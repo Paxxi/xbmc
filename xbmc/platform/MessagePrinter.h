@@ -15,7 +15,6 @@
 class CMessagePrinter
 {
 public:
-
   /*! \brief Display a normal message to the user during startup
   *
   * \param[in] message  message to display

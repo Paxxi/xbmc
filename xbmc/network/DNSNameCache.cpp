@@ -35,12 +35,13 @@ bool CDNSNameCache::Lookup(const std::string& strHostName, std::string& strIpAdd
 
   if (address != INADDR_NONE)
   {
-    strIpAddress = StringUtils::Format("%lu.%lu.%lu.%lu", (address & 0xFF), (address & 0xFF00) >> 8, (address & 0xFF0000) >> 16, (address & 0xFF000000) >> 24 );
+    strIpAddress = StringUtils::Format("%lu.%lu.%lu.%lu", (address & 0xFF), (address & 0xFF00) >> 8,
+                                       (address & 0xFF0000) >> 16, (address & 0xFF000000) >> 24);
     return true;
   }
 
   // check if there's a custom entry or if it's already cached
-  if(g_DNSCache.GetCached(strHostName, strIpAddress))
+  if (g_DNSCache.GetCached(strHostName, strIpAddress))
     return true;
 
 #if !defined(TARGET_WINDOWS) && defined(HAS_FILESYSTEM_SMB)
@@ -71,11 +72,10 @@ bool CDNSNameCache::Lookup(const std::string& strHostName, std::string& strIpAdd
 #endif
 
   // perform dns lookup
-  struct hostent *host = gethostbyname(strHostName.c_str());
+  struct hostent* host = gethostbyname(strHostName.c_str());
   if (host && host->h_addr_list[0])
   {
-    strIpAddress = StringUtils::Format("%d.%d.%d.%d",
-                                       (unsigned char)host->h_addr_list[0][0],
+    strIpAddress = StringUtils::Format("%d.%d.%d.%d", (unsigned char)host->h_addr_list[0][0],
                                        (unsigned char)host->h_addr_list[0][1],
                                        (unsigned char)host->h_addr_list[0][2],
                                        (unsigned char)host->h_addr_list[0][3]);
@@ -95,7 +95,7 @@ bool CDNSNameCache::GetCached(const std::string& strHostName, std::string& strIp
   for (int i = 0; i < (int)g_DNSCache.m_vecDNSNames.size(); ++i)
   {
     CDNSName& DNSname = g_DNSCache.m_vecDNSNames[i];
-    if ( DNSname.m_strHostName == strHostName )
+    if (DNSname.m_strHostName == strHostName)
     {
       strIpAddress = DNSname.m_strIpAddress;
       return true;
@@ -106,14 +106,13 @@ bool CDNSNameCache::GetCached(const std::string& strHostName, std::string& strIp
   return false;
 }
 
-void CDNSNameCache::Add(const std::string &strHostName, const std::string &strIpAddress)
+void CDNSNameCache::Add(const std::string& strHostName, const std::string& strIpAddress)
 {
   CDNSName dnsName;
 
   dnsName.m_strHostName = strHostName;
-  dnsName.m_strIpAddress  = strIpAddress;
+  dnsName.m_strIpAddress = strIpAddress;
 
   CSingleLock lock(m_critical);
   g_DNSCache.m_vecDNSNames.push_back(dnsName);
 }
-

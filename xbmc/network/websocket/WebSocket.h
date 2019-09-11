@@ -14,43 +14,49 @@
 
 enum WebSocketFrameOpcode
 {
-  WebSocketContinuationFrame  = 0x00,
-  WebSocketTextFrame          = 0x01,
-  WebSocketBinaryFrame        = 0x02,
+  WebSocketContinuationFrame = 0x00,
+  WebSocketTextFrame = 0x01,
+  WebSocketBinaryFrame = 0x02,
   //0x3 - 0x7 are reserved for non-control frames
-  WebSocketConnectionClose    = 0x08,
-  WebSocketPing               = 0x09,
-  WebSocketPong               = 0x0A,
+  WebSocketConnectionClose = 0x08,
+  WebSocketPing = 0x09,
+  WebSocketPong = 0x0A,
   //0xB - 0xF are reserved for control frames
-  WebSocketUnknownFrame       = 0x10
+  WebSocketUnknownFrame = 0x10
 };
 
 enum WebSocketState
 {
-  WebSocketStateNotConnected    = 0,
-  WebSocketStateHandshaking     = 1,
-  WebSocketStateConnected       = 2,
-  WebSocketStateClosing         = 3,
-  WebSocketStateClosed          = 4
+  WebSocketStateNotConnected = 0,
+  WebSocketStateHandshaking = 1,
+  WebSocketStateConnected = 2,
+  WebSocketStateClosing = 3,
+  WebSocketStateClosed = 4
 };
 
 enum WebSocketCloseReason
 {
-  WebSocketCloseNormal          = 1000,
-  WebSocketCloseLeaving         = 1001,
-  WebSocketCloseProtocolError   = 1002,
-  WebSocketCloseInvalidData     = 1003,
-  WebSocketCloseFrameTooLarge   = 1004,
+  WebSocketCloseNormal = 1000,
+  WebSocketCloseLeaving = 1001,
+  WebSocketCloseProtocolError = 1002,
+  WebSocketCloseInvalidData = 1003,
+  WebSocketCloseFrameTooLarge = 1004,
   // Reserved status code       = 1005,
   // Reserved status code       = 1006,
-  WebSocketCloseInvalidUtf8     = 1007
+  WebSocketCloseInvalidUtf8 = 1007
 };
 
 class CWebSocketFrame
 {
 public:
   CWebSocketFrame(const char* data, uint64_t length);
-  CWebSocketFrame(WebSocketFrameOpcode opcode, const char* data = NULL, uint32_t length = 0, bool final = true, bool masked = false, int32_t mask = 0, int8_t extension = 0);
+  CWebSocketFrame(WebSocketFrameOpcode opcode,
+                  const char* data = NULL,
+                  uint32_t length = 0,
+                  bool final = true,
+                  bool masked = false,
+                  int32_t mask = 0,
+                  int8_t extension = 0);
   virtual ~CWebSocketFrame();
 
   virtual bool IsValid() const { return m_valid; }
@@ -67,7 +73,7 @@ public:
 
 protected:
   bool m_free;
-  const char *m_data;
+  const char* m_data;
   uint64_t m_lengthFrame;
   uint64_t m_length;
   bool m_valid;
@@ -76,7 +82,7 @@ protected:
   WebSocketFrameOpcode m_opcode;
   bool m_masked;
   int32_t m_mask;
-  char *m_applicationData;
+  char* m_applicationData;
 
 private:
   void reset();
@@ -94,12 +100,12 @@ public:
   virtual bool IsComplete() const { return m_complete; }
 
   virtual bool AddFrame(const CWebSocketFrame* frame);
-  virtual const std::vector<const CWebSocketFrame *>& GetFrames() const { return m_frames; }
+  virtual const std::vector<const CWebSocketFrame*>& GetFrames() const { return m_frames; }
 
   virtual void Clear();
 
 protected:
-  std::vector<const CWebSocketFrame *> m_frames;
+  std::vector<const CWebSocketFrame*> m_frames;
   bool m_fragmented;
   bool m_complete;
 };
@@ -107,26 +113,43 @@ protected:
 class CWebSocket
 {
 public:
-  CWebSocket() { m_state = WebSocketStateNotConnected; m_message = NULL; }
-  virtual ~CWebSocket() { if (m_message) delete m_message; };
+  CWebSocket()
+  {
+    m_state = WebSocketStateNotConnected;
+    m_message = NULL;
+  }
+  virtual ~CWebSocket()
+  {
+    if (m_message)
+      delete m_message;
+  };
 
   int GetVersion() { return m_version; }
   WebSocketState GetState() { return m_state; }
 
-  virtual bool Handshake(const char* data, size_t length, std::string &response) = 0;
-  virtual const CWebSocketMessage* Handle(const char* &buffer, size_t &length, bool &send);
-  virtual const CWebSocketMessage* Send(WebSocketFrameOpcode opcode, const char* data = NULL, uint32_t length = 0);
+  virtual bool Handshake(const char* data, size_t length, std::string& response) = 0;
+  virtual const CWebSocketMessage* Handle(const char*& buffer, size_t& length, bool& send);
+  virtual const CWebSocketMessage* Send(WebSocketFrameOpcode opcode,
+                                        const char* data = NULL,
+                                        uint32_t length = 0);
   virtual const CWebSocketFrame* Ping(const char* data = NULL) const = 0;
   virtual const CWebSocketFrame* Pong(const char* data = NULL) const = 0;
-  virtual const CWebSocketFrame* Close(WebSocketCloseReason reason = WebSocketCloseNormal, const std::string &message = "") = 0;
+  virtual const CWebSocketFrame* Close(WebSocketCloseReason reason = WebSocketCloseNormal,
+                                       const std::string& message = "") = 0;
   virtual void Fail() = 0;
 
 protected:
   int m_version;
   WebSocketState m_state;
-  CWebSocketMessage *m_message;
+  CWebSocketMessage* m_message;
 
   virtual CWebSocketFrame* GetFrame(const char* data, uint64_t length) = 0;
-  virtual CWebSocketFrame* GetFrame(WebSocketFrameOpcode opcode, const char* data = NULL, uint32_t length = 0, bool final = true, bool masked = false, int32_t mask = 0, int8_t extension = 0) = 0;
+  virtual CWebSocketFrame* GetFrame(WebSocketFrameOpcode opcode,
+                                    const char* data = NULL,
+                                    uint32_t length = 0,
+                                    bool final = true,
+                                    bool masked = false,
+                                    int32_t mask = 0,
+                                    int8_t extension = 0) = 0;
   virtual CWebSocketMessage* GetMessage() = 0;
 };

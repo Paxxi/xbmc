@@ -76,12 +76,12 @@ int CPowerSyscall::BatteryLevel()
   if (full != 0 && remaining != 0)
   {
     float percent = static_cast<float>(remaining) / static_cast<float>(full);
-    result = static_cast<int> (percent * 100.0f);
+    result = static_cast<int>(percent * 100.0f);
   }
   return result;
 }
 
-bool CPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
+bool CPowerSyscall::PumpPowerEvents(IPowerEventsCallback* callback)
 {
   return true;
 }

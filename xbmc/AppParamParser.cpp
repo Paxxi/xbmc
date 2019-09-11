@@ -18,8 +18,8 @@
 #include <stdlib.h>
 
 CAppParamParser::CAppParamParser()
-: m_logLevel(LOG_LEVEL_NORMAL),
-  m_playlist(new CFileItemList())
+  : m_logLevel(LOG_LEVEL_NORMAL)
+  , m_playlist(new CFileItemList())
 {
 }
 
@@ -43,8 +43,8 @@ void CAppParamParser::Parse(const char* const* argv, int nArgs)
 void CAppParamParser::DisplayVersion()
 {
   printf("%s Media Center %s\n", CSysInfo::GetVersion().c_str(), CSysInfo::GetAppName().c_str());
-  printf("Copyright (C) %s Team %s - http://kodi.tv\n",
-         CCompileInfo::GetCopyrightYears(), CSysInfo::GetAppName().c_str());
+  printf("Copyright (C) %s Team %s - http://kodi.tv\n", CCompileInfo::GetCopyrightYears(),
+         CSysInfo::GetAppName().c_str());
   exit(0);
 }
 
@@ -55,19 +55,22 @@ void CAppParamParser::DisplayHelp()
   printf("Usage: %s [OPTION]... [FILE]...\n\n", lcAppName.c_str());
   printf("Arguments:\n");
   printf("  -fs\t\t\tRuns %s in full screen\n", CSysInfo::GetAppName().c_str());
-  printf("  --standalone\t\t%s runs in a stand alone environment without a window \n", CSysInfo::GetAppName().c_str());
+  printf("  --standalone\t\t%s runs in a stand alone environment without a window \n",
+         CSysInfo::GetAppName().c_str());
   printf("\t\t\tmanager and supporting applications. For example, that\n");
   printf("\t\t\tenables network settings.\n");
-  printf("  -p or --portable\t%s will look for configurations in install folder instead of ~/.%s\n", CSysInfo::GetAppName().c_str(), lcAppName.c_str());
+  printf("  -p or --portable\t%s will look for configurations in install folder instead of ~/.%s\n",
+         CSysInfo::GetAppName().c_str(), lcAppName.c_str());
   printf("  --debug\t\tEnable debug logging\n");
   printf("  --version\t\tPrint version information\n");
   printf("  --test\t\tEnable test mode. [FILE] required.\n");
-  printf("  --settings=<filename>\t\tLoads specified file after advancedsettings.xml replacing any settings specified\n");
+  printf("  --settings=<filename>\t\tLoads specified file after advancedsettings.xml replacing any "
+         "settings specified\n");
   printf("  \t\t\t\tspecified file must exist in special://xbmc/system/\n");
   exit(0);
 }
 
-void CAppParamParser::ParseArg(const std::string &arg)
+void CAppParamParser::ParseArg(const std::string& arg)
 {
   if (arg == "-fs" || arg == "--fullscreen")
     m_startFullScreen = true;
@@ -77,7 +80,7 @@ void CAppParamParser::ParseArg(const std::string &arg)
     DisplayVersion();
   else if (arg == "--standalone")
     m_standAlone = true;
-  else if (arg == "-p" || arg  == "--portable")
+  else if (arg == "-p" || arg == "--portable")
     m_platformDirectories = false;
   else if (arg == "--debug")
     m_logLevel = LOG_LEVEL_DEBUG;

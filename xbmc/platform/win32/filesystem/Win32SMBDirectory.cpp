@@ -7,17 +7,18 @@
  */
 
 #include "Win32SMBDirectory.h"
+
 #include "FileItem.h"
-#include "platform/win32/WIN32Util.h"
-#include "platform/win32/CharsetConverter.h"
-#include "utils/CharsetConverter.h"
-#include "URL.h"
-#include "utils/log.h"
 #include "PasswordManager.h"
+#include "URL.h"
+#include "utils/CharsetConverter.h"
 #include "utils/auto_buffer.h"
+#include "utils/log.h"
+
+#include "platform/win32/CharsetConverter.h"
+#include "platform/win32/WIN32Util.h"
 
 #include <Windows.h>
-
 #include <Winnetwk.h>
 #pragma comment(lib, "mpr.lib")
 
@@ -33,8 +34,8 @@ using KODI::PLATFORM::WINDOWS::FromW;
 // local helper
 static inline bool worthTryToConnect(const DWORD lastErr)
 {
-  return lastErr != ERROR_FILE_NOT_FOUND      && lastErr != ERROR_BAD_NET_NAME  &&
-         lastErr != ERROR_NO_NET_OR_BAD_PATH  && lastErr != ERROR_NO_NETWORK    &&
+  return lastErr != ERROR_FILE_NOT_FOUND && lastErr != ERROR_BAD_NET_NAME &&
+         lastErr != ERROR_NO_NET_OR_BAD_PATH && lastErr != ERROR_NO_NETWORK &&
          lastErr != ERROR_BAD_NETPATH;
 }
 
@@ -46,8 +47,13 @@ static inline bool worthTryToConnect(const DWORD lastErr)
 * @param getShares         set to true to get shares, set for false to get servers
 * @return true if succeed, false otherwise
 */
-static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, const std::string& urlPrefixForItems, CFileItemList& items, bool getShares);
-static bool localGetShares(const std::wstring& serverNameToScan, const std::string& urlPrefixForItems, CFileItemList& items);
+static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr,
+                                     const std::string& urlPrefixForItems,
+                                     CFileItemList& items,
+                                     bool getShares);
+static bool localGetShares(const std::wstring& serverNameToScan,
+                           const std::string& urlPrefixForItems,
+                           CFileItemList& items);
 
 // check for empty string, remove trailing slash if any, convert to win32 form
 inline static std::wstring prepareWin32SMBDirectoryName(const CURL& url)
@@ -57,7 +63,8 @@ inline static std::wstring prepareWin32SMBDirectoryName(const CURL& url)
   if (url.GetHostName().empty() || url.GetShareName().empty())
     return std::wstring(); // can't use win32 standard file API, return empty string
 
-  std::wstring nameW(CWIN32Util::ConvertPathToWin32Form("\\\\?\\UNC\\" + url.GetHostName() + '\\' + url.GetFileName()));
+  std::wstring nameW(CWIN32Util::ConvertPathToWin32Form("\\\\?\\UNC\\" + url.GetHostName() + '\\' +
+                                                        url.GetFileName()));
   if (!nameW.empty() && nameW.back() == L'\\')
     nameW.pop_back(); // remove slash at the end if any
 
@@ -65,12 +72,14 @@ inline static std::wstring prepareWin32SMBDirectoryName(const CURL& url)
 }
 
 CWin32SMBDirectory::CWin32SMBDirectory(void)
-{}
+{
+}
 
 CWin32SMBDirectory::~CWin32SMBDirectory(void)
-{}
+{
+}
 
-bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   assert(url.IsProtocol("smb"));
   items.Clear();
@@ -92,7 +101,8 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     return false; // share name is set, but host name is empty
 
   /* Get file directory content by using standard win32 file API */
-  std::wstring searchMask(CWIN32Util::ConvertPathToWin32Form("\\\\?\\UNC\\" + url.GetHostName() + '\\' + url.GetFileName()));
+  std::wstring searchMask(CWIN32Util::ConvertPathToWin32Form("\\\\?\\UNC\\" + url.GetHostName() +
+                                                             '\\' + url.GetFileName()));
   if (searchMask.empty())
     return false;
 
@@ -106,7 +116,8 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   WIN32_FIND_DATAW findData = {};
   CURL authUrl(url); // ConnectAndAuthenticate may update url with username and password
 
-  hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
+  hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch,
+                             NULL, FIND_FIRST_EX_LARGE_FETCH);
 
   if (hSearch == INVALID_HANDLE_VALUE)
   {
@@ -116,12 +127,13 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
     if (ConnectAndAuthenticate(authUrl, (m_flags & DIR_FLAG_ALLOW_PROMPT) != 0))
     {
-      hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
+      hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData,
+                                 FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
       searchErr = GetLastError();
     }
     if (hSearch == INVALID_HANDLE_VALUE)
     {
-      if (searchErr == ERROR_ACCESS_DENIED ||searchErr == ERROR_BAD_USERNAME ||
+      if (searchErr == ERROR_ACCESS_DENIED || searchErr == ERROR_BAD_USERNAME ||
           searchErr == ERROR_INVALID_PASSWORD || searchErr == ERROR_LOGON_FAILURE)
       {
         if ((m_flags & DIR_FLAG_ALLOW_PROMPT) != 0)
@@ -160,8 +172,8 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     else
       pItem->SetPath(pathWithSlash + itemName);
 
-    if ((findData.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0
-          || itemName.front() == '.') // mark files starting from dot as hidden
+    if ((findData.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0 ||
+        itemName.front() == '.') // mark files starting from dot as hidden
       pItem->SetProperty("file:hidden", true);
 
     // calculation of size and date costs a little on win32
@@ -173,7 +185,7 @@ bool CWin32SMBDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       pItem->m_dateTime.SetValid(false);
 
     if (!pItem->m_bIsFolder)
-        pItem->m_dwSize = (__int64(findData.nFileSizeHigh) << 32) + findData.nFileSizeLow;
+      pItem->m_dwSize = (__int64(findData.nFileSizeHigh) << 32) + findData.nFileSizeLow;
 
     items.Add(pItem);
   } while (FindNextFileW(hSearch, &findData));
@@ -191,7 +203,8 @@ bool CWin32SMBDirectory::Create(const CURL& url)
 bool CWin32SMBDirectory::RealCreate(const CURL& url, bool tryToConnect)
 {
   assert(url.IsProtocol("smb"));
-  if (url.GetHostName().empty() || url.GetShareName().empty() || url.GetFileName() == url.GetShareName())
+  if (url.GetHostName().empty() || url.GetShareName().empty() ||
+      url.GetFileName() == url.GetShareName())
     return false; // can't create new hosts or shares
 
   std::wstring nameW(prepareWin32SMBDirectoryName(url));
@@ -219,8 +232,10 @@ bool CWin32SMBDirectory::RealCreate(const CURL& url, bool tryToConnect)
   if (lastSlashPos < nameW.length() - 1 && nameW[lastSlashPos + 1] == L'.')
   {
     DWORD dirAttrs = GetFileAttributesW(nameW.c_str());
-    if (dirAttrs == INVALID_FILE_ATTRIBUTES || !SetFileAttributesW(nameW.c_str(), dirAttrs | FILE_ATTRIBUTE_HIDDEN))
-      CLog::LogF(LOGWARNING, "Can't set hidden attribute for newly created directory \"%s\"", url.Get().c_str());
+    if (dirAttrs == INVALID_FILE_ATTRIBUTES ||
+        !SetFileAttributesW(nameW.c_str(), dirAttrs | FILE_ATTRIBUTE_HIDDEN))
+      CLog::LogF(LOGWARNING, "Can't set hidden attribute for newly created directory \"%s\"",
+                 url.Get().c_str());
   }
 
   return true;
@@ -253,7 +268,8 @@ bool CWin32SMBDirectory::RealExists(const CURL& url, bool tryToConnect)
       // try fast way
       if (g_charsetConverter.utf8ToW("\\\\" + url.GetHostName(), serverNameW, false, false, true) &&
           g_charsetConverter.utf8ToW(url.GetShareName(), shareNameW, false, false, true) &&
-          NetShareGetInfo((LPWSTR)serverNameW.c_str(), (LPWSTR)shareNameW.c_str(), 1, (LPBYTE*)&info) == NERR_Success)
+          NetShareGetInfo((LPWSTR)serverNameW.c_str(), (LPWSTR)shareNameW.c_str(), 1,
+                          (LPBYTE*)&info) == NERR_Success)
       {
         const bool ret = ((info->shi1_type & STYPE_MASK) == STYPE_DISKTREE);
         NetApiBufferFree(info);
@@ -282,7 +298,8 @@ bool CWin32SMBDirectory::RealExists(const CURL& url, bool tryToConnect)
       }
       return false;
     }
-    const std::string& searchStr = (url.GetShareName().empty()) ? url.GetHostName() : url.GetShareName();
+    const std::string& searchStr =
+        (url.GetShareName().empty()) ? url.GetHostName() : url.GetShareName();
     const VECFILEITEMS entrVec = entries.GetList();
     for (const auto& it : entrVec)
     {
@@ -337,7 +354,8 @@ bool CWin32SMBDirectory::GetNetworkResources(const CURL& basePath, CFileItemList
 
   std::string hostName(basePath.GetHostName());
   if (hostName.empty())
-    return localGetNetworkResources(NULL, basePath.Get(), items, false); // get all servers from network
+    return localGetNetworkResources(NULL, basePath.Get(), items,
+                                    false); // get all servers from network
 
   // get all shares from server
   std::string basePathStr(basePath.Get());
@@ -347,9 +365,11 @@ bool CWin32SMBDirectory::GetNetworkResources(const CURL& basePath, CFileItemList
     basePathStr.push_back('/');
 
   std::wstring remoteName;
-  if (!basePathStr.empty() && !g_charsetConverter.utf8ToW("\\\\" + basePath.GetHostName(), remoteName, false, false, true))
+  if (!basePathStr.empty() &&
+      !g_charsetConverter.utf8ToW("\\\\" + basePath.GetHostName(), remoteName, false, false, true))
   {
-    CLog::LogF(LOGERROR, "can't convert host name \"%s\" to wide character form", basePath.GetHostName().c_str());
+    CLog::LogF(LOGERROR, "can't convert host name \"%s\" to wide character form",
+               basePath.GetHostName().c_str());
     return false;
   }
 
@@ -371,13 +391,18 @@ bool CWin32SMBDirectory::GetNetworkResources(const CURL& basePath, CFileItemList
  * @param getShares         set to true to get shares, set for false to get servers
  * @return true if succeed, false otherwise
  */
-static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, const std::string& urlPrefixForItems, CFileItemList& items, bool getShares)
+static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr,
+                                     const std::string& urlPrefixForItems,
+                                     CFileItemList& items,
+                                     bool getShares)
 {
   assert(!basePathToScanPtr || (basePathToScanPtr->dwUsage & RESOURCEUSAGE_CONTAINER));
   assert(!basePathToScanPtr || basePathToScanPtr->dwScope == RESOURCE_GLOBALNET);
-  assert(!basePathToScanPtr || (basePathToScanPtr->lpRemoteName != NULL && basePathToScanPtr->lpRemoteName[0]));
+  assert(!basePathToScanPtr ||
+         (basePathToScanPtr->lpRemoteName != NULL && basePathToScanPtr->lpRemoteName[0]));
   assert(!getShares || basePathToScanPtr); // can't get shares without host
-  assert(urlPrefixForItems.compare(0, 6, "smb://", 6) == 0); // 'urlPrefixForItems' must be in form 'smb://[[user[:pass]@]ServerName]'
+  assert(urlPrefixForItems.compare(0, 6, "smb://", 6) ==
+         0); // 'urlPrefixForItems' must be in form 'smb://[[user[:pass]@]ServerName]'
   assert(urlPrefixForItems.length() >= 6);
   assert(!getShares || urlPrefixForItems.back() == '/');
 
@@ -387,12 +412,15 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
     if (localGetShares(basePathToScanPtr->lpRemoteName, urlPrefixForItems, items))
       return true;
 
-    CLog::LogF(LOGNOTICE, "Can't read shares for \"%ls\" by localGetShares(), fallback to standard method", FromW(basePathToScanPtr->lpRemoteName));
+    CLog::LogF(LOGNOTICE,
+               "Can't read shares for \"%ls\" by localGetShares(), fallback to standard method",
+               FromW(basePathToScanPtr->lpRemoteName));
   }
 
   HANDLE netEnum;
   DWORD result;
-  result = WNetOpenEnumW(RESOURCE_GLOBALNET, getShares ? RESOURCETYPE_DISK : RESOURCETYPE_ANY, 0, basePathToScanPtr, &netEnum);
+  result = WNetOpenEnumW(RESOURCE_GLOBALNET, getShares ? RESOURCETYPE_DISK : RESOURCETYPE_ANY, 0,
+                         basePathToScanPtr, &netEnum);
   if (result != NO_ERROR)
   {
     if (basePathToScanPtr)
@@ -401,10 +429,12 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
       if (basePathToScanPtr->lpProvider && basePathToScanPtr->lpProvider[0] != 0)
         providerName.assign(L" (provider \"").append(basePathToScanPtr->lpProvider).append(L"\")");
       CLog::LogF(LOGNOTICE, "Can't open network enumeration for \"%ls\"%ls. Error: %lu",
-                  FromW(basePathToScanPtr->lpRemoteName), FromW(providerName), static_cast<unsigned long>(result));
+                 FromW(basePathToScanPtr->lpRemoteName), FromW(providerName),
+                 static_cast<unsigned long>(result));
     }
     else
-      CLog::LogF(LOGERROR, "Can't open network enumeration for network root. Error: %lu", static_cast<unsigned long>(result));
+      CLog::LogF(LOGERROR, "Can't open network enumeration for network root. Error: %lu",
+                 static_cast<unsigned long>(result));
 
     return false;
   }
@@ -440,7 +470,8 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
             if (remoteName.length() > 2 && remoteName.compare(0, 2, L"\\\\", 2) == 0)
             {
               std::string remoteNameUtf8;
-              if (g_charsetConverter.wToUTF8(remoteName.substr(2), remoteNameUtf8, true) && !remoteNameUtf8.empty())
+              if (g_charsetConverter.wToUTF8(remoteName.substr(2), remoteNameUtf8, true) &&
+                  !remoteNameUtf8.empty())
               {
                 CFileItemPtr pItem(new CFileItem(remoteNameUtf8));
                 pItem->SetPath(urlPrefixForItems + remoteNameUtf8 + '/');
@@ -449,20 +480,22 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
               }
               else
                 CLog::LogF(LOGERROR,
-                            "Can't convert server wide string name \"%ls\" to UTF-8 encoding",
-                            FromW(remoteName.substr(2)));
+                           "Can't convert server wide string name \"%ls\" to UTF-8 encoding",
+                           FromW(remoteName.substr(2)));
             }
             else
-              CLog::LogF(LOGERROR, "Skipping server name \"%ls\" without '\\' prefix", FromW(remoteName));
+              CLog::LogF(LOGERROR, "Skipping server name \"%ls\" without '\\' prefix",
+                         FromW(remoteName));
           }
           else
             CLog::LogF(LOGERROR, "Skipping server with empty remote name");
         }
 
         /* check and collect shares */
-        if (getShares && (curResource.dwDisplayType == RESOURCEDISPLAYTYPE_SHARE ||
-                          curResource.dwDisplayType == RESOURCEDISPLAYTYPE_SHAREADMIN) &&
-                          curResource.dwType != RESOURCETYPE_PRINT)
+        if (getShares &&
+            (curResource.dwDisplayType == RESOURCEDISPLAYTYPE_SHARE ||
+             curResource.dwDisplayType == RESOURCEDISPLAYTYPE_SHAREADMIN) &&
+            curResource.dwType != RESOURCETYPE_PRINT)
         {
           if (curResource.lpRemoteName != NULL)
           {
@@ -473,7 +506,9 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
               if (slashPos < serverShareName.length() - 1) // slash must be not on last position
               {
                 std::string shareNameUtf8;
-                if (g_charsetConverter.wToUTF8(serverShareName.substr(slashPos + 1), shareNameUtf8, true) && !shareNameUtf8.empty())
+                if (g_charsetConverter.wToUTF8(serverShareName.substr(slashPos + 1), shareNameUtf8,
+                                               true) &&
+                    !shareNameUtf8.empty())
                 {
                   CFileItemPtr pItem(new CFileItem(shareNameUtf8));
                   pItem->SetPath(urlPrefixForItems + shareNameUtf8 + '/');
@@ -494,7 +529,7 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
               else
               {
                 CLog::LogF(LOGERROR, "Can't find name of share in remote name \"%ls\"",
-                            FromW(serverShareName));
+                           FromW(serverShareName));
               }
             }
             else
@@ -509,7 +544,8 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
 
         /* recursively collect servers from container */
         if (!getShares && (curResource.dwUsage & RESOURCEUSAGE_CONTAINER) &&
-            curResource.dwDisplayType != RESOURCEDISPLAYTYPE_SERVER) // don't scan servers for other servers
+            curResource.dwDisplayType !=
+                RESOURCEDISPLAYTYPE_SERVER) // don't scan servers for other servers
         {
           if (curResource.lpRemoteName != NULL && curResource.lpRemoteName[0] != 0)
           {
@@ -558,11 +594,15 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr, co
 
 // advanced shares enumeration function
 // if this function is failed, simple 'localGetNetworkResources()' can be used
-static bool localGetShares(const std::wstring& serverNameToScan, const std::string& urlPrefixForItems, CFileItemList& items)
+static bool localGetShares(const std::wstring& serverNameToScan,
+                           const std::string& urlPrefixForItems,
+                           CFileItemList& items)
 {
-  assert(serverNameToScan.compare(0, 2, L"\\\\", 2) == 0); // 'serverNameToScan' must be in form '\\ServerName'
+  assert(serverNameToScan.compare(0, 2, L"\\\\", 2) ==
+         0); // 'serverNameToScan' must be in form '\\ServerName'
   assert(serverNameToScan.length() > 2);
-  assert(urlPrefixForItems.compare(0, 6, "smb://", 6) == 0); // 'urlPrefixForItems' must be in form 'smb://[user[:pass]@]ServerName/'
+  assert(urlPrefixForItems.compare(0, 6, "smb://", 6) ==
+         0); // 'urlPrefixForItems' must be in form 'smb://[user[:pass]@]ServerName/'
   assert(urlPrefixForItems.length() > 7);
   assert(urlPrefixForItems.back() == '/');
 
@@ -575,7 +615,8 @@ static bool localGetShares(const std::wstring& serverNameToScan, const std::stri
   {
     SHARE_INFO_1* shareInfos = NULL;
     DWORD count, totalCount;
-    enumResult = NetShareEnum((LPWSTR)serverNameToScan.c_str(), 1, (LPBYTE*)&shareInfos, MAX_PREFERRED_LENGTH, &count, &totalCount, &hEnumResume);
+    enumResult = NetShareEnum((LPWSTR)serverNameToScan.c_str(), 1, (LPBYTE*)&shareInfos,
+                              MAX_PREFERRED_LENGTH, &count, &totalCount, &hEnumResume);
     if (enumResult == NERR_Success || enumResult == ERROR_MORE_DATA)
     {
       for (unsigned int i = 0; i < count && !errorFlag; i++)
@@ -585,7 +626,8 @@ static bool localGetShares(const std::wstring& serverNameToScan, const std::stri
         {
           std::string shareNameUtf8;
           if (curShare.shi1_netname && curShare.shi1_netname[0] &&
-              g_charsetConverter.wToUTF8(curShare.shi1_netname, shareNameUtf8, true) && !shareNameUtf8.empty())
+              g_charsetConverter.wToUTF8(curShare.shi1_netname, shareNameUtf8, true) &&
+              !shareNameUtf8.empty())
           {
             CFileItemPtr pItem(new CFileItem(shareNameUtf8));
             pItem->SetPath(urlPrefixForItems + shareNameUtf8 + '/');
@@ -610,7 +652,8 @@ static bool localGetShares(const std::wstring& serverNameToScan, const std::stri
   return true;
 }
 
-bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCredential /*= false*/)
+bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url,
+                                                bool allowPromptForCredential /*= false*/)
 {
   assert(url.IsProtocol("smb"));
   if (url.GetHostName().empty())
@@ -623,7 +666,8 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
   std::wstring serverNameW;
   if (!g_charsetConverter.utf8ToW(url.GetHostName(), serverNameW, false, false, true))
   {
-    CLog::LogF(LOGERROR, "Can't convert server name \"%s\" to wide string", url.GetHostName().c_str());
+    CLog::LogF(LOGERROR, "Can't convert server name \"%s\" to wide string",
+               url.GetHostName().c_str());
     return false;
   }
   serverNameW = L"\\\\" + serverNameW;
@@ -635,7 +679,8 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
     serverShareName = "\\\\" + url.GetHostName() + "\\" + url.GetShareName();
     if (!g_charsetConverter.utf8ToW(serverShareName, serverShareNameW, false, false, true))
     {
-      CLog::LogF(LOGERROR, "Can't convert share name \"%s\" to wide string", serverShareName.c_str());
+      CLog::LogF(LOGERROR, "Can't convert share name \"%s\" to wide string",
+                 serverShareName.c_str());
       return false;
     }
   }
@@ -646,22 +691,26 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
   }
 
   std::wstring usernameW;
-  if (!url.GetUserName().empty() && !g_charsetConverter.utf8ToW(url.GetUserName(), usernameW, false, false, true))
+  if (!url.GetUserName().empty() &&
+      !g_charsetConverter.utf8ToW(url.GetUserName(), usernameW, false, false, true))
   {
     CLog::LogF(LOGERROR, "Can't convert username \"%s\" to wide string", url.GetUserName().c_str());
     return false;
   }
   std::wstring domainW;
-  if (!url.GetDomain().empty() && !g_charsetConverter.utf8ToW(url.GetDomain(), domainW, false, false, true))
+  if (!url.GetDomain().empty() &&
+      !g_charsetConverter.utf8ToW(url.GetDomain(), domainW, false, false, true))
   {
-    CLog::LogF(LOGERROR, "Can't convert domain name \"%s\" to wide string", url.GetDomain().c_str());
+    CLog::LogF(LOGERROR, "Can't convert domain name \"%s\" to wide string",
+               url.GetDomain().c_str());
     return false;
   }
   if (!domainW.empty())
     usernameW += L'@' + domainW;
 
   std::wstring passwordW;
-  if (!url.GetPassWord().empty() && !g_charsetConverter.utf8ToW(url.GetPassWord(), passwordW, false, false, true))
+  if (!url.GetPassWord().empty() &&
+      !g_charsetConverter.utf8ToW(url.GetPassWord(), passwordW, false, false, true))
   {
     CLog::LogF(LOGERROR, "Can't convert password to wide string");
     return false;
@@ -671,7 +720,8 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
   if (url.GetUserName().empty())
     loginDescr = "without username";
   else
-    loginDescr = "with username \"" + url.GetUserName() + (url.GetDomain().empty() ? "" : "@" + url.GetDomain()) + "\"";
+    loginDescr = "with username \"" + url.GetUserName() +
+                 (url.GetDomain().empty() ? "" : "@" + url.GetDomain()) + "\"";
 
   loginDescr += url.GetPassWord().empty() ? " and without password" : " and with password";
   NETRESOURCEW connInfo = {};
@@ -681,26 +731,33 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
   for (int i = 0; i < 3; i++) // make up to three attempts to connect
   {
     connRes = WNetAddConnection2W(&connInfo, passwordW.empty() ? NULL : (LPWSTR)passwordW.c_str(),
-                                  usernameW.empty() ? NULL : (LPWSTR)usernameW.c_str(), CONNECT_TEMPORARY);
+                                  usernameW.empty() ? NULL : (LPWSTR)usernameW.c_str(),
+                                  CONNECT_TEMPORARY);
     if (connRes == NO_ERROR)
     {
       CLog::LogF(LOGDEBUG, "Connected to \"%s\" %s", serverShareName.c_str(), loginDescr.c_str());
       return true;
     }
 
-    if (connRes == ERROR_ACCESS_DENIED || connRes == ERROR_BAD_USERNAME || connRes == ERROR_INVALID_PASSWORD ||
-        connRes == ERROR_LOGON_FAILURE || connRes == ERROR_LOGON_TYPE_NOT_GRANTED || connRes == ERROR_LOGON_NOT_GRANTED)
+    if (connRes == ERROR_ACCESS_DENIED || connRes == ERROR_BAD_USERNAME ||
+        connRes == ERROR_INVALID_PASSWORD || connRes == ERROR_LOGON_FAILURE ||
+        connRes == ERROR_LOGON_TYPE_NOT_GRANTED || connRes == ERROR_LOGON_NOT_GRANTED)
     {
       if (connRes == ERROR_ACCESS_DENIED)
-        CLog::LogF(LOGERROR, "Doesn't have permissions to access \"%s\" %s", serverShareName.c_str(), loginDescr.c_str());
+        CLog::LogF(LOGERROR, "Doesn't have permissions to access \"%s\" %s",
+                   serverShareName.c_str(), loginDescr.c_str());
       else
-        CLog::LogF(LOGERROR, "Username/password combination was not accepted by \"%s\" when trying to connect %s", serverShareName.c_str(), loginDescr.c_str());
+        CLog::LogF(
+            LOGERROR,
+            "Username/password combination was not accepted by \"%s\" when trying to connect %s",
+            serverShareName.c_str(), loginDescr.c_str());
       if (allowPromptForCredential)
         RequireAuthentication(url);
 
       return false; // don't try any more
     }
-    else if (connRes == ERROR_BAD_NET_NAME || connRes == ERROR_NO_NET_OR_BAD_PATH || connRes == ERROR_NO_NETWORK)
+    else if (connRes == ERROR_BAD_NET_NAME || connRes == ERROR_NO_NET_OR_BAD_PATH ||
+             connRes == ERROR_NO_NETWORK)
     {
       CLog::LogF(LOGERROR, "Can't find \"%s\"", serverShareName.c_str());
       return false; // don't try any more
@@ -709,13 +766,17 @@ bool CWin32SMBDirectory::ConnectAndAuthenticate(CURL& url, bool allowPromptForCr
       CLog::LogF(LOGNOTICE, "Network is busy for \"%s\"", serverShareName.c_str());
     else if (connRes == ERROR_SESSION_CREDENTIAL_CONFLICT)
     {
-      CLog::LogF(LOGWARNING, "Can't connect to \"%s\" %s because of conflict of credential. Will try to close current connections.", serverShareName.c_str(), loginDescr.c_str());
+      CLog::LogF(LOGWARNING,
+                 "Can't connect to \"%s\" %s because of conflict of credential. Will try to close "
+                 "current connections.",
+                 serverShareName.c_str(), loginDescr.c_str());
       WNetCancelConnection2W((LPWSTR)serverShareNameW.c_str(), 0, FALSE);
       WNetCancelConnection2W((LPWSTR)(serverNameW + L"\\IPC$").c_str(), 0, FALSE);
       WNetCancelConnection2W((LPWSTR)serverNameW.c_str(), 0, FALSE);
     }
   }
 
-  CLog::LogF(LOGWARNING, "Can't connect to \"%s\" %s. Error code: %lu", serverShareName.c_str(), loginDescr.c_str(), (unsigned long)connRes);
+  CLog::LogF(LOGWARNING, "Can't connect to \"%s\" %s. Error code: %lu", serverShareName.c_str(),
+             loginDescr.c_str(), (unsigned long)connRes);
   return false;
 }

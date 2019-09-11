@@ -29,11 +29,11 @@ static const unsigned int GRID_START_PADDING = 30; // minutes
 
 void CGUIEPGGridContainerModel::SetInvalid()
 {
-  for (const auto &programme : m_programmeItems)
+  for (const auto& programme : m_programmeItems)
     programme->SetInvalid();
-  for (const auto &channel : m_channelItems)
+  for (const auto& channel : m_channelItems)
     channel->SetInvalid();
-  for (const auto &ruler : m_rulerItems)
+  for (const auto& ruler : m_rulerItems)
     ruler->SetInvalid();
 }
 
@@ -51,7 +51,12 @@ std::shared_ptr<CFileItem> CGUIEPGGridContainerModel::CreateGapItem(int iChannel
   return std::make_shared<CFileItem>(gapTag);
 }
 
-void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> &items, const CDateTime &gridStart, const CDateTime &gridEnd, int iRulerUnit, int iBlocksPerPage, float fBlockSize)
+void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList>& items,
+                                           const CDateTime& gridStart,
+                                           const CDateTime& gridEnd,
+                                           int iRulerUnit,
+                                           int iBlocksPerPage,
+                                           float fBlockSize)
 {
   if (!m_channelItems.empty())
   {
@@ -83,7 +88,9 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
       iLastChannelUID = iCurrentChannelUID;
       iLastClientUID = iCurrentClientUID;
 
-      const std::shared_ptr<CPVRChannel> channel = CServiceBroker::GetPVRManager().ChannelGroups()->GetChannelForEpgTag(fileItem->GetEPGInfoTag());
+      const std::shared_ptr<CPVRChannel> channel =
+          CServiceBroker::GetPVRManager().ChannelGroups()->GetChannelForEpgTag(
+              fileItem->GetEPGInfoTag());
       if (!channel)
         continue;
 
@@ -110,7 +117,8 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
     m_gridStart = CDateTime::GetUTCDateTime() - CDateTimeSpan(0, 0, GetGridStartPadding(), 0);
     m_gridEnd = m_gridStart + CDateTimeSpan(0, 0, iBlocksPerPage * MINSPERBLOCK, 0);
   }
-  else if (gridStart > (CDateTime::GetUTCDateTime() - CDateTimeSpan(0, 0, GetGridStartPadding(), 0)))
+  else if (gridStart >
+           (CDateTime::GetUTCDateTime() - CDateTimeSpan(0, 0, GetGridStartPadding(), 0)))
   {
     // adjust to start "now minus GRID_START_PADDING minutes".
     m_gridStart = CDateTime::GetUTCDateTime() - CDateTimeSpan(0, 0, GetGridStartPadding(), 0);
@@ -123,8 +131,10 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
   }
 
   // roundup
-  m_gridStart = CDateTime(m_gridStart.GetYear(), m_gridStart.GetMonth(), m_gridStart.GetDay(), m_gridStart.GetHour(), m_gridStart.GetMinute() >= 30 ? 30 : 0, 0);
-  m_gridEnd = CDateTime(m_gridEnd.GetYear(), m_gridEnd.GetMonth(), m_gridEnd.GetDay(), m_gridEnd.GetHour(), m_gridEnd.GetMinute() >= 30 ? 30 : 0, 0);
+  m_gridStart = CDateTime(m_gridStart.GetYear(), m_gridStart.GetMonth(), m_gridStart.GetDay(),
+                          m_gridStart.GetHour(), m_gridStart.GetMinute() >= 30 ? 30 : 0, 0);
+  m_gridEnd = CDateTime(m_gridEnd.GetYear(), m_gridEnd.GetMonth(), m_gridEnd.GetDay(),
+                        m_gridEnd.GetHour(), m_gridEnd.GetMinute() >= 30 ? 30 : 0, 0);
 
   ////////////////////////////////////////////////////////////////////////
   // Create ruler items
@@ -150,7 +160,9 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
   // Create epg grid
   const CDateTimeSpan blockDuration(0, 0, MINSPERBLOCK, 0);
   const CDateTimeSpan gridDuration(m_gridEnd - m_gridStart);
-  m_blocks = (gridDuration.GetDays() * 24 * 60 + gridDuration.GetHours() * 60 + gridDuration.GetMinutes()) / MINSPERBLOCK;
+  m_blocks = (gridDuration.GetDays() * 24 * 60 + gridDuration.GetHours() * 60 +
+              gridDuration.GetMinutes()) /
+             MINSPERBLOCK;
   if (m_blocks >= MAXBLOCKS)
     m_blocks = MAXBLOCKS;
   else if (m_blocks < iBlocksPerPage)
@@ -166,9 +178,9 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
     CDateTime gridCursor(m_gridStart); //reset cursor for new channel
     unsigned long progIdx = m_epgItemsPtr[channel].start;
     unsigned long lastIdx = m_epgItemsPtr[channel].stop;
-    int iEpgId            = m_programmeItems[progIdx]->GetEPGInfoTag()->EpgID();
-    int itemSize          = 1; // size of the programme in blocks
-    int savedBlock        = 0;
+    int iEpgId = m_programmeItems[progIdx]->GetEPGInfoTag()->EpgID();
+    int itemSize = 1; // size of the programme in blocks
+    int savedBlock = 0;
     CFileItemPtr item;
     CPVREpgInfoTagPtr tag;
 
@@ -182,7 +194,8 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
         // Note: Start block of an event is start-time-based calculated block + 1,
         //       unless start times matches exactly the begin of a block.
 
-        if (tag->EpgID() != iEpgId || gridCursor < tag->StartAsUTC() || m_gridEnd <= tag->StartAsUTC())
+        if (tag->EpgID() != iEpgId || gridCursor < tag->StartAsUTC() ||
+            m_gridEnd <= tag->StartAsUTC())
           break;
 
         if (gridCursor < tag->EndAsUTC())
@@ -217,7 +230,8 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
 
         if (prevItem)
         {
-          m_gridIndex[channel][savedBlock].item->SetProperty("GenreType", prevItem->GetEPGInfoTag()->GenreType());
+          m_gridIndex[channel][savedBlock].item->SetProperty(
+              "GenreType", prevItem->GetEPGInfoTag()->GenreType());
         }
         else
         {
@@ -240,7 +254,8 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
         {
           if (currItem)
           {
-            m_gridIndex[channel][savedBlock].item->SetProperty("GenreType", currItem->GetEPGInfoTag()->GenreType());
+            m_gridIndex[channel][savedBlock].item->SetProperty(
+                "GenreType", currItem->GetEPGInfoTag()->GenreType());
           }
           else
           {
@@ -259,7 +274,11 @@ void CGUIEPGGridContainerModel::Initialize(const std::unique_ptr<CFileItemList> 
   }
 }
 
-void CGUIEPGGridContainerModel::FindChannelAndBlockIndex(int channelUid, unsigned int broadcastUid, int eventOffset, int &newChannelIndex, int &newBlockIndex) const
+void CGUIEPGGridContainerModel::FindChannelAndBlockIndex(int channelUid,
+                                                         unsigned int broadcastUid,
+                                                         int eventOffset,
+                                                         int& newChannelIndex,
+                                                         int& newBlockIndex) const
 {
   const CDateTimeSpan blockDuration(0, 0, MINSPERBLOCK, 0);
 
@@ -292,7 +311,8 @@ void CGUIEPGGridContainerModel::FindChannelAndBlockIndex(int channelUid, unsigne
       {
         tag = m_programmeItems[progIdx]->GetEPGInfoTag();
 
-        if (tag->EpgID() != iEpgId || gridCursor < tag->StartAsUTC() || m_gridEnd <= tag->StartAsUTC())
+        if (tag->EpgID() != iEpgId || gridCursor < tag->StartAsUTC() ||
+            m_gridEnd <= tag->StartAsUTC())
           break; // next block
 
         if (gridCursor < tag->EndAsUTC())
@@ -313,7 +333,8 @@ void CGUIEPGGridContainerModel::FindChannelAndBlockIndex(int channelUid, unsigne
 
 unsigned int CGUIEPGGridContainerModel::GetGridStartPadding() const
 {
-  unsigned int iPastMinutes = CServiceBroker::GetPVRManager().EpgContainer().GetPastDaysToDisplay() * 24 * 60;
+  unsigned int iPastMinutes =
+      CServiceBroker::GetPVRManager().EpgContainer().GetPastDaysToDisplay() * 24 * 60;
 
   if (iPastMinutes < GRID_START_PADDING)
     return iPastMinutes;
@@ -405,11 +426,11 @@ void CGUIEPGGridContainerModel::FreeRulerMemory(int keepStart, int keepEnd)
 
 void CGUIEPGGridContainerModel::FreeItemsMemory()
 {
-  for (const auto &programme : m_programmeItems)
+  for (const auto& programme : m_programmeItems)
     programme->FreeMemory();
-  for (const auto &channel : m_channelItems)
+  for (const auto& channel : m_channelItems)
     channel->FreeMemory();
-  for (const auto &ruler : m_rulerItems)
+  for (const auto& ruler : m_rulerItems)
     ruler->FreeMemory();
 }
 
@@ -425,10 +446,10 @@ CDateTime CGUIEPGGridContainerModel::GetStartTimeForBlock(int block) const
   else if (block >= m_blocks)
     block = m_blocks - 1;
 
-  return m_gridStart + CDateTimeSpan(0, 0 , block * MINSPERBLOCK, 0);
+  return m_gridStart + CDateTimeSpan(0, 0, block * MINSPERBLOCK, 0);
 }
 
-int CGUIEPGGridContainerModel::GetBlock(const CDateTime &datetime) const
+int CGUIEPGGridContainerModel::GetBlock(const CDateTime& datetime) const
 {
   int diff;
 
@@ -447,7 +468,7 @@ int CGUIEPGGridContainerModel::GetNowBlock() const
   return GetBlock(CDateTime::GetUTCDateTime()) - GetPageNowOffset();
 }
 
-int CGUIEPGGridContainerModel::GetFirstEventBlock(const CPVREpgInfoTagPtr &event) const
+int CGUIEPGGridContainerModel::GetFirstEventBlock(const CPVREpgInfoTagPtr& event) const
 {
   const CDateTime eventStart = event->StartAsUTC();
   int diff;
@@ -465,7 +486,7 @@ int CGUIEPGGridContainerModel::GetFirstEventBlock(const CPVREpgInfoTagPtr &event
   return std::ceil(fBlockIndex);
 }
 
-int CGUIEPGGridContainerModel::GetLastEventBlock(const CPVREpgInfoTagPtr &event) const
+int CGUIEPGGridContainerModel::GetLastEventBlock(const CPVREpgInfoTagPtr& event) const
 {
   // Last block of a tag is always the block calculated using event's end time, not rounded up.
   // Refer to CGUIEPGGridContainerModel::Refresh, where the model is created, for details!

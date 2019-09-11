@@ -42,7 +42,7 @@ protected:
 
 TEST_F(TestLabelFormatter, FormatLabel)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destpath;
   LABEL_MASKS labelMasks;
   CLabelFormatter formatter("", labelMasks.m_strLabel2File);
@@ -62,7 +62,7 @@ TEST_F(TestLabelFormatter, FormatLabel)
 
 TEST_F(TestLabelFormatter, FormatLabel2)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destpath;
   LABEL_MASKS labelMasks;
   CLabelFormatter formatter("", labelMasks.m_strLabel2File);

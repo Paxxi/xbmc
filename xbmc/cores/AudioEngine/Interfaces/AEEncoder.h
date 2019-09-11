@@ -10,7 +10,8 @@
 
 #include "cores/AudioEngine/Utils/AEAudioFormat.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 }
 
@@ -43,7 +44,7 @@ public:
    * @param allow_planar_input allow engine to use with planar formats
    * @return true on success, false on failure
    */
-  virtual bool Initialize(AEAudioFormat &format, bool allow_planar_input = false) = 0;
+  virtual bool Initialize(AEAudioFormat& format, bool allow_planar_input = false) = 0;
 
   /**
    * Reset the encoder for new data
@@ -76,14 +77,14 @@ public:
    * @param out_size output buffer size
    * @return size of encoded data
    */
-  virtual int Encode (uint8_t *in, int in_size, uint8_t *out, int out_size) = 0;
+  virtual int Encode(uint8_t* in, int in_size, uint8_t* out, int out_size) = 0;
 
   /**
    * Get the encoded data
    * @param data return pointer to the buffer with the current encoded block
    * @return the size in bytes of *data
    */
-  virtual int GetData(uint8_t **data) = 0;
+  virtual int GetData(uint8_t** data) = 0;
 
   /**
    * Get the delay in seconds
@@ -92,4 +93,3 @@ public:
    */
   virtual double GetDelay(unsigned int bufferSize) = 0;
 };
-

@@ -18,13 +18,15 @@
 #include "utils/log.h"
 
 CInputStreamPVRBase::CInputStreamPVRBase(IVideoPlayer* pPlayer, const CFileItem& fileitem)
-  : CDVDInputStream(DVDSTREAM_TYPE_PVRMANAGER, fileitem),
-    m_eof(true),
-    m_StreamProps(new PVR_STREAM_PROPERTIES()),
-    m_client(CServiceBroker::GetPVRManager().GetClient(fileitem))
+  : CDVDInputStream(DVDSTREAM_TYPE_PVRMANAGER, fileitem)
+  , m_eof(true)
+  , m_StreamProps(new PVR_STREAM_PROPERTIES())
+  , m_client(CServiceBroker::GetPVRManager().GetClient(fileitem))
 {
   if (!m_client)
-    CLog::Log(LOGERROR, "CInputStreamPVRBase - %s - unable to obtain pvr addon instance for item '%s'", __FUNCTION__, fileitem.GetPath().c_str());
+    CLog::Log(LOGERROR,
+              "CInputStreamPVRBase - %s - unable to obtain pvr addon instance for item '%s'",
+              __FUNCTION__, fileitem.GetPath().c_str());
 }
 
 CInputStreamPVRBase::~CInputStreamPVRBase()
@@ -100,7 +102,7 @@ int CInputStreamPVRBase::GetBlockSize()
   return ret;
 }
 
-bool CInputStreamPVRBase::GetTimes(Times &times)
+bool CInputStreamPVRBase::GetTimes(Times& times)
 {
   PVR_STREAM_TIMES streamTimes;
   if (m_client && m_client->GetStreamTimes(&streamTimes) == PVR_ERROR_NO_ERROR)
@@ -223,7 +225,7 @@ void CInputStreamPVRBase::FillBuffer(bool mode)
     m_client->FillBuffer(mode);
 }
 
-bool CInputStreamPVRBase::SeekTime(double timems, bool backwards, double *startpts)
+bool CInputStreamPVRBase::SeekTime(double timems, bool backwards, double* startpts)
 {
   if (m_client)
     return m_client->SeekTime(timems, backwards, startpts) == PVR_ERROR_NO_ERROR;
@@ -329,7 +331,8 @@ void CInputStreamPVRBase::UpdateStreamMap()
       dStream = streamSubtitle;
     }
     else if (stream.iCodecType == XBMC_CODEC_TYPE_RDS &&
-             CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool("pvrplayback.enableradiords"))
+             CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                 "pvrplayback.enableradiords"))
     {
       std::shared_ptr<CDemuxStreamRadioRDS> streamRadioRDS;
 

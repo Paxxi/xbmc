@@ -19,7 +19,7 @@
 /*    CGLTexture                                                       */
 /************************************************************************/
 CGLTexture::CGLTexture(unsigned int width, unsigned int height, unsigned int format)
-: CBaseTexture(width, height, format)
+  : CBaseTexture(width, height, format)
 {
   unsigned int major, minor;
   CServiceBroker::GetRenderSystem()->GetRenderVersion(major, minor);
@@ -34,7 +34,7 @@ CGLTexture::~CGLTexture()
 
 void CGLTexture::CreateTextureObject()
 {
-  glGenTextures(1, (GLuint*) &m_texture);
+  glGenTextures(1, (GLuint*)&m_texture);
 }
 
 void CGLTexture::DestroyTextureObject()
@@ -65,7 +65,8 @@ void CGLTexture::LoadToGPU()
   // Set the texture's stretching properties
   if (IsMipmapped())
   {
-    GLenum mipmapFilter = (m_scalingMethod == TEXTURE_SCALING::NEAREST ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR);
+    GLenum mipmapFilter = (m_scalingMethod == TEXTURE_SCALING::NEAREST ? GL_LINEAR_MIPMAP_NEAREST
+                                                                       : GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmapFilter);
 
 #ifndef HAS_GLES
@@ -87,12 +88,16 @@ void CGLTexture::LoadToGPU()
   unsigned int maxSize = CServiceBroker::GetRenderSystem()->GetMaxTextureSize();
   if (m_textureHeight > maxSize)
   {
-    CLog::Log(LOGERROR, "GL: Image height %d too big to fit into single texture unit, truncating to %u", m_textureHeight, maxSize);
+    CLog::Log(LOGERROR,
+              "GL: Image height %d too big to fit into single texture unit, truncating to %u",
+              m_textureHeight, maxSize);
     m_textureHeight = maxSize;
   }
   if (m_textureWidth > maxSize)
   {
-    CLog::Log(LOGERROR, "GL: Image width %d too big to fit into single texture unit, truncating to %u", m_textureWidth, maxSize);
+    CLog::Log(LOGERROR,
+              "GL: Image width %d too big to fit into single texture unit, truncating to %u",
+              m_textureWidth, maxSize);
 #ifndef HAS_GLES
     glPixelStorei(GL_UNPACK_ROW_LENGTH, m_textureWidth);
 #endif
@@ -126,14 +131,12 @@ void CGLTexture::LoadToGPU()
 
   if ((m_format & XB_FMT_DXT_MASK) == 0)
   {
-    glTexImage2D(GL_TEXTURE_2D, 0, numcomponents,
-                 m_textureWidth, m_textureHeight, 0,
-                 format, GL_UNSIGNED_BYTE, m_pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, numcomponents, m_textureWidth, m_textureHeight, 0, format,
+                 GL_UNSIGNED_BYTE, m_pixels);
   }
   else
   {
-    glCompressedTexImage2D(GL_TEXTURE_2D, 0, format,
-                           m_textureWidth, m_textureHeight, 0,
+    glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, m_textureWidth, m_textureHeight, 0,
                            GetPitch() * GetRows(), m_pixels);
   }
 
@@ -144,7 +147,7 @@ void CGLTexture::LoadToGPU()
 
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 
-#else	// GLES version
+#else // GLES version
 
   // All incoming textures are BGRA, which GLES does not necessarily support.
   // Some (most?) hardware supports BGRA textures via an extension.
@@ -160,35 +163,35 @@ void CGLTexture::LoadToGPU()
 
   switch (m_format)
   {
-    default:
-    case XB_FMT_RGBA8:
+  default:
+  case XB_FMT_RGBA8:
+    internalformat = pixelformat = GL_RGBA;
+    break;
+  case XB_FMT_RGB8:
+    internalformat = pixelformat = GL_RGB;
+    break;
+  case XB_FMT_A8R8G8B8:
+    if (CServiceBroker::GetRenderSystem()->IsExtSupported("GL_EXT_texture_format_BGRA8888") ||
+        CServiceBroker::GetRenderSystem()->IsExtSupported("GL_IMG_texture_format_BGRA8888"))
+    {
+      internalformat = pixelformat = GL_BGRA_EXT;
+    }
+    else if (CServiceBroker::GetRenderSystem()->IsExtSupported("GL_APPLE_texture_format_BGRA8888"))
+    {
+      // Apple's implementation does not conform to spec. Instead, they require
+      // differing format/internalformat, more like GL.
+      internalformat = GL_RGBA;
+      pixelformat = GL_BGRA_EXT;
+    }
+    else
+    {
+      SwapBlueRed(m_pixels, m_textureHeight, GetPitch());
       internalformat = pixelformat = GL_RGBA;
-      break;
-    case XB_FMT_RGB8:
-      internalformat = pixelformat = GL_RGB;
-      break;
-    case XB_FMT_A8R8G8B8:
-      if (CServiceBroker::GetRenderSystem()->IsExtSupported("GL_EXT_texture_format_BGRA8888") ||
-          CServiceBroker::GetRenderSystem()->IsExtSupported("GL_IMG_texture_format_BGRA8888"))
-      {
-        internalformat = pixelformat = GL_BGRA_EXT;
-      }
-      else if (CServiceBroker::GetRenderSystem()->IsExtSupported("GL_APPLE_texture_format_BGRA8888"))
-      {
-        // Apple's implementation does not conform to spec. Instead, they require
-        // differing format/internalformat, more like GL.
-        internalformat = GL_RGBA;
-        pixelformat = GL_BGRA_EXT;
-      }
-      else
-      {
-        SwapBlueRed(m_pixels, m_textureHeight, GetPitch());
-        internalformat = pixelformat = GL_RGBA;
-      }
-      break;
+    }
+    break;
   }
-  glTexImage2D(GL_TEXTURE_2D, 0, internalformat, m_textureWidth, m_textureHeight, 0,
-    pixelformat, GL_UNSIGNED_BYTE, m_pixels);
+  glTexImage2D(GL_TEXTURE_2D, 0, internalformat, m_textureWidth, m_textureHeight, 0, pixelformat,
+               GL_UNSIGNED_BYTE, m_pixels);
 
   if (IsMipmapped())
   {
@@ -212,4 +215,3 @@ void CGLTexture::BindToUnit(unsigned int unit)
   glActiveTexture(GL_TEXTURE0 + unit);
   glBindTexture(GL_TEXTURE_2D, m_texture);
 }
-

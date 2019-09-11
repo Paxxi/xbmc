@@ -17,9 +17,7 @@
 class CVideoTagLoaderNFO : public VIDEO::IVideoInfoTagLoader
 {
 public:
-  CVideoTagLoaderNFO(const CFileItem& item,
-                     ADDON::ScraperPtr info,
-                     bool lookInFolder);
+  CVideoTagLoaderNFO(const CFileItem& item, ADDON::ScraperPtr info, bool lookInFolder);
 
   virtual ~CVideoTagLoaderNFO() = default;
 
@@ -28,7 +26,8 @@ public:
 
   //! \brief Load "tag" from nfo file.
   //! \brief tag Tag to load info into
-  CInfoScanner::INFO_TYPE Load(CVideoInfoTag& tag, bool prioritise,
+  CInfoScanner::INFO_TYPE Load(CVideoInfoTag& tag,
+                               bool prioritise,
                                std::vector<EmbeddedArt>* = nullptr) override;
 
 protected:

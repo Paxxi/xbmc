@@ -20,9 +20,9 @@
 #include "utils/log.h"
 #include "windowing/GraphicContext.h"
 
-static void libass_log(int level, const char *fmt, va_list args, void *data)
+static void libass_log(int level, const char* fmt, va_list args, void* data)
 {
-  if(level >= 5)
+  if (level >= 5)
     return;
   std::string log = StringUtils::FormatV(fmt, args);
   CLog::Log(LOGDEBUG, "CDVDSubtitlesLibass: [ass] %s", log.c_str());
@@ -35,7 +35,7 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 
   CLog::Log(LOGINFO, "CDVDSubtitlesLibass: Creating ASS library structure");
   m_library = ass_library_init();
-  if(!m_library)
+  if (!m_library)
     return;
 
   ass_set_message_cb(m_library, libass_log, this);
@@ -43,7 +43,7 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
   CLog::Log(LOGINFO, "CDVDSubtitlesLibass: Initializing ASS library font settings");
   // libass uses fontconfig (system lib) which is not wrapped
   //  so translate the path before calling into libass
-  ass_set_fonts_dir(m_library,  CSpecialProtocol::TranslatePath(strPath).c_str());
+  ass_set_fonts_dir(m_library, CSpecialProtocol::TranslatePath(strPath).c_str());
   ass_set_extract_fonts(m_library, 1);
   ass_set_style_overrides(m_library, NULL);
 
@@ -51,14 +51,16 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 
   m_renderer = ass_renderer_init(m_library);
 
-  if(!m_renderer)
+  if (!m_renderer)
     return;
 
   //Setting default font to the Arial in \media\fonts (used if FontConfig fails)
   const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
-  strPath = URIUtils::AddFileToFolder("special://home/media/Fonts/", settings->GetString(CSettings::SETTING_SUBTITLES_FONT));
+  strPath = URIUtils::AddFileToFolder("special://home/media/Fonts/",
+                                      settings->GetString(CSettings::SETTING_SUBTITLES_FONT));
   if (!XFILE::CFile::Exists(strPath))
-    strPath = URIUtils::AddFileToFolder("special://xbmc/media/Fonts/", settings->GetString(CSettings::SETTING_SUBTITLES_FONT));
+    strPath = URIUtils::AddFileToFolder("special://xbmc/media/Fonts/",
+                                        settings->GetString(CSettings::SETTING_SUBTITLES_FONT));
   int fc = !settings->GetBool(CSettings::SETTING_SUBTITLES_OVERRIDEASSFONTS);
 
   ass_set_margins(m_renderer, 0, 0, 0, 0);
@@ -73,7 +75,7 @@ CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 
 CDVDSubtitlesLibass::~CDVDSubtitlesLibass()
 {
-  if(m_track)
+  if (m_track)
     ass_free_track(m_track);
   ass_renderer_done(m_renderer);
   ass_library_done(m_library);
@@ -83,13 +85,13 @@ CDVDSubtitlesLibass::~CDVDSubtitlesLibass()
 bool CDVDSubtitlesLibass::DecodeHeader(char* data, int size)
 {
   CSingleLock lock(m_section);
-  if(!m_library || !data)
+  if (!m_library || !data)
     return false;
 
-  if(!m_track)
+  if (!m_track)
   {
     CLog::Log(LOGINFO, "CDVDSubtitlesLibass: Creating new ASS track");
-    m_track = ass_new_track(m_library) ;
+    m_track = ass_new_track(m_library);
   }
 
   ass_process_codec_private(m_track, data, size);
@@ -99,21 +101,22 @@ bool CDVDSubtitlesLibass::DecodeHeader(char* data, int size)
 bool CDVDSubtitlesLibass::DecodeDemuxPkt(const char* data, int size, double start, double duration)
 {
   CSingleLock lock(m_section);
-  if(!m_track)
+  if (!m_track)
   {
     CLog::Log(LOGERROR, "CDVDSubtitlesLibass: No SSA header found.");
     return false;
   }
 
   //! @bug libass isn't const correct
-  ass_process_chunk(m_track, const_cast<char*>(data), size, DVD_TIME_TO_MSEC(start), DVD_TIME_TO_MSEC(duration));
+  ass_process_chunk(m_track, const_cast<char*>(data), size, DVD_TIME_TO_MSEC(start),
+                    DVD_TIME_TO_MSEC(duration));
   return true;
 }
 
 bool CDVDSubtitlesLibass::CreateTrack(char* buf, size_t size)
 {
   CSingleLock lock(m_section);
-  if(!m_library)
+  if (!m_library)
   {
     CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s - No ASS library struct", __FUNCTION__);
     return false;
@@ -122,19 +125,28 @@ bool CDVDSubtitlesLibass::CreateTrack(char* buf, size_t size)
   CLog::Log(LOGINFO, "SSA Parser: Creating m_track from SSA buffer");
 
   m_track = ass_read_memory(m_library, buf, size, 0);
-  if(m_track == NULL)
+  if (m_track == NULL)
     return false;
 
   return true;
 }
 
-ASS_Image* CDVDSubtitlesLibass::RenderImage(int frameWidth, int frameHeight, int videoWidth, int videoHeight, int sourceWidth, int sourceHeight,
-                                            double pts, int useMargin, double position, int *changes)
+ASS_Image* CDVDSubtitlesLibass::RenderImage(int frameWidth,
+                                            int frameHeight,
+                                            int videoWidth,
+                                            int videoHeight,
+                                            int sourceWidth,
+                                            int sourceHeight,
+                                            double pts,
+                                            int useMargin,
+                                            double position,
+                                            int* changes)
 {
   CSingleLock lock(m_section);
-  if(!m_renderer || !m_track)
+  if (!m_renderer || !m_track)
   {
-    CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s - Missing ASS structs(m_track or m_renderer)", __FUNCTION__);
+    CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s - Missing ASS structs(m_track or m_renderer)",
+              __FUNCTION__);
     return NULL;
   }
 
@@ -153,7 +165,7 @@ ASS_Image* CDVDSubtitlesLibass::RenderImage(int frameWidth, int frameHeight, int
 ASS_Event* CDVDSubtitlesLibass::GetEvents()
 {
   CSingleLock lock(m_section);
-  if(!m_track)
+  if (!m_track)
   {
     CLog::Log(LOGERROR, "CDVDSubtitlesLibass: %s -  Missing ASS structs(m_track)", __FUNCTION__);
     return NULL;
@@ -164,8 +176,7 @@ ASS_Event* CDVDSubtitlesLibass::GetEvents()
 int CDVDSubtitlesLibass::GetNrOfEvents()
 {
   CSingleLock lock(m_section);
-  if(!m_track)
+  if (!m_track)
     return 0;
   return m_track->n_events;
 }
-

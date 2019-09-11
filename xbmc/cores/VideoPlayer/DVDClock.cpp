@@ -200,10 +200,10 @@ double CDVDClock::ErrorAdjust(double error, const char* log)
   if (adjustment == 0)
     return 0;
 
-  Discontinuity(clock+adjustment, absolute);
+  Discontinuity(clock + adjustment, absolute);
 
-  CLog::Log(LOGDEBUG, "CDVDClock::ErrorAdjust - %s - error:%f, adjusted:%f",
-                      log, error, adjustment);
+  CLog::Log(LOGDEBUG, "CDVDClock::ErrorAdjust - %s - error:%f, adjusted:%f", log, error,
+            adjustment);
   return adjustment;
 }
 
@@ -211,7 +211,7 @@ void CDVDClock::Discontinuity(double clock, double absolute)
 {
   CSingleLock lock(m_critSection);
   m_startClock = AbsoluteToSystem(absolute);
-  if(m_pauseClock)
+  if (m_pauseClock)
     m_pauseClock = m_startClock;
   m_iDisc = clock;
   m_bReset = false;
@@ -230,10 +230,10 @@ void CDVDClock::SetMaxSpeedAdjust(double speed)
 int CDVDClock::UpdateFramerate(double fps, double* interval /*= NULL*/)
 {
   //sent with fps of 0 means we are not playing video
-  if(fps == 0.0)
+  if (fps == 0.0)
     return -1;
 
-  m_frameTime = 1/fps * DVD_TIME_BASE;
+  m_frameTime = 1 / fps * DVD_TIME_BASE;
 
   //check if the videoreferenceclock is running, will return -1 if not
   double rate = m_videoRefClock->GetRefreshRate(interval);
@@ -248,11 +248,11 @@ int CDVDClock::UpdateFramerate(double fps, double* interval /*= NULL*/)
   //set the speed of the videoreferenceclock based on fps, refreshrate and maximum speed adjust set by user
   if (m_maxspeedadjust > 0.05)
   {
-    if (weight / MathUtils::round_int(weight) < 1.0 + m_maxspeedadjust / 200.0
-    &&  weight / MathUtils::round_int(weight) > 1.0 - m_maxspeedadjust / 200.0)
+    if (weight / MathUtils::round_int(weight) < 1.0 + m_maxspeedadjust / 200.0 &&
+        weight / MathUtils::round_int(weight) > 1.0 - m_maxspeedadjust / 200.0)
       weight = MathUtils::round_int(weight);
   }
-  double speed = (rate * 2.0 ) / (fps * weight);
+  double speed = (rate * 2.0) / (fps * weight);
   lock.Leave();
 
   m_videoRefClock->SetSpeed(speed);
@@ -283,7 +283,7 @@ double CDVDClock::SystemToPlaying(int64_t system)
   {
     m_startClock = system;
     m_systemUsed = m_systemFrequency;
-    if(m_pauseClock)
+    if (m_pauseClock)
       m_pauseClock = m_startClock;
     m_iDisc = 0;
     m_systemAdjust = 0;

@@ -6,17 +6,18 @@
  *  See LICENSES/README.md for more information.
  */
 
+#include "RenderSystemGLES.h"
+
 #include "guilib/DirtyRegion.h"
-#include "windowing/GraphicContext.h"
+#include "rendering/MatrixGL.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
-#include "RenderSystemGLES.h"
-#include "rendering/MatrixGL.h"
 #include "utils/GLUtils.h"
-#include "utils/log.h"
-#include "utils/TimeUtils.h"
-#include "utils/SystemInfo.h"
 #include "utils/MathUtils.h"
+#include "utils/SystemInfo.h"
+#include "utils/TimeUtils.h"
+#include "utils/log.h"
+#include "windowing/GraphicContext.h"
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
 #endif
@@ -26,7 +27,7 @@
 #endif
 
 CRenderSystemGLES::CRenderSystemGLES()
- : CRenderSystemBase()
+  : CRenderSystemBase()
 {
 }
 
@@ -56,19 +57,19 @@ bool CRenderSystemGLES::InitRenderSystem()
   }
 
   // Get our driver vendor and renderer
-  const char *tmpVendor = (const char*) glGetString(GL_VENDOR);
+  const char* tmpVendor = (const char*)glGetString(GL_VENDOR);
   m_RenderVendor.clear();
   if (tmpVendor != NULL)
     m_RenderVendor = tmpVendor;
 
-  const char *tmpRenderer = (const char*) glGetString(GL_RENDERER);
+  const char* tmpRenderer = (const char*)glGetString(GL_RENDERER);
   m_RenderRenderer.clear();
   if (tmpRenderer != NULL)
     m_RenderRenderer = tmpRenderer;
 
-  m_RenderExtensions  = " ";
+  m_RenderExtensions = " ";
 
-  const char *tmpExtensions = (const char*) glGetString(GL_EXTENSIONS);
+  const char* tmpExtensions = (const char*)glGetString(GL_EXTENSIONS);
   if (tmpExtensions != NULL)
   {
     m_RenderExtensions += tmpExtensions;
@@ -82,20 +83,26 @@ bool CRenderSystemGLES::InitRenderSystem()
   {
     if (IsExtSupported("GL_KHR_debug"))
     {
-      auto glDebugMessageCallback = CEGLUtils::GetRequiredProcAddress<PFNGLDEBUGMESSAGECALLBACKKHRPROC>("glDebugMessageCallbackKHR");
-      auto glDebugMessageControl = CEGLUtils::GetRequiredProcAddress<PFNGLDEBUGMESSAGECONTROLKHRPROC>("glDebugMessageControlKHR");
+      auto glDebugMessageCallback =
+          CEGLUtils::GetRequiredProcAddress<PFNGLDEBUGMESSAGECALLBACKKHRPROC>(
+              "glDebugMessageCallbackKHR");
+      auto glDebugMessageControl =
+          CEGLUtils::GetRequiredProcAddress<PFNGLDEBUGMESSAGECONTROLKHRPROC>(
+              "glDebugMessageControlKHR");
 
       glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
       glDebugMessageCallback(KODI::UTILS::GL::GlErrorCallback, nullptr);
 
       // ignore shader compilation information
-      glDebugMessageControl(GL_DEBUG_SOURCE_SHADER_COMPILER_KHR, GL_DEBUG_TYPE_OTHER_KHR, GL_DONT_CARE, 0, nullptr, GL_FALSE);
+      glDebugMessageControl(GL_DEBUG_SOURCE_SHADER_COMPILER_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+                            GL_DONT_CARE, 0, nullptr, GL_FALSE);
 
       CLog::Log(LOGDEBUG, "OpenGL(ES): debugging enabled");
     }
     else
     {
-      CLog::Log(LOGDEBUG, "OpenGL(ES): debugging requested but the required extension isn't available (GL_KHR_debug)");
+      CLog::Log(LOGDEBUG, "OpenGL(ES): debugging requested but the required extension isn't "
+                          "available (GL_KHR_debug)");
     }
   }
 #endif
@@ -114,17 +121,17 @@ bool CRenderSystemGLES::ResetRenderSystem(int width, int height)
   m_width = width;
   m_height = height;
 
-  glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   CalculateMaxTexturesize();
 
-  CRect rect( 0, 0, width, height );
-  SetViewPort( rect );
+  CRect rect(0, 0, width, height);
+  SetViewPort(rect);
 
   glEnable(GL_SCISSOR_TEST);
 
   glMatrixProject.Clear();
   glMatrixProject->LoadIdentity();
-  glMatrixProject->Ortho(0.0f, width-1, height-1, 0.0f, -1.0f, 1.0f);
+  glMatrixProject->Ortho(0.0f, width - 1, height - 1, 0.0f, -1.0f, 1.0f);
   glMatrixProject.Load();
 
   glMatrixModview.Clear();
@@ -136,7 +143,7 @@ bool CRenderSystemGLES::ResetRenderSystem(int width, int height)
   glMatrixTexture.Load();
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-  glEnable(GL_BLEND);          // Turn Blending On
+  glEnable(GL_BLEND); // Turn Blending On
   glDisable(GL_DEPTH_TEST);
 
   return true;
@@ -205,7 +212,7 @@ bool CRenderSystemGLES::ClearBuffers(UTILS::Color color)
 
 bool CRenderSystemGLES::IsExtSupported(const char* extension) const
 {
-  if (strcmp( extension, "GL_EXT_framebuffer_object" ) == 0)
+  if (strcmp(extension, "GL_EXT_framebuffer_object") == 0)
   {
     // GLES has FBO as a core element, not an extension!
     return true;
@@ -213,7 +220,7 @@ bool CRenderSystemGLES::IsExtSupported(const char* extension) const
   else
   {
     std::string name;
-    name  = " ";
+    name = " ";
     name += extension;
     name += " ";
 
@@ -264,8 +271,8 @@ void CRenderSystemGLES::CaptureStateBlock()
 
   glDisable(GL_SCISSOR_TEST); // fixes FBO corruption on Macs
   glActiveTexture(GL_TEXTURE0);
-//! @todo - NOTE: Only for Screensavers & Visualisations
-//  glColor3f(1.0, 1.0, 1.0);
+  //! @todo - NOTE: Only for Screensavers & Visualisations
+  //  glColor3f(1.0, 1.0, 1.0);
 }
 
 void CRenderSystemGLES::ApplyStateBlock()
@@ -282,30 +289,35 @@ void CRenderSystemGLES::ApplyStateBlock()
   glClear(GL_DEPTH_BUFFER_BIT);
 }
 
-void CRenderSystemGLES::SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor)
+void CRenderSystemGLES::SetCameraPosition(const CPoint& camera,
+                                          int screenWidth,
+                                          int screenHeight,
+                                          float stereoFactor)
 {
   if (!m_bRenderCreated)
     return;
 
-  CPoint offset = camera - CPoint(screenWidth*0.5f, screenHeight*0.5f);
+  CPoint offset = camera - CPoint(screenWidth * 0.5f, screenHeight * 0.5f);
 
-  float w = (float)m_viewPort[2]*0.5f;
-  float h = (float)m_viewPort[3]*0.5f;
+  float w = (float)m_viewPort[2] * 0.5f;
+  float h = (float)m_viewPort[3] * 0.5f;
 
   glMatrixModview->LoadIdentity();
   glMatrixModview->Translatef(-(w + offset.x - stereoFactor), +(h + offset.y), 0);
-  glMatrixModview->LookAt(0.0, 0.0, -2.0*h, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
+  glMatrixModview->LookAt(0.0, 0.0, -2.0 * h, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
   glMatrixModview.Load();
 
   glMatrixProject->LoadIdentity();
-  glMatrixProject->Frustum( (-w - offset.x)*0.5f, (w - offset.x)*0.5f, (-h + offset.y)*0.5f, (h + offset.y)*0.5f, h, 100*h);
+  glMatrixProject->Frustum((-w - offset.x) * 0.5f, (w - offset.x) * 0.5f, (-h + offset.y) * 0.5f,
+                           (h + offset.y) * 0.5f, h, 100 * h);
   glMatrixProject.Load();
 }
 
-void CRenderSystemGLES::Project(float &x, float &y, float &z)
+void CRenderSystemGLES::Project(float& x, float& y, float& z)
 {
   GLfloat coordX, coordY, coordZ;
-  if (CMatrixGL::Project(x, y, z, glMatrixModview.Get(), glMatrixProject.Get(), m_viewPort, &coordX, &coordY, &coordZ))
+  if (CMatrixGL::Project(x, y, z, glMatrixModview.Get(), glMatrixProject.Get(), m_viewPort, &coordX,
+                         &coordY, &coordZ))
   {
     x = coordX;
     y = (float)(m_viewPort[1] + m_viewPort[3] - coordY);
@@ -335,8 +347,10 @@ void CRenderSystemGLES::SetViewPort(const CRect& viewPort)
   if (!m_bRenderCreated)
     return;
 
-  glScissor((GLint) viewPort.x1, (GLint) (m_height - viewPort.y1 - viewPort.Height()), (GLsizei) viewPort.Width(), (GLsizei) viewPort.Height());
-  glViewport((GLint) viewPort.x1, (GLint) (m_height - viewPort.y1 - viewPort.Height()), (GLsizei) viewPort.Width(), (GLsizei) viewPort.Height());
+  glScissor((GLint)viewPort.x1, (GLint)(m_height - viewPort.y1 - viewPort.Height()),
+            (GLsizei)viewPort.Width(), (GLsizei)viewPort.Height());
+  glViewport((GLint)viewPort.x1, (GLint)(m_height - viewPort.y1 - viewPort.Height()),
+             (GLsizei)viewPort.Width(), (GLsizei)viewPort.Height());
   m_viewPort[0] = viewPort.x1;
   m_viewPort[1] = m_height - viewPort.y1 - viewPort.Height();
   m_viewPort[2] = viewPort.Width();
@@ -351,7 +365,7 @@ bool CRenderSystemGLES::ScissorsCanEffectClipping()
   return false;
 }
 
-CRect CRenderSystemGLES::ClipRectToScissorRect(const CRect &rect)
+CRect CRenderSystemGLES::ClipRectToScissorRect(const CRect& rect)
 {
   if (!m_pShader[m_method])
     return CRect();
@@ -359,13 +373,11 @@ CRect CRenderSystemGLES::ClipRectToScissorRect(const CRect &rect)
   float xOffset = m_pShader[m_method]->GetClipXOffset();
   float yFactor = m_pShader[m_method]->GetClipYFactor();
   float yOffset = m_pShader[m_method]->GetClipYOffset();
-  return CRect(rect.x1 * xFactor + xOffset,
-               rect.y1 * yFactor + yOffset,
-               rect.x2 * xFactor + xOffset,
-               rect.y2 * yFactor + yOffset);
+  return CRect(rect.x1 * xFactor + xOffset, rect.y1 * yFactor + yOffset,
+               rect.x2 * xFactor + xOffset, rect.y2 * yFactor + yOffset);
 }
 
-void CRenderSystemGLES::SetScissors(const CRect &rect)
+void CRenderSystemGLES::SetScissors(const CRect& rect)
 {
   if (!m_bRenderCreated)
     return;
@@ -373,7 +385,7 @@ void CRenderSystemGLES::SetScissors(const CRect &rect)
   GLint y1 = MathUtils::round_int(rect.y1);
   GLint x2 = MathUtils::round_int(rect.x2);
   GLint y2 = MathUtils::round_int(rect.y2);
-  glScissor(x1, m_height - y2, x2-x1, y2-y1);
+  glScissor(x1, m_height - y2, x2 - x1, y2 - y1);
 }
 
 void CRenderSystemGLES::ResetScissors()
@@ -390,7 +402,8 @@ void CRenderSystemGLES::InitialiseShaders()
     defines += "#define KODI_LIMITED_RANGE 1\n";
   }
 
-  m_pShader[SM_DEFAULT].reset(new CGLESShader("gles_shader.vert", "gles_shader_default.frag", defines));
+  m_pShader[SM_DEFAULT].reset(
+      new CGLESShader("gles_shader.vert", "gles_shader_default.frag", defines));
   if (!m_pShader[SM_DEFAULT]->CompileAndLink())
   {
     m_pShader[SM_DEFAULT]->Free();
@@ -430,7 +443,8 @@ void CRenderSystemGLES::InitialiseShaders()
     CLog::Log(LOGERROR, "GUI Shader gles_shader_texture_noblend.frag - compile and link failed");
   }
 
-  m_pShader[SM_MULTI_BLENDCOLOR].reset(new CGLESShader("gles_shader_multi_blendcolor.frag", defines));
+  m_pShader[SM_MULTI_BLENDCOLOR].reset(
+      new CGLESShader("gles_shader_multi_blendcolor.frag", defines));
   if (!m_pShader[SM_MULTI_BLENDCOLOR]->CompileAndLink())
   {
     m_pShader[SM_MULTI_BLENDCOLOR]->Free();
@@ -446,7 +460,8 @@ void CRenderSystemGLES::InitialiseShaders()
     CLog::Log(LOGERROR, "GUI Shader gles_shader_rgba.frag - compile and link failed");
   }
 
-  m_pShader[SM_TEXTURE_RGBA_BLENDCOLOR].reset(new CGLESShader("gles_shader_rgba_blendcolor.frag", defines));
+  m_pShader[SM_TEXTURE_RGBA_BLENDCOLOR].reset(
+      new CGLESShader("gles_shader_rgba_blendcolor.frag", defines));
   if (!m_pShader[SM_TEXTURE_RGBA_BLENDCOLOR]->CompileAndLink())
   {
     m_pShader[SM_TEXTURE_RGBA_BLENDCOLOR]->Free();
@@ -473,7 +488,8 @@ void CRenderSystemGLES::InitialiseShaders()
     }
 
 
-    m_pShader[SM_TEXTURE_RGBA_BOB_OES].reset(new CGLESShader("gles_shader_rgba_bob_oes.frag", defines));
+    m_pShader[SM_TEXTURE_RGBA_BOB_OES].reset(
+        new CGLESShader("gles_shader_rgba_bob_oes.frag", defines));
     if (!m_pShader[SM_TEXTURE_RGBA_BOB_OES]->CompileAndLink())
     {
       m_pShader[SM_TEXTURE_RGBA_BOB_OES]->Free();

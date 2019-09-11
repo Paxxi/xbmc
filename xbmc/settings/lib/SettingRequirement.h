@@ -16,9 +16,10 @@
 class CSettingRequirementCondition : public CSettingConditionItem
 {
 public:
-  explicit CSettingRequirementCondition(CSettingsManager *settingsManager = nullptr)
+  explicit CSettingRequirementCondition(CSettingsManager* settingsManager = nullptr)
     : CSettingConditionItem(settingsManager)
-  { }
+  {
+  }
   ~CSettingRequirementCondition() override = default;
 
   bool Check() const override;
@@ -27,21 +28,28 @@ public:
 class CSettingRequirementConditionCombination : public CSettingConditionCombination
 {
 public:
-  explicit CSettingRequirementConditionCombination(CSettingsManager *settingsManager = nullptr)
+  explicit CSettingRequirementConditionCombination(CSettingsManager* settingsManager = nullptr)
     : CSettingConditionCombination(settingsManager)
-  { }
+  {
+  }
   ~CSettingRequirementConditionCombination() override = default;
 
   bool Check() const override;
 
 private:
-  CBooleanLogicOperation* newOperation() override { return new CSettingRequirementConditionCombination(m_settingsManager); }
-  CBooleanLogicValue* newValue() override { return new CSettingRequirementCondition(m_settingsManager); }
+  CBooleanLogicOperation* newOperation() override
+  {
+    return new CSettingRequirementConditionCombination(m_settingsManager);
+  }
+  CBooleanLogicValue* newValue() override
+  {
+    return new CSettingRequirementCondition(m_settingsManager);
+  }
 };
 
 class CSettingRequirement : public CSettingCondition
 {
 public:
-  explicit CSettingRequirement(CSettingsManager *settingsManager = nullptr);
+  explicit CSettingRequirement(CSettingsManager* settingsManager = nullptr);
   ~CSettingRequirement() override = default;
 };

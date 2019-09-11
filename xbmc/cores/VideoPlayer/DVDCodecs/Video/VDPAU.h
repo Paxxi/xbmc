@@ -28,24 +28,27 @@
 
 #include "cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodec.h"
 #include "cores/VideoPlayer/Process/VideoBuffer.h"
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include "threads/CriticalSection.h"
-#include "threads/SharedSection.h"
 #include "cores/VideoSettings.h"
 #include "guilib/DispResource.h"
+#include "threads/CriticalSection.h"
 #include "threads/Event.h"
+#include "threads/SharedSection.h"
 #include "threads/Thread.h"
 #include "utils/ActorProtocol.h"
 #include "utils/Geometry.h"
+
 #include <deque>
 #include <list>
 #include <map>
 #include <vector>
 
-extern "C" {
-#include <libavutil/avutil.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+extern "C"
+{
 #include <libavcodec/vdpau.h>
+#include <libavutil/avutil.h>
 }
 
 class CProcessInfo;
@@ -59,8 +62,8 @@ namespace VDPAU
 
 struct VDPAU_procs
 {
-  VdpGetProcAddress*vdp_get_proc_address;
-  VdpDeviceDestroy*                    vdp_device_destroy;
+  VdpGetProcAddress* vdp_get_proc_address;
+  VdpDeviceDestroy* vdp_device_destroy;
 
   VdpVideoSurfaceCreate* vdp_video_surface_create;
   VdpVideoSurfaceDestroy* vdp_video_surface_destroy;
@@ -83,7 +86,7 @@ struct VDPAU_procs
   VdpVideoMixerRender* vdp_video_mixer_render;
   VdpVideoMixerSetAttributeValues* vdp_video_mixer_set_attribute_values;
 
-  VdpGenerateCSCMatrix*  vdp_generate_csc_matrix;
+  VdpGenerateCSCMatrix* vdp_generate_csc_matrix;
 
   VdpGetErrorString* vdp_get_error_string;
 
@@ -116,20 +119,88 @@ public:
   bool canSkipDeint;
   bool draining;
 
-  void IncDecoded() { CSingleLock l(m_sec); decodedPics++;}
-  void DecDecoded() { CSingleLock l(m_sec); decodedPics--;}
-  void IncProcessed() { CSingleLock l(m_sec); processedPics++;}
-  void DecProcessed() { CSingleLock l(m_sec); processedPics--;}
-  void IncRender() { CSingleLock l(m_sec); renderPics++;}
-  void DecRender() { CSingleLock l(m_sec); renderPics--;}
-  void Reset() { CSingleLock l(m_sec); decodedPics=0; processedPics=0;renderPics=0;latency=0;}
-  void Get(uint16_t &decoded, uint16_t &processed, uint16_t &render) {CSingleLock l(m_sec); decoded = decodedPics, processed=processedPics, render=renderPics;}
-  void SetParams(uint64_t time, int flags) { CSingleLock l(m_sec); latency = time; codecFlags = flags; }
-  void GetParams(uint64_t &lat, int &flags) { CSingleLock l(m_sec); lat = latency; flags = codecFlags; }
-  void SetCanSkipDeint(bool canSkip) { CSingleLock l(m_sec); canSkipDeint = canSkip; }
-  bool CanSkipDeint() { CSingleLock l(m_sec); if (canSkipDeint) return true; else return false;}
-  void SetDraining(bool drain) { CSingleLock l(m_sec); draining = drain; }
-  bool IsDraining() { CSingleLock l(m_sec); if (draining) return true; else return false;}
+  void IncDecoded()
+  {
+    CSingleLock l(m_sec);
+    decodedPics++;
+  }
+  void DecDecoded()
+  {
+    CSingleLock l(m_sec);
+    decodedPics--;
+  }
+  void IncProcessed()
+  {
+    CSingleLock l(m_sec);
+    processedPics++;
+  }
+  void DecProcessed()
+  {
+    CSingleLock l(m_sec);
+    processedPics--;
+  }
+  void IncRender()
+  {
+    CSingleLock l(m_sec);
+    renderPics++;
+  }
+  void DecRender()
+  {
+    CSingleLock l(m_sec);
+    renderPics--;
+  }
+  void Reset()
+  {
+    CSingleLock l(m_sec);
+    decodedPics = 0;
+    processedPics = 0;
+    renderPics = 0;
+    latency = 0;
+  }
+  void Get(uint16_t& decoded, uint16_t& processed, uint16_t& render)
+  {
+    CSingleLock l(m_sec);
+    decoded = decodedPics, processed = processedPics, render = renderPics;
+  }
+  void SetParams(uint64_t time, int flags)
+  {
+    CSingleLock l(m_sec);
+    latency = time;
+    codecFlags = flags;
+  }
+  void GetParams(uint64_t& lat, int& flags)
+  {
+    CSingleLock l(m_sec);
+    lat = latency;
+    flags = codecFlags;
+  }
+  void SetCanSkipDeint(bool canSkip)
+  {
+    CSingleLock l(m_sec);
+    canSkipDeint = canSkip;
+  }
+  bool CanSkipDeint()
+  {
+    CSingleLock l(m_sec);
+    if (canSkipDeint)
+      return true;
+    else
+      return false;
+  }
+  void SetDraining(bool drain)
+  {
+    CSingleLock l(m_sec);
+    draining = drain;
+  }
+  bool IsDraining()
+  {
+    CSingleLock l(m_sec);
+    if (draining)
+      return true;
+    else
+      return false;
+  }
+
 private:
   CCriticalSection m_sec;
 };
@@ -153,15 +224,15 @@ struct CVdpauConfig
   int outHeight;
   VdpDecoder vdpDecoder;
   VdpChromaType vdpChromaType;
-  CVdpauBufferStats *stats;
-  CDecoder *vdpau;
+  CVdpauBufferStats* stats;
+  CDecoder* vdpau;
   int upscale;
-  CVideoSurfaces *videoSurfaces;
+  CVideoSurfaces* videoSurfaces;
   int numRenderBuffers;
   uint32_t maxReferences;
   bool useInteropYuv;
-  CVDPAUContext *context;
-  CProcessInfo *processInfo;
+  CVDPAUContext* context;
+  CProcessInfo* processInfo;
   int resetCounter;
   uint64_t timeOpened;
 };
@@ -173,10 +244,7 @@ struct CVdpauConfig
 struct CVdpauDecodedPicture
 {
   CVdpauDecodedPicture() = default;
-  CVdpauDecodedPicture(const CVdpauDecodedPicture &rhs)
-  {
-    *this = rhs;
-  }
+  CVdpauDecodedPicture(const CVdpauDecodedPicture& rhs) { *this = rhs; }
   CVdpauDecodedPicture& operator=(const CVdpauDecodedPicture& rhs)
   {
     DVDPic.SetParams(rhs.DVDPic);
@@ -195,10 +263,7 @@ struct CVdpauDecodedPicture
 struct CVdpauProcessedPicture
 {
   CVdpauProcessedPicture() = default;
-  CVdpauProcessedPicture(const CVdpauProcessedPicture& rhs)
-  {
-    *this = rhs;
-  }
+  CVdpauProcessedPicture(const CVdpauProcessedPicture& rhs) { *this = rhs; }
   CVdpauProcessedPicture& operator=(const CVdpauProcessedPicture& rhs)
   {
     DVDPic.SetParams(rhs.DVDPic);
@@ -221,14 +286,17 @@ struct CVdpauProcessedPicture
 class CVdpauRenderPicture : public CVideoBuffer
 {
 public:
-  explicit CVdpauRenderPicture(int id) : CVideoBuffer(id) { }
+  explicit CVdpauRenderPicture(int id)
+    : CVideoBuffer(id)
+  {
+  }
   VideoPicture DVDPic;
   CVdpauProcessedPicture procPic;
   int width;
   int height;
   CRect crop;
-  void *device;
-  void *procFunc;
+  void* device;
+  void* procFunc;
   int64_t ident;
 };
 
@@ -239,7 +307,8 @@ public:
 class CMixerControlProtocol : public Actor::Protocol
 {
 public:
-  CMixerControlProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
+  CMixerControlProtocol(std::string name, CEvent* inEvent, CEvent* outEvent)
+    : Protocol(name, inEvent, outEvent){};
   enum OutSignal
   {
     INIT = 0,
@@ -256,7 +325,8 @@ public:
 class CMixerDataProtocol : public Actor::Protocol
 {
 public:
-  CMixerDataProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
+  CMixerDataProtocol(std::string name, CEvent* inEvent, CEvent* outEvent)
+    : Protocol(name, inEvent, outEvent){};
   enum OutSignal
   {
     FRAME,
@@ -276,18 +346,19 @@ public:
 class CMixer : private CThread
 {
 public:
-  explicit CMixer(CEvent *inMsgEvent);
+  explicit CMixer(CEvent* inMsgEvent);
   ~CMixer() override;
   void Start();
   void Dispose();
   bool IsActive();
   CMixerControlProtocol m_controlPort;
   CMixerDataProtocol m_dataPort;
+
 protected:
   void OnStartup() override;
   void OnExit() override;
   void Process() override;
-  void StateMachine(int signal, Actor::Protocol *port, Actor::Message *msg);
+  void StateMachine(int signal, Actor::Protocol* port, Actor::Message* msg);
   void Init();
   void Uninit();
   void Flush();
@@ -299,7 +370,7 @@ protected:
   void SetPostProcFeatures(bool postProcEnabled);
   void PostProcOff();
   void InitCSCMatrix(int Width);
-  bool GenerateStudioCSCMatrix(VdpColorStandard colorStandard, VdpCSCMatrix &studioCSCMatrix);
+  bool GenerateStudioCSCMatrix(VdpColorStandard colorStandard, VdpCSCMatrix& studioCSCMatrix);
   void SetColor();
   void SetNoiseReduction();
   void SetSharpness();
@@ -310,7 +381,7 @@ protected:
   std::string GetDeintStrFromInterlaceMethod(EINTERLACEMETHOD method);
   bool CheckStatus(VdpStatus vdp_st, int line);
   CEvent m_outMsgEvent;
-  CEvent *m_inMsgEvent;
+  CEvent* m_inMsgEvent;
   int m_state;
   bool m_bStateMachineSelfTrigger;
 
@@ -320,7 +391,7 @@ protected:
   CVdpauConfig m_config;
   VdpVideoMixer m_videoMixer;
   VdpProcamp m_Procamp;
-  VdpCSCMatrix  m_CSCMatrix;
+  VdpCSCMatrix m_CSCMatrix;
   bool m_PostProc;
   float m_Brightness;
   float m_Contrast;
@@ -329,7 +400,7 @@ protected:
   int m_Deint;
   int m_Upscale;
   bool m_SeenInterlaceFlag;
-  unsigned int m_ColorMatrix       : 4;
+  unsigned int m_ColorMatrix : 4;
   VdpVideoMixerPictureStructure m_mixerfield;
   int m_mixerstep;
   int m_mixersteps;
@@ -346,7 +417,8 @@ protected:
 class COutputControlProtocol : public Actor::Protocol
 {
 public:
-  COutputControlProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Actor::Protocol(name, inEvent, outEvent) {};
+  COutputControlProtocol(std::string name, CEvent* inEvent, CEvent* outEvent)
+    : Actor::Protocol(name, inEvent, outEvent){};
   enum OutSignal
   {
     INIT,
@@ -365,7 +437,8 @@ public:
 class COutputDataProtocol : public Actor::Protocol
 {
 public:
-  COutputDataProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Actor::Protocol(name, inEvent, outEvent) {};
+  COutputDataProtocol(std::string name, CEvent* inEvent, CEvent* outEvent)
+    : Actor::Protocol(name, inEvent, outEvent){};
   enum OutSignal
   {
     NEWFRAME = 0,
@@ -388,21 +461,22 @@ class CVdpauBufferPool;
 class COutput : private CThread
 {
 public:
-  COutput(CDecoder &decoder, CEvent *inMsgEvent);
+  COutput(CDecoder& decoder, CEvent* inMsgEvent);
   ~COutput() override;
   void Start();
   void Dispose();
   COutputControlProtocol m_controlPort;
   COutputDataProtocol m_dataPort;
+
 protected:
   void OnStartup() override;
   void OnExit() override;
   void Process() override;
-  void StateMachine(int signal, Actor::Protocol *port, Actor::Message *msg);
+  void StateMachine(int signal, Actor::Protocol* port, Actor::Message* msg);
   bool HasWork();
-  CVdpauRenderPicture *ProcessMixerPicture();
-  void QueueReturnPicture(CVdpauRenderPicture *pic);
-  void ProcessReturnPicture(CVdpauRenderPicture *pic);
+  CVdpauRenderPicture* ProcessMixerPicture();
+  void QueueReturnPicture(CVdpauRenderPicture* pic);
+  void ProcessReturnPicture(CVdpauRenderPicture* pic);
   void ProcessSyncPicture();
   bool Init();
   bool Uninit();
@@ -413,10 +487,10 @@ protected:
   void InitMixer();
   bool CheckStatus(VdpStatus vdp_st, int line);
   CEvent m_outMsgEvent;
-  CEvent *m_inMsgEvent;
+  CEvent* m_inMsgEvent;
   int m_state;
   bool m_bStateMachineSelfTrigger;
-  CDecoder &m_vdpau;
+  CDecoder& m_vdpau;
 
   // extended state variables for state machine
   int m_extTimeout;
@@ -443,6 +517,7 @@ public:
   void Reset();
   int Size();
   bool HasRefs();
+
 protected:
   std::map<VdpVideoSurface, int> m_state;
   std::list<VdpVideoSurface> m_freeSurfaces;
@@ -456,13 +531,14 @@ protected:
 class CVDPAUContext
 {
 public:
-  static bool EnsureContext(CVDPAUContext **ctx);
+  static bool EnsureContext(CVDPAUContext** ctx);
   void Release();
   VDPAU_procs& GetProcs();
   VdpDevice GetDevice();
   bool Supports(VdpVideoMixerFeature feature);
   VdpVideoMixerFeature* GetFeatures();
   int GetFeatureCount();
+
 private:
   CVDPAUContext();
   void Close();
@@ -471,32 +547,32 @@ private:
   void DestroyContext();
   void QueryProcs();
   void SpewHardwareAvailable();
-  static CVDPAUContext *m_context;
+  static CVDPAUContext* m_context;
   static CCriticalSection m_section;
-  static Display *m_display;
+  static Display* m_display;
   int m_refCount;
   VdpVideoMixerFeature m_vdpFeatures[14];
   int m_featureCount;
-  static void *m_dlHandle;
+  static void* m_dlHandle;
   VdpDevice m_vdpDevice;
   VDPAU_procs m_vdpProcs;
-  VdpStatus (*dl_vdp_device_create_x11)(Display* display, int screen, VdpDevice* device, VdpGetProcAddress **get_proc_address);
+  VdpStatus (*dl_vdp_device_create_x11)(Display* display,
+                                        int screen,
+                                        VdpDevice* device,
+                                        VdpGetProcAddress** get_proc_address);
 };
 
 /**
  *  VDPAU main class
  */
-class CDecoder
- : public IHardwareDecoder
- , public IDispResource
+class CDecoder : public IHardwareDecoder, public IDispResource
 {
-   friend class CVdpauBufferPool;
+  friend class CVdpauBufferPool;
 
 public:
-
   struct Desc
   {
-    const char *name;
+    const char* name;
     uint32_t id;
     uint32_t aux; /* optional extra parameter... */
   };
@@ -504,8 +580,8 @@ public:
   explicit CDecoder(CProcessInfo& processInfo);
   ~CDecoder() override;
 
-  bool Open (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat) override;
-  CDVDVideoCodec::VCReturn Decode (AVCodecContext* avctx, AVFrame* frame) override;
+  bool Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat) override;
+  CDVDVideoCodec::VCReturn Decode(AVCodecContext* avctx, AVFrame* frame) override;
   bool GetPicture(AVCodecContext* avctx, VideoPicture* picture) override;
   void Reset() override;
   virtual void Close();
@@ -520,38 +596,43 @@ public:
   bool Supports(VdpVideoMixerFeature feature);
   static bool IsVDPAUFormat(AVPixelFormat fmt);
 
-  static void FFReleaseBuffer(void *opaque, uint8_t *data);
-  static int FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags);
-  static int Render(struct AVCodecContext *s, struct AVFrame *src,
-                    const VdpPictureInfo *info, uint32_t buffers_used,
-                    const VdpBitstreamBuffer *buffers);
+  static void FFReleaseBuffer(void* opaque, uint8_t* data);
+  static int FFGetBuffer(AVCodecContext* avctx, AVFrame* pic, int flags);
+  static int Render(struct AVCodecContext* s,
+                    struct AVFrame* src,
+                    const VdpPictureInfo* info,
+                    uint32_t buffers_used,
+                    const VdpBitstreamBuffer* buffers);
 
   void OnLostDisplay() override;
   void OnResetDisplay() override;
 
-  static IHardwareDecoder* Create(CDVDStreamInfo &hint, CProcessInfo &processInfo, AVPixelFormat fmt);
+  static IHardwareDecoder* Create(CDVDStreamInfo& hint,
+                                  CProcessInfo& processInfo,
+                                  AVPixelFormat fmt);
   static void Register();
 
 protected:
   void SetWidthHeight(int width, int height);
-  bool ConfigVDPAU(AVCodecContext *avctx, int ref_frames);
+  bool ConfigVDPAU(AVCodecContext* avctx, int ref_frames);
   bool CheckStatus(VdpStatus vdp_st, int line);
   void FiniVDPAUOutput();
-  void ReturnRenderPicture(CVdpauRenderPicture *renderPic);
+  void ReturnRenderPicture(CVdpauRenderPicture* renderPic);
   long ReleasePicReference();
 
-  static void ReadFormatOf( AVCodecID codec
-                          , VdpDecoderProfile &decoder_profile
-                          , VdpChromaType &chroma_type);
+  static void ReadFormatOf(AVCodecID codec,
+                           VdpDecoderProfile& decoder_profile,
+                           VdpChromaType& chroma_type);
 
   // OnLostDevice triggers transition from all states to LOST
   // internal errors trigger transition from OPEN to RESET
   // OnResetDevice triggers transition from LOST to RESET
   enum EDisplayState
-  { VDPAU_OPEN
-  , VDPAU_RESET
-  , VDPAU_LOST
-  , VDPAU_ERROR
+  {
+    VDPAU_OPEN,
+    VDPAU_RESET,
+    VDPAU_LOST,
+    VDPAU_ERROR
   } m_DisplayState;
   CCriticalSection m_DecoderSection;
   CEvent m_DisplayEvent;
@@ -566,7 +647,7 @@ protected:
   COutput m_vdpauOutput;
   CVdpauBufferStats m_bufferStats;
   CEvent m_inMsgEvent;
-  CVdpauRenderPicture *m_presentPicture = nullptr;
+  CVdpauRenderPicture* m_presentPicture = nullptr;
 
   int m_codecControl;
   CProcessInfo& m_processInfo;
@@ -574,4 +655,4 @@ protected:
   static bool m_capGeneral;
 };
 
-}
+} // namespace VDPAU

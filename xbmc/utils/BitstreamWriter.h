@@ -13,16 +13,16 @@
 class CBitstreamWriter
 {
 public:
-  CBitstreamWriter(uint8_t *buffer, unsigned int buffer_size, int writer_le);
+  CBitstreamWriter(uint8_t* buffer, unsigned int buffer_size, int writer_le);
   void WriteBits(int n, unsigned int value);
   void SkipBits(int n);
   void FlushBits();
 
 private:
-  int       writer_le;
-  uint32_t  bit_buf;
-  int       bit_left;
-  uint8_t   *buf, *buf_ptr;
+  int writer_le;
+  uint32_t bit_buf;
+  int bit_left;
+  uint8_t *buf, *buf_ptr;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,14 +37,18 @@ private:
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  *  See LICENSES/README.md for more information.
  */
-#define BS_WB32(p, d) { \
-  ((uint8_t*)(p))[3] = (d); \
-  ((uint8_t*)(p))[2] = (d) >> 8; \
-  ((uint8_t*)(p))[1] = (d) >> 16; \
-  ((uint8_t*)(p))[0] = (d) >> 24; }
+#define BS_WB32(p, d) \
+  { \
+    ((uint8_t*)(p))[3] = (d); \
+    ((uint8_t*)(p))[2] = (d) >> 8; \
+    ((uint8_t*)(p))[1] = (d) >> 16; \
+    ((uint8_t*)(p))[0] = (d) >> 24; \
+  }
 
-#define BS_WL32(p, d) { \
-  ((uint8_t*)(p))[0] = (d); \
-  ((uint8_t*)(p))[1] = (d) >> 8; \
-  ((uint8_t*)(p))[2] = (d) >> 16; \
-  ((uint8_t*)(p))[3] = (d) >> 24; }
+#define BS_WL32(p, d) \
+  { \
+    ((uint8_t*)(p))[0] = (d); \
+    ((uint8_t*)(p))[1] = (d) >> 8; \
+    ((uint8_t*)(p))[2] = (d) >> 16; \
+    ((uint8_t*)(p))[3] = (d) >> 24; \
+  }

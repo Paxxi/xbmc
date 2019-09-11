@@ -27,8 +27,11 @@ using namespace Shaders;
 // BaseYUV2RGBGLSLShader - base class for GLSL YUV2RGB shaders
 //////////////////////////////////////////////////////////////////////
 
-BaseYUV2RGBGLSLShader::BaseYUV2RGBGLSLShader(bool rect, EShaderFormat format, bool stretch,
-                                             AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries,
+BaseYUV2RGBGLSLShader::BaseYUV2RGBGLSLShader(bool rect,
+                                             EShaderFormat format,
+                                             bool stretch,
+                                             AVColorPrimaries dstPrimaries,
+                                             AVColorPrimaries srcPrimaries,
                                              bool toneMap,
                                              std::shared_ptr<GLSLOutput> output)
 {
@@ -63,12 +66,8 @@ BaseYUV2RGBGLSLShader::BaseYUV2RGBGLSLShader(bool rect, EShaderFormat format, bo
   else
     m_defines += "#define XBMC_STRETCH 0\n";
 
-  if (m_format == SHADER_YV12 ||
-      m_format == SHADER_YV12_9 ||
-      m_format == SHADER_YV12_10 ||
-      m_format == SHADER_YV12_12 ||
-      m_format == SHADER_YV12_14 ||
-      m_format == SHADER_YV12_16)
+  if (m_format == SHADER_YV12 || m_format == SHADER_YV12_9 || m_format == SHADER_YV12_10 ||
+      m_format == SHADER_YV12_12 || m_format == SHADER_YV12_14 || m_format == SHADER_YV12_16)
     m_defines += "#define XBMC_YV12\n";
   else if (m_format == SHADER_NV12)
     m_defines += "#define XBMC_NV12\n";
@@ -155,7 +154,7 @@ bool BaseYUV2RGBGLSLShader::OnEnabled()
   {
     glUniformMatrix3fv(m_hPrimMat, 1, GL_FALSE, (GLfloat*)primMat);
     glUniform1f(m_hGammaSrc, m_pConvMatrix->GetGammaSrc());
-    glUniform1f(m_hGammaDstInv, 1/m_pConvMatrix->GetGammaDst());
+    glUniform1f(m_hGammaDstInv, 1 / m_pConvMatrix->GetGammaDst());
   }
 
   if (m_toneMapping)
@@ -164,7 +163,8 @@ bool BaseYUV2RGBGLSLShader::OnEnabled()
     if (m_hasLightMetadata)
       param = log10(100) / log10(m_lightMetadata.MaxCLL);
     else if (m_hasDisplayMetadata && m_displayMetadata.has_luminance)
-      param = log10(100) / log10(m_displayMetadata.max_luminance.num/m_displayMetadata.max_luminance.den);
+      param = log10(100) /
+              log10(m_displayMetadata.max_luminance.num / m_displayMetadata.max_luminance.den);
 
     // Sanity check
     if (param < 0.1f || param > 5.0f)
@@ -196,8 +196,10 @@ void BaseYUV2RGBGLSLShader::Free()
     m_glslOutput->Free();
 }
 
-void BaseYUV2RGBGLSLShader::SetColParams(AVColorSpace colSpace, int bits, bool limited,
-                                        int textureBits)
+void BaseYUV2RGBGLSLShader::SetColParams(AVColorSpace colSpace,
+                                         int bits,
+                                         bool limited,
+                                         int textureBits)
 {
   if (colSpace == AVCOL_SPC_UNSPECIFIED)
   {
@@ -209,8 +211,10 @@ void BaseYUV2RGBGLSLShader::SetColParams(AVColorSpace colSpace, int bits, bool l
   m_pConvMatrix->SetColParams(colSpace, bits, limited, textureBits);
 }
 
-void BaseYUV2RGBGLSLShader::SetDisplayMetadata(bool hasDisplayMetadata, AVMasteringDisplayMetadata displayMetadata,
-                                               bool hasLightMetadata, AVContentLightMetadata lightMetadata)
+void BaseYUV2RGBGLSLShader::SetDisplayMetadata(bool hasDisplayMetadata,
+                                               AVMasteringDisplayMetadata displayMetadata,
+                                               bool hasLightMetadata,
+                                               AVContentLightMetadata lightMetadata)
 {
   m_hasDisplayMetadata = hasDisplayMetadata;
   m_displayMetadata = displayMetadata;
@@ -223,8 +227,11 @@ void BaseYUV2RGBGLSLShader::SetDisplayMetadata(bool hasDisplayMetadata, AVMaster
 // Use for weave deinterlacing / progressive
 //////////////////////////////////////////////////////////////////////
 
-YUV2RGBProgressiveShader::YUV2RGBProgressiveShader(bool rect, EShaderFormat format, bool stretch,
-                                                   AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries,
+YUV2RGBProgressiveShader::YUV2RGBProgressiveShader(bool rect,
+                                                   EShaderFormat format,
+                                                   bool stretch,
+                                                   AVColorPrimaries dstPrimaries,
+                                                   AVColorPrimaries srcPrimaries,
                                                    bool toneMap,
                                                    std::shared_ptr<GLSLOutput> output)
   : BaseYUV2RGBGLSLShader(rect, format, stretch, dstPrimaries, srcPrimaries, toneMap, output)
@@ -242,11 +249,12 @@ YUV2RGBProgressiveShader::YUV2RGBProgressiveShader(bool rect, EShaderFormat form
 YUV2RGBFilterShader4::YUV2RGBFilterShader4(bool rect,
                                            EShaderFormat format,
                                            bool stretch,
-                                           AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries,
+                                           AVColorPrimaries dstPrimaries,
+                                           AVColorPrimaries srcPrimaries,
                                            bool toneMap,
                                            ESCALINGMETHOD method,
                                            std::shared_ptr<GLSLOutput> output)
-: BaseYUV2RGBGLSLShader(rect, format, stretch, dstPrimaries, srcPrimaries, toneMap, output)
+  : BaseYUV2RGBGLSLShader(rect, format, stretch, dstPrimaries, srcPrimaries, toneMap, output)
 {
   m_scaling = method;
   PixelShader()->LoadSource("gl_yuv2rgb_filter4.glsl", m_defines);
@@ -269,7 +277,8 @@ void YUV2RGBFilterShader4::OnCompiledAndLinked()
 
   if (m_scaling != VS_SCALINGMETHOD_LANCZOS3_FAST && m_scaling != VS_SCALINGMETHOD_SPLINE36_FAST)
   {
-    CLog::Log(LOGERROR, "GL: BaseYUV2RGBGLSLShader4 - unsupported scaling %d will fallback", m_scaling);
+    CLog::Log(LOGERROR, "GL: BaseYUV2RGBGLSLShader4 - unsupported scaling %d will fallback",
+              m_scaling);
     m_scaling = VS_SCALINGMETHOD_LANCZOS3_FAST;
   }
 

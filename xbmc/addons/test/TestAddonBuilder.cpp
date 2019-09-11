@@ -44,6 +44,7 @@ TEST_F(TestAddonBuilder, ShouldReturnDerivedType)
   CAddonInfoBuilder::CFromDB builder;
   builder.SetId("aa");
   builder.SetType(ADDON_RESOURCE_LANGUAGE);
-  auto addon = std::dynamic_pointer_cast<CLanguageResource>(CAddonBuilder::Generate(builder.get(), ADDON_UNKNOWN));
+  auto addon = std::dynamic_pointer_cast<CLanguageResource>(
+      CAddonBuilder::Generate(builder.get(), ADDON_UNKNOWN));
   EXPECT_NE(nullptr, addon);
 }

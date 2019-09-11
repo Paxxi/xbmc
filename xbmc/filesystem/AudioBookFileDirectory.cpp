@@ -18,16 +18,16 @@
 
 using namespace XFILE;
 
-static int cfile_file_read(void *h, uint8_t* buf, int size)
+static int cfile_file_read(void* h, uint8_t* buf, int size)
 {
   CFile* pFile = static_cast<CFile*>(h);
   return pFile->Read(buf, size);
 }
 
-static int64_t cfile_file_seek(void *h, int64_t pos, int whence)
+static int64_t cfile_file_seek(void* h, int64_t pos, int whence)
 {
   CFile* pFile = static_cast<CFile*>(h);
-  if(whence == AVSEEK_SIZE)
+  if (whence == AVSEEK_SIZE)
     return pFile->GetLength();
   else
     return pFile->Seek(pos, whence & ~AVSEEK_FORCE);
@@ -44,8 +44,7 @@ CAudioBookFileDirectory::~CAudioBookFileDirectory(void)
   }
 }
 
-bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
-                                           CFileItemList &items)
+bool CAudioBookFileDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   if (!m_fctx && !ContainsFiles(url))
     return true;
@@ -54,14 +53,14 @@ bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
   std::string author;
   std::string album;
 
-  AVDictionaryEntry* tag=nullptr;
+  AVDictionaryEntry* tag = nullptr;
   while ((tag = av_dict_get(m_fctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
   {
-    if (strcasecmp(tag->key,"title") == 0)
+    if (strcasecmp(tag->key, "title") == 0)
       title = tag->value;
-    else if (strcasecmp(tag->key,"album") == 0)
+    else if (strcasecmp(tag->key, "album") == 0)
       album = tag->value;
-    else if (strcasecmp(tag->key,"artist") == 0)
+    else if (strcasecmp(tag->key, "artist") == 0)
       author = tag->value;
   }
 
@@ -69,23 +68,23 @@ bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
   if (m_fctx->nb_chapters > 1)
     thumb = CTextureUtils::GetWrappedImageURL(url.Get(), "music");
 
-  for (size_t i=0;i<m_fctx->nb_chapters;++i)
+  for (size_t i = 0; i < m_fctx->nb_chapters; ++i)
   {
-    tag=nullptr;
-    std::string chaptitle = StringUtils::Format(g_localizeStrings.Get(25010).c_str(), i+1);
+    tag = nullptr;
+    std::string chaptitle = StringUtils::Format(g_localizeStrings.Get(25010).c_str(), i + 1);
     std::string chapauthor;
     std::string chapalbum;
-    while ((tag=av_dict_get(m_fctx->chapters[i]->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+    while ((tag = av_dict_get(m_fctx->chapters[i]->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
     {
-      if (strcasecmp(tag->key,"title") == 0)
+      if (strcasecmp(tag->key, "title") == 0)
         chaptitle = tag->value;
-      else if (strcasecmp(tag->key,"artist") == 0)
+      else if (strcasecmp(tag->key, "artist") == 0)
         chapauthor = tag->value;
-      else if (strcasecmp(tag->key,"album") == 0)
+      else if (strcasecmp(tag->key, "album") == 0)
         chapalbum = tag->value;
     }
-    CFileItemPtr item(new CFileItem(url.Get(),false));
-    item->GetMusicInfoTag()->SetTrackNumber(i+1);
+    CFileItemPtr item(new CFileItem(url.Get(), false));
+    item->GetMusicInfoTag()->SetTrackNumber(i + 1);
     item->GetMusicInfoTag()->SetLoaded(true);
     item->GetMusicInfoTag()->SetTitle(chaptitle);
     if (album.empty())
@@ -99,21 +98,25 @@ bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
     else
       item->GetMusicInfoTag()->SetArtist(chapauthor);
 
-    item->SetLabel(StringUtils::Format("{0:02}. {1} - {2}",i+1,
-                   item->GetMusicInfoTag()->GetAlbum().c_str(),
-                   item->GetMusicInfoTag()->GetTitle()).c_str());
-    item->m_lStartOffset = CUtil::ConvertSecsToMilliSecs(m_fctx->chapters[i]->start*av_q2d(m_fctx->chapters[i]->time_base));
-    item->m_lEndOffset = m_fctx->chapters[i]->end*av_q2d(m_fctx->chapters[i]->time_base);
+    item->SetLabel(StringUtils::Format("{0:02}. {1} - {2}", i + 1,
+                                       item->GetMusicInfoTag()->GetAlbum().c_str(),
+                                       item->GetMusicInfoTag()->GetTitle())
+                       .c_str());
+    item->m_lStartOffset = CUtil::ConvertSecsToMilliSecs(m_fctx->chapters[i]->start *
+                                                         av_q2d(m_fctx->chapters[i]->time_base));
+    item->m_lEndOffset = m_fctx->chapters[i]->end * av_q2d(m_fctx->chapters[i]->time_base);
     int compare = m_fctx->duration / (AV_TIME_BASE);
     if (item->m_lEndOffset < 0 || item->m_lEndOffset > compare)
     {
-      if (i < m_fctx->nb_chapters-1)
-        item->m_lEndOffset = m_fctx->chapters[i+1]->start*av_q2d(m_fctx->chapters[i+1]->time_base);
+      if (i < m_fctx->nb_chapters - 1)
+        item->m_lEndOffset =
+            m_fctx->chapters[i + 1]->start * av_q2d(m_fctx->chapters[i + 1]->time_base);
       else
         item->m_lEndOffset = compare;
     }
     item->m_lEndOffset = CUtil::ConvertSecsToMilliSecs(item->m_lEndOffset);
-    item->GetMusicInfoTag()->SetDuration(CUtil::ConvertMilliSecsToSecsInt(item->m_lEndOffset - item->m_lStartOffset));
+    item->GetMusicInfoTag()->SetDuration(
+        CUtil::ConvertMilliSecsToSecsInt(item->m_lEndOffset - item->m_lStartOffset));
     item->SetProperty("item_start", item->m_lStartOffset);
     if (!thumb.empty())
       item->SetArt("thumb", thumb);
@@ -135,8 +138,7 @@ bool CAudioBookFileDirectory::ContainsFiles(const CURL& url)
     return false;
 
   uint8_t* buffer = (uint8_t*)av_malloc(32768);
-  m_ioctx = avio_alloc_context(buffer, 32768, 0, &file, cfile_file_read,
-                               nullptr, cfile_file_seek);
+  m_ioctx = avio_alloc_context(buffer, 32768, 0, &file, cfile_file_read, nullptr, cfile_file_seek);
 
   m_fctx = avformat_alloc_context();
   m_fctx->pb = m_ioctx;
@@ -146,7 +148,7 @@ bool CAudioBookFileDirectory::ContainsFiles(const CURL& url)
 
   m_ioctx->max_packet_size = 32768;
 
-  AVInputFormat* iformat=nullptr;
+  AVInputFormat* iformat = nullptr;
   av_probe_input_buffer(m_ioctx, &iformat, url.Get().c_str(), nullptr, 0, 0);
 
   bool contains = false;

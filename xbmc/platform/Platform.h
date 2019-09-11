@@ -20,7 +20,7 @@ public:
    *
    *@return the platform object
   */
-  static CPlatform *CreateInstance();
+  static CPlatform* CreateInstance();
 
   /**\brief C'tor */
   CPlatform();
@@ -34,5 +34,4 @@ public:
    * or initialisation (like setting environment variables for example)
    */
   virtual void Init();
-
 };

@@ -22,19 +22,19 @@ class CDRMLegacy : public CDRMUtils
 public:
   CDRMLegacy() = default;
   ~CDRMLegacy() { DestroyDrm(); };
-  virtual void FlipPage(struct gbm_bo *bo, bool rendered, bool videoLayer) override;
-  virtual bool SetVideoMode(const RESOLUTION_INFO& res, struct gbm_bo *bo) override;
+  virtual void FlipPage(struct gbm_bo* bo, bool rendered, bool videoLayer) override;
+  virtual bool SetVideoMode(const RESOLUTION_INFO& res, struct gbm_bo* bo) override;
   virtual bool SetActive(bool active) override;
   virtual bool InitDrm() override;
-  virtual bool SetProperty(struct drm_object *object, const char *name, uint64_t value) override;
+  virtual bool SetProperty(struct drm_object* object, const char* name, uint64_t value) override;
 
 private:
   bool WaitingForFlip();
-  bool QueueFlip(struct gbm_bo *bo);
-  static void PageFlipHandler(int fd, unsigned int frame, unsigned int sec,
-                              unsigned int usec, void *data);
+  bool QueueFlip(struct gbm_bo* bo);
+  static void PageFlipHandler(
+      int fd, unsigned int frame, unsigned int sec, unsigned int usec, void* data);
 };
 
-}
-}
-}
+} // namespace GBM
+} // namespace WINDOWING
+} // namespace KODI

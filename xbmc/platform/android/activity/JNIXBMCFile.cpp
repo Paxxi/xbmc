@@ -26,24 +26,23 @@ CJNIXBMCFile::CJNIXBMCFile()
 {
 }
 
-void CJNIXBMCFile::RegisterNatives(JNIEnv *env)
+void CJNIXBMCFile::RegisterNatives(JNIEnv* env)
 {
   jclass cClass = env->FindClass(s_className.c_str());
-  if(cClass)
+  if (cClass)
   {
-    JNINativeMethod methods[] =
-    {
-      {"_open", "(Ljava/lang/String;)Z", (void*)&CJNIXBMCFile::_open},
-      {"_close", "()V", (void*)&CJNIXBMCFile::_close},
-      {"_read", "()[B", (void*)&CJNIXBMCFile::_read},
-      {"_eof", "()Z", (void*)&CJNIXBMCFile::_eof},
+    JNINativeMethod methods[] = {
+        {"_open", "(Ljava/lang/String;)Z", (void*)&CJNIXBMCFile::_open},
+        {"_close", "()V", (void*)&CJNIXBMCFile::_close},
+        {"_read", "()[B", (void*)&CJNIXBMCFile::_read},
+        {"_eof", "()Z", (void*)&CJNIXBMCFile::_eof},
     };
 
-    env->RegisterNatives(cClass, methods, sizeof(methods)/sizeof(methods[0]));
+    env->RegisterNatives(cClass, methods, sizeof(methods) / sizeof(methods[0]));
   }
 }
 
-jboolean CJNIXBMCFile::_open(JNIEnv *env, jobject thiz, jstring path)
+jboolean CJNIXBMCFile::_open(JNIEnv* env, jobject thiz, jstring path)
 {
   std::string strPath = jcast<std::string>(jhstring::fromJNI(path));
 
@@ -69,9 +68,9 @@ jboolean CJNIXBMCFile::_open(JNIEnv *env, jobject thiz, jstring path)
   return true;
 }
 
-void CJNIXBMCFile::_close(JNIEnv *env, jobject thiz)
+void CJNIXBMCFile::_close(JNIEnv* env, jobject thiz)
 {
-  CJNIXBMCFile *inst = find_instance(thiz);
+  CJNIXBMCFile* inst = find_instance(thiz);
   if (inst)
   {
     inst->m_file->Close();
@@ -80,12 +79,12 @@ void CJNIXBMCFile::_close(JNIEnv *env, jobject thiz)
   }
 }
 
-jbyteArray CJNIXBMCFile::_read(JNIEnv *env, jobject thiz)
+jbyteArray CJNIXBMCFile::_read(JNIEnv* env, jobject thiz)
 {
   ssize_t sz = 0;
   char buffer[BUFFSIZE];
 
-  CJNIXBMCFile *inst = find_instance(thiz);
+  CJNIXBMCFile* inst = find_instance(thiz);
   if (inst && inst->m_file)
   {
     sz = inst->m_file->Read((void*)buffer, BUFFSIZE);
@@ -97,7 +96,7 @@ jbyteArray CJNIXBMCFile::_read(JNIEnv *env, jobject thiz)
   }
 
   jbyteArray jba = NULL;
-  char*   pArray;
+  char* pArray;
   jba = env->NewByteArray(sz);
   if ((pArray = (char*)env->GetPrimitiveArrayCritical(jba, NULL)))
   {
@@ -108,15 +107,11 @@ jbyteArray CJNIXBMCFile::_read(JNIEnv *env, jobject thiz)
   return jba;
 }
 
-jboolean CJNIXBMCFile::_eof(JNIEnv *env, jobject thiz)
+jboolean CJNIXBMCFile::_eof(JNIEnv* env, jobject thiz)
 {
-  CJNIXBMCFile *inst = find_instance(thiz);
+  CJNIXBMCFile* inst = find_instance(thiz);
   if (inst)
     return inst->m_eof;
 
   return true;
 }
-
-
-
-

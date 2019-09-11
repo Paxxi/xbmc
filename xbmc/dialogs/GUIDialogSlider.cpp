@@ -16,11 +16,11 @@
 #include "input/Key.h"
 
 #define CONTROL_HEADING 10
-#define CONTROL_SLIDER  11
-#define CONTROL_LABEL   12
+#define CONTROL_SLIDER 11
+#define CONTROL_LABEL 12
 
 CGUIDialogSlider::CGUIDialogSlider(void)
-    : CGUIDialog(WINDOW_DIALOG_SLIDER, "DialogSlider.xml")
+  : CGUIDialog(WINDOW_DIALOG_SLIDER, "DialogSlider.xml")
 {
   m_callback = NULL;
   m_callbackData = NULL;
@@ -29,7 +29,7 @@ CGUIDialogSlider::CGUIDialogSlider(void)
 
 CGUIDialogSlider::~CGUIDialogSlider(void) = default;
 
-bool CGUIDialogSlider::OnAction(const CAction &action)
+bool CGUIDialogSlider::OnAction(const CAction& action)
 {
   if (action.GetID() == ACTION_SELECT_ITEM)
   {
@@ -41,12 +41,12 @@ bool CGUIDialogSlider::OnAction(const CAction &action)
 
 bool CGUIDialogSlider::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_CLICKED:
     if (message.GetSenderId() == CONTROL_SLIDER)
     {
-      CGUISliderControl *slider = dynamic_cast<CGUISliderControl *>(GetControl(CONTROL_SLIDER));
+      CGUISliderControl* slider = dynamic_cast<CGUISliderControl*>(GetControl(CONTROL_SLIDER));
       if (slider && m_callback)
       {
         m_callback->OnSliderChange(m_callbackData, slider);
@@ -62,10 +62,16 @@ bool CGUIDialogSlider::OnMessage(CGUIMessage& message)
   return CGUIDialog::OnMessage(message);
 }
 
-void CGUIDialogSlider::SetSlider(const std::string &label, float value, float min, float delta, float max, ISliderCallback *callback, void *callbackData)
+void CGUIDialogSlider::SetSlider(const std::string& label,
+                                 float value,
+                                 float min,
+                                 float delta,
+                                 float max,
+                                 ISliderCallback* callback,
+                                 void* callbackData)
 {
   SET_CONTROL_LABEL(CONTROL_HEADING, label);
-  CGUISliderControl *slider = dynamic_cast<CGUISliderControl *>(GetControl(CONTROL_SLIDER));
+  CGUISliderControl* slider = dynamic_cast<CGUISliderControl*>(GetControl(CONTROL_SLIDER));
   m_callback = callback;
   m_callbackData = callbackData;
   if (slider)
@@ -95,10 +101,18 @@ void CGUIDialogSlider::SetModalityType(DialogModalityType type)
   m_modalityType = type;
 }
 
-void CGUIDialogSlider::ShowAndGetInput(const std::string &label, float value, float min, float delta, float max, ISliderCallback *callback, void *callbackData)
+void CGUIDialogSlider::ShowAndGetInput(const std::string& label,
+                                       float value,
+                                       float min,
+                                       float delta,
+                                       float max,
+                                       ISliderCallback* callback,
+                                       void* callbackData)
 {
   // grab the slider dialog
-  CGUIDialogSlider *slider = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSlider>(WINDOW_DIALOG_SLIDER);
+  CGUIDialogSlider* slider =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSlider>(
+          WINDOW_DIALOG_SLIDER);
   if (!slider)
     return;
 
@@ -109,10 +123,13 @@ void CGUIDialogSlider::ShowAndGetInput(const std::string &label, float value, fl
   slider->Open();
 }
 
-void CGUIDialogSlider::Display(int label, float value, float min, float delta, float max, ISliderCallback *callback)
+void CGUIDialogSlider::Display(
+    int label, float value, float min, float delta, float max, ISliderCallback* callback)
 {
   // grab the slider dialog
-  CGUIDialogSlider *slider = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSlider>(WINDOW_DIALOG_SLIDER);
+  CGUIDialogSlider* slider =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSlider>(
+          WINDOW_DIALOG_SLIDER);
   if (!slider)
     return;
 

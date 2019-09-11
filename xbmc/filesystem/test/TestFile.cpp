@@ -22,10 +22,10 @@ TEST(TestFile, Read)
   size_t addPerLine = newLine.length() - 1;
   size_t realSize = size + lines * addPerLine;
 
-  const std::string firstBuf  = "About" + newLine + "-----" + newLine + "XBMC is ";
+  const std::string firstBuf = "About" + newLine + "-----" + newLine + "XBMC is ";
   const std::string secondBuf = "an award-winning fre";
-  const std::string thirdBuf  = "ent hub for digital ";
-  const std::string fourthBuf  = "rs, XBMC is a non-pr";
+  const std::string thirdBuf = "ent hub for digital ";
+  const std::string fourthBuf = "rs, XBMC is a non-pr";
   const std::string fifthBuf = "multimedia jukebox." + newLine;
 
   XFILE::CFile file;
@@ -33,8 +33,7 @@ TEST(TestFile, Read)
   memset(buf, 0, sizeof(buf));
 
   size_t currentPos;
-  ASSERT_TRUE(file.Open(
-    XBMC_REF_FILE_PATH("/xbmc/filesystem/test/reffile.txt")));
+  ASSERT_TRUE(file.Open(XBMC_REF_FILE_PATH("/xbmc/filesystem/test/reffile.txt")));
   EXPECT_EQ(0, file.GetPosition());
   EXPECT_EQ(realSize, file.GetLength());
   EXPECT_EQ(firstBuf.length(), static_cast<size_t>(file.Read(buf, firstBuf.length())));
@@ -87,7 +86,7 @@ TEST(TestFile, Read)
 
 TEST(TestFile, Write)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
   const char str[] = "TestFile.Write test string\n";
   char buf[30];
   memset(buf, 0, sizeof(buf));
@@ -114,7 +113,7 @@ TEST(TestFile, Write)
 
 TEST(TestFile, Exists)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
 
   ASSERT_NE(nullptr, file = XBMC_CREATETEMPFILE(""));
   file->Close();
@@ -125,7 +124,7 @@ TEST(TestFile, Exists)
 
 TEST(TestFile, Stat)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
   struct __stat64 buffer;
 
   ASSERT_NE(nullptr, file = XBMC_CREATETEMPFILE(""));
@@ -139,7 +138,7 @@ TEST(TestFile, Stat)
 
 TEST(TestFile, Delete)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
   std::string path;
 
   ASSERT_NE(nullptr, file = XBMC_CREATETEMPFILE(""));
@@ -152,7 +151,7 @@ TEST(TestFile, Delete)
 
 TEST(TestFile, Rename)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
   std::string path1, path2;
 
   ASSERT_NE(nullptr, file = XBMC_CREATETEMPFILE(""));
@@ -172,7 +171,7 @@ TEST(TestFile, Rename)
 
 TEST(TestFile, Copy)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
   std::string path1, path2;
 
   ASSERT_NE(nullptr, file = XBMC_CREATETEMPFILE(""));
@@ -193,7 +192,7 @@ TEST(TestFile, Copy)
 
 TEST(TestFile, SetHidden)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
 
   ASSERT_NE(nullptr, file = XBMC_CREATETEMPFILE(""));
   file->Close();

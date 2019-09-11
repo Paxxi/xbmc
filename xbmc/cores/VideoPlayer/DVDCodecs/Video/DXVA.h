@@ -14,6 +14,7 @@
 #include "threads/Event.h"
 
 #include <vector>
+
 #include <wrl/client.h>
 extern "C"
 {
@@ -63,7 +64,9 @@ public:
 
 protected:
   explicit CVideoBufferShared(int id)
-      : CVideoBuffer(id) {}
+    : CVideoBuffer(id)
+  {
+  }
 
   HANDLE handle = INVALID_HANDLE_VALUE;
   Microsoft::WRL::ComPtr<ID3D11Resource> m_sharedRes;
@@ -79,7 +82,9 @@ public:
 
 protected:
   explicit CVideoBufferCopy(int id)
-      : CVideoBufferShared(id) {}
+    : CVideoBufferShared(id)
+  {
+  }
 
   Microsoft::WRL::ComPtr<ID3D11Resource> m_copyRes;
 };
@@ -93,23 +98,24 @@ public:
   ~CContext();
 
   static shared_ptr EnsureContext(CDecoder* decoder);
-  bool GetFormatAndConfig(AVCodecContext* avctx, D3D11_VIDEO_DECODER_DESC& format, D3D11_VIDEO_DECODER_CONFIG& config) const;
-  bool CreateSurfaces(const D3D11_VIDEO_DECODER_DESC& format, uint32_t count, uint32_t alignment,
-                      ID3D11VideoDecoderOutputView** surfaces, HANDLE* pHandle) const;
-  bool CreateDecoder(const D3D11_VIDEO_DECODER_DESC& format, const D3D11_VIDEO_DECODER_CONFIG& config,
-                     ID3D11VideoDecoder** decoder, ID3D11VideoContext** context);
+  bool GetFormatAndConfig(AVCodecContext* avctx,
+                          D3D11_VIDEO_DECODER_DESC& format,
+                          D3D11_VIDEO_DECODER_CONFIG& config) const;
+  bool CreateSurfaces(const D3D11_VIDEO_DECODER_DESC& format,
+                      uint32_t count,
+                      uint32_t alignment,
+                      ID3D11VideoDecoderOutputView** surfaces,
+                      HANDLE* pHandle) const;
+  bool CreateDecoder(const D3D11_VIDEO_DECODER_DESC& format,
+                     const D3D11_VIDEO_DECODER_CONFIG& config,
+                     ID3D11VideoDecoder** decoder,
+                     ID3D11VideoContext** context);
   void Release(CDecoder* decoder);
 
   bool Check() const;
   bool Reset();
-  bool IsContextShared() const
-  {
-    return m_sharingAllowed;
-  }
-  bool HasAMDWorkaround() const
-  {
-    return m_atiWorkaround;
-  }
+  bool IsContextShared() const { return m_sharingAllowed; }
+  bool HasAMDWorkaround() const { return m_atiWorkaround; }
 
 private:
   explicit CContext() = default;
@@ -170,10 +176,7 @@ template<typename TBuffer>
 class CVideoBufferPoolTyped : public CVideoBufferPool
 {
 protected:
-  CVideoBuffer* CreateBuffer(int idx) override
-  {
-    return new TBuffer(idx);
-  }
+  CVideoBuffer* CreateBuffer(int idx) override { return new TBuffer(idx); }
 };
 
 class CDecoder : public IHardwareDecoder, public ID3DResource
@@ -181,7 +184,9 @@ class CDecoder : public IHardwareDecoder, public ID3DResource
 public:
   ~CDecoder() override;
 
-  static IHardwareDecoder* Create(CDVDStreamInfo& hint, CProcessInfo& processInfo, AVPixelFormat fmt);
+  static IHardwareDecoder* Create(CDVDStreamInfo& hint,
+                                  CProcessInfo& processInfo,
+                                  AVPixelFormat fmt);
   static bool Register();
 
   // IHardwareDecoder overrides

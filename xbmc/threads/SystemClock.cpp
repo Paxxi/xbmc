@@ -14,20 +14,20 @@
 
 namespace XbmcThreads
 {
-  unsigned int SystemClockMillis()
+unsigned int SystemClockMillis()
+{
+  uint64_t now_time;
+  static uint64_t start_time = 0;
+  static bool start_time_set = false;
+
+  now_time = static_cast<uint64_t>(1000 * CurrentHostCounter() / CurrentHostFrequency());
+
+  if (!start_time_set)
   {
-    uint64_t now_time;
-    static uint64_t start_time = 0;
-    static bool start_time_set = false;
-
-    now_time = static_cast<uint64_t>(1000 * CurrentHostCounter() / CurrentHostFrequency());
-
-    if (!start_time_set)
-    {
-      start_time = now_time;
-      start_time_set = true;
-    }
-    return (unsigned int)(now_time - start_time);
+    start_time = now_time;
+    start_time_set = true;
   }
-  const unsigned int EndTime::InfiniteValue = std::numeric_limits<unsigned int>::max();
+  return (unsigned int)(now_time - start_time);
 }
+const unsigned int EndTime::InfiniteValue = std::numeric_limits<unsigned int>::max();
+} // namespace XbmcThreads

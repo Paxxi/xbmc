@@ -30,29 +30,31 @@ class CCueDocument
     int iEndTime = 0;
     ReplayGain::Info replayGain;
   };
+
 public:
   ~CCueDocument(void);
   // USED
-  bool ParseFile(const std::string &strFilePath);
-  bool ParseTag(const std::string &strContent);
-  void GetSongs(VECSONGS &songs);
+  bool ParseFile(const std::string& strFilePath);
+  bool ParseTag(const std::string& strContent);
+  void GetSongs(VECSONGS& songs);
   std::string GetMediaPath();
   std::string GetMediaTitle();
   void GetMediaFiles(std::vector<std::string>& mediaFiles);
   void UpdateMediaFile(const std::string& oldMediaFile, const std::string& mediaFile);
   bool IsOneFilePerTrack() const;
   bool IsLoaded() const;
+
 private:
   void Clear();
   bool Parse(CueReader& reader, const std::string& strFile = std::string());
 
   // Member variables
-  std::string m_strArtist;  // album artist
-  std::string m_strAlbum;  // album title
-  std::string m_strGenre;  // album genre
-  int m_iYear = 0;            //album year
-  int m_iTrack = 0;   // current track
-  int m_iDiscNumber = 0;  // Disc number
+  std::string m_strArtist; // album artist
+  std::string m_strAlbum; // album title
+  std::string m_strGenre; // album genre
+  int m_iYear = 0; //album year
+  int m_iTrack = 0; // current track
+  int m_iDiscNumber = 0; // Disc number
   ReplayGain::Info m_albumReplayGain;
 
   bool m_bOneFilePerTrack = false;
@@ -61,8 +63,8 @@ private:
   typedef std::vector<CCueTrack> Tracks;
   Tracks m_tracks;
 
-  std::string ExtractInfo(const std::string &line);
-  int ExtractTimeFromIndex(const std::string &index);
-  int ExtractNumericInfo(const std::string &info);
-  bool ResolvePath(std::string &strPath, const std::string &strBase);
+  std::string ExtractInfo(const std::string& line);
+  int ExtractTimeFromIndex(const std::string& index);
+  int ExtractNumericInfo(const std::string& info);
+  bool ResolvePath(std::string& strPath, const std::string& strBase);
 };

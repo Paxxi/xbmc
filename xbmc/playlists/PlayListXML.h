@@ -12,8 +12,7 @@
 
 namespace PLAYLIST
 {
-class CPlayListXML :
-      public CPlayList
+class CPlayListXML : public CPlayList
 {
 public:
   CPlayListXML(void);
@@ -21,4 +20,4 @@ public:
   bool Load(const std::string& strFileName) override;
   void Save(const std::string& strFileName) const override;
 };
-}
+} // namespace PLAYLIST

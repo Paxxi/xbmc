@@ -66,8 +66,6 @@ static int RipCD(const std::vector<std::string>& params)
 
 CBuiltins::CommandMap COpticalBuiltins::GetOperations() const
 {
-  return {
-           {"ejecttray", {"Close or open the DVD tray", 0, Eject}},
-           {"ripcd",     {"Rip the currently inserted audio CD", 0, RipCD}}
-         };
+  return {{"ejecttray", {"Close or open the DVD tray", 0, Eject}},
+          {"ripcd", {"Rip the currently inserted audio CD", 0, RipCD}}};
 }

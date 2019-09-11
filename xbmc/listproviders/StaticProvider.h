@@ -16,18 +16,19 @@
 class CStaticListProvider : public IListProvider
 {
 public:
-  CStaticListProvider(const TiXmlElement *element, int parentID);
-  explicit CStaticListProvider(const std::vector<CGUIStaticItemPtr> &items); // for python
+  CStaticListProvider(const TiXmlElement* element, int parentID);
+  explicit CStaticListProvider(const std::vector<CGUIStaticItemPtr>& items); // for python
   ~CStaticListProvider() override;
 
   bool Update(bool forceRefresh) override;
-  void Fetch(std::vector<CGUIListItemPtr> &items) override;
-  bool OnClick(const CGUIListItemPtr &item) override;
-  bool OnInfo(const CGUIListItemPtr &item) override { return false; }
-  bool OnContextMenu(const CGUIListItemPtr &item) override { return false; }
+  void Fetch(std::vector<CGUIListItemPtr>& items) override;
+  bool OnClick(const CGUIListItemPtr& item) override;
+  bool OnInfo(const CGUIListItemPtr& item) override { return false; }
+  bool OnContextMenu(const CGUIListItemPtr& item) override { return false; }
   void SetDefaultItem(int item, bool always) override;
   int GetDefaultItem() const override;
   bool AlwaysFocusDefaultItem() const override;
+
 private:
   int m_defaultItem;
   bool m_defaultAlways;

@@ -16,18 +16,18 @@
 @interface IOSEAGLView : UIView
 {
 @private
-  EAGLContext *context;
+  EAGLContext* context;
   // The pixel dimensions of the CAEAGLLayer.
   GLint framebufferWidth;
   GLint framebufferHeight;
   // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view.
   GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
-	// the shader program object
-	GLuint program;
-	//
-	GLfloat rotz;
+  // the shader program object
+  GLuint program;
+  //
+  GLfloat rotz;
 
-	BOOL animating;
+  BOOL animating;
   BOOL xbmcAlive;
   BOOL readyToRun;
   BOOL pause;
@@ -37,21 +37,21 @@
 
   BOOL framebufferResizeRequested;
 }
-@property (readonly, nonatomic, getter=isAnimating) BOOL animating;
-@property (readonly, nonatomic, getter=isXBMCAlive) BOOL xbmcAlive;
-@property (readonly, nonatomic, getter=isReadyToRun) BOOL readyToRun;
-@property (readonly, nonatomic, getter=isPause) BOOL pause;
+@property(readonly, nonatomic, getter=isAnimating) BOOL animating;
+@property(readonly, nonatomic, getter=isXBMCAlive) BOOL xbmcAlive;
+@property(readonly, nonatomic, getter=isReadyToRun) BOOL readyToRun;
+@property(readonly, nonatomic, getter=isPause) BOOL pause;
 @property(weak, readonly, getter=getCurrentScreen) UIScreen* currentScreen;
-@property (readonly, getter=getCurrentEAGLContext) EAGLContext *context;
+@property(readonly, getter=getCurrentEAGLContext) EAGLContext* context;
 @property BOOL framebufferResizeRequested;
 
-- (id)initWithFrame:(CGRect)frame withScreen:(UIScreen *)screen;
-- (void) pauseAnimation;
-- (void) resumeAnimation;
-- (void) startAnimation;
-- (void) stopAnimation;
-- (void) setFramebuffer;
-- (bool) presentFramebuffer;
-- (void) setScreen:(UIScreen *)screen withFrameBufferResize:(BOOL)resize;
-- (CGFloat) getScreenScale:(UIScreen *)screen;
+- (id)initWithFrame:(CGRect)frame withScreen:(UIScreen*)screen;
+- (void)pauseAnimation;
+- (void)resumeAnimation;
+- (void)startAnimation;
+- (void)stopAnimation;
+- (void)setFramebuffer;
+- (bool)presentFramebuffer;
+- (void)setScreen:(UIScreen*)screen withFrameBufferResize:(BOOL)resize;
+- (CGFloat)getScreenScale:(UIScreen*)screen;
 @end

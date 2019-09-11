@@ -12,15 +12,15 @@ class CSong;
 class CArtist;
 class CVariant;
 
-#include <string>
-#include <vector>
-
 #include "ReplayGain.h"
 #include "XBDateTime.h"
 #include "music/Album.h"
 #include "utils/IArchivable.h"
 #include "utils/ISerializable.h"
 #include "utils/ISortable.h"
+
+#include <string>
+#include <vector>
 
 
 namespace MUSIC_INFO
@@ -29,7 +29,7 @@ class CMusicInfoTag final : public IArchivable, public ISerializable, public ISo
 {
 public:
   CMusicInfoTag(void);
-  bool operator !=(const CMusicInfoTag& tag) const;
+  bool operator!=(const CMusicInfoTag& tag) const;
   bool Loaded() const;
   const std::string& GetTitle() const;
   const std::string& GetURL() const;
@@ -46,10 +46,10 @@ public:
   int GetTrackNumber() const;
   int GetDiscNumber() const;
   int GetTrackAndDiscNumber() const;
-  int GetDuration() const;  // may be set even if Loaded() returns false
+  int GetDuration() const; // may be set even if Loaded() returns false
   int GetYear() const;
   int GetDatabaseId() const;
-  const std::string &GetType() const;
+  const std::string& GetType() const;
 
   void GetReleaseDate(SYSTEMTIME& dateTime) const;
   std::string GetYearString() const;
@@ -68,13 +68,13 @@ public:
   const std::string& GetCueSheet() const;
   const CDateTime& GetLastPlayed() const;
   const CDateTime& GetDateAdded() const;
-  bool  GetCompilation() const;
+  bool GetCompilation() const;
   float GetRating() const;
   int GetUserrating() const;
   int GetVotes() const;
   int GetListeners() const;
   int GetPlayCount() const;
-  const EmbeddedArtInfo &GetCoverArtInfo() const;
+  const EmbeddedArtInfo& GetCoverArtInfo() const;
   const ReplayGain& GetReplayGain() const;
   CAlbum::ReleaseType GetAlbumReleaseType() const;
 
@@ -94,7 +94,7 @@ public:
   void SetGenre(const std::string& strGenre, bool bTrim = false);
   void SetGenre(const std::vector<std::string>& genres, bool bTrim = false);
   void SetYear(int year);
-  void SetDatabaseId(long id, const std::string &type);
+  void SetDatabaseId(long id, const std::string& type);
   void SetReleaseDate(SYSTEMTIME& dateTime);
   void SetTrackNumber(int iTrack);
   void SetDiscNumber(int iDiscNumber);
@@ -127,7 +127,7 @@ public:
   void SetDateAdded(const std::string& strDateAdded);
   void SetDateAdded(const CDateTime& strDateAdded);
   void SetCompilation(bool compilation);
-  void SetCoverArtInfo(size_t size, const std::string &mimeType);
+  void SetCoverArtInfo(size_t size, const std::string& mimeType);
   void SetReplayGain(const ReplayGain& aGain);
   void SetAlbumReleaseType(CAlbum::ReleaseType releaseType);
   void SetType(const MediaType mediaType);
@@ -136,19 +136,19 @@ public:
    Checks if we have this artist already added, and if not adds it to the songs artist list.
    \param value artist to add.
    */
-  void AppendArtist(const std::string &artist);
+  void AppendArtist(const std::string& artist);
 
   /*! \brief Append a unique album artist to the artist list
    Checks if we have this album artist already added, and if not adds it to the songs album artist list.
    \param albumArtist album artist to add.
    */
-  void AppendAlbumArtist(const std::string &albumArtist);
+  void AppendAlbumArtist(const std::string& albumArtist);
 
   /*! \brief Append a unique genre to the genre list
    Checks if we have this genre already added, and if not adds it to the songs genre list.
    \param genre genre to add.
    */
-  void AppendGenre(const std::string &genre);
+  void AppendGenre(const std::string& genre);
 
   void AddArtistRole(const std::string& Role, const std::string& strArtist);
   void AddArtistRole(const std::string& Role, const std::vector<std::string>& artists);
@@ -156,7 +156,7 @@ public:
   const std::string GetArtistStringForRole(const std::string& strRole) const;
   const std::string GetContributorsText() const;
   const std::string GetContributorsAndRolesText() const;
-  const VECMUSICROLES &GetContributors() const;
+  const VECMUSICROLES& GetContributors() const;
   void SetContributors(const VECMUSICROLES& contributors);
   bool HasContributors() const { return !m_musicRoles.empty(); }
 
@@ -171,7 +171,7 @@ protected:
    \param value string to trim
    \return trimmed value, with spaces removed from left and right, as well as carriage returns from the right.
    */
-  std::string Trim(const std::string &value) const;
+  std::string Trim(const std::string& value) const;
 
   std::string m_strURL;
   std::string m_strTitle;
@@ -192,7 +192,8 @@ protected:
   std::vector<std::string> m_musicBrainzAlbumArtistHints;
   std::string m_strMusicBrainzReleaseGroupID;
   std::string m_strMusicBrainzReleaseType;
-  VECMUSICROLES m_musicRoles; //Artists contributing to the recording and role (from tags other than ARTIST or ALBUMARTIST)
+  VECMUSICROLES
+      m_musicRoles; //Artists contributing to the recording and role (from tags other than ARTIST or ALBUMARTIST)
   std::string m_strComment;
   std::string m_strMood;
   std::string m_strRecordLabel;
@@ -202,7 +203,7 @@ protected:
   CDateTime m_dateAdded;
   bool m_bCompilation;
   int m_iDuration;
-  int m_iTrack;     // consists of the disk number in the high 16 bits, the track number in the low 16bits
+  int m_iTrack; // consists of the disk number in the high 16 bits, the track number in the low 16bits
   int m_iDbId;
   MediaType m_type; ///< item type "music", "song", "album", "artist"
   bool m_bLoaded;
@@ -219,4 +220,4 @@ protected:
 
   ReplayGain m_replayGain; ///< ReplayGain information
 };
-}
+} // namespace MUSIC_INFO

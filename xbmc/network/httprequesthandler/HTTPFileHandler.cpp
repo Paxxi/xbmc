@@ -13,23 +13,25 @@
 #include "utils/URIUtils.h"
 
 CHTTPFileHandler::CHTTPFileHandler()
-  : IHTTPRequestHandler(),
-    m_url(),
-    m_lastModified()
-{ }
+  : IHTTPRequestHandler()
+  , m_url()
+  , m_lastModified()
+{
+}
 
-CHTTPFileHandler::CHTTPFileHandler(const HTTPRequest &request)
-  : IHTTPRequestHandler(request),
-    m_url(),
-    m_lastModified()
-{ }
+CHTTPFileHandler::CHTTPFileHandler(const HTTPRequest& request)
+  : IHTTPRequestHandler(request)
+  , m_url()
+  , m_lastModified()
+{
+}
 
 int CHTTPFileHandler::HandleRequest()
 {
   return !m_url.empty() ? MHD_YES : MHD_NO;
 }
 
-bool CHTTPFileHandler::GetLastModifiedDate(CDateTime &lastModified) const
+bool CHTTPFileHandler::GetLastModifiedDate(CDateTime& lastModified) const
 {
   if (!m_lastModified.IsValid())
     return false;
@@ -49,7 +51,7 @@ void CHTTPFileHandler::SetFile(const std::string& file, int responseStatus)
   if (m_response.status == MHD_HTTP_OK)
     m_response.type = HTTPFileDownload;
   else if (m_response.status == MHD_HTTP_FOUND)
-      m_response.type = HTTPRedirect;
+    m_response.type = HTTPRedirect;
   else
     m_response.type = HTTPError;
 
@@ -88,14 +90,14 @@ void CHTTPFileHandler::SetFile(const std::string& file, int responseStatus)
     m_canBeCached = false;
 }
 
-void CHTTPFileHandler::SetLastModifiedDate(const struct __stat64 *statBuffer)
+void CHTTPFileHandler::SetLastModifiedDate(const struct __stat64* statBuffer)
 {
-  struct tm *time;
+  struct tm* time;
 #ifdef HAVE_LOCALTIME_R
-  struct tm result = { };
+  struct tm result = {};
   time = localtime_r((const time_t*)&statBuffer->st_mtime, &result);
 #else
-  time = localtime((time_t *)&statBuffer->st_mtime);
+  time = localtime((time_t*)&statBuffer->st_mtime);
 #endif
   if (time != NULL)
     m_lastModified = *time;

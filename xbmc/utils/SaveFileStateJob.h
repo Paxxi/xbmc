@@ -14,8 +14,5 @@ class CFileItem;
 class CSaveFileState
 {
 public:
-  static void DoWork(CFileItem& item,
-                     CBookmark& bookmark,
-                     bool updatePlayCount);
+  static void DoWork(CFileItem& item, CBookmark& bookmark, bool updatePlayCount);
 };
-

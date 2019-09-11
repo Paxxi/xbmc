@@ -13,9 +13,10 @@
 #include "view/ViewState.h"
 #include "windowing/GraphicContext.h"
 
-CGUIViewStateEventLog::CGUIViewStateEventLog(const CFileItemList& items) : CGUIViewState(items)
+CGUIViewStateEventLog::CGUIViewStateEventLog(const CFileItemList& items)
+  : CGUIViewState(items)
 {
-  AddSortMethod(SortByDate, 552, LABEL_MASKS("%L", "%d", "%L", "%d"));  // Label, Date | Label, Date
+  AddSortMethod(SortByDate, 552, LABEL_MASKS("%L", "%d", "%L", "%d")); // Label, Date | Label, Date
 
   SetSortMethod(SortByDate);
   SetViewAsControl(DEFAULT_VIEW_AUTO);

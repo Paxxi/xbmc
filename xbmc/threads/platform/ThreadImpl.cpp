@@ -11,4 +11,3 @@
 #elif (defined TARGET_WINDOWS)
 #include "threads/platform/win/ThreadImpl.cpp"
 #endif
-

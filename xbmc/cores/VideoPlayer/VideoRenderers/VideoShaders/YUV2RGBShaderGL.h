@@ -8,42 +8,49 @@
 
 #pragma once
 
-#include "utils/TransformMatrix.h"
-#include "ShaderFormats.h"
 #include "GLSLOutput.h"
-#include "guilib/Shader.h"
+#include "ShaderFormats.h"
 #include "cores/VideoSettings.h"
+#include "guilib/Shader.h"
+#include "utils/TransformMatrix.h"
 
 #include <memory>
 
-extern "C" {
-#include <libavutil/pixfmt.h>
+extern "C"
+{
 #include <libavutil/mastering_display_metadata.h>
+#include <libavutil/pixfmt.h>
 }
 
 class CConvertMatrix;
 
-namespace Shaders {
+namespace Shaders
+{
 
 class BaseYUV2RGBGLSLShader : public CGLSLShaderProgram
 {
 public:
-  BaseYUV2RGBGLSLShader(bool rect, EShaderFormat format, bool stretch,
-                        AVColorPrimaries dst, AVColorPrimaries src,
+  BaseYUV2RGBGLSLShader(bool rect,
+                        EShaderFormat format,
+                        bool stretch,
+                        AVColorPrimaries dst,
+                        AVColorPrimaries src,
                         bool toneMap,
                         std::shared_ptr<GLSLOutput> output);
   virtual ~BaseYUV2RGBGLSLShader();
 
-  void SetField(int field) { m_field  = field; }
-  void SetWidth(int w) { m_width  = w; }
+  void SetField(int field) { m_field = field; }
+  void SetWidth(int w) { m_width = w; }
   void SetHeight(int h) { m_height = h; }
 
   void SetColParams(AVColorSpace colSpace, int bits, bool limited, int textureBits);
   void SetBlack(float black) { m_black = black; }
   void SetContrast(float contrast) { m_contrast = contrast; }
   void SetNonLinStretch(float stretch) { m_stretch = stretch; }
-  void SetDisplayMetadata(bool hasDisplayMetadata, AVMasteringDisplayMetadata displayMetadata,
-                          bool hasLightMetadata, AVContentLightMetadata lightMetadata);
+  void SetDisplayMetadata(bool hasDisplayMetadata,
+                          AVMasteringDisplayMetadata displayMetadata,
+                          bool hasLightMetadata,
+                          AVContentLightMetadata lightMetadata);
   void SetToneMapParam(float param) { m_toneMappingParam = param; }
 
   void SetConvertFullColorRange(bool convertFullRange) { m_convertFullRange = convertFullRange; }
@@ -53,11 +60,14 @@ public:
   GLint GetUcoordLoc() { return m_hUcoord; }
   GLint GetVcoordLoc() { return m_hVcoord; }
 
-  void SetMatrices(const GLfloat *p, const GLfloat *m) { m_proj = p; m_model = m; }
-  void SetAlpha(GLfloat alpha)  { m_alpha = alpha; }
+  void SetMatrices(const GLfloat* p, const GLfloat* m)
+  {
+    m_proj = p;
+    m_model = m;
+  }
+  void SetAlpha(GLfloat alpha) { m_alpha = alpha; }
 
 protected:
-
   void OnCompiledAndLinked() override;
   bool OnEnabled() override;
   void OnDisabled() override;
@@ -79,8 +89,8 @@ protected:
   float m_contrast;
   float m_stretch;
 
-  const GLfloat *m_proj = nullptr;
-  const GLfloat *m_model = nullptr;
+  const GLfloat* m_proj = nullptr;
+  const GLfloat* m_model = nullptr;
   GLfloat m_alpha = 1.0f;
 
   std::string m_defines;
@@ -117,7 +127,8 @@ public:
   YUV2RGBProgressiveShader(bool rect,
                            EShaderFormat format,
                            bool stretch,
-                           AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries,
+                           AVColorPrimaries dstPrimaries,
+                           AVColorPrimaries srcPrimaries,
                            bool toneMap,
                            std::shared_ptr<GLSLOutput> output);
 };
@@ -128,7 +139,8 @@ public:
   YUV2RGBFilterShader4(bool rect,
                        EShaderFormat format,
                        bool stretch,
-                       AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries,
+                       AVColorPrimaries dstPrimaries,
+                       AVColorPrimaries srcPrimaries,
                        bool toneMap,
                        ESCALINGMETHOD method,
                        std::shared_ptr<GLSLOutput> output);
@@ -143,5 +155,4 @@ protected:
   ESCALINGMETHOD m_scaling = VS_SCALINGMETHOD_LANCZOS3_FAST;
 };
 
-} // end namespace
-
+} // namespace Shaders

@@ -14,4 +14,4 @@
 
 // Helper Functions
 std::string GetError(OSStatus error);
-const char* StreamDescriptionToString(AudioStreamBasicDescription desc, std::string &str);
+const char* StreamDescriptionToString(AudioStreamBasicDescription desc, std::string& str);

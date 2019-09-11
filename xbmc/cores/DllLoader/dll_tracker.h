@@ -9,6 +9,7 @@
 #pragma once
 
 #include "threads/CriticalSection.h"
+
 #include "PlatformDefs.h"
 #ifdef TARGET_WINDOWS
 #if defined(TARGET_WINDOWS_STORE)
@@ -23,7 +24,7 @@ class DllLoader;
 
 struct AllocLenCaller
 {
-  size_t   size;
+  size_t size;
   uintptr_t calleraddr;
 };
 
@@ -61,7 +62,7 @@ typedef std::list<HANDLE> HeapObjectList;
 typedef std::list<HANDLE>::iterator HeapObjectListIter;
 
 typedef std::map<uintptr_t, AllocLenCaller> VAllocList;
-typedef std::map<uintptr_t, AllocLenCaller>::iterator  VAllocListIter;
+typedef std::map<uintptr_t, AllocLenCaller>::iterator VAllocListIter;
 
 typedef struct _DllTrackInfo
 {
@@ -85,7 +86,9 @@ typedef struct _DllTrackInfo
   VAllocList virtualList;
 } DllTrackInfo;
 
-class TrackedDllList : public std::list<DllTrackInfo*>, public CCriticalSection {};
+class TrackedDllList : public std::list<DllTrackInfo*>, public CCriticalSection
+{
+};
 typedef std::list<DllTrackInfo*>::iterator TrackedDllsIter;
 
 #ifdef _cplusplus
@@ -93,29 +96,29 @@ extern "C"
 {
 #endif
 
-extern CCriticalSection g_trackerLock;
-extern TrackedDllList g_trackedDlls;
+  extern CCriticalSection g_trackerLock;
+  extern TrackedDllList g_trackedDlls;
 
-// add a dll for tracking
-void tracker_dll_add(DllLoader* pDll);
+  // add a dll for tracking
+  void tracker_dll_add(DllLoader* pDll);
 
-// remove a dll, and free all its resources
-void tracker_dll_free(DllLoader* pDll);
+  // remove a dll, and free all its resources
+  void tracker_dll_free(DllLoader* pDll);
 
-// sets the dll base address and size
-void tracker_dll_set_addr(DllLoader* pDll, uintptr_t min, uintptr_t max);
+  // sets the dll base address and size
+  void tracker_dll_set_addr(DllLoader* pDll, uintptr_t min, uintptr_t max);
 
-// returns the name from the dll that contains this address or "" if not found
-const char* tracker_getdllname(uintptr_t caller);
+  // returns the name from the dll that contains this address or "" if not found
+  const char* tracker_getdllname(uintptr_t caller);
 
-// returns a function pointer if there is one available for it, or NULL if not ofund
-void* tracker_dll_get_function(DllLoader* pDll, char* sFunctionName);
+  // returns a function pointer if there is one available for it, or NULL if not ofund
+  void* tracker_dll_get_function(DllLoader* pDll, char* sFunctionName);
 
-DllTrackInfo* tracker_get_dlltrackinfo_byobject(DllLoader* pDll);
+  DllTrackInfo* tracker_get_dlltrackinfo_byobject(DllLoader* pDll);
 
-DllTrackInfo* tracker_get_dlltrackinfo(uintptr_t caller);
+  DllTrackInfo* tracker_get_dlltrackinfo(uintptr_t caller);
 
-void tracker_dll_data_track(DllLoader* pDll, uintptr_t addr);
+  void tracker_dll_data_track(DllLoader* pDll, uintptr_t addr);
 
 #ifdef TARGET_POSIX
 #define _ReturnAddress() __builtin_return_address(0)
@@ -126,7 +129,6 @@ void tracker_dll_data_track(DllLoader* pDll, uintptr_t addr);
 #endif
 
 #ifndef TARGET_POSIX
-extern "C" void * _ReturnAddress(void);
+extern "C" void* _ReturnAddress(void);
 #pragma intrinsic(_ReturnAddress)
 #endif
-

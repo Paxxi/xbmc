@@ -11,14 +11,14 @@
 #include "input/Key.h"
 
 CGUIDialogFullScreenInfo::CGUIDialogFullScreenInfo(void)
-    : CGUIDialog(WINDOW_DIALOG_FULLSCREEN_INFO, "DialogFullScreenInfo.xml")
+  : CGUIDialog(WINDOW_DIALOG_FULLSCREEN_INFO, "DialogFullScreenInfo.xml")
 {
   m_loadType = KEEP_IN_MEMORY;
 }
 
 CGUIDialogFullScreenInfo::~CGUIDialogFullScreenInfo(void) = default;
 
-bool CGUIDialogFullScreenInfo::OnAction(const CAction &action)
+bool CGUIDialogFullScreenInfo::OnAction(const CAction& action)
 {
   if (action.GetID() == ACTION_SHOW_INFO)
   {
@@ -27,4 +27,3 @@ bool CGUIDialogFullScreenInfo::OnAction(const CAction &action)
   }
   return CGUIDialog::OnAction(action);
 }
-

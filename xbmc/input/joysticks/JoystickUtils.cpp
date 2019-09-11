@@ -14,12 +14,12 @@
 using namespace KODI;
 using namespace JOYSTICK;
 
-std::string CJoystickUtils::MakeKeyName(const FeatureName &feature)
+std::string CJoystickUtils::MakeKeyName(const FeatureName& feature)
 {
   return feature;
 }
 
-std::string CJoystickUtils::MakeKeyName(const FeatureName &feature, ANALOG_STICK_DIRECTION dir)
+std::string CJoystickUtils::MakeKeyName(const FeatureName& feature, ANALOG_STICK_DIRECTION dir)
 {
   std::string keyName = feature;
 
@@ -29,7 +29,7 @@ std::string CJoystickUtils::MakeKeyName(const FeatureName &feature, ANALOG_STICK
   return keyName;
 }
 
-std::string CJoystickUtils::MakeKeyName(const FeatureName &feature, WHEEL_DIRECTION dir)
+std::string CJoystickUtils::MakeKeyName(const FeatureName& feature, WHEEL_DIRECTION dir)
 {
   ANALOG_STICK_DIRECTION stickDir = ANALOG_STICK_DIRECTION::NONE;
 
@@ -48,26 +48,26 @@ std::string CJoystickUtils::MakeKeyName(const FeatureName &feature, WHEEL_DIRECT
   return MakeKeyName(feature, stickDir);
 }
 
-std::string CJoystickUtils::MakeKeyName(const FeatureName &feature, THROTTLE_DIRECTION dir)
+std::string CJoystickUtils::MakeKeyName(const FeatureName& feature, THROTTLE_DIRECTION dir)
 {
   ANALOG_STICK_DIRECTION stickDir = ANALOG_STICK_DIRECTION::NONE;
 
   switch (dir)
   {
-    case THROTTLE_DIRECTION::UP:
-      stickDir = ANALOG_STICK_DIRECTION::UP;
-      break;
-    case THROTTLE_DIRECTION::DOWN:
-      stickDir = ANALOG_STICK_DIRECTION::DOWN;
-      break;
-    default:
-      break;
+  case THROTTLE_DIRECTION::UP:
+    stickDir = ANALOG_STICK_DIRECTION::UP;
+    break;
+  case THROTTLE_DIRECTION::DOWN:
+    stickDir = ANALOG_STICK_DIRECTION::DOWN;
+    break;
+  default:
+    break;
   }
 
   return MakeKeyName(feature, stickDir);
 }
 
-const std::vector<ANALOG_STICK_DIRECTION> &CJoystickUtils::GetAnalogStickDirections()
+const std::vector<ANALOG_STICK_DIRECTION>& CJoystickUtils::GetAnalogStickDirections()
 {
   static std::vector<ANALOG_STICK_DIRECTION> directions;
   if (directions.empty())
@@ -80,7 +80,7 @@ const std::vector<ANALOG_STICK_DIRECTION> &CJoystickUtils::GetAnalogStickDirecti
   return directions;
 }
 
-const std::vector<WHEEL_DIRECTION> &CJoystickUtils::GetWheelDirections()
+const std::vector<WHEEL_DIRECTION>& CJoystickUtils::GetWheelDirections()
 {
   static std::vector<WHEEL_DIRECTION> directions;
   if (directions.empty())
@@ -91,7 +91,7 @@ const std::vector<WHEEL_DIRECTION> &CJoystickUtils::GetWheelDirections()
   return directions;
 }
 
-const std::vector<THROTTLE_DIRECTION> &CJoystickUtils::GetThrottleDirections()
+const std::vector<THROTTLE_DIRECTION>& CJoystickUtils::GetThrottleDirections()
 {
   static std::vector<THROTTLE_DIRECTION> directions;
   if (directions.empty())

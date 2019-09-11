@@ -21,7 +21,7 @@ CMusicSearchDirectory::CMusicSearchDirectory(void) = default;
 
 CMusicSearchDirectory::~CMusicSearchDirectory(void) = default;
 
-bool CMusicSearchDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CMusicSearchDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   // break up our path
   // format is:  musicsearch://<url encoded search string>
@@ -37,8 +37,8 @@ bool CMusicSearchDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   db.Open();
   db.Search(search, items);
   db.Close();
-  CLog::Log(LOGDEBUG, "%s (%s) took %u ms",
-            __FUNCTION__, url.GetRedacted().c_str(), XbmcThreads::SystemClockMillis() - time);
+  CLog::Log(LOGDEBUG, "%s (%s) took %u ms", __FUNCTION__, url.GetRedacted().c_str(),
+            XbmcThreads::SystemClockMillis() - time);
   items.SetLabel(g_localizeStrings.Get(137)); // Search
   return true;
 }

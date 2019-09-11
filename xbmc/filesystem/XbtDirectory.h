@@ -30,4 +30,4 @@ public:
   // specialization of IFileDirectory
   bool ContainsFiles(const CURL& url) override;
 };
-}
+} // namespace XFILE

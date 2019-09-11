@@ -7,50 +7,52 @@
  */
 
 #include "NetworkWin10.h"
+
 #include "filesystem/SpecialProtocol.h"
-#include "platform/win10/AsyncHelpers.h"
-#include "platform/win32/WIN32Util.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
-#include "utils/log.h"
 #include "utils/StringUtils.h"
+#include "utils/log.h"
+
+#include "platform/win10/AsyncHelpers.h"
+#include "platform/win32/WIN32Util.h"
 
 #include <errno.h>
-#include <iphlpapi.h>
-#include <ppltasks.h>
 #include <string.h>
-#include <Ws2tcpip.h>
-#include <ws2ipdef.h>
 
 #include <Ipexport.h>
+#include <Ws2tcpip.h>
+#include <iphlpapi.h>
+#include <ppltasks.h>
+#include <ws2ipdef.h>
 #ifndef IP_STATUS_BASE
 
 // --- c&p from Ipexport.h ----------------
-typedef ULONG IPAddr;       // An IP address.
+typedef ULONG IPAddr; // An IP address.
 
-typedef struct ip_option_information {
-  UCHAR   Ttl;                // Time To Live
-  UCHAR   Tos;                // Type Of Service
-  UCHAR   Flags;              // IP header flags
-  UCHAR   OptionsSize;        // Size in bytes of options data
-  _Field_size_bytes_(OptionsSize)
-    PUCHAR  OptionsData;        // Pointer to options data
+typedef struct ip_option_information
+{
+  UCHAR Ttl; // Time To Live
+  UCHAR Tos; // Type Of Service
+  UCHAR Flags; // IP header flags
+  UCHAR OptionsSize; // Size in bytes of options data
+  _Field_size_bytes_(OptionsSize) PUCHAR OptionsData; // Pointer to options data
 } IP_OPTION_INFORMATION, *PIP_OPTION_INFORMATION;
 
-typedef struct icmp_echo_reply {
-  IPAddr  Address;            // Replying address
-  ULONG   Status;             // Reply IP_STATUS
-  ULONG   RoundTripTime;      // RTT in milliseconds
-  USHORT  DataSize;           // Reply data size in bytes
-  USHORT  Reserved;           // Reserved for system use
-  _Field_size_bytes_(DataSize)
-    PVOID   Data;               // Pointer to the reply data
+typedef struct icmp_echo_reply
+{
+  IPAddr Address; // Replying address
+  ULONG Status; // Reply IP_STATUS
+  ULONG RoundTripTime; // RTT in milliseconds
+  USHORT DataSize; // Reply data size in bytes
+  USHORT Reserved; // Reserved for system use
+  _Field_size_bytes_(DataSize) PVOID Data; // Pointer to the reply data
   struct ip_option_information Options; // Reply options
 } ICMP_ECHO_REPLY, *PICMP_ECHO_REPLY;
 
-#define IP_STATUS_BASE              11000
-#define IP_SUCCESS                  0
-#define IP_REQ_TIMED_OUT            (IP_STATUS_BASE + 10)
+#define IP_STATUS_BASE 11000
+#define IP_SUCCESS 0
+#define IP_REQ_TIMED_OUT (IP_STATUS_BASE + 10)
 
 #endif //! IP_STATUS_BASE
 #include <Icmpapi.h>
@@ -78,7 +80,8 @@ std::string CNetworkInterfaceWin10::GetMacAddress() const
 {
   std::string result;
   unsigned char* mAddr = m_adapterAddr->PhysicalAddress;
-  result = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X", mAddr[0], mAddr[1], mAddr[2], mAddr[3], mAddr[4], mAddr[5]);
+  result = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X", mAddr[0], mAddr[1], mAddr[2],
+                               mAddr[3], mAddr[4], mAddr[5]);
   return result;
 }
 
@@ -167,7 +170,7 @@ CNetworkWin10::~CNetworkWin10(void)
 void CNetworkWin10::CleanInterfaceList()
 {
   std::vector<CNetworkInterface*>::iterator it = m_interfaces.begin();
-  while(it != m_interfaces.end())
+  while (it != m_interfaces.end())
   {
     CNetworkInterface* nInt = *it;
     delete nInt;
@@ -179,7 +182,7 @@ void CNetworkWin10::CleanInterfaceList()
 
 std::vector<CNetworkInterface*>& CNetworkWin10::GetInterfaceList(void)
 {
-  CSingleLock lock (m_critSection);
+  CSingleLock lock(m_critSection);
   return m_interfaces;
 }
 
@@ -205,15 +208,15 @@ void CNetworkWin10::queryInterfaceList()
     // case-independent (ci) compare_less
     struct nocase_compare
     {
-      bool operator() (const unsigned int& c1, const unsigned int& c2) const {
+      bool operator()(const unsigned int& c1, const unsigned int& c2) const
+      {
         return tolower(c1) < tolower(c2);
       }
     };
-    bool operator()(const std::wstring & s1, const std::wstring & s2) const {
-      return std::lexicographical_compare
-      (s1.begin(), s1.end(),
-       s2.begin(), s2.end(),
-       nocase_compare());
+    bool operator()(const std::wstring& s1, const std::wstring& s2) const
+    {
+      return std::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end(),
+                                          nocase_compare());
     }
   };
 
@@ -292,9 +295,9 @@ bool CNetworkWin10::PingHost(unsigned long host, unsigned int timeout_ms /* = 20
 
   SetLastError(ERROR_SUCCESS);
 
-  DWORD dwRetVal = IcmpSendEcho2(hIcmpFile, nullptr, nullptr, nullptr,
-                                 host, SendData, sizeof(SendData), nullptr,
-                                 ReplyBuffer, sizeof(ReplyBuffer), timeout_ms);
+  DWORD dwRetVal =
+      IcmpSendEcho2(hIcmpFile, nullptr, nullptr, nullptr, host, SendData, sizeof(SendData), nullptr,
+                    ReplyBuffer, sizeof(ReplyBuffer), timeout_ms);
 
   DWORD lastErr = GetLastError();
   if (lastErr != ERROR_SUCCESS && lastErr != IP_REQ_TIMED_OUT)

@@ -17,7 +17,6 @@ using namespace XFILE::MUSICDATABASEDIRECTORY;
 CDirectoryNodeAlbum::CDirectoryNodeAlbum(const std::string& strName, CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_ALBUM, strName, pParent)
 {
-
 }
 
 NODE_TYPE CDirectoryNodeAlbum::GetChildType() const
@@ -44,7 +43,8 @@ bool CDirectoryNodeAlbum::GetContent(CFileItemList& items) const
   CQueryParams params;
   CollectQueryParams(params);
 
-  bool bSuccess=musicdatabase.GetAlbumsNav(BuildPath(), items, params.GetGenreId(), params.GetArtistId());
+  bool bSuccess =
+      musicdatabase.GetAlbumsNav(BuildPath(), items, params.GetGenreId(), params.GetArtistId());
 
   musicdatabase.Close();
 

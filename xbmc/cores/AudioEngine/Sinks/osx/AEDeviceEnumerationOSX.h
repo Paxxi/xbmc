@@ -22,7 +22,7 @@ struct CADeviceInstance
   unsigned int streamIndex;
   unsigned int sourceId;
 };
-typedef std::vector< std::pair<struct CADeviceInstance, CAEDeviceInfo> > CADeviceList;
+typedef std::vector<std::pair<struct CADeviceInstance, CAEDeviceInfo>> CADeviceList;
 
 //Hierarchy:
 // Device
@@ -48,7 +48,7 @@ public:
   *
   * @return Returns the device list.
   */
-  CADeviceList  GetDeviceInfoList() const;
+  CADeviceList GetDeviceInfoList() const;
 
   /*!
   * @brief Fetches all metadata from the CoreAudio device which is needed to generate a proper DeviceList for AE
@@ -57,19 +57,19 @@ public:
   *        After this call - GetDeviceInfoList will reflect the Enumerated metadata.
   * @return false when streamlist couldn't be fetched from device - else true
   */
-  bool          Enumerate();
+  bool Enumerate();
 
   /*!
   * @brief Returns the number of Planes for a device. This will be 1 for non-planar devices and > 1 for planar devices.
   * @return Number of planes for this device.
   */
-  unsigned int  GetNumPlanes() const;
+  unsigned int GetNumPlanes() const;
 
   /*!
   * @brief Checks if the m_deviceID belongs to a planar or non-planar device.
   * @return true if m_deviceID belongs to a planar device - else false.
   */
-  bool          IsPlanar() const { return m_isPlanar; }
+  bool IsPlanar() const { return m_isPlanar; }
 
   /*!
   * @brief Tries to find a suitable CoreAudio format which matches the given AEAudioFormat as close as possible.
@@ -82,15 +82,17 @@ public:
   * @param outputStream [out] - the coreaudio streamid which contains the coreaudio format returned in outputFormat
   * @return true if a matching corea audio format was found - else false
   */
-  bool          FindSuitableFormatForStream(UInt32 &streamIdx, const AEAudioFormat &format, bool virt,
-                                            AudioStreamBasicDescription &outputFormat,
-                                            AudioStreamID &outputStream) const;
+  bool FindSuitableFormatForStream(UInt32& streamIdx,
+                                   const AEAudioFormat& format,
+                                   bool virt,
+                                   AudioStreamBasicDescription& outputFormat,
+                                   AudioStreamID& outputStream) const;
 
   /*!
   * @brief Returns the device name which belongs to m_deviceID without any stream/source suffixes
   * @return the CA device name
   */
-  std::string   GetMasterDeviceName() const { return m_deviceName; }
+  std::string GetMasterDeviceName() const { return m_deviceName; }
 
   /*!
   * @brief Tries to return a proper channelmap from CA in a format AE understands
@@ -100,7 +102,7 @@ public:
   * @param channelsPerFrame [int] - the number of channels which should be mapped
   *                                 (also decides if stereo or multichannel map is fetched similar to channelMap param)
   */
-  void          GetAEChannelMap(CAEChannelInfo &channelMap, unsigned int channelsPerFrame) const;
+  void GetAEChannelMap(CAEChannelInfo& channelMap, unsigned int channelsPerFrame) const;
 
   /*!
    * @brief Scores a format based on:
@@ -115,15 +117,15 @@ public:
    *          (scores > 10000 indicate passthrough formats)
    */
   // public because its used in unit tests ...
-  float             ScoreFormat(const AudioStreamBasicDescription &formatDesc, const AEAudioFormat &format) const;
+  float ScoreFormat(const AudioStreamBasicDescription& formatDesc,
+                    const AEAudioFormat& format) const;
 
 private:
-
   /*!
   * @brief Checks if this is a digital device based on CA transportType or name
   * @return - true if this is a digital device - else false.
   */
-  bool              isDigitalDevice() const;
+  bool isDigitalDevice() const;
 
   /*!
   * @brief Checks if there are passthrough formats or digital formats
@@ -132,9 +134,9 @@ private:
   * @param hasPassthroughFormats [out] - true if there were passthrough formats in the list
   * @param hasDigitalFormat [out] - true if there were dedicated passthrough formats in the list
   */
-  void              hasPassthroughOrDigitalFormats(const StreamFormatList &formatList,
-                                                   bool &hasPassthroughFormats,
-                                                   bool &hasDigitalFormat) const;
+  void hasPassthroughOrDigitalFormats(const StreamFormatList& formatList,
+                                      bool& hasPassthroughFormats,
+                                      bool& hasDigitalFormat) const;
 
   /*!
   * @brief Gets the AE devicetype for this device based the given criteria
@@ -144,13 +146,15 @@ private:
   * @param transportType [in] - the transportType of the device
   * @return the AE devicetype
   */
-  enum AEDeviceType getDeviceType(bool hasPassthroughFormats, bool isDigital,
-                                  UInt32 numChannels, UInt32 transportType) const;
+  enum AEDeviceType getDeviceType(bool hasPassthroughFormats,
+                                  bool isDigital,
+                                  UInt32 numChannels,
+                                  UInt32 transportType) const;
 
   /*!
   * @brief Fetches all ca streams from the ca device and fills m_channelsPerStream and m_streams
   */
-  void              fillStreamList();
+  void fillStreamList();
 
   /*!
   * @brief Scores a samplerate based on:
@@ -161,11 +165,11 @@ private:
   * @param sourceRate [in] - the sourceRate of the audio format - this is the samplerate the score is based on
   * @return the score
   */
-  float             scoreSampleRate(Float64 destinationRate, unsigned int sourceRate) const;
+  float scoreSampleRate(Float64 destinationRate, unsigned int sourceRate) const;
 
-  bool              hasSampleRate(const AESampleRateList &list, const unsigned int samplerate) const;
-  bool              hasDataFormat(const AEDataFormatList &list, const enum AEDataFormat format) const;
-  bool              hasDataType(const AEDataTypeList &list, CAEStreamInfo::DataType type) const;
+  bool hasSampleRate(const AESampleRateList& list, const unsigned int samplerate) const;
+  bool hasDataFormat(const AEDataFormatList& list, const enum AEDataFormat format) const;
+  bool hasDataType(const AEDataTypeList& list, CAEStreamInfo::DataType type) const;
 
   /*!
   * @brief Converts a CA format description to a list of AEFormat descriptions (as one format can result
@@ -176,8 +180,10 @@ private:
   *                        (for allowing bitstreaming without dedicated AC3 format in CA)
   * @return The list of converted AE formats.
   */
-  AEDataFormatList  caFormatToAE(const AudioStreamBasicDescription &formatDesc, bool isDigital) const;
-  AEDataTypeList caFormatToAEType(const AudioStreamBasicDescription &formatDesc, bool isDigital) const;
+  AEDataFormatList caFormatToAE(const AudioStreamBasicDescription& formatDesc,
+                                bool isDigital) const;
+  AEDataTypeList caFormatToAEType(const AudioStreamBasicDescription& formatDesc,
+                                  bool isDigital) const;
 
 
   /*!
@@ -185,7 +191,7 @@ private:
   * @param CAChannelLabel - the CA channel label to be converted
   * @return the corresponding AEChannel
   */
-  enum AEChannel    caChannelToAEChannel(const AudioChannelLabel &CAChannelLabel) const;
+  enum AEChannel caChannelToAEChannel(const AudioChannelLabel& CAChannelLabel) const;
 
   // for filling out the AEDeviceInfo object based on
   // the data gathered on the last call to Enumerate()
@@ -194,30 +200,30 @@ private:
   * @param streamIdx [in] - index into m_caStreamInfos
   * @return - the list of AE formats in that stream.
   */
-  AEDataFormatList  getFormatListForStream(UInt32 streamIdx) const;
+  AEDataFormatList getFormatListForStream(UInt32 streamIdx) const;
 
-  AEDataTypeList  getTypeListForStream(UInt32 streamIdx) const;
+  AEDataTypeList getTypeListForStream(UInt32 streamIdx) const;
 
   /*!
   * @brief Returns the AE channelinfo/channel map for the CA stream at the given index
   * @param streamIdx [in] - index into m_caStreamInfos
   * @return - the of AE channel info for that stream.
   */
-  CAEChannelInfo    getChannelInfoForStream(UInt32 streamIdx) const;
+  CAEChannelInfo getChannelInfoForStream(UInt32 streamIdx) const;
 
   /*!
   * @brief Returns the AE samplerates for the CA stream at the given index
   * @param streamIdx [in] - index into m_caStreamInfos
   * @return - the list of AE samplerates for that stream.
   */
-  AESampleRateList  getSampleRateListForStream(UInt32 streamIdx) const;
+  AESampleRateList getSampleRateListForStream(UInt32 streamIdx) const;
 
   /*!
   * @brief Returns the AE device name for the CA stream at the given index
   * @param streamIdx [in] - index into m_caStreamInfos
   * @return - The devicename for that stream
   */
-  std::string       getDeviceNameForStream(UInt32 streamIdx) const;
+  std::string getDeviceNameForStream(UInt32 streamIdx) const;
 
   /*!
   * @brief - Returns the extra displayname shown to the User in addition to getDisplayNameForStream
@@ -225,11 +231,11 @@ private:
   * @param streamIdx [in] - index into m_caStreamInfos
   * @return - The extra displayname for that stream (might be empty)
   */
-  std::string       getExtraDisplayNameForStream(UInt32 streamIdx) const;
+  std::string getExtraDisplayNameForStream(UInt32 streamIdx) const;
 
-  AudioDeviceID     m_deviceID;
-  bool              m_isPlanar;
-  std::string       m_deviceName;
+  AudioDeviceID m_deviceID;
+  bool m_isPlanar;
+  std::string m_deviceName;
 
   typedef struct
   {
@@ -241,6 +247,6 @@ private:
     bool hasPassthroughFormats;
     enum AEDeviceType deviceType;
   } caStreamInfo;
-  std::vector<caStreamInfo>       m_caStreamInfos;
-  CCoreAudioDevice                m_caDevice;
+  std::vector<caStreamInfo> m_caStreamInfos;
+  CCoreAudioDevice m_caDevice;
 };

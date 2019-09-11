@@ -11,12 +11,18 @@
 #include <androidjni/JNIBase.h>
 #include <androidjni/SurfaceTexture.h>
 
-class CJNIXBMCSurfaceTextureOnFrameAvailableListener : public CJNISurfaceTextureOnFrameAvailableListener, public CJNIInterfaceImplem<CJNIXBMCSurfaceTextureOnFrameAvailableListener>
+class CJNIXBMCSurfaceTextureOnFrameAvailableListener
+  : public CJNISurfaceTextureOnFrameAvailableListener,
+    public CJNIInterfaceImplem<CJNIXBMCSurfaceTextureOnFrameAvailableListener>
 {
 public:
   CJNIXBMCSurfaceTextureOnFrameAvailableListener();
-  CJNIXBMCSurfaceTextureOnFrameAvailableListener(const CJNIXBMCSurfaceTextureOnFrameAvailableListener& other);
-  CJNIXBMCSurfaceTextureOnFrameAvailableListener(const jni::jhobject &object) : CJNIBase(object) {}
+  CJNIXBMCSurfaceTextureOnFrameAvailableListener(
+      const CJNIXBMCSurfaceTextureOnFrameAvailableListener& other);
+  CJNIXBMCSurfaceTextureOnFrameAvailableListener(const jni::jhobject& object)
+    : CJNIBase(object)
+  {
+  }
   virtual ~CJNIXBMCSurfaceTextureOnFrameAvailableListener();
 
   static void RegisterNatives(JNIEnv* env);

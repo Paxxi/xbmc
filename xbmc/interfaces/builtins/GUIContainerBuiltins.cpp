@@ -20,10 +20,11 @@
  *  Set the Dir template parameter to 1 to switch to next sort method
  *  or -1 to switch to previous sort method.
  */
-  template<int Dir>
+template<int Dir>
 static int ChangeSortMethod(const std::vector<std::string>& params)
 {
-  CGUIMessage message(GUI_MSG_CHANGE_SORT_METHOD, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, 0, Dir);
+  CGUIMessage message(GUI_MSG_CHANGE_SORT_METHOD,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, 0, Dir);
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
   return 0;
@@ -35,10 +36,11 @@ static int ChangeSortMethod(const std::vector<std::string>& params)
  *  Set the Dir template parameter to 1 to switch to next view mode
  *  or -1 to switch to previous view mode.
  */
-  template<int Dir>
+template<int Dir>
 static int ChangeViewMode(const std::vector<std::string>& params)
 {
-  CGUIMessage message(GUI_MSG_CHANGE_VIEW_MODE, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, 0, Dir);
+  CGUIMessage message(GUI_MSG_CHANGE_VIEW_MODE,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, 0, Dir);
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
   return 0;
@@ -51,7 +53,9 @@ static int ChangeViewMode(const std::vector<std::string>& params)
 static int Refresh(const std::vector<std::string>& params)
 { // NOTE: These messages require a media window, thus they're sent to the current activewindow.
   //       This shouldn't stop a dialog intercepting it though.
-  CGUIMessage message(GUI_MSG_NOTIFY_ALL, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, GUI_MSG_UPDATE, 1); // 1 to reset the history
+  CGUIMessage message(GUI_MSG_NOTIFY_ALL,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0,
+                      GUI_MSG_UPDATE, 1); // 1 to reset the history
   message.SetStringParam(!params.empty() ? params[0] : "");
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
@@ -64,7 +68,9 @@ static int Refresh(const std::vector<std::string>& params)
  */
 static int SetSortMethod(const std::vector<std::string>& params)
 {
-  CGUIMessage message(GUI_MSG_CHANGE_SORT_METHOD, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, atoi(params[0].c_str()));
+  CGUIMessage message(GUI_MSG_CHANGE_SORT_METHOD,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0,
+                      atoi(params[0].c_str()));
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
   return 0;
@@ -76,7 +82,9 @@ static int SetSortMethod(const std::vector<std::string>& params)
  */
 static int SetViewMode(const std::vector<std::string>& params)
 {
-  CGUIMessage message(GUI_MSG_CHANGE_VIEW_MODE, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, atoi(params[0].c_str()));
+  CGUIMessage message(GUI_MSG_CHANGE_VIEW_MODE,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0,
+                      atoi(params[0].c_str()));
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
   return 0;
@@ -87,7 +95,8 @@ static int SetViewMode(const std::vector<std::string>& params)
  */
 static int ToggleSortDirection(const std::vector<std::string>& params)
 {
-  CGUIMessage message(GUI_MSG_CHANGE_SORT_DIRECTION, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, 0);
+  CGUIMessage message(GUI_MSG_CHANGE_SORT_DIRECTION,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, 0);
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
   return 0;
@@ -100,7 +109,9 @@ static int ToggleSortDirection(const std::vector<std::string>& params)
  */
 static int Update(const std::vector<std::string>& params)
 {
-  CGUIMessage message(GUI_MSG_NOTIFY_ALL, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0, GUI_MSG_UPDATE, 0);
+  CGUIMessage message(GUI_MSG_NOTIFY_ALL,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow(), 0,
+                      GUI_MSG_UPDATE, 0);
   message.SetStringParam(params[0]);
   if (params.size() > 1 && StringUtils::EqualsNoCase(params[1], "replace"))
     message.SetParam2(1); // reset the history
@@ -175,15 +186,18 @@ static int Update(const std::vector<std::string>& params)
 
 CBuiltins::CommandMap CGUIContainerBuiltins::GetOperations() const
 {
-  return {
-           {"container.nextsortmethod",     {"Change to the next sort method", 0, ChangeSortMethod<1>}},
-           {"container.nextviewmode",       {"Move to the next view type (and refresh the listing)", 0, ChangeViewMode<1>}},
-           {"container.previoussortmethod", {"Change to the previous sort method", 0, ChangeSortMethod<-1>}},
-           {"container.previousviewmode",   {"Move to the previous view type (and refresh the listing)", 0, ChangeViewMode<-1>}},
-           {"container.refresh",            {"Refresh current listing", 0, Refresh}},
-           {"container.setsortdirection",   {"Toggle the sort direction", 0, ToggleSortDirection}},
-           {"container.setsortmethod",      {"Change to the specified sort method", 1, SetSortMethod}},
-           {"container.setviewmode",        {"Move to the view with the given id", 1, SetViewMode}},
-           {"container.update",             {"Update current listing. Send Container.Update(path,replace) to reset the path history", 1, Update}}
-         };
+  return {{"container.nextsortmethod", {"Change to the next sort method", 0, ChangeSortMethod<1>}},
+          {"container.nextviewmode",
+           {"Move to the next view type (and refresh the listing)", 0, ChangeViewMode<1>}},
+          {"container.previoussortmethod",
+           {"Change to the previous sort method", 0, ChangeSortMethod<-1>}},
+          {"container.previousviewmode",
+           {"Move to the previous view type (and refresh the listing)", 0, ChangeViewMode<-1>}},
+          {"container.refresh", {"Refresh current listing", 0, Refresh}},
+          {"container.setsortdirection", {"Toggle the sort direction", 0, ToggleSortDirection}},
+          {"container.setsortmethod", {"Change to the specified sort method", 1, SetSortMethod}},
+          {"container.setviewmode", {"Move to the view with the given id", 1, SetViewMode}},
+          {"container.update",
+           {"Update current listing. Send Container.Update(path,replace) to reset the path history",
+            1, Update}}};
 }

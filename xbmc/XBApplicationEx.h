@@ -13,11 +13,12 @@
 class CAppParamParser;
 
 // Do not change the numbering, external scripts depend on them
-enum {
-  EXITCODE_QUIT      = 0,
+enum
+{
+  EXITCODE_QUIT = 0,
   EXITCODE_POWERDOWN = 64,
-  EXITCODE_RESTARTAPP= 65,
-  EXITCODE_REBOOT    = 66,
+  EXITCODE_RESTARTAPP = 65,
+  EXITCODE_REBOOT = 66,
 };
 
 class CXBApplicationEx : public IWindowManagerCallback
@@ -28,7 +29,7 @@ public:
 
   // Variables for timing
   bool m_bStop;
-  int  m_ExitCode;
+  int m_ExitCode;
   bool m_AppFocused;
   bool m_renderGUI;
 
@@ -37,9 +38,8 @@ public:
   virtual bool Cleanup() { return true; }
 
 public:
-  int Run(const CAppParamParser &params);
+  int Run(const CAppParamParser& params);
   void Destroy();
 
 private:
 };
-

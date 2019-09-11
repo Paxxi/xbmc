@@ -13,10 +13,10 @@
 extern "C"
 {
 
-struct AddonGlobalInterface;
+  struct AddonGlobalInterface;
 
-namespace ADDON
-{
+  namespace ADDON
+  {
 
   /*!
    * @brief Global gui Add-on to Kodi callback functions
@@ -43,15 +43,32 @@ namespace ADDON
      */
     //@{
     static bool show_and_verify_new_password(void* kodiBase, char** password);
-    static int show_and_verify_password(void* kodiBase, const char* password, const char *heading, int retries);
-    static bool show_and_verify_input(void* kodiBase, const char* verify_in, char** verify_out, const char* heading, bool verify_input);
-    static bool show_and_get_time(void* kodiBase, tm *time, const char *heading);
-    static bool show_and_get_date(void* kodiBase, tm *date, const char *heading);
-    static bool show_and_get_ip_address(void* kodiBase, const char* ip_address_in, char** ip_address_out, const char *heading);
-    static bool show_and_get_number(void* kodiBase, const char* number_in, char** number_out, const char *heading, unsigned int auto_close_ms);
-    static bool show_and_get_seconds(void* kodiBase, const char* time_in, char** time_out, const char *heading);
+    static int show_and_verify_password(void* kodiBase,
+                                        const char* password,
+                                        const char* heading,
+                                        int retries);
+    static bool show_and_verify_input(void* kodiBase,
+                                      const char* verify_in,
+                                      char** verify_out,
+                                      const char* heading,
+                                      bool verify_input);
+    static bool show_and_get_time(void* kodiBase, tm* time, const char* heading);
+    static bool show_and_get_date(void* kodiBase, tm* date, const char* heading);
+    static bool show_and_get_ip_address(void* kodiBase,
+                                        const char* ip_address_in,
+                                        char** ip_address_out,
+                                        const char* heading);
+    static bool show_and_get_number(void* kodiBase,
+                                    const char* number_in,
+                                    char** number_out,
+                                    const char* heading,
+                                    unsigned int auto_close_ms);
+    static bool show_and_get_seconds(void* kodiBase,
+                                     const char* time_in,
+                                     char** time_out,
+                                     const char* heading);
     //@}
   };
 
-} /* namespace ADDON */
+  } /* namespace ADDON */
 } /* extern "C" */

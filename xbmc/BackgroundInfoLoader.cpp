@@ -14,11 +14,12 @@
 #include "threads/Thread.h"
 #include "utils/log.h"
 
-CBackgroundInfoLoader::CBackgroundInfoLoader() : m_thread (NULL)
+CBackgroundInfoLoader::CBackgroundInfoLoader()
+  : m_thread(NULL)
 {
   m_bStop = true;
-  m_pObserver=NULL;
-  m_pProgressCallback=NULL;
+  m_pObserver = NULL;
+  m_pProgressCallback = NULL;
   m_pVecItems = NULL;
   m_bIsLoading = false;
 }
@@ -37,7 +38,8 @@ void CBackgroundInfoLoader::Run()
       OnLoaderStart();
 
       // Stage 1: All "fast" stuff we have already cached
-      for (std::vector<CFileItemPtr>::const_iterator iter = m_vecItems.begin(); iter != m_vecItems.end(); ++iter)
+      for (std::vector<CFileItemPtr>::const_iterator iter = m_vecItems.begin();
+           iter != m_vecItems.end(); ++iter)
       {
         CFileItemPtr pItem = *iter;
 
@@ -52,12 +54,15 @@ void CBackgroundInfoLoader::Run()
         }
         catch (...)
         {
-          CLog::Log(LOGERROR, "CBackgroundInfoLoader::LoadItemCached - Unhandled exception for item %s", CURL::GetRedacted(pItem->GetPath()).c_str());
+          CLog::Log(LOGERROR,
+                    "CBackgroundInfoLoader::LoadItemCached - Unhandled exception for item %s",
+                    CURL::GetRedacted(pItem->GetPath()).c_str());
         }
       }
 
       // Stage 2: All "slow" stuff that we need to lookup
-      for (std::vector<CFileItemPtr>::const_iterator iter = m_vecItems.begin(); iter != m_vecItems.end(); ++iter)
+      for (std::vector<CFileItemPtr>::const_iterator iter = m_vecItems.begin();
+           iter != m_vecItems.end(); ++iter)
       {
         CFileItemPtr pItem = *iter;
 
@@ -72,7 +77,9 @@ void CBackgroundInfoLoader::Run()
         }
         catch (...)
         {
-          CLog::Log(LOGERROR, "CBackgroundInfoLoader::LoadItemLookup - Unhandled exception for item %s", CURL::GetRedacted(pItem->GetPath()).c_str());
+          CLog::Log(LOGERROR,
+                    "CBackgroundInfoLoader::LoadItemLookup - Unhandled exception for item %s",
+                    CURL::GetRedacted(pItem->GetPath()).c_str());
         }
       }
     }
@@ -96,7 +103,7 @@ void CBackgroundInfoLoader::Load(CFileItemList& items)
 
   CSingleLock lock(m_lock);
 
-  for (int nItem=0; nItem < items.Size(); nItem++)
+  for (int nItem = 0; nItem < items.Size(); nItem++)
     m_vecItems.push_back(items[nItem]);
 
   m_pVecItems = &items;
@@ -143,4 +150,3 @@ void CBackgroundInfoLoader::SetProgressCallback(IProgressCallback* pCallback)
 {
   m_pProgressCallback = pCallback;
 }
-

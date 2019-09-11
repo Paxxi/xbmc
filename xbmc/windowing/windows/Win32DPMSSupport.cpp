@@ -36,10 +36,12 @@ bool CWin32DPMSSupport::EnablePowerSaving(PowerSavingMode mode)
   {
   case OFF:
     // Turn off display
-    return SendMessage(DX::Windowing()->GetHwnd(), WM_SYSCOMMAND, SC_MONITORPOWER, static_cast<LPARAM>(2)) == 0;
+    return SendMessage(DX::Windowing()->GetHwnd(), WM_SYSCOMMAND, SC_MONITORPOWER,
+                       static_cast<LPARAM>(2)) == 0;
   case STANDBY:
     // Set display to low power
-    return SendMessage(DX::Windowing()->GetHwnd(), WM_SYSCOMMAND, SC_MONITORPOWER, static_cast<LPARAM>(1)) == 0;
+    return SendMessage(DX::Windowing()->GetHwnd(), WM_SYSCOMMAND, SC_MONITORPOWER,
+                       static_cast<LPARAM>(1)) == 0;
   default:
     return true;
   }
@@ -48,5 +50,6 @@ bool CWin32DPMSSupport::EnablePowerSaving(PowerSavingMode mode)
 bool CWin32DPMSSupport::DisablePowerSaving()
 {
   // Turn display on
-  return SendMessage(DX::Windowing()->GetHwnd(), WM_SYSCOMMAND, SC_MONITORPOWER, static_cast<LPARAM>(-1)) == 0;
+  return SendMessage(DX::Windowing()->GetHwnd(), WM_SYSCOMMAND, SC_MONITORPOWER,
+                     static_cast<LPARAM>(-1)) == 0;
 }

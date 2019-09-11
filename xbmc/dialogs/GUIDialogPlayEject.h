@@ -19,7 +19,7 @@ public:
   bool OnMessage(CGUIMessage& message) override;
   void FrameMove() override;
 
-  static bool ShowAndGetInput(const CFileItem & item, unsigned int uiAutoCloseTime = 0);
+  static bool ShowAndGetInput(const CFileItem& item, unsigned int uiAutoCloseTime = 0);
 
 protected:
   void OnInitWindow() override;

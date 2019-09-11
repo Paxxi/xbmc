@@ -17,15 +17,15 @@ class CVariant;
 
 namespace ADDON
 {
-  typedef std::vector<AddonPtr> VECADDONS;
-  typedef std::vector<AddonPtr>::iterator IVECADDONS;
+typedef std::vector<AddonPtr> VECADDONS;
+typedef std::vector<AddonPtr>::iterator IVECADDONS;
 
-  const char* const ORIGIN_SYSTEM = "b6a50484-93a0-4afb-a01c-8d17e059feda";
+const char* const ORIGIN_SYSTEM = "b6a50484-93a0-4afb-a01c-8d17e059feda";
 
-  void OnPreInstall(const AddonPtr& addon);
-  void OnPostInstall(const AddonPtr& addon, bool update, bool modal);
-  void OnPreUnInstall(const AddonPtr& addon);
-  void OnPostUnInstall(const AddonPtr& addon);
+void OnPreInstall(const AddonPtr& addon);
+void OnPostInstall(const AddonPtr& addon, bool update, bool modal);
+void OnPreUnInstall(const AddonPtr& addon);
+void OnPostUnInstall(const AddonPtr& addon);
 
 class CAddon : public IAddon
 {
@@ -38,9 +38,9 @@ public:
   bool IsType(TYPE type) const override { return type == m_addonInfo->MainType(); }
   const CAddonType* Type(TYPE type) const { return m_addonInfo->Type(type); }
 
-  std::string ID() const override{ return m_addonInfo->ID(); }
+  std::string ID() const override { return m_addonInfo->ID(); }
   std::string Name() const override { return m_addonInfo->Name(); }
-  bool IsInUse() const override{ return false; };
+  bool IsInUse() const override { return false; };
   AddonVersion Version() const override { return m_addonInfo->Version(); }
   AddonVersion MinVersion() const override { return m_addonInfo->MinVersion(); }
   std::string Summary() const override { return m_addonInfo->Summary(); }
@@ -61,7 +61,10 @@ public:
   std::string Origin() const override { return m_addonInfo->Origin(); }
   uint64_t PackageSize() const override { return m_addonInfo->PackageSize(); }
   const InfoMap& ExtraInfo() const override { return m_addonInfo->ExtraInfo(); }
-  const std::vector<DependencyInfo>& GetDependencies() const override { return m_addonInfo->GetDependencies(); }
+  const std::vector<DependencyInfo>& GetDependencies() const override
+  {
+    return m_addonInfo->GetDependencies();
+  }
 
   std::string FanArt() const override
   {
@@ -171,23 +174,26 @@ public:
    \param dependencyID the addon ID of the dependency.
    \return the version this addon requires.
    */
-  AddonVersion GetDependencyVersion(const std::string &dependencyID) const override;
+  AddonVersion GetDependencyVersion(const std::string& dependencyID) const override;
 
   /*! \brief return whether or not this addon satisfies the given version requirements
    \param version the version to meet.
    \return true if  min_version <= version <= current_version, false otherwise.
    */
-  bool MeetsVersion(const AddonVersion &version) const override { return m_addonInfo->MeetsVersion(version); }
+  bool MeetsVersion(const AddonVersion& version) const override
+  {
+    return m_addonInfo->MeetsVersion(version);
+  }
   bool ReloadSettings() override;
 
   /*! \brief retrieve the running instance of an add-on if it persists while running.
    */
   AddonPtr GetRunningInstance() const override { return AddonPtr(); }
 
-  void OnPreInstall() override {};
-  void OnPostInstall(bool update, bool modal) override {};
-  void OnPreUnInstall() override {};
-  void OnPostUnInstall() override {};
+  void OnPreInstall() override{};
+  void OnPostInstall(bool update, bool modal) override{};
+  void OnPreUnInstall() override{};
+  void OnPostUnInstall() override{};
 
 protected:
   /*! \brief Whether or not the settings have been initialized. */
@@ -221,14 +227,14 @@ protected:
    \return true if settings are loaded, false otherwise
    \sa SettingsToXML
    */
-  virtual bool SettingsFromXML(const CXBMCTinyXML &doc, bool loadDefaults = false);
+  virtual bool SettingsFromXML(const CXBMCTinyXML& doc, bool loadDefaults = false);
 
   /*! \brief Write settings into an XML document
    \param doc XML document to receive the settings
    \return true if settings are saved, false otherwise
    \sa SettingsFromXML
    */
-  virtual bool SettingsToXML(CXBMCTinyXML &doc) const;
+  virtual bool SettingsToXML(CXBMCTinyXML& doc) const;
 
   const AddonInfoPtr m_addonInfo;
   std::string m_userSettingsPath;
@@ -243,4 +249,3 @@ private:
 };
 
 }; /* namespace ADDON */
-

@@ -12,14 +12,15 @@
 
 namespace XFILE
 {
-  class CHTTPDirectory : public IDirectory
-  {
-    public:
-      CHTTPDirectory(void);
-      ~CHTTPDirectory(void) override;
-      bool GetDirectory(const CURL& url, CFileItemList &items) override;
-      bool Exists(const CURL& url) override;
-      DIR_CACHE_TYPE GetCacheType(const CURL& url) const override { return DIR_CACHE_ONCE; };
-    private:
-  };
-}
+class CHTTPDirectory : public IDirectory
+{
+public:
+  CHTTPDirectory(void);
+  ~CHTTPDirectory(void) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool Exists(const CURL& url) override;
+  DIR_CACHE_TYPE GetCacheType(const CURL& url) const override { return DIR_CACHE_ONCE; };
+
+private:
+};
+} // namespace XFILE

@@ -16,7 +16,8 @@
 
 using namespace jni;
 
-static std::string s_className = std::string(CCompileInfo::GetClass()) + "/interfaces/XBMCDisplayManagerDisplayListener";
+static std::string s_className =
+    std::string(CCompileInfo::GetClass()) + "/interfaces/XBMCDisplayManagerDisplayListener";
 
 CJNIXBMCDisplayManagerDisplayListener::CJNIXBMCDisplayManagerDisplayListener()
   : CJNIBase(s_className)
@@ -28,20 +29,24 @@ CJNIXBMCDisplayManagerDisplayListener::CJNIXBMCDisplayManagerDisplayListener()
 void CJNIXBMCDisplayManagerDisplayListener::RegisterNatives(JNIEnv* env)
 {
   jclass cClass = env->FindClass(s_className.c_str());
-  if(cClass)
+  if (cClass)
   {
-    JNINativeMethod methods[] =
-    {
-      {"_onDisplayAdded", "(I)V", reinterpret_cast<void*>(&CJNIXBMCDisplayManagerDisplayListener::_onDisplayAdded)},
-      {"_onDisplayChanged", "(I)V", reinterpret_cast<void*>(&CJNIXBMCDisplayManagerDisplayListener::_onDisplayChanged)},
-      {"_onDisplayRemoved", "(I)V", reinterpret_cast<void*>(&CJNIXBMCDisplayManagerDisplayListener::_onDisplayRemoved)},
+    JNINativeMethod methods[] = {
+        {"_onDisplayAdded", "(I)V",
+         reinterpret_cast<void*>(&CJNIXBMCDisplayManagerDisplayListener::_onDisplayAdded)},
+        {"_onDisplayChanged", "(I)V",
+         reinterpret_cast<void*>(&CJNIXBMCDisplayManagerDisplayListener::_onDisplayChanged)},
+        {"_onDisplayRemoved", "(I)V",
+         reinterpret_cast<void*>(&CJNIXBMCDisplayManagerDisplayListener::_onDisplayRemoved)},
     };
 
-    env->RegisterNatives(cClass, methods, sizeof(methods)/sizeof(methods[0]));
+    env->RegisterNatives(cClass, methods, sizeof(methods) / sizeof(methods[0]));
   }
 }
 
-void CJNIXBMCDisplayManagerDisplayListener::_onDisplayAdded(JNIEnv *env, jobject context, jint displayId)
+void CJNIXBMCDisplayManagerDisplayListener::_onDisplayAdded(JNIEnv* env,
+                                                            jobject context,
+                                                            jint displayId)
 {
   static_cast<void>(env);
   static_cast<void>(context);
@@ -49,7 +54,9 @@ void CJNIXBMCDisplayManagerDisplayListener::_onDisplayAdded(JNIEnv *env, jobject
   CXBMCApp::get()->onDisplayAdded(displayId);
 }
 
-void CJNIXBMCDisplayManagerDisplayListener::_onDisplayChanged(JNIEnv *env, jobject context, jint displayId)
+void CJNIXBMCDisplayManagerDisplayListener::_onDisplayChanged(JNIEnv* env,
+                                                              jobject context,
+                                                              jint displayId)
 {
   static_cast<void>(env);
   static_cast<void>(context);
@@ -57,7 +64,9 @@ void CJNIXBMCDisplayManagerDisplayListener::_onDisplayChanged(JNIEnv *env, jobje
   CXBMCApp::get()->onDisplayChanged(displayId);
 }
 
-void CJNIXBMCDisplayManagerDisplayListener::_onDisplayRemoved(JNIEnv *env, jobject context, jint displayId)
+void CJNIXBMCDisplayManagerDisplayListener::_onDisplayRemoved(JNIEnv* env,
+                                                              jobject context,
+                                                              jint displayId)
 {
   static_cast<void>(env);
   static_cast<void>(context);

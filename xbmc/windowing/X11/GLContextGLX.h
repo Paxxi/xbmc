@@ -15,8 +15,8 @@
 class CGLContextGLX : public CGLContext
 {
 public:
-  explicit CGLContextGLX(Display *dpy);
-  bool Refresh(bool force, int screen, Window glWindow, bool &newContext) override;
+  explicit CGLContextGLX(Display* dpy);
+  bool Refresh(bool force, int screen, Window glWindow, bool& newContext) override;
   void Destroy() override;
   void Detach() override;
   void SetVSync(bool enable) override;
@@ -24,8 +24,9 @@ public:
   void QueryExtensions() override;
   GLXWindow m_glxWindow;
   GLXContext m_glxContext;
+
 protected:
-  bool IsSuitableVisual(XVisualInfo *vInfo);
+  bool IsSuitableVisual(XVisualInfo* vInfo);
 
   int (*m_glXGetVideoSyncSGI)(unsigned int*);
   int (*m_glXWaitVideoSyncSGI)(int, int, unsigned int*);

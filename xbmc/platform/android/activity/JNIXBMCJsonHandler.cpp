@@ -20,21 +20,21 @@ using namespace jni;
 
 static std::string s_className = std::string(CCompileInfo::GetClass()) + "/XBMCJsonRPC";
 
-void CJNIXBMCJsonHandler::RegisterNatives(JNIEnv *env)
+void CJNIXBMCJsonHandler::RegisterNatives(JNIEnv* env)
 {
   jclass cClass = env->FindClass(s_className.c_str());
-  if(cClass)
+  if (cClass)
   {
-    JNINativeMethod methods[] =
-    {
-      {"_requestJSON", "(Ljava/lang/String;)Ljava/lang/String;", (void*)&CJNIXBMCJsonHandler::_requestJSON},
+    JNINativeMethod methods[] = {
+        {"_requestJSON", "(Ljava/lang/String;)Ljava/lang/String;",
+         (void*)&CJNIXBMCJsonHandler::_requestJSON},
     };
 
-    env->RegisterNatives(cClass, methods, sizeof(methods)/sizeof(methods[0]));
+    env->RegisterNatives(cClass, methods, sizeof(methods) / sizeof(methods[0]));
   }
 }
 
-jstring CJNIXBMCJsonHandler::_requestJSON(JNIEnv *env, jobject thiz, jstring request)
+jstring CJNIXBMCJsonHandler::_requestJSON(JNIEnv* env, jobject thiz, jstring request)
 {
   CJNIClient client;
   CJNITransportLayer transportLayer;
@@ -48,12 +48,14 @@ jstring CJNIXBMCJsonHandler::_requestJSON(JNIEnv *env, jobject thiz, jstring req
 
 /**********************************/
 
-bool CJNIXBMCJsonHandler::CJNITransportLayer::PrepareDownload(const char *path, CVariant &details, std::string &protocol)
+bool CJNIXBMCJsonHandler::CJNITransportLayer::PrepareDownload(const char* path,
+                                                              CVariant& details,
+                                                              std::string& protocol)
 {
   return false;
 }
 
-bool CJNIXBMCJsonHandler::CJNITransportLayer::Download(const char *path, CVariant &result)
+bool CJNIXBMCJsonHandler::CJNITransportLayer::Download(const char* path, CVariant& result)
 {
   return false;
 }

@@ -33,21 +33,21 @@ public:
   static void RegisterPowerSyscall(CreatePowerSyscallFunc createFunc);
 
   virtual ~IPowerSyscall() = default;
-  virtual bool Powerdown()    = 0;
-  virtual bool Suspend()      = 0;
-  virtual bool Hibernate()    = 0;
-  virtual bool Reboot()       = 0;
+  virtual bool Powerdown() = 0;
+  virtual bool Suspend() = 0;
+  virtual bool Hibernate() = 0;
+  virtual bool Reboot() = 0;
 
-// Might need to be membervariables instead for speed
+  // Might need to be membervariables instead for speed
   virtual bool CanPowerdown() = 0;
-  virtual bool CanSuspend()   = 0;
+  virtual bool CanSuspend() = 0;
   virtual bool CanHibernate() = 0;
-  virtual bool CanReboot()    = 0;
+  virtual bool CanReboot() = 0;
 
-  virtual int  CountPowerFeatures() = 0;
+  virtual int CountPowerFeatures() = 0;
 
-// Battery related functions
-  virtual int  BatteryLevel() = 0;
+  // Battery related functions
+  virtual int BatteryLevel() = 0;
 
   /*!
    \brief Pump power related events back to xbmc.
@@ -59,7 +59,7 @@ public:
 
    \param callback the callback to signal to
    */
-  virtual bool PumpPowerEvents(IPowerEventsCallback *callback) = 0;
+  virtual bool PumpPowerEvents(IPowerEventsCallback* callback) = 0;
 
   static const int MAX_COUNT_POWER_FEATURES = 4;
 
@@ -72,22 +72,32 @@ class CAbstractPowerSyscall : public IPowerSyscall
 public:
   int CountPowerFeatures() override
   {
-      return (CanPowerdown() ? 1 : 0)
-             + (CanSuspend() ? 1 : 0)
-             + (CanHibernate() ? 1 : 0)
-             + (CanReboot() ? 1 : 0);
+    return (CanPowerdown() ? 1 : 0) + (CanSuspend() ? 1 : 0) + (CanHibernate() ? 1 : 0) +
+           (CanReboot() ? 1 : 0);
   }
 };
 
 class CPowerSyscallWithoutEvents : public CAbstractPowerSyscall
 {
 public:
-  CPowerSyscallWithoutEvents() { m_OnResume = false; m_OnSuspend = false; }
+  CPowerSyscallWithoutEvents()
+  {
+    m_OnResume = false;
+    m_OnSuspend = false;
+  }
 
-  bool Suspend() override { m_OnSuspend = true; return false; }
-  bool Hibernate() override { m_OnSuspend = true; return false; }
+  bool Suspend() override
+  {
+    m_OnSuspend = true;
+    return false;
+  }
+  bool Hibernate() override
+  {
+    m_OnSuspend = true;
+    return false;
+  }
 
-  bool PumpPowerEvents(IPowerEventsCallback *callback) override
+  bool PumpPowerEvents(IPowerEventsCallback* callback) override
   {
     if (m_OnSuspend)
     {
@@ -105,6 +115,7 @@ public:
     else
       return false;
   }
+
 private:
   bool m_OnResume;
   bool m_OnSuspend;

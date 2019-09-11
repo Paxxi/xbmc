@@ -21,10 +21,11 @@ using namespace INFO;
 
 void InfoSingle::Initialize()
 {
-  m_condition = CServiceBroker::GetGUI()->GetInfoManager().TranslateSingleString(m_expression, m_listItemDependent);
+  m_condition = CServiceBroker::GetGUI()->GetInfoManager().TranslateSingleString(
+      m_expression, m_listItemDependent);
 }
 
-void InfoSingle::Update(const CGUIListItem *item)
+void InfoSingle::Update(const CGUIListItem* item)
 {
   m_value = CServiceBroker::GetGUI()->GetInfoManager().GetBool(m_condition, m_context, item);
 }
@@ -34,11 +35,12 @@ void InfoExpression::Initialize()
   if (!Parse(m_expression))
   {
     CLog::Log(LOGERROR, "Error parsing boolean expression %s", m_expression.c_str());
-    m_expression_tree = std::make_shared<InfoLeaf>(CServiceBroker::GetGUI()->GetInfoManager().Register("false", 0), false);
+    m_expression_tree = std::make_shared<InfoLeaf>(
+        CServiceBroker::GetGUI()->GetInfoManager().Register("false", 0), false);
   }
 }
 
-void InfoExpression::Update(const CGUIListItem *item)
+void InfoExpression::Update(const CGUIListItem* item)
 {
   m_value = m_expression_tree->Evaluate(item);
 }
@@ -61,22 +63,21 @@ void InfoExpression::Update(const CGUIListItem *item)
  *    operations. So [A|B]|[C|D+[[E|F]|G] becomes A|B|C|[D+[E|F|G]].
  */
 
-bool InfoExpression::InfoLeaf::Evaluate(const CGUIListItem *item)
+bool InfoExpression::InfoLeaf::Evaluate(const CGUIListItem* item)
 {
   return m_invert ^ m_info->Get(item);
 }
 
-InfoExpression::InfoAssociativeGroup::InfoAssociativeGroup(
-    node_type_t type,
-    const InfoSubexpressionPtr &left,
-    const InfoSubexpressionPtr &right)
-    : m_type(type)
+InfoExpression::InfoAssociativeGroup::InfoAssociativeGroup(node_type_t type,
+                                                           const InfoSubexpressionPtr& left,
+                                                           const InfoSubexpressionPtr& right)
+  : m_type(type)
 {
   AddChild(right);
   AddChild(left);
 }
 
-void InfoExpression::InfoAssociativeGroup::AddChild(const InfoSubexpressionPtr &child)
+void InfoExpression::InfoAssociativeGroup::AddChild(const InfoSubexpressionPtr& child)
 {
   m_children.push_front(child); // largely undoes the effect of parsing right-associative
 }
@@ -86,7 +87,7 @@ void InfoExpression::InfoAssociativeGroup::Merge(std::shared_ptr<InfoAssociative
   m_children.splice(m_children.end(), other->m_children);
 }
 
-bool InfoExpression::InfoAssociativeGroup::Evaluate(const CGUIListItem *item)
+bool InfoExpression::InfoAssociativeGroup::Evaluate(const CGUIListItem* item)
 {
   /* Handle either AND or OR by using the relation
    * A AND B == !(!A OR !B)
@@ -132,7 +133,9 @@ InfoExpression::operator_t InfoExpression::GetOperator(char ch)
     return OPERATOR_NONE;
 }
 
-void InfoExpression::OperatorPop(std::stack<operator_t> &operator_stack, bool &invert, std::stack<InfoSubexpressionPtr> &nodes)
+void InfoExpression::OperatorPop(std::stack<operator_t>& operator_stack,
+                                 bool& invert,
+                                 std::stack<InfoSubexpressionPtr>& nodes)
 {
   operator_t op2 = operator_stack.top();
   operator_stack.pop();
@@ -144,7 +147,7 @@ void InfoExpression::OperatorPop(std::stack<operator_t> &operator_stack, bool &i
   {
     // At this point, it can only be OPERATOR_AND or OPERATOR_OR
     if (invert)
-      op2 = (operator_t) (OPERATOR_AND ^ OPERATOR_OR ^ op2);
+      op2 = (operator_t)(OPERATOR_AND ^ OPERATOR_OR ^ op2);
     node_type_t new_type = op2 == OPERATOR_AND ? NODE_AND : NODE_OR;
 
     InfoSubexpressionPtr right = nodes.top();
@@ -162,7 +165,8 @@ void InfoExpression::OperatorPop(std::stack<operator_t> &operator_stack, bool &i
        *               /   \     /   \         leaf leaf leaf leaf
        *             leaf leaf leaf leaf
        */
-      std::static_pointer_cast<InfoAssociativeGroup>(left)->Merge(std::static_pointer_cast<InfoAssociativeGroup>(right));
+      std::static_pointer_cast<InfoAssociativeGroup>(left)->Merge(
+          std::static_pointer_cast<InfoAssociativeGroup>(right));
     else if (left_type == new_type)
       /* For example:        AND                    AND
        *                   /     \                /  |  \
@@ -197,9 +201,9 @@ void InfoExpression::OperatorPop(std::stack<operator_t> &operator_stack, bool &i
   }
 }
 
-bool InfoExpression::Parse(const std::string &expression)
+bool InfoExpression::Parse(const std::string& expression)
 {
-  const char *s = expression.c_str();
+  const char* s = expression.c_str();
   std::string operand;
   std::stack<operator_t> operator_stack;
   bool invert = false;
@@ -212,7 +216,7 @@ bool InfoExpression::Parse(const std::string &expression)
 
   char c;
   // Skip leading whitespace - don't want it to count as an operand if that's all there is
-  while (isspace((unsigned char)(c=*s)))
+  while (isspace((unsigned char)(c = *s)))
     s++;
 
   while ((c = *s++) != '\0')
@@ -266,7 +270,8 @@ bool InfoExpression::Parse(const std::string &expression)
       if (c == '+' || c == '|')
         after_binaryoperator = true;
       // Skip trailing whitespace - don't want it to count as an operand if that's all there is
-      while (isspace((unsigned char)(c=*s))) s++;
+      while (isspace((unsigned char)(c = *s)))
+        s++;
     }
     else
     {

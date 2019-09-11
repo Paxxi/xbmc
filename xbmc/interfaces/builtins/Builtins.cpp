@@ -11,26 +11,25 @@
 #include "ApplicationBuiltins.h"
 #include "CECBuiltins.h"
 #include "GUIBuiltins.h"
-#include "GUIControlBuiltins.h"
 #include "GUIContainerBuiltins.h"
+#include "GUIControlBuiltins.h"
 #include "LibraryBuiltins.h"
 #include "OpticalBuiltins.h"
+#include "PVRBuiltins.h"
 #include "PictureBuiltins.h"
 #include "PlayerBuiltins.h"
 #include "ProfileBuiltins.h"
-#include "PVRBuiltins.h"
+#include "ServiceBroker.h"
 #include "SkinBuiltins.h"
 #include "SystemBuiltins.h"
+#include "Util.h"
 #include "WeatherBuiltins.h"
-
-#include "ServiceBroker.h"
 #include "input/InputManager.h"
 #include "powermanagement/PowerTypes.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "Util.h"
-#include "utils/log.h"
 #include "utils/StringUtils.h"
+#include "utils/log.h"
 
 #if defined(TARGET_ANDROID)
 #include "AndroidBuiltins.h"
@@ -102,32 +101,29 @@ bool CBuiltins::IsSystemPowerdownCommand(const std::string& execString)
   StringUtils::ToLower(execute);
 
   // Check if action is resulting in system powerdown.
-  if (execute == "reboot"    ||
-      execute == "restart"   ||
-      execute == "reset"     ||
-      execute == "powerdown" ||
-      execute == "hibernate" ||
-      execute == "suspend" )
+  if (execute == "reboot" || execute == "restart" || execute == "reset" || execute == "powerdown" ||
+      execute == "hibernate" || execute == "suspend")
   {
     return true;
   }
   else if (execute == "shutdown")
   {
-    switch (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNSTATE))
+    switch (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+        CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNSTATE))
     {
-      case POWERSTATE_SHUTDOWN:
-      case POWERSTATE_SUSPEND:
-      case POWERSTATE_HIBERNATE:
-        return true;
+    case POWERSTATE_SHUTDOWN:
+    case POWERSTATE_SUSPEND:
+    case POWERSTATE_HIBERNATE:
+      return true;
 
-      default:
-        return false;
+    default:
+      return false;
     }
   }
   return false;
 }
 
-void CBuiltins::GetHelp(std::string &help)
+void CBuiltins::GetHelp(std::string& help)
 {
   help.clear();
 
@@ -156,7 +152,7 @@ int CBuiltins::Execute(const std::string& execString)
     else
     {
       CLog::Log(LOGERROR, "{0} called with invalid number of parameters (should be: {1}, is {2})",
-                          execute.c_str(), it->second.parameters, params.size());
+                execute.c_str(), it->second.parameters, params.size());
       return -1;
     }
   }

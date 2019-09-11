@@ -6,34 +6,35 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "threads/SystemClock.h"
 #include "GUIWindowFullScreen.h"
-#include "GUIWindowFullScreenDefines.h"
+
 #include "Application.h"
-#include "ServiceBroker.h"
-#include "messaging/ApplicationMessenger.h"
+#include "FileItem.h"
 #include "GUIInfoManager.h"
+#include "GUIWindowFullScreenDefines.h"
+#include "ServiceBroker.h"
+#include "cores/IPlayer.h"
 #include "guilib/GUIComponent.h"
-#include "guilib/GUIProgressControl.h"
 #include "guilib/GUILabelControl.h"
-#include "video/dialogs/GUIDialogSubtitleSettings.h"
+#include "guilib/GUIProgressControl.h"
 #include "guilib/GUIWindowManager.h"
+#include "guilib/LocalizeStrings.h"
+#include "guilib/guiinfo/GUIInfoLabels.h"
 #include "input/Key.h"
-#include "video/dialogs/GUIDialogFullScreenInfo.h"
+#include "messaging/ApplicationMessenger.h"
 #include "settings/DisplaySettings.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "FileItem.h"
-#include "guilib/LocalizeStrings.h"
+#include "threads/SystemClock.h"
 #include "utils/StringUtils.h"
-#include "windowing/WinSystem.h"
-#include "cores/IPlayer.h"
-#include "guilib/guiinfo/GUIInfoLabels.h"
 #include "video/ViewModeSettings.h"
+#include "video/dialogs/GUIDialogFullScreenInfo.h"
+#include "video/dialogs/GUIDialogSubtitleSettings.h"
+#include "windowing/WinSystem.h"
 
-#include <stdio.h>
 #include <algorithm>
+#include <stdio.h>
 #if defined(TARGET_DARWIN)
 #include "platform/posix/PosixResourceCounter.h"
 #endif
@@ -46,7 +47,7 @@ static CPosixResourceCounter m_resourceCounter;
 #endif
 
 CGUIWindowFullScreen::CGUIWindowFullScreen()
-    : CGUIWindow(WINDOW_FULLSCREEN_VIDEO, "VideoFullScreen.xml")
+  : CGUIWindow(WINDOW_FULLSCREEN_VIDEO, "VideoFullScreen.xml")
 {
   m_viewModeChanged = true;
   m_dwShowViewModeTimeout = 0;
@@ -77,7 +78,7 @@ CGUIWindowFullScreen::~CGUIWindowFullScreen(void)
   delete m_controlStats;
 }
 
-bool CGUIWindowFullScreen::OnAction(const CAction &action)
+bool CGUIWindowFullScreen::OnAction(const CAction& action)
 {
   switch (action.GetID())
   {
@@ -109,68 +110,74 @@ bool CGUIWindowFullScreen::OnAction(const CAction &action)
     break;
 
   case ACTION_SHOW_GUI:
-    {
-      // switch back to the menu
-      CServiceBroker::GetGUI()->GetWindowManager().PreviousWindow();
-      return true;
-    }
-    break;
+  {
+    // switch back to the menu
+    CServiceBroker::GetGUI()->GetWindowManager().PreviousWindow();
+    return true;
+  }
+  break;
 
   case ACTION_SHOW_OSD_TIME:
     m_bShowCurrentTime = !m_bShowCurrentTime;
-    CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPlayerInfoProvider().SetShowTime(m_bShowCurrentTime);
+    CServiceBroker::GetGUI()
+        ->GetInfoManager()
+        .GetInfoProviders()
+        .GetPlayerInfoProvider()
+        .SetShowTime(m_bShowCurrentTime);
     return true;
     break;
 
   case ACTION_SHOW_INFO:
+  {
+    CGUIDialogFullScreenInfo* pDialog =
+        CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogFullScreenInfo>(
+            WINDOW_DIALOG_FULLSCREEN_INFO);
+    if (pDialog)
     {
-      CGUIDialogFullScreenInfo* pDialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogFullScreenInfo>(WINDOW_DIALOG_FULLSCREEN_INFO);
-      if (pDialog)
-      {
-        CFileItem item(g_application.CurrentFileItem());
-        pDialog->Open();
-        return true;
-      }
-      break;
+      CFileItem item(g_application.CurrentFileItem());
+      pDialog->Open();
+      return true;
     }
+    break;
+  }
 
   case ACTION_ASPECT_RATIO:
-    { // toggle the aspect ratio mode (only if the info is onscreen)
-      if (m_dwShowViewModeTimeout)
-      {
-        CVideoSettings vs = g_application.GetAppPlayer().GetVideoSettings();
-        vs.m_ViewMode = CViewModeSettings::GetNextQuickCycleViewMode(vs.m_ViewMode);
-        g_application.GetAppPlayer().SetRenderViewMode(vs.m_ViewMode, vs.m_CustomZoomAmount,
-                                                   vs.m_CustomPixelRatio, vs.m_CustomVerticalShift,
-                                                   vs.m_CustomNonLinStretch);
-      }
-      else
-        m_viewModeChanged = true;
-      m_dwShowViewModeTimeout = XbmcThreads::SystemClockMillis();
+  { // toggle the aspect ratio mode (only if the info is onscreen)
+    if (m_dwShowViewModeTimeout)
+    {
+      CVideoSettings vs = g_application.GetAppPlayer().GetVideoSettings();
+      vs.m_ViewMode = CViewModeSettings::GetNextQuickCycleViewMode(vs.m_ViewMode);
+      g_application.GetAppPlayer().SetRenderViewMode(
+          vs.m_ViewMode, vs.m_CustomZoomAmount, vs.m_CustomPixelRatio, vs.m_CustomVerticalShift,
+          vs.m_CustomNonLinStretch);
     }
+    else
+      m_viewModeChanged = true;
+    m_dwShowViewModeTimeout = XbmcThreads::SystemClockMillis();
+  }
     return true;
     break;
   case ACTION_SHOW_PLAYLIST:
-    {
-      CFileItem item(g_application.CurrentFileItem());
-      if (item.HasPVRChannelInfoTag())
-        CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_DIALOG_PVR_OSD_CHANNELS);
-      else if (item.HasVideoInfoTag())
-        CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_VIDEO_PLAYLIST);
-      else if (item.HasMusicInfoTag())
-        CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_MUSIC_PLAYLIST);
-    }
+  {
+    CFileItem item(g_application.CurrentFileItem());
+    if (item.HasPVRChannelInfoTag())
+      CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_DIALOG_PVR_OSD_CHANNELS);
+    else if (item.HasVideoInfoTag())
+      CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_VIDEO_PLAYLIST);
+    else if (item.HasMusicInfoTag())
+      CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_MUSIC_PLAYLIST);
+  }
     return true;
     break;
   case ACTION_BROWSE_SUBTITLE:
-    {
-      std::string path = CGUIDialogSubtitleSettings::BrowseForSubtitle();
-      if (!path.empty())
-        g_application.GetAppPlayer().AddSubtitle(path);
-      return true;
-    }
+  {
+    std::string path = CGUIDialogSubtitleSettings::BrowseForSubtitle();
+    if (!path.empty())
+      g_application.GetAppPlayer().AddSubtitle(path);
+    return true;
+  }
   default:
-      break;
+    break;
   }
 
   return CGUIWindow::OnAction(action);
@@ -191,7 +198,7 @@ void CGUIWindowFullScreen::OnWindowLoaded()
   CGUIProgressControl* pProgress = dynamic_cast<CGUIProgressControl*>(GetControl(CONTROL_PROGRESS));
   if (pProgress)
   {
-    if( pProgress->GetInfo() == 0 || !pProgress->HasVisibleCondition())
+    if (pProgress->GetInfo() == 0 || !pProgress->HasVisibleCondition())
     {
       pProgress->SetInfo(PLAYER_PROGRESS);
       pProgress->SetVisibleCondition("player.displayafterseek");
@@ -200,14 +207,14 @@ void CGUIWindowFullScreen::OnWindowLoaded()
   }
 
   CGUILabelControl* pLabel = dynamic_cast<CGUILabelControl*>(GetControl(LABEL_BUFFERING));
-  if(pLabel && !pLabel->HasVisibleCondition())
+  if (pLabel && !pLabel->HasVisibleCondition())
   {
     pLabel->SetVisibleCondition("player.caching");
     pLabel->SetVisible(true);
   }
 
   pLabel = dynamic_cast<CGUILabelControl*>(GetControl(LABEL_CURRENT_TIME));
-  if(pLabel && !pLabel->HasVisibleCondition())
+  if (pLabel && !pLabel->HasVisibleCondition())
   {
     pLabel->SetVisibleCondition("player.displayafterseek");
     pLabel->SetVisible(true);
@@ -220,55 +227,57 @@ bool CGUIWindowFullScreen::OnMessage(CGUIMessage& message)
   switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_INIT:
-    {
-      // check whether we've come back here from a window during which time we've actually
-      // stopped playing videos
-      if (message.GetParam1() == WINDOW_INVALID && !g_application.GetAppPlayer().IsPlayingVideo())
-      { // why are we here if nothing is playing???
-        CServiceBroker::GetGUI()->GetWindowManager().PreviousWindow();
-        return true;
-      }
-
-      GUIINFO::CPlayerGUIInfo& guiInfo = CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPlayerInfoProvider();
-      guiInfo.SetShowInfo(false);
-      m_bShowCurrentTime = false;
-      guiInfo.SetDisplayAfterSeek(0); // Make sure display after seek is off.
-
-      // switch resolution
-      CServiceBroker::GetWinSystem()->GetGfxContext().SetFullScreenVideo(true);
-
-      // now call the base class to load our windows
-      CGUIWindow::OnMessage(message);
-
-      m_dwShowViewModeTimeout = 0;
-      m_viewModeChanged = true;
-
-
+  {
+    // check whether we've come back here from a window during which time we've actually
+    // stopped playing videos
+    if (message.GetParam1() == WINDOW_INVALID && !g_application.GetAppPlayer().IsPlayingVideo())
+    { // why are we here if nothing is playing???
+      CServiceBroker::GetGUI()->GetWindowManager().PreviousWindow();
       return true;
     }
+
+    GUIINFO::CPlayerGUIInfo& guiInfo =
+        CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPlayerInfoProvider();
+    guiInfo.SetShowInfo(false);
+    m_bShowCurrentTime = false;
+    guiInfo.SetDisplayAfterSeek(0); // Make sure display after seek is off.
+
+    // switch resolution
+    CServiceBroker::GetWinSystem()->GetGfxContext().SetFullScreenVideo(true);
+
+    // now call the base class to load our windows
+    CGUIWindow::OnMessage(message);
+
+    m_dwShowViewModeTimeout = 0;
+    m_viewModeChanged = true;
+
+
+    return true;
+  }
   case GUI_MSG_WINDOW_DEINIT:
-    {
-      // close all active modal dialogs
-      CServiceBroker::GetGUI()->GetWindowManager().CloseInternalModalDialogs(true);
+  {
+    // close all active modal dialogs
+    CServiceBroker::GetGUI()->GetWindowManager().CloseInternalModalDialogs(true);
 
-      CGUIWindow::OnMessage(message);
+    CGUIWindow::OnMessage(message);
 
-      CServiceBroker::GetSettingsComponent()->GetSettings()->Save();
+    CServiceBroker::GetSettingsComponent()->GetSettings()->Save();
 
-      CServiceBroker::GetWinSystem()->GetGfxContext().SetFullScreenVideo(false);
+    CServiceBroker::GetWinSystem()->GetGfxContext().SetFullScreenVideo(false);
 
-      return true;
-    }
+    return true;
+  }
   case GUI_MSG_SETFOCUS:
   case GUI_MSG_LOSTFOCUS:
-    if (message.GetSenderId() != WINDOW_FULLSCREEN_VIDEO) return true;
+    if (message.GetSenderId() != WINDOW_FULLSCREEN_VIDEO)
+      return true;
     break;
   }
 
   return CGUIWindow::OnMessage(message);
 }
 
-EVENT_RESULT CGUIWindowFullScreen::OnMouseEvent(const CPoint &point, const CMouseEvent &event)
+EVENT_RESULT CGUIWindowFullScreen::OnMouseEvent(const CPoint& point, const CMouseEvent& event)
 {
   if (event.m_id == ACTION_MOUSE_RIGHT_CLICK)
   { // no control found to absorb this click - go back to GUI
@@ -277,11 +286,14 @@ EVENT_RESULT CGUIWindowFullScreen::OnMouseEvent(const CPoint &point, const CMous
   }
   if (event.m_id == ACTION_MOUSE_WHEEL_UP)
   {
-    return g_application.OnAction(CAction(ACTION_ANALOG_SEEK_FORWARD, 0.5f)) ? EVENT_RESULT_HANDLED : EVENT_RESULT_UNHANDLED;
+    return g_application.OnAction(CAction(ACTION_ANALOG_SEEK_FORWARD, 0.5f))
+               ? EVENT_RESULT_HANDLED
+               : EVENT_RESULT_UNHANDLED;
   }
   if (event.m_id == ACTION_MOUSE_WHEEL_DOWN)
   {
-    return g_application.OnAction(CAction(ACTION_ANALOG_SEEK_BACK, 0.5f)) ? EVENT_RESULT_HANDLED : EVENT_RESULT_UNHANDLED;
+    return g_application.OnAction(CAction(ACTION_ANALOG_SEEK_BACK, 0.5f)) ? EVENT_RESULT_HANDLED
+                                                                          : EVENT_RESULT_UNHANDLED;
   }
   if (event.m_id >= ACTION_GESTURE_NOTIFY && event.m_id <= ACTION_GESTURE_END) // gestures
     return EVENT_RESULT_UNHANDLED;
@@ -292,7 +304,11 @@ void CGUIWindowFullScreen::FrameMove()
 {
   float playspeed = g_application.GetAppPlayer().GetPlaySpeed();
   if (playspeed != 1.0 && !g_application.GetAppPlayer().HasGame())
-    CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPlayerInfoProvider().SetDisplayAfterSeek();
+    CServiceBroker::GetGUI()
+        ->GetInfoManager()
+        .GetInfoProviders()
+        .GetPlayerInfoProvider()
+        .SetDisplayAfterSeek();
 
   if (!g_application.GetAppPlayer().HasPlayer())
     return;
@@ -323,21 +339,19 @@ void CGUIWindowFullScreen::FrameMove()
     }
     // show sizing information
     VideoStreamInfo info;
-    g_application.GetAppPlayer().GetVideoStreamInfo(CURRENT_STREAM,info);
+    g_application.GetAppPlayer().GetVideoStreamInfo(CURRENT_STREAM, info);
     {
       // Splitres scaling factor
-      float xscale = (float)res.iScreenWidth  / (float)res.iWidth;
+      float xscale = (float)res.iScreenWidth / (float)res.iWidth;
       float yscale = (float)res.iScreenHeight / (float)res.iHeight;
 
-      std::string strSizing = StringUtils::Format(g_localizeStrings.Get(245).c_str(),
-                                                 (int)info.SrcRect.Width(),
-                                                 (int)info.SrcRect.Height(),
-                                                 (int)(info.DestRect.Width() * xscale),
-                                                 (int)(info.DestRect.Height() * yscale),
-                                                 CDisplaySettings::GetInstance().GetZoomAmount(),
-                                                 info.videoAspectRatio*CDisplaySettings::GetInstance().GetPixelRatio(),
-                                                 CDisplaySettings::GetInstance().GetPixelRatio(),
-                                                 CDisplaySettings::GetInstance().GetVerticalShift());
+      std::string strSizing = StringUtils::Format(
+          g_localizeStrings.Get(245).c_str(), (int)info.SrcRect.Width(), (int)info.SrcRect.Height(),
+          (int)(info.DestRect.Width() * xscale), (int)(info.DestRect.Height() * yscale),
+          CDisplaySettings::GetInstance().GetZoomAmount(),
+          info.videoAspectRatio * CDisplaySettings::GetInstance().GetPixelRatio(),
+          CDisplaySettings::GetInstance().GetPixelRatio(),
+          CDisplaySettings::GetInstance().GetVerticalShift());
       CGUIMessage msg(GUI_MSG_LABEL_SET, GetID(), LABEL_ROW2);
       msg.SetLabel(strSizing);
       OnMessage(msg);
@@ -346,17 +360,12 @@ void CGUIWindowFullScreen::FrameMove()
     {
       std::string strStatus;
       if (CServiceBroker::GetWinSystem()->IsFullScreen())
-        strStatus = StringUtils::Format("%s %ix%i@%.2fHz - %s",
-                                        g_localizeStrings.Get(13287).c_str(),
-                                        res.iScreenWidth,
-                                        res.iScreenHeight,
-                                        res.fRefreshRate,
-                                        g_localizeStrings.Get(244).c_str());
+        strStatus = StringUtils::Format(
+            "%s %ix%i@%.2fHz - %s", g_localizeStrings.Get(13287).c_str(), res.iScreenWidth,
+            res.iScreenHeight, res.fRefreshRate, g_localizeStrings.Get(244).c_str());
       else
-        strStatus = StringUtils::Format("%s %ix%i - %s",
-                                        g_localizeStrings.Get(13287).c_str(),
-                                        res.iScreenWidth,
-                                        res.iScreenHeight,
+        strStatus = StringUtils::Format("%s %ix%i - %s", g_localizeStrings.Get(13287).c_str(),
+                                        res.iScreenWidth, res.iScreenHeight,
                                         g_localizeStrings.Get(242).c_str());
 
       CGUIMessage msg(GUI_MSG_LABEL_SET, GetID(), LABEL_ROW3);
@@ -385,7 +394,7 @@ void CGUIWindowFullScreen::FrameMove()
   }
 }
 
-void CGUIWindowFullScreen::Process(unsigned int currentTime, CDirtyRegionList &dirtyregion)
+void CGUIWindowFullScreen::Process(unsigned int currentTime, CDirtyRegionList& dirtyregion)
 {
   if (g_application.GetAppPlayer().IsRenderingGuiLayer())
     MarkDirtyRegion();
@@ -396,23 +405,28 @@ void CGUIWindowFullScreen::Process(unsigned int currentTime, CDirtyRegionList &d
 
   //! @todo This isn't quite optimal - ideally we'd only be dirtying up the actual video render rect
   //!       which is probably the job of the renderer as it can more easily track resizing etc.
-  m_renderRegion.SetRect(0, 0, (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(), (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight());
+  m_renderRegion.SetRect(0, 0, (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(),
+                         (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight());
 }
 
 void CGUIWindowFullScreen::Render()
 {
-  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(CServiceBroker::GetWinSystem()->GetGfxContext().GetVideoResolution(), false);
+  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetVideoResolution(), false);
   g_application.GetAppPlayer().Render(true, 255);
-  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(m_coordsRes, m_needsScaling);
+  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(m_coordsRes,
+                                                                         m_needsScaling);
   CGUIWindow::Render();
 }
 
 void CGUIWindowFullScreen::RenderEx()
 {
   CGUIWindow::RenderEx();
-  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(CServiceBroker::GetWinSystem()->GetGfxContext().GetVideoResolution(), false);
+  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetVideoResolution(), false);
   g_application.GetAppPlayer().Render(false, 255, false);
-  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(m_coordsRes, m_needsScaling);
+  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(m_coordsRes,
+                                                                         m_needsScaling);
 }
 
 void CGUIWindowFullScreen::SeekChapter(int iChapter)
@@ -420,12 +434,16 @@ void CGUIWindowFullScreen::SeekChapter(int iChapter)
   g_application.GetAppPlayer().SeekChapter(iChapter);
 
   // Make sure gui items are visible.
-  CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPlayerInfoProvider().SetDisplayAfterSeek();
+  CServiceBroker::GetGUI()
+      ->GetInfoManager()
+      .GetInfoProviders()
+      .GetPlayerInfoProvider()
+      .SetDisplayAfterSeek();
 }
 
 void CGUIWindowFullScreen::ToggleOSD()
 {
-  CGUIDialog *pOSD = GetOSD();
+  CGUIDialog* pOSD = GetOSD();
   if (pOSD)
   {
     if (pOSD->IsDialogRunning())
@@ -439,7 +457,7 @@ void CGUIWindowFullScreen::ToggleOSD()
 
 void CGUIWindowFullScreen::TriggerOSD()
 {
-  CGUIDialog *pOSD = GetOSD();
+  CGUIDialog* pOSD = GetOSD();
   if (pOSD && !pOSD->IsDialogRunning())
   {
     if (!g_application.GetAppPlayer().IsPlayingGame())
@@ -453,7 +471,7 @@ bool CGUIWindowFullScreen::HasVisibleControls()
   return m_controlStats->nCountVisible > 0;
 }
 
-CGUIDialog *CGUIWindowFullScreen::GetOSD()
+CGUIDialog* CGUIWindowFullScreen::GetOSD()
 {
   return CServiceBroker::GetGUI()->GetWindowManager().GetDialog(WINDOW_DIALOG_VIDEO_OSD);
 }

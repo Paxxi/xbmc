@@ -33,11 +33,9 @@ bool CDAVFile::Execute(const CURL& url)
   CLog::Log(LOGDEBUG, "CDAVFile::Execute(%p) %s", (void*)this, m_url.c_str());
 
   assert(!(!m_state->m_easyHandle ^ !m_state->m_multiHandle));
-  if( m_state->m_easyHandle == NULL )
-    g_curlInterface.easy_acquire(url2.GetProtocol().c_str(),
-                                url2.GetHostName().c_str(),
-                                &m_state->m_easyHandle,
-                                &m_state->m_multiHandle);
+  if (m_state->m_easyHandle == NULL)
+    g_curlInterface.easy_acquire(url2.GetProtocol().c_str(), url2.GetHostName().c_str(),
+                                 &m_state->m_easyHandle, &m_state->m_multiHandle);
 
   // setup common curl options
   SetCommonOptions(m_state);
@@ -48,7 +46,9 @@ bool CDAVFile::Execute(const CURL& url)
     return false;
 
   char* efurl;
-  if (CURLE_OK == g_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL,&efurl) && efurl)
+  if (CURLE_OK ==
+          g_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL, &efurl) &&
+      efurl)
     m_url = efurl;
 
   if (m_lastResponseCode == 207)
@@ -61,14 +61,16 @@ bool CDAVFile::Execute(const CURL& url)
 
     if (!davResponse.Parse(strResponse))
     {
-      CLog::Log(LOGERROR, "CDAVFile::Execute - Unable to process dav response (%s)", CURL(m_url).GetRedacted().c_str());
+      CLog::Log(LOGERROR, "CDAVFile::Execute - Unable to process dav response (%s)",
+                CURL(m_url).GetRedacted().c_str());
       Close();
       return false;
     }
 
-    TiXmlNode *pChild;
+    TiXmlNode* pChild;
     // Iterate over all responses
-    for (pChild = davResponse.RootElement()->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+    for (pChild = davResponse.RootElement()->FirstChild(); pChild != 0;
+         pChild = pChild->NextSibling())
     {
       if (CDAVCommon::ValueWithoutNamespace(pChild, "response"))
       {
@@ -84,7 +86,6 @@ bool CDAVFile::Execute(const CURL& url)
               return false;
           }
         }
-
       }
     }
   }
@@ -105,7 +106,8 @@ bool CDAVFile::Delete(const CURL& url)
   CLog::Log(LOGDEBUG, "CDAVFile::Delete - Execute DELETE (%s)", url.GetRedacted().c_str());
   if (!dav.Execute(url))
   {
-    CLog::Log(LOGERROR, "CDAVFile::Delete - Unable to delete dav resource (%s)", url.GetRedacted().c_str());
+    CLog::Log(LOGERROR, "CDAVFile::Delete - Unable to delete dav resource (%s)",
+              url.GetRedacted().c_str());
     return false;
   }
 
@@ -129,10 +131,12 @@ bool CDAVFile::Rename(const CURL& url, const CURL& urlnew)
   dav.SetCustomRequest(strRequest);
   dav.SetRequestHeader("Destination", url2.GetWithoutUserDetails());
 
-  CLog::Log(LOGDEBUG, "CDAVFile::Rename - Execute MOVE (%s -> %s)", url.GetRedacted().c_str(), url2.GetRedacted().c_str());
+  CLog::Log(LOGDEBUG, "CDAVFile::Rename - Execute MOVE (%s -> %s)", url.GetRedacted().c_str(),
+            url2.GetRedacted().c_str());
   if (!dav.Execute(url))
   {
-    CLog::Log(LOGERROR, "CDAVFile::Rename - Unable to rename dav resource (%s -> %s)", url.GetRedacted().c_str(), url2.GetRedacted().c_str());
+    CLog::Log(LOGERROR, "CDAVFile::Rename - Unable to rename dav resource (%s -> %s)",
+              url.GetRedacted().c_str(), url2.GetRedacted().c_str());
     return false;
   }
 

@@ -6,43 +6,46 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <algorithm>
-
 #include "HttpRangeUtils.h"
+
 #include "Util.h"
+
+#include <algorithm>
 #ifdef HAS_WEB_SERVER
 #include "network/httprequesthandler/IHTTPRequestHandler.h"
 #endif // HAS_WEB_SERVER
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
-#define HEADER_NEWLINE        "\r\n"
-#define HEADER_SEPARATOR      HEADER_NEWLINE HEADER_NEWLINE
-#define HEADER_BOUNDARY       "--"
+#define HEADER_NEWLINE "\r\n"
+#define HEADER_SEPARATOR HEADER_NEWLINE HEADER_NEWLINE
+#define HEADER_BOUNDARY "--"
 
-#define HEADER_CONTENT_RANGE_VALUE          "%" PRIu64
-#define HEADER_CONTENT_RANGE_VALUE_UNKNOWN  "*"
-#define HEADER_CONTENT_RANGE_FORMAT_BYTES   "bytes " HEADER_CONTENT_RANGE_VALUE "-" HEADER_CONTENT_RANGE_VALUE "/"
-#define CONTENT_RANGE_FORMAT_TOTAL          HEADER_CONTENT_RANGE_FORMAT_BYTES HEADER_CONTENT_RANGE_VALUE
-#define CONTENT_RANGE_FORMAT_TOTAL_UNKNOWN  HEADER_CONTENT_RANGE_FORMAT_BYTES HEADER_CONTENT_RANGE_VALUE_UNKNOWN
+#define HEADER_CONTENT_RANGE_VALUE "%" PRIu64
+#define HEADER_CONTENT_RANGE_VALUE_UNKNOWN "*"
+#define HEADER_CONTENT_RANGE_FORMAT_BYTES \
+  "bytes " HEADER_CONTENT_RANGE_VALUE "-" HEADER_CONTENT_RANGE_VALUE "/"
+#define CONTENT_RANGE_FORMAT_TOTAL HEADER_CONTENT_RANGE_FORMAT_BYTES HEADER_CONTENT_RANGE_VALUE
+#define CONTENT_RANGE_FORMAT_TOTAL_UNKNOWN \
+  HEADER_CONTENT_RANGE_FORMAT_BYTES HEADER_CONTENT_RANGE_VALUE_UNKNOWN
 
 CHttpRange::CHttpRange(uint64_t firstPosition, uint64_t lastPosition)
-  : m_first(firstPosition),
-    m_last(lastPosition)
-{ }
-
-bool CHttpRange::operator<(const CHttpRange &other) const
+  : m_first(firstPosition)
+  , m_last(lastPosition)
 {
-  return (m_first < other.m_first) ||
-         (m_first == other.m_first && m_last < other.m_last);
 }
 
-bool CHttpRange::operator==(const CHttpRange &other) const
+bool CHttpRange::operator<(const CHttpRange& other) const
+{
+  return (m_first < other.m_first) || (m_first == other.m_first && m_last < other.m_last);
+}
+
+bool CHttpRange::operator==(const CHttpRange& other) const
 {
   return m_first == other.m_first && m_last == other.m_last;
 }
 
-bool CHttpRange::operator!=(const CHttpRange &other) const
+bool CHttpRange::operator!=(const CHttpRange& other) const
 {
   return !(*this == other);
 }
@@ -66,26 +69,32 @@ bool CHttpRange::IsValid() const
 }
 
 CHttpResponseRange::CHttpResponseRange()
-  : CHttpRange(),
-    m_data(NULL)
-{ }
+  : CHttpRange()
+  , m_data(NULL)
+{
+}
 
 CHttpResponseRange::CHttpResponseRange(uint64_t firstPosition, uint64_t lastPosition)
-  : CHttpRange(firstPosition, lastPosition),
-    m_data(NULL)
-{ }
+  : CHttpRange(firstPosition, lastPosition)
+  , m_data(NULL)
+{
+}
 
-CHttpResponseRange::CHttpResponseRange(const void* data, uint64_t firstPosition, uint64_t lastPosition)
-  : CHttpRange(firstPosition, lastPosition),
-    m_data(data)
-{ }
+CHttpResponseRange::CHttpResponseRange(const void* data,
+                                       uint64_t firstPosition,
+                                       uint64_t lastPosition)
+  : CHttpRange(firstPosition, lastPosition)
+  , m_data(data)
+{
+}
 
 CHttpResponseRange::CHttpResponseRange(const void* data, uint64_t length)
-  : CHttpRange(0, length - 1),
-    m_data(data)
-{ }
+  : CHttpRange(0, length - 1)
+  , m_data(data)
+{
+}
 
-bool CHttpResponseRange::operator==(const CHttpResponseRange &other) const
+bool CHttpResponseRange::operator==(const CHttpResponseRange& other) const
 {
   if (!CHttpRange::operator==(other))
     return false;
@@ -93,7 +102,7 @@ bool CHttpResponseRange::operator==(const CHttpResponseRange &other) const
   return m_data == other.m_data;
 }
 
-bool CHttpResponseRange::operator!=(const CHttpResponseRange &other) const
+bool CHttpResponseRange::operator!=(const CHttpResponseRange& other) const
 {
   return !(*this == other);
 }
@@ -125,11 +134,12 @@ bool CHttpResponseRange::IsValid() const
 }
 
 CHttpRanges::CHttpRanges()
-: m_ranges()
-{ }
+  : m_ranges()
+{
+}
 
 CHttpRanges::CHttpRanges(const HttpRanges& httpRanges)
-: m_ranges(httpRanges)
+  : m_ranges(httpRanges)
 {
   SortAndCleanup();
 }
@@ -246,7 +256,8 @@ bool CHttpRanges::Parse(const std::string& header, uint64_t totalLength)
   // split the value of the "Range" header by ","
   std::vector<std::string> rangeValues = StringUtils::Split(rangesValue, ",");
 
-  for (std::vector<std::string>::const_iterator range = rangeValues.begin(); range != rangeValues.end(); ++range)
+  for (std::vector<std::string>::const_iterator range = rangeValues.begin();
+       range != rangeValues.end(); ++range)
   {
     // there must be a "-" in the range definition
     if (range->find("-") == std::string::npos)
@@ -344,10 +355,13 @@ std::string HttpRangeUtils::GenerateContentRangeHeaderValue(const CHttpRange* ra
   if (range == NULL)
     return "";
 
-  return StringUtils::Format(CONTENT_RANGE_FORMAT_TOTAL, range->GetFirstPosition(), range->GetLastPosition(), range->GetLength());
+  return StringUtils::Format(CONTENT_RANGE_FORMAT_TOTAL, range->GetFirstPosition(),
+                             range->GetLastPosition(), range->GetLength());
 }
 
-std::string HttpRangeUtils::GenerateContentRangeHeaderValue(uint64_t start, uint64_t end, uint64_t total)
+std::string HttpRangeUtils::GenerateContentRangeHeaderValue(uint64_t start,
+                                                            uint64_t end,
+                                                            uint64_t total)
 {
   if (total > 0)
     return StringUtils::Format(CONTENT_RANGE_FORMAT_TOTAL, start, end, total);
@@ -371,7 +385,8 @@ std::string HttpRangeUtils::GenerateMultipartBoundary()
   return boundary;
 }
 
-std::string HttpRangeUtils::GenerateMultipartBoundaryContentType(const std::string& multipartBoundary)
+std::string HttpRangeUtils::GenerateMultipartBoundaryContentType(
+    const std::string& multipartBoundary)
 {
   if (multipartBoundary.empty())
     return "";
@@ -379,7 +394,8 @@ std::string HttpRangeUtils::GenerateMultipartBoundaryContentType(const std::stri
   return "multipart/byteranges; boundary=" + multipartBoundary;
 }
 
-std::string HttpRangeUtils::GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundary, const std::string& contentType)
+std::string HttpRangeUtils::GenerateMultipartBoundaryWithHeader(
+    const std::string& multipartBoundary, const std::string& contentType)
 {
   if (multipartBoundary.empty())
     return "";
@@ -391,15 +407,18 @@ std::string HttpRangeUtils::GenerateMultipartBoundaryWithHeader(const std::strin
   return boundaryWithHeader;
 }
 
-std::string HttpRangeUtils::GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundary, const std::string& contentType, const CHttpRange* range)
+std::string HttpRangeUtils::GenerateMultipartBoundaryWithHeader(
+    const std::string& multipartBoundary, const std::string& contentType, const CHttpRange* range)
 {
   if (multipartBoundary.empty() || range == NULL)
     return "";
 
-  return GenerateMultipartBoundaryWithHeader(GenerateMultipartBoundaryWithHeader(multipartBoundary, contentType), range);
+  return GenerateMultipartBoundaryWithHeader(
+      GenerateMultipartBoundaryWithHeader(multipartBoundary, contentType), range);
 }
 
-std::string HttpRangeUtils::GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundaryWithContentType, const CHttpRange* range)
+std::string HttpRangeUtils::GenerateMultipartBoundaryWithHeader(
+    const std::string& multipartBoundaryWithContentType, const CHttpRange* range)
 {
   if (multipartBoundaryWithContentType.empty() || range == NULL)
     return "";

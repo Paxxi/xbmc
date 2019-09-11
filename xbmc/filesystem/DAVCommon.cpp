@@ -18,9 +18,9 @@ using namespace XFILE;
  *
  * if pElement is <DAV:foo> and value is foo then ValueWithoutNamespace is true
  */
-bool CDAVCommon::ValueWithoutNamespace(const TiXmlNode *pNode, const std::string& value)
+bool CDAVCommon::ValueWithoutNamespace(const TiXmlNode* pNode, const std::string& value)
 {
-  const TiXmlElement *pElement;
+  const TiXmlElement* pElement;
 
   if (!pNode)
   {
@@ -46,7 +46,8 @@ bool CDAVCommon::ValueWithoutNamespace(const TiXmlNode *pNode, const std::string
   }
   else if (tag.size() > 2)
   {
-    CLog::Log(LOGERROR, "%s - Splitting %s failed, size(): %lu, value: %s", __FUNCTION__, pElement->Value(), (unsigned long int)tag.size(), value.c_str());
+    CLog::Log(LOGERROR, "%s - Splitting %s failed, size(): %lu, value: %s", __FUNCTION__,
+              pElement->Value(), (unsigned long int)tag.size(), value.c_str());
   }
 
   return false;
@@ -55,9 +56,9 @@ bool CDAVCommon::ValueWithoutNamespace(const TiXmlNode *pNode, const std::string
 /*
  * Search for <status> and return its content
  */
-std::string CDAVCommon::GetStatusTag(const TiXmlElement *pElement)
+std::string CDAVCommon::GetStatusTag(const TiXmlElement* pElement)
 {
-  const TiXmlElement *pChild;
+  const TiXmlElement* pChild;
 
   for (pChild = pElement->FirstChildElement(); pChild != 0; pChild = pChild->NextSiblingElement())
   {
@@ -69,4 +70,3 @@ std::string CDAVCommon::GetStatusTag(const TiXmlElement *pElement)
 
   return "";
 }
-

@@ -16,39 +16,41 @@
 namespace jni
 {
 
-  class CJNIXBMCJsonHandler : public CJNIBase
+class CJNIXBMCJsonHandler : public CJNIBase
+{
+public:
+  CJNIXBMCJsonHandler(const jni::jhobject& object)
+    : CJNIBase(object)
+  {
+  }
+
+  static void RegisterNatives(JNIEnv* env);
+
+
+protected:
+  virtual ~CJNIXBMCJsonHandler() {}
+
+  static jstring _requestJSON(JNIEnv* env, jobject thiz, jstring request);
+
+  class CJNITransportLayer : public JSONRPC::ITransportLayer
   {
   public:
-    CJNIXBMCJsonHandler(const jni::jhobject &object) : CJNIBase(object) {}
+    CJNITransportLayer() = default;
+    ~CJNITransportLayer() = default;
 
-    static void RegisterNatives(JNIEnv* env);
-
-
-  protected:
-    virtual ~CJNIXBMCJsonHandler() {}
-
-    static jstring _requestJSON(JNIEnv* env, jobject thiz, jstring request);
-
-    class CJNITransportLayer : public JSONRPC::ITransportLayer
-    {
-    public:
-      CJNITransportLayer() = default;
-      ~CJNITransportLayer() = default;
-
-      // implementations of JSONRPC::ITransportLayer
-      bool PrepareDownload(const char *path, CVariant &details, std::string &protocol) override;
-      bool Download(const char *path, CVariant &result) override;
-      int GetCapabilities() override;
-    };
-
-    class CJNIClient : public JSONRPC::IClient
-    {
-    public:
-      virtual int  GetPermissionFlags();
-      virtual int  GetAnnouncementFlags();
-      virtual bool SetAnnouncementFlags(int flags);
-    };
-
+    // implementations of JSONRPC::ITransportLayer
+    bool PrepareDownload(const char* path, CVariant& details, std::string& protocol) override;
+    bool Download(const char* path, CVariant& result) override;
+    int GetCapabilities() override;
   };
 
-}
+  class CJNIClient : public JSONRPC::IClient
+  {
+  public:
+    virtual int GetPermissionFlags();
+    virtual int GetAnnouncementFlags();
+    virtual bool SetAnnouncementFlags(int flags);
+  };
+};
+
+} // namespace jni

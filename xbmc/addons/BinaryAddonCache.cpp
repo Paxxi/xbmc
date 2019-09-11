@@ -15,7 +15,7 @@
 namespace ADDON
 {
 
-const std::vector<TYPE> ADDONS_TO_CACHE = { ADDON_PVRDLL, ADDON_GAMEDLL };
+const std::vector<TYPE> ADDONS_TO_CACHE = {ADDON_PVRDLL, ADDON_GAMEDLL};
 
 CBinaryAddonCache::~CBinaryAddonCache()
 {
@@ -38,7 +38,7 @@ void CBinaryAddonCache::GetAddons(VECADDONS& addons, const TYPE& type)
   VECADDONS myAddons;
   GetInstalledAddons(myAddons, type);
 
-  for (auto &addon : myAddons)
+  for (auto& addon : myAddons)
   {
     if (!CServiceBroker::GetAddonMgr().IsAddonDisabled(addon->ID()))
       addons.emplace_back(std::move(addon));
@@ -50,7 +50,7 @@ void CBinaryAddonCache::GetDisabledAddons(VECADDONS& addons, const TYPE& type)
   VECADDONS myAddons;
   GetInstalledAddons(myAddons, type);
 
-  for (auto &addon : myAddons)
+  for (auto& addon : myAddons)
   {
     if (CServiceBroker::GetAddonMgr().IsAddonDisabled(addon->ID()))
       addons.emplace_back(std::move(addon));
@@ -76,10 +76,7 @@ AddonPtr CBinaryAddonCache::GetAddonInstance(const std::string& strId, TYPE type
   {
     VECADDONS& addons = it->second;
     auto itAddon = std::find_if(addons.begin(), addons.end(),
-      [&strId](const AddonPtr& addon)
-      {
-        return addon->ID() == strId;
-      });
+                                [&strId](const AddonPtr& addon) { return addon->ID() == strId; });
 
     if (itAddon != addons.end())
       addon = *itAddon;
@@ -94,7 +91,7 @@ void CBinaryAddonCache::OnEvent(const AddonEvent& event)
       typeid(event) == typeid(AddonEvents::Disabled) ||
       typeid(event) == typeid(AddonEvents::ReInstalled))
   {
-    for (auto &type : ADDONS_TO_CACHE)
+    for (auto& type : ADDONS_TO_CACHE)
     {
       if (CServiceBroker::GetAddonMgr().HasType(event.id, type))
       {
@@ -114,7 +111,7 @@ void CBinaryAddonCache::Update()
   using AddonMap = std::multimap<TYPE, VECADDONS>;
   AddonMap addonmap;
 
-  for (auto &addonType : ADDONS_TO_CACHE)
+  for (auto& addonType : ADDONS_TO_CACHE)
   {
     VECADDONS addons;
     CServiceBroker::GetAddonMgr().GetInstalledAddons(addons, addonType);
@@ -127,4 +124,4 @@ void CBinaryAddonCache::Update()
   }
 }
 
-}
+} // namespace ADDON

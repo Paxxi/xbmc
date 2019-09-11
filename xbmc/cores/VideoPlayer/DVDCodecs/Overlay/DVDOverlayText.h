@@ -16,11 +16,10 @@
 class CDVDOverlayText : public CDVDOverlay
 {
 public:
-
   enum ElementType
   {
-    ELEMENT_TYPE_NONE     = -1,
-    ELEMENT_TYPE_TEXT     = 1,
+    ELEMENT_TYPE_NONE = -1,
+    ELEMENT_TYPE_TEXT = 1,
     ELEMENT_TYPE_PROPERTY = 2
   };
 
@@ -35,7 +34,7 @@ public:
 
     CElement(CElement& src)
     {
-      pNext  = NULL;
+      pNext = NULL;
       m_type = src.m_type;
     }
 
@@ -51,8 +50,10 @@ public:
   {
   private:
     std::string m_text;
+
   public:
-    CElementText(const char* strText, int size = -1) : CElement(ELEMENT_TYPE_TEXT)
+    CElementText(const char* strText, int size = -1)
+      : CElement(ELEMENT_TYPE_TEXT)
     {
       if (!strText)
         return;
@@ -61,21 +62,20 @@ public:
       else
         m_text.assign(strText, size);
     }
-    explicit CElementText(const std::string& text) : CElement(ELEMENT_TYPE_TEXT),
-      m_text(text)
+    explicit CElementText(const std::string& text)
+      : CElement(ELEMENT_TYPE_TEXT)
+      , m_text(text)
     {
     }
 
     CElementText(CElementText& src)
-     : CElement(src),
-       m_text(src.m_text)
+      : CElement(src)
+      , m_text(src.m_text)
     {
     }
 
-    const std::string& GetText()
-    { return m_text; }
-    const char* GetTextPtr()
-    { return m_text.c_str(); }
+    const std::string& GetText() { return m_text; }
+    const char* GetTextPtr() { return m_text.c_str(); }
 
     ~CElementText() override = default;
   };
@@ -83,17 +83,18 @@ public:
   class CElementProperty : public CElement
   {
   public:
-    CElementProperty() : CElement(ELEMENT_TYPE_PROPERTY)
+    CElementProperty()
+      : CElement(ELEMENT_TYPE_PROPERTY)
     {
       bItalic = false;
       bBold = false;
     }
 
     CElementProperty(CElementProperty& src)
-    : CElement(src)
+      : CElement(src)
     {
       bItalic = src.bItalic;
-      bBold   = src.bBold;
+      bBold = src.bBold;
     }
 
   public:
@@ -102,7 +103,8 @@ public:
     // color
   };
 
-  CDVDOverlayText() : CDVDOverlay(DVDOVERLAY_TYPE_TEXT)
+  CDVDOverlayText()
+    : CDVDOverlay(DVDOVERLAY_TYPE_TEXT)
   {
     m_pHead = NULL;
     m_pEnd = NULL;
@@ -113,11 +115,11 @@ public:
   {
     m_pHead = NULL;
     m_pEnd = NULL;
-    for(CElement* e = src.m_pHead; e; e = e->pNext)
+    for (CElement* e = src.m_pHead; e; e = e->pNext)
     {
-      if(e->IsElementType(ELEMENT_TYPE_TEXT))
+      if (e->IsElementType(ELEMENT_TYPE_TEXT))
         AddElement(new CElementText(*static_cast<CElementText*>(e)));
-      else if(e->IsElementType(ELEMENT_TYPE_PROPERTY))
+      else if (e->IsElementType(ELEMENT_TYPE_PROPERTY))
         AddElement(new CElementProperty(*static_cast<CElementProperty*>(e)));
       else
         AddElement(new CElement(*e));
@@ -134,10 +136,7 @@ public:
     }
   }
 
-  CDVDOverlayText* Clone() override
-  {
-    return new CDVDOverlayText(*this);
-  }
+  CDVDOverlayText* Clone() override { return new CDVDOverlayText(*this); }
 
   void AddElement(CDVDOverlayText::CElement* pElement)
   {
@@ -158,4 +157,3 @@ public:
   CElement* m_pHead;
   CElement* m_pEnd;
 };
-

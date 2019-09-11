@@ -8,14 +8,15 @@
 
 #pragma once
 
-#include <map>
-#include <list>
-#include <vector>
-#include <utility>
-
 #include "cores/AudioEngine/Utils/AEAudioFormat.h"
 
-extern "C" {
+#include <list>
+#include <map>
+#include <utility>
+#include <vector>
+
+extern "C"
+{
 #include <libavutil/samplefmt.h>
 }
 
@@ -31,29 +32,29 @@ class IAEClockCallback;
 class CAEStreamInfo;
 
 /* sound options */
-#define AE_SOUND_OFF    0 /* disable sounds */
-#define AE_SOUND_IDLE   1 /* only play sounds while no streams are running */
+#define AE_SOUND_OFF 0 /* disable sounds */
+#define AE_SOUND_IDLE 1 /* only play sounds while no streams are running */
 #define AE_SOUND_ALWAYS 2 /* always play sounds */
 
 /* config options */
 #define AE_CONFIG_FIXED 1
-#define AE_CONFIG_AUTO  2
+#define AE_CONFIG_AUTO 2
 #define AE_CONFIG_MATCH 3
 
 enum AEQuality
 {
-  AE_QUALITY_UNKNOWN    = -1, /* Unset, unknown or incorrect quality level */
-  AE_QUALITY_DEFAULT    =  0, /* Engine's default quality level */
+  AE_QUALITY_UNKNOWN = -1, /* Unset, unknown or incorrect quality level */
+  AE_QUALITY_DEFAULT = 0, /* Engine's default quality level */
 
   /* Basic quality levels */
-  AE_QUALITY_LOW        = 20, /* Low quality level */
-  AE_QUALITY_MID        = 30, /* Standard quality level */
-  AE_QUALITY_HIGH       = 50, /* Best sound processing quality */
+  AE_QUALITY_LOW = 20, /* Low quality level */
+  AE_QUALITY_MID = 30, /* Standard quality level */
+  AE_QUALITY_HIGH = 50, /* Best sound processing quality */
 
   /* Optional quality levels */
   AE_QUALITY_REALLYHIGH = 100, /* Uncompromised optional quality level,
                                usually with unmeasurable and unnoticeable improvement */
-  AE_QUALITY_GPU        = 101, /* GPU acceleration */
+  AE_QUALITY_GPU = 101, /* GPU acceleration */
 };
 
 struct SampleConfig
@@ -72,7 +73,6 @@ struct SampleConfig
 class IAE
 {
 protected:
-
   IAE() = default;
   virtual ~IAE() = default;
 
@@ -81,11 +81,12 @@ protected:
    * Do not call this directly, CApplication will call this when it is ready
    */
   virtual void Start() = 0;
+
 public:
   /**
    * Called when the application needs to terminate the engine
    */
-  virtual void Shutdown() { }
+  virtual void Shutdown() {}
 
   /**
    * Suspends output and de-initializes sink
@@ -107,7 +108,7 @@ public:
    * Default is true so players drop audio or pause if engine unloaded
    * @return True if processing suspended
    */
-  virtual bool IsSuspended() {return true;}
+  virtual bool IsSuspended() { return true; }
 
   /**
    * Returns the current master volume level of the AudioEngine
@@ -139,7 +140,9 @@ public:
    * @param options A bit field of stream options (see: enum AEStreamOptions)
    * @return a new IAEStream that will accept data in the requested format
    */
-  virtual IAEStream *MakeStream(AEAudioFormat &audioFormat, unsigned int options = 0, IAEClockCallback *clock = NULL) = 0;
+  virtual IAEStream* MakeStream(AEAudioFormat& audioFormat,
+                                unsigned int options = 0,
+                                IAEClockCallback* clock = NULL) = 0;
 
   /**
    * This method will remove the specifyed stream from the engine.
@@ -148,36 +151,36 @@ public:
    * @param finish if true AE will switch back to gui sound mode (if this is last stream)
    * @return NULL
    */
-  virtual bool FreeStream(IAEStream *stream, bool finish) = 0;
+  virtual bool FreeStream(IAEStream* stream, bool finish) = 0;
 
   /**
    * Creates a new IAESound that is ready to play the specified file
    * @param file The WAV file to load, this supports XBMC's VFS
    * @return A new IAESound if the file could be loaded, otherwise NULL
    */
-  virtual IAESound *MakeSound(const std::string &file) = 0;
+  virtual IAESound* MakeSound(const std::string& file) = 0;
 
   /**
    * Free the supplied IAESound object
    * @param sound The IAESound object to free
    */
-  virtual void FreeSound(IAESound *sound) = 0;
+  virtual void FreeSound(IAESound* sound) = 0;
 
   /**
    * Enumerate the supported audio output devices
    * @param devices The device list to append supported devices to
    * @param passthrough True if only passthrough devices are wanted
    */
-  virtual void EnumerateOutputDevices(AEDeviceList &devices, bool passthrough) = 0;
+  virtual void EnumerateOutputDevices(AEDeviceList& devices, bool passthrough) = 0;
 
   /**
    * Returns true if the AudioEngine supports AE_FMT_RAW streams for use with formats such as IEC61937
    * @see CAEPackIEC61937::CAEPackIEC61937()
    * @returns true if the AudioEngine is capable of RAW output
    */
-  virtual bool SupportsRaw(AEAudioFormat &format) { return false; }
+  virtual bool SupportsRaw(AEAudioFormat& format) { return false; }
 
-   /**
+  /**
    * Returns true if the AudioEngine supports drain mode which is not streaming silence when idle
    * @returns true if the AudioEngine is capable of drain mode
    */
@@ -209,7 +212,7 @@ public:
    * AE decides whether this settings should be displayed
    * @return true if AudioEngine wants to display this setting
    */
-  virtual bool IsSettingVisible(const std::string &settingId) {return false; }
+  virtual bool IsSettingVisible(const std::string& settingId) { return false; }
 
   /**
    * Instruct AE to keep configuration for a specified time
@@ -228,5 +231,5 @@ public:
    * @param Current sink data format. For more details see AEAudioFormat.
    * @return Returns true on success, else false.
    */
-  virtual bool GetCurrentSinkFormat(AEAudioFormat &SinkFormat) { return false; }
+  virtual bool GetCurrentSinkFormat(AEAudioFormat& SinkFormat) { return false; }
 };

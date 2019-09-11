@@ -12,7 +12,7 @@ bool CGLContext::IsExtSupported(const char* extension) const
 {
   std::string name;
 
-  name  = " ";
+  name = " ";
   name += extension;
   name += " ";
 

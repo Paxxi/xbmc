@@ -38,12 +38,12 @@ public:
   ~CVideoLibraryCleaningJob() override;
 
   // specialization of CJob
-  const char *GetType() const override { return "VideoLibraryCleaningJob"; }
+  const char* GetType() const override { return "VideoLibraryCleaningJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
   // implementation of CVideoLibraryJob
-  bool Work(CVideoDatabase &db) override;
+  bool Work(CVideoDatabase& db) override;
 
 private:
   std::set<int> m_paths;

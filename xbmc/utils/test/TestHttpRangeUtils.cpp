@@ -10,7 +10,7 @@
 
 #include <gtest/gtest.h>
 
-#define RANGES_START  "bytes="
+#define RANGES_START "bytes="
 
 static const uint64_t DefaultFirstPosition = 1;
 static const uint64_t DefaultLastPosition = 0;

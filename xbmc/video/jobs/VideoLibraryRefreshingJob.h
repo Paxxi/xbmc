@@ -28,17 +28,21 @@ public:
    \param[in] ignoreNfo Whether or not to ignore local NFO files
    \param[in] searchTitle Title to use for the search (instead of determining it from the item's filename/path)
   */
-  CVideoLibraryRefreshingJob(CFileItemPtr item, bool forceRefresh, bool refreshAll, bool ignoreNfo = false, const std::string& searchTitle = "");
+  CVideoLibraryRefreshingJob(CFileItemPtr item,
+                             bool forceRefresh,
+                             bool refreshAll,
+                             bool ignoreNfo = false,
+                             const std::string& searchTitle = "");
 
   ~CVideoLibraryRefreshingJob() override;
 
   // specialization of CJob
-  const char *GetType() const override { return "VideoLibraryRefreshingJob"; }
+  const char* GetType() const override { return "VideoLibraryRefreshingJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
   // implementation of CVideoLibraryJob
-  bool Work(CVideoDatabase &db) override;
+  bool Work(CVideoDatabase& db) override;
 
 private:
   CFileItemPtr m_item;

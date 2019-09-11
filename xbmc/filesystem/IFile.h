@@ -14,13 +14,14 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "PlatformDefs.h" // for __stat64, ssize_t
-
-#include <stdio.h>
 #include <stdint.h>
-#include <sys/stat.h>
+#include <stdio.h>
 #include <string>
 #include <vector>
+
+#include <sys/stat.h>
+
+#include "PlatformDefs.h" // for __stat64, ssize_t
 
 #if !defined(SIZE_MAX) || !defined(SSIZE_MAX)
 #include <limits.h>
@@ -91,14 +92,14 @@ public:
    *         zero if no bytes were written and no detectable error occur,
    *         -1 in case of any explicit error
    */
-  virtual ssize_t Write(const void* bufPtr, size_t bufSize) { return -1;}
-  virtual bool ReadString(char *szLine, int iLineLength);
+  virtual ssize_t Write(const void* bufPtr, size_t bufSize) { return -1; }
+  virtual bool ReadString(char* szLine, int iLineLength);
   virtual int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET) = 0;
   virtual void Close() = 0;
   virtual int64_t GetPosition() = 0;
   virtual int64_t GetLength() = 0;
-  virtual void Flush() { }
-  virtual int Truncate(int64_t size) { return -1;};
+  virtual void Flush() {}
+  virtual int Truncate(int64_t size) { return -1; };
 
   /* Returns the minium size that can be read from input stream.   *
    * For example cdrom access where access could be sector based.  *
@@ -106,8 +107,8 @@ public:
    * to meet the requirement of CFile.                             *
    * It can also be used to indicate a file system is non buffered *
    * but accepts any read size, have it return the value 1         */
-  virtual int  GetChunkSize() {return 0;}
-  virtual double GetDownloadSpeed(){ return 0.0f; };
+  virtual int GetChunkSize() { return 0; }
+  virtual double GetDownloadSpeed() { return 0.0f; };
 
   virtual bool Delete(const CURL& url) { return false; }
   virtual bool Rename(const CURL& url, const CURL& urlnew) { return false; }
@@ -115,12 +116,14 @@ public:
 
   virtual int IoControl(EIoControl request, void* param) { return -1; }
 
-  virtual const std::string GetProperty(XFILE::FileProperty type, const std::string &name = "") const
+  virtual const std::string GetProperty(XFILE::FileProperty type,
+                                        const std::string& name = "") const
   {
     return type == XFILE::FILE_PROPERTY_CONTENT_TYPE ? "application/octet-stream" : "";
   };
 
-  virtual const std::vector<std::string> GetPropertyValues(XFILE::FileProperty type, const std::string &name = "") const
+  virtual const std::vector<std::string> GetPropertyValues(XFILE::FileProperty type,
+                                                           const std::string& name = "") const
   {
     std::vector<std::string> values;
     std::string value = GetProperty(type, name);
@@ -135,12 +138,12 @@ public:
 class CRedirectException
 {
 public:
-  IFile *m_pNewFileImp;
-  CURL  *m_pNewUrl;
+  IFile* m_pNewFileImp;
+  CURL* m_pNewUrl;
 
   CRedirectException();
 
-  CRedirectException(IFile *pNewFileImp, CURL *pNewUrl=NULL);
+  CRedirectException(IFile* pNewFileImp, CURL* pNewUrl = NULL);
 };
 
-}
+} // namespace XFILE

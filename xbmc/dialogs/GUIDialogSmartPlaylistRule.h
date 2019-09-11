@@ -11,8 +11,7 @@
 #include "guilib/GUIDialog.h"
 #include "playlists/SmartPlayList.h"
 
-class CGUIDialogSmartPlaylistRule :
-      public CGUIDialog
+class CGUIDialogSmartPlaylistRule : public CGUIDialog
 {
 public:
   CGUIDialogSmartPlaylistRule(void);
@@ -22,7 +21,7 @@ public:
   void OnInitWindow() override;
   void OnDeinitWindow(int nextWindowID) override;
 
-  static bool EditRule(CSmartPlaylistRule &rule, const std::string& type="songs");
+  static bool EditRule(CSmartPlaylistRule& rule, const std::string& type = "songs");
 
 protected:
   void OnField();
@@ -31,7 +30,7 @@ protected:
   void OnCancel();
   void UpdateButtons();
   void OnBrowse();
-  std::vector< std::pair<std::string, int> > GetValidOperators(const CSmartPlaylistRule& rule);
+  std::vector<std::pair<std::string, int>> GetValidOperators(const CSmartPlaylistRule& rule);
   CSmartPlaylistRule m_rule;
   bool m_cancelled;
   std::string m_type;

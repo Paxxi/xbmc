@@ -18,10 +18,10 @@ public:
   CResourceFile();
   ~CResourceFile() override;
 
-  static bool TranslatePath(const std::string &path, std::string &translatedPath);
-  static bool TranslatePath(const CURL &url, std::string &translatedPath);
+  static bool TranslatePath(const std::string& path, std::string& translatedPath);
+  static bool TranslatePath(const CURL& url, std::string& translatedPath);
 
 protected:
-  std::string TranslatePath(const CURL &url) override;
+  std::string TranslatePath(const CURL& url) override;
 };
-}
+} // namespace XFILE

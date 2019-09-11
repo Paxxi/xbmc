@@ -23,7 +23,8 @@
 #include "utils/Variant.h"
 #include "utils/log.h"
 
-CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
+CGUIWindowHome::CGUIWindowHome(void)
+  : CGUIWindow(WINDOW_HOME, "Home.xml")
 {
   m_updateRA = (Audio | Video | Totals);
   m_loadType = KEEP_IN_MEMORY;
@@ -36,11 +37,10 @@ CGUIWindowHome::~CGUIWindowHome(void)
   CServiceBroker::GetAnnouncementManager()->RemoveAnnouncer(this);
 }
 
-bool CGUIWindowHome::OnAction(const CAction &action)
+bool CGUIWindowHome::OnAction(const CAction& action)
 {
   static unsigned int min_hold_time = 1000;
-  if (action.GetID() == ACTION_NAV_BACK &&
-      action.GetHoldTime() < min_hold_time &&
+  if (action.GetID() == ACTION_NAV_BACK && action.GetHoldTime() < min_hold_time &&
       g_application.GetAppPlayer().IsPlaying())
   {
     g_application.SwitchToFullScreen();
@@ -53,19 +53,27 @@ void CGUIWindowHome::OnInitWindow()
 {
   // for shared databases (ie mysql) always force an update on return to home
   // this is a temporary solution until remote announcements can be delivered
-  if (StringUtils::EqualsNoCase(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_databaseVideo.type, "mysql") ||
-      StringUtils::EqualsNoCase(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_databaseMusic.type, "mysql") )
+  if (StringUtils::EqualsNoCase(
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_databaseVideo.type,
+          "mysql") ||
+      StringUtils::EqualsNoCase(
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_databaseMusic.type,
+          "mysql"))
     m_updateRA = (Audio | Video | Totals);
-  AddRecentlyAddedJobs( m_updateRA );
+  AddRecentlyAddedJobs(m_updateRA);
 
   CGUIWindow::OnInitWindow();
 }
 
-void CGUIWindowHome::Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
+void CGUIWindowHome::Announce(ANNOUNCEMENT::AnnouncementFlag flag,
+                              const char* sender,
+                              const char* message,
+                              const CVariant& data)
 {
   int ra_flag = 0;
 
-  CLog::Log(LOGDEBUG, "GOT ANNOUNCEMENT, type: %i, from %s, message %s",(int)flag, sender, message);
+  CLog::Log(LOGDEBUG, "GOT ANNOUNCEMENT, type: %i, from %s, message %s", (int)flag, sender,
+            message);
 
   // we are only interested in library changes
   if ((flag & (ANNOUNCEMENT::VideoLibrary | ANNOUNCEMENT::AudioLibrary)) == 0)
@@ -74,8 +82,7 @@ void CGUIWindowHome::Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *s
   if (data.isMember("transaction") && data["transaction"].asBoolean())
     return;
 
-  if (strcmp(message, "OnScanStarted") == 0 ||
-      strcmp(message, "OnCleanStarted") == 0)
+  if (strcmp(message, "OnScanStarted") == 0 || strcmp(message, "OnCleanStarted") == 0)
     return;
 
   bool onUpdate = strcmp(message, "OnUpdate") == 0;
@@ -111,7 +118,7 @@ void CGUIWindowHome::AddRecentlyAddedJobs(int flag)
       flag |= m_cumulativeUpdateFlag; // add the flags from previous calls to AddRecentlyAddedJobs
 
       m_cumulativeUpdateFlag = 0; // now taken care of in flag.
-                                  // reset this since we're going to execute a job
+          // reset this since we're going to execute a job
 
       // we're about to add one so set the indicator
       if (flag)
@@ -128,7 +135,7 @@ void CGUIWindowHome::AddRecentlyAddedJobs(int flag)
   m_updateRA = 0;
 }
 
-void CGUIWindowHome::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CGUIWindowHome::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   int flag = 0;
 
@@ -142,18 +149,21 @@ void CGUIWindowHome::OnJobComplete(unsigned int jobID, bool success, CJob *job)
   }
 
   if (flag)
-    AddRecentlyAddedJobs(0 /* the flag will be set inside AddRecentlyAddedJobs via m_cumulativeUpdateFlag */ );
+    AddRecentlyAddedJobs(
+        0 /* the flag will be set inside AddRecentlyAddedJobs via m_cumulativeUpdateFlag */);
 }
 
 
 bool CGUIWindowHome::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_NOTIFY_ALL:
-    if (message.GetParam1() == GUI_MSG_WINDOW_RESET || message.GetParam1() == GUI_MSG_REFRESH_THUMBS)
+    if (message.GetParam1() == GUI_MSG_WINDOW_RESET ||
+        message.GetParam1() == GUI_MSG_REFRESH_THUMBS)
     {
-      int updateRA = (message.GetSenderId() == GetID()) ? message.GetParam2() : (Video | Audio | Totals);
+      int updateRA =
+          (message.GetSenderId() == GetID()) ? message.GetParam2() : (Video | Audio | Totals);
 
       if (IsActive())
         AddRecentlyAddedJobs(updateRA);

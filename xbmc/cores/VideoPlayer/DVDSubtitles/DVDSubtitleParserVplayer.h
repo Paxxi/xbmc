@@ -15,10 +15,12 @@
 class CDVDSubtitleParserVplayer : public CDVDSubtitleParserText
 {
 public:
-  CDVDSubtitleParserVplayer(std::unique_ptr<CDVDSubtitleStream> && pStream, const std::string& strFile);
+  CDVDSubtitleParserVplayer(std::unique_ptr<CDVDSubtitleStream>&& pStream,
+                            const std::string& strFile);
   ~CDVDSubtitleParserVplayer() override;
 
-  bool Open(CDVDStreamInfo &hints) override;
+  bool Open(CDVDStreamInfo& hints) override;
+
 private:
   double m_framerate;
 };

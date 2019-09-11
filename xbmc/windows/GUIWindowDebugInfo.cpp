@@ -40,13 +40,15 @@ CGUIWindowDebugInfo::~CGUIWindowDebugInfo(void) = default;
 
 void CGUIWindowDebugInfo::UpdateVisibility()
 {
-  if (LOG_LEVEL_DEBUG_FREEMEM <= CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_logLevel || g_SkinInfo->IsDebugging())
+  if (LOG_LEVEL_DEBUG_FREEMEM <=
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_logLevel ||
+      g_SkinInfo->IsDebugging())
     Open();
   else
     Close();
 }
 
-bool CGUIWindowDebugInfo::OnMessage(CGUIMessage &message)
+bool CGUIWindowDebugInfo::OnMessage(CGUIMessage& message)
 {
   if (message.GetMessage() == GUI_MSG_WINDOW_DEINIT)
   {
@@ -59,9 +61,10 @@ bool CGUIWindowDebugInfo::OnMessage(CGUIMessage &message)
   return CGUIDialog::OnMessage(message);
 }
 
-void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
-  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), false);
+  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), false);
 
   g_cpuInfo.getUsedPercentage(); // must call it to recalculate pct values
 
@@ -80,8 +83,8 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
 
   if (!m_layout)
   {
-    CGUIFont *font13 = g_fontManager.GetDefaultFont();
-    CGUIFont *font13border = g_fontManager.GetDefaultFont(true);
+    CGUIFont* font13 = g_fontManager.GetDefaultFont();
+    CGUIFont* font13border = g_fontManager.GetDefaultFont(true);
     if (font13)
       m_layout = new CGUITextLayout(font13, true, 0, font13border);
   }
@@ -89,7 +92,8 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
     return;
 
   std::string info;
-  if (LOG_LEVEL_DEBUG_FREEMEM <= CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_logLevel)
+  if (LOG_LEVEL_DEBUG_FREEMEM <=
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_logLevel)
   {
     KODI::MEMORY::MemoryStatus stat;
     KODI::MEMORY::GetMemoryStatus(&stat);
@@ -98,20 +102,31 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
     std::string lcAppName = CCompileInfo::GetAppName();
     StringUtils::ToLower(lcAppName);
 #if !defined(TARGET_POSIX)
-    info = StringUtils::Format("LOG: %s%s.log\nMEM: %" PRIu64"/%" PRIu64" KB - FPS: %2.1f fps\nCPU: %s%s",
-                               CSpecialProtocol::TranslatePath("special://logpath").c_str(), lcAppName.c_str(),
-                               stat.availPhys / 1024, stat.totalPhys / 1024, CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetSystemInfoProvider().GetFPS(),
+    info = StringUtils::Format("LOG: %s%s.log\nMEM: %" PRIu64 "/%" PRIu64
+                               " KB - FPS: %2.1f fps\nCPU: %s%s",
+                               CSpecialProtocol::TranslatePath("special://logpath").c_str(),
+                               lcAppName.c_str(), stat.availPhys / 1024, stat.totalPhys / 1024,
+                               CServiceBroker::GetGUI()
+                                   ->GetInfoManager()
+                                   .GetInfoProviders()
+                                   .GetSystemInfoProvider()
+                                   .GetFPS(),
                                strCores.c_str(), profiling.c_str());
 #else
     double dCPU = m_resourceCounter.GetCPUUsage();
     std::string ucAppName = lcAppName;
     StringUtils::ToUpper(ucAppName);
     info = StringUtils::Format("LOG: %s%s.log\n"
-                                "MEM: %" PRIu64"/%" PRIu64" KB - FPS: %2.1f fps\n"
-                                "CPU: %s (CPU-%s %4.2f%%%s)",
-                                CSpecialProtocol::TranslatePath("special://logpath").c_str(), lcAppName.c_str(),
-                                stat.availPhys / 1024, stat.totalPhys / 1024, CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetSystemInfoProvider().GetFPS(),
-                                strCores.c_str(), ucAppName.c_str(), dCPU, profiling.c_str());
+                               "MEM: %" PRIu64 "/%" PRIu64 " KB - FPS: %2.1f fps\n"
+                               "CPU: %s (CPU-%s %4.2f%%%s)",
+                               CSpecialProtocol::TranslatePath("special://logpath").c_str(),
+                               lcAppName.c_str(), stat.availPhys / 1024, stat.totalPhys / 1024,
+                               CServiceBroker::GetGUI()
+                                   ->GetInfoManager()
+                                   .GetInfoProviders()
+                                   .GetSystemInfoProvider()
+                                   .GetFPS(),
+                               strCores.c_str(), ucAppName.c_str(), dCPU, profiling.c_str());
 #endif
   }
 
@@ -120,8 +135,10 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
   {
     if (!info.empty())
       info += "\n";
-    CGUIWindow *window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
-    CGUIWindow *pointer = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_DIALOG_POINTER);
+    CGUIWindow* window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(
+        CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
+    CGUIWindow* pointer =
+        CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_DIALOG_POINTER);
     CPoint point;
     if (pointer)
       point = CPoint(pointer->GetXPosition(), pointer->GetYPosition());
@@ -134,17 +151,22 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
         windowName = window->GetProperty("xmlfile").asString();
       info += "Window: " + windowName + "\n";
       // transform the mouse coordinates to this window's coordinates
-      CServiceBroker::GetWinSystem()->GetGfxContext().SetScalingResolution(window->GetCoordsRes(), true);
+      CServiceBroker::GetWinSystem()->GetGfxContext().SetScalingResolution(window->GetCoordsRes(),
+                                                                           true);
       point.x *= CServiceBroker::GetWinSystem()->GetGfxContext().GetGUIScaleX();
       point.y *= CServiceBroker::GetWinSystem()->GetGfxContext().GetGUIScaleY();
-      CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), false);
+      CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(
+          CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), false);
     }
-    info += StringUtils::Format("Mouse: (%d,%d)  ", static_cast<int>(point.x), static_cast<int>(point.y));
+    info += StringUtils::Format("Mouse: (%d,%d)  ", static_cast<int>(point.x),
+                                static_cast<int>(point.y));
     if (window)
     {
-      CGUIControl *control = window->GetFocusedControl();
+      CGUIControl* control = window->GetFocusedControl();
       if (control)
-        info += StringUtils::Format("Focused: %i (%s)", control->GetID(), CGUIControlFactory::TranslateControlType(control->GetControlType()).c_str());
+        info += StringUtils::Format(
+            "Focused: %i (%s)", control->GetID(),
+            CGUIControlFactory::TranslateControlType(control->GetControlType()).c_str());
     }
   }
 
@@ -155,12 +177,13 @@ void CGUIWindowDebugInfo::Process(unsigned int currentTime, CDirtyRegionList &di
 
   float x = xShift + 0.04f * CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth();
   float y = yShift + 0.04f * CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight();
-  m_renderRegion.SetRect(x, y, x+w, y+h);
+  m_renderRegion.SetRect(x, y, x + w, y + h);
 }
 
 void CGUIWindowDebugInfo::Render()
 {
-  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), false);
+  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), false);
   if (m_layout)
     m_layout->RenderOutline(m_renderRegion.x1, m_renderRegion.y1, 0xffffffff, 0xff000000, 0, 0);
 }

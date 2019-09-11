@@ -7,14 +7,15 @@
  */
 
 #include "platform/Filesystem.h"
+
 #include "filesystem/SpecialProtocol.h"
 #include "utils/URIUtils.h"
 
 #if defined(TARGET_LINUX)
 #include <sys/statvfs.h>
 #elif defined(TARGET_DARWIN) || defined(TARGET_FREEBSD)
-#include <sys/param.h>
 #include <sys/mount.h>
+#include <sys/param.h>
 #elif defined(TARGET_ANDROID)
 #include <sys/statfs.h>
 #endif
@@ -22,6 +23,7 @@
 #include <cstdlib>
 #include <limits.h>
 #include <string.h>
+
 #include <unistd.h>
 
 namespace KODI
@@ -59,7 +61,7 @@ space_info space(const std::string& path, std::error_code& ec)
   return sp;
 }
 
-std::string temp_directory_path(std::error_code &ec)
+std::string temp_directory_path(std::error_code& ec)
 {
   ec.clear();
 
@@ -70,7 +72,7 @@ std::string temp_directory_path(std::error_code &ec)
   return "/tmp/";
 }
 
-std::string create_temp_directory(std::error_code &ec)
+std::string create_temp_directory(std::error_code& ec)
 {
   char buf[PATH_MAX];
 
@@ -90,7 +92,7 @@ std::string create_temp_directory(std::error_code &ec)
   return std::string(tmp);
 }
 
-std::string temp_file_path(std::string suffix, std::error_code &ec)
+std::string temp_file_path(std::string suffix, std::error_code& ec)
 {
   char tmp[PATH_MAX];
 
@@ -121,6 +123,6 @@ std::string temp_file_path(std::string suffix, std::error_code &ec)
   return std::string(tmp);
 }
 
-}
-}
-}
+} // namespace FILESYSTEM
+} // namespace PLATFORM
+} // namespace KODI

@@ -15,17 +15,18 @@ namespace KodiAPI
 namespace GUI
 {
 
-CGUIAddonRenderingControl::CGUIAddonRenderingControl(CGUIRenderingControl *pControl)
-  : CBCreate{nullptr},
-  CBRender{nullptr},
-  CBStop{nullptr},
-  CBDirty{nullptr},
-  m_clientHandle{nullptr},
-  m_pControl{pControl},
-  m_refCount{1}
-{ }
+CGUIAddonRenderingControl::CGUIAddonRenderingControl(CGUIRenderingControl* pControl)
+  : CBCreate{nullptr}
+  , CBRender{nullptr}
+  , CBStop{nullptr}
+  , CBDirty{nullptr}
+  , m_clientHandle{nullptr}
+  , m_pControl{pControl}
+  , m_refCount{1}
+{
+}
 
-bool CGUIAddonRenderingControl::Create(int x, int y, int w, int h, void *device)
+bool CGUIAddonRenderingControl::Create(int x, int y, int w, int h, void* device)
 {
   if (CBCreate)
   {

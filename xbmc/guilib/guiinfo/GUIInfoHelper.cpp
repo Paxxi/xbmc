@@ -28,7 +28,7 @@ namespace GUIINFO
 {
 
 // conditions for window retrieval
-static const int WINDOW_CONDITION_HAS_LIST_ITEMS  = 1;
+static const int WINDOW_CONDITION_HAS_LIST_ITEMS = 1;
 static const int WINDOW_CONDITION_IS_MEDIA_WINDOW = 2;
 
 std::string GetPlaylistLabel(int item, int playlistid /* = PLAYLIST_NONE */)
@@ -41,34 +41,34 @@ std::string GetPlaylistLabel(int item, int playlistid /* = PLAYLIST_NONE */)
   int iPlaylist = playlistid == PLAYLIST_NONE ? player.GetCurrentPlaylist() : playlistid;
   switch (item)
   {
-    case PLAYLIST_LENGTH:
-    {
-      return StringUtils::Format("%i", player.GetPlaylist(iPlaylist).size());
-    }
-    case PLAYLIST_POSITION:
-    {
-      int currentSong = player.GetCurrentSong();
-      if (currentSong > -1)
-        return StringUtils::Format("%i", currentSong + 1);
-      break;
-    }
-    case PLAYLIST_RANDOM:
-    {
-      if (player.IsShuffled(iPlaylist))
-        return g_localizeStrings.Get(16041); // 16041: On
-      else
-        return g_localizeStrings.Get(591); // 591: Off
-    }
-    case PLAYLIST_REPEAT:
-    {
-      PLAYLIST::REPEAT_STATE state = player.GetRepeat(iPlaylist);
-      if (state == PLAYLIST::REPEAT_ONE)
-        return g_localizeStrings.Get(592); // 592: One
-      else if (state == PLAYLIST::REPEAT_ALL)
-        return g_localizeStrings.Get(593); // 593: All
-      else
-        return g_localizeStrings.Get(594); // 594: Off
-    }
+  case PLAYLIST_LENGTH:
+  {
+    return StringUtils::Format("%i", player.GetPlaylist(iPlaylist).size());
+  }
+  case PLAYLIST_POSITION:
+  {
+    int currentSong = player.GetCurrentSong();
+    if (currentSong > -1)
+      return StringUtils::Format("%i", currentSong + 1);
+    break;
+  }
+  case PLAYLIST_RANDOM:
+  {
+    if (player.IsShuffled(iPlaylist))
+      return g_localizeStrings.Get(16041); // 16041: On
+    else
+      return g_localizeStrings.Get(591); // 591: Off
+  }
+  case PLAYLIST_REPEAT:
+  {
+    PLAYLIST::REPEAT_STATE state = player.GetRepeat(iPlaylist);
+    if (state == PLAYLIST::REPEAT_ONE)
+      return g_localizeStrings.Get(592); // 592: One
+    else if (state == PLAYLIST::REPEAT_ALL)
+      return g_localizeStrings.Get(593); // 593: All
+    else
+      return g_localizeStrings.Get(594); // 594: Off
+  }
   }
   return std::string();
 }
@@ -76,7 +76,7 @@ std::string GetPlaylistLabel(int item, int playlistid /* = PLAYLIST_NONE */)
 namespace
 {
 
-bool CheckWindowCondition(CGUIWindow *window, int condition)
+bool CheckWindowCondition(CGUIWindow* window, int condition)
 {
   // check if it satisfies our condition
   if (!window)
@@ -92,7 +92,7 @@ CGUIWindow* GetWindowWithCondition(int contextWindow, int condition)
 {
   CGUIWindowManager& windowMgr = CServiceBroker::GetGUI()->GetWindowManager();
 
-  CGUIWindow *window = windowMgr.GetWindow(contextWindow);
+  CGUIWindow* window = windowMgr.GetWindow(contextWindow);
   if (CheckWindowCondition(window, condition))
     return window;
 
@@ -136,11 +136,11 @@ CGUIMediaWindow* GetMediaWindow(int contextWindow)
 
 CGUIControl* GetActiveContainer(int containerId, int contextWindow)
 {
-  CGUIWindow *window = GetWindow(contextWindow);
+  CGUIWindow* window = GetWindow(contextWindow);
   if (!window)
     return nullptr;
 
-  CGUIControl *control = nullptr;
+  CGUIControl* control = nullptr;
   if (!containerId) // No container specified, so we lookup the current view container
   {
     if (window->IsMediaWindow())
@@ -158,22 +158,22 @@ CGUIControl* GetActiveContainer(int containerId, int contextWindow)
   return nullptr;
 }
 
-CGUIListItemPtr GetCurrentListItem(int contextWindow, int containerId /* = 0 */, int itemOffset /* = 0 */, unsigned int itemFlags /* = 0 */)
+CGUIListItemPtr GetCurrentListItem(int contextWindow,
+                                   int containerId /* = 0 */,
+                                   int itemOffset /* = 0 */,
+                                   unsigned int itemFlags /* = 0 */)
 {
   CGUIListItemPtr item;
 
-  if (containerId == 0  &&
-      itemOffset == 0 &&
-      !(itemFlags & INFOFLAG_LISTITEM_CONTAINER) &&
-      !(itemFlags & INFOFLAG_LISTITEM_ABSOLUTE) &&
-      !(itemFlags & INFOFLAG_LISTITEM_POSITION))
+  if (containerId == 0 && itemOffset == 0 && !(itemFlags & INFOFLAG_LISTITEM_CONTAINER) &&
+      !(itemFlags & INFOFLAG_LISTITEM_ABSOLUTE) && !(itemFlags & INFOFLAG_LISTITEM_POSITION))
     item = GetCurrentListItemFromWindow(contextWindow);
 
   if (!item)
   {
     CGUIControl* activeContainer = GetActiveContainer(containerId, contextWindow);
     if (activeContainer)
-      item = static_cast<IGUIContainer *>(activeContainer)->GetListItem(itemOffset, itemFlags);
+      item = static_cast<IGUIContainer*>(activeContainer)->GetListItem(itemOffset, itemFlags);
   }
 
   return item;

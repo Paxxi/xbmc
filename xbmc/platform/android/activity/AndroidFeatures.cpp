@@ -28,7 +28,7 @@ int CAndroidFeatures::GetVersion()
   {
     version = 0;
 
-    JNIEnv *jenv = xbmc_jnienv();
+    JNIEnv* jenv = xbmc_jnienv();
 
     jclass jcOsBuild = jenv->FindClass("android/os/Build$VERSION");
     if (jcOsBuild == NULL)
@@ -37,7 +37,8 @@ int CAndroidFeatures::GetVersion()
       return version;
     }
 
-    jint iSdkVersion = jenv->GetStaticIntField(jcOsBuild, jenv->GetStaticFieldID(jcOsBuild, "SDK_INT", "I"));
+    jint iSdkVersion =
+        jenv->GetStaticIntField(jcOsBuild, jenv->GetStaticFieldID(jcOsBuild, "SDK_INT", "I"));
     CLog::Log(LOGDEBUG, "%s: android.os.Build.VERSION %d", __PRETTY_FUNCTION__, (int)iSdkVersion);
 
     // <= 10 Gingerbread
@@ -62,4 +63,3 @@ int CAndroidFeatures::GetCPUCount()
   }
   return count;
 }
-

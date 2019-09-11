@@ -17,7 +17,7 @@ public:
   ~CGUIWindowMusicPlayList(void) override;
 
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
   bool OnBack(int actionID) override;
 
   void RemovePlayListItem(int iItem);
@@ -28,10 +28,10 @@ protected:
   void UpdateButtons() override;
   void OnItemLoaded(CFileItem* pItem) override;
   bool Update(const std::string& strDirectory, bool updateFilterPath = true) override;
-  void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
   bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
   void OnMove(int iItem, int iAction);
-  bool OnPlayMedia(int iItem, const std::string &player = "") override;
+  bool OnPlayMedia(int iItem, const std::string& player = "") override;
 
   void SavePlayList();
   void ClearPlayList();

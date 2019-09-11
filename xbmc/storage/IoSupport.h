@@ -16,11 +16,11 @@
 
 #include "PlatformDefs.h" // for Win32 types
 
-#define MODE1_DATA_SIZE    2048 // Mode1 sector has 2048 bytes of data
+#define MODE1_DATA_SIZE 2048 // Mode1 sector has 2048 bytes of data
 
-#define MODE2_DATA_START   24   // Mode2 raw sector has 24 bytes before the data payload
-#define MODE2_DATA_SIZE    2324 // And has 2324 usable bytes
-#define RAW_SECTOR_SIZE    2352 // Raw sector size
+#define MODE2_DATA_START 24 // Mode2 raw sector has 24 bytes before the data payload
+#define MODE2_DATA_SIZE 2324 // And has 2324 usable bytes
+#define RAW_SECTOR_SIZE 2352 // Raw sector size
 
 class CIoSupport
 {

@@ -12,16 +12,22 @@
 
 #include <queue>
 
-#define TOAST_DISPLAY_TIME   5000L  // default 5 seconds
-#define TOAST_MESSAGE_TIME   1000L  // minimal message time 1 second
+#define TOAST_DISPLAY_TIME 5000L // default 5 seconds
+#define TOAST_MESSAGE_TIME 1000L // minimal message time 1 second
 
-class CGUIDialogKaiToast: public CGUIDialog
+class CGUIDialogKaiToast : public CGUIDialog
 {
 public:
   CGUIDialogKaiToast(void);
   ~CGUIDialogKaiToast(void) override;
 
-  enum eMessageType { Default = 0, Info, Warning, Error };
+  enum eMessageType
+  {
+    Default = 0,
+    Info,
+    Warning,
+    Error
+  };
 
   struct Notification
   {
@@ -36,9 +42,19 @@ public:
 
   typedef std::queue<Notification> TOASTQUEUE;
 
-  static void QueueNotification(eMessageType eType, const std::string& aCaption, const std::string& aDescription, unsigned int displayTime = TOAST_DISPLAY_TIME, bool withSound = true, unsigned int messageTime = TOAST_MESSAGE_TIME);
+  static void QueueNotification(eMessageType eType,
+                                const std::string& aCaption,
+                                const std::string& aDescription,
+                                unsigned int displayTime = TOAST_DISPLAY_TIME,
+                                bool withSound = true,
+                                unsigned int messageTime = TOAST_MESSAGE_TIME);
   static void QueueNotification(const std::string& aCaption, const std::string& aDescription);
-  static void QueueNotification(const std::string& aImageFile, const std::string& aCaption, const std::string& aDescription, unsigned int displayTime = TOAST_DISPLAY_TIME, bool withSound = true, unsigned int messageTime = TOAST_MESSAGE_TIME);
+  static void QueueNotification(const std::string& aImageFile,
+                                const std::string& aCaption,
+                                const std::string& aDescription,
+                                unsigned int displayTime = TOAST_DISPLAY_TIME,
+                                bool withSound = true,
+                                unsigned int messageTime = TOAST_MESSAGE_TIME);
   bool DoWork();
 
   bool OnMessage(CGUIMessage& message) override;
@@ -46,7 +62,13 @@ public:
   void ResetTimer();
 
 protected:
-  static void AddToQueue(const std::string& aImageFile, const eMessageType eType, const std::string& aCaption, const std::string& aDescription, unsigned int displayTime, bool withSound, unsigned int messageTime);
+  static void AddToQueue(const std::string& aImageFile,
+                         const eMessageType eType,
+                         const std::string& aCaption,
+                         const std::string& aDescription,
+                         unsigned int displayTime,
+                         bool withSound,
+                         unsigned int messageTime);
 
   unsigned int m_timer;
 

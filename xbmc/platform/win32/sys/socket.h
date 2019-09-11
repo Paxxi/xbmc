@@ -26,7 +26,7 @@
 
 
 #ifndef AF_BTH
-#define AF_BTH          32
+#define AF_BTH 32
 #endif
 
 #ifndef BTHPROTO_RFCOMM
@@ -42,4 +42,3 @@
 #endif
 
 typedef int socklen_t;
-

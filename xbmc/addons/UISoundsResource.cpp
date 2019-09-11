@@ -20,13 +20,13 @@ namespace ADDON
 
 bool CUISoundsResource::IsAllowed(const std::string& file) const
 {
-  return StringUtils::EqualsNoCase(file, "sounds.xml")
-      || URIUtils::HasExtension(file, ".wav");
+  return StringUtils::EqualsNoCase(file, "sounds.xml") || URIUtils::HasExtension(file, ".wav");
 }
 
 bool CUISoundsResource::IsInUse() const
 {
-  return CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOOKANDFEEL_SOUNDSKIN) == ID();
+  return CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+             CSettings::SETTING_LOOKANDFEEL_SOUNDSKIN) == ID();
 }
 
 void CUISoundsResource::OnPostInstall(bool update, bool modal)
@@ -36,4 +36,4 @@ void CUISoundsResource::OnPostInstall(bool update, bool modal)
     gui->GetAudioManager().Load();
 }
 
-}
+} // namespace ADDON

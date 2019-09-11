@@ -15,9 +15,10 @@
 
 using namespace PVR;
 
-CPVRTimerRuleMatcher::CPVRTimerRuleMatcher(const std::shared_ptr<CPVRTimerInfoTag>& timerRule, const CDateTime& start)
-: m_timerRule(timerRule),
-  m_start(CPVRTimerInfoTag::ConvertUTCToLocalTime(start))
+CPVRTimerRuleMatcher::CPVRTimerRuleMatcher(const std::shared_ptr<CPVRTimerInfoTag>& timerRule,
+                                           const CDateTime& start)
+  : m_timerRule(timerRule)
+  , m_start(CPVRTimerInfoTag::ConvertUTCToLocalTime(start))
 {
 }
 
@@ -37,8 +38,8 @@ CDateTime CPVRTimerRuleMatcher::GetNextTimerStart() const
     return CDateTime(); // invalid datetime
 
   const CDateTime startDateLocal = m_timerRule->GetTimerType()->SupportsFirstDay()
-                                   ? m_timerRule->FirstDayAsLocalTime()
-                                   : m_start;
+                                       ? m_timerRule->FirstDayAsLocalTime()
+                                       : m_start;
   const CDateTime startTimeLocal = m_timerRule->StartAsLocalTime();
   CDateTime nextStart(startDateLocal.GetYear(), startDateLocal.GetMonth(), startDateLocal.GetDay(),
                       startTimeLocal.GetHour(), startTimeLocal.GetMinute(), 0);
@@ -70,14 +71,9 @@ CDateTime CPVRTimerRuleMatcher::GetNextTimerStart() const
 
 bool CPVRTimerRuleMatcher::Matches(const std::shared_ptr<CPVREpgInfoTag>& epgTag) const
 {
-  return epgTag &&
-         CPVRTimerInfoTag::ConvertUTCToLocalTime(epgTag->EndAsUTC()) > m_start &&
-         MatchSeriesLink(epgTag) &&
-         MatchChannel(epgTag) &&
-         MatchStart(epgTag) &&
-         MatchEnd(epgTag) &&
-         MatchDayOfWeek(epgTag) &&
-         MatchSearchText(epgTag);
+  return epgTag && CPVRTimerInfoTag::ConvertUTCToLocalTime(epgTag->EndAsUTC()) > m_start &&
+         MatchSeriesLink(epgTag) && MatchChannel(epgTag) && MatchStart(epgTag) &&
+         MatchEnd(epgTag) && MatchDayOfWeek(epgTag) && MatchSearchText(epgTag);
 }
 
 bool CPVRTimerRuleMatcher::MatchSeriesLink(const std::shared_ptr<CPVREpgInfoTag>& epgTag) const
@@ -108,19 +104,16 @@ bool CPVRTimerRuleMatcher::MatchStart(const std::shared_ptr<CPVREpgInfoTag>& epg
   {
     // only year, month and day do matter here...
     const CDateTime startEpgLocal = CPVRTimerInfoTag::ConvertUTCToLocalTime(epgTag->StartAsUTC());
-    const CDateTime startEpg(startEpgLocal.GetYear(),
-                             startEpgLocal.GetMonth(),
+    const CDateTime startEpg(startEpgLocal.GetYear(), startEpgLocal.GetMonth(),
                              startEpgLocal.GetDay(), 0, 0, 0);
     const CDateTime firstDayLocal = m_timerRule->FirstDayAsLocalTime();
-    const CDateTime startTimer(firstDayLocal.GetYear(),
-                               firstDayLocal.GetMonth(),
+    const CDateTime startTimer(firstDayLocal.GetYear(), firstDayLocal.GetMonth(),
                                firstDayLocal.GetDay(), 0, 0, 0);
     if (startEpg < startTimer)
       return false;
   }
 
-  if (m_timerRule->GetTimerType()->SupportsStartAnyTime() &&
-      m_timerRule->m_bStartAnyTime)
+  if (m_timerRule->GetTimerType()->SupportsStartAnyTime() && m_timerRule->m_bStartAnyTime)
     return true; // matches any start time
 
   if (m_timerRule->GetTimerType()->SupportsStartTime())
@@ -129,7 +122,8 @@ bool CPVRTimerRuleMatcher::MatchStart(const std::shared_ptr<CPVREpgInfoTag>& epg
     const CDateTime startEpgLocal = CPVRTimerInfoTag::ConvertUTCToLocalTime(epgTag->StartAsUTC());
     const CDateTime startEpg(2000, 1, 1, startEpgLocal.GetHour(), startEpgLocal.GetMinute(), 0);
     const CDateTime startTimerLocal = m_timerRule->StartAsLocalTime();
-    const CDateTime startTimer(2000, 1, 1, startTimerLocal.GetHour(), startTimerLocal.GetMinute(), 0);
+    const CDateTime startTimer(2000, 1, 1, startTimerLocal.GetHour(), startTimerLocal.GetMinute(),
+                               0);
     return startEpg >= startTimer;
   }
   else
@@ -138,8 +132,7 @@ bool CPVRTimerRuleMatcher::MatchStart(const std::shared_ptr<CPVREpgInfoTag>& epg
 
 bool CPVRTimerRuleMatcher::MatchEnd(const std::shared_ptr<CPVREpgInfoTag>& epgTag) const
 {
-  if (m_timerRule->GetTimerType()->SupportsEndAnyTime() &&
-      m_timerRule->m_bEndAnyTime)
+  if (m_timerRule->GetTimerType()->SupportsEndAnyTime() && m_timerRule->m_bEndAnyTime)
     return true; // matches any end time
 
   if (m_timerRule->GetTimerType()->SupportsEndTime())
@@ -174,8 +167,7 @@ bool CPVRTimerRuleMatcher::MatchDayOfWeek(const std::shared_ptr<CPVREpgInfoTag>&
 
 bool CPVRTimerRuleMatcher::MatchSearchText(const std::shared_ptr<CPVREpgInfoTag>& epgTag) const
 {
-  if (m_timerRule->GetTimerType()->SupportsEpgFulltextMatch() &&
-      m_timerRule->m_bFullTextEpgSearch)
+  if (m_timerRule->GetTimerType()->SupportsEpgFulltextMatch() && m_timerRule->m_bFullTextEpgSearch)
   {
     if (!m_textSearch)
     {

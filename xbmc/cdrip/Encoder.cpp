@@ -25,21 +25,21 @@ CEncoder::~CEncoder()
   FileClose();
 }
 
-int CEncoder::WriteCallback(void *opaque, const uint8_t *data, int size)
+int CEncoder::WriteCallback(void* opaque, const uint8_t* data, int size)
 {
   if (opaque)
   {
-    CEncoder *encoder = static_cast<CEncoder *>(opaque);
+    CEncoder* encoder = static_cast<CEncoder*>(opaque);
     return encoder->WriteStream(data, size);
   }
   return -1;
 }
 
-int64_t CEncoder::SeekCallback(void *opaque, int64_t position, int whence)
+int64_t CEncoder::SeekCallback(void* opaque, int64_t position, int whence)
 {
   if (opaque)
   {
-    CEncoder *encoder = static_cast<CEncoder *>(opaque);
+    CEncoder* encoder = static_cast<CEncoder*>(opaque);
     return encoder->FileSeek(position, whence);
   }
   return -1;
@@ -47,7 +47,8 @@ int64_t CEncoder::SeekCallback(void *opaque, int64_t position, int whence)
 
 bool CEncoder::Init(const char* strFile, int iInChannels, int iInRate, int iInBits)
 {
-  if (strFile == NULL) return false;
+  if (strFile == NULL)
+    return false;
 
   m_dwWriteBufferPointer = 0;
   m_impl->m_strFile = strFile;
@@ -91,7 +92,7 @@ bool CEncoder::FileClose()
 }
 
 // return total bytes written, or -1 on error
-int CEncoder::FileWrite(const void *pBuffer, uint32_t iBytes)
+int CEncoder::FileWrite(const void* pBuffer, uint32_t iBytes)
 {
   if (!m_file)
     return -1;
@@ -112,7 +113,7 @@ int64_t CEncoder::FileSeek(int64_t iFilePosition, int iWhence)
 }
 
 // write the stream to our writebuffer, and write the buffer to disk if it's full
-int CEncoder::WriteStream(const void *pBuffer, uint32_t iBytes)
+int CEncoder::WriteStream(const void* pBuffer, uint32_t iBytes)
 {
   if ((WRITEBUFFER_SIZE - m_dwWriteBufferPointer) > iBytes)
   {
@@ -132,16 +133,18 @@ int CEncoder::WriteStream(const void *pBuffer, uint32_t iBytes)
 
     uint32_t dwBytesRemaining = iBytes - (WRITEBUFFER_SIZE - m_dwWriteBufferPointer);
     // fill up our write buffer and write it to disk
-    memcpy(m_btWriteBuffer + m_dwWriteBufferPointer, pBuffer, (WRITEBUFFER_SIZE - m_dwWriteBufferPointer));
+    memcpy(m_btWriteBuffer + m_dwWriteBufferPointer, pBuffer,
+           (WRITEBUFFER_SIZE - m_dwWriteBufferPointer));
     FileWrite(m_btWriteBuffer, WRITEBUFFER_SIZE);
     m_dwWriteBufferPointer = 0;
 
     // pbtRemaining = pBuffer + bytesWritten
-    const uint8_t* pbtRemaining = (const uint8_t *)pBuffer + (iBytes - dwBytesRemaining);
+    const uint8_t* pbtRemaining = (const uint8_t*)pBuffer + (iBytes - dwBytesRemaining);
     if (dwBytesRemaining > WRITEBUFFER_SIZE)
     {
       // data is not going to fit in our buffer, just write it to disk
-      if (FileWrite(pbtRemaining, dwBytesRemaining) == -1) return -1;
+      if (FileWrite(pbtRemaining, dwBytesRemaining) == -1)
+        return -1;
       return iBytes;
     }
     else
@@ -158,7 +161,8 @@ int CEncoder::WriteStream(const void *pBuffer, uint32_t iBytes)
 int CEncoder::FlushStream()
 {
   int iResult;
-  if (m_dwWriteBufferPointer == 0) return 0;
+  if (m_dwWriteBufferPointer == 0)
+    return 0;
 
   iResult = FileWrite(m_btWriteBuffer, m_dwWriteBufferPointer);
   m_dwWriteBufferPointer = 0;

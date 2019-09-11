@@ -24,19 +24,18 @@ public:
   \param[in] xmlFile       xml file to import
   \param[in] progressDialog Progress dialog to be used to display the import progress
   */
-  CMusicLibraryImportJob(const std::string &xmlFile, CGUIDialogProgress* progressDialog);
+  CMusicLibraryImportJob(const std::string& xmlFile, CGUIDialogProgress* progressDialog);
 
   ~CMusicLibraryImportJob() override;
 
   // specialization of CJob
-  const char *GetType() const override { return "MusicLibraryImportJob"; }
+  const char* GetType() const override { return "MusicLibraryImportJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
   // implementation of CMusicLibraryJob
-  bool Work(CMusicDatabase &db) override;
+  bool Work(CMusicDatabase& db) override;
 
 private:
   std::string m_xmlFile;
 };
-

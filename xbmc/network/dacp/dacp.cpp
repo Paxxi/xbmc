@@ -14,7 +14,7 @@
 
 // AirTunes related DACP implementation taken from http://nto.github.io/AirPlay.html#audio-remotecontrol
 
-CDACP::CDACP(const std::string &active_remote_header, const std::string &hostname, int port)
+CDACP::CDACP(const std::string& active_remote_header, const std::string& hostname, int port)
 {
   m_dacpUrl.SetHostName(hostname);
   m_dacpUrl.SetPort(port);
@@ -22,7 +22,7 @@ CDACP::CDACP(const std::string &active_remote_header, const std::string &hostnam
   m_dacpUrl.SetProtocolOption("Active-Remote", active_remote_header);
 }
 
-void CDACP::SendCmd(const std::string &cmd)
+void CDACP::SendCmd(const std::string& cmd)
 {
   m_dacpUrl.SetFileName(AIRTUNES_DACP_CMD_URI + cmd);
   // issue the command

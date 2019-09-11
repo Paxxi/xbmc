@@ -10,10 +10,35 @@
 
 #include "input/Key.h"
 
-CGUISettingsSliderControl::CGUISettingsSliderControl(int parentID, int controlID, float posX, float posY, float width, float height, float sliderWidth, float sliderHeight, const CTextureInfo &textureFocus, const CTextureInfo &textureNoFocus, const CTextureInfo& backGroundTexture, const CTextureInfo& nibTexture, const CTextureInfo& nibTextureFocus, const CLabelInfo &labelInfo, int iType)
-    : CGUISliderControl(parentID, controlID, posX, posY, sliderWidth, sliderHeight, backGroundTexture, nibTexture,nibTextureFocus, iType, HORIZONTAL)
-    , m_buttonControl(parentID, controlID, posX, posY, width, height, textureFocus, textureNoFocus, labelInfo)
-    , m_label(posX, posY, width, height, labelInfo)
+CGUISettingsSliderControl::CGUISettingsSliderControl(int parentID,
+                                                     int controlID,
+                                                     float posX,
+                                                     float posY,
+                                                     float width,
+                                                     float height,
+                                                     float sliderWidth,
+                                                     float sliderHeight,
+                                                     const CTextureInfo& textureFocus,
+                                                     const CTextureInfo& textureNoFocus,
+                                                     const CTextureInfo& backGroundTexture,
+                                                     const CTextureInfo& nibTexture,
+                                                     const CTextureInfo& nibTextureFocus,
+                                                     const CLabelInfo& labelInfo,
+                                                     int iType)
+  : CGUISliderControl(parentID,
+                      controlID,
+                      posX,
+                      posY,
+                      sliderWidth,
+                      sliderHeight,
+                      backGroundTexture,
+                      nibTexture,
+                      nibTextureFocus,
+                      iType,
+                      HORIZONTAL)
+  , m_buttonControl(
+        parentID, controlID, posX, posY, width, height, textureFocus, textureNoFocus, labelInfo)
+  , m_label(posX, posY, width, height, labelInfo)
 {
   m_label.SetAlign((labelInfo.align & XBFONT_CENTER_Y) | XBFONT_RIGHT);
   ControlType = GUICONTROL_SETTINGS_SLIDER;
@@ -22,12 +47,14 @@ CGUISettingsSliderControl::CGUISettingsSliderControl(int parentID, int controlID
 
 CGUISettingsSliderControl::~CGUISettingsSliderControl(void) = default;
 
-void CGUISettingsSliderControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUISettingsSliderControl::Process(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
   if (m_bInvalidated)
   {
-    float sliderPosX = m_buttonControl.GetXPosition() + m_buttonControl.GetWidth() - m_width - m_buttonControl.GetLabelInfo().offsetX;
-    float sliderPosY = m_buttonControl.GetYPosition() + (m_buttonControl.GetHeight() - m_height) * 0.5f;
+    float sliderPosX = m_buttonControl.GetXPosition() + m_buttonControl.GetWidth() - m_width -
+                       m_buttonControl.GetLabelInfo().offsetX;
+    float sliderPosY =
+        m_buttonControl.GetYPosition() + (m_buttonControl.GetHeight() - m_height) * 0.5f;
     CGUISliderControl::SetPosition(sliderPosX, sliderPosY);
   }
   m_buttonControl.SetFocus(HasFocus());
@@ -49,7 +76,9 @@ void CGUISettingsSliderControl::ProcessText()
 {
   bool changed = false;
 
-  changed |= m_label.SetMaxRect(m_buttonControl.GetXPosition(), m_buttonControl.GetYPosition(), m_posX - m_buttonControl.GetXPosition(), m_buttonControl.GetHeight());
+  changed |=
+      m_label.SetMaxRect(m_buttonControl.GetXPosition(), m_buttonControl.GetYPosition(),
+                         m_posX - m_buttonControl.GetXPosition(), m_buttonControl.GetHeight());
   changed |= m_label.SetText(CGUISliderControl::GetDescription());
   if (IsDisabled())
     changed |= m_label.SetColor(CGUILabel::COLOR_DISABLED);
@@ -62,14 +91,14 @@ void CGUISettingsSliderControl::ProcessText()
     MarkDirtyRegion();
 }
 
-bool CGUISettingsSliderControl::OnAction(const CAction &action)
+bool CGUISettingsSliderControl::OnAction(const CAction& action)
 {
   // intercept ACTION_SELECT_ITEM because onclick functionality is different from base class
   if (action.GetID() == ACTION_SELECT_ITEM)
   {
     if (!IsActive())
       m_active = true;
-     // switch between the two sliders
+    // switch between the two sliders
     else if (m_rangeSelection && m_currentSelector == RangeSelectorLower)
       SwitchRangeSelector();
     else
@@ -88,7 +117,7 @@ void CGUISettingsSliderControl::OnUnFocus()
   m_active = false;
 }
 
-EVENT_RESULT CGUISettingsSliderControl::OnMouseEvent(const CPoint &point, const CMouseEvent &event)
+EVENT_RESULT CGUISettingsSliderControl::OnMouseEvent(const CPoint& point, const CMouseEvent& event)
 {
   SetActive();
   return CGUISliderControl::OnMouseEvent(point, event);

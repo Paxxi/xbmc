@@ -38,7 +38,7 @@ bool CWinSystemWaylandEGLContextGL::InitWindowSystem()
 
   bool general, deepColor;
   m_vaapiProxy.reset(::WAYLAND::VaapiProxyCreate());
-  ::WAYLAND::VaapiProxyConfig(m_vaapiProxy.get(),GetConnection()->GetDisplay(),
+  ::WAYLAND::VaapiProxyConfig(m_vaapiProxy.get(), GetConnection()->GetDisplay(),
                               m_eglContext.GetEGLDisplay());
   ::WAYLAND::VAAPIRegisterRender(m_vaapiProxy.get(), general, deepColor);
   if (general)
@@ -57,9 +57,10 @@ bool CWinSystemWaylandEGLContextGL::CreateContext()
   const EGLint glMinor = 2;
 
   CEGLAttributesVec contextAttribs;
-  contextAttribs.Add({{EGL_CONTEXT_MAJOR_VERSION_KHR, glMajor},
-                      {EGL_CONTEXT_MINOR_VERSION_KHR, glMinor},
-                      {EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR}});
+  contextAttribs.Add(
+      {{EGL_CONTEXT_MAJOR_VERSION_KHR, glMajor},
+       {EGL_CONTEXT_MINOR_VERSION_KHR, glMinor},
+       {EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR}});
 
   if (!m_eglContext.CreateContext(contextAttribs))
   {
@@ -73,7 +74,10 @@ bool CWinSystemWaylandEGLContextGL::CreateContext()
     }
     else
     {
-      CLog::Log(LOGWARNING, "Your OpenGL drivers do not support OpenGL {}.{} core profile. Kodi will run in compatibility mode, but performance may suffer.", glMajor, glMinor);
+      CLog::Log(LOGWARNING,
+                "Your OpenGL drivers do not support OpenGL {}.{} core profile. Kodi will run in "
+                "compatibility mode, but performance may suffer.",
+                glMajor, glMinor);
     }
   }
 
@@ -102,7 +106,7 @@ void CWinSystemWaylandEGLContextGL::PresentRenderImpl(bool rendered)
   PresentFrame(rendered);
 }
 
-void CWinSystemWaylandEGLContextGL::delete_CVaapiProxy::operator()(CVaapiProxy *p) const
+void CWinSystemWaylandEGLContextGL::delete_CVaapiProxy::operator()(CVaapiProxy* p) const
 {
   ::WAYLAND::VaapiProxyDelete(p);
 }

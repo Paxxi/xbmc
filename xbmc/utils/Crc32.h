@@ -20,12 +20,8 @@ public:
   static uint32_t Compute(const std::string& strValue);
   static uint32_t ComputeFromLowerCase(const std::string& strValue);
 
-  operator uint32_t () const
-  {
-    return m_crc;
-  }
+  operator uint32_t() const { return m_crc; }
 
 private:
   uint32_t m_crc;
 };
-

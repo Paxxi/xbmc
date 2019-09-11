@@ -32,23 +32,27 @@ void CHttpHeader::Parse(const std::string& strData)
   // If current line is NOT started from whitespace char, then previously stored (and completed) m_lastHeaderLine is parsed and current line is assigned to m_lastHeaderLine (to be parsed later)
   while (pos < len)
   {
-    size_t lineEnd = strData.find('\x0a', pos); // use '\x0a' instead of '\n' to be platform independent
+    size_t lineEnd =
+        strData.find('\x0a', pos); // use '\x0a' instead of '\n' to be platform independent
 
     if (lineEnd == std::string::npos)
       return; // error: expected only complete lines
 
     const size_t nextLine = lineEnd + 1;
-    if (lineEnd > pos && strDataC[lineEnd - 1] == '\x0d') // use '\x0d' instead of '\r' to be platform independent
+    if (lineEnd > pos &&
+        strDataC[lineEnd - 1] == '\x0d') // use '\x0d' instead of '\r' to be platform independent
       lineEnd--;
 
     if (m_headerdone)
       Clear(); // clear previous header and process new one
 
-    if (strDataC[pos] == ' ' || strDataC[pos] == '\t') // same chars as in CHttpHeader::m_whitespaceChars
+    if (strDataC[pos] == ' ' ||
+        strDataC[pos] == '\t') // same chars as in CHttpHeader::m_whitespaceChars
     { // line is started from whitespace char: this is continuation of previous line
       pos = strData.find_first_not_of(m_whitespaceChars, pos);
 
-      m_lastHeaderLine.push_back(' '); // replace all whitespace chars at start of the line with single space
+      m_lastHeaderLine.push_back(
+          ' '); // replace all whitespace chars at start of the line with single space
       m_lastHeaderLine.append(strData, pos, lineEnd - pos); // append current line
     }
     else
@@ -56,10 +60,14 @@ void CHttpHeader::Parse(const std::string& strData)
       if (!m_lastHeaderLine.empty())
         ParseLine(m_lastHeaderLine); // process previously stored completed line (if any)
 
-      m_lastHeaderLine.assign(strData, pos, lineEnd - pos); // store current line to (possibly) complete later. Will be parsed on next turns.
+      m_lastHeaderLine.assign(
+          strData, pos,
+          lineEnd -
+              pos); // store current line to (possibly) complete later. Will be parsed on next turns.
 
       if (pos == lineEnd)
-        m_headerdone = true; // current line is bare "\r\n" (or "\n"), means end of header; no need to process current m_lastHeaderLine
+        m_headerdone =
+            true; // current line is bare "\r\n" (or "\n"), means end of header; no need to process current m_lastHeaderLine
     }
 
     pos = nextLine; // go to next line (if any)
@@ -91,7 +99,9 @@ bool CHttpHeader::ParseLine(const std::string& headerLine)
   return true;
 }
 
-void CHttpHeader::AddParam(const std::string& param, const std::string& value, const bool overwrite /*= false*/)
+void CHttpHeader::AddParam(const std::string& param,
+                           const std::string& value,
+                           const bool overwrite /*= false*/)
 {
   std::string paramLower(param);
   StringUtils::ToLower(paramLower);
@@ -131,7 +141,8 @@ std::string CHttpHeader::GetValue(const std::string& strParam) const
 std::string CHttpHeader::GetValueRaw(const std::string& strParam) const
 {
   // look in reverse to find last parameter (probably most important)
-  for (HeaderParams::const_reverse_iterator iter = m_params.rbegin(); iter != m_params.rend(); ++iter)
+  for (HeaderParams::const_reverse_iterator iter = m_params.rbegin(); iter != m_params.rend();
+       ++iter)
   {
     if (iter->first == strParam)
       return iter->second;
@@ -205,8 +216,9 @@ std::string CHttpHeader::GetCharset(void) const
         size_t len = strValue.find(';', pos);
         if (len != std::string::npos)
           len -= pos;
-        std::string charset(strValue, pos, len);  // intentionally ignoring possible ';' inside quoted string
-                                                  // as we don't support any charset with ';' in name
+        std::string charset(strValue, pos,
+                            len); // intentionally ignoring possible ';' inside quoted string
+            // as we don't support any charset with ';' in name
         StringUtils::Trim(charset, m_whitespaceChars);
         if (!charset.empty())
         {
@@ -214,7 +226,8 @@ std::string CHttpHeader::GetCharset(void) const
             return charset;
           else
           { // charset contains quoted string (allowed according to RFC 2616)
-            StringUtils::Replace(charset, "\\", ""); // unescape chars, ignoring possible '\"' and '\\'
+            StringUtils::Replace(charset, "\\",
+                                 ""); // unescape chars, ignoring possible '\"' and '\\'
             const size_t closingQ = charset.find('"', 1);
             if (closingQ == std::string::npos)
               return ""; // no closing quote

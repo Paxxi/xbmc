@@ -29,7 +29,9 @@
  * \param action (optional) the action.
  * \return Zero on success and -1 otherwise
  */
-int CEnvironment::win_setenv(const std::string &name, const std::string &value /* = "" */, enum updateAction action /* = autoDetect */)
+int CEnvironment::win_setenv(const std::string& name,
+                             const std::string& value /* = "" */,
+                             enum updateAction action /* = autoDetect */)
 {
   std::wstring Wname = KODI::PLATFORM::WINDOWS::ToW(name);
   if (Wname.empty() || name.find('=') != std::wstring::npos)
@@ -51,7 +53,7 @@ int CEnvironment::win_setenv(const std::string &name, const std::string &value /
   return retValue;
 }
 
-std::string CEnvironment::win_getenv(const std::string &name)
+std::string CEnvironment::win_getenv(const std::string& name)
 {
   if (name.empty())
     return "";

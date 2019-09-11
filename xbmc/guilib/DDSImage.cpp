@@ -49,13 +49,13 @@ unsigned int CDDSImage::GetFormat() const
     return 0; // Not supported
   if (m_desc.pixelFormat.flags & DDPF_FOURCC)
   {
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT1", 4) == 0)
+    if (strncmp((const char*)&m_desc.pixelFormat.fourcc, "DXT1", 4) == 0)
       return XB_FMT_DXT1;
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT3", 4) == 0)
+    if (strncmp((const char*)&m_desc.pixelFormat.fourcc, "DXT3", 4) == 0)
       return XB_FMT_DXT3;
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "DXT5", 4) == 0)
+    if (strncmp((const char*)&m_desc.pixelFormat.fourcc, "DXT5", 4) == 0)
       return XB_FMT_DXT5;
-    if (strncmp((const char *)&m_desc.pixelFormat.fourcc, "ARGB", 4) == 0)
+    if (strncmp((const char*)&m_desc.pixelFormat.fourcc, "ARGB", 4) == 0)
       return XB_FMT_A8R8G8B8;
   }
   return 0;
@@ -66,12 +66,12 @@ unsigned int CDDSImage::GetSize() const
   return m_desc.linearSize;
 }
 
-unsigned char *CDDSImage::GetData() const
+unsigned char* CDDSImage::GetData() const
 {
   return m_data;
 }
 
-bool CDDSImage::ReadFile(const std::string &inputFile)
+bool CDDSImage::ReadFile(const std::string& inputFile)
 {
   // open the file
   CFile file;
@@ -85,7 +85,7 @@ bool CDDSImage::ReadFile(const std::string &inputFile)
   if (file.Read(&m_desc, sizeof(m_desc)) != sizeof(m_desc))
     return false;
   if (!GetFormat())
-    return false;  // not supported
+    return false; // not supported
 
   // allocate our data
   m_data = new unsigned char[m_desc.linearSize];
@@ -100,7 +100,9 @@ bool CDDSImage::ReadFile(const std::string &inputFile)
   return true;
 }
 
-unsigned int CDDSImage::GetStorageRequirements(unsigned int width, unsigned int height, unsigned int format)
+unsigned int CDDSImage::GetStorageRequirements(unsigned int width,
+                                               unsigned int height,
+                                               unsigned int format)
 {
   switch (format)
   {
@@ -131,7 +133,7 @@ void CDDSImage::Allocate(unsigned int width, unsigned int height, unsigned int f
   m_data = new unsigned char[m_desc.linearSize];
 }
 
-const char *CDDSImage::GetFourCC(unsigned int format)
+const char* CDDSImage::GetFourCC(unsigned int format)
 {
   switch (format)
   {

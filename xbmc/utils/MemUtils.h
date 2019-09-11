@@ -26,5 +26,5 @@ struct MemoryStatus
 void* AlignedMalloc(size_t s, size_t alignTo);
 void AlignedFree(void* p);
 void GetMemoryStatus(MemoryStatus* buffer);
-}
-}
+} // namespace MEMORY
+} // namespace KODI

@@ -37,7 +37,12 @@ using namespace MUSIC_INFO;
 using namespace JSONRPC;
 using namespace XFILE;
 
-bool CFileItemHandler::GetField(const std::string &field, const CVariant &info, const CFileItemPtr &item, CVariant &result, bool &fetchedArt, CThumbLoader *thumbLoader /* = NULL */)
+bool CFileItemHandler::GetField(const std::string& field,
+                                const CVariant& info,
+                                const CFileItemPtr& item,
+                                CVariant& result,
+                                bool& fetchedArt,
+                                CThumbLoader* thumbLoader /* = NULL */)
 {
   if (result.isMember(field) && !result[field].empty())
     return true;
@@ -118,7 +123,8 @@ bool CFileItemHandler::GetField(const std::string &field, const CVariant &info, 
     if (field == "thumbnail")
     {
       if (thumbLoader != NULL && !item->HasArt("thumb") && !fetchedArt &&
-        ((item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iDbId > -1) || (item->HasMusicInfoTag() && item->GetMusicInfoTag()->GetDatabaseId() > -1)))
+          ((item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iDbId > -1) ||
+           (item->HasMusicInfoTag() && item->GetMusicInfoTag()->GetDatabaseId() > -1)))
       {
         thumbLoader->FillLibraryArt(*item);
         fetchedArt = true;
@@ -137,7 +143,8 @@ bool CFileItemHandler::GetField(const std::string &field, const CVariant &info, 
     if (field == "fanart")
     {
       if (thumbLoader != NULL && !item->HasArt("fanart") && !fetchedArt &&
-        ((item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iDbId > -1) || (item->HasMusicInfoTag() && item->GetMusicInfoTag()->GetDatabaseId() > -1)))
+          ((item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iDbId > -1) ||
+           (item->HasMusicInfoTag() && item->GetMusicInfoTag()->GetDatabaseId() > -1)))
       {
         thumbLoader->FillLibraryArt(*item);
         fetchedArt = true;
@@ -175,7 +182,11 @@ bool CFileItemHandler::GetField(const std::string &field, const CVariant &info, 
   return false;
 }
 
-void CFileItemHandler::FillDetails(const ISerializable *info, const CFileItemPtr &item, std::set<std::string> &fields, CVariant &result, CThumbLoader *thumbLoader /* = NULL */)
+void CFileItemHandler::FillDetails(const ISerializable* info,
+                                   const CFileItemPtr& item,
+                                   std::set<std::string>& fields,
+                                   CVariant& result,
+                                   CThumbLoader* thumbLoader /* = NULL */)
 {
   if (info == NULL || fields.empty())
     return;
@@ -195,12 +206,26 @@ void CFileItemHandler::FillDetails(const ISerializable *info, const CFileItemPtr
   }
 }
 
-void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const char *resultname, CFileItemList &items, const CVariant &parameterObject, CVariant &result, bool sortLimit /* = true */)
+void CFileItemHandler::HandleFileItemList(const char* ID,
+                                          bool allowFile,
+                                          const char* resultname,
+                                          CFileItemList& items,
+                                          const CVariant& parameterObject,
+                                          CVariant& result,
+                                          bool sortLimit /* = true */)
 {
-  HandleFileItemList(ID, allowFile, resultname, items, parameterObject, result, items.Size(), sortLimit);
+  HandleFileItemList(ID, allowFile, resultname, items, parameterObject, result, items.Size(),
+                     sortLimit);
 }
 
-void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const char *resultname, CFileItemList &items, const CVariant &parameterObject, CVariant &result, int size, bool sortLimit /* = true */)
+void CFileItemHandler::HandleFileItemList(const char* ID,
+                                          bool allowFile,
+                                          const char* resultname,
+                                          CFileItemList& items,
+                                          const CVariant& parameterObject,
+                                          CVariant& result,
+                                          int size,
+                                          bool sortLimit /* = true */)
 {
   int start, end;
   HandleLimits(parameterObject, result, size, start, end);
@@ -213,7 +238,7 @@ void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const 
     end = items.Size();
   }
 
-  CThumbLoader *thumbLoader = NULL;
+  CThumbLoader* thumbLoader = NULL;
   if (end - start > 0)
   {
     if (items.Get(start)->HasVideoInfoTag())
@@ -228,32 +253,52 @@ void CFileItemHandler::HandleFileItemList(const char *ID, bool allowFile, const 
   std::set<std::string> fields;
   if (parameterObject.isMember("properties") && parameterObject["properties"].isArray())
   {
-    for (CVariant::const_iterator_array field = parameterObject["properties"].begin_array(); field != parameterObject["properties"].end_array(); field++)
+    for (CVariant::const_iterator_array field = parameterObject["properties"].begin_array();
+         field != parameterObject["properties"].end_array(); field++)
       fields.insert(field->asString());
   }
 
   for (int i = start; i < end; i++)
   {
     CFileItemPtr item = items.Get(i);
-    HandleFileItem(ID, allowFile, resultname, item, parameterObject, fields, result, true, thumbLoader);
+    HandleFileItem(ID, allowFile, resultname, item, parameterObject, fields, result, true,
+                   thumbLoader);
   }
 
   delete thumbLoader;
 }
 
-void CFileItemHandler::HandleFileItem(const char *ID, bool allowFile, const char *resultname, CFileItemPtr item, const CVariant &parameterObject, const CVariant &validFields, CVariant &result, bool append /* = true */, CThumbLoader *thumbLoader /* = NULL */)
+void CFileItemHandler::HandleFileItem(const char* ID,
+                                      bool allowFile,
+                                      const char* resultname,
+                                      CFileItemPtr item,
+                                      const CVariant& parameterObject,
+                                      const CVariant& validFields,
+                                      CVariant& result,
+                                      bool append /* = true */,
+                                      CThumbLoader* thumbLoader /* = NULL */)
 {
   std::set<std::string> fields;
   if (parameterObject.isMember("properties") && parameterObject["properties"].isArray())
   {
-    for (CVariant::const_iterator_array field = parameterObject["properties"].begin_array(); field != parameterObject["properties"].end_array(); field++)
+    for (CVariant::const_iterator_array field = parameterObject["properties"].begin_array();
+         field != parameterObject["properties"].end_array(); field++)
       fields.insert(field->asString());
   }
 
-  HandleFileItem(ID, allowFile, resultname, item, parameterObject, fields, result, append, thumbLoader);
+  HandleFileItem(ID, allowFile, resultname, item, parameterObject, fields, result, append,
+                 thumbLoader);
 }
 
-void CFileItemHandler::HandleFileItem(const char *ID, bool allowFile, const char *resultname, CFileItemPtr item, const CVariant &parameterObject, const std::set<std::string> &validFields, CVariant &result, bool append /* = true */, CThumbLoader *thumbLoader /* = NULL */)
+void CFileItemHandler::HandleFileItem(const char* ID,
+                                      bool allowFile,
+                                      const char* resultname,
+                                      CFileItemPtr item,
+                                      const CVariant& parameterObject,
+                                      const std::set<std::string>& validFields,
+                                      CVariant& result,
+                                      bool append /* = true */,
+                                      CThumbLoader* thumbLoader /* = NULL */)
 {
   CVariant object;
   std::set<std::string> fields(validFields.begin(), validFields.end());
@@ -295,13 +340,14 @@ void CFileItemHandler::HandleFileItem(const char *ID, bool allowFile, const char
     if (ID)
     {
       if (item->HasPVRChannelInfoTag() && item->GetPVRChannelInfoTag()->ChannelID() > 0)
-         object[ID] = item->GetPVRChannelInfoTag()->ChannelID();
-      else if (item->HasEPGInfoTag() && item->GetEPGInfoTag()->UniqueBroadcastID() > EPG_TAG_INVALID_UID)
-         object[ID] = item->GetEPGInfoTag()->UniqueBroadcastID();
+        object[ID] = item->GetPVRChannelInfoTag()->ChannelID();
+      else if (item->HasEPGInfoTag() &&
+               item->GetEPGInfoTag()->UniqueBroadcastID() > EPG_TAG_INVALID_UID)
+        object[ID] = item->GetEPGInfoTag()->UniqueBroadcastID();
       else if (item->HasPVRRecordingInfoTag() && item->GetPVRRecordingInfoTag()->m_iRecordingId > 0)
-         object[ID] = item->GetPVRRecordingInfoTag()->m_iRecordingId;
+        object[ID] = item->GetPVRRecordingInfoTag()->m_iRecordingId;
       else if (item->HasPVRTimerInfoTag() && item->GetPVRTimerInfoTag()->m_iTimerId > 0)
-         object[ID] = item->GetPVRTimerInfoTag()->m_iTimerId;
+        object[ID] = item->GetPVRTimerInfoTag()->m_iTimerId;
       else if (item->HasMusicInfoTag() && item->GetMusicInfoTag()->GetDatabaseId() > 0)
         object[ID] = item->GetMusicInfoTag()->GetDatabaseId();
       else if (item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iDbId > 0)
@@ -322,7 +368,8 @@ void CFileItemHandler::HandleFileItem(const char *ID, bool allowFile, const char
         else if (item->HasVideoInfoTag() && !item->GetVideoInfoTag()->m_type.empty())
         {
           std::string type = item->GetVideoInfoTag()->m_type;
-          if (type == MediaTypeMovie || type == MediaTypeTvShow || type == MediaTypeEpisode || type == MediaTypeMusicVideo)
+          if (type == MediaTypeMovie || type == MediaTypeTvShow || type == MediaTypeEpisode ||
+              type == MediaTypeMusicVideo)
             object["type"] = type;
         }
         else if (item->HasPictureInfoTag())
@@ -390,20 +437,21 @@ void CFileItemHandler::HandleFileItem(const char *ID, bool allowFile, const char
   }
 }
 
-bool CFileItemHandler::FillFileItemList(const CVariant &parameterObject, CFileItemList &list)
+bool CFileItemHandler::FillFileItemList(const CVariant& parameterObject, CFileItemList& list)
 {
   CAudioLibrary::FillFileItemList(parameterObject, list);
   CVideoLibrary::FillFileItemList(parameterObject, list);
   CFileOperations::FillFileItemList(parameterObject, list);
 
   std::string file = parameterObject["file"].asString();
-  if (!file.empty() && (URIUtils::IsURL(file) || (CFile::Exists(file) && !CDirectory::Exists(file))))
+  if (!file.empty() &&
+      (URIUtils::IsURL(file) || (CFile::Exists(file) && !CDirectory::Exists(file))))
   {
     bool added = false;
     for (int index = 0; index < list.Size(); index++)
     {
-      if (list[index]->GetDynPath() == file ||
-          list[index]->GetMusicInfoTag()->GetURL() == file || list[index]->GetVideoInfoTag()->GetPath() == file)
+      if (list[index]->GetDynPath() == file || list[index]->GetMusicInfoTag()->GetURL() == file ||
+          list[index]->GetVideoInfoTag()->GetPath() == file)
       {
         added = true;
         break;
@@ -432,7 +480,7 @@ bool CFileItemHandler::FillFileItemList(const CVariant &parameterObject, CFileIt
   return (list.Size() > 0);
 }
 
-void CFileItemHandler::Sort(CFileItemList &items, const CVariant &parameterObject)
+void CFileItemHandler::Sort(CFileItemList& items, const CVariant& parameterObject)
 {
   SortDescription sorting;
   if (!ParseSorting(parameterObject, sorting.sortBy, sorting.sortOrder, sorting.sortAttributes))

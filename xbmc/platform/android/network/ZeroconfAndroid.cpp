@@ -23,9 +23,14 @@ CZeroconfAndroid::~CZeroconfAndroid()
   doStop();
 }
 
-bool CZeroconfAndroid::doPublishService(const std::string& fcr_identifier, const std::string& fcr_type, const std::string& fcr_name, unsigned int f_port, const std::vector<std::pair<std::string, std::string> >& txt)
+bool CZeroconfAndroid::doPublishService(const std::string& fcr_identifier,
+                                        const std::string& fcr_type,
+                                        const std::string& fcr_name,
+                                        unsigned int f_port,
+                                        const std::vector<std::pair<std::string, std::string>>& txt)
 {
-  CLog::Log(LOGDEBUG, "ZeroconfAndroid: identifier: %s type: %s name:%s port:%i", fcr_identifier.c_str(), fcr_type.c_str(), fcr_name.c_str(), f_port);
+  CLog::Log(LOGDEBUG, "ZeroconfAndroid: identifier: %s type: %s name:%s port:%i",
+            fcr_identifier.c_str(), fcr_type.c_str(), fcr_name.c_str(), f_port);
 
   struct tServiceRef newService;
 
@@ -36,11 +41,12 @@ bool CZeroconfAndroid::doPublishService(const std::string& fcr_identifier, const
 
   for (auto it : txt)
   {
-//    CLog::Log(LOGDEBUG, "ZeroconfAndroid: key:%s, value:%s", it.first.c_str(),it.second.c_str());
+    //    CLog::Log(LOGDEBUG, "ZeroconfAndroid: key:%s, value:%s", it.first.c_str(),it.second.c_str());
     newService.serviceInfo.setAttribute(it.first, it.second);
   }
 
-  m_manager.registerService(newService.serviceInfo, 1 /* PROTOCOL_DNS_SD */, newService.registrationListener);
+  m_manager.registerService(newService.serviceInfo, 1 /* PROTOCOL_DNS_SD */,
+                            newService.registrationListener);
 
   CSingleLock lock(m_data_guard);
   newService.updateNumber = 0;
@@ -54,12 +60,12 @@ bool CZeroconfAndroid::doForceReAnnounceService(const std::string& fcr_identifie
   bool ret = false;
   CSingleLock lock(m_data_guard);
   tServiceMap::iterator it = m_services.find(fcr_identifier);
-  if(it != m_services.end())
+  if (it != m_services.end())
   {
     // for force announcing a service with mdns we need
     // to change a txt record - so we diddle between
     // even and odd dummy records here
-    if ( (it->second.updateNumber % 2) == 0)
+    if ((it->second.updateNumber % 2) == 0)
       it->second.serviceInfo.setAttribute("xbmcdummy", "evendummy");
     else
       it->second.serviceInfo.setAttribute("xbmcdummy", "odddummy");
@@ -67,7 +73,8 @@ bool CZeroconfAndroid::doForceReAnnounceService(const std::string& fcr_identifie
 
     m_manager.unregisterService(it->second.registrationListener);
     it->second.registrationListener = jni::CJNIXBMCNsdManagerRegistrationListener();
-    m_manager.registerService(it->second.serviceInfo, 1 /* PROTOCOL_DNS_SD */, it->second.registrationListener);
+    m_manager.registerService(it->second.serviceInfo, 1 /* PROTOCOL_DNS_SD */,
+                              it->second.registrationListener);
   }
   return ret;
 }
@@ -76,7 +83,7 @@ bool CZeroconfAndroid::doRemoveService(const std::string& fcr_ident)
 {
   CSingleLock lock(m_data_guard);
   tServiceMap::iterator it = m_services.find(fcr_ident);
-  if(it != m_services.end())
+  if (it != m_services.end())
   {
     m_manager.unregisterService(it->second.registrationListener);
     m_services.erase(it);
@@ -92,7 +99,7 @@ void CZeroconfAndroid::doStop()
   {
     CSingleLock lock(m_data_guard);
     CLog::Log(LOGDEBUG, "ZeroconfAndroid: Shutdown services");
-    for(auto it : m_services)
+    for (auto it : m_services)
     {
       m_manager.unregisterService(it.second.registrationListener);
       CLog::Log(LOGDEBUG, "CZeroconfAndroid: Removed service %s", it.first.c_str());
@@ -100,4 +107,3 @@ void CZeroconfAndroid::doStop()
     m_services.clear();
   }
 }
-

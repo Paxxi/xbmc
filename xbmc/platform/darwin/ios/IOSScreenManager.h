@@ -14,33 +14,34 @@
 @class XBMCController;
 @class IOSExternalTouchController;
 
-@interface IOSScreenManager : NSObject {
+@interface IOSScreenManager : NSObject
+{
 
-  unsigned int  _screenIdx;
+  unsigned int _screenIdx;
   bool _externalScreen;
   IOSEAGLView* __weak _glView;
-  IOSExternalTouchController *_externalTouchController;
+  IOSExternalTouchController* _externalTouchController;
   UIInterfaceOrientation _lastTouchControllerOrientation;
 }
-@property (readonly, getter=GetScreenIdx)unsigned int  _screenIdx;
-@property (readonly, getter=isExternalScreen)bool _externalScreen;
+@property(readonly, getter=GetScreenIdx) unsigned int _screenIdx;
+@property(readonly, getter=isExternalScreen) bool _externalScreen;
 @property(weak, setter=setView:) IOSEAGLView* _glView;
 @property UIInterfaceOrientation _lastTouchControllerOrientation;
 
 // init the screenmanager with our eaglview
 //- (id)      initWithView:(IOSEAGLView *)view;
 // change to screen with the given mode (might also change only the mode on the same screen)
-- (bool)    changeScreen: (unsigned int)screenIdx withMode:(UIScreenMode *)mode;
+- (bool)changeScreen:(unsigned int)screenIdx withMode:(UIScreenMode*)mode;
 // called when app detects disconnection of external screen - will move xbmc to the internal screen then
-- (void)    screenDisconnect;
+- (void)screenDisconnect;
 // wrapper for g_Windowing.UpdateResolutions();
-+ (void)    updateResolutions;
++ (void)updateResolutions;
 // fades the screen from black back to full alpha after delaySecs seconds
-- (void)    fadeFromBlack:(CGFloat) delaySecs;
+- (void)fadeFromBlack:(CGFloat)delaySecs;
 // returns true if switching to screenIdx will change from internal to external screen
-- (bool)    willSwitchToExternal:(unsigned int) screenIdx;
+- (bool)willSwitchToExternal:(unsigned int)screenIdx;
 // returns true if switching to screenIdx will change from external to internal screen
-- (bool)    willSwitchToInternal:(unsigned int) screenIdx;
+- (bool)willSwitchToInternal:(unsigned int)screenIdx;
 // singleton access
-+ (id)      sharedInstance;
++ (id)sharedInstance;
 @end

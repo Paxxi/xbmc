@@ -18,44 +18,66 @@ using namespace KODI::WINDOWING::WAYLAND;
 namespace
 {
 
-void TryBind(wayland::registry_t& registry, wayland::proxy_t& target, std::uint32_t name, std::string const& interface, std::uint32_t minVersion, std::uint32_t maxVersion, std::uint32_t offeredVersion)
+void TryBind(wayland::registry_t& registry,
+             wayland::proxy_t& target,
+             std::uint32_t name,
+             std::string const& interface,
+             std::uint32_t minVersion,
+             std::uint32_t maxVersion,
+             std::uint32_t offeredVersion)
 {
   if (offeredVersion < minVersion)
   {
-    CLog::Log(LOGWARNING, "Not binding Wayland protocol %s because server has only version %u (we need at least version %u)", interface.c_str(), offeredVersion, minVersion);
+    CLog::Log(LOGWARNING,
+              "Not binding Wayland protocol %s because server has only version %u (we need at "
+              "least version %u)",
+              interface.c_str(), offeredVersion, minVersion);
   }
   else
   {
     // Binding below the offered version is OK
     auto bindVersion = std::min(maxVersion, offeredVersion);
-    CLog::Log(LOGDEBUG, "Binding Wayland protocol %s version %u (server has version %u)", interface.c_str(), bindVersion, offeredVersion);
+    CLog::Log(LOGDEBUG, "Binding Wayland protocol %s version %u (server has version %u)",
+              interface.c_str(), bindVersion, offeredVersion);
     registry.bind(name, target, bindVersion);
   }
 }
 
-}
+} // namespace
 
 CRegistry::CRegistry(CConnection& connection)
-: m_connection{connection}
+  : m_connection{connection}
 {
 }
 
-void CRegistry::RequestSingletonInternal(wayland::proxy_t& target, std::string const& interfaceName, std::uint32_t minVersion, std::uint32_t maxVersion, bool required)
+void CRegistry::RequestSingletonInternal(wayland::proxy_t& target,
+                                         std::string const& interfaceName,
+                                         std::uint32_t minVersion,
+                                         std::uint32_t maxVersion,
+                                         bool required)
 {
   if (m_registry)
   {
     throw std::logic_error("Cannot request more binds from registry after binding has started");
   }
-  m_singletonBinds.emplace(std::piecewise_construct, std::forward_as_tuple(interfaceName), std::forward_as_tuple(target, minVersion, maxVersion, required));
+  m_singletonBinds.emplace(std::piecewise_construct, std::forward_as_tuple(interfaceName),
+                           std::forward_as_tuple(target, minVersion, maxVersion, required));
 }
 
-void CRegistry::RequestInternal(std::function<wayland::proxy_t()> constructor, const std::string& interfaceName, std::uint32_t minVersion, std::uint32_t maxVersion, AddHandler addHandler, RemoveHandler removeHandler)
+void CRegistry::RequestInternal(std::function<wayland::proxy_t()> constructor,
+                                const std::string& interfaceName,
+                                std::uint32_t minVersion,
+                                std::uint32_t maxVersion,
+                                AddHandler addHandler,
+                                RemoveHandler removeHandler)
 {
   if (m_registry)
   {
     throw std::logic_error("Cannot request more binds from registry after binding has started");
   }
-  m_binds.emplace(std::piecewise_construct, std::forward_as_tuple(interfaceName), std::forward_as_tuple(constructor, minVersion, maxVersion, addHandler, removeHandler));
+  m_binds.emplace(
+      std::piecewise_construct, std::forward_as_tuple(interfaceName),
+      std::forward_as_tuple(constructor, minVersion, maxVersion, addHandler, removeHandler));
 }
 
 void CRegistry::Bind()
@@ -81,8 +103,8 @@ void CRegistry::Bind()
 
   m_registry = displayProxy.get_registry();
 
-  m_registry.on_global() = [this] (std::uint32_t name, std::string interface, std::uint32_t version)
-  {
+  m_registry.on_global() = [this](std::uint32_t name, std::string interface,
+                                  std::uint32_t version) {
     {
       auto it = m_singletonBinds.find(interface);
       if (it != m_singletonBinds.end())
@@ -91,7 +113,8 @@ void CRegistry::Bind()
         auto registryProxy = m_registry.proxy_create_wrapper();
         // Events on the bound global should always go to the main queue
         registryProxy.set_queue(wayland::event_queue_t());
-        TryBind(registryProxy, bind.target, name, interface, bind.minVersion, bind.maxVersion, version);
+        TryBind(registryProxy, bind.target, name, interface, bind.minVersion, bind.maxVersion,
+                version);
         return;
       }
     }
@@ -116,8 +139,7 @@ void CRegistry::Bind()
     }
   };
 
-  m_registry.on_global_remove() = [this] (std::uint32_t name)
-  {
+  m_registry.on_global_remove() = [this](std::uint32_t name) {
     auto it = m_boundNames.find(name);
     if (it != m_boundNames.end())
     {

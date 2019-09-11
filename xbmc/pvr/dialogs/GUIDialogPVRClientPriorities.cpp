@@ -20,8 +20,8 @@
 
 using namespace PVR;
 
-CGUIDialogPVRClientPriorities::CGUIDialogPVRClientPriorities() :
-  CGUIDialogSettingsManualBase(WINDOW_DIALOG_PVR_CLIENT_PRIORITIES, "DialogSettings.xml")
+CGUIDialogPVRClientPriorities::CGUIDialogPVRClientPriorities()
+  : CGUIDialogSettingsManualBase(WINDOW_DIALOG_PVR_CLIENT_PRIORITIES, "DialogSettings.xml")
 {
   m_loadType = LOAD_EVERY_TIME;
 }
@@ -70,7 +70,8 @@ void CGUIDialogPVRClientPriorities::InitializeSettings()
   CServiceBroker::GetPVRManager().Clients()->GetCreatedClients(m_clients);
   for (const auto& client : m_clients)
   {
-    setting = AddEdit(group, StringUtils::Format("%i", client.second->GetID()), 13205 /* Unknown */, SettingLevel::Basic, client.second->GetPriority());
+    setting = AddEdit(group, StringUtils::Format("%i", client.second->GetID()), 13205 /* Unknown */,
+                      SettingLevel::Basic, client.second->GetPriority());
   }
 }
 
@@ -84,7 +85,8 @@ void CGUIDialogPVRClientPriorities::OnSettingChanged(std::shared_ptr<const CSett
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
 
-  m_changedValues[setting->GetId()] = std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
+  m_changedValues[setting->GetId()] =
+      std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
 }
 
 void CGUIDialogPVRClientPriorities::Save()

@@ -14,7 +14,10 @@ class CJNIXBMCDisplayManagerDisplayListener : public CJNIBase
 {
 public:
   CJNIXBMCDisplayManagerDisplayListener();
-  CJNIXBMCDisplayManagerDisplayListener(const jni::jhobject &object) : CJNIBase(object) {}
+  CJNIXBMCDisplayManagerDisplayListener(const jni::jhobject& object)
+    : CJNIBase(object)
+  {
+  }
 
   static void RegisterNatives(JNIEnv* env);
 

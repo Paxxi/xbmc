@@ -13,13 +13,15 @@
 #include "guilib/D3DResource.h"
 #include "utils/Geometry.h"
 
-#include <DirectXMath.h>
 #include <vector>
+
+#include <DirectXMath.h>
 #include <wrl/client.h>
 
-extern "C" {
-#include <libavutil/pixfmt.h>
+extern "C"
+{
 #include <libavutil/mastering_display_metadata.h>
+#include <libavutil/pixfmt.h>
 }
 class CRenderBuffer;
 
@@ -32,12 +34,12 @@ protected:
   virtual ~CWinShader() = default;
 
   virtual bool CreateVertexBuffer(unsigned int vertCount, unsigned int vertSize);
-  virtual bool LockVertexBuffer(void **data);
+  virtual bool LockVertexBuffer(void** data);
   virtual bool UnlockVertexBuffer();
   virtual bool LoadEffect(const std::string& filename, DefinesMap* defines);
   virtual bool Execute(const std::vector<CD3DTexture*>& targets, unsigned int vertexIndexStep);
-  virtual void SetStepParams(unsigned stepIndex) { }
-  virtual bool CreateInputLayout(D3D11_INPUT_ELEMENT_DESC *layout, unsigned numElements);
+  virtual void SetStepParams(unsigned stepIndex) {}
+  virtual bool CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* layout, unsigned numElements);
 
   CD3DEffect m_effect;
   CD3DTexture* m_target = nullptr;
@@ -58,30 +60,51 @@ public:
   explicit COutputShader() = default;
   ~COutputShader() = default;
 
-  void ApplyEffectParameters(CD3DEffect &effect, unsigned sourceWidth, unsigned sourceHeight);
-  void GetDefines(DefinesMap &map) const;
+  void ApplyEffectParameters(CD3DEffect& effect, unsigned sourceWidth, unsigned sourceHeight);
+  void GetDefines(DefinesMap& map) const;
   bool Create(bool useLUT, bool useDithering, int ditherDepth, bool toneMapping);
-  void Render(CD3DTexture& sourceTexture, CRect sourceRect, const CPoint points[4]
-            , CD3DTexture& target, unsigned range = 0, float contrast = 0.5f, float brightness = 0.5f);
-  void Render(CD3DTexture& sourceTexture, CRect sourceRect, CRect destRect
-            , CD3DTexture& target, unsigned range = 0, float contrast = 0.5f, float brightness = 0.5f);
-  void SetLUT(int lutSize, ID3D11ShaderResourceView *pLUTView);
-  void SetDisplayMetadata(bool hasDisplayMetadata, AVMasteringDisplayMetadata displayMetadata,
-                          bool hasLightMetadata, AVContentLightMetadata lightMetadata);
+  void Render(CD3DTexture& sourceTexture,
+              CRect sourceRect,
+              const CPoint points[4],
+              CD3DTexture& target,
+              unsigned range = 0,
+              float contrast = 0.5f,
+              float brightness = 0.5f);
+  void Render(CD3DTexture& sourceTexture,
+              CRect sourceRect,
+              CRect destRect,
+              CD3DTexture& target,
+              unsigned range = 0,
+              float contrast = 0.5f,
+              float brightness = 0.5f);
+  void SetLUT(int lutSize, ID3D11ShaderResourceView* pLUTView);
+  void SetDisplayMetadata(bool hasDisplayMetadata,
+                          AVMasteringDisplayMetadata displayMetadata,
+                          bool hasLightMetadata,
+                          AVContentLightMetadata lightMetadata);
   void SetToneMapParam(float param) { m_toneMappingParam = param; }
 
-  static bool CreateLUTView(int lutSize, uint16_t* lutData, bool isRGB, ID3D11ShaderResourceView** ppLUTView);
+  static bool CreateLUTView(int lutSize,
+                            uint16_t* lutData,
+                            bool isRGB,
+                            ID3D11ShaderResourceView** ppLUTView);
 
 private:
-  struct Vertex 
+  struct Vertex
   {
     float x, y, z;
     float tu, tv;
   };
 
   bool HasLUT() const { return m_lutSize && m_pLUTView; }
-  void PrepareParameters(unsigned sourceWidth, unsigned sourceHeight, CRect sourceRect, const CPoint points[4]);
-  void SetShaderParameters(CD3DTexture &sourceTexture, unsigned range, float contrast, float brightness);
+  void PrepareParameters(unsigned sourceWidth,
+                         unsigned sourceHeight,
+                         CRect sourceRect,
+                         const CPoint points[4]);
+  void SetShaderParameters(CD3DTexture& sourceTexture,
+                           unsigned range,
+                           float contrast,
+                           float brightness);
   void CreateDitherView();
 
   bool m_useLut = false;
@@ -110,7 +133,9 @@ public:
   explicit CYUV2RGBShader() = default;
   ~CYUV2RGBShader() = default;
 
-  bool Create(AVPixelFormat fmt, AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries, 
+  bool Create(AVPixelFormat fmt,
+              AVColorPrimaries dstPrimaries,
+              AVColorPrimaries srcPrimaries,
               const std::shared_ptr<COutputShader>& pOutShader = nullptr);
   void Render(CRect sourceRect, CPoint dest[], CRenderBuffer* videoBuffer, CD3DTexture& target);
   void SetParams(float contrast, float black, bool limited) const;
@@ -121,9 +146,10 @@ protected:
   void SetShaderParameters(CRenderBuffer* videoBuffer);
 
 private:
-  struct Vertex {
+  struct Vertex
+  {
     float x, y, z;
-    float tu, tv;   // Y Texture coordinates
+    float tu, tv; // Y Texture coordinates
     float tu2, tv2; // U and V Textures coordinates
   };
 
@@ -141,11 +167,17 @@ class CConvolutionShader : public CWinShader
 {
 public:
   virtual ~CConvolutionShader() = default;
-  virtual bool Create(ESCALINGMETHOD method, const std::shared_ptr<COutputShader>& pOutShader = nullptr) = 0;
-  virtual void Render(CD3DTexture& sourceTexture, CD3DTexture& target,
-                      CRect sourceRect, CRect destRect, bool useLimitRange) = 0;
+  virtual bool Create(ESCALINGMETHOD method,
+                      const std::shared_ptr<COutputShader>& pOutShader = nullptr) = 0;
+  virtual void Render(CD3DTexture& sourceTexture,
+                      CD3DTexture& target,
+                      CRect sourceRect,
+                      CRect destRect,
+                      bool useLimitRange) = 0;
+
 protected:
-  struct Vertex {
+  struct Vertex
+  {
     float x, y, z;
     float tu, tv;
   };
@@ -154,7 +186,10 @@ protected:
 
   virtual bool ChooseKernelD3DFormat();
   virtual bool CreateHQKernel(ESCALINGMETHOD method);
-  virtual void SetShaderParameters(CD3DTexture &sourceTexture, float* texSteps, int texStepsCount, bool useLimitRange) = 0;
+  virtual void SetShaderParameters(CD3DTexture& sourceTexture,
+                                   float* texSteps,
+                                   int texStepsCount,
+                                   bool useLimitRange) = 0;
 
   bool m_floattex = false;
   bool m_rgba = false;
@@ -168,15 +203,23 @@ class CConvolutionShader1Pass : public CConvolutionShader
 public:
   explicit CConvolutionShader1Pass() = default;
 
-  bool Create(ESCALINGMETHOD method, const std::shared_ptr<COutputShader>& pOutputShader = nullptr) override;
-  void Render(CD3DTexture& sourceTexture, CD3DTexture& target,
-              CRect sourceRect, CRect destRect, bool useLimitRange) override;
+  bool Create(ESCALINGMETHOD method,
+              const std::shared_ptr<COutputShader>& pOutputShader = nullptr) override;
+  void Render(CD3DTexture& sourceTexture,
+              CD3DTexture& target,
+              CRect sourceRect,
+              CRect destRect,
+              bool useLimitRange) override;
 
 protected:
-  void PrepareParameters(unsigned int sourceWidth, unsigned int sourceHeight,
-                         CRect sourceRect, CRect destRect);
-  void SetShaderParameters(CD3DTexture &sourceTexture, float* texSteps,
-                           int texStepsCount, bool useLimitRange) override;
+  void PrepareParameters(unsigned int sourceWidth,
+                         unsigned int sourceHeight,
+                         CRect sourceRect,
+                         CRect destRect);
+  void SetShaderParameters(CD3DTexture& sourceTexture,
+                           float* texSteps,
+                           int texStepsCount,
+                           bool useLimitRange) override;
 
 private:
   unsigned int m_sourceWidth = 0;
@@ -191,19 +234,28 @@ public:
   explicit CConvolutionShaderSeparable() = default;
   ~CConvolutionShaderSeparable() = default;
 
-  bool Create(ESCALINGMETHOD method, const std::shared_ptr<COutputShader>& pOutputShader = nullptr) override;
-  void Render(CD3DTexture& sourceTexture, CD3DTexture& target,
-              CRect sourceRect, CRect destRect, bool useLimitRange) override;
+  bool Create(ESCALINGMETHOD method,
+              const std::shared_ptr<COutputShader>& pOutputShader = nullptr) override;
+  void Render(CD3DTexture& sourceTexture,
+              CD3DTexture& target,
+              CRect sourceRect,
+              CRect destRect,
+              bool useLimitRange) override;
 
 protected:
   bool ChooseIntermediateD3DFormat();
   bool CreateIntermediateRenderTarget(unsigned int width, unsigned int height);
   bool ClearIntermediateRenderTarget();
-  void PrepareParameters(unsigned int sourceWidth, unsigned int sourceHeight,
-                         unsigned int destWidth, unsigned int destHeight,
-                         CRect sourceRect, CRect destRect);
-  void SetShaderParameters(CD3DTexture &sourceTexture, float* texSteps,
-                           int texStepsCount, bool useLimitRange) override;
+  void PrepareParameters(unsigned int sourceWidth,
+                         unsigned int sourceHeight,
+                         unsigned int destWidth,
+                         unsigned int destHeight,
+                         CRect sourceRect,
+                         CRect destRect);
+  void SetShaderParameters(CD3DTexture& sourceTexture,
+                           float* texSteps,
+                           int texStepsCount,
+                           bool useLimitRange) override;
   void SetStepParams(unsigned iPass) override;
 
 private:

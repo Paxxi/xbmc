@@ -14,8 +14,10 @@
 class CTestStopWatchThread : public CThread
 {
 public:
-  CTestStopWatchThread() :
-    CThread("TestStopWatch"){}
+  CTestStopWatchThread()
+    : CThread("TestStopWatch")
+  {
+  }
 };
 
 TEST(TestStopWatch, Initialization)

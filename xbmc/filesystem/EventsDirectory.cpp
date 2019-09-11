@@ -16,7 +16,7 @@
 
 using namespace XFILE;
 
-bool CEventsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CEventsDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   items.ClearProperties();
   items.SetContent("events");

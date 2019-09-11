@@ -53,7 +53,7 @@ bool CScreenshotSurfaceWindows::Capture()
   if (!backbuffer.Get())
     return false;
 
-  D3D11_TEXTURE2D_DESC desc = { 0 };
+  D3D11_TEXTURE2D_DESC desc = {0};
   backbuffer.GetDesc(&desc);
   desc.Usage = D3D11_USAGE_STAGING;
   desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
@@ -77,7 +77,8 @@ bool CScreenshotSurfaceWindows::Capture()
         // convert R10G10B10A2 -> B8G8R8A8
         for (int y = 0; y < m_height; y++)
         {
-          uint32_t* pixels10 = reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(res.pData) + y * res.RowPitch);
+          uint32_t* pixels10 =
+              reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(res.pData) + y * res.RowPitch);
           uint8_t* pixels8 = m_buffer + y * m_stride;
 
           for (int x = 0; x < m_width; x++, pixels10++, pixels8 += 4)

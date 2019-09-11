@@ -17,7 +17,7 @@ public:
   CGUIDialogSlider();
   ~CGUIDialogSlider(void) override;
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
   void SetModalityType(DialogModalityType type);
 
@@ -33,7 +33,13 @@ public:
    \param callbackData pointer to callback-specific data (defaults to NULL)
    \sa ISliderCallback, Display
    */
-  static void ShowAndGetInput(const std::string &label, float value, float min, float delta, float max, ISliderCallback *callback, void *callbackData = NULL);
+  static void ShowAndGetInput(const std::string& label,
+                              float value,
+                              float min,
+                              float delta,
+                              float max,
+                              ISliderCallback* callback,
+                              void* callbackData = NULL);
 
   /*! \brief Show the slider dialog as a response to user input
    Shows the slider with the given values for a short period of time, used for UI feedback of a set user action.
@@ -46,12 +52,19 @@ public:
    \param callback callback class that implements ISliderCallback::OnSliderChange
    \sa ISliderCallback, ShowAndGetInput
    */
-  static void Display(int label, float value, float min, float delta, float max, ISliderCallback *callback);
+  static void Display(
+      int label, float value, float min, float delta, float max, ISliderCallback* callback);
+
 protected:
-  void SetSlider(const std::string &label, float value, float min, float delta, float max, ISliderCallback *callback, void *callbackData);
+  void SetSlider(const std::string& label,
+                 float value,
+                 float min,
+                 float delta,
+                 float max,
+                 ISliderCallback* callback,
+                 void* callbackData);
   void OnWindowLoaded() override;
 
-  ISliderCallback *m_callback;
-  void *m_callbackData;
+  ISliderCallback* m_callback;
+  void* m_callbackData;
 };
-

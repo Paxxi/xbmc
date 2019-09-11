@@ -85,17 +85,18 @@ void CDRMPRIMETexture::Unmap()
 
 int CDRMPRIMETexture::GetColorSpace(int colorSpace)
 {
-  switch(colorSpace)
+  switch (colorSpace)
   {
-    case DRM_COLOR_YCBCR_BT2020:
-      return EGL_ITU_REC2020_EXT;
-    case DRM_COLOR_YCBCR_BT601:
-      return EGL_ITU_REC601_EXT;
-    case DRM_COLOR_YCBCR_BT709:
-      return EGL_ITU_REC709_EXT;
-    default:
-      CLog::Log(LOGERROR, "CEGLImage::%s - failed to get colorspace for: %d", __FUNCTION__, colorSpace);
-      break;
+  case DRM_COLOR_YCBCR_BT2020:
+    return EGL_ITU_REC2020_EXT;
+  case DRM_COLOR_YCBCR_BT601:
+    return EGL_ITU_REC601_EXT;
+  case DRM_COLOR_YCBCR_BT709:
+    return EGL_ITU_REC709_EXT;
+  default:
+    CLog::Log(LOGERROR, "CEGLImage::%s - failed to get colorspace for: %d", __FUNCTION__,
+              colorSpace);
+    break;
   }
 
   return -1;
@@ -103,15 +104,16 @@ int CDRMPRIMETexture::GetColorSpace(int colorSpace)
 
 int CDRMPRIMETexture::GetColorRange(int colorRange)
 {
-  switch(colorRange)
+  switch (colorRange)
   {
-    case DRM_COLOR_YCBCR_FULL_RANGE:
-      return EGL_YUV_FULL_RANGE_EXT;
-    case DRM_COLOR_YCBCR_LIMITED_RANGE:
-      return EGL_YUV_NARROW_RANGE_EXT;
-    default:
-      CLog::Log(LOGERROR, "CEGLImage::%s - failed to get colorrange for: %d", __FUNCTION__, colorRange);
-      break;
+  case DRM_COLOR_YCBCR_FULL_RANGE:
+    return EGL_YUV_FULL_RANGE_EXT;
+  case DRM_COLOR_YCBCR_LIMITED_RANGE:
+    return EGL_YUV_NARROW_RANGE_EXT;
+  default:
+    CLog::Log(LOGERROR, "CEGLImage::%s - failed to get colorrange for: %d", __FUNCTION__,
+              colorRange);
+    break;
   }
 
   return -1;

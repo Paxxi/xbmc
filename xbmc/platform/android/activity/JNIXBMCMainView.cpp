@@ -28,17 +28,17 @@ CJNIXBMCMainView* CJNIXBMCMainView::m_instance = nullptr;
 void CJNIXBMCMainView::RegisterNatives(JNIEnv* env)
 {
   jclass cClass = env->FindClass(s_className.c_str());
-  if(cClass)
+  if (cClass)
   {
-    JNINativeMethod methods[] =
-    {
-      {"_attach", "()V", (void*)&CJNIXBMCMainView::_attach},
-      {"_surfaceChanged", "(Landroid/view/SurfaceHolder;III)V", (void*)&CJNIXBMCMainView::_surfaceChanged},
-      {"_surfaceCreated", "(Landroid/view/SurfaceHolder;)V", (void*)&CJNIXBMCMainView::_surfaceCreated},
-      {"_surfaceDestroyed", "(Landroid/view/SurfaceHolder;)V", (void*)&CJNIXBMCMainView::_surfaceDestroyed}
-    };
+    JNINativeMethod methods[] = {{"_attach", "()V", (void*)&CJNIXBMCMainView::_attach},
+                                 {"_surfaceChanged", "(Landroid/view/SurfaceHolder;III)V",
+                                  (void*)&CJNIXBMCMainView::_surfaceChanged},
+                                 {"_surfaceCreated", "(Landroid/view/SurfaceHolder;)V",
+                                  (void*)&CJNIXBMCMainView::_surfaceCreated},
+                                 {"_surfaceDestroyed", "(Landroid/view/SurfaceHolder;)V",
+                                  (void*)&CJNIXBMCMainView::_surfaceDestroyed}};
 
-    env->RegisterNatives(cClass, methods, sizeof(methods)/sizeof(methods[0]));
+    env->RegisterNatives(cClass, methods, sizeof(methods) / sizeof(methods[0]));
   }
 }
 
@@ -60,7 +60,8 @@ void CJNIXBMCMainView::_attach(JNIEnv* env, jobject thiz)
     m_instance->attach(thiz);
 }
 
-void CJNIXBMCMainView::_surfaceChanged(JNIEnv *env, jobject thiz, jobject holder, jint format, jint width, jint height )
+void CJNIXBMCMainView::_surfaceChanged(
+    JNIEnv* env, jobject thiz, jobject holder, jint format, jint width, jint height)
 {
   (void)env;
 
@@ -123,6 +124,4 @@ bool CJNIXBMCMainView::isCreated() const
   if (!m_object)
     return false;
   return get_field<jboolean>(m_object, "mIsCreated");
-
 }
-

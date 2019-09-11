@@ -27,7 +27,7 @@ struct IntegerSettingOption;
 
 namespace XFILE
 {
-  class IDirectory;
+class IDirectory;
 }
 
 class CSetting;
@@ -47,20 +47,33 @@ public:
   CAutorun();
   virtual ~CAutorun();
   static bool CanResumePlayDVD(const std::string& path);
-  static bool PlayDisc(const std::string& path="", bool bypassSettings = false, bool startFromBeginning = false);
-  static bool PlayDiscAskResume(const std::string& path="");
+  static bool PlayDisc(const std::string& path = "",
+                       bool bypassSettings = false,
+                       bool startFromBeginning = false);
+  static bool PlayDiscAskResume(const std::string& path = "");
   bool IsEnabled() const;
   void Enable();
   void Disable();
   void HandleAutorun();
-  static void ExecuteAutorun(const std::string& path = "", bool bypassSettings = false, bool ignoreplaying = true, bool startFromBeginning = false);
+  static void ExecuteAutorun(const std::string& path = "",
+                             bool bypassSettings = false,
+                             bool ignoreplaying = true,
+                             bool startFromBeginning = false);
 
-  static void SettingOptionAudioCdActionsFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
+  static void SettingOptionAudioCdActionsFiller(std::shared_ptr<const CSetting> setting,
+                                                std::vector<IntegerSettingOption>& list,
+                                                int& current,
+                                                void* data);
 
 protected:
-  static bool RunDisc(XFILE::IDirectory* pDir, const std::string& strDrive, int& nAddedToPlaylist, bool bRoot, bool bypassSettings, bool startFromBeginning);
+  static bool RunDisc(XFILE::IDirectory* pDir,
+                      const std::string& strDrive,
+                      int& nAddedToPlaylist,
+                      bool bRoot,
+                      bool bypassSettings,
+                      bool startFromBeginning);
   bool m_bEnable;
 };
-}
+} // namespace MEDIA_DETECT
 
 #endif

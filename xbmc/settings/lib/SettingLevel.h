@@ -12,7 +12,8 @@
  \ingroup settings
  \brief Levels which every setting is assigned to.
  */
-enum class SettingLevel {
+enum class SettingLevel
+{
   Basic = 0,
   Standard,
   Advanced,

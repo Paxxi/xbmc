@@ -25,21 +25,24 @@ CAELimiter::CAELimiter()
   m_increase = 0.0f;
 }
 
-float CAELimiter::Run(float* frame[AE_CH_MAX], int channels, int offset /*= 0*/, bool planar /*= false*/)
+float CAELimiter::Run(float* frame[AE_CH_MAX],
+                      int channels,
+                      int offset /*= 0*/,
+                      bool planar /*= false*/)
 {
   float highest = 0.0f;
   if (!planar)
   {
-    for(int i=0; i<channels; i++)
+    for (int i = 0; i < channels; i++)
     {
-      highest = std::max(highest, fabsf(*(frame[0]+offset+i)));
+      highest = std::max(highest, fabsf(*(frame[0] + offset + i)));
     }
   }
   else
   {
-    for(int i=0; i<channels; i++)
+    for (int i = 0; i < channels; i++)
     {
-      highest = std::max(highest, fabsf(*(frame[i]+offset)));
+      highest = std::max(highest, fabsf(*(frame[i] + offset)));
     }
   }
 
@@ -47,8 +50,13 @@ float CAELimiter::Run(float* frame[AE_CH_MAX], int channels, int offset /*= 0*/,
   if (sample * m_attenuation > 1.0f)
   {
     m_attenuation = 1.0f / sample;
-    m_holdcounter = MathUtils::round_int(m_samplerate * CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_limiterHold);
-    m_increase = powf(std::min(sample, 10000.0f), 1.0f / (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_limiterRelease * m_samplerate));
+    m_holdcounter = MathUtils::round_int(
+        m_samplerate *
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_limiterHold);
+    m_increase = powf(
+        std::min(sample, 10000.0f),
+        1.0f / (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_limiterRelease *
+                m_samplerate));
   }
 
   float attenuation = m_attenuation;
@@ -72,4 +80,3 @@ float CAELimiter::Run(float* frame[AE_CH_MAX], int channels, int offset /*= 0*/,
 
   return attenuation * m_amplify;
 }
-

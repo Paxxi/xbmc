@@ -10,17 +10,17 @@
 
 #include "utils/StringUtils.h"
 
-bool StringValidation::IsInteger(const std::string &input, void *data)
+bool StringValidation::IsInteger(const std::string& input, void* data)
 {
   return StringUtils::IsInteger(input);
 }
 
-bool StringValidation::IsPositiveInteger(const std::string &input, void *data)
+bool StringValidation::IsPositiveInteger(const std::string& input, void* data)
 {
   return StringUtils::IsNaturalNumber(input);
 }
 
-bool StringValidation::IsTime(const std::string &input, void *data)
+bool StringValidation::IsTime(const std::string& input, void* data)
 {
   std::string strTime = input;
   StringUtils::Trim(strTime);

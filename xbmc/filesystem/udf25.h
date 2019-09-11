@@ -23,7 +23,8 @@
  */
 #define MAX_UDF_FILE_NAME_LEN 2048
 
-struct Partition {
+struct Partition
+{
   int valid;
   char VolumeDesc[128];
   uint16_t Flags;
@@ -35,10 +36,11 @@ struct Partition {
   uint32_t Start_Correction;
 };
 
-struct AD {
+struct AD
+{
   uint32_t Location;
   uint32_t Length;
-  uint8_t  Flags;
+  uint8_t Flags;
   uint16_t Partition;
 };
 
@@ -57,45 +59,52 @@ struct AD {
 
 #define UDF_MAX_AD_CHAINS 2000
 
-struct FileAD {
-    uint64_t Length;
-    uint32_t num_AD;
-    uint16_t Partition;
-    uint32_t Partition_Start;
-    uint32_t Partition_Start_Correction;
-    uint8_t  Type;
-    uint16_t Flags;
-    struct AD AD_chain[UDF_MAX_AD_CHAINS];
+struct FileAD
+{
+  uint64_t Length;
+  uint32_t num_AD;
+  uint16_t Partition;
+  uint32_t Partition_Start;
+  uint32_t Partition_Start_Correction;
+  uint8_t Type;
+  uint16_t Flags;
+  struct AD AD_chain[UDF_MAX_AD_CHAINS];
 };
 
-struct extent_ad {
+struct extent_ad
+{
   uint32_t location;
   uint32_t length;
 };
 
-struct avdp_t {
+struct avdp_t
+{
   struct extent_ad mvds;
   struct extent_ad rvds;
 };
 
-struct pvd_t {
+struct pvd_t
+{
   uint8_t VolumeIdentifier[32];
   uint8_t VolumeSetIdentifier[128];
 };
 
-struct lbudf {
+struct lbudf
+{
   uint32_t lb;
-  uint8_t *data;
+  uint8_t* data;
   /* needed for proper freeing */
-  uint8_t *data_base;
+  uint8_t* data_base;
 };
 
-struct icbmap {
+struct icbmap
+{
   uint32_t lbn;
-  struct FileAD  file;
+  struct FileAD file;
 };
 
-struct udf_cache {
+struct udf_cache
+{
   int avdp_valid;
   struct avdp_t avdp;
   int pvd_valid;
@@ -105,19 +114,26 @@ struct udf_cache {
   int rooticb_valid;
   struct AD rooticb;
   int lb_num;
-  struct lbudf *lbs;
+  struct lbudf* lbs;
   int map_num;
-  struct icbmap *maps;
+  struct icbmap* maps;
 };
 
-typedef enum {
-  PartitionCache, RootICBCache, LBUDFCache, MapCache, AVDPCache, PVDCache
+typedef enum
+{
+  PartitionCache,
+  RootICBCache,
+  LBUDFCache,
+  MapCache,
+  AVDPCache,
+  PVDCache
 } UDFCacheType;
 
 /*
  * DVDReaddir entry types.
  */
-typedef enum {
+typedef enum
+{
   DVD_DT_UNKNOWN = 0,
   DVD_DT_FIFO,
   DVD_DT_CHR,
@@ -133,82 +149,90 @@ typedef enum {
  * DVDReaddir structure.
  * Extended a little from POSIX to also return filesize.
  */
-typedef struct {
-  unsigned char  d_name[MAX_UDF_FILE_NAME_LEN];
+typedef struct
+{
+  unsigned char d_name[MAX_UDF_FILE_NAME_LEN];
   // "Shall not exceed 1023; Ecma-167 page 123"
-  udf_dir_type_t d_type;       // DT_REG, DT_DIR
-  unsigned int   d_namlen;
-  uint64_t       d_filesize;
+  udf_dir_type_t d_type; // DT_REG, DT_DIR
+  unsigned int d_namlen;
+  uint64_t d_filesize;
 } udf_dirent_t;
 
 
 /*
  * DVDOpendir DIR* structure
  */
-typedef struct {
+typedef struct
+{
   uint32_t dir_location;
   uint32_t dir_length;
-  uint32_t dir_current;   // Separate to _location should we one day want to
-                          // implement dir_rewind()
+  uint32_t dir_current; // Separate to _location should we one day want to
+      // implement dir_rewind()
   unsigned int current_p; // Internal implementation specific. UDFScanDirX
   udf_dirent_t entry;
 } udf_dir_t;
 
 
-
-typedef struct FileAD *UDF_FILE;
+typedef struct FileAD* UDF_FILE;
 
 typedef struct _BD_FILE
 {
   UDF_FILE file;
-  uint64_t seek_pos;  // in bytes
-  uint64_t filesize;  // in bytes
+  uint64_t seek_pos; // in bytes
+  uint64_t filesize; // in bytes
 
-} *BD_FILE;
+} * BD_FILE;
 
 
 class udf25
 {
 
 public:
-  udf25( );
-  virtual ~udf25( );
+  udf25();
+  virtual ~udf25();
 
-  DWORD SetFilePointer(HANDLE hFile, long lDistanceToMove, long* lpDistanceToMoveHigh, DWORD dwMoveMethod );
+  DWORD SetFilePointer(HANDLE hFile,
+                       long lDistanceToMove,
+                       long* lpDistanceToMoveHigh,
+                       DWORD dwMoveMethod);
   int64_t GetFileSize(HANDLE hFile);
   int64_t GetFilePosition(HANDLE hFile);
   int64_t Seek(HANDLE hFile, int64_t lOffset, int whence);
-  bool   Open(const char *isofile);
-  HANDLE OpenFile( const char* filename );
-  long ReadFile(HANDLE fd, unsigned char *pBuffer, long lSize);
+  bool Open(const char* isofile);
+  HANDLE OpenFile(const char* filename);
+  long ReadFile(HANDLE fd, unsigned char* pBuffer, long lSize);
   void CloseFile(HANDLE hFile);
 
-  udf_dir_t *OpenDir( const char *subdir );
-  udf_dirent_t *ReadDir( udf_dir_t *dirp );
-  int CloseDir( udf_dir_t *dirp );
+  udf_dir_t* OpenDir(const char* subdir);
+  udf_dirent_t* ReadDir(udf_dir_t* dirp);
+  int CloseDir(udf_dir_t* dirp);
 
   void Reset();
   void Scan();
   bool IsScanned();
 
 private:
-  UDF_FILE UDFFindFile( const char* filename, uint64_t *filesize );
-  int UDFScanDirX( udf_dir_t *dirp );
+  UDF_FILE UDFFindFile(const char* filename, uint64_t* filesize);
+  int UDFScanDirX(udf_dir_t* dirp);
   int DVDUDFCacheLevel(int level);
   void* GetUDFCacheHandle();
-  void SetUDFCacheHandle(void *cache);
-  int GetUDFCache(UDFCacheType type,uint32_t nr, void *data);
-  int UDFFindPartition( int partnum, struct Partition *part );
-  int UDFGetAVDP( struct avdp_t *avdp);
-  int DVDReadLBUDF( uint32_t lb_number, size_t block_count, unsigned char *data, int encrypted );
-  int ReadAt( int64_t pos, size_t len, unsigned char *data );
-  int UDFMapICB( struct AD ICB, struct Partition *partition, struct FileAD *File );
-  int UDFScanDir( const struct FileAD& Dir, char *FileName, struct Partition *partition, struct AD *FileICB, int cache_file_info);
-  int SetUDFCache(UDFCacheType type, uint32_t nr, void *data);
+  void SetUDFCacheHandle(void* cache);
+  int GetUDFCache(UDFCacheType type, uint32_t nr, void* data);
+  int UDFFindPartition(int partnum, struct Partition* part);
+  int UDFGetAVDP(struct avdp_t* avdp);
+  int DVDReadLBUDF(uint32_t lb_number, size_t block_count, unsigned char* data, int encrypted);
+  int ReadAt(int64_t pos, size_t len, unsigned char* data);
+  int UDFMapICB(struct AD ICB, struct Partition* partition, struct FileAD* File);
+  int UDFScanDir(const struct FileAD& Dir,
+                 char* FileName,
+                 struct Partition* partition,
+                 struct AD* FileICB,
+                 int cache_file_info);
+  int SetUDFCache(UDFCacheType type, uint32_t nr, void* data);
+
 protected:
-    /* Filesystem cache */
+  /* Filesystem cache */
   int m_udfcache_level; /* 0 - turned off, 1 - on */
-  void *m_udfcache;
+  void* m_udfcache;
   XFILE::CFile* m_fp;
 };
-

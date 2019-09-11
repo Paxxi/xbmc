@@ -26,7 +26,7 @@
 class CImageLoader : public CJob
 {
 public:
-  CImageLoader(const std::string &path, const bool useCache);
+  CImageLoader(const std::string& path, const bool useCache);
   ~CImageLoader() override;
 
   /*!
@@ -34,9 +34,9 @@ public:
    */
   bool DoWork() override;
 
-  bool          m_use_cache; ///< Whether or not to use any caching with this image
-  std::string    m_path; ///< path of image to load
-  CBaseTexture *m_texture; ///< Texture object to load the image into \sa CBaseTexture.
+  bool m_use_cache; ///< Whether or not to use any caching with this image
+  std::string m_path; ///< path of image to load
+  CBaseTexture* m_texture; ///< Texture object to load the image into \sa CBaseTexture.
 };
 
 /*!
@@ -61,7 +61,7 @@ public:
 
    \sa CImageLoader, IJobCallback
    */
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
 
   /*!
    \brief Request a texture to be loaded in the background.
@@ -77,7 +77,10 @@ public:
    \return true if the image exists, else false.
    \sa CGUITextureArray and CGUITexture
    */
-  bool GetImage(const std::string &path, CTextureArray &texture, bool firstRequest, bool useCache = true);
+  bool GetImage(const std::string& path,
+                CTextureArray& texture,
+                bool firstRequest,
+                bool useCache = true);
 
   /*!
    \brief Request a texture to be unloaded.
@@ -90,7 +93,7 @@ public:
    \param immediately if set true the image is immediately unloaded once its reference count reaches zero
                       rather than being unloaded after a delay.
    */
-  void ReleaseImage(const std::string &path, bool immediately = false);
+  void ReleaseImage(const std::string& path, bool immediately = false);
 
   /*!
    \brief Cleanup images that are no longer in use.
@@ -107,7 +110,7 @@ private:
   class CLargeTexture
   {
   public:
-    explicit CLargeTexture(const std::string &path);
+    explicit CLargeTexture(const std::string& path);
     virtual ~CLargeTexture();
 
     void AddRef();
@@ -115,8 +118,8 @@ private:
     bool DeleteIfRequired(bool deleteImmediately = false);
     void SetTexture(CBaseTexture* texture);
 
-    const std::string &GetPath() const { return m_path; };
-    const CTextureArray &GetTexture() const { return m_texture; };
+    const std::string& GetPath() const { return m_path; };
+    const CTextureArray& GetTexture() const { return m_texture; };
 
   private:
     static const unsigned int TIME_TO_DELETE = 2000;
@@ -127,13 +130,12 @@ private:
     unsigned int m_timeToDelete;
   };
 
-  void QueueImage(const std::string &path, bool useCache = true);
+  void QueueImage(const std::string& path, bool useCache = true);
 
-  std::vector< std::pair<unsigned int, CLargeTexture *> > m_queued;
-  std::vector<CLargeTexture *> m_allocated;
-  typedef std::vector<CLargeTexture *>::iterator listIterator;
-  typedef std::vector< std::pair<unsigned int, CLargeTexture *> >::iterator queueIterator;
+  std::vector<std::pair<unsigned int, CLargeTexture*>> m_queued;
+  std::vector<CLargeTexture*> m_allocated;
+  typedef std::vector<CLargeTexture*>::iterator listIterator;
+  typedef std::vector<std::pair<unsigned int, CLargeTexture*>>::iterator queueIterator;
 
   CCriticalSection m_listSection;
 };
-

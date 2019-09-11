@@ -22,25 +22,25 @@
 
 using KODI::UTILITY::CDigest;
 
-#define WS_HTTP_METHOD          "GET"
-#define WS_HTTP_TAG             "HTTP/"
+#define WS_HTTP_METHOD "GET"
+#define WS_HTTP_TAG "HTTP/"
 
-#define WS_HEADER_UPGRADE       "Upgrade"
-#define WS_HEADER_CONNECTION    "Connection"
+#define WS_HEADER_UPGRADE "Upgrade"
+#define WS_HEADER_CONNECTION "Connection"
 
-#define WS_HEADER_KEY_LC        "sec-websocket-key"         // "Sec-WebSocket-Key"
-#define WS_HEADER_ACCEPT        "Sec-WebSocket-Accept"
-#define WS_HEADER_PROTOCOL      "Sec-WebSocket-Protocol"
-#define WS_HEADER_PROTOCOL_LC   "sec-websocket-protocol"    // "Sec-WebSocket-Protocol"
+#define WS_HEADER_KEY_LC "sec-websocket-key" // "Sec-WebSocket-Key"
+#define WS_HEADER_ACCEPT "Sec-WebSocket-Accept"
+#define WS_HEADER_PROTOCOL "Sec-WebSocket-Protocol"
+#define WS_HEADER_PROTOCOL_LC "sec-websocket-protocol" // "Sec-WebSocket-Protocol"
 
-#define WS_PROTOCOL_JSONRPC     "jsonrpc.xbmc.org"
+#define WS_PROTOCOL_JSONRPC "jsonrpc.xbmc.org"
 #define WS_HEADER_UPGRADE_VALUE "websocket"
-#define WS_KEY_MAGICSTRING      "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+#define WS_KEY_MAGICSTRING "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
-bool CWebSocketV8::Handshake(const char* data, size_t length, std::string &response)
+bool CWebSocketV8::Handshake(const char* data, size_t length, std::string& response)
 {
   std::string strHeader(data, length);
-  const char *value;
+  const char* value;
   HttpParser header;
   if (header.addBytes(data, length) != HttpParser::Done)
   {
@@ -65,13 +65,15 @@ bool CWebSocketV8::Handshake(const char* data, size_t length, std::string &respo
   }
 
   pos += strlen(WS_HTTP_TAG);
-  std::istringstream converter(strHeader.substr(pos, strHeader.find_first_of(" \r\n\t", pos) - pos));
+  std::istringstream converter(
+      strHeader.substr(pos, strHeader.find_first_of(" \r\n\t", pos) - pos));
   float fVersion;
   converter >> fVersion;
 
   if (fVersion < 1.1f)
   {
-    CLog::Log(LOGINFO, "WebSocket [hybi-10]: invalid HTTP version %f (1.1 or higher expected)", fVersion);
+    CLog::Log(LOGINFO, "WebSocket [hybi-10]: invalid HTTP version %f (1.1 or higher expected)",
+              fVersion);
     return false;
   }
 
@@ -122,11 +124,14 @@ bool CWebSocketV8::Handshake(const char* data, size_t length, std::string &respo
   return true;
 }
 
-const CWebSocketFrame* CWebSocketV8::Close(WebSocketCloseReason reason /* = WebSocketCloseNormal */, const std::string &message /* = "" */)
+const CWebSocketFrame* CWebSocketV8::Close(WebSocketCloseReason reason /* = WebSocketCloseNormal */,
+                                           const std::string& message /* = "" */)
 {
-  if (m_state == WebSocketStateNotConnected || m_state == WebSocketStateHandshaking || m_state == WebSocketStateClosed)
+  if (m_state == WebSocketStateNotConnected || m_state == WebSocketStateHandshaking ||
+      m_state == WebSocketStateClosed)
   {
-    CLog::Log(LOGINFO, "WebSocket [hybi-10]: Cannot send a closing handshake if no connection has been established");
+    CLog::Log(LOGINFO, "WebSocket [hybi-10]: Cannot send a closing handshake if no connection has "
+                       "been established");
     return NULL;
   }
 
@@ -143,8 +148,13 @@ CWebSocketFrame* CWebSocketV8::GetFrame(const char* data, uint64_t length)
   return new CWebSocketFrame(data, length);
 }
 
-CWebSocketFrame* CWebSocketV8::GetFrame(WebSocketFrameOpcode opcode, const char* data /* = NULL */, uint32_t length /* = 0 */,
-                                        bool final /* = true */, bool masked /* = false */, int32_t mask /* = 0 */, int8_t extension /* = 0 */)
+CWebSocketFrame* CWebSocketV8::GetFrame(WebSocketFrameOpcode opcode,
+                                        const char* data /* = NULL */,
+                                        uint32_t length /* = 0 */,
+                                        bool final /* = true */,
+                                        bool masked /* = false */,
+                                        int32_t mask /* = 0 */,
+                                        int8_t extension /* = 0 */)
 {
   return new CWebSocketFrame(opcode, data, length, final, masked, mask, extension);
 }
@@ -154,7 +164,8 @@ CWebSocketMessage* CWebSocketV8::GetMessage()
   return new CWebSocketMessage();
 }
 
-const CWebSocketFrame* CWebSocketV8::close(WebSocketCloseReason reason /* = WebSocketCloseNormal */, const std::string &message /* = "" */)
+const CWebSocketFrame* CWebSocketV8::close(WebSocketCloseReason reason /* = WebSocketCloseNormal */,
+                                           const std::string& message /* = "" */)
 {
   size_t length = 2 + message.size();
 
@@ -175,7 +186,7 @@ const CWebSocketFrame* CWebSocketV8::close(WebSocketCloseReason reason /* = WebS
   return frame;
 }
 
-std::string CWebSocketV8::calculateKey(const std::string &key)
+std::string CWebSocketV8::calculateKey(const std::string& key)
 {
   std::string acceptKey = key;
   acceptKey.append(WS_KEY_MAGICSTRING);

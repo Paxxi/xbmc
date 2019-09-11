@@ -25,12 +25,12 @@ namespace MUSIC_GRABBER
 class CMusicInfoScraper : public CThread
 {
 public:
-  explicit CMusicInfoScraper(const ADDON::ScraperPtr &scraper);
+  explicit CMusicInfoScraper(const ADDON::ScraperPtr& scraper);
   ~CMusicInfoScraper(void) override;
   void FindAlbumInfo(const std::string& strAlbum, const std::string& strArtist = "");
   void LoadAlbumInfo(int iAlbum);
   void FindArtistInfo(const std::string& strArtist);
-  void LoadArtistInfo(int iArtist, const std::string &strSearch);
+  void LoadArtistInfo(int iArtist, const std::string& strSearch);
   bool Completed();
   bool Succeeded();
   void Cancel();
@@ -39,18 +39,9 @@ public:
   int GetArtistCount() const;
   CMusicAlbumInfo& GetAlbum(int iAlbum);
   CMusicArtistInfo& GetArtist(int iArtist);
-  std::vector<CMusicArtistInfo>& GetArtists()
-  {
-    return m_vecArtists;
-  }
-  std::vector<CMusicAlbumInfo>& GetAlbums()
-  {
-    return m_vecAlbums;
-  }
-  void SetScraperInfo(const ADDON::ScraperPtr& scraper)
-  {
-    m_scraper = scraper;
-  }
+  std::vector<CMusicArtistInfo>& GetArtists() { return m_vecArtists; }
+  std::vector<CMusicAlbumInfo>& GetAlbums() { return m_vecAlbums; }
+  void SetScraperInfo(const ADDON::ScraperPtr& scraper) { m_scraper = scraper; }
   /*!
    \brief Checks whether we have a valid scraper.  If not, we try the fallbackScraper
    First tests the current scraper for validity by loading it.  If it is not valid we
@@ -58,7 +49,8 @@ public:
    \param fallbackScraper name of scraper to use as a fallback
    \return true if we have a valid scraper (or the default is valid).
    */
-  bool CheckValidOrFallback(const std::string &fallbackScraper);
+  bool CheckValidOrFallback(const std::string& fallbackScraper);
+
 protected:
   void FindAlbumInfo();
   void LoadAlbumInfo();
@@ -79,4 +71,4 @@ protected:
   ADDON::ScraperPtr m_scraper;
 };
 
-}
+} // namespace MUSIC_GRABBER

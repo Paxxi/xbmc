@@ -22,4 +22,3 @@ public:
 protected:
   void SaveViewState() override;
 };
-

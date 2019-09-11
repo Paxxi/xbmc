@@ -20,7 +20,7 @@ CResourceDirectory::CResourceDirectory() = default;
 
 CResourceDirectory::~CResourceDirectory() = default;
 
-bool CResourceDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CResourceDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   const std::string pathToUrl(url.Get());
   std::string translatedPath;
@@ -34,7 +34,8 @@ bool CResourceDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     {
       CFileItemPtr item = items[i];
       if (URIUtils::PathHasParent(item->GetPath(), translatedPath))
-        item->SetPath(URIUtils::AddFileToFolder(pathToUrl, item->GetPath().substr(translatedPath.size())));
+        item->SetPath(
+            URIUtils::AddFileToFolder(pathToUrl, item->GetPath().substr(translatedPath.size())));
     }
 
     return true;
@@ -43,7 +44,7 @@ bool CResourceDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   return false;
 }
 
-std::string CResourceDirectory::TranslatePath(const CURL &url)
+std::string CResourceDirectory::TranslatePath(const CURL& url)
 {
   std::string translatedPath;
   if (!CResourceFile::TranslatePath(url, translatedPath))

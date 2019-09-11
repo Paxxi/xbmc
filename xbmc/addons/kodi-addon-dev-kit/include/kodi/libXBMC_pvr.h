@@ -8,13 +8,14 @@
 
 #pragma once
 
+#include "libXBMC_addon.h"
+#include "xbmc_pvr_types.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <string>
 #include <vector>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "xbmc_pvr_types.h"
-#include "libXBMC_addon.h"
 
 #define DVD_TIME_BASE 1000000
 
@@ -49,7 +50,8 @@ public:
     if (m_Handle)
       m_Callbacks = (AddonInstance_PVR*)m_Handle->PVRLib_RegisterMe(m_Handle->addonData);
     if (!m_Callbacks)
-      fprintf(stderr, "libXBMC_pvr-ERROR: PVRLib_register_me can't get callback table from Kodi !!!\n");
+      fprintf(stderr,
+              "libXBMC_pvr-ERROR: PVRLib_register_me can't get callback table from Kodi !!!\n");
 
     return m_Callbacks != NULL;
   }
@@ -71,7 +73,8 @@ public:
    */
   void TransferChannelEntry(const ADDON_HANDLE handle, const PVR_CHANNEL* entry)
   {
-    return m_Callbacks->toKodi.TransferChannelEntry(m_Callbacks->toKodi.kodiInstance, handle, entry);
+    return m_Callbacks->toKodi.TransferChannelEntry(m_Callbacks->toKodi.kodiInstance, handle,
+                                                    entry);
   }
 
   /*!
@@ -91,7 +94,8 @@ public:
    */
   void TransferRecordingEntry(const ADDON_HANDLE handle, const PVR_RECORDING* entry)
   {
-    return m_Callbacks->toKodi.TransferRecordingEntry(m_Callbacks->toKodi.kodiInstance, handle, entry);
+    return m_Callbacks->toKodi.TransferRecordingEntry(m_Callbacks->toKodi.kodiInstance, handle,
+                                                      entry);
   }
 
   /*!
@@ -101,7 +105,8 @@ public:
    */
   void TransferChannelGroup(const ADDON_HANDLE handle, const PVR_CHANNEL_GROUP* entry)
   {
-    return m_Callbacks->toKodi.TransferChannelGroup(m_Callbacks->toKodi.kodiInstance, handle, entry);
+    return m_Callbacks->toKodi.TransferChannelGroup(m_Callbacks->toKodi.kodiInstance, handle,
+                                                    entry);
   }
 
   /*!
@@ -111,7 +116,8 @@ public:
    */
   void TransferChannelGroupMember(const ADDON_HANDLE handle, const PVR_CHANNEL_GROUP_MEMBER* entry)
   {
-    return m_Callbacks->toKodi.TransferChannelGroupMember(m_Callbacks->toKodi.kodiInstance, handle, entry);
+    return m_Callbacks->toKodi.TransferChannelGroupMember(m_Callbacks->toKodi.kodiInstance, handle,
+                                                          entry);
   }
 
   /*!
@@ -131,7 +137,8 @@ public:
    */
   void Recording(const char* strRecordingName, const char* strFileName, bool bOn)
   {
-    return m_Callbacks->toKodi.Recording(m_Callbacks->toKodi.kodiInstance, strRecordingName, strFileName, bOn);
+    return m_Callbacks->toKodi.Recording(m_Callbacks->toKodi.kodiInstance, strRecordingName,
+                                         strFileName, bOn);
   }
 
   /*!
@@ -203,9 +210,12 @@ public:
    * @param strMessage A localized addon-defined string representing the new state, that can be displayed
    *        in the UI or NULL if the Kodi-defined default string for the new state shall be displayed.
    */
-  void ConnectionStateChange(const char *strConnectionString, PVR_CONNECTION_STATE newState, const char *strMessage)
+  void ConnectionStateChange(const char* strConnectionString,
+                             PVR_CONNECTION_STATE newState,
+                             const char* strMessage)
   {
-    return m_Callbacks->toKodi.ConnectionStateChange(m_Callbacks->toKodi.kodiInstance, strConnectionString, newState, strMessage);
+    return m_Callbacks->toKodi.ConnectionStateChange(m_Callbacks->toKodi.kodiInstance,
+                                                     strConnectionString, newState, strMessage);
   }
 
   /*!
@@ -214,7 +224,7 @@ public:
    * @param newState The new state. For EPG_EVENT_CREATED and EPG_EVENT_UPDATED, tag must be filled with all available
    *        event data, not just a delta. For EPG_EVENT_DELETED, it is sufficient to fill EPG_TAG.iUniqueBroadcastId
    */
-  void EpgEventStateChange(EPG_TAG *tag, EPG_EVENT_STATE newState)
+  void EpgEventStateChange(EPG_TAG* tag, EPG_EVENT_STATE newState)
   {
     return m_Callbacks->toKodi.EpgEventStateChange(m_Callbacks->toKodi.kodiInstance, tag, newState);
   }
@@ -231,5 +241,5 @@ public:
 
 private:
   AddonCB* m_Handle;
-  AddonInstance_PVR *m_Callbacks;
+  AddonInstance_PVR* m_Callbacks;
 };

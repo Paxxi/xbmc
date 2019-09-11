@@ -33,7 +33,7 @@ protected:
                         const std::string& fcr_type,
                         const std::string& fcr_name,
                         unsigned int f_port,
-                        const std::vector<std::pair<std::string, std::string> >& txt) override;
+                        const std::vector<std::pair<std::string, std::string>>& txt) override;
 
   bool doForceReAnnounceService(const std::string& fcr_identifier) override;
   bool doRemoveService(const std::string& fcr_ident) override;
@@ -44,9 +44,9 @@ private:
   ///this is where the client calls us if state changes
   static void clientCallback(AvahiClient* fp_client, AvahiClientState f_state, void*);
   ///here we get notified of group changes
-  static void groupCallback(AvahiEntryGroup *fp_group, AvahiEntryGroupState f_state, void *);
+  static void groupCallback(AvahiEntryGroup* fp_group, AvahiEntryGroupState f_state, void*);
   //shutdown callback; works around a problem in avahi < 0.6.24 see destructor for details
-  static void shutdownCallback(AvahiTimeout *fp_e, void *);
+  static void shutdownCallback(AvahiTimeout* fp_e, void*);
 
   ///creates the avahi client;
   ///@return true on success
@@ -59,7 +59,7 @@ private:
   //helper struct for holding information about creating a service / AvahiEntryGroup
   //we have to hold that as it's needed to recreate the service
   struct ServiceInfo;
-  typedef std::map<std::string, std::shared_ptr<ServiceInfo> > tServiceMap;
+  typedef std::map<std::string, std::shared_ptr<ServiceInfo>> tServiceMap;
 
   //goes through a list of todos and publishs them (takes the client a param, as it might be called from
   // from the callbacks)

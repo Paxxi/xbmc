@@ -30,14 +30,17 @@ class CAirPlayServer : public CThread, public ANNOUNCEMENT::IAnnouncer
 {
 public:
   // IAnnouncer IF
-  void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data) override;
+  void Announce(ANNOUNCEMENT::AnnouncementFlag flag,
+                const char* sender,
+                const char* message,
+                const CVariant& data) override;
 
   //AirPlayServer impl.
   static bool StartServer(int port, bool nonlocal);
   static void StopServer(bool bWait);
   static bool IsRunning();
   static bool SetCredentials(bool usePassword, const std::string& password);
-  static bool IsPlaying(){ return m_isPlaying > 0;}
+  static bool IsPlaying() { return m_isPlaying > 0; }
   static void backupVolume();
   static void restoreVolume();
   static int m_isPlaying;
@@ -62,9 +65,11 @@ private:
     //when adding a member variable, make sure to copy it in CTCPClient::Copy
     CTCPClient(const CTCPClient& client);
     CTCPClient& operator=(const CTCPClient& client);
-    void PushBuffer(CAirPlayServer *host, const char *buffer,
-                    int length, std::string &sessionId,
-                    std::map<std::string, int> &reverseSockets);
+    void PushBuffer(CAirPlayServer* host,
+                    const char* buffer,
+                    int length,
+                    std::string& sessionId,
+                    std::map<std::string, int>& reverseSockets);
     void ComposeReverseEvent(std::string& reverseHeader, std::string& reverseBody, int state);
 
     void Disconnect();
@@ -73,20 +78,21 @@ private:
     struct sockaddr_storage m_cliaddr;
     socklen_t m_addrlen;
     CCriticalSection m_critSection;
-    int  m_sessionCounter;
+    int m_sessionCounter;
     std::string m_sessionId;
 
   private:
-    int ProcessRequest( std::string& responseHeader,
-                        std::string& response);
+    int ProcessRequest(std::string& responseHeader, std::string& response);
 
     void ComposeAuthRequestAnswer(std::string& responseHeader, std::string& responseBody);
-    bool checkAuthorization(const std::string& authStr, const std::string& method, const std::string& uri);
+    bool checkAuthorization(const std::string& authStr,
+                            const std::string& method,
+                            const std::string& uri);
     void Copy(const CTCPClient& client);
 
     HttpParser* m_httpParser;
     bool m_bAuthenticated;
-    int  m_lastEvent;
+    int m_lastEvent;
     std::string m_authNonce;
   };
 
@@ -101,5 +107,5 @@ private:
   int m_origVolume;
 
   static CCriticalSection ServerInstanceLock;
-  static CAirPlayServer *ServerInstance;
+  static CAirPlayServer* ServerInstance;
 };

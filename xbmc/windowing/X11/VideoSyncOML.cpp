@@ -76,4 +76,3 @@ float CVideoSyncOML::GetFps()
   m_fps = m_winSystem.GetGfxContext().GetFPS();
   return m_fps;
 }
-

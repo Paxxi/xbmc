@@ -8,25 +8,27 @@
 
 #include "UDevProvider.h"
 
-#include "platform/posix/PosixMountProvider.h"
-#include "utils/log.h"
 #include "utils/URIUtils.h"
+#include "utils/log.h"
 
-extern "C" {
+#include "platform/posix/PosixMountProvider.h"
+
+extern "C"
+{
 #include <libudev.h>
 #include <poll.h>
 }
 
-static const char *get_mountpoint(const char *devnode)
+static const char* get_mountpoint(const char* devnode)
 {
   static char buf[4096];
-  const char *delim = " ";
-  const char *mountpoint = NULL;
-  FILE *fp = fopen("/proc/mounts", "r");
+  const char* delim = " ";
+  const char* mountpoint = NULL;
+  FILE* fp = fopen("/proc/mounts", "r");
 
-  while (fgets(buf, sizeof (buf), fp))
+  while (fgets(buf, sizeof(buf), fp))
   {
-    const char *node = strtok(buf, delim);
+    const char* node = strtok(buf, delim);
     if (strcmp(node, devnode) == 0)
     {
       mountpoint = strtok(NULL, delim);
@@ -60,7 +62,7 @@ static const char *get_mountpoint(const char *devnode)
 
 CUDevProvider::CUDevProvider()
 {
-  m_udev    = NULL;
+  m_udev = NULL;
   m_udevMon = NULL;
 }
 
@@ -92,7 +94,7 @@ void CUDevProvider::Stop()
 void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
 {
   // enumerate existing block devices
-  struct udev_enumerate *u_enum = udev_enumerate_new(m_udev);
+  struct udev_enumerate* u_enum = udev_enumerate_new(m_udev);
   if (u_enum == NULL)
   {
     fprintf(stderr, "Error: udev_enumerate_new(udev)\n");
@@ -104,19 +106,19 @@ void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
   udev_enumerate_add_match_property(u_enum, "DEVTYPE", "partition");
   udev_enumerate_scan_devices(u_enum);
 
-  struct udev_list_entry *u_list_ent;
-  struct udev_list_entry *u_first_list_ent;
+  struct udev_list_entry* u_list_ent;
+  struct udev_list_entry* u_first_list_ent;
   u_first_list_ent = udev_enumerate_get_list_entry(u_enum);
   udev_list_entry_foreach(u_list_ent, u_first_list_ent)
   {
-    const char *name = udev_list_entry_get_name(u_list_ent);
-    struct udev *context = udev_enumerate_get_udev(u_enum);
-    struct udev_device *device = udev_device_new_from_syspath(context, name);
+    const char* name = udev_list_entry_get_name(u_list_ent);
+    struct udev* context = udev_enumerate_get_udev(u_enum);
+    struct udev_device* device = udev_device_new_from_syspath(context, name);
     if (device == NULL)
       continue;
 
     // filter out devices that are not mounted
-    const char *mountpoint = get_mountpoint(udev_device_get_devnode(device));
+    const char* mountpoint = get_mountpoint(udev_device_get_devnode(device));
     if (!mountpoint)
     {
       udev_device_unref(device);
@@ -138,10 +140,10 @@ void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
     }
 
     // look for devices on the usb bus, or mounted on */media/ (sdcards), or optical devices
-    const char *bus = udev_device_get_property_value(device, "ID_BUS");
-    const char *optical = udev_device_get_property_value(device, "ID_CDROM"); // matches also DVD, Blu-ray
-    bool isRemovable = ((bus        && strstr(bus, "usb")) ||
-                        (optical    && strstr(optical,"1"))  ||
+    const char* bus = udev_device_get_property_value(device, "ID_BUS");
+    const char* optical =
+        udev_device_get_property_value(device, "ID_CDROM"); // matches also DVD, Blu-ray
+    bool isRemovable = ((bus && strstr(bus, "usb")) || (optical && strstr(optical, "1")) ||
                         (mountpoint && strstr(mountpoint, "/media/")));
 
     // filter according to requested device type
@@ -151,7 +153,7 @@ void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
       continue;
     }
 
-    const char *udev_label = udev_device_get_property_value(device, "ID_FS_LABEL");
+    const char* udev_label = udev_device_get_property_value(device, "ID_FS_LABEL");
     std::string label;
     if (udev_label)
       label = udev_label;
@@ -159,8 +161,8 @@ void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
       label = URIUtils::GetFileName(mountpoint);
 
     CMediaSource share;
-    share.strName  = label;
-    share.strPath  = mountpoint;
+    share.strName = label;
+    share.strPath = mountpoint;
     share.m_ignore = true;
     if (isRemovable)
     {
@@ -178,12 +180,12 @@ void CUDevProvider::GetDisks(VECSOURCES& disks, bool removable)
   udev_enumerate_unref(u_enum);
 }
 
-void CUDevProvider::GetLocalDrives(VECSOURCES &localDrives)
+void CUDevProvider::GetLocalDrives(VECSOURCES& localDrives)
 {
   GetDisks(localDrives, false);
 }
 
-void CUDevProvider::GetRemovableDrives(VECSOURCES &removableDrives)
+void CUDevProvider::GetRemovableDrives(VECSOURCES& removableDrives)
 {
   GetDisks(removableDrives, true);
 }
@@ -207,7 +209,7 @@ std::vector<std::string> CUDevProvider::GetDiskUsage()
   return legacy.GetDiskUsage();
 }
 
-bool CUDevProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
+bool CUDevProvider::PumpDriveChangeEvents(IStorageEventsCallback* callback)
 {
   bool changed = false;
 
@@ -223,23 +225,24 @@ bool CUDevProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
 
   if (FD_ISSET(udev_monitor_get_fd(m_udevMon), &readfds))
   {
-		struct udev_device *dev = udev_monitor_receive_device(m_udevMon);
+    struct udev_device* dev = udev_monitor_receive_device(m_udevMon);
     if (!dev)
       return false;
 
-    const char *action  = udev_device_get_action(dev);
+    const char* action = udev_device_get_action(dev);
     if (action)
     {
       std::string label;
-      const char *udev_label = udev_device_get_property_value(dev, "ID_FS_LABEL");
-      const char *mountpoint = get_mountpoint(udev_device_get_devnode(dev));
+      const char* udev_label = udev_device_get_property_value(dev, "ID_FS_LABEL");
+      const char* mountpoint = get_mountpoint(udev_device_get_devnode(dev));
       if (udev_label)
         label = udev_label;
       else if (mountpoint)
         label = URIUtils::GetFileName(mountpoint);
 
-      const char *fs_usage = udev_device_get_property_value(dev, "ID_FS_USAGE");
-      if (mountpoint && strcmp(action, "add") == 0 && (fs_usage && strcmp(fs_usage, "filesystem") == 0))
+      const char* fs_usage = udev_device_get_property_value(dev, "ID_FS_USAGE");
+      if (mountpoint && strcmp(action, "add") == 0 &&
+          (fs_usage && strcmp(fs_usage, "filesystem") == 0))
       {
         CLog::Log(LOGNOTICE, "UDev: Added %s", mountpoint);
         if (callback)
@@ -253,10 +256,10 @@ bool CUDevProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
         changed = true;
       }
       // browse disk dialog is not wanted for blu-rays
-      const char *bd = udev_device_get_property_value(dev, "ID_CDROM_MEDIA_BD");
+      const char* bd = udev_device_get_property_value(dev, "ID_CDROM_MEDIA_BD");
       if (strcmp(action, "change") == 0 && !(bd && strcmp(bd, "1") == 0))
       {
-        const char *optical = udev_device_get_property_value(dev, "ID_CDROM");
+        const char* optical = udev_device_get_property_value(dev, "ID_CDROM");
         if (mountpoint && (optical && strcmp(optical, "1") == 0))
         {
           CLog::Log(LOGNOTICE, "UDev: Changed / Added %s", mountpoint);
@@ -264,7 +267,7 @@ bool CUDevProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
             callback->OnStorageAdded(label, mountpoint);
           changed = true;
         }
-        const char *eject_request = udev_device_get_property_value(dev, "DISK_EJECT_REQUEST");
+        const char* eject_request = udev_device_get_property_value(dev, "DISK_EJECT_REQUEST");
         if (eject_request && strcmp(eject_request, "1") == 0)
         {
           if (callback)

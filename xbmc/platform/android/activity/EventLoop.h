@@ -18,7 +18,7 @@ class CEventLoop
 public:
   CEventLoop(android_app* application);
 
-  void run(IActivityHandler &activityHandler, IInputHandler &inputHandler);
+  void run(IActivityHandler& activityHandler, IInputHandler& inputHandler);
 
 protected:
   void activate();
@@ -36,4 +36,3 @@ private:
   IActivityHandler* m_activityHandler;
   IInputHandler* m_inputHandler;
 };
-

@@ -42,7 +42,7 @@ CFileAndroidApp::~CFileAndroidApp(void)
 bool CFileAndroidApp::Open(const CURL& url)
 {
   m_url = url;
-  m_packageName =  URIUtils::GetFileName(url.Get());
+  m_packageName = URIUtils::GetFileName(url.Get());
   m_packageName = m_packageName.substr(0, m_packageName.size() - 4);
 
   std::vector<androidPackage> applications = CXBMCApp::GetApplications();
@@ -61,7 +61,7 @@ bool CFileAndroidApp::Open(const CURL& url)
 
 bool CFileAndroidApp::Exists(const CURL& url)
 {
-  std::string appname =  URIUtils::GetFileName(url.Get());
+  std::string appname = URIUtils::GetFileName(url.Get());
   appname = appname.substr(0, appname.size() - 4);
 
   std::vector<androidPackage> applications = CXBMCApp::GetApplications();
@@ -74,11 +74,14 @@ bool CFileAndroidApp::Exists(const CURL& url)
   return false;
 }
 
-unsigned int CFileAndroidApp::ReadIcon(unsigned char** lpBuf, unsigned int* width, unsigned int* height)
+unsigned int CFileAndroidApp::ReadIcon(unsigned char** lpBuf,
+                                       unsigned int* width,
+                                       unsigned int* height)
 {
   JNIEnv* env = xbmc_jnienv();
-  void *bitmapBuf = NULL;
-  int densities[] = { CJNIDisplayMetrics::DENSITY_XXXHIGH, CJNIDisplayMetrics::DENSITY_XXHIGH, CJNIDisplayMetrics::DENSITY_XHIGH, -1 };
+  void* bitmapBuf = NULL;
+  int densities[] = {CJNIDisplayMetrics::DENSITY_XXXHIGH, CJNIDisplayMetrics::DENSITY_XXHIGH,
+                     CJNIDisplayMetrics::DENSITY_XHIGH, -1};
 
   CJNIBitmap bmp;
   jclass cBmpDrw = env->FindClass("android/graphics/drawable/BitmapDrawable");
@@ -88,13 +91,14 @@ unsigned int CFileAndroidApp::ReadIcon(unsigned char** lpBuf, unsigned int* widt
     CJNIResources res = CJNIContext::GetPackageManager().getResourcesForApplication(m_packageName);
     if (res)
     {
-      for (int i=0; densities[i] != -1 && !bmp; ++i)
+      for (int i = 0; densities[i] != -1 && !bmp; ++i)
       {
         int density = densities[i];
         CJNIDrawable drw = res.getDrawableForDensity(m_icon, density);
         if (xbmc_jnienv()->ExceptionCheck())
           xbmc_jnienv()->ExceptionClear();
-        else if (!drw);
+        else if (!drw)
+          ;
         else
         {
           if (env->IsInstanceOf(drw.get_raw(), cBmpDrw))
@@ -113,7 +117,8 @@ unsigned int CFileAndroidApp::ReadIcon(unsigned char** lpBuf, unsigned int* widt
     CJNIDrawable drw = CJNIContext::GetPackageManager().getApplicationIcon(m_packageName);
     if (xbmc_jnienv()->ExceptionCheck())
       xbmc_jnienv()->ExceptionClear();
-    else if (!drw);
+    else if (!drw)
+      ;
     else
     {
       if (env->IsInstanceOf(drw.get_raw(), cBmpDrw))
@@ -169,7 +174,7 @@ int CFileAndroidApp::Stat(const CURL& url, struct __stat64* buffer)
 }
 int CFileAndroidApp::IoControl(EIoControl request, void* param)
 {
-  if(request == IOCTRL_SEEK_POSSIBLE)
+  if (request == IOCTRL_SEEK_POSSIBLE)
     return 0;
   return 1;
 }

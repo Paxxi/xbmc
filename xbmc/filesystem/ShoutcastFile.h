@@ -30,14 +30,19 @@ public:
   int64_t GetPosition() override;
   int64_t GetLength() override;
   bool Open(const CURL& url) override;
-  bool Exists(const CURL& url) override { return true;};
-  int Stat(const CURL& url, struct __stat64* buffer) override { errno = ENOENT; return -1; };
+  bool Exists(const CURL& url) override { return true; };
+  int Stat(const CURL& url, struct __stat64* buffer) override
+  {
+    errno = ENOENT;
+    return -1;
+  };
   ssize_t Read(void* lpBuf, size_t uiBufSize) override;
   int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET) override;
   void Close() override;
   int IoControl(EIoControl request, void* param) override;
 
   void Process() override;
+
 protected:
   bool ExtractTagInfo(const char* buf);
   void ReadTruncated(char* buf2, int size);
@@ -55,5 +60,4 @@ protected:
   CCriticalSection m_tagSection;
   int64_t m_tagPos;
 };
-}
-
+} // namespace XFILE

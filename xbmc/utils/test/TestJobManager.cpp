@@ -7,11 +7,12 @@
  */
 
 #include "test/MtTestUtils.h"
-#include "utils/JobManager.h"
 #include "utils/Job.h"
+#include "utils/JobManager.h"
+
+#include <atomic>
 
 #include <gtest/gtest.h>
-#include <atomic>
 
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
@@ -30,8 +31,10 @@ struct Flags
 class DummyJob : public CJob
 {
   Flags* m_flags;
+
 public:
-  inline DummyJob(Flags* flags) : m_flags(flags)
+  inline DummyJob(Flags* flags)
+    : m_flags(flags)
   {
   }
 
@@ -41,7 +44,7 @@ public:
     while (m_flags->lingerAtWork)
       std::this_thread::yield();
 
-    if (ShouldCancel(0,0))
+    if (ShouldCancel(0, 0))
       m_flags->wasCanceled = true;
 
     m_flags->finished = true;
@@ -52,8 +55,12 @@ public:
 class ReallyDumbJob : public CJob
 {
   Flags* m_flags;
+
 public:
-  inline ReallyDumbJob(Flags* flags) : m_flags(flags) {}
+  inline ReallyDumbJob(Flags* flags)
+    : m_flags(flags)
+  {
+  }
 
   bool DoWork() override
   {
@@ -65,9 +72,7 @@ public:
 class TestJobManager : public testing::Test
 {
 protected:
-  TestJobManager()
-  {
-  }
+  TestJobManager() {}
 
   ~TestJobManager() override
   {
@@ -120,24 +125,19 @@ struct JobControlPackage
     jobCreatedMutex.lock();
   }
 
-  ~JobControlPackage()
-  {
-    jobCreatedMutex.unlock();
-  }
+  ~JobControlPackage() { jobCreatedMutex.unlock(); }
 
   bool ready = false;
   XbmcThreads::ConditionVariable jobCreatedCond;
   CCriticalSection jobCreatedMutex;
 };
 
-class BroadcastingJob :
-  public CJob
+class BroadcastingJob : public CJob
 {
 public:
-
-  BroadcastingJob(JobControlPackage &package) :
-    m_package(package),
-    m_finish(false)
+  BroadcastingJob(JobControlPackage& package)
+    : m_package(package)
+    , m_finish(false)
   {
   }
 
@@ -149,10 +149,7 @@ public:
     m_block.notifyAll();
   }
 
-  const char * GetType() const override
-  {
-    return "BroadcastingJob";
-  }
+  const char* GetType() const override { return "BroadcastingJob"; }
 
   bool DoWork() override
   {
@@ -172,16 +169,14 @@ public:
   }
 
 private:
-
-  JobControlPackage &m_package;
+  JobControlPackage& m_package;
 
   XbmcThreads::ConditionVariable m_block;
   CCriticalSection m_blockMutex;
   bool m_finish;
 };
 
-BroadcastingJob *
-WaitForJobToStartProcessing(CJob::PRIORITY priority, JobControlPackage &package)
+BroadcastingJob* WaitForJobToStartProcessing(CJob::PRIORITY priority, JobControlPackage& package)
 {
   BroadcastingJob* job = new BroadcastingJob(package);
   CJobManager::GetInstance().AddJob(job, NULL, priority);
@@ -192,12 +187,12 @@ WaitForJobToStartProcessing(CJob::PRIORITY priority, JobControlPackage &package)
 
   return job;
 }
-}
+} // namespace
 
 TEST_F(TestJobManager, PauseLowPriorityJob)
 {
   JobControlPackage package;
-  BroadcastingJob *job (WaitForJobToStartProcessing(CJob::PRIORITY_LOW_PAUSABLE, package));
+  BroadcastingJob* job(WaitForJobToStartProcessing(CJob::PRIORITY_LOW_PAUSABLE, package));
 
   EXPECT_TRUE(CJobManager::GetInstance().IsProcessing(CJob::PRIORITY_LOW_PAUSABLE));
   CJobManager::GetInstance().PauseJobs();
@@ -211,7 +206,7 @@ TEST_F(TestJobManager, PauseLowPriorityJob)
 TEST_F(TestJobManager, IsProcessing)
 {
   JobControlPackage package;
-  BroadcastingJob *job (WaitForJobToStartProcessing(CJob::PRIORITY_LOW_PAUSABLE, package));
+  BroadcastingJob* job(WaitForJobToStartProcessing(CJob::PRIORITY_LOW_PAUSABLE, package));
 
   EXPECT_EQ(0, CJobManager::GetInstance().IsProcessing(""));
 

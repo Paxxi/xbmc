@@ -24,13 +24,19 @@ public:
    * @brief PVR GUI directory ctor.
    * @param url The directory's URL.
    */
-  explicit CPVRGUIDirectory(const CURL& url) : m_url(url) {}
+  explicit CPVRGUIDirectory(const CURL& url)
+    : m_url(url)
+  {
+  }
 
   /*!
    * @brief PVR GUI directory ctor.
    * @param path The directory's path.
    */
-  explicit CPVRGUIDirectory(const std::string& path) : m_url(path) {}
+  explicit CPVRGUIDirectory(const std::string& path)
+    : m_url(path)
+  {
+  }
 
   /*!
    * @brief PVR GUI directory dtor.
@@ -104,4 +110,4 @@ private:
   const CURL m_url;
 };
 
-}
+} // namespace PVR

@@ -23,8 +23,10 @@ namespace WAYLAND
 class COSScreenSaverIdleInhibitUnstableV1 : public IOSScreenSaver
 {
 public:
-  COSScreenSaverIdleInhibitUnstableV1(wayland::zwp_idle_inhibit_manager_v1_t const& manager, wayland::surface_t const& inhibitSurface);
-  static COSScreenSaverIdleInhibitUnstableV1* TryCreate(CConnection& connection, wayland::surface_t const& inhibitSurface);
+  COSScreenSaverIdleInhibitUnstableV1(wayland::zwp_idle_inhibit_manager_v1_t const& manager,
+                                      wayland::surface_t const& inhibitSurface);
+  static COSScreenSaverIdleInhibitUnstableV1* TryCreate(CConnection& connection,
+                                                        wayland::surface_t const& inhibitSurface);
   void Inhibit() override;
   void Uninhibit() override;
 
@@ -34,6 +36,6 @@ private:
   wayland::surface_t m_surface;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

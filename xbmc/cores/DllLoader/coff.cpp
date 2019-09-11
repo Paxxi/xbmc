@@ -6,39 +6,38 @@
  *  See LICENSES/README.md for more information.
  */
 
+#include "coff.h"
+
+#include "coffldr.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "coff.h"
-#include "coffldr.h"
 
 //#define DUMPING_DATA 1
 
 #ifndef __GNUC__
-#pragma warning (disable:4806)
+#pragma warning(disable : 4806)
 #endif
 
 #include "utils/log.h"
-#define printf(format, ...) CLog::Log(LOGDEBUG, format , ##__VA_ARGS__)
+#define printf(format, ...) CLog::Log(LOGDEBUG, format, ##__VA_ARGS__)
 
-const char *DATA_DIR_NAME[16] =
-  {
-    "Export Table",
-    "Import Table",
-    "Resource Table",
-    "Exception Table",
-    "Certificate Table",
-    "Base Relocation Table",
-    "Debug",
-    "Architecture",
-    "Global Ptr",
-    "TLS Table",
-    "Load Config Table",
-    "Bound Import",
-    "IAT",
-    "Delay Import Descriptor",
-    "COM+ Runtime Header",
-    "Reserved"
-  };
+const char* DATA_DIR_NAME[16] = {"Export Table",
+                                 "Import Table",
+                                 "Resource Table",
+                                 "Exception Table",
+                                 "Certificate Table",
+                                 "Base Relocation Table",
+                                 "Debug",
+                                 "Architecture",
+                                 "Global Ptr",
+                                 "TLS Table",
+                                 "Load Config Table",
+                                 "Bound Import",
+                                 "IAT",
+                                 "Delay Import Descriptor",
+                                 "COM+ Runtime Header",
+                                 "Reserved"};
 
 
 CoffLoader::CoffLoader()
@@ -63,7 +62,7 @@ CoffLoader::CoffLoader()
 
 CoffLoader::~CoffLoader()
 {
-  if ( hModule )
+  if (hModule)
   {
 #ifdef TARGET_POSIX
     free(hModule);
@@ -72,19 +71,19 @@ CoffLoader::~CoffLoader()
 #endif
     hModule = NULL;
   }
-  if ( SymTable )
+  if (SymTable)
   {
-    delete [] SymTable;
+    delete[] SymTable;
     SymTable = 0;
   }
-  if ( StringTable )
+  if (StringTable)
   {
-    delete [] StringTable;
+    delete[] StringTable;
     StringTable = 0;
   }
-  if ( SectionData )
+  if (SectionData)
   {
-    delete [] SectionData;
+    delete[] SectionData;
     SectionData = 0;
   }
 }
@@ -97,25 +96,26 @@ int CoffLoader::ParseHeaders(void* hModule)
   if (strncmp((char*)hModule, "MZ", 2) != 0)
     return 0;
 
-  int* Offset = (int*)((char*)hModule+0x3c);
+  int* Offset = (int*)((char*)hModule + 0x3c);
   if (*Offset <= 0)
     return 0;
 
-  if (strncmp((char*)hModule+*Offset, "PE\0\0", 4) != 0)
+  if (strncmp((char*)hModule + *Offset, "PE\0\0", 4) != 0)
     return 0;
 
   FileHeaderOffset = *Offset + 4;
 
-  CoffFileHeader = (COFF_FileHeader_t *) ( (char*)hModule + FileHeaderOffset );
+  CoffFileHeader = (COFF_FileHeader_t*)((char*)hModule + FileHeaderOffset);
   NumOfSections = CoffFileHeader->NumberOfSections;
 
-  OptionHeader = (OptionHeader_t *) ( (char*)CoffFileHeader + sizeof(COFF_FileHeader_t) );
-  WindowsHeader = (WindowsHeader_t *) ( (char*)OptionHeader + OPTHDR_SIZE );
+  OptionHeader = (OptionHeader_t*)((char*)CoffFileHeader + sizeof(COFF_FileHeader_t));
+  WindowsHeader = (WindowsHeader_t*)((char*)OptionHeader + OPTHDR_SIZE);
   EntryAddress = OptionHeader->Entry;
   NumOfDirectories = WindowsHeader->NumDirectories;
 
-  Directory = (Image_Data_Directory_t *) ( (char*)WindowsHeader + WINHDR_SIZE);
-  SectionHeader = (SectionHeader_t *) ( (char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
+  Directory = (Image_Data_Directory_t*)((char*)WindowsHeader + WINHDR_SIZE);
+  SectionHeader =
+      (SectionHeader_t*)((char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
 
   if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386)
     return 0;
@@ -124,7 +124,7 @@ int CoffLoader::ParseHeaders(void* hModule)
   PrintFileHeader(CoffFileHeader);
 #endif
 
-  if ( CoffFileHeader->SizeOfOptionHeader == 0 ) //not an image file, object file maybe
+  if (CoffFileHeader->SizeOfOptionHeader == 0) //not an image file, object file maybe
     return 0;
 
   // process Option Header
@@ -140,7 +140,6 @@ int CoffLoader::ParseHeaders(void* hModule)
     PrintOptionHeader(OptionHeader);
     PrintWindowsHeader(WindowsHeader);
 #endif
-
   }
   else
   {
@@ -158,10 +157,9 @@ int CoffLoader::ParseHeaders(void* hModule)
 #endif
 
   return 1;
-
 }
 
-int CoffLoader::LoadCoffHModule(FILE *fp)
+int CoffLoader::LoadCoffHModule(FILE* fp)
 {
   //test file signatures
   char Sig[4];
@@ -188,7 +186,8 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
   FileHeaderOffset = Offset;
 
   // Load and process Header
-  if (fseek(fp, FileHeaderOffset + sizeof(COFF_FileHeader_t) + OPTHDR_SIZE, SEEK_SET)) //skip to winows headers
+  if (fseek(fp, FileHeaderOffset + sizeof(COFF_FileHeader_t) + OPTHDR_SIZE,
+            SEEK_SET)) //skip to winows headers
     return 0;
 
   WindowsHeader_t tempWindowsHeader;
@@ -196,34 +195,39 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
   if (readcount != WINHDR_SIZE) //test file size error
     return 0;
 
-  // alloc aligned memory
+    // alloc aligned memory
 #ifdef TARGET_POSIX
   hModule = malloc(tempWindowsHeader.SizeOfImage);
 #elif defined TARGET_WINDOWS_STORE
-  hModule = VirtualAllocFromApp(GetCurrentProcess(), tempWindowsHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+  hModule = VirtualAllocFromApp(GetCurrentProcess(), tempWindowsHeader.SizeOfImage,
+                                MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 #else
-  hModule = VirtualAllocEx(GetCurrentProcess(), (PVOID)tempWindowsHeader.ImageBase, tempWindowsHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+  hModule = VirtualAllocEx(GetCurrentProcess(), (PVOID)tempWindowsHeader.ImageBase,
+                           tempWindowsHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE,
+                           PAGE_EXECUTE_READWRITE);
   if (hModule == NULL)
-    hModule = VirtualAlloc(GetCurrentProcess(), tempWindowsHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    hModule = VirtualAlloc(GetCurrentProcess(), tempWindowsHeader.SizeOfImage,
+                           MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 #endif
   if (hModule == NULL)
-    return 0;   //memory allocation fails
+    return 0; //memory allocation fails
 
   rewind(fp);
   readcount = fread(hModule, 1, tempWindowsHeader.SizeOfHeaders, fp);
-  if (readcount != tempWindowsHeader.SizeOfHeaders)   //file size error
+  if (readcount != tempWindowsHeader.SizeOfHeaders) //file size error
     return 0;
 
-  CoffFileHeader = (COFF_FileHeader_t *) ( (char*)hModule + FileHeaderOffset );
+  CoffFileHeader = (COFF_FileHeader_t*)((char*)hModule + FileHeaderOffset);
   NumOfSections = CoffFileHeader->NumberOfSections;
 
-  OptionHeader = (OptionHeader_t *) ( (char*)CoffFileHeader + sizeof(COFF_FileHeader_t) );
-  WindowsHeader = (WindowsHeader_t *) ( (char*)OptionHeader + OPTHDR_SIZE );
+  OptionHeader = (OptionHeader_t*)((char*)CoffFileHeader + sizeof(COFF_FileHeader_t));
+  WindowsHeader = (WindowsHeader_t*)((char*)OptionHeader + OPTHDR_SIZE);
   EntryAddress = OptionHeader->Entry;
   NumOfDirectories = WindowsHeader->NumDirectories;
 
-  Directory = (Image_Data_Directory_t *) ( (char*)WindowsHeader + WINHDR_SIZE);
-  SectionHeader = (SectionHeader_t *) ( (char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
+  Directory = (Image_Data_Directory_t*)((char*)WindowsHeader + WINHDR_SIZE);
+  SectionHeader =
+      (SectionHeader_t*)((char*)Directory + sizeof(Image_Data_Directory_t) * NumOfDirectories);
 
   if (CoffFileHeader->MachineType != IMAGE_FILE_MACHINE_I386)
     return 0;
@@ -232,7 +236,7 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
   PrintFileHeader(CoffFileHeader);
 #endif
 
-  if ( CoffFileHeader->SizeOfOptionHeader == 0 ) //not an image file, object file maybe
+  if (CoffFileHeader->SizeOfOptionHeader == 0) //not an image file, object file maybe
     return 0;
 
   // process Option Header
@@ -248,7 +252,6 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
     PrintOptionHeader(OptionHeader);
     PrintWindowsHeader(WindowsHeader);
 #endif
-
   }
   else
   {
@@ -266,28 +269,27 @@ int CoffLoader::LoadCoffHModule(FILE *fp)
 #endif
 
   return 1;
-
 }
 
-int CoffLoader::LoadSymTable(FILE *fp)
+int CoffLoader::LoadSymTable(FILE* fp)
 {
   int Offset = ftell(fp);
   if (Offset < 0)
     return 0;
 
-  if ( CoffFileHeader->PointerToSymbolTable == 0 )
+  if (CoffFileHeader->PointerToSymbolTable == 0)
     return 1;
 
   if (fseek(fp, CoffFileHeader->PointerToSymbolTable /* + CoffBeginOffset*/, SEEK_SET) != 0)
     return 0;
 
-  SymbolTable_t *tmp = new SymbolTable_t[CoffFileHeader->NumberOfSymbols];
+  SymbolTable_t* tmp = new SymbolTable_t[CoffFileHeader->NumberOfSymbols];
   if (!tmp)
   {
     printf("Could not allocate memory for symbol table!\n");
     return 0;
   }
-  if (!fread((void *)tmp, CoffFileHeader->NumberOfSymbols, sizeof(SymbolTable_t), fp))
+  if (!fread((void*)tmp, CoffFileHeader->NumberOfSymbols, sizeof(SymbolTable_t), fp))
   {
     delete[] tmp;
     return 0;
@@ -299,21 +301,22 @@ int CoffLoader::LoadSymTable(FILE *fp)
   return 1;
 }
 
-int CoffLoader::LoadStringTable(FILE *fp)
+int CoffLoader::LoadStringTable(FILE* fp)
 {
   int StringTableSize;
-  char *tmp = NULL;
+  char* tmp = NULL;
 
   int Offset = ftell(fp);
   if (Offset < 0)
     return 0;
 
-  if ( CoffFileHeader->PointerToSymbolTable == 0 )
+  if (CoffFileHeader->PointerToSymbolTable == 0)
     return 1;
 
-  if (fseek(fp, CoffFileHeader->PointerToSymbolTable +
-        CoffFileHeader->NumberOfSymbols * sizeof(SymbolTable_t),
-        SEEK_SET) != 0)
+  if (fseek(fp,
+            CoffFileHeader->PointerToSymbolTable +
+                CoffFileHeader->NumberOfSymbols * sizeof(SymbolTable_t),
+            SEEK_SET) != 0)
     return 0;
 
   if (!fread(&StringTableSize, 1, sizeof(int), fp))
@@ -327,7 +330,7 @@ int CoffLoader::LoadStringTable(FILE *fp)
       printf("Could not allocate memory for string table\n");
       return 0;
     }
-    if (!fread((void *)tmp, StringTableSize, sizeof(char), fp))
+    if (!fread((void*)tmp, StringTableSize, sizeof(char), fp))
     {
       delete[] tmp;
       return 0;
@@ -340,12 +343,12 @@ int CoffLoader::LoadStringTable(FILE *fp)
   return 1;
 }
 
-int CoffLoader::LoadSections(FILE *fp)
+int CoffLoader::LoadSections(FILE* fp)
 {
   NumOfSections = CoffFileHeader->NumberOfSections;
 
-  SectionData = new char * [NumOfSections];
-  if ( !SectionData )
+  SectionData = new char*[NumOfSections];
+  if (!SectionData)
     return 0;
 
   // Bobbin007: for debug dlls this check always fails
@@ -364,7 +367,7 @@ int CoffLoader::LoadSections(FILE *fp)
 
   for (int SctnCnt = 0; SctnCnt < NumOfSections; SctnCnt++)
   {
-    SectionHeader_t *ScnHdr = SectionHeader + SctnCnt;
+    SectionHeader_t* ScnHdr = SectionHeader + SctnCnt;
     SectionData[SctnCnt] = ((char*)hModule + ScnHdr->VirtualAddress);
 
     if (fseek(fp, ScnHdr->PtrToRawData, SEEK_SET) != 0)
@@ -380,17 +383,19 @@ int CoffLoader::LoadSections(FILE *fp)
     for (int i = 0; i < 8; i++)
       namebuf[i] = ScnHdr->Name[i];
     namebuf[8] = '\0';
-    sprintf(szBuf, "Load code Sections %s Memory %p,Length %x\n", namebuf,
-            SectionData[SctnCnt], max(ScnHdr->VirtualSize, ScnHdr->SizeOfRawData));
+    sprintf(szBuf, "Load code Sections %s Memory %p,Length %x\n", namebuf, SectionData[SctnCnt],
+            max(ScnHdr->VirtualSize, ScnHdr->SizeOfRawData));
     OutputDebugString(szBuf);
 #endif
 
-    if ( ScnHdr->SizeOfRawData < ScnHdr->VirtualSize )  //initialize BSS data in the end of section
+    if (ScnHdr->SizeOfRawData < ScnHdr->VirtualSize) //initialize BSS data in the end of section
     {
-      memset((char*)((long)(SectionData[SctnCnt]) + ScnHdr->SizeOfRawData), 0, ScnHdr->VirtualSize - ScnHdr->SizeOfRawData);
+      memset((char*)((long)(SectionData[SctnCnt]) + ScnHdr->SizeOfRawData), 0,
+             ScnHdr->VirtualSize - ScnHdr->SizeOfRawData);
     }
 
-    if (ScnHdr->Characteristics & IMAGE_SCN_CNT_BSS)  //initialize whole .BSS section, pure .BSS is obsolete
+    if (ScnHdr->Characteristics &
+        IMAGE_SCN_CNT_BSS) //initialize whole .BSS section, pure .BSS is obsolete
     {
       memset(SectionData[SctnCnt], 0, ScnHdr->VirtualSize);
     }
@@ -398,7 +403,6 @@ int CoffLoader::LoadSections(FILE *fp)
 #ifdef DUMPING_DATA
     PrintSection(SectionHeader + SctnCnt, SectionData[SctnCnt]);
 #endif
-
   }
   return 1;
 }
@@ -408,15 +412,15 @@ int CoffLoader::LoadSections(FILE *fp)
 int CoffLoader::RVA2Section(unsigned long RVA)
 {
   NumOfSections = CoffFileHeader->NumberOfSections;
-  for ( int i = 0; i < NumOfSections; i++)
+  for (int i = 0; i < NumOfSections; i++)
   {
-    if ( SectionHeader[i].VirtualAddress <= RVA )
+    if (SectionHeader[i].VirtualAddress <= RVA)
     {
-      if ( i + 1 != NumOfSections )
+      if (i + 1 != NumOfSections)
       {
-        if ( RVA < SectionHeader[i + 1].VirtualAddress )
+        if (RVA < SectionHeader[i + 1].VirtualAddress)
         {
-          if ( SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA )
+          if (SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA)
             printf("Warning! Address outside of Section: %lx!\n", RVA);
           //                    else
           return i;
@@ -424,7 +428,7 @@ int CoffLoader::RVA2Section(unsigned long RVA)
       }
       else
       {
-        if ( SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA )
+        if (SectionHeader[i].VirtualAddress + SectionHeader[i].VirtualSize <= RVA)
           printf("Warning! Address outside of Section: %lx!\n", RVA);
         //                else
         return i;
@@ -439,8 +443,8 @@ void* CoffLoader::RVA2Data(unsigned long RVA)
 {
   int Sctn = RVA2Section(RVA);
 
-  if( RVA < SectionHeader[Sctn].VirtualAddress
-   || RVA >= SectionHeader[Sctn].VirtualAddress + SectionHeader[Sctn].VirtualSize)
+  if (RVA < SectionHeader[Sctn].VirtualAddress ||
+      RVA >= SectionHeader[Sctn].VirtualAddress + SectionHeader[Sctn].VirtualSize)
   {
     // RVA2Section is lying, let's use base address of dll instead, only works if
     // DLL has been loaded fully into memory, wich we normally do
@@ -451,31 +455,32 @@ void* CoffLoader::RVA2Data(unsigned long RVA)
 
 unsigned long CoffLoader::Data2RVA(void* address)
 {
-  for ( int i = 0; i < CoffFileHeader->NumberOfSections; i++)
+  for (int i = 0; i < CoffFileHeader->NumberOfSections; i++)
   {
-    if(address >= SectionData[i] && address < SectionData[i] + SectionHeader[i].VirtualSize)
-      return (unsigned long)address - (unsigned long)SectionData[i] + SectionHeader[i].VirtualAddress;
+    if (address >= SectionData[i] && address < SectionData[i] + SectionHeader[i].VirtualSize)
+      return (unsigned long)address - (unsigned long)SectionData[i] +
+             SectionHeader[i].VirtualAddress;
   }
 
   // Section wasn't found, so use relative to main load of dll
   return (unsigned long)address - (unsigned long)hModule;
 }
 
-char *CoffLoader::GetStringTblIndex(int index)
+char* CoffLoader::GetStringTblIndex(int index)
 {
-  char *table = StringTable;
+  char* table = StringTable;
 
   while (index--)
     table += strlen(table) + 1;
   return table;
 }
 
-char *CoffLoader::GetStringTblOff(int Offset)
+char* CoffLoader::GetStringTblOff(int Offset)
 {
   return StringTable + Offset - 4;
 }
 
-char *CoffLoader::GetSymbolName(SymbolTable_t *sym)
+char* CoffLoader::GetSymbolName(SymbolTable_t* sym)
 {
   long long index = sym->Name.Offset;
   int low = (int)(index & 0xFFFFFFFF);
@@ -489,14 +494,14 @@ char *CoffLoader::GetSymbolName(SymbolTable_t *sym)
   {
     static char shortname[9];
     memset(shortname, 0, 9);
-    strncpy(shortname, (char *)sym->Name.ShortName, 8);
+    strncpy(shortname, (char*)sym->Name.ShortName, 8);
     return shortname;
   }
 }
 
-char *CoffLoader::GetSymbolName(int index)
+char* CoffLoader::GetSymbolName(int index)
 {
-  SymbolTable_t *sym = &(SymTable[index]);
+  SymbolTable_t* sym = &(SymTable[index]);
   return GetSymbolName(sym);
 }
 
@@ -504,7 +509,7 @@ void CoffLoader::PrintStringTable(void)
 {
   int size = SizeOfStringTable;
   int index = 0;
-  char *table = StringTable;
+  char* table = StringTable;
 
   printf("\nSTRING TABLE\n");
   while (size)
@@ -614,19 +619,18 @@ void CoffLoader::PrintSymbolTable(void)
     printf("\n");
   }
   printf("\n");
-
 }
 
-void CoffLoader::PrintFileHeader(COFF_FileHeader_t *FileHeader)
+void CoffLoader::PrintFileHeader(COFF_FileHeader_t* FileHeader)
 {
   printf("COFF Header\n");
   printf("------------------------------------------\n\n");
 
   printf("MachineType:            0x%04X\n", FileHeader->MachineType);
   printf("NumberOfSections:       0x%04X\n", FileHeader->NumberOfSections);
-  printf("TimeDateStamp:          0x%08lX\n",FileHeader->TimeDateStamp);
-  printf("PointerToSymbolTable:   0x%08lX\n",FileHeader->PointerToSymbolTable);
-  printf("NumberOfSymbols:        0x%08lX\n",FileHeader->NumberOfSymbols);
+  printf("TimeDateStamp:          0x%08lX\n", FileHeader->TimeDateStamp);
+  printf("PointerToSymbolTable:   0x%08lX\n", FileHeader->PointerToSymbolTable);
+  printf("NumberOfSymbols:        0x%08lX\n", FileHeader->NumberOfSymbols);
   printf("SizeOfOptionHeader:     0x%04X\n", FileHeader->SizeOfOptionHeader);
   printf("Characteristics:        0x%04X\n", FileHeader->Characteristics);
 
@@ -678,7 +682,7 @@ void CoffLoader::PrintFileHeader(COFF_FileHeader_t *FileHeader)
   printf("\n");
 }
 
-void CoffLoader::PrintOptionHeader(OptionHeader_t *OptHdr)
+void CoffLoader::PrintOptionHeader(OptionHeader_t* OptHdr)
 {
   printf("Option Header\n");
   printf("------------------------------------------\n\n");
@@ -695,7 +699,7 @@ void CoffLoader::PrintOptionHeader(OptionHeader_t *OptHdr)
   printf("\n");
 }
 
-void CoffLoader::PrintWindowsHeader(WindowsHeader_t *WinHdr)
+void CoffLoader::PrintWindowsHeader(WindowsHeader_t* WinHdr)
 {
   printf("Windows Specific Option Header\n");
   printf("------------------------------------------\n\n");
@@ -703,9 +707,12 @@ void CoffLoader::PrintWindowsHeader(WindowsHeader_t *WinHdr)
   printf("Image Base:         0x%08lX\n", WinHdr->ImageBase);
   printf("Section Alignment:  0x%08lX\n", WinHdr->SectionAlignment);
   printf("File Alignment:     0x%08lX\n", WinHdr->FileAlignment);
-  printf("OS Version:         %d.%08d\n", BIGVERSION_MAJOR(WinHdr->OSVer), BIGVERSION_MINOR(WinHdr->OSVer));
-  printf("Image Version:      %d.%08d\n", BIGVERSION_MAJOR(WinHdr->ImgVer), BIGVERSION_MINOR(WinHdr->ImgVer));
-  printf("SubSystem Version:  %d.%08d\n", BIGVERSION_MAJOR(WinHdr->SubSysVer), BIGVERSION_MINOR(WinHdr->SubSysVer));
+  printf("OS Version:         %d.%08d\n", BIGVERSION_MAJOR(WinHdr->OSVer),
+         BIGVERSION_MINOR(WinHdr->OSVer));
+  printf("Image Version:      %d.%08d\n", BIGVERSION_MAJOR(WinHdr->ImgVer),
+         BIGVERSION_MINOR(WinHdr->ImgVer));
+  printf("SubSystem Version:  %d.%08d\n", BIGVERSION_MAJOR(WinHdr->SubSysVer),
+         BIGVERSION_MINOR(WinHdr->SubSysVer));
   printf("Size of Image:      0x%08lX\n", WinHdr->SizeOfImage);
   printf("Size of Headers:    0x%08lX\n", WinHdr->SizeOfHeaders);
   printf("Checksum:           0x%08lX\n", WinHdr->CheckSum);
@@ -720,11 +727,11 @@ void CoffLoader::PrintWindowsHeader(WindowsHeader_t *WinHdr)
   printf("\n");
 }
 
-void CoffLoader::PrintSection(SectionHeader_t *ScnHdr, char* data)
+void CoffLoader::PrintSection(SectionHeader_t* ScnHdr, char* data)
 {
   char SectionName[9];
 
-  strncpy(SectionName, (char *)ScnHdr->Name, 8);
+  strncpy(SectionName, (char*)ScnHdr->Name, 8);
   SectionName[8] = 0;
   printf("Section: %s\n", SectionName);
   printf("------------------------------------------\n\n");
@@ -921,16 +928,14 @@ void CoffLoader::PrintSection(SectionHeader_t *ScnHdr, char* data)
   printf("\n");
 }
 
-int CoffLoader::ParseCoff(FILE *fp)
+int CoffLoader::ParseCoff(FILE* fp)
 {
-  if ( !LoadCoffHModule(fp) )
+  if (!LoadCoffHModule(fp))
   {
     printf("Failed to load/find COFF hModule header\n");
     return 0;
   }
-  if ( !LoadSymTable(fp) ||
-       !LoadStringTable(fp) ||
-       !LoadSections(fp) )
+  if (!LoadSymTable(fp) || !LoadStringTable(fp) || !LoadSections(fp))
     return 0;
 
   PerformFixups();
@@ -945,22 +950,22 @@ int CoffLoader::ParseCoff(FILE *fp)
 void CoffLoader::PerformFixups(void)
 {
   int FixupDataSize;
-  char *FixupData;
-  char *EndData;
+  char* FixupData;
+  char* EndData;
 
   EntryAddress = (unsigned long)RVA2Data(EntryAddress);
 
-  if( reinterpret_cast<void*>(WindowsHeader->ImageBase) == hModule )
+  if (reinterpret_cast<void*>(WindowsHeader->ImageBase) == hModule)
     return;
 
-  if ( !Directory )
-    return ;
+  if (!Directory)
+    return;
 
-  if ( NumOfDirectories <= BASE_RELOCATION_TABLE )
-    return ;
+  if (NumOfDirectories <= BASE_RELOCATION_TABLE)
+    return;
 
-  if ( !Directory[BASE_RELOCATION_TABLE].Size )
-    return ;
+  if (!Directory[BASE_RELOCATION_TABLE].Size)
+    return;
 
   FixupDataSize = Directory[BASE_RELOCATION_TABLE].Size;
   FixupData = (char*)RVA2Data(Directory[BASE_RELOCATION_TABLE].RVA);
@@ -983,11 +988,12 @@ void CoffLoader::PerformFixups(void)
       Fixup &= 0xfff;
       if (Type == IMAGE_REL_BASED_HIGHLOW)
       {
-        unsigned long *Off = (unsigned long*)RVA2Data(Fixup + PageRVA);
+        unsigned long* Off = (unsigned long*)RVA2Data(Fixup + PageRVA);
         *Off = (unsigned long)RVA2Data(*Off - WindowsHeader->ImageBase);
       }
       else if (Type == IMAGE_REL_BASED_ABSOLUTE)
-      {}
+      {
+      }
       else
       {
         printf("Unsupported fixup type!!\n");

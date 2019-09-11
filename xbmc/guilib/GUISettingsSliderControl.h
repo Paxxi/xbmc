@@ -20,17 +20,30 @@
  \ingroup controls
  \brief
  */
-class CGUISettingsSliderControl :
-      public CGUISliderControl
+class CGUISettingsSliderControl : public CGUISliderControl
 {
 public:
-  CGUISettingsSliderControl(int parentID, int controlID, float posX, float posY, float width, float height, float sliderWidth, float sliderHeight, const CTextureInfo &textureFocus, const CTextureInfo &textureNoFocus, const CTextureInfo& backGroundTexture, const CTextureInfo& nibTexture, const CTextureInfo& nibTextureFocus, const CLabelInfo &labelInfo, int iType);
+  CGUISettingsSliderControl(int parentID,
+                            int controlID,
+                            float posX,
+                            float posY,
+                            float width,
+                            float height,
+                            float sliderWidth,
+                            float sliderHeight,
+                            const CTextureInfo& textureFocus,
+                            const CTextureInfo& textureNoFocus,
+                            const CTextureInfo& backGroundTexture,
+                            const CTextureInfo& nibTexture,
+                            const CTextureInfo& nibTextureFocus,
+                            const CLabelInfo& labelInfo,
+                            int iType);
   ~CGUISettingsSliderControl(void) override;
-  CGUISettingsSliderControl *Clone() const override { return new CGUISettingsSliderControl(*this); }
+  CGUISettingsSliderControl* Clone() const override { return new CGUISettingsSliderControl(*this); }
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
   void OnUnFocus() override;
   EVENT_RESULT OnMouseEvent(const CPoint& point, const CMouseEvent& event) override;
   void SetActive();
@@ -46,11 +59,11 @@ public:
   void SetHeight(float height) override;
   void SetEnabled(bool bEnable) override;
 
-  void SetText(const std::string &label) {m_buttonControl.SetLabel(label);};
-  float GetXPosition() const override { return m_buttonControl.GetXPosition();};
-  float GetYPosition() const override { return m_buttonControl.GetYPosition();};
+  void SetText(const std::string& label) { m_buttonControl.SetLabel(label); };
+  float GetXPosition() const override { return m_buttonControl.GetXPosition(); };
+  float GetYPosition() const override { return m_buttonControl.GetYPosition(); };
   std::string GetDescription() const override;
-  bool HitTest(const CPoint &point) const override { return m_buttonControl.HitTest(point); };
+  bool HitTest(const CPoint& point) const override { return m_buttonControl.HitTest(point); };
 
 protected:
   bool UpdateColors() override;
@@ -61,4 +74,3 @@ private:
   CGUILabel m_label;
   bool m_active; ///< Whether the slider has been activated by a click.
 };
-

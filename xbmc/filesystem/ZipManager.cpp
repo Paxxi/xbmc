@@ -8,19 +8,19 @@
 
 #include "ZipManager.h"
 
-#include <algorithm>
-#include <utility>
-
 #include "File.h"
 #include "URL.h"
+
+#include <algorithm>
+#include <utility>
 #if defined(TARGET_POSIX)
 #include "PlatformDefs.h"
 #endif
 #include "utils/CharsetConverter.h"
 #include "utils/EndianSwap.h"
-#include "utils/log.h"
 #include "utils/RegExp.h"
 #include "utils/URIUtils.h"
+#include "utils/log.h"
 
 using namespace XFILE;
 
@@ -36,16 +36,17 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
 
   std::string strFile = url.GetHostName();
 
-  if (CFile::Stat(strFile,&m_StatData))
+  if (CFile::Stat(strFile, &m_StatData))
   {
-    CLog::Log(LOGDEBUG,"CZipManager::GetZipList: failed to stat file %s", url.GetRedacted().c_str());
+    CLog::Log(LOGDEBUG, "CZipManager::GetZipList: failed to stat file %s",
+              url.GetRedacted().c_str());
     return false;
   }
 
-  std::map<std::string, std::vector<SZipEntry> >::iterator it = mZipMap.find(strFile);
+  std::map<std::string, std::vector<SZipEntry>>::iterator it = mZipMap.find(strFile);
   if (it != mZipMap.end()) // already listed, just return it if not changed, else release and reread
   {
-    std::map<std::string,int64_t>::iterator it2=mZipDate.find(strFile);
+    std::map<std::string, int64_t>::iterator it2 = mZipDate.find(strFile);
 
     if (m_StatData.st_mtime == it2->second)
     {
@@ -59,25 +60,26 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
   CFile mFile;
   if (!mFile.Open(strFile))
   {
-    CLog::Log(LOGDEBUG,"ZipManager: unable to open file %s!",strFile.c_str());
+    CLog::Log(LOGDEBUG, "ZipManager: unable to open file %s!", strFile.c_str());
     return false;
   }
 
   unsigned int hdr;
-  if (mFile.Read(&hdr, 4)!=4 || (Endian_SwapLE32(hdr) != ZIP_LOCAL_HEADER &&
-                                 Endian_SwapLE32(hdr) != ZIP_DATA_RECORD_HEADER &&
-                                 Endian_SwapLE32(hdr) != ZIP_SPLIT_ARCHIVE_HEADER))
+  if (mFile.Read(&hdr, 4) != 4 ||
+      (Endian_SwapLE32(hdr) != ZIP_LOCAL_HEADER && Endian_SwapLE32(hdr) != ZIP_DATA_RECORD_HEADER &&
+       Endian_SwapLE32(hdr) != ZIP_SPLIT_ARCHIVE_HEADER))
   {
-    CLog::Log(LOGDEBUG,"ZipManager: not a zip file!");
+    CLog::Log(LOGDEBUG, "ZipManager: not a zip file!");
     mFile.Close();
     return false;
   }
 
   if (Endian_SwapLE32(hdr) == ZIP_SPLIT_ARCHIVE_HEADER)
-    CLog::LogF(LOGWARNING, "ZIP split archive header found. Trying to process as a single archive..");
+    CLog::LogF(LOGWARNING,
+               "ZIP split archive header found. Trying to process as a single archive..");
 
   // push date for update detection
-  mZipDate.insert(make_pair(strFile,m_StatData.st_mtime));
+  mZipDate.insert(make_pair(strFile, m_StatData.st_mtime));
 
 
   // Look for end of central directory record
@@ -90,11 +92,11 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
   // we start the search at ECDREC_SIZE-1 from the end of file
   if (fileSize < ECDREC_SIZE - 1)
   {
-    CLog::Log(LOGERROR, "ZipManager: Invalid zip file length: %" PRId64"", fileSize);
+    CLog::Log(LOGERROR, "ZipManager: Invalid zip file length: %" PRId64 "", fileSize);
     return false;
   }
-  int searchSize = (int) std::min(static_cast<int64_t>(65557), fileSize-ECDREC_SIZE+1);
-  int blockSize = (int) std::min(1024, searchSize);
+  int searchSize = (int)std::min(static_cast<int64_t>(65557), fileSize - ECDREC_SIZE + 1);
+  int blockSize = (int)std::min(1024, searchSize);
   int nbBlock = searchSize / blockSize;
   int extraBlockSize = searchSize % blockSize;
   // Signature is on 4 bytes
@@ -103,34 +105,34 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
   bool found = false;
 
   // Loop through blocks starting at the end of the file (minus ECDREC_SIZE-1)
-  for (int nb=1; !found && (nb <= nbBlock); nb++)
+  for (int nb = 1; !found && (nb <= nbBlock); nb++)
   {
-    mFile.Seek(fileSize-ECDREC_SIZE+1-(blockSize*nb),SEEK_SET);
+    mFile.Seek(fileSize - ECDREC_SIZE + 1 - (blockSize * nb), SEEK_SET);
     if (mFile.Read(buffer.get(), blockSize + 3) != blockSize + 3)
       return false;
-    for (int i=blockSize-1; !found && (i >= 0); i--)
+    for (int i = blockSize - 1; !found && (i >= 0); i--)
     {
-      if ( Endian_SwapLE32(*((unsigned int*)(buffer.get()+i))) == ZIP_END_CENTRAL_HEADER )
+      if (Endian_SwapLE32(*((unsigned int*)(buffer.get() + i))) == ZIP_END_CENTRAL_HEADER)
       {
         // Set current position to start of end of central directory
-        mFile.Seek(fileSize-ECDREC_SIZE+1-(blockSize*nb)+i,SEEK_SET);
+        mFile.Seek(fileSize - ECDREC_SIZE + 1 - (blockSize * nb) + i, SEEK_SET);
         found = true;
       }
     }
   }
 
   // If not found, look in the last block left...
-  if ( !found && (extraBlockSize > 0) )
+  if (!found && (extraBlockSize > 0))
   {
-    mFile.Seek(fileSize-ECDREC_SIZE+1-searchSize,SEEK_SET);
+    mFile.Seek(fileSize - ECDREC_SIZE + 1 - searchSize, SEEK_SET);
     if (mFile.Read(buffer.get(), extraBlockSize + 3) != extraBlockSize + 3)
       return false;
-    for (int i=extraBlockSize-1; !found && (i >= 0); i--)
+    for (int i = extraBlockSize - 1; !found && (i >= 0); i--)
     {
-      if ( Endian_SwapLE32(*((unsigned int*)(buffer.get()+i))) == ZIP_END_CENTRAL_HEADER )
+      if (Endian_SwapLE32(*((unsigned int*)(buffer.get() + i))) == ZIP_END_CENTRAL_HEADER)
       {
         // Set current position to start of end of central directory
-        mFile.Seek(fileSize-ECDREC_SIZE+1-searchSize+i,SEEK_SET);
+        mFile.Seek(fileSize - ECDREC_SIZE + 1 - searchSize + i, SEEK_SET);
         found = true;
       }
     }
@@ -138,16 +140,16 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
 
   buffer.clear();
 
-  if ( !found )
+  if (!found)
   {
-    CLog::Log(LOGDEBUG,"ZipManager: broken file %s!",strFile.c_str());
+    CLog::Log(LOGDEBUG, "ZipManager: broken file %s!", strFile.c_str());
     mFile.Close();
     return false;
   }
 
   unsigned int cdirOffset, cdirSize;
   // Get size of the central directory
-  mFile.Seek(12,SEEK_CUR);
+  mFile.Seek(12, SEEK_CUR);
   if (mFile.Read(&cdirSize, 4) != 4)
     return false;
   cdirSize = Endian_SwapLE32(cdirSize);
@@ -157,7 +159,7 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
   cdirOffset = Endian_SwapLE32(cdirOffset);
 
   // Go to the start of central directory
-  mFile.Seek(cdirOffset,SEEK_SET);
+  mFile.Seek(cdirOffset, SEEK_SET);
 
   CRegExp pathTraversal;
   pathTraversal.RegComp(PATH_TRAVERSAL);
@@ -171,7 +173,7 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
     readCHeader(temp, ze);
     if (ze.header != ZIP_CENTRAL_HEADER)
     {
-      CLog::Log(LOGDEBUG,"ZipManager: broken file %s!",strFile.c_str());
+      CLog::Log(LOGDEBUG, "ZipManager: broken file %s!", strFile.c_str());
       mFile.Close();
       return false;
     }
@@ -191,7 +193,7 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
     strncpy(ze.name, strName.c_str(), strName.size() > 254 ? 254 : strName.size());
 
     // Jump after central file header extra field and file comment
-    mFile.Seek(ze.eclength + ze.clength,SEEK_CUR);
+    mFile.Seek(ze.eclength + ze.clength, SEEK_CUR);
 
     if (pathTraversal.RegFind(strName) < 0)
       items.push_back(ze);
@@ -202,17 +204,16 @@ bool CZipManager::GetZipList(const CURL& url, std::vector<SZipEntry>& items)
   {
     // Go to the local file header to get the extra field length
     // !! local header extra field length != central file header extra field length !!
-    mFile.Seek(ze.lhdrOffset+28,SEEK_SET);
+    mFile.Seek(ze.lhdrOffset + 28, SEEK_SET);
     if (mFile.Read(&(ze.elength), 2) != 2)
       return false;
     ze.elength = Endian_SwapLE16(ze.elength);
 
     // Compressed data offset = local header offset + size of local header + filename length + local file header extra field length
     ze.offset = ze.lhdrOffset + LHDR_SIZE + ze.flength + ze.elength;
-
   }
 
-  mZipMap.insert(make_pair(strFile,items));
+  mZipMap.insert(make_pair(strFile, items));
   mFile.Close();
   return true;
 }
@@ -221,11 +222,11 @@ bool CZipManager::GetZipEntry(const CURL& url, SZipEntry& item)
 {
   std::string strFile = url.GetHostName();
 
-  std::map<std::string, std::vector<SZipEntry> >::iterator it = mZipMap.find(strFile);
+  std::map<std::string, std::vector<SZipEntry>>::iterator it = mZipMap.find(strFile);
   std::vector<SZipEntry> items;
   if (it == mZipMap.end()) // we need to list the zip
   {
-    GetZipList(url,items);
+    GetZipList(url, items);
   }
   else
   {
@@ -273,16 +274,16 @@ bool CZipManager::ExtractArchive(const CURL& archive, const std::string& strPath
 void CZipManager::readHeader(const char* buffer, SZipEntry& info)
 {
   info.header = Endian_SwapLE32(*(const unsigned int*)buffer);
-  info.version = Endian_SwapLE16(*(const unsigned short*)(buffer+4));
-  info.flags = Endian_SwapLE16(*(const unsigned short*)(buffer+6));
-  info.method = Endian_SwapLE16(*(const unsigned short*)(buffer+8));
-  info.mod_time = Endian_SwapLE16(*(const unsigned short*)(buffer+10));
-  info.mod_date = Endian_SwapLE16(*(const unsigned short*)(buffer+12));
-  info.crc32 = Endian_SwapLE32(*(const unsigned int*)(buffer+14));
-  info.csize = Endian_SwapLE32(*(const unsigned int*)(buffer+18));
-  info.usize = Endian_SwapLE32(*(const unsigned int*)(buffer+22));
-  info.flength = Endian_SwapLE16(*(const unsigned short*)(buffer+26));
-  info.elength = Endian_SwapLE16(*(const unsigned short*)(buffer+28));
+  info.version = Endian_SwapLE16(*(const unsigned short*)(buffer + 4));
+  info.flags = Endian_SwapLE16(*(const unsigned short*)(buffer + 6));
+  info.method = Endian_SwapLE16(*(const unsigned short*)(buffer + 8));
+  info.mod_time = Endian_SwapLE16(*(const unsigned short*)(buffer + 10));
+  info.mod_date = Endian_SwapLE16(*(const unsigned short*)(buffer + 12));
+  info.crc32 = Endian_SwapLE32(*(const unsigned int*)(buffer + 14));
+  info.csize = Endian_SwapLE32(*(const unsigned int*)(buffer + 18));
+  info.usize = Endian_SwapLE32(*(const unsigned int*)(buffer + 22));
+  info.flength = Endian_SwapLE16(*(const unsigned short*)(buffer + 26));
+  info.elength = Endian_SwapLE16(*(const unsigned short*)(buffer + 28));
 }
 
 // Read central file header (from central directory)
@@ -290,32 +291,29 @@ void CZipManager::readCHeader(const char* buffer, SZipEntry& info)
 {
   info.header = Endian_SwapLE32(*(const unsigned int*)buffer);
   // Skip version made by
-  info.version = Endian_SwapLE16(*(const unsigned short*)(buffer+6));
-  info.flags = Endian_SwapLE16(*(const unsigned short*)(buffer+8));
-  info.method = Endian_SwapLE16(*(const unsigned short*)(buffer+10));
-  info.mod_time = Endian_SwapLE16(*(const unsigned short*)(buffer+12));
-  info.mod_date = Endian_SwapLE16(*(const unsigned short*)(buffer+14));
-  info.crc32 = Endian_SwapLE32(*(const unsigned int*)(buffer+16));
-  info.csize = Endian_SwapLE32(*(const unsigned int*)(buffer+20));
-  info.usize = Endian_SwapLE32(*(const unsigned int*)(buffer+24));
-  info.flength = Endian_SwapLE16(*(const unsigned short*)(buffer+28));
-  info.eclength = Endian_SwapLE16(*(const unsigned short*)(buffer+30));
-  info.clength = Endian_SwapLE16(*(const unsigned short*)(buffer+32));
+  info.version = Endian_SwapLE16(*(const unsigned short*)(buffer + 6));
+  info.flags = Endian_SwapLE16(*(const unsigned short*)(buffer + 8));
+  info.method = Endian_SwapLE16(*(const unsigned short*)(buffer + 10));
+  info.mod_time = Endian_SwapLE16(*(const unsigned short*)(buffer + 12));
+  info.mod_date = Endian_SwapLE16(*(const unsigned short*)(buffer + 14));
+  info.crc32 = Endian_SwapLE32(*(const unsigned int*)(buffer + 16));
+  info.csize = Endian_SwapLE32(*(const unsigned int*)(buffer + 20));
+  info.usize = Endian_SwapLE32(*(const unsigned int*)(buffer + 24));
+  info.flength = Endian_SwapLE16(*(const unsigned short*)(buffer + 28));
+  info.eclength = Endian_SwapLE16(*(const unsigned short*)(buffer + 30));
+  info.clength = Endian_SwapLE16(*(const unsigned short*)(buffer + 32));
   // Skip disk number start, internal/external file attributes
-  info.lhdrOffset = Endian_SwapLE32(*(const unsigned int*)(buffer+42));
-
+  info.lhdrOffset = Endian_SwapLE32(*(const unsigned int*)(buffer + 42));
 }
 
 void CZipManager::release(const std::string& strPath)
 {
   CURL url(strPath);
-  std::map<std::string, std::vector<SZipEntry> >::iterator it= mZipMap.find(url.GetHostName());
+  std::map<std::string, std::vector<SZipEntry>>::iterator it = mZipMap.find(url.GetHostName());
   if (it != mZipMap.end())
   {
-    std::map<std::string,int64_t>::iterator it2=mZipDate.find(url.GetHostName());
+    std::map<std::string, int64_t>::iterator it2 = mZipDate.find(url.GetHostName());
     mZipMap.erase(it);
     mZipDate.erase(it2);
   }
 }
-
-

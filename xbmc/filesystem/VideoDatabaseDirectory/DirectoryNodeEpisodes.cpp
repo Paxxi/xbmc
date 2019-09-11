@@ -16,7 +16,6 @@ using namespace XFILE::VIDEODATABASEDIRECTORY;
 CDirectoryNodeEpisodes::CDirectoryNodeEpisodes(const std::string& strName, CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_EPISODES, strName, pParent)
 {
-
 }
 
 bool CDirectoryNodeEpisodes::GetContent(CFileItemList& items) const
@@ -32,7 +31,9 @@ bool CDirectoryNodeEpisodes::GetContent(CFileItemList& items) const
   if (season == -2)
     season = -1;
 
-  bool bSuccess=videodatabase.GetEpisodesNav(BuildPath(), items, params.GetGenreId(), params.GetYear(), params.GetActorId(), params.GetDirectorId(), params.GetTvShowId(), season);
+  bool bSuccess = videodatabase.GetEpisodesNav(
+      BuildPath(), items, params.GetGenreId(), params.GetYear(), params.GetActorId(),
+      params.GetDirectorId(), params.GetTvShowId(), season);
 
   videodatabase.Close();
 

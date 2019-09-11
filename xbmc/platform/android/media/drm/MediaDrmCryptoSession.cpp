@@ -25,7 +25,8 @@ using namespace XbmcCommons;
 class CharVecBuffer : public Buffer
 {
 public:
-  inline CharVecBuffer(const Buffer& buf) : Buffer(buf) {};
+  inline CharVecBuffer(const Buffer& buf)
+    : Buffer(buf){};
 
   inline CharVecBuffer(const std::vector<char>& vec)
     : Buffer(vec.size())
@@ -45,7 +46,9 @@ void CMediaDrmCryptoSession::Register()
   CCryptoSession::RegisterInterface(CMediaDrmCryptoSession::Create);
 }
 
-CMediaDrmCryptoSession::CMediaDrmCryptoSession(const std::string& UUID, const std::string& cipherAlgo, const std::string& macAlgo)
+CMediaDrmCryptoSession::CMediaDrmCryptoSession(const std::string& UUID,
+                                               const std::string& cipherAlgo,
+                                               const std::string& macAlgo)
   : m_mediaDrm(nullptr)
   , m_cryptoSession(nullptr)
   , m_cipherAlgo(cipherAlgo)
@@ -57,11 +60,12 @@ CMediaDrmCryptoSession::CMediaDrmCryptoSession(const std::string& UUID, const st
     throw std::runtime_error("mediaDrm: Invalid UUID size");
 
   int64_t mostSigBits(0), leastSigBits(0);
-  const uint8_t uuidPtr[16] = {0xed,0xef,0x8b,0xa9,0x79,0xd6,0x4a,0xce,0xa3,0xc8,0x27,0xdc,0xd5,0x1d,0x21,0xed};
+  const uint8_t uuidPtr[16] = {0xed, 0xef, 0x8b, 0xa9, 0x79, 0xd6, 0x4a, 0xce,
+                               0xa3, 0xc8, 0x27, 0xdc, 0xd5, 0x1d, 0x21, 0xed};
   for (unsigned int i(0); i < 8; ++i)
     mostSigBits = (mostSigBits << 8) | uuidPtr[i];
   for (unsigned int i(8); i < 16; ++i)
-   leastSigBits = (leastSigBits << 8) | uuidPtr[i];
+    leastSigBits = (leastSigBits << 8) | uuidPtr[i];
 
   CJNIUUID uuid(mostSigBits, leastSigBits);
 
@@ -92,9 +96,12 @@ CMediaDrmCryptoSession::~CMediaDrmCryptoSession()
   delete m_mediaDrm, m_mediaDrm = nullptr;
 }
 
-CCryptoSession* CMediaDrmCryptoSession::Create(const std::string& UUID, const std::string& cipherAlgo, const std::string& macAlgo)
+CCryptoSession* CMediaDrmCryptoSession::Create(const std::string& UUID,
+                                               const std::string& cipherAlgo,
+                                               const std::string& macAlgo)
 {
-  CMediaDrmCryptoSession *res = nullptr;;
+  CMediaDrmCryptoSession* res = nullptr;
+  ;
   try
   {
     res = new CMediaDrmCryptoSession(UUID, cipherAlgo, macAlgo);
@@ -110,14 +117,15 @@ CCryptoSession* CMediaDrmCryptoSession::Create(const std::string& UUID, const st
 
 // Interface methods
 Buffer CMediaDrmCryptoSession::GetKeyRequest(const Buffer& init,
-  const std::string& mimeType,
-  bool offlineKey,
-  const std::map<std::string, std::string>& parameters)
+                                             const std::string& mimeType,
+                                             bool offlineKey,
+                                             const std::map<std::string, std::string>& parameters)
 {
   if (m_mediaDrm && m_sessionId)
   {
-    CJNIMediaDrmKeyRequest req = m_mediaDrm->getKeyRequest(*m_sessionId, CharVecBuffer(init), mimeType,
-      offlineKey ? CJNIMediaDrm::KEY_TYPE_OFFLINE : CJNIMediaDrm::KEY_TYPE_STREAMING, parameters);
+    CJNIMediaDrmKeyRequest req = m_mediaDrm->getKeyRequest(
+        *m_sessionId, CharVecBuffer(init), mimeType,
+        offlineKey ? CJNIMediaDrm::KEY_TYPE_OFFLINE : CJNIMediaDrm::KEY_TYPE_STREAMING, parameters);
     return CharVecBuffer(req.getData());
   }
 
@@ -172,18 +180,24 @@ void CMediaDrmCryptoSession::SetPropertyString(const std::string& name, const st
 }
 
 // Crypto methods
-Buffer CMediaDrmCryptoSession::Decrypt(const Buffer& cipherKeyId, const Buffer& input, const Buffer& iv)
+Buffer CMediaDrmCryptoSession::Decrypt(const Buffer& cipherKeyId,
+                                       const Buffer& input,
+                                       const Buffer& iv)
 {
   if (m_cryptoSession)
-    return CharVecBuffer(m_cryptoSession->decrypt(CharVecBuffer(cipherKeyId), CharVecBuffer(input), CharVecBuffer(iv)));
+    return CharVecBuffer(m_cryptoSession->decrypt(CharVecBuffer(cipherKeyId), CharVecBuffer(input),
+                                                  CharVecBuffer(iv)));
 
   return Buffer();
 }
 
-Buffer CMediaDrmCryptoSession::Encrypt(const Buffer& cipherKeyId, const Buffer& input, const Buffer& iv)
+Buffer CMediaDrmCryptoSession::Encrypt(const Buffer& cipherKeyId,
+                                       const Buffer& input,
+                                       const Buffer& iv)
 {
   if (m_cryptoSession)
-    return CharVecBuffer(m_cryptoSession->encrypt(CharVecBuffer(cipherKeyId), CharVecBuffer(input), CharVecBuffer(iv)));
+    return CharVecBuffer(m_cryptoSession->encrypt(CharVecBuffer(cipherKeyId), CharVecBuffer(input),
+                                                  CharVecBuffer(iv)));
 
   return Buffer();
 }
@@ -196,10 +210,13 @@ Buffer CMediaDrmCryptoSession::Sign(const Buffer& macKeyId, const Buffer& messag
   return Buffer();
 }
 
-bool CMediaDrmCryptoSession::Verify(const Buffer& macKeyId, const Buffer& message, const Buffer& signature)
+bool CMediaDrmCryptoSession::Verify(const Buffer& macKeyId,
+                                    const Buffer& message,
+                                    const Buffer& signature)
 {
   if (m_cryptoSession)
-    return m_cryptoSession->verify(CharVecBuffer(macKeyId), CharVecBuffer(message), CharVecBuffer(signature));
+    return m_cryptoSession->verify(CharVecBuffer(macKeyId), CharVecBuffer(message),
+                                   CharVecBuffer(signature));
 
   return false;
 }
@@ -225,7 +242,8 @@ TRYAGAIN:
     }
   }
 
-  m_cryptoSession = new CJNIMediaDrmCryptoSession(m_mediaDrm->getCryptoSession(*m_sessionId, m_cipherAlgo, m_macAlgo));
+  m_cryptoSession = new CJNIMediaDrmCryptoSession(
+      m_mediaDrm->getCryptoSession(*m_sessionId, m_cipherAlgo, m_macAlgo));
 
   if (xbmc_jnienv()->ExceptionCheck())
   {
@@ -244,7 +262,7 @@ void CMediaDrmCryptoSession::CloseSession()
     m_mediaDrm->closeSession(*m_sessionId);
 
     if (m_cryptoSession)
-      delete(m_cryptoSession), m_cryptoSession = nullptr;
+      delete (m_cryptoSession), m_cryptoSession = nullptr;
 
     delete m_sessionId, m_sessionId = nullptr;
     m_hasKeys = false;

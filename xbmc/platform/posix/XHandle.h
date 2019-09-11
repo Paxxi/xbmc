@@ -18,42 +18,49 @@
 
 #include "PlatformDefs.h"
 
-struct CXHandle {
+struct CXHandle
+{
 
 public:
-  typedef enum { HND_NULL = 0, HND_FILE, HND_EVENT, HND_MUTEX, HND_FIND_FILE } HandleType;
+  typedef enum
+  {
+    HND_NULL = 0,
+    HND_FILE,
+    HND_EVENT,
+    HND_MUTEX,
+    HND_FIND_FILE
+  } HandleType;
 
   CXHandle();
   explicit CXHandle(HandleType nType);
-  CXHandle(const CXHandle &src);
+  CXHandle(const CXHandle& src);
 
   virtual ~CXHandle();
   void Init();
   inline HandleType GetType() { return m_type; }
   void ChangeType(HandleType newType);
 
-  XbmcThreads::ConditionVariable     *m_hCond;
-  std::list<CXHandle*>  m_hParents;
+  XbmcThreads::ConditionVariable* m_hCond;
+  std::list<CXHandle*> m_hParents;
 
   // simulate mutex and critical section
-  CCriticalSection *m_hMutex;
-  int       RecursionCount;  // for mutex - for compatibility with TARGET_WINDOWS critical section
-  int       fd;
-  bool      m_bManualEvent;
-  time_t    m_tmCreation;
+  CCriticalSection* m_hMutex;
+  int RecursionCount; // for mutex - for compatibility with TARGET_WINDOWS critical section
+  int fd;
+  bool m_bManualEvent;
+  time_t m_tmCreation;
   std::vector<std::string> m_FindFileResults;
-  int              m_nFindFileIterator;
-  std::string      m_FindFileDir;
-  off64_t          m_iOffset;
-  bool             m_bCDROM;
-  bool             m_bEventSet;
-  int              m_nRefCount;
-  CCriticalSection *m_internalLock;
+  int m_nFindFileIterator;
+  std::string m_FindFileDir;
+  off64_t m_iOffset;
+  bool m_bCDROM;
+  bool m_bEventSet;
+  int m_nRefCount;
+  CCriticalSection* m_internalLock;
 
   static void DumpObjectTracker();
 
 protected:
-  HandleType  m_type;
+  HandleType m_type;
   static int m_objectTracker[10];
-
 };

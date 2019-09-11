@@ -13,7 +13,7 @@
 #include "utils/StringUtils.h"
 #include "utils/XBMCTinyXML.h"
 
-bool CSettingConditionItem::Deserialize(const TiXmlNode *node)
+bool CSettingConditionItem::Deserialize(const TiXmlNode* node)
 {
   if (!CBooleanLogicValue::Deserialize(node))
     return false;
@@ -40,7 +40,8 @@ bool CSettingConditionItem::Check() const
   if (m_settingsManager == nullptr)
     return false;
 
-  return m_settingsManager->GetConditions().Check(m_name, m_value, m_settingsManager->GetSetting(m_setting)) == !m_negated;
+  return m_settingsManager->GetConditions().Check(
+             m_name, m_value, m_settingsManager->GetSetting(m_setting)) == !m_negated;
 }
 
 bool CSettingConditionCombination::Check() const
@@ -51,7 +52,8 @@ bool CSettingConditionCombination::Check() const
     if (operation == nullptr)
       continue;
 
-    const auto combination = std::static_pointer_cast<const CSettingConditionCombination>(operation);
+    const auto combination =
+        std::static_pointer_cast<const CSettingConditionCombination>(operation);
     if (combination == nullptr)
       continue;
 
@@ -79,7 +81,7 @@ bool CSettingConditionCombination::Check() const
   return ok;
 }
 
-CSettingCondition::CSettingCondition(CSettingsManager *settingsManager /* = nullptr */)
+CSettingCondition::CSettingCondition(CSettingsManager* settingsManager /* = nullptr */)
   : ISettingCondition(settingsManager)
 {
   m_operation = CBooleanLogicOperationPtr(new CSettingConditionCombination(settingsManager));
@@ -104,7 +106,9 @@ void CSettingConditionsManager::AddCondition(std::string condition)
   m_defines.insert(condition);
 }
 
-void CSettingConditionsManager::AddDynamicCondition(std::string identifier, SettingConditionCheck condition, void *data /*= nullptr*/)
+void CSettingConditionsManager::AddDynamicCondition(std::string identifier,
+                                                    SettingConditionCheck condition,
+                                                    void* data /*= nullptr*/)
 {
   if (identifier.empty() || condition == nullptr)
     return;
@@ -126,7 +130,9 @@ void CSettingConditionsManager::RemoveDynamicCondition(std::string identifier)
     m_conditions.erase(it);
 }
 
-bool CSettingConditionsManager::Check(std::string condition, const std::string &value /* = "" */, std::shared_ptr<const CSetting> setting /* = nullptr */) const
+bool CSettingConditionsManager::Check(std::string condition,
+                                      const std::string& value /* = "" */,
+                                      std::shared_ptr<const CSetting> setting /* = nullptr */) const
 {
   if (condition.empty())
     return false;

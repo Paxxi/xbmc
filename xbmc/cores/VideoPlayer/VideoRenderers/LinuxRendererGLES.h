@@ -8,20 +8,21 @@
 
 #pragma once
 
+#include "BaseRenderer.h"
+#include "FrameBufferObject.h"
+#include "RenderFlags.h"
+#include "RenderInfo.h"
+#include "cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodec.h"
+#include "cores/VideoSettings.h"
+#include "guilib/Shader.h"
+#include "windowing/GraphicContext.h"
+
 #include <vector>
 
 #include "system_gl.h"
 
-#include "BaseRenderer.h"
-#include "cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodec.h"
-#include "cores/VideoSettings.h"
-#include "FrameBufferObject.h"
-#include "guilib/Shader.h"
-#include "RenderFlags.h"
-#include "RenderInfo.h"
-#include "windowing/GraphicContext.h"
-
-extern "C" {
+extern "C"
+{
 #include <libavutil/mastering_display_metadata.h>
 }
 
@@ -29,8 +30,14 @@ class CRenderCapture;
 class CRenderSystemGLES;
 
 class CBaseTexture;
-namespace Shaders { class BaseYUV2RGBGLSLShader; }
-namespace Shaders { class BaseVideoFilterShader; }
+namespace Shaders
+{
+class BaseYUV2RGBGLSLShader;
+}
+namespace Shaders
+{
+class BaseVideoFilterShader;
+}
 
 struct DRAWRECT
 {
@@ -63,23 +70,24 @@ public:
   virtual ~CLinuxRendererGLES();
 
   // Registration
-  static CBaseRenderer* Create(CVideoBuffer *buffer);
+  static CBaseRenderer* Create(CVideoBuffer* buffer);
   static bool Register();
 
   // Player functions
-  virtual bool Configure(const VideoPicture &picture, float fps, unsigned int orientation) override;
+  virtual bool Configure(const VideoPicture& picture, float fps, unsigned int orientation) override;
   virtual bool IsConfigured() override { return m_bConfigured; }
-  virtual void AddVideoPicture(const VideoPicture &picture, int index) override;
+  virtual void AddVideoPicture(const VideoPicture& picture, int index) override;
   virtual void UnInit() override;
   virtual bool Flush(bool saveBuffers) override;
   virtual void SetBufferSize(int numBuffers) override { m_NumYV12Buffers = numBuffers; }
   virtual bool IsGuiLayer() override;
   virtual void ReleaseBuffer(int idx) override;
-  virtual void RenderUpdate(int index, int index2, bool clear, unsigned int flags, unsigned int alpha) override;
+  virtual void RenderUpdate(
+      int index, int index2, bool clear, unsigned int flags, unsigned int alpha) override;
   virtual void Update() override;
   virtual bool RenderCapture(CRenderCapture* capture) override;
   virtual CRenderInfo GetRenderInfo() override;
-  virtual bool ConfigChanged(const VideoPicture &picture) override;
+  virtual bool ConfigChanged(const VideoPicture& picture) override;
 
   // Feature support
   virtual bool SupportsMultiPassRendering() override;
@@ -96,11 +104,13 @@ protected:
 
   int NextYV12Texture();
   virtual bool ValidateRenderTarget();
-  virtual void LoadShaders(int field=FIELD_FULL);
+  virtual void LoadShaders(int field = FIELD_FULL);
   virtual void ReleaseShaders();
   void SetTextureFilter(GLenum method);
   void UpdateVideoFilter();
-  AVColorPrimaries GetSrcPrimaries(AVColorPrimaries srcPrimaries, unsigned int width, unsigned int height);
+  AVColorPrimaries GetSrcPrimaries(AVColorPrimaries srcPrimaries,
+                                   unsigned int width,
+                                   unsigned int height);
 
   // textures
   virtual bool UploadTexture(int index);
@@ -126,7 +136,7 @@ protected:
   // hooks for HwDec Renderered
   virtual bool LoadShadersHook() { return false; };
   virtual bool RenderHook(int idx) { return false; };
-  virtual void AfterRenderHook(int idx) {};
+  virtual void AfterRenderHook(int idx){};
 
   struct
   {
@@ -147,7 +157,7 @@ protected:
   // Raw data used by renderer
   int m_currentField{FIELD_FULL};
   int m_reloadShaders{0};
-  CRenderSystemGLES *m_renderSystem{nullptr};
+  CRenderSystemGLES* m_renderSystem{nullptr};
   GLenum m_pixelStoreKey{0};
 
   struct CYuvPlane
@@ -171,7 +181,7 @@ protected:
     CYuvPlane fields[MAX_FIELDS][YuvImage::MAX_PLANES];
     YuvImage image;
 
-    CVideoBuffer *videoBuffer{nullptr};
+    CVideoBuffer* videoBuffer{nullptr};
     bool loaded{false};
 
     AVColorPrimaries m_srcPrimaries;
@@ -190,13 +200,12 @@ protected:
   // field index 0 is full image, 1 is odd scanlines, 2 is even scanlines
   CPictureBuffer m_buffers[NUM_BUFFERS];
 
-  void LoadPlane(CYuvPlane& plane, int type,
-                 unsigned width,  unsigned height,
-                 int stride, int bpp, void* data);
+  void LoadPlane(
+      CYuvPlane& plane, int type, unsigned width, unsigned height, int stride, int bpp, void* data);
 
-  Shaders::BaseYUV2RGBGLSLShader *m_pYUVProgShader{nullptr};
-  Shaders::BaseYUV2RGBGLSLShader *m_pYUVBobShader{nullptr};
-  Shaders::BaseVideoFilterShader *m_pVideoFilterShader{nullptr};
+  Shaders::BaseYUV2RGBGLSLShader* m_pYUVProgShader{nullptr};
+  Shaders::BaseYUV2RGBGLSLShader* m_pYUVBobShader{nullptr};
+  Shaders::BaseVideoFilterShader* m_pVideoFilterShader{nullptr};
   ESCALINGMETHOD m_scalingMethod{VS_SCALINGMETHOD_LINEAR};
   ESCALINGMETHOD m_scalingMethodGui{VS_SCALINGMETHOD_MAX};
   bool m_fullRange;

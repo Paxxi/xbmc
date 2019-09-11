@@ -24,5 +24,7 @@ CPlatformWin10::~CPlatformWin10() = default;
 
 void CPlatformWin10::Init()
 {
-  CEnvironment::setenv("SSL_CERT_FILE", CSpecialProtocol::TranslatePath("special://xbmc/system/certs/cacert.pem").c_str(), 1);
+  CEnvironment::setenv(
+      "SSL_CERT_FILE",
+      CSpecialProtocol::TranslatePath("special://xbmc/system/certs/cacert.pem").c_str(), 1);
 }

@@ -19,11 +19,11 @@ class CVaapiProxy;
 namespace X11
 {
 CVaapiProxy* VaapiProxyCreate();
-void VaapiProxyDelete(CVaapiProxy *proxy);
-void VaapiProxyConfig(CVaapiProxy *proxy, void *dpy, void *eglDpy);
-void VAAPIRegister(CVaapiProxy *winSystem, bool deepColor);
-void VAAPIRegisterRender(CVaapiProxy *winSystem, bool &general, bool &deepColor);
-}
+void VaapiProxyDelete(CVaapiProxy* proxy);
+void VaapiProxyConfig(CVaapiProxy* proxy, void* dpy, void* eglDpy);
+void VAAPIRegister(CVaapiProxy* winSystem, bool deepColor);
+void VAAPIRegisterRender(CVaapiProxy* winSystem, bool& general, bool& deepColor);
+} // namespace X11
 
 //-----------------------------------------------------------------------------
 // GLX
@@ -37,9 +37,9 @@ namespace X11
 {
 XID GLXGetWindow(void* context);
 void* GLXGetContext(void* context);
-CGLContext* GLXContextCreate(Display *dpy);
-CVideoSync* GLXVideoSyncCreate(void *clock, CWinSystemX11GLContext& winSystem);
-}
+CGLContext* GLXContextCreate(Display* dpy);
+CVideoSync* GLXVideoSyncCreate(void* clock, CWinSystemX11GLContext& winSystem);
+} // namespace X11
 
 //-----------------------------------------------------------------------------
 // VDPAU
@@ -49,4 +49,4 @@ namespace X11
 {
 void VDPAURegisterRender();
 void VDPAURegister();
-}
+} // namespace X11

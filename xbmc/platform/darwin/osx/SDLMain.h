@@ -9,5 +9,5 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface XBMCDelegate : NSObject<NSApplicationDelegate>
+@interface XBMCDelegate : NSObject <NSApplicationDelegate>
 @end

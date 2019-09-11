@@ -26,7 +26,8 @@ bool CCocoaDPMSSupport::EnablePowerSaving(PowerSavingMode mode)
   // This is an unsupported system call that might kernel panic on PPC boxes
   // The reported OSX-PPC panic is unverified so we are going to enable this until
   // we find out which OSX-PPC boxes have problems, then add detect/disable for those boxes.
-  io_registry_entry_t r = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
+  io_registry_entry_t r =
+      IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
   if (!r)
     return false;
 
@@ -46,7 +47,8 @@ bool CCocoaDPMSSupport::DisablePowerSaving()
   // This is an unsupported system call that might kernel panic on PPC boxes
   // The reported OSX-PPC panic is unverified so we are going to enable this until
   // we find out which OSX-PPC boxes have problems, then add detect/disable for those boxes.
-  io_registry_entry_t r = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
+  io_registry_entry_t r =
+      IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
   if (!r)
     return false;
 

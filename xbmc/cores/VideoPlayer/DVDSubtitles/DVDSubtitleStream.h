@@ -39,4 +39,3 @@ public:
 
   std::stringstream m_stringstream;
 };
-

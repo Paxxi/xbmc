@@ -109,7 +109,7 @@ bool CWinSystemRpiGLESContext::CreateNewWindow(const std::string& name,
   {
     CSingleLock lock(m_resourceSection);
     // tell any shared resources
-    for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
+    for (std::vector<IDispResource*>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
       (*i)->OnResetDisplay();
   }
 
@@ -122,7 +122,9 @@ bool CWinSystemRpiGLESContext::ResizeWindow(int newWidth, int newHeight, int new
   return true;
 }
 
-bool CWinSystemRpiGLESContext::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays)
+bool CWinSystemRpiGLESContext::SetFullScreen(bool fullScreen,
+                                             RESOLUTION_INFO& res,
+                                             bool blankOtherDisplays)
 {
   CreateNewWindow("", fullScreen, res);
   CRenderSystemGLES::ResetRenderSystem(res.iWidth, res.iHeight);
@@ -139,16 +141,17 @@ void CWinSystemRpiGLESContext::SetVSyncImpl(bool enable)
 
 void CWinSystemRpiGLESContext::PresentRenderImpl(bool rendered)
 {
-  CGUIComponent *gui = CServiceBroker::GetGUI();
+  CGUIComponent* gui = CServiceBroker::GetGUI();
   if (gui)
-    CWinSystemRpi::SetVisible(gui->GetWindowManager().HasVisibleControls() || g_application.GetAppPlayer().IsRenderingGuiLayer());
+    CWinSystemRpi::SetVisible(gui->GetWindowManager().HasVisibleControls() ||
+                              g_application.GetAppPlayer().IsRenderingGuiLayer());
 
   if (m_delayDispReset && m_dispResetTimer.IsTimePast())
   {
     m_delayDispReset = false;
     CSingleLock lock(m_resourceSection);
     // tell any shared resources
-    for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
+    for (std::vector<IDispResource*>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
       (*i)->OnResetDisplay();
   }
   if (!rendered)
@@ -176,14 +179,13 @@ EGLContext CWinSystemRpiGLESContext::GetEGLContext() const
   return m_pGLContext.GetEGLContext();
 }
 
-EGLConfig  CWinSystemRpiGLESContext::GetEGLConfig() const
+EGLConfig CWinSystemRpiGLESContext::GetEGLConfig() const
 {
   return m_pGLContext.GetEGLConfig();
 }
 
-std::unique_ptr<CVideoSync> CWinSystemRpiGLESContext::GetVideoSync(void *clock)
+std::unique_ptr<CVideoSync> CWinSystemRpiGLESContext::GetVideoSync(void* clock)
 {
   std::unique_ptr<CVideoSync> pVSync(new CVideoSyncPi(clock));
   return pVSync;
 }
-

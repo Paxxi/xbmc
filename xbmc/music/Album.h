@@ -28,7 +28,7 @@ class CAlbum
 public:
   explicit CAlbum(const CFileItem& item);
   CAlbum() = default;
-  bool operator<(const CAlbum &a) const;
+  bool operator<(const CAlbum& a) const;
   void MergeScrapedAlbum(const CAlbum& album, bool override = true);
 
   void Reset()
@@ -94,7 +94,8 @@ public:
   */
   const std::vector<int> GetArtistIDArray() const;
 
-  typedef enum ReleaseType {
+  typedef enum ReleaseType
+  {
     Album = 0,
     Single
   } ReleaseType;
@@ -117,7 +118,8 @@ public:
    \param artisthints String vector of artist name hints (as from ARTISTS tag)
    \param artistmbids String vector of artist Musicbrainz IDs (as from MUSICBRAINZARTISTID tag)
   */
-  void SetArtistCredits(const std::vector<std::string>& names, const std::vector<std::string>& hints,
+  void SetArtistCredits(const std::vector<std::string>& names,
+                        const std::vector<std::string>& hints,
                         const std::vector<std::string>& mbids,
                         const std::vector<std::string>& artistnames = std::vector<std::string>(),
                         const std::vector<std::string>& artisthints = std::vector<std::string>(),
@@ -130,8 +132,8 @@ public:
    \param prioritise if appending, whether additive tags should be prioritised (i.e. replace or prepend) over existing values. Defaults to false.
    \sa CVideoInfoTag::Load
    */
-  bool Load(const TiXmlElement *element, bool append = false, bool prioritise = false);
-  bool Save(TiXmlNode *node, const std::string &tag, const std::string& strPath);
+  bool Load(const TiXmlElement* element, bool append = false, bool prioritise = false);
+  bool Save(TiXmlNode* node, const std::string& tag, const std::string& strPath);
 
   long idAlbum = -1;
   std::string strAlbum;
@@ -159,7 +161,7 @@ public:
   int iTimesPlayed = 0;
   CDateTime dateAdded;
   CDateTime lastPlayed;
-  VECSONGS songs;     ///< Local songs
+  VECSONGS songs; ///< Local songs
   ReleaseType releaseType = Album;
   std::string strLastScraped;
   bool bScrapedMBID = false;

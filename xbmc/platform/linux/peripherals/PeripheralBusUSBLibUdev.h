@@ -16,28 +16,28 @@ struct udev_monitor;
 
 namespace PERIPHERALS
 {
-  class CPeripherals;
+class CPeripherals;
 
-  class CPeripheralBusUSB : public CPeripheralBus
-  {
-  public:
-    explicit CPeripheralBusUSB(CPeripherals& manager);
-    ~CPeripheralBusUSB(void) override;
+class CPeripheralBusUSB : public CPeripheralBus
+{
+public:
+  explicit CPeripheralBusUSB(CPeripherals& manager);
+  ~CPeripheralBusUSB(void) override;
 
-    void Clear(void) override;
+  void Clear(void) override;
 
-    /*!
+  /*!
      * @see PeripheralBus::PerformDeviceScan()
      */
-    bool PerformDeviceScan(PeripheralScanResults &results) override;
+  bool PerformDeviceScan(PeripheralScanResults& results) override;
 
-  protected:
-    static PeripheralType GetType(int iDeviceClass);
+protected:
+  static PeripheralType GetType(int iDeviceClass);
 
-    void Process(void) override;
-    bool WaitForUpdate(void);
+  void Process(void) override;
+  bool WaitForUpdate(void);
 
-    struct udev *        m_udev;
-    struct udev_monitor *m_udevMon;
-  };
-}
+  struct udev* m_udev;
+  struct udev_monitor* m_udevMon;
+};
+} // namespace PERIPHERALS

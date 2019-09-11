@@ -33,29 +33,29 @@ void CLibraryGUIInfo::SetLibraryBool(int condition, bool value)
 {
   switch (condition)
   {
-    case LIBRARY_HAS_MUSIC:
-      m_libraryHasMusic = value ? 1 : 0;
-      break;
-    case LIBRARY_HAS_MOVIES:
-      m_libraryHasMovies = value ? 1 : 0;
-      break;
-    case LIBRARY_HAS_MOVIE_SETS:
-      m_libraryHasMovieSets = value ? 1 : 0;
-      break;
-    case LIBRARY_HAS_TVSHOWS:
-      m_libraryHasTVShows = value ? 1 : 0;
-      break;
-    case LIBRARY_HAS_MUSICVIDEOS:
-      m_libraryHasMusicVideos = value ? 1 : 0;
-      break;
-    case LIBRARY_HAS_SINGLES:
-      m_libraryHasSingles = value ? 1 : 0;
-      break;
-    case LIBRARY_HAS_COMPILATIONS:
-      m_libraryHasCompilations = value ? 1 : 0;
-      break;
-    default:
-      break;
+  case LIBRARY_HAS_MUSIC:
+    m_libraryHasMusic = value ? 1 : 0;
+    break;
+  case LIBRARY_HAS_MOVIES:
+    m_libraryHasMovies = value ? 1 : 0;
+    break;
+  case LIBRARY_HAS_MOVIE_SETS:
+    m_libraryHasMovieSets = value ? 1 : 0;
+    break;
+  case LIBRARY_HAS_TVSHOWS:
+    m_libraryHasTVShows = value ? 1 : 0;
+    break;
+  case LIBRARY_HAS_MUSICVIDEOS:
+    m_libraryHasMusicVideos = value ? 1 : 0;
+    break;
+  case LIBRARY_HAS_SINGLES:
+    m_libraryHasSingles = value ? 1 : 0;
+    break;
+  case LIBRARY_HAS_COMPILATIONS:
+    m_libraryHasCompilations = value ? 1 : 0;
+    break;
+  default:
+    break;
   }
 }
 
@@ -71,174 +71,184 @@ void CLibraryGUIInfo::ResetLibraryBools()
   m_libraryRoleCounts.clear();
 }
 
-bool CLibraryGUIInfo::InitCurrentItem(CFileItem *item)
+bool CLibraryGUIInfo::InitCurrentItem(CFileItem* item)
 {
   return false;
 }
 
-bool CLibraryGUIInfo::GetLabel(std::string& value, const CFileItem *item, int contextWindow, const CGUIInfo &info, std::string *fallback) const
+bool CLibraryGUIInfo::GetLabel(std::string& value,
+                               const CFileItem* item,
+                               int contextWindow,
+                               const CGUIInfo& info,
+                               std::string* fallback) const
 {
   return false;
 }
 
-bool CLibraryGUIInfo::GetInt(int& value, const CGUIListItem *gitem, int contextWindow, const CGUIInfo &info) const
+bool CLibraryGUIInfo::GetInt(int& value,
+                             const CGUIListItem* gitem,
+                             int contextWindow,
+                             const CGUIInfo& info) const
 {
   return false;
 }
 
-bool CLibraryGUIInfo::GetBool(bool& value, const CGUIListItem *gitem, int contextWindow, const CGUIInfo &info) const
+bool CLibraryGUIInfo::GetBool(bool& value,
+                              const CGUIListItem* gitem,
+                              int contextWindow,
+                              const CGUIInfo& info) const
 {
   switch (info.m_info)
   {
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    // LIBRARY_*
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    case LIBRARY_HAS_MUSIC:
-    {
-      if (m_libraryHasMusic < 0)
-      { // query
-        CMusicDatabase db;
-        if (db.Open())
-        {
-          m_libraryHasMusic = (db.GetSongsCount() > 0) ? 1 : 0;
-          db.Close();
-        }
-      }
-      value = m_libraryHasMusic > 0;
-      return true;
-    }
-    case LIBRARY_HAS_MOVIES:
-    {
-      if (m_libraryHasMovies < 0)
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  // LIBRARY_*
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  case LIBRARY_HAS_MUSIC:
+  {
+    if (m_libraryHasMusic < 0)
+    { // query
+      CMusicDatabase db;
+      if (db.Open())
       {
-        CVideoDatabase db;
-        if (db.Open())
-        {
-          m_libraryHasMovies = db.HasContent(VIDEODB_CONTENT_MOVIES) ? 1 : 0;
-          db.Close();
-        }
+        m_libraryHasMusic = (db.GetSongsCount() > 0) ? 1 : 0;
+        db.Close();
       }
-      value = m_libraryHasMovies > 0;
-      return true;
     }
-    case LIBRARY_HAS_MOVIE_SETS:
+    value = m_libraryHasMusic > 0;
+    return true;
+  }
+  case LIBRARY_HAS_MOVIES:
+  {
+    if (m_libraryHasMovies < 0)
     {
-      if (m_libraryHasMovieSets < 0)
+      CVideoDatabase db;
+      if (db.Open())
       {
-        CVideoDatabase db;
-        if (db.Open())
-        {
-          m_libraryHasMovieSets = db.HasSets() ? 1 : 0;
-          db.Close();
-        }
+        m_libraryHasMovies = db.HasContent(VIDEODB_CONTENT_MOVIES) ? 1 : 0;
+        db.Close();
       }
-      value = m_libraryHasMovieSets > 0;
-      return true;
     }
-    case LIBRARY_HAS_TVSHOWS:
+    value = m_libraryHasMovies > 0;
+    return true;
+  }
+  case LIBRARY_HAS_MOVIE_SETS:
+  {
+    if (m_libraryHasMovieSets < 0)
     {
-      if (m_libraryHasTVShows < 0)
+      CVideoDatabase db;
+      if (db.Open())
       {
-        CVideoDatabase db;
-        if (db.Open())
-        {
-          m_libraryHasTVShows = db.HasContent(VIDEODB_CONTENT_TVSHOWS) ? 1 : 0;
-          db.Close();
-        }
+        m_libraryHasMovieSets = db.HasSets() ? 1 : 0;
+        db.Close();
       }
-      value = m_libraryHasTVShows > 0;
-      return true;
     }
-    case LIBRARY_HAS_MUSICVIDEOS:
+    value = m_libraryHasMovieSets > 0;
+    return true;
+  }
+  case LIBRARY_HAS_TVSHOWS:
+  {
+    if (m_libraryHasTVShows < 0)
     {
-      if (m_libraryHasMusicVideos < 0)
+      CVideoDatabase db;
+      if (db.Open())
       {
-        CVideoDatabase db;
-        if (db.Open())
-        {
-          m_libraryHasMusicVideos = db.HasContent(VIDEODB_CONTENT_MUSICVIDEOS) ? 1 : 0;
-          db.Close();
-        }
+        m_libraryHasTVShows = db.HasContent(VIDEODB_CONTENT_TVSHOWS) ? 1 : 0;
+        db.Close();
       }
-      value = m_libraryHasMusicVideos > 0;
-      return true;
     }
-    case LIBRARY_HAS_SINGLES:
+    value = m_libraryHasTVShows > 0;
+    return true;
+  }
+  case LIBRARY_HAS_MUSICVIDEOS:
+  {
+    if (m_libraryHasMusicVideos < 0)
     {
-      if (m_libraryHasSingles < 0)
+      CVideoDatabase db;
+      if (db.Open())
       {
-        CMusicDatabase db;
-        if (db.Open())
-        {
-          m_libraryHasSingles = (db.GetSinglesCount() > 0) ? 1 : 0;
-          db.Close();
-        }
+        m_libraryHasMusicVideos = db.HasContent(VIDEODB_CONTENT_MUSICVIDEOS) ? 1 : 0;
+        db.Close();
       }
-      value = m_libraryHasSingles > 0;
-      return true;
     }
-    case LIBRARY_HAS_COMPILATIONS:
+    value = m_libraryHasMusicVideos > 0;
+    return true;
+  }
+  case LIBRARY_HAS_SINGLES:
+  {
+    if (m_libraryHasSingles < 0)
     {
-      if (m_libraryHasCompilations < 0)
+      CMusicDatabase db;
+      if (db.Open())
       {
-        CMusicDatabase db;
-        if (db.Open())
-        {
-          m_libraryHasCompilations = (db.GetCompilationAlbumsCount() > 0) ? 1 : 0;
-          db.Close();
-        }
+        m_libraryHasSingles = (db.GetSinglesCount() > 0) ? 1 : 0;
+        db.Close();
       }
-      value = m_libraryHasCompilations > 0;
-      return true;
     }
-    case LIBRARY_HAS_VIDEO:
+    value = m_libraryHasSingles > 0;
+    return true;
+  }
+  case LIBRARY_HAS_COMPILATIONS:
+  {
+    if (m_libraryHasCompilations < 0)
     {
-      return (GetBool(value, gitem, contextWindow, CGUIInfo(LIBRARY_HAS_MOVIES)) ||
-              GetBool(value, gitem, contextWindow, CGUIInfo(LIBRARY_HAS_TVSHOWS)) ||
-              GetBool(value, gitem, contextWindow, CGUIInfo(LIBRARY_HAS_MUSICVIDEOS)));
-    }
-    case LIBRARY_HAS_ROLE:
-    {
-      std::string strRole = info.GetData3();
-      // Find value for role if already stored
-      int artistcount = -1;
-      for (const auto &role : m_libraryRoleCounts)
+      CMusicDatabase db;
+      if (db.Open())
       {
-        if (StringUtils::EqualsNoCase(strRole, role.first))
-        {
-          artistcount = role.second;
-          break;
-        }
+        m_libraryHasCompilations = (db.GetCompilationAlbumsCount() > 0) ? 1 : 0;
+        db.Close();
       }
-      // Otherwise get from DB and store
-      if (artistcount < 0)
+    }
+    value = m_libraryHasCompilations > 0;
+    return true;
+  }
+  case LIBRARY_HAS_VIDEO:
+  {
+    return (GetBool(value, gitem, contextWindow, CGUIInfo(LIBRARY_HAS_MOVIES)) ||
+            GetBool(value, gitem, contextWindow, CGUIInfo(LIBRARY_HAS_TVSHOWS)) ||
+            GetBool(value, gitem, contextWindow, CGUIInfo(LIBRARY_HAS_MUSICVIDEOS)));
+  }
+  case LIBRARY_HAS_ROLE:
+  {
+    std::string strRole = info.GetData3();
+    // Find value for role if already stored
+    int artistcount = -1;
+    for (const auto& role : m_libraryRoleCounts)
+    {
+      if (StringUtils::EqualsNoCase(strRole, role.first))
       {
-        CMusicDatabase db;
-        if (db.Open())
-        {
-          artistcount = db.GetArtistCountForRole(strRole);
-          db.Close();
-          m_libraryRoleCounts.emplace_back(std::make_pair(strRole, artistcount));
-        }
+        artistcount = role.second;
+        break;
       }
-      value = artistcount > 0;
-      return true;
     }
-    case LIBRARY_IS_SCANNING:
+    // Otherwise get from DB and store
+    if (artistcount < 0)
     {
-      value = (g_application.IsMusicScanning() || g_application.IsVideoScanning());
-      return true;
+      CMusicDatabase db;
+      if (db.Open())
+      {
+        artistcount = db.GetArtistCountForRole(strRole);
+        db.Close();
+        m_libraryRoleCounts.emplace_back(std::make_pair(strRole, artistcount));
+      }
     }
-    case LIBRARY_IS_SCANNING_VIDEO:
-    {
-      value = g_application.IsVideoScanning();
-      return true;
-    }
-    case LIBRARY_IS_SCANNING_MUSIC:
-    {
-      value = g_application.IsMusicScanning();
-      return true;
-    }
+    value = artistcount > 0;
+    return true;
+  }
+  case LIBRARY_IS_SCANNING:
+  {
+    value = (g_application.IsMusicScanning() || g_application.IsVideoScanning());
+    return true;
+  }
+  case LIBRARY_IS_SCANNING_VIDEO:
+  {
+    value = g_application.IsVideoScanning();
+    return true;
+  }
+  case LIBRARY_IS_SCANNING_MUSIC:
+  {
+    value = g_application.IsMusicScanning();
+    return true;
+  }
   }
 
   return false;

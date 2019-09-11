@@ -17,20 +17,20 @@
 
 using namespace Shaders;
 
-CGLShader::CGLShader(const char *shader, std::string prefix)
+CGLShader::CGLShader(const char* shader, std::string prefix)
 {
   m_proj = nullptr;
-  m_model  = nullptr;
+  m_model = nullptr;
   m_clipPossible = false;
 
   VertexShader()->LoadSource("gl_shader_vert.glsl");
   PixelShader()->LoadSource(shader, prefix);
 }
 
-CGLShader::CGLShader(const char *vshader, const char *fshader, std::string prefix)
+CGLShader::CGLShader(const char* vshader, const char* fshader, std::string prefix)
 {
   m_proj = nullptr;
-  m_model  = nullptr;
+  m_model = nullptr;
   m_clipPossible = false;
 
   VertexShader()->LoadSource(vshader, prefix);
@@ -51,10 +51,10 @@ void CGLShader::OnCompiledAndLinked()
   m_hModel = glGetUniformLocation(ProgramHandle(), "m_model");
 
   // Vertex attributes
-  m_hPos = glGetAttribLocation(ProgramHandle(),  "m_attrpos");
-  m_hCol = glGetAttribLocation(ProgramHandle(),  "m_attrcol");
-  m_hCord0 = glGetAttribLocation(ProgramHandle(),  "m_attrcord0");
-  m_hCord1 = glGetAttribLocation(ProgramHandle(),  "m_attrcord1");
+  m_hPos = glGetAttribLocation(ProgramHandle(), "m_attrpos");
+  m_hCol = glGetAttribLocation(ProgramHandle(), "m_attrcol");
+  m_hCord0 = glGetAttribLocation(ProgramHandle(), "m_attrcord0");
+  m_hCord1 = glGetAttribLocation(ProgramHandle(), "m_attrcord1");
 
   // It's okay to do this only one time. Textures units never change.
   glUseProgram(ProgramHandle());
@@ -69,12 +69,12 @@ bool CGLShader::OnEnabled()
 {
   // This is called after glUseProgram()
 
-  const GLfloat *projMatrix = glMatrixProject.Get();
-  const GLfloat *modelMatrix = glMatrixModview.Get();
-  glUniformMatrix4fv(m_hProj,  1, GL_FALSE, projMatrix);
+  const GLfloat* projMatrix = glMatrixProject.Get();
+  const GLfloat* modelMatrix = glMatrixModview.Get();
+  glUniformMatrix4fv(m_hProj, 1, GL_FALSE, projMatrix);
   glUniformMatrix4fv(m_hModel, 1, GL_FALSE, modelMatrix);
 
-  const TransformMatrix &guiMatrix = CServiceBroker::GetWinSystem()->GetGfxContext().GetGUIMatrix();
+  const TransformMatrix& guiMatrix = CServiceBroker::GetWinSystem()->GetGfxContext().GetGUIMatrix();
   CRect viewPort; // absolute positions of corners
   CServiceBroker::GetRenderSystem()->GetViewPort(viewPort);
 
@@ -112,25 +112,14 @@ bool CGLShader::OnEnabled()
    * that's needed to handle that is an effective negation at the stage where
    * Y is in normalised device coordinates.)
    */
-  m_clipPossible = guiMatrix.m[0][1] == 0 &&
-      guiMatrix.m[1][0] == 0 &&
-      guiMatrix.m[2][0] == 0 &&
-      guiMatrix.m[2][1] == 0 &&
-      modelMatrix[0+1*4] == 0 &&
-      modelMatrix[0+2*4] == 0 &&
-      modelMatrix[1+0*4] == 0 &&
-      modelMatrix[1+2*4] == 0 &&
-      modelMatrix[2+0*4] == 0 &&
-      modelMatrix[2+1*4] == 0 &&
-      projMatrix[0+1*4] == 0 &&
-      projMatrix[0+2*4] == 0 &&
-      projMatrix[0+3*4] == 0 &&
-      projMatrix[1+0*4] == 0 &&
-      projMatrix[1+2*4] == 0 &&
-      projMatrix[1+3*4] == 0 &&
-      projMatrix[3+0*4] == 0 &&
-      projMatrix[3+1*4] == 0 &&
-      projMatrix[3+3*4] == 0;
+  m_clipPossible =
+      guiMatrix.m[0][1] == 0 && guiMatrix.m[1][0] == 0 && guiMatrix.m[2][0] == 0 &&
+      guiMatrix.m[2][1] == 0 && modelMatrix[0 + 1 * 4] == 0 && modelMatrix[0 + 2 * 4] == 0 &&
+      modelMatrix[1 + 0 * 4] == 0 && modelMatrix[1 + 2 * 4] == 0 && modelMatrix[2 + 0 * 4] == 0 &&
+      modelMatrix[2 + 1 * 4] == 0 && projMatrix[0 + 1 * 4] == 0 && projMatrix[0 + 2 * 4] == 0 &&
+      projMatrix[0 + 3 * 4] == 0 && projMatrix[1 + 0 * 4] == 0 && projMatrix[1 + 2 * 4] == 0 &&
+      projMatrix[1 + 3 * 4] == 0 && projMatrix[3 + 0 * 4] == 0 && projMatrix[3 + 1 * 4] == 0 &&
+      projMatrix[3 + 3 * 4] == 0;
 
   m_clipXFactor = 0.0;
   m_clipXOffset = 0.0;
@@ -139,13 +128,17 @@ bool CGLShader::OnEnabled()
 
   if (m_clipPossible)
   {
-    m_clipXFactor = guiMatrix.m[0][0] * modelMatrix[0+0*4] * projMatrix[0+0*4];
-    m_clipXOffset = (guiMatrix.m[0][3] * modelMatrix[0+0*4] + modelMatrix[0+3*4]) * projMatrix[0+0*4];
-    m_clipYFactor = guiMatrix.m[1][1] * modelMatrix[1+1*4] * projMatrix[1+1*4];
-    m_clipYOffset = (guiMatrix.m[1][3] * modelMatrix[1+1*4] + modelMatrix[1+3*4]) * projMatrix[1+1*4];
-    float clipW = (guiMatrix.m[2][3] * modelMatrix[2+2*4] + modelMatrix[2+3*4]) * projMatrix[3+2*4];
+    m_clipXFactor = guiMatrix.m[0][0] * modelMatrix[0 + 0 * 4] * projMatrix[0 + 0 * 4];
+    m_clipXOffset = (guiMatrix.m[0][3] * modelMatrix[0 + 0 * 4] + modelMatrix[0 + 3 * 4]) *
+                    projMatrix[0 + 0 * 4];
+    m_clipYFactor = guiMatrix.m[1][1] * modelMatrix[1 + 1 * 4] * projMatrix[1 + 1 * 4];
+    m_clipYOffset = (guiMatrix.m[1][3] * modelMatrix[1 + 1 * 4] + modelMatrix[1 + 3 * 4]) *
+                    projMatrix[1 + 1 * 4];
+    float clipW = (guiMatrix.m[2][3] * modelMatrix[2 + 2 * 4] + modelMatrix[2 + 3 * 4]) *
+                  projMatrix[3 + 2 * 4];
     float xMult = (viewPort.x2 - viewPort.x1) / (2 * clipW);
-    float yMult = (viewPort.y1 - viewPort.y2) / (2 * clipW); // correct for inverted window coordinate scheme
+    float yMult =
+        (viewPort.y1 - viewPort.y2) / (2 * clipW); // correct for inverted window coordinate scheme
     m_clipXFactor = m_clipXFactor * xMult;
     m_clipXOffset = m_clipXOffset * xMult + (viewPort.x2 + viewPort.x1) / 2;
     m_clipYFactor = m_clipYFactor * yMult;

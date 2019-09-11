@@ -66,11 +66,13 @@ bool CRendererSoftware::Configure(const VideoPicture& picture, float fps, unsign
 
 bool CRendererSoftware::Supports(ESCALINGMETHOD method)
 {
-  return method == VS_SCALINGMETHOD_AUTO
-    || method == VS_SCALINGMETHOD_LINEAR;
+  return method == VS_SCALINGMETHOD_AUTO || method == VS_SCALINGMETHOD_LINEAR;
 }
 
-void CRendererSoftware::RenderImpl(CD3DTexture& target, CRect& sourceRect, CPoint(&destPoints)[4], uint32_t flags)
+void CRendererSoftware::RenderImpl(CD3DTexture& target,
+                                   CRect& sourceRect,
+                                   CPoint (&destPoints)[4],
+                                   uint32_t flags)
 {
   // if creation failed
   if (!m_outputShader)
@@ -79,18 +81,16 @@ void CRendererSoftware::RenderImpl(CD3DTexture& target, CRect& sourceRect, CPoin
   CRenderBuffer* buf = m_renderBuffers[m_iBufferIndex];
 
   // 1. convert yuv to rgb
-  m_sw_scale_ctx = sws_getCachedContext(m_sw_scale_ctx,
-    buf->GetWidth(), buf->GetHeight(), buf->av_format,
-    buf->GetWidth(), buf->GetHeight(), AV_PIX_FMT_BGRA,
-    SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
+  m_sw_scale_ctx = sws_getCachedContext(
+      m_sw_scale_ctx, buf->GetWidth(), buf->GetHeight(), buf->av_format, buf->GetWidth(),
+      buf->GetHeight(), AV_PIX_FMT_BGRA, SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
 
   if (!m_sw_scale_ctx)
     return;
 
-  sws_setColorspaceDetails(m_sw_scale_ctx,
-    sws_getCoefficients(buf->color_space), buf->full_range,
-    sws_getCoefficients(AVCOL_SPC_BT709),  buf->full_range,
-    0, 1 << 16, 1 << 16);
+  sws_setColorspaceDetails(m_sw_scale_ctx, sws_getCoefficients(buf->color_space), buf->full_range,
+                           sws_getCoefficients(AVCOL_SPC_BT709), buf->full_range, 0, 1 << 16,
+                           1 << 16);
 
   uint8_t* src[YuvImage::MAX_PLANES];
   int srcStride[YuvImage::MAX_PLANES];
@@ -99,10 +99,11 @@ void CRendererSoftware::RenderImpl(CD3DTexture& target, CRect& sourceRect, CPoin
   D3D11_MAPPED_SUBRESOURCE mapping;
   if (target.LockRect(0, &mapping, D3D11_MAP_WRITE_DISCARD))
   {
-    uint8_t *dst[] = { static_cast<uint8_t*>(mapping.pData), nullptr, nullptr };
-    int dstStride[] = { static_cast<int>(mapping.RowPitch), 0, 0 };
+    uint8_t* dst[] = {static_cast<uint8_t*>(mapping.pData), nullptr, nullptr};
+    int dstStride[] = {static_cast<int>(mapping.RowPitch), 0, 0};
 
-    sws_scale(m_sw_scale_ctx, src, srcStride, 0, std::min(target.GetHeight(), buf->GetHeight()), dst, dstStride);
+    sws_scale(m_sw_scale_ctx, src, srcStride, 0, std::min(target.GetHeight(), buf->GetHeight()),
+              dst, dstStride);
 
     if (!target.UnlockRect(0))
       CLog::LogF(LOGERROR, "failed to unlock swtarget texture.");
@@ -114,12 +115,13 @@ void CRendererSoftware::RenderImpl(CD3DTexture& target, CRect& sourceRect, CPoin
   ReorderDrawPoints(CRect(destPoints[0], destPoints[2]), destPoints);
 }
 
-void CRendererSoftware::FinalOutput(CD3DTexture& source, CD3DTexture& target, const CRect& src, const CPoint(&destPoints)[4])
+void CRendererSoftware::FinalOutput(CD3DTexture& source,
+                                    CD3DTexture& target,
+                                    const CRect& src,
+                                    const CPoint (&destPoints)[4])
 {
-  m_outputShader->Render(source, src, destPoints, target, 
-    DX::Windowing()->UseLimitedColor(), 
-    m_videoSettings.m_Contrast * 0.01f,
-    m_videoSettings.m_Brightness * 0.01f);
+  m_outputShader->Render(source, src, destPoints, target, DX::Windowing()->UseLimitedColor(),
+                         m_videoSettings.m_Contrast * 0.01f, m_videoSettings.m_Brightness * 0.01f);
 }
 
 CRenderBuffer* CRendererSoftware::CreateBuffer()
@@ -127,7 +129,9 @@ CRenderBuffer* CRendererSoftware::CreateBuffer()
   return new CRenderBufferImpl(m_format, m_sourceWidth, m_sourceHeight);
 }
 
-CRendererSoftware::CRenderBufferImpl::CRenderBufferImpl(AVPixelFormat av_pix_format, unsigned width, unsigned height)
+CRendererSoftware::CRenderBufferImpl::CRenderBufferImpl(AVPixelFormat av_pix_format,
+                                                        unsigned width,
+                                                        unsigned height)
   : CRenderBuffer(av_pix_format, width, height)
 {
 }
@@ -149,7 +153,7 @@ void CRendererSoftware::CRenderBufferImpl::AppendPicture(const VideoPicture& pic
   }
 }
 
-bool CRendererSoftware::CRenderBufferImpl::GetDataPlanes(uint8_t*(&planes)[3], int(&strides)[3])
+bool CRendererSoftware::CRenderBufferImpl::GetDataPlanes(uint8_t* (&planes)[3], int (&strides)[3])
 {
   if (!videoBuffer)
     return false;
@@ -195,5 +199,6 @@ bool CRendererSoftware::CRenderBufferImpl::UploadBuffer()
     return false;
 
   // map will finish copying data from GPU to CPU
-  return SUCCEEDED(SUCCEEDED(DX::DeviceResources::Get()->GetImmediateContext()->Map(m_staging.Get(), 0, D3D11_MAP_READ, 0, &m_msr)));
+  return SUCCEEDED(SUCCEEDED(DX::DeviceResources::Get()->GetImmediateContext()->Map(
+      m_staging.Get(), 0, D3D11_MAP_READ, 0, &m_msr)));
 }

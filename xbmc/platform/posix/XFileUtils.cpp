@@ -6,23 +6,27 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "PlatformDefs.h"
 #include "XFileUtils.h"
+
+#include "XHandle.h"
 #include "filesystem/SpecialProtocol.h"
 #include "utils/StringUtils.h"
 
-#include "XHandle.h"
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <stdlib.h>
+
+#include <sys/stat.h>
+#include <sys/types.h>
+
+#include "PlatformDefs.h"
 #if !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD) && !defined(TARGET_ANDROID)
 #include <sys/vfs.h>
 #else
-#include <sys/param.h>
 #include <sys/mount.h>
+#include <sys/param.h>
 #endif
-#include <dirent.h>
 #include <errno.h>
+
+#include <dirent.h>
 
 #if defined(TARGET_ANDROID)
 #include <sys/file.h>
@@ -33,11 +37,13 @@
 #endif
 
 #include "storage/cdioSupport.h"
-
 #include "utils/log.h"
 
-int ReadFile(HANDLE hFile, void* lpBuffer, DWORD nNumberOfBytesToRead,
-  unsigned int* lpNumberOfBytesRead, void* lpOverlapped)
+int ReadFile(HANDLE hFile,
+             void* lpBuffer,
+             DWORD nNumberOfBytesToRead,
+             unsigned int* lpNumberOfBytesRead,
+             void* lpOverlapped)
 {
   if (lpOverlapped)
   {
@@ -46,7 +52,7 @@ int ReadFile(HANDLE hFile, void* lpBuffer, DWORD nNumberOfBytesToRead,
   }
 
   size_t bytesRead = read(hFile->fd, lpBuffer, nNumberOfBytesToRead);
-  if (bytesRead == (size_t) -1)
+  if (bytesRead == (size_t)-1)
     return 0;
 
   if (lpNumberOfBytesRead)
@@ -55,8 +61,11 @@ int ReadFile(HANDLE hFile, void* lpBuffer, DWORD nNumberOfBytesToRead,
   return 1;
 }
 
-int WriteFile(HANDLE hFile, const void * lpBuffer, DWORD nNumberOfBytesToWrite,
-  unsigned int* lpNumberOfBytesWritten, void* lpOverlapped)
+int WriteFile(HANDLE hFile,
+              const void* lpBuffer,
+              DWORD nNumberOfBytesToWrite,
+              unsigned int* lpNumberOfBytesWritten,
+              void* lpOverlapped)
 {
   if (lpOverlapped)
   {
@@ -66,7 +75,7 @@ int WriteFile(HANDLE hFile, const void * lpBuffer, DWORD nNumberOfBytesToWrite,
 
   size_t bytesWritten = write(hFile->fd, lpBuffer, nNumberOfBytesToWrite);
 
-  if (bytesWritten == (size_t) -1)
+  if (bytesWritten == (size_t)-1)
     return 0;
 
   *lpNumberOfBytesWritten = bytesWritten;
@@ -74,8 +83,10 @@ int WriteFile(HANDLE hFile, const void * lpBuffer, DWORD nNumberOfBytesToWrite,
   return 1;
 }
 
-uint32_t SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
-                      int32_t *lpDistanceToMoveHigh, DWORD dwMoveMethod)
+uint32_t SetFilePointer(HANDLE hFile,
+                        int32_t lDistanceToMove,
+                        int32_t* lpDistanceToMoveHigh,
+                        DWORD dwMoveMethod)
 {
   if (hFile == NULL)
     return 0;
@@ -85,7 +96,7 @@ uint32_t SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
   {
     long long helper = *lpDistanceToMoveHigh;
     helper <<= 32;
-    offset &= 0xFFFFFFFF;   // Zero out the upper half (sign ext)
+    offset &= 0xFFFFFFFF; // Zero out the upper half (sign ext)
     offset |= helper;
   }
 
@@ -110,7 +121,7 @@ uint32_t SetFilePointer(HANDLE hFile, int32_t lDistanceToMove,
   return (DWORD)currOff;
 }
 
-uint32_t GetTimeZoneInformation( LPTIME_ZONE_INFORMATION lpTimeZoneInformation )
+uint32_t GetTimeZoneInformation(LPTIME_ZONE_INFORMATION lpTimeZoneInformation)
 {
   if (lpTimeZoneInformation == NULL)
     return TIME_ZONE_ID_INVALID;
@@ -119,7 +130,7 @@ uint32_t GetTimeZoneInformation( LPTIME_ZONE_INFORMATION lpTimeZoneInformation )
 
   struct tm t;
   time_t tt = time(NULL);
-  if(localtime_r(&tt, &t))
+  if (localtime_r(&tt, &t))
     lpTimeZoneInformation->Bias = -t.tm_gmtoff / 60;
 
   swprintf(lpTimeZoneInformation->StandardName, 31, L"%s", tzname[0]);
@@ -128,10 +139,10 @@ uint32_t GetTimeZoneInformation( LPTIME_ZONE_INFORMATION lpTimeZoneInformation )
   return TIME_ZONE_ID_UNKNOWN;
 }
 
-int SetFilePointerEx(  HANDLE hFile,
-            LARGE_INTEGER liDistanceToMove,
-            PLARGE_INTEGER lpNewFilePointer,
-            DWORD dwMoveMethod )
+int SetFilePointerEx(HANDLE hFile,
+                     LARGE_INTEGER liDistanceToMove,
+                     PLARGE_INTEGER lpNewFilePointer,
+                     DWORD dwMoveMethod)
 {
 
   int nMode = SEEK_SET;
@@ -154,7 +165,7 @@ int SetFilePointerEx(  HANDLE hFile,
   return 1;
 }
 
-int _fstat64(int fd, struct __stat64 *buffer)
+int _fstat64(int fd, struct __stat64* buffer)
 {
   if (buffer == NULL)
     return -1;
@@ -162,7 +173,7 @@ int _fstat64(int fd, struct __stat64 *buffer)
   return fstat64(fd, buffer);
 }
 
-int _stat64(   const char *path,   struct __stat64 *buffer )
+int _stat64(const char* path, struct __stat64* buffer)
 {
 
   if (buffer == NULL || path == NULL)

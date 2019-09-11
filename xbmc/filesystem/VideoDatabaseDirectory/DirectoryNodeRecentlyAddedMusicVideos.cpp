@@ -12,10 +12,10 @@
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 
-CDirectoryNodeRecentlyAddedMusicVideos::CDirectoryNodeRecentlyAddedMusicVideos(const std::string& strName, CDirectoryNode* pParent)
+CDirectoryNodeRecentlyAddedMusicVideos::CDirectoryNodeRecentlyAddedMusicVideos(
+    const std::string& strName, CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS, strName, pParent)
 {
-
 }
 
 bool CDirectoryNodeRecentlyAddedMusicVideos::GetContent(CFileItemList& items) const
@@ -24,10 +24,9 @@ bool CDirectoryNodeRecentlyAddedMusicVideos::GetContent(CFileItemList& items) co
   if (!videodatabase.Open())
     return false;
 
-  bool bSuccess=videodatabase.GetRecentlyAddedMusicVideosNav(BuildPath(), items);
+  bool bSuccess = videodatabase.GetRecentlyAddedMusicVideosNav(BuildPath(), items);
 
   videodatabase.Close();
 
   return bSuccess;
 }
-

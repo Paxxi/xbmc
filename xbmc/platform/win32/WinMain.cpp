@@ -46,11 +46,11 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT)
   // Initializes CreateMiniDump to handle exceptions.
   char ver[100];
   if (strlen(CCompileInfo::GetSuffix()) > 0)
-    sprintf_s(ver, "%d.%d-%s Git:%s", CCompileInfo::GetMajor(),
-    CCompileInfo::GetMinor(), CCompileInfo::GetSuffix(), CCompileInfo::GetSCMID());
+    sprintf_s(ver, "%d.%d-%s Git:%s", CCompileInfo::GetMajor(), CCompileInfo::GetMinor(),
+              CCompileInfo::GetSuffix(), CCompileInfo::GetSCMID());
   else
-    sprintf_s(ver, "%d.%d Git:%s", CCompileInfo::GetMajor(),
-    CCompileInfo::GetMinor(), CCompileInfo::GetSCMID());
+    sprintf_s(ver, "%d.%d Git:%s", CCompileInfo::GetMajor(), CCompileInfo::GetMinor(),
+              CCompileInfo::GetSCMID());
 
   if (win32_exception::ShouldHook())
   {
@@ -77,7 +77,8 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT)
 
   if ((g_cpuInfo.GetCPUFeatures() & CPU_FEATURE_SSE2) == 0)
   {
-    MessageBox(NULL, L"No SSE2 support detected", ToW(appName + ": Fatal Error").c_str(), MB_OK | MB_ICONERROR);
+    MessageBox(NULL, L"No SSE2 support detected", ToW(appName + ": Fatal Error").c_str(),
+               MB_OK | MB_ICONERROR);
     ReleaseMutex(appRunningMutex);
     return 0;
   }

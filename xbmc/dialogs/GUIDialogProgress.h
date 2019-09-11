@@ -13,15 +13,14 @@
 
 #include <array>
 
-class CGUIDialogProgress :
-      public CGUIDialogBoxBase, public IProgressCallback
+class CGUIDialogProgress : public CGUIDialogBoxBase, public IProgressCallback
 {
 public:
   CGUIDialogProgress(void);
   ~CGUIDialogProgress(void) override;
 
   void Reset();
-  void Open(const std::string &param = "");
+  void Open(const std::string& param = "");
   bool OnMessage(CGUIMessage& message) override;
   bool OnBack(int actionID) override;
   void OnWindowLoaded() override;
@@ -55,7 +54,7 @@ public:
 
   // Implements IProgressCallback
   void SetProgressMax(int iMax) override;
-  void SetProgressAdvance(int nSteps=1) override;
+  void SetProgressAdvance(int nSteps = 1) override;
   bool Abort() override;
 
   void SetCanCancel(bool bCanCancel);
@@ -63,12 +62,12 @@ public:
 protected:
   void OnInitWindow() override;
   int GetDefaultLabelID(int controlId) const override;
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
 
   bool m_bCanCancel;
 
-  int  m_iCurrent;
-  int  m_iMax;
+  int m_iCurrent;
+  int m_iMax;
   int m_percentage;
   bool m_showProgress;
 

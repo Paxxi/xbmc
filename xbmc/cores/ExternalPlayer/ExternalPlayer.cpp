@@ -6,33 +6,35 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "threads/SystemClock.h"
-#include "CompileInfo.h"
 #include "ExternalPlayer.h"
-#include "windowing/WinSystem.h"
+
+#include "Application.h"
+#include "CompileInfo.h"
+#include "FileItem.h"
+#include "ServiceBroker.h"
+#include "URL.h"
+#include "cores/AudioEngine/Interfaces/AE.h"
+#include "cores/DataCacheCore.h"
 #include "dialogs/GUIDialogOK.h"
+#include "filesystem/MusicDatabaseFile.h"
 #include "guilib/GUIComponent.h"
 #include "guilib/GUIWindowManager.h"
-#include "Application.h"
-#include "filesystem/MusicDatabaseFile.h"
-#include "FileItem.h"
+#include "threads/SystemClock.h"
 #include "utils/RegExp.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "URL.h"
+#include "utils/Variant.h"
 #include "utils/XMLUtils.h"
 #include "utils/log.h"
-#include "utils/Variant.h"
 #include "video/Bookmark.h"
-#include "ServiceBroker.h"
-#include "cores/AudioEngine/Interfaces/AE.h"
-#include "cores/DataCacheCore.h"
+#include "windowing/WinSystem.h"
 #if defined(TARGET_WINDOWS)
-  #include "utils/CharsetConverter.h"
-  #include <Windows.h>
+#include "utils/CharsetConverter.h"
+
+#include <Windows.h>
 #endif
 #if defined(TARGET_ANDROID)
-  #include "platform/android/activity/XBMCApp.h"
+#include "platform/android/activity/XBMCApp.h"
 #endif
 
 // If the process ends in less than this time (ms), we assume it's a launcher
@@ -50,8 +52,8 @@ extern HWND g_hWnd;
 #endif
 
 CExternalPlayer::CExternalPlayer(IPlayerCallback& callback)
-    : IPlayer(callback),
-      CThread("ExternalPlayer")
+  : IPlayer(callback)
+  , CThread("ExternalPlayer")
 {
   m_bAbortRequest = false;
   m_bIsPlaying = false;
@@ -80,7 +82,7 @@ CExternalPlayer::~CExternalPlayer()
   CloseFile();
 }
 
-bool CExternalPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
+bool CExternalPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options)
 {
   try
   {
@@ -94,10 +96,10 @@ bool CExternalPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &opti
 
     return true;
   }
-  catch(...)
+  catch (...)
   {
     m_bIsPlaying = false;
-    CLog::Log(LOGERROR,"%s - Exception thrown", __FUNCTION__);
+    CLog::Log(LOGERROR, "%s - Exception thrown", __FUNCTION__);
     return false;
   }
 }
@@ -106,7 +108,8 @@ bool CExternalPlayer::CloseFile(bool reopen)
 {
   m_bAbortRequest = true;
 
-  if (m_dialog && m_dialog->IsActive()) m_dialog->Close();
+  if (m_dialog && m_dialog->IsActive())
+    m_dialog->Close();
 
 #if defined(TARGET_WINDOWS_DESKTOP)
   if (m_bIsPlaying && m_processInfo.hProcess)
@@ -132,7 +135,8 @@ void CExternalPlayer::Process()
   {
     // Unwind archive names
     CURL url(m_launchFilename);
-    if (url.IsProtocol("zip") || url.IsProtocol("rar") /* || url.IsProtocol("iso9660") ??*/ || url.IsProtocol("udf"))
+    if (url.IsProtocol("zip") || url.IsProtocol("rar") /* || url.IsProtocol("iso9660") ??*/ ||
+        url.IsProtocol("udf"))
     {
       mainFile = url.GetHostName();
       archiveContent = url.GetFileName();
@@ -163,7 +167,7 @@ void CExternalPlayer::Process()
         continue;
 
       std::string strMatch = vecSplit[0];
-      StringUtils::Replace(strMatch, ",,",",");
+      StringUtils::Replace(strMatch, ",,", ",");
       bool bCaseless = vecSplit[3].find('i') != std::string::npos;
       CRegExp regExp(bCaseless, CRegExp::autoUtf8);
 
@@ -176,7 +180,7 @@ void CExternalPlayer::Process()
       if (regExp.RegFind(mainFile) > -1)
       {
         std::string strPat = vecSplit[1];
-        StringUtils::Replace(strPat, ",,",",");
+        StringUtils::Replace(strPat, ",,", ",");
 
         if (!regExp.RegComp(strPat.c_str()))
         { // invalid regexp - complain in logs
@@ -185,19 +189,22 @@ void CExternalPlayer::Process()
         }
 
         std::string strRep = vecSplit[2];
-        StringUtils::Replace(strRep, ",,",",");
+        StringUtils::Replace(strRep, ",,", ",");
         bool bGlobal = vecSplit[3].find('g') != std::string::npos;
         bool bStop = vecSplit[3].find('s') != std::string::npos;
         int iStart = 0;
         while ((iStart = regExp.RegFind(mainFile, iStart)) > -1)
         {
           int iLength = regExp.GetFindLen();
-          mainFile = mainFile.substr(0, iStart) + regExp.GetReplaceString(strRep) + mainFile.substr(iStart + iLength);
+          mainFile = mainFile.substr(0, iStart) + regExp.GetReplaceString(strRep) +
+                     mainFile.substr(iStart + iLength);
           if (!bGlobal)
             break;
         }
-        CLog::Log(LOGINFO, "%s: File matched:'%s' (RE='%s',Rep='%s') new filename:'%s'.", __FUNCTION__, strMatch.c_str(), strPat.c_str(), strRep.c_str(), mainFile.c_str());
-        if (bStop) break;
+        CLog::Log(LOGINFO, "%s: File matched:'%s' (RE='%s',Rep='%s') new filename:'%s'.",
+                  __FUNCTION__, strMatch.c_str(), strPat.c_str(), strRep.c_str(), mainFile.c_str());
+        if (bStop)
+          break;
       }
     }
   }
@@ -233,7 +240,8 @@ void CExternalPlayer::Process()
   int nReplaced = StringUtils::Replace(strFArgs, "{0}", mainFile);
 
   if (!nReplaced)
-    nReplaced = StringUtils::Replace(strFArgs, "{1}", mainFile) + StringUtils::Replace(strFArgs, "{2}", archiveContent);
+    nReplaced = StringUtils::Replace(strFArgs, "{1}", mainFile) +
+                StringUtils::Replace(strFArgs, "{2}", archiveContent);
 
   if (!nReplaced)
   {
@@ -250,21 +258,21 @@ void CExternalPlayer::Process()
     int y = 0;
     switch (m_warpcursor)
     {
-      case WARP_BOTTOM_RIGHT:
-        x = GetSystemMetrics(SM_CXSCREEN);
-      case WARP_BOTTOM_LEFT:
-        y = GetSystemMetrics(SM_CYSCREEN);
-        break;
-      case WARP_TOP_RIGHT:
-        x = GetSystemMetrics(SM_CXSCREEN);
-        break;
-      case WARP_CENTER:
-        x = GetSystemMetrics(SM_CXSCREEN) / 2;
-        y = GetSystemMetrics(SM_CYSCREEN) / 2;
-        break;
+    case WARP_BOTTOM_RIGHT:
+      x = GetSystemMetrics(SM_CXSCREEN);
+    case WARP_BOTTOM_LEFT:
+      y = GetSystemMetrics(SM_CYSCREEN);
+      break;
+    case WARP_TOP_RIGHT:
+      x = GetSystemMetrics(SM_CXSCREEN);
+      break;
+    case WARP_CENTER:
+      x = GetSystemMetrics(SM_CXSCREEN) / 2;
+      y = GetSystemMetrics(SM_CYSCREEN) / 2;
+      break;
     }
     CLog::Log(LOGNOTICE, "%s: Warping cursor to (%d,%d)", __FUNCTION__, x, y);
-    SetCursorPos(x,y);
+    SetCursorPos(x, y);
   }
 
   LONG currentStyle = GetWindowLong(g_hWnd, GWL_EXSTYLE);
@@ -279,7 +287,8 @@ void CExternalPlayer::Process()
   else if (currentStyle & WS_EX_TOPMOST)
   {
     CLog::Log(LOGNOTICE, "%s: Lowering %s window", __FUNCTION__, CCompileInfo::GetAppName());
-    SetWindowPos(g_hWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW | SWP_ASYNCWINDOWPOS);
+    SetWindowPos(g_hWnd, HWND_BOTTOM, 0, 0, 0, 0,
+                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW | SWP_ASYNCWINDOWPOS);
   }
 
   CLog::Log(LOGDEBUG, "%s: Unlocking foreground window", __FUNCTION__);
@@ -299,7 +308,8 @@ void CExternalPlayer::Process()
   }
   if (timer.IsTimePast())
   {
-    CLog::Log(LOGERROR,"%s: AudioEngine did not suspend before launching external player", __FUNCTION__);
+    CLog::Log(LOGERROR, "%s: AudioEngine did not suspend before launching external player",
+              __FUNCTION__);
   }
 
   m_callback.OnPlayBackStarted(m_file);
@@ -307,7 +317,7 @@ void CExternalPlayer::Process()
 
   bool ret = true;
 #if defined(TARGET_WINDOWS_DESKTOP)
-  ret = ExecuteAppW32(strFName.c_str(),strFArgs.c_str());
+  ret = ExecuteAppW32(strFName.c_str(), strFArgs.c_str());
 #elif defined(TARGET_ANDROID)
   ret = ExecuteAppAndroid(m_filename.c_str(), mainFile.c_str());
 #elif defined(TARGET_POSIX) && !defined(TARGET_DARWIN_EMBEDDED)
@@ -319,12 +329,14 @@ void CExternalPlayer::Process()
   {
     if (m_hidexbmc)
     {
-      CLog::Log(LOGNOTICE, "%s: %s cannot stay hidden for a launcher process", __FUNCTION__, CCompileInfo::GetAppName());
+      CLog::Log(LOGNOTICE, "%s: %s cannot stay hidden for a launcher process", __FUNCTION__,
+                CCompileInfo::GetAppName());
       CServiceBroker::GetWinSystem()->Show(false);
     }
 
     {
-      m_dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
+      m_dialog =
+          CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
       m_dialog->SetHeading(CVariant{23100});
       m_dialog->SetLine(1, CVariant{23104});
       m_dialog->SetLine(2, CVariant{23105});
@@ -344,7 +356,8 @@ void CExternalPlayer::Process()
   if (currentStyle & WS_EX_TOPMOST)
   {
     CLog::Log(LOGNOTICE, "%s: Showing %s window TOPMOST", __FUNCTION__, CCompileInfo::GetAppName());
-    SetWindowPos(g_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_ASYNCWINDOWPOS);
+    SetWindowPos(g_hWnd, HWND_TOPMOST, 0, 0, 0, 0,
+                 SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_ASYNCWINDOWPOS);
     SetForegroundWindow(g_hWnd);
   }
   else
@@ -365,7 +378,7 @@ void CExternalPlayer::Process()
       m_yPos = (m_ptCursorpos.y);
     }
     CLog::Log(LOGNOTICE, "%s: Restoring cursor to (%d,%d)", __FUNCTION__, m_xPos, m_yPos);
-    SetCursorPos(m_xPos,m_yPos);
+    SetCursorPos(m_xPos, m_yPos);
   }
 #endif
 
@@ -378,7 +391,8 @@ void CExternalPlayer::Process()
   /* Resume AE processing of XBMC native audio */
   if (!CServiceBroker::GetActiveAE()->Resume())
   {
-    CLog::Log(LOGFATAL, "%s: Failed to restart AudioEngine after return from external player",__FUNCTION__);
+    CLog::Log(LOGFATAL, "%s: Failed to restart AudioEngine after return from external player",
+              __FUNCTION__);
   }
 
   // We don't want to come back to an active screensaver
@@ -406,11 +420,12 @@ bool CExternalPlayer::ExecuteAppW32(const char* strPath, const char* strSwitches
   g_charsetConverter.utf8ToW(strPath, WstrPath, false);
   g_charsetConverter.utf8ToW(strSwitches, WstrSwitches, false);
 
-  if (m_bAbortRequest) return false;
+  if (m_bAbortRequest)
+    return false;
 
-  BOOL ret = CreateProcessW(WstrPath.empty() ? NULL : WstrPath.c_str(),
-                            (LPWSTR) WstrSwitches.c_str(), NULL, NULL, FALSE, NULL,
-                            NULL, NULL, &si, &m_processInfo);
+  BOOL ret =
+      CreateProcessW(WstrPath.empty() ? NULL : WstrPath.c_str(), (LPWSTR)WstrSwitches.c_str(), NULL,
+                     NULL, FALSE, NULL, NULL, NULL, &si, &m_processInfo);
 
   if (ret == FALSE)
   {
@@ -423,19 +438,19 @@ bool CExternalPlayer::ExecuteAppW32(const char* strPath, const char* strSwitches
 
     switch (res)
     {
-      case WAIT_OBJECT_0:
-        CLog::Log(LOGNOTICE, "%s: WAIT_OBJECT_0", __FUNCTION__);
-        break;
-      case WAIT_ABANDONED:
-        CLog::Log(LOGNOTICE, "%s: WAIT_ABANDONED", __FUNCTION__);
-        break;
-      case WAIT_TIMEOUT:
-        CLog::Log(LOGNOTICE, "%s: WAIT_TIMEOUT", __FUNCTION__);
-        break;
-      case WAIT_FAILED:
-        CLog::Log(LOGNOTICE, "%s: WAIT_FAILED (%d)", __FUNCTION__, GetLastError());
-        ret = FALSE;
-        break;
+    case WAIT_OBJECT_0:
+      CLog::Log(LOGNOTICE, "%s: WAIT_OBJECT_0", __FUNCTION__);
+      break;
+    case WAIT_ABANDONED:
+      CLog::Log(LOGNOTICE, "%s: WAIT_ABANDONED", __FUNCTION__);
+      break;
+    case WAIT_TIMEOUT:
+      CLog::Log(LOGNOTICE, "%s: WAIT_TIMEOUT", __FUNCTION__);
+      break;
+    case WAIT_FAILED:
+      CLog::Log(LOGNOTICE, "%s: WAIT_FAILED (%d)", __FUNCTION__, GetLastError());
+      ret = FALSE;
+      break;
     }
 
     CloseHandle(m_processInfo.hThread);
@@ -463,7 +478,7 @@ bool CExternalPlayer::ExecuteAppLinux(const char* strSwitches)
 #endif
 
 #if defined(TARGET_ANDROID)
-bool CExternalPlayer::ExecuteAppAndroid(const char* strSwitches,const char* strPath)
+bool CExternalPlayer::ExecuteAppAndroid(const char* strSwitches, const char* strPath)
 {
   CLog::Log(LOGNOTICE, "%s: %s", __FUNCTION__, strSwitches);
 
@@ -553,7 +568,7 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
   else
   {
     std::string xml;
-    xml<<*pConfig;
+    xml << *pConfig;
     CLog::Log(LOGERROR, "ExternalPlayer Error: filename element missing from: %s", xml.c_str());
     return false;
   }
@@ -577,11 +592,16 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
   std::string warpCursor;
   if (XMLUtils::GetString(pConfig, "warpcursor", warpCursor) && !warpCursor.empty())
   {
-    if (warpCursor == "bottomright") m_warpcursor = WARP_BOTTOM_RIGHT;
-    else if (warpCursor == "bottomleft") m_warpcursor = WARP_BOTTOM_LEFT;
-    else if (warpCursor == "topleft") m_warpcursor = WARP_TOP_LEFT;
-    else if (warpCursor == "topright") m_warpcursor = WARP_TOP_RIGHT;
-    else if (warpCursor == "center") m_warpcursor = WARP_CENTER;
+    if (warpCursor == "bottomright")
+      m_warpcursor = WARP_BOTTOM_RIGHT;
+    else if (warpCursor == "bottomleft")
+      m_warpcursor = WARP_BOTTOM_LEFT;
+    else if (warpCursor == "topleft")
+      m_warpcursor = WARP_TOP_LEFT;
+    else if (warpCursor == "topright")
+      m_warpcursor = WARP_TOP_RIGHT;
+    else if (warpCursor == "center")
+      m_warpcursor = WARP_CENTER;
     else
     {
       warpCursor = "none";
@@ -591,11 +611,11 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
 
   XMLUtils::GetInt(pConfig, "playcountminimumtime", m_playCountMinTime, 1, INT_MAX);
 
-  CLog::Log(LOGNOTICE, "ExternalPlayer Tweaks: hideconsole (%s), hidexbmc (%s), islauncher (%s), warpcursor (%s)",
-          m_hideconsole ? "true" : "false",
-          m_hidexbmc ? "true" : "false",
-          m_islauncher ? "true" : "false",
-          warpCursor.c_str());
+  CLog::Log(
+      LOGNOTICE,
+      "ExternalPlayer Tweaks: hideconsole (%s), hidexbmc (%s), islauncher (%s), warpcursor (%s)",
+      m_hideconsole ? "true" : "false", m_hidexbmc ? "true" : "false",
+      m_islauncher ? "true" : "false", warpCursor.c_str());
 
 #ifdef TARGET_WINDOWS_DESKTOP
   m_filenameReplacers.push_back("^smb:// , / , \\\\ , g");
@@ -612,7 +632,7 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
   return true;
 }
 
-void CExternalPlayer::GetCustomRegexpReplacers(TiXmlElement *pRootElement,
+void CExternalPlayer::GetCustomRegexpReplacers(TiXmlElement* pRootElement,
                                                std::vector<std::string>& settings)
 {
   int iAction = 0; // overwrite
@@ -647,21 +667,24 @@ void CExternalPlayer::GetCustomRegexpReplacers(TiXmlElement *pRootElement,
       std::string strMatch;
       std::string strPat;
       std::string strRep;
-      XMLUtils::GetString(pReplacer,"match",strMatch);
-      XMLUtils::GetString(pReplacer,"pat",strPat);
-      XMLUtils::GetString(pReplacer,"rep",strRep);
+      XMLUtils::GetString(pReplacer, "match", strMatch);
+      XMLUtils::GetString(pReplacer, "pat", strPat);
+      XMLUtils::GetString(pReplacer, "rep", strRep);
 
       if (!strPat.empty() && !strRep.empty())
       {
-        CLog::Log(LOGDEBUG,"  Registering replacer:");
-        CLog::Log(LOGDEBUG,"    Match:[%s] Pattern:[%s] Replacement:[%s]", strMatch.c_str(), strPat.c_str(), strRep.c_str());
-        CLog::Log(LOGDEBUG,"    Global:[%s] Stop:[%s]", bGlobal?"true":"false", bStop?"true":"false");
+        CLog::Log(LOGDEBUG, "  Registering replacer:");
+        CLog::Log(LOGDEBUG, "    Match:[%s] Pattern:[%s] Replacement:[%s]", strMatch.c_str(),
+                  strPat.c_str(), strRep.c_str());
+        CLog::Log(LOGDEBUG, "    Global:[%s] Stop:[%s]", bGlobal ? "true" : "false",
+                  bStop ? "true" : "false");
         // keep literal commas since we use comma as a separator
-        StringUtils::Replace(strMatch, ",",",,");
-        StringUtils::Replace(strPat, ",",",,");
-        StringUtils::Replace(strRep, ",",",,");
+        StringUtils::Replace(strMatch, ",", ",,");
+        StringUtils::Replace(strPat, ",", ",,");
+        StringUtils::Replace(strRep, ",", ",,");
 
-        std::string strReplacer = strMatch + " , " + strPat + " , " + strRep + " , " + (bGlobal ? "g" : "") + (bStop ? "s" : "");
+        std::string strReplacer = strMatch + " , " + strPat + " , " + strRep + " , " +
+                                  (bGlobal ? "g" : "") + (bStop ? "s" : "");
         if (iAction == 2)
           settings.insert(settings.begin() + i++, 1, strReplacer);
         else
@@ -671,9 +694,9 @@ void CExternalPlayer::GetCustomRegexpReplacers(TiXmlElement *pRootElement,
       {
         // error message about missing tag
         if (strPat.empty())
-          CLog::Log(LOGERROR,"  Missing <Pat> tag");
+          CLog::Log(LOGERROR, "  Missing <Pat> tag");
         else
-          CLog::Log(LOGERROR,"  Missing <Rep> tag");
+          CLog::Log(LOGERROR, "  Missing <Rep> tag");
       }
     }
 

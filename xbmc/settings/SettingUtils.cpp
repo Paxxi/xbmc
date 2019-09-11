@@ -17,7 +17,8 @@ std::vector<CVariant> CSettingUtils::GetList(std::shared_ptr<const CSettingList>
   return ListToValues(settingList, settingList->GetValue());
 }
 
-bool CSettingUtils::SetList(std::shared_ptr<CSettingList> settingList, const std::vector<CVariant> &value)
+bool CSettingUtils::SetList(std::shared_ptr<CSettingList> settingList,
+                            const std::vector<CVariant>& value)
 {
   SettingList newValues;
   if (!ValuesToList(settingList, value, newValues))
@@ -26,7 +27,9 @@ bool CSettingUtils::SetList(std::shared_ptr<CSettingList> settingList, const std
   return settingList->SetValue(newValues);
 }
 
-std::vector<CVariant> CSettingUtils::ListToValues(std::shared_ptr<const CSettingList> setting, const std::vector< std::shared_ptr<CSetting> > &values)
+std::vector<CVariant> CSettingUtils::ListToValues(
+    std::shared_ptr<const CSettingList> setting,
+    const std::vector<std::shared_ptr<CSetting>>& values)
 {
   std::vector<CVariant> realValues;
 
@@ -37,32 +40,33 @@ std::vector<CVariant> CSettingUtils::ListToValues(std::shared_ptr<const CSetting
   {
     switch (setting->GetElementType())
     {
-      case SettingType::Boolean:
-        realValues.push_back(std::static_pointer_cast<const CSettingBool>(value)->GetValue());
-        break;
+    case SettingType::Boolean:
+      realValues.push_back(std::static_pointer_cast<const CSettingBool>(value)->GetValue());
+      break;
 
-      case SettingType::Integer:
-        realValues.push_back(std::static_pointer_cast<const CSettingInt>(value)->GetValue());
-        break;
+    case SettingType::Integer:
+      realValues.push_back(std::static_pointer_cast<const CSettingInt>(value)->GetValue());
+      break;
 
-      case SettingType::Number:
-        realValues.push_back(std::static_pointer_cast<const CSettingNumber>(value)->GetValue());
-        break;
+    case SettingType::Number:
+      realValues.push_back(std::static_pointer_cast<const CSettingNumber>(value)->GetValue());
+      break;
 
-      case SettingType::String:
-        realValues.push_back(std::static_pointer_cast<const CSettingString>(value)->GetValue());
-        break;
+    case SettingType::String:
+      realValues.push_back(std::static_pointer_cast<const CSettingString>(value)->GetValue());
+      break;
 
-      default:
-        break;
+    default:
+      break;
     }
   }
 
   return realValues;
 }
 
-bool CSettingUtils::ValuesToList(std::shared_ptr<const CSettingList> setting, const std::vector<CVariant> &values,
-                                 std::vector< std::shared_ptr<CSetting> > &newValues)
+bool CSettingUtils::ValuesToList(std::shared_ptr<const CSettingList> setting,
+                                 const std::vector<CVariant>& values,
+                                 std::vector<std::shared_ptr<CSetting>>& newValues)
 {
   if (setting == NULL)
     return false;
@@ -71,43 +75,45 @@ bool CSettingUtils::ValuesToList(std::shared_ptr<const CSettingList> setting, co
   bool ret = true;
   for (const auto& value : values)
   {
-    SettingPtr settingValue = setting->GetDefinition()->Clone(StringUtils::Format("%s.%d", setting->GetId().c_str(), index++));
+    SettingPtr settingValue = setting->GetDefinition()->Clone(
+        StringUtils::Format("%s.%d", setting->GetId().c_str(), index++));
     if (settingValue == NULL)
       return false;
 
     switch (setting->GetElementType())
     {
-      case SettingType::Boolean:
-        if (!value.isBoolean())
-          ret = false;
-        else
-          ret = std::static_pointer_cast<CSettingBool>(settingValue)->SetValue(value.asBoolean());
-        break;
-
-      case SettingType::Integer:
-        if (!value.isInteger())
-          ret = false;
-        else
-          ret = std::static_pointer_cast<CSettingInt>(settingValue)->SetValue(static_cast<int>(value.asInteger()));
-        break;
-
-      case SettingType::Number:
-        if (!value.isDouble())
-          ret = false;
-        else
-          ret = std::static_pointer_cast<CSettingNumber>(settingValue)->SetValue(value.asDouble());
-        break;
-
-      case SettingType::String:
-        if (!value.isString())
-          ret = false;
-        else
-          ret = std::static_pointer_cast<CSettingString>(settingValue)->SetValue(value.asString());
-        break;
-
-      default:
+    case SettingType::Boolean:
+      if (!value.isBoolean())
         ret = false;
-        break;
+      else
+        ret = std::static_pointer_cast<CSettingBool>(settingValue)->SetValue(value.asBoolean());
+      break;
+
+    case SettingType::Integer:
+      if (!value.isInteger())
+        ret = false;
+      else
+        ret = std::static_pointer_cast<CSettingInt>(settingValue)
+                  ->SetValue(static_cast<int>(value.asInteger()));
+      break;
+
+    case SettingType::Number:
+      if (!value.isDouble())
+        ret = false;
+      else
+        ret = std::static_pointer_cast<CSettingNumber>(settingValue)->SetValue(value.asDouble());
+      break;
+
+    case SettingType::String:
+      if (!value.isString())
+        ret = false;
+      else
+        ret = std::static_pointer_cast<CSettingString>(settingValue)->SetValue(value.asString());
+      break;
+
+    default:
+      ret = false;
+      break;
     }
 
     if (!ret)

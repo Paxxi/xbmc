@@ -7,16 +7,19 @@
  */
 
 #include "DVDVideoPPFFmpeg.h"
-#include "utils/log.h"
+
 #include "cores/FFmpeg.h"
 #include "cores/VideoPlayer/Process/ProcessInfo.h"
+#include "utils/log.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/mem.h>
 }
 
-CDVDVideoPPFFmpeg::CDVDVideoPPFFmpeg(CProcessInfo &processInfo):
-  m_sType(""), m_processInfo(processInfo)
+CDVDVideoPPFFmpeg::CDVDVideoPPFFmpeg(CProcessInfo& processInfo)
+  : m_sType("")
+  , m_processInfo(processInfo)
 {
   m_pMode = m_pContext = NULL;
   m_iInitWidth = m_iInitHeight = 0;
@@ -35,7 +38,7 @@ void CDVDVideoPPFFmpeg::Dispose()
     pp_free_mode(m_pMode);
     m_pMode = NULL;
   }
-  if(m_pContext)
+  if (m_pContext)
   {
     pp_free_context(m_pContext);
     m_pContext = NULL;
@@ -77,14 +80,14 @@ void CDVDVideoPPFFmpeg::SetType(const std::string& mType, bool deinterlace)
 
   m_sType = mType;
 
-  if(m_pContext || m_pMode)
+  if (m_pContext || m_pMode)
     Dispose();
 }
 
 void CDVDVideoPPFFmpeg::Process(VideoPicture* pPicture)
 {
   VideoPicture* pSource = pPicture;
-  CVideoBuffer *videoBuffer;
+  CVideoBuffer* videoBuffer;
 
   if (pSource->videoBuffer->GetFormat() != AV_PIX_FMT_YUV420P)
     return;
@@ -95,14 +98,14 @@ void CDVDVideoPPFFmpeg::Process(VideoPicture* pPicture)
     return;
   }
 
-  uint8_t* srcPlanes[YuvImage::MAX_PLANES], *dstPlanes[YuvImage::MAX_PLANES];
+  uint8_t *srcPlanes[YuvImage::MAX_PLANES], *dstPlanes[YuvImage::MAX_PLANES];
   int srcStrides[YuvImage::MAX_PLANES];
   pSource->videoBuffer->GetPlanes(srcPlanes);
   pSource->videoBuffer->GetStrides(srcStrides);
 
-  videoBuffer = m_processInfo.GetVideoBufferManager().Get(AV_PIX_FMT_YUV420P,
-                                                          srcStrides[0] * pPicture->iHeight +
-                                                          srcStrides[1] * pPicture->iHeight, nullptr);
+  videoBuffer = m_processInfo.GetVideoBufferManager().Get(
+      AV_PIX_FMT_YUV420P, srcStrides[0] * pPicture->iHeight + srcStrides[1] * pPicture->iHeight,
+      nullptr);
   if (!videoBuffer)
   {
     return;
@@ -111,12 +114,9 @@ void CDVDVideoPPFFmpeg::Process(VideoPicture* pPicture)
   videoBuffer->SetDimensions(pPicture->iWidth, pPicture->iHeight, srcStrides);
   videoBuffer->GetPlanes(dstPlanes);
   //! @bug libpostproc isn't const correct
-  pp_postprocess(const_cast<const uint8_t **>(srcPlanes), srcStrides,
-                 dstPlanes, srcStrides,
-                 pSource->iWidth, pSource->iHeight,
-                 pSource->qp_table, pSource->qstride,
-                 m_pMode, m_pContext,
-                 pSource->pict_type | pSource->qscale_type ? PP_PICT_TYPE_QP2 : 0);
+  pp_postprocess(const_cast<const uint8_t**>(srcPlanes), srcStrides, dstPlanes, srcStrides,
+                 pSource->iWidth, pSource->iHeight, pSource->qp_table, pSource->qstride, m_pMode,
+                 m_pContext, pSource->pict_type | pSource->qscale_type ? PP_PICT_TYPE_QP2 : 0);
 
 
   pPicture->SetParams(*pSource);
@@ -127,4 +127,3 @@ void CDVDVideoPPFFmpeg::Process(VideoPicture* pPicture)
   if (m_deinterlace)
     pPicture->iFlags &= ~DVP_FLAG_INTERLACED;
 }
-

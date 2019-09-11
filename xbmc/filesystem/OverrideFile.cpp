@@ -17,7 +17,8 @@ using namespace XFILE;
 
 COverrideFile::COverrideFile(bool writable)
   : m_writable(writable)
-{ }
+{
+}
 
 
 COverrideFile::~COverrideFile()

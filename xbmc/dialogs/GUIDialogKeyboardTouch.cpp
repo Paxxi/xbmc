@@ -12,14 +12,18 @@
 #endif
 
 CGUIDialogKeyboardTouch::CGUIDialogKeyboardTouch()
-: CGUIDialog(WINDOW_DIALOG_KEYBOARD_TOUCH, "")
-, CGUIKeyboard()
-, CThread("keyboard")
-, m_pCharCallback(NULL)
+  : CGUIDialog(WINDOW_DIALOG_KEYBOARD_TOUCH, "")
+  , CGUIKeyboard()
+  , CThread("keyboard")
+  , m_pCharCallback(NULL)
 {
 }
 
-bool CGUIDialogKeyboardTouch::ShowAndGetInput(char_callback_t pCallback, const std::string &initialString, std::string &typedString, const std::string &heading, bool bHiddenInput)
+bool CGUIDialogKeyboardTouch::ShowAndGetInput(char_callback_t pCallback,
+                                              const std::string& initialString,
+                                              std::string& typedString,
+                                              const std::string& heading,
+                                              bool bHiddenInput)
 {
 #if defined(TARGET_DARWIN_EMBEDDED)
   m_keyboard.reset(new CIOSKeyboard());
@@ -49,7 +53,7 @@ bool CGUIDialogKeyboardTouch::ShowAndGetInput(char_callback_t pCallback, const s
   return false;
 }
 
-bool CGUIDialogKeyboardTouch::SetTextToKeyboard(const std::string &text, bool closeKeyboard)
+bool CGUIDialogKeyboardTouch::SetTextToKeyboard(const std::string& text, bool closeKeyboard)
 {
   if (m_keyboard)
     return m_keyboard->SetTextToKeyboard(text, closeKeyboard);
@@ -80,7 +84,8 @@ void CGUIDialogKeyboardTouch::Process()
 {
   if (m_keyboard)
   {
-    m_confirmed = m_keyboard->ShowAndGetInput(m_pCharCallback, m_initialString, m_typedString, m_heading, m_bHiddenInput);
+    m_confirmed = m_keyboard->ShowAndGetInput(m_pCharCallback, m_initialString, m_typedString,
+                                              m_heading, m_bHiddenInput);
   }
   Close();
 }

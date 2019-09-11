@@ -94,7 +94,7 @@ void CWinSystemX11GLContext::PresentRenderImpl(bool rendered)
     m_delayDispReset = false;
     CSingleLock lock(m_resourceSection);
     // tell any shared resources
-    for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
+    for (std::vector<IDispResource*>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
       (*i)->OnResetDisplay();
   }
 }
@@ -106,7 +106,7 @@ void CWinSystemX11GLContext::SetVSyncImpl(bool enable)
 
 bool CWinSystemX11GLContext::IsExtSupported(const char* extension) const
 {
-  if(strncmp(extension, m_pGLContext->ExtPrefix().c_str(), 4) != 0)
+  if (strncmp(extension, m_pGLContext->ExtPrefix().c_str(), 4) != 0)
     return CRenderSystemGL::IsExtSupported(extension);
 
   return m_pGLContext->IsExtSupported(extension);
@@ -142,7 +142,8 @@ EGLConfig CWinSystemX11GLContext::GetEGLConfig() const
   return static_cast<CGLContextEGL*>(m_pGLContext)->m_eglConfig;
 }
 
-bool CWinSystemX11GLContext::SetWindow(int width, int height, bool fullscreen, const std::string &output, int *winstate)
+bool CWinSystemX11GLContext::SetWindow(
+    int width, int height, bool fullscreen, const std::string& output, int* winstate)
 {
   int newwin = 0;
 
@@ -162,16 +163,19 @@ bool CWinSystemX11GLContext::SetWindow(int width, int height, bool fullscreen, c
     {
       CSingleLock lock(m_resourceSection);
       // tell any shared resources
-      for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
+      for (std::vector<IDispResource*>::iterator i = m_resources.begin(); i != m_resources.end();
+           ++i)
         (*i)->OnResetDisplay();
     }
   }
   return true;
 }
 
-bool CWinSystemX11GLContext::CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res)
+bool CWinSystemX11GLContext::CreateNewWindow(const std::string& name,
+                                             bool fullScreen,
+                                             RESOLUTION_INFO& res)
 {
-  if(!CWinSystemX11::CreateNewWindow(name, fullScreen, res))
+  if (!CWinSystemX11::CreateNewWindow(name, fullScreen, res))
     return false;
 
   m_pGLContext->QueryExtensions();
@@ -200,7 +204,9 @@ void CWinSystemX11GLContext::FinishWindowResize(int newWidth, int newHeight)
     g_application.ReloadSkin();
 }
 
-bool CWinSystemX11GLContext::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays)
+bool CWinSystemX11GLContext::SetFullScreen(bool fullScreen,
+                                           RESOLUTION_INFO& res,
+                                           bool blankOtherDisplays)
 {
   m_newGlContext = false;
   CWinSystemX11::SetFullScreen(fullScreen, res, blankOtherDisplays);
@@ -230,7 +236,7 @@ XVisualInfo* CWinSystemX11GLContext::GetVisual()
 {
   int count = 0;
   XVisualInfo vTemplate;
-  XVisualInfo *visual = nullptr;
+  XVisualInfo* visual = nullptr;
 
   int vMask = VisualScreenMask | VisualDepthMask | VisualClassMask;
 
@@ -274,7 +280,7 @@ bool CWinSystemX11GLContext::RefreshGLContext(bool force)
   CScreenshotSurfaceGL::Register();
 
   std::string gpuvendor;
-  const char* vend = (const char*) glGetString(GL_VENDOR);
+  const char* vend = (const char*)glGetString(GL_VENDOR);
   if (vend)
     gpuvendor = vend;
   std::transform(gpuvendor.begin(), gpuvendor.end(), gpuvendor.begin(), ::tolower);
@@ -326,7 +332,7 @@ bool CWinSystemX11GLContext::RefreshGLContext(bool force)
   return success;
 }
 
-std::unique_ptr<CVideoSync> CWinSystemX11GLContext::GetVideoSync(void *clock)
+std::unique_ptr<CVideoSync> CWinSystemX11GLContext::GetVideoSync(void* clock)
 {
   std::unique_ptr<CVideoSync> pVSync;
 
@@ -353,7 +359,7 @@ float CWinSystemX11GLContext::GetFrameLatencyAdjustment()
   return 0;
 }
 
-uint64_t CWinSystemX11GLContext::GetVblankTiming(uint64_t &msc, uint64_t &interval)
+uint64_t CWinSystemX11GLContext::GetVblankTiming(uint64_t& msc, uint64_t& interval)
 {
   if (m_pGLContext)
   {
@@ -365,7 +371,7 @@ uint64_t CWinSystemX11GLContext::GetVblankTiming(uint64_t &msc, uint64_t &interv
   return 0;
 }
 
-void CWinSystemX11GLContext::delete_CVaapiProxy::operator()(CVaapiProxy *p) const
+void CWinSystemX11GLContext::delete_CVaapiProxy::operator()(CVaapiProxy* p) const
 {
   X11::VaapiProxyDelete(p);
 }

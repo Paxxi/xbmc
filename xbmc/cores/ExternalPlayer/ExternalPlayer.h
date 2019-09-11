@@ -20,12 +20,20 @@ class CGUIDialogOK;
 class CExternalPlayer : public IPlayer, public CThread
 {
 public:
-  enum WARP_CURSOR { WARP_NONE = 0, WARP_TOP_LEFT, WARP_TOP_RIGHT, WARP_BOTTOM_RIGHT, WARP_BOTTOM_LEFT, WARP_CENTER };
+  enum WARP_CURSOR
+  {
+    WARP_NONE = 0,
+    WARP_TOP_LEFT,
+    WARP_TOP_RIGHT,
+    WARP_BOTTOM_RIGHT,
+    WARP_BOTTOM_LEFT,
+    WARP_CENTER
+  };
 
   explicit CExternalPlayer(IPlayerCallback& callback);
   ~CExternalPlayer() override;
   bool Initialize(TiXmlElement* pConfig) override;
-  bool OpenFile(const CFileItem& file, const CPlayerOptions &options) override;
+  bool OpenFile(const CFileItem& file, const CPlayerOptions& options) override;
   bool CloseFile(bool reopen = false) override;
   bool IsPlaying() const override;
   void Pause() override;
@@ -53,13 +61,13 @@ public:
   bool ExecuteAppW32(const char* strPath, const char* strSwitches);
   //static void CALLBACK AppFinished(void* closure, BOOLEAN TimerOrWaitFired);
 #elif defined(TARGET_ANDROID)
-  bool ExecuteAppAndroid(const char* strSwitches,const char* strPath);
+  bool ExecuteAppAndroid(const char* strSwitches, const char* strPath);
 #elif defined(TARGET_POSIX)
   bool ExecuteAppLinux(const char* strSwitches);
 #endif
 
 private:
-  void GetCustomRegexpReplacers(TiXmlElement *pRootElement, std::vector<std::string>& settings);
+  void GetCustomRegexpReplacers(TiXmlElement* pRootElement, std::vector<std::string>& settings);
   void Process() override;
 
   bool m_bAbortRequest;

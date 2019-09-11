@@ -17,7 +17,7 @@
 class CUDiskDevice
 {
 public:
-  CUDiskDevice(const char *DeviceKitUDI);
+  CUDiskDevice(const char* DeviceKitUDI);
   ~CUDiskDevice() = default;
 
   void Update();
@@ -32,7 +32,8 @@ public:
   CMediaSource ToMediaShare();
 
   std::string m_UDI, m_DeviceKitUDI, m_MountPath, m_FileSystem, m_Label;
-  bool m_isMounted, m_isMountedByUs, m_isRemovable, m_isPartition, m_isFileSystem, m_isSystemInternal, m_isOptical;
+  bool m_isMounted, m_isMountedByUs, m_isRemovable, m_isPartition, m_isFileSystem,
+      m_isSystemInternal, m_isOptical;
   int64_t m_PartitionSize;
 };
 
@@ -43,25 +44,26 @@ public:
   ~CUDisksProvider() override;
 
   void Initialize() override;
-  void Stop() override { }
+  void Stop() override {}
 
-  void GetLocalDrives(VECSOURCES &localDrives) override { GetDisks(localDrives, false); }
-  void GetRemovableDrives(VECSOURCES &removableDrives) override { GetDisks(removableDrives, true); }
+  void GetLocalDrives(VECSOURCES& localDrives) override { GetDisks(localDrives, false); }
+  void GetRemovableDrives(VECSOURCES& removableDrives) override { GetDisks(removableDrives, true); }
 
   bool Eject(const std::string& mountpath) override;
 
   std::vector<std::string> GetDiskUsage() override;
 
-  bool PumpDriveChangeEvents(IStorageEventsCallback *callback) override;
+  bool PumpDriveChangeEvents(IStorageEventsCallback* callback) override;
 
   static bool HasUDisks();
-private:
-  typedef std::map<std::string, CUDiskDevice *> DeviceMap;
-  typedef std::pair<std::string, CUDiskDevice *> DevicePair;
 
-  void DeviceAdded(const char *object, IStorageEventsCallback *callback);
-  void DeviceRemoved(const char *object, IStorageEventsCallback *callback);
-  void DeviceChanged(const char *object, IStorageEventsCallback *callback);
+private:
+  typedef std::map<std::string, CUDiskDevice*> DeviceMap;
+  typedef std::pair<std::string, CUDiskDevice*> DevicePair;
+
+  void DeviceAdded(const char* object, IStorageEventsCallback* callback);
+  void DeviceRemoved(const char* object, IStorageEventsCallback* callback);
+  void DeviceChanged(const char* object, IStorageEventsCallback* callback);
 
   std::vector<std::string> EnumerateDisks();
 

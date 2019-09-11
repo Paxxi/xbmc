@@ -30,18 +30,16 @@ public:
     width = height = 0;
     updateable = false;
   };
-  bool operator==(const CTextureDetails &right) const
+  bool operator==(const CTextureDetails& right) const
   {
-    return (id    == right.id    &&
-            file  == right.file  &&
-            width == right.width );
+    return (id == right.id && file == right.file && width == right.width);
   };
-  int          id;
-  std::string  file;
-  std::string  hash;
+  int id;
+  std::string file;
+  std::string hash;
   unsigned int width;
   unsigned int height;
-  bool         updateable;
+  bool updateable;
 };
 
 /*!
@@ -53,11 +51,11 @@ public:
 class CTextureCacheJob : public CJob
 {
 public:
-  CTextureCacheJob(const std::string &url, const std::string &oldHash = "");
+  CTextureCacheJob(const std::string& url, const std::string& oldHash = "");
   ~CTextureCacheJob() override;
 
   const char* GetType() const override { return kJobTypeCacheImage; };
-  bool operator==(const CJob *job) const override;
+  bool operator==(const CJob* job) const override;
   bool DoWork() override;
 
   /*! \brief retrieve a hash for the given image
@@ -65,20 +63,21 @@ public:
    \param url location of the image
    \return a hash string for this image
    */
-  bool CacheTexture(CBaseTexture **texture = NULL);
+  bool CacheTexture(CBaseTexture** texture = NULL);
 
-  static bool ResizeTexture(const std::string &url, uint8_t* &result, size_t &result_size);
+  static bool ResizeTexture(const std::string& url, uint8_t*& result, size_t& result_size);
 
   std::string m_url;
   std::string m_oldHash;
   CTextureDetails m_details;
+
 private:
   /*! \brief retrieve a hash for the given image
    Combines the size, ctime and mtime of the image file into a "unique" hash
    \param url location of the image
    \return a hash string for this image
    */
-  static std::string GetImageHash(const std::string &url);
+  static std::string GetImageHash(const std::string& url);
 
   /*! \brief Check whether a given URL represents an image that can be updated
    We currently don't check http:// and https:// URLs for updates, under the assumption that
@@ -87,7 +86,7 @@ private:
    \param url the url to check
    \return true if the image given by the URL should be checked for updates, false otherwise
    */
-  bool UpdateableURL(const std::string &url) const;
+  bool UpdateableURL(const std::string& url) const;
 
   /*! \brief Decode an image URL to the underlying image, width, height and orientation
    \param url wrapped URL of the image
@@ -97,7 +96,11 @@ private:
    \param additional_info additional information, such as "flipped" to flip horizontally
    \return URL of the underlying image file.
    */
-  static std::string DecodeImageURL(const std::string &url, unsigned int &width, unsigned int &height, CPictureScalingAlgorithm::Algorithm& scalingAlgorithm, std::string &additional_info);
+  static std::string DecodeImageURL(const std::string& url,
+                                    unsigned int& width,
+                                    unsigned int& height,
+                                    CPictureScalingAlgorithm::Algorithm& scalingAlgorithm,
+                                    std::string& additional_info);
 
   /*! \brief Load an image at a given target size and orientation.
 
@@ -110,9 +113,13 @@ private:
    \param additional_info extra info for loading, such as whether to flip horizontally.
    \return a pointer to a CBaseTexture object, NULL if failed.
    */
-  static CBaseTexture *LoadImage(const std::string &image, unsigned int width, unsigned int height, const std::string &additional_info, bool requirePixels = false);
+  static CBaseTexture* LoadImage(const std::string& image,
+                                 unsigned int width,
+                                 unsigned int height,
+                                 const std::string& additional_info,
+                                 bool requirePixels = false);
 
-  std::string    m_cachePath;
+  std::string m_cachePath;
 };
 
 /* \brief Job class for storing the use count of textures
@@ -120,10 +127,10 @@ private:
 class CTextureUseCountJob : public CJob
 {
 public:
-  explicit CTextureUseCountJob(const std::vector<CTextureDetails> &textures);
+  explicit CTextureUseCountJob(const std::vector<CTextureDetails>& textures);
 
   const char* GetType() const override { return "usecount"; };
-  bool operator==(const CJob *job) const override;
+  bool operator==(const CJob* job) const override;
   bool DoWork() override;
 
 private:

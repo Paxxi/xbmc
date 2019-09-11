@@ -45,7 +45,10 @@ namespace WAYLAND
 class CRegistry;
 class CWindowDecorator;
 
-class CWinSystemWayland : public CWinSystemBase, IInputHandler, IWindowDecorationHandler, IShellSurfaceHandler
+class CWinSystemWayland : public CWinSystemBase,
+                          IInputHandler,
+                          IWindowDecorationHandler,
+                          IShellSurfaceHandler
 {
 public:
   CWinSystemWayland();
@@ -54,9 +57,7 @@ public:
   bool InitWindowSystem() override;
   bool DestroyWindowSystem() override;
 
-  bool CreateNewWindow(const std::string& name,
-                       bool fullScreen,
-                       RESOLUTION_INFO& res) override;
+  bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
 
   bool DestroyWindow() override;
 
@@ -85,7 +86,11 @@ public:
   void Register(IDispResource* resource) override;
   void Unregister(IDispResource* resource) override;
 
-  using PresentationFeedbackHandler = std::function<void(timespec /* tv */, std::uint32_t /* refresh */, std::uint32_t /* sync output id */, float /* sync output fps */, std::uint64_t /* msc */)>;
+  using PresentationFeedbackHandler = std::function<void(timespec /* tv */,
+                                                         std::uint32_t /* refresh */,
+                                                         std::uint32_t /* sync output id */,
+                                                         float /* sync output fps */,
+                                                         std::uint64_t /* msc */)>;
   CSignalRegistration RegisterOnPresentationFeedback(PresentationFeedbackHandler handler);
 
   // Like CWinSystemX11
@@ -96,18 +101,9 @@ public:
 
 protected:
   std::unique_ptr<KODI::WINDOWING::IOSScreenSaver> GetOSScreenSaverImpl() override;
-  CSizeInt GetBufferSize() const
-  {
-    return m_bufferSize;
-  }
-  std::unique_ptr<CConnection> const& GetConnection()
-  {
-    return m_connection;
-  }
-  wayland::surface_t GetMainSurface()
-  {
-    return m_surface;
-  }
+  CSizeInt GetBufferSize() const { return m_bufferSize; }
+  std::unique_ptr<CConnection> const& GetConnection() { return m_connection; }
+  wayland::surface_t GetMainSurface() { return m_surface; }
 
   void PrepareFramePresentation();
   void FinishFramePresentation();
@@ -122,8 +118,12 @@ private:
 
   // IWindowDecorationHandler
   void OnWindowMove(const wayland::seat_t& seat, std::uint32_t serial) override;
-  void OnWindowResize(const wayland::seat_t& seat, std::uint32_t serial, wayland::shell_surface_resize edge) override;
-  void OnWindowShowContextMenu(const wayland::seat_t& seat, std::uint32_t serial, CPointInt position) override;
+  void OnWindowResize(const wayland::seat_t& seat,
+                      std::uint32_t serial,
+                      wayland::shell_surface_resize edge) override;
+  void OnWindowShowContextMenu(const wayland::seat_t& seat,
+                               std::uint32_t serial,
+                               CPointInt position) override;
   void OnWindowClose() override;
   void OnWindowMaximize() override;
   void OnWindowMinimize() override;
@@ -141,14 +141,22 @@ private:
   void LoadDefaultCursor();
   void SendFocusChange(bool focus);
   bool SetResolutionExternal(bool fullScreen, RESOLUTION_INFO const& res);
-  void SetResolutionInternal(CSizeInt size, int scale, IShellSurface::StateBitset state, bool sizeIncludesDecoration, bool mustAck = false, std::uint32_t configureSerial = 0u);
+  void SetResolutionInternal(CSizeInt size,
+                             int scale,
+                             IShellSurface::StateBitset state,
+                             bool sizeIncludesDecoration,
+                             bool mustAck = false,
+                             std::uint32_t configureSerial = 0u);
   struct Sizes
   {
     CSizeInt surfaceSize;
     CSizeInt bufferSize;
     CSizeInt configuredSize;
   };
-  Sizes CalculateSizes(CSizeInt size, int scale, IShellSurface::StateBitset state, bool sizeIncludesDecoration);
+  Sizes CalculateSizes(CSizeInt size,
+                       int scale,
+                       IShellSurface::StateBitset state,
+                       bool sizeIncludesDecoration);
   struct SizeUpdateInformation
   {
     bool surfaceSizeChanged : 1;
@@ -156,7 +164,10 @@ private:
     bool configuredSizeChanged : 1;
     bool bufferScaleChanged : 1;
   };
-  SizeUpdateInformation UpdateSizeVariables(CSizeInt size, int scale, IShellSurface::StateBitset state, bool sizeIncludesDecoration);
+  SizeUpdateInformation UpdateSizeVariables(CSizeInt size,
+                                            int scale,
+                                            IShellSurface::StateBitset state,
+                                            bool sizeIncludesDecoration);
   void ApplySizeUpdate(SizeUpdateInformation update);
   void ApplyNextState();
 
@@ -231,7 +242,8 @@ private:
     timespec submissionTime;
     float latency;
     wayland::presentation_feedback_t feedback;
-    SurfaceSubmission(timespec const& submissionTime, wayland::presentation_feedback_t const& feedback);
+    SurfaceSubmission(timespec const& submissionTime,
+                      wayland::presentation_feedback_t const& feedback);
   };
   std::list<SurfaceSubmission> m_surfaceSubmissions;
   CCriticalSection m_surfaceSubmissionsMutex;
@@ -296,6 +308,6 @@ private:
 };
 
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

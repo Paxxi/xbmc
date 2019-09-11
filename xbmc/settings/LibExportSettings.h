@@ -41,7 +41,7 @@ public:
   CLibExportSettings();
   ~CLibExportSettings() = default;
 
-  bool operator!=(const CLibExportSettings &right) const;
+  bool operator!=(const CLibExportSettings& right) const;
   bool IsItemExported(ELIBEXPORTOPTIONS item) const;
   bool IsArtists() const;
   std::vector<int> GetExportItems() const;
@@ -49,7 +49,10 @@ public:
   void ClearItems() { m_itemstoexport = 0; }
   void AddItem(ELIBEXPORTOPTIONS item) { m_itemstoexport += item; }
   unsigned int GetItemsToExport() { return m_itemstoexport; }
-  void SetItemsToExport(int itemstoexport) { m_itemstoexport = static_cast<unsigned int>(itemstoexport); }
+  void SetItemsToExport(int itemstoexport)
+  {
+    m_itemstoexport = static_cast<unsigned int>(itemstoexport);
+  }
   unsigned int GetExportType() { return m_exporttype; }
   void SetExportType(int exporttype) { m_exporttype = static_cast<unsigned int>(exporttype); }
   bool IsSingleFile() const;
@@ -62,6 +65,7 @@ public:
   bool m_artwork;
   bool m_unscraped;
   bool m_skipnfo;
+
 private:
   unsigned int m_exporttype; //singlefile, separate files, to library folder
   unsigned int m_itemstoexport;

@@ -17,7 +17,7 @@
 
 namespace ADDON
 {
-  class CContextMenuAddon;
+class CContextMenuAddon;
 }
 
 class IContextMenuItem
@@ -34,12 +34,13 @@ public:
 class CStaticContextMenuAction : public IContextMenuItem
 {
 public:
-  explicit CStaticContextMenuAction(uint32_t label) : m_label(label) {}
-  std::string GetLabel(const CFileItem& item) const final
+  explicit CStaticContextMenuAction(uint32_t label)
+    : m_label(label)
   {
-    return g_localizeStrings.Get(m_label);
   }
+  std::string GetLabel(const CFileItem& item) const final { return g_localizeStrings.Get(m_label); }
   bool IsGroup() const final { return false; }
+
 private:
   const uint32_t m_label;
 };
@@ -50,26 +51,24 @@ class CContextMenuItem : public IContextMenuItem
 public:
   CContextMenuItem() = default;
 
-  std::string GetLabel(const CFileItem& item) const  override { return m_label; }
-  bool IsVisible(const CFileItem& item) const override ;
+  std::string GetLabel(const CFileItem& item) const override { return m_label; }
+  bool IsVisible(const CFileItem& item) const override;
   bool IsParentOf(const CContextMenuItem& menuItem) const;
-  bool IsGroup() const override ;
+  bool IsGroup() const override;
   bool Execute(const CFileItemPtr& item) const override;
   bool operator==(const CContextMenuItem& other) const;
   std::string ToString() const;
 
-  static CContextMenuItem CreateGroup(
-    const std::string& label,
-    const std::string& parent,
-    const std::string& groupId,
-    const std::string& addonId);
+  static CContextMenuItem CreateGroup(const std::string& label,
+                                      const std::string& parent,
+                                      const std::string& groupId,
+                                      const std::string& addonId);
 
-  static CContextMenuItem CreateItem(
-    const std::string& label,
-    const std::string& parent,
-    const std::string& library,
-    const std::string& condition,
-    const std::string& addonId);
+  static CContextMenuItem CreateItem(const std::string& label,
+                                     const std::string& parent,
+                                     const std::string& library,
+                                     const std::string& condition,
+                                     const std::string& addonId);
 
   friend class ADDON::CContextMenuAddon;
 

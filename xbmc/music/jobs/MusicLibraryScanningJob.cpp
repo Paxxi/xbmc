@@ -10,12 +10,15 @@
 
 #include "music/MusicDatabase.h"
 
-CMusicLibraryScanningJob::CMusicLibraryScanningJob(const std::string& directory, int flags, bool showProgress /* = true */)
-  : m_scanner(),
-    m_directory(directory),
-    m_showProgress(showProgress),
-    m_flags(flags)
-{ }
+CMusicLibraryScanningJob::CMusicLibraryScanningJob(const std::string& directory,
+                                                   int flags,
+                                                   bool showProgress /* = true */)
+  : m_scanner()
+  , m_directory(directory)
+  , m_showProgress(showProgress)
+  , m_flags(flags)
+{
+}
 
 CMusicLibraryScanningJob::~CMusicLibraryScanningJob() = default;
 
@@ -37,11 +40,10 @@ bool CMusicLibraryScanningJob::operator==(const CJob* job) const
   if (scanningJob == nullptr)
     return false;
 
-  return m_directory == scanningJob->m_directory &&
-         m_flags == scanningJob->m_flags;
+  return m_directory == scanningJob->m_directory && m_flags == scanningJob->m_flags;
 }
 
-bool CMusicLibraryScanningJob::Work(CMusicDatabase &db)
+bool CMusicLibraryScanningJob::Work(CMusicDatabase& db)
 {
   m_scanner.ShowDialog(m_showProgress);
   if (m_flags & MUSIC_INFO::CMusicInfoScanner::SCAN_ALBUMS)

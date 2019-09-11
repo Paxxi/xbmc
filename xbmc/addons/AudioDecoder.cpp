@@ -20,7 +20,7 @@ CAudioDecoder::CAudioDecoder(const BinaryAddonBasePtr& addonInfo)
   m_CodecName = addonInfo->Type(ADDON_AUDIODECODER)->GetValue("@name").asString();
   m_strExt = m_CodecName + "stream";
   m_hasTags = addonInfo->Type(ADDON_AUDIODECODER)->GetValue("@tags").asBoolean();
-  m_struct = {{ 0 }};
+  m_struct = {{0}};
 }
 
 CAudioDecoder::~CAudioDecoder()
@@ -46,10 +46,9 @@ bool CAudioDecoder::Init(const CFileItem& file, unsigned int filecache)
   int channels;
   int sampleRate;
 
- bool ret = m_struct.toAddon.init(&m_struct, file.GetDynPath().c_str(), filecache,
-                                  &channels, &sampleRate,
-                                  &m_bitsPerSample, &m_TotalTime,
-                                  &m_bitRate, &m_format.m_dataFormat, &m_channel);
+  bool ret = m_struct.toAddon.init(&m_struct, file.GetDynPath().c_str(), filecache, &channels,
+                                   &sampleRate, &m_bitsPerSample, &m_TotalTime, &m_bitRate,
+                                   &m_format.m_dataFormat, &m_channel);
 
   m_format.m_sampleRate = sampleRate;
   if (m_channel)
@@ -84,8 +83,8 @@ bool CAudioDecoder::Load(const std::string& fileName,
   if (!m_struct.toAddon.read_tag)
     return false;
 
-  char title[256] = { 0 };
-  char artist[256] = { 0 };
+  char title[256] = {0};
+  char artist[256] = {0};
   int length;
   if (m_struct.toAddon.read_tag(&m_struct, fileName.c_str(), title, artist, &length))
   {

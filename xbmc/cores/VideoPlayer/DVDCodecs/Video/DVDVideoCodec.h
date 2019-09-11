@@ -8,28 +8,29 @@
 
 #pragma once
 
+#include "DVDResource.h"
+#include "cores/VideoPlayer/Interface/Addon/DemuxPacket.h"
 #include "cores/VideoPlayer/Process/ProcessInfo.h"
 #include "cores/VideoPlayer/Process/VideoBuffer.h"
-#include "cores/VideoPlayer/Interface/Addon/DemuxPacket.h"
-#include "DVDResource.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 #include <libavutil/mastering_display_metadata.h>
 }
 
-#include <vector>
-#include <string>
 #include <map>
+#include <string>
+#include <vector>
 
 class CSetting;
 
 // when modifying these structures, make sure you update all codecs accordingly
 #define FRAME_TYPE_UNDEF 0
-#define FRAME_TYPE_I     1
-#define FRAME_TYPE_P     2
-#define FRAME_TYPE_B     3
-#define FRAME_TYPE_D     4
+#define FRAME_TYPE_I 1
+#define FRAME_TYPE_P 2
+#define FRAME_TYPE_B 3
+#define FRAME_TYPE_D 4
 
 
 // should be entirely filled by all codecs
@@ -38,27 +39,27 @@ struct VideoPicture
 public:
   VideoPicture();
   ~VideoPicture();
-  VideoPicture& CopyRef(const VideoPicture &pic);
-  VideoPicture& SetParams(const VideoPicture &pic);
+  VideoPicture& CopyRef(const VideoPicture& pic);
+  VideoPicture& SetParams(const VideoPicture& pic);
   void Reset(); // reinitialize members, videoBuffer will be released if set!
 
-  CVideoBuffer *videoBuffer = nullptr;
+  CVideoBuffer* videoBuffer = nullptr;
 
   double pts; // timestamp in seconds, used in the CVideoPlayer class to keep track of pts
   double dts;
   unsigned int iFlags;
   double iRepeatPicture;
   double iDuration;
-  unsigned int iFrameType         : 4;  //< see defines above // 1->I, 2->P, 3->B, 0->Undef
+  unsigned int iFrameType : 4; //< see defines above // 1->I, 2->P, 3->B, 0->Undef
   unsigned int color_space;
-  unsigned int color_range        : 1;  //< 1 indicate if we have a full range of color
+  unsigned int color_range : 1; //< 1 indicate if we have a full range of color
   unsigned int chroma_position;
   unsigned int color_primaries;
   unsigned int color_transfer;
   unsigned int colorBits = 8;
   std::string stereoMode;
 
-  int8_t* qp_table;                //< Quantization parameters, primarily used by filters
+  int8_t* qp_table; //< Quantization parameters, primarily used by filters
   int qstride;
   int qscale_type;
   int pict_type;
@@ -70,33 +71,36 @@ public:
 
   unsigned int iWidth;
   unsigned int iHeight;
-  unsigned int iDisplayWidth;           //< width of the picture without black bars
-  unsigned int iDisplayHeight;          //< height of the picture without black bars
+  unsigned int iDisplayWidth; //< width of the picture without black bars
+  unsigned int iDisplayHeight; //< height of the picture without black bars
 
 private:
   VideoPicture(VideoPicture const&);
   VideoPicture& operator=(VideoPicture const&);
 };
 
-#define DVP_FLAG_TOP_FIELD_FIRST    0x00000001
-#define DVP_FLAG_REPEAT_TOP_FIELD   0x00000002  //< Set to indicate that the top field should be repeated
-#define DVP_FLAG_INTERLACED         0x00000008  //< Set to indicate that this frame is interlaced
-#define DVP_FLAG_DROPPED            0x00000010  //< indicate that this picture has been dropped in decoder stage, will have no data
+#define DVP_FLAG_TOP_FIELD_FIRST 0x00000001
+#define DVP_FLAG_REPEAT_TOP_FIELD \
+  0x00000002 //< Set to indicate that the top field should be repeated
+#define DVP_FLAG_INTERLACED 0x00000008 //< Set to indicate that this frame is interlaced
+#define DVP_FLAG_DROPPED \
+  0x00000010 //< indicate that this picture has been dropped in decoder stage, will have no data
 
-#define DVD_CODEC_CTRL_SKIPDEINT    0x01000000  //< request to skip a deinterlacing cycle, if possible
-#define DVD_CODEC_CTRL_NO_POSTPROC  0x02000000  //< see GetCodecStats
-#define DVD_CODEC_CTRL_HURRY        0x04000000  //< see GetCodecStats
-#define DVD_CODEC_CTRL_DROP         0x08000000  //< drop in decoder or set DVP_FLAG_DROPPED, no render of frame
-#define DVD_CODEC_CTRL_DROP_ANY     0x10000000  //< drop some non-reference frame
-#define DVD_CODEC_CTRL_DRAIN        0x20000000  //< squeeze out pictured without feeding new packets
-#define DVD_CODEC_CTRL_ROTATE       0x40000000  //< rotate if renderer does not support it
+#define DVD_CODEC_CTRL_SKIPDEINT 0x01000000 //< request to skip a deinterlacing cycle, if possible
+#define DVD_CODEC_CTRL_NO_POSTPROC 0x02000000 //< see GetCodecStats
+#define DVD_CODEC_CTRL_HURRY 0x04000000 //< see GetCodecStats
+#define DVD_CODEC_CTRL_DROP \
+  0x08000000 //< drop in decoder or set DVP_FLAG_DROPPED, no render of frame
+#define DVD_CODEC_CTRL_DROP_ANY 0x10000000 //< drop some non-reference frame
+#define DVD_CODEC_CTRL_DRAIN 0x20000000 //< squeeze out pictured without feeding new packets
+#define DVD_CODEC_CTRL_ROTATE 0x40000000 //< rotate if renderer does not support it
 
 // DVP_FLAG 0x00000100 - 0x00000f00 is in use by libmpeg2!
 
-#define DVP_QSCALE_UNKNOWN          0
-#define DVP_QSCALE_MPEG1            1
-#define DVP_QSCALE_MPEG2            2
-#define DVP_QSCALE_H264             3
+#define DVP_QSCALE_UNKNOWN 0
+#define DVP_QSCALE_MPEG1 1
+#define DVP_QSCALE_MPEG2 2
+#define DVP_QSCALE_H264 3
 
 class CDVDStreamInfo;
 class CDVDCodecOption;
@@ -105,21 +109,23 @@ class CDVDCodecOptions;
 class CDVDVideoCodec
 {
 public:
-
   enum VCReturn
   {
     VC_NONE = 0,
-    VC_ERROR,           //< an error occured, no other messages will be returned
-    VC_FATAL,           //< non recoverable error
-    VC_BUFFER,          //< the decoder needs more data
-    VC_PICTURE,         //< the decoder got a picture, call Decode(NULL, 0) again to parse the rest of the data
-    VC_FLUSHED,         //< the decoder lost it's state, we need to restart decoding again
-    VC_NOBUFFER,        //< last FFmpeg GetBuffer failed
-    VC_REOPEN,          //< decoder request to re-open
-    VC_EOF              //< EOF
+    VC_ERROR, //< an error occured, no other messages will be returned
+    VC_FATAL, //< non recoverable error
+    VC_BUFFER, //< the decoder needs more data
+    VC_PICTURE, //< the decoder got a picture, call Decode(NULL, 0) again to parse the rest of the data
+    VC_FLUSHED, //< the decoder lost it's state, we need to restart decoding again
+    VC_NOBUFFER, //< last FFmpeg GetBuffer failed
+    VC_REOPEN, //< decoder request to re-open
+    VC_EOF //< EOF
   };
 
-  explicit CDVDVideoCodec(CProcessInfo &processInfo) : m_processInfo(processInfo) {}
+  explicit CDVDVideoCodec(CProcessInfo& processInfo)
+    : m_processInfo(processInfo)
+  {
+  }
   virtual ~CDVDVideoCodec() = default;
 
   /**
@@ -127,7 +133,7 @@ public:
    * Decoders not capable of runnung multiple instances should return false in case
    * there is already a instance open
    */
-  virtual bool Open(CDVDStreamInfo &hints, CDVDCodecOptions &options) = 0;
+  virtual bool Open(CDVDStreamInfo& hints, CDVDCodecOptions& options) = 0;
 
   /**
    * Reconfigure the decoder, returns true on success
@@ -135,16 +141,13 @@ public:
    * the running instance. If Reconfigure returns false, player will close / open
    * the decoder
    */
-  virtual bool Reconfigure(CDVDStreamInfo &hints)
-  {
-    return false;
-  }
+  virtual bool Reconfigure(CDVDStreamInfo& hints) { return false; }
 
   /**
    * add data, decoder has to consume the entire packet
    * returns true if the packet was consumed or if resubmitting it is useless
    */
-  virtual bool AddData(const DemuxPacket &packet) = 0;
+  virtual bool AddData(const DemuxPacket& packet) = 0;
 
   /**
    * Reset the decoder.
@@ -163,7 +166,7 @@ public:
    * will be called by video player indicating the playback speed. see DVD_PLAYSPEED_NORMAL,
    * DVD_PLAYSPEED_PAUSE and friends.
    */
-  virtual void SetSpeed(int iSpeed) {};
+  virtual void SetSpeed(int iSpeed){};
 
   /**
    * should return codecs name
@@ -174,10 +177,7 @@ public:
    * How many packets should player remember, so codec can recover should
    * something cause it to flush outside of players control
    */
-  virtual unsigned GetConvergeCount()
-  {
-    return 0;
-  }
+  virtual unsigned GetConvergeCount() { return 0; }
 
   /**
    * Number of references to old pictures that are allowed to be retained when
@@ -197,7 +197,7 @@ public:
    * video player is used. In case decoder does post-proc and de-interlacing there
    * may be quite some frames queued up between exit decoder and entry player.
    */
-  virtual bool GetCodecStats(double &pts, int &droppedFrames, int &skippedPics)
+  virtual bool GetCodecStats(double& pts, int& droppedFrames, int& skippedPics)
   {
     droppedFrames = -1;
     skippedPics = -1;
@@ -233,10 +233,10 @@ public:
    * Re-open the decoder.
    * Decoder request to re-open
    */
-  virtual void Reopen() {};
+  virtual void Reopen(){};
 
 protected:
-  CProcessInfo &m_processInfo;
+  CProcessInfo& m_processInfo;
 };
 
 // callback interface for ffmpeg hw accelerators
@@ -251,9 +251,9 @@ public:
   virtual CDVDVideoCodec::VCReturn Check(AVCodecContext* avctx) = 0;
   virtual void Reset() {}
   virtual unsigned GetAllowedReferences() { return 0; }
-  virtual bool CanSkipDeint() {return false; }
+  virtual bool CanSkipDeint() { return false; }
   virtual const std::string Name() = 0;
-  virtual void SetCodecControl(int flags) {};
+  virtual void SetCodecControl(int flags){};
 };
 
 class ICallbackHWAccel

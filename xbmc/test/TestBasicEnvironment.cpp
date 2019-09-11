@@ -7,27 +7,28 @@
  */
 
 #include "TestBasicEnvironment.h"
-#include "TestUtils.h"
+
+#include "AppParamParser.h"
+#include "Application.h"
 #include "ServiceBroker.h"
+#include "TestUtils.h"
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
 #include "filesystem/SpecialProtocol.h"
+#include "platform/Filesystem.h"
 #include "profiles/ProfileManager.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "Application.h"
-#include "AppParamParser.h"
 #include "windowing/WinSystem.h"
-#include "platform/Filesystem.h"
 
 #ifdef TARGET_DARWIN
 #include "Util.h"
 #endif
 
+#include <climits>
 #include <cstdio>
 #include <cstdlib>
-#include <climits>
 #include <system_error>
 
 namespace fs = KODI::PLATFORM::FILESYSTEM;
@@ -41,15 +42,14 @@ void TestBasicEnvironment::SetUp()
   m_pSettingsComponent.reset(new CSettingsComponent());
   m_pSettingsComponent->Init(params);
 
-  XFILE::CFile *f;
+  XFILE::CFile* f;
 
   g_application.m_ServiceManager.reset(new CServiceManager());
 
   if (!CXBMCTestUtils::Instance().SetReferenceFileBasePath())
     SetUpError();
   CXBMCTestUtils::Instance().setTestFileFactoryWriteInputFile(
-    XBMC_REF_FILE_PATH("xbmc/filesystem/test/reffile.txt")
-  );
+      XBMC_REF_FILE_PATH("xbmc/filesystem/test/reffile.txt"));
 
 //for darwin set framework path - else we get assert
 //in guisettings init below

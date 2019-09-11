@@ -18,8 +18,15 @@ typedef std::map<std::string, std::vector<std::string>> ContentPathMap;
 class CPluginSource : public CAddon
 {
 public:
-
-  enum Content { UNKNOWN, AUDIO, IMAGE, EXECUTABLE, VIDEO, GAME };
+  enum Content
+  {
+    UNKNOWN,
+    AUDIO,
+    IMAGE,
+    EXECUTABLE,
+    VIDEO,
+    GAME
+  };
 
   explicit CPluginSource(const AddonInfoPtr& addonInfo, TYPE addonType);
 
@@ -30,23 +37,18 @@ public:
     return content == UNKNOWN ? false : m_providedContent.count(content) > 0;
   }
 
-  bool ProvidesSeveral() const
-  {
-    return m_providedContent.size() > 1;
-  }
+  bool ProvidesSeveral() const { return m_providedContent.size() > 1; }
 
-  const ContentPathMap& MediaLibraryScanPaths() const
-  {
-    return m_mediaLibraryScanPaths;
-  }
+  const ContentPathMap& MediaLibraryScanPaths() const { return m_mediaLibraryScanPaths; }
 
-  static Content Translate(const std::string &content);
+  static Content Translate(const std::string& content);
+
 private:
   /*! \brief Set the provided content for this plugin
    If no valid content types are passed in, we set the EXECUTABLE type
    \param content a space-separated list of content types
    */
-  void SetProvides(const std::string &content);
+  void SetProvides(const std::string& content);
   std::set<Content> m_providedContent;
   ContentPathMap m_mediaLibraryScanPaths;
 };

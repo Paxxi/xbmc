@@ -26,7 +26,7 @@ CGUIDialogBusyNoCancel::CGUIDialogBusyNoCancel(void)
 
 CGUIDialogBusyNoCancel::~CGUIDialogBusyNoCancel(void) = default;
 
-void CGUIDialogBusyNoCancel::Open_Internal(const std::string &param /* = "" */)
+void CGUIDialogBusyNoCancel::Open_Internal(const std::string& param /* = "" */)
 {
   m_bLastVisible = true;
   m_progress = -1;
@@ -35,18 +35,19 @@ void CGUIDialogBusyNoCancel::Open_Internal(const std::string &param /* = "" */)
 }
 
 
-void CGUIDialogBusyNoCancel::DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUIDialogBusyNoCancel::DoProcess(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
-  bool visible = CServiceBroker::GetGUI()->GetWindowManager().IsModalDialogTopmost(WINDOW_DIALOG_BUSY_NOCANCEL);
+  bool visible = CServiceBroker::GetGUI()->GetWindowManager().IsModalDialogTopmost(
+      WINDOW_DIALOG_BUSY_NOCANCEL);
   if (!visible && m_bLastVisible)
     dirtyregions.push_back(CDirtyRegion(m_renderRegion));
   m_bLastVisible = visible;
 
   // update the progress control if available
-  CGUIControl *control = GetControl(PROGRESS_CONTROL);
+  CGUIControl* control = GetControl(PROGRESS_CONTROL);
   if (control && control->GetControlType() == CGUIControl::GUICONTROL_PROGRESS)
   {
-    CGUIProgressControl *progress = static_cast<CGUIProgressControl*>(control);
+    CGUIProgressControl* progress = static_cast<CGUIProgressControl*>(control);
     progress->SetPercentage(m_progress);
     progress->SetVisible(m_progress > -1);
   }
@@ -56,7 +57,7 @@ void CGUIDialogBusyNoCancel::DoProcess(unsigned int currentTime, CDirtyRegionLis
 
 void CGUIDialogBusyNoCancel::Render()
 {
-  if(!m_bLastVisible)
+  if (!m_bLastVisible)
     return;
   CGUIDialog::Render();
 }

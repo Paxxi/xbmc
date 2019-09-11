@@ -10,12 +10,12 @@
 
 #include "guilib/GUIDialog.h"
 
-class CGUIDialogButtonMenu :
-      public CGUIDialog
+class CGUIDialogButtonMenu : public CGUIDialog
 {
 public:
-  CGUIDialogButtonMenu(int id = WINDOW_DIALOG_BUTTON_MENU, const std::string &xmlFile = "DialogButtonMenu.xml");
+  CGUIDialogButtonMenu(int id = WINDOW_DIALOG_BUTTON_MENU,
+                       const std::string& xmlFile = "DialogButtonMenu.xml");
   ~CGUIDialogButtonMenu(void) override;
-  bool OnMessage(CGUIMessage &message) override;
+  bool OnMessage(CGUIMessage& message) override;
   void FrameMove() override;
 };

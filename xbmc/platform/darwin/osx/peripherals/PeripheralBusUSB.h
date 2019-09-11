@@ -16,27 +16,30 @@
 
 namespace PERIPHERALS
 {
-  class CPeripherals;
+class CPeripherals;
 
-  class CPeripheralBusUSB : public CPeripheralBus
-  {
-  public:
-    explicit CPeripheralBusUSB(CPeripherals& manager);
-    virtual ~CPeripheralBusUSB();
+class CPeripheralBusUSB : public CPeripheralBus
+{
+public:
+  explicit CPeripheralBusUSB(CPeripherals& manager);
+  virtual ~CPeripheralBusUSB();
 
-    /*!
+  /*!
      * @see PeripheralBus::PerformDeviceScan()
      */
-    bool PerformDeviceScan(PeripheralScanResults &results);
+  bool PerformDeviceScan(PeripheralScanResults& results);
 
-  protected:
-    PeripheralScanResults m_scan_results;
-    static PeripheralType GetType(int iDeviceClass);
-    static void  DeviceDetachCallback(void *refCon, io_service_t service, natural_t messageType, void *messageArgument);
-    static void  DeviceAttachCallback(CPeripheralBusUSB* refCon, io_iterator_t iterator);
+protected:
+  PeripheralScanResults m_scan_results;
+  static PeripheralType GetType(int iDeviceClass);
+  static void DeviceDetachCallback(void* refCon,
+                                   io_service_t service,
+                                   natural_t messageType,
+                                   void* messageArgument);
+  static void DeviceAttachCallback(CPeripheralBusUSB* refCon, io_iterator_t iterator);
 
-    IONotificationPortRef m_notify_port;
-    io_iterator_t         m_attach_iterator;
-  };
+  IONotificationPortRef m_notify_port;
+  io_iterator_t m_attach_iterator;
+};
 
-}
+} // namespace PERIPHERALS

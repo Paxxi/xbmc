@@ -13,8 +13,8 @@
 using namespace KODI;
 using namespace RETRO;
 
-CBaseRenderBuffer::CBaseRenderBuffer() :
-  m_refCount(0)
+CBaseRenderBuffer::CBaseRenderBuffer()
+  : m_refCount(0)
 {
 }
 

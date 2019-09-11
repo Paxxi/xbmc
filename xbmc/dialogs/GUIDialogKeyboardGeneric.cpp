@@ -6,35 +6,37 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "interfaces/AnnouncementManager.h"
-#include "input/XBMC_vkeys.h"
-#include "input/InputCodingTable.h"
+#include "GUIDialogKeyboardGeneric.h"
+
+#include "GUIDialogNumeric.h"
+#include "GUIUserMessages.h"
+#include "ServiceBroker.h"
 #include "guilib/GUIComponent.h"
 #include "guilib/GUIEditControl.h"
 #include "guilib/GUILabelControl.h"
 #include "guilib/GUIWindowManager.h"
-#include "input/KeyboardLayoutManager.h"
-#include "input/Key.h"
 #include "guilib/LocalizeStrings.h"
-#include "GUIUserMessages.h"
-#include "GUIDialogNumeric.h"
-#include "GUIDialogKeyboardGeneric.h"
-#include "ServiceBroker.h"
+#include "input/InputCodingTable.h"
+#include "input/Key.h"
+#include "input/KeyboardLayoutManager.h"
+#include "input/XBMC_vkeys.h"
+#include "interfaces/AnnouncementManager.h"
+#include "messaging/ApplicationMessenger.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "utils/RegExp.h"
-#include "utils/Variant.h"
-#include "utils/StringUtils.h"
-#include "messaging/ApplicationMessenger.h"
 #include "utils/CharsetConverter.h"
-#include "windowing/WinSystem.h"
+#include "utils/RegExp.h"
+#include "utils/StringUtils.h"
+#include "utils/Variant.h"
 #include "utils/log.h"
+#include "windowing/WinSystem.h"
 
 #ifdef TARGET_ANDROID
+#include "platform/android/activity/XBMCApp.h"
+
+#include <androidjni/ArrayList.h>
 #include <androidjni/Intent.h>
 #include <androidjni/RecognizerIntent.h>
-#include <androidjni/ArrayList.h>
-#include "platform/android/activity/XBMCApp.h"
 
 #define ACTION_RECOGNIZE_SPEECH_REQID 543
 
@@ -42,35 +44,35 @@
 
 using namespace KODI::MESSAGING;
 
-#define BUTTON_ID_OFFSET      100
-#define BUTTONS_PER_ROW        20
-#define BUTTONS_MAX_ROWS        4
+#define BUTTON_ID_OFFSET 100
+#define BUTTONS_PER_ROW 20
+#define BUTTONS_MAX_ROWS 4
 
-#define CTL_BUTTON_DONE       300
-#define CTL_BUTTON_CANCEL     301
-#define CTL_BUTTON_SHIFT      302
-#define CTL_BUTTON_CAPS       303
-#define CTL_BUTTON_SYMBOLS    304
-#define CTL_BUTTON_LEFT       305
-#define CTL_BUTTON_RIGHT      306
+#define CTL_BUTTON_DONE 300
+#define CTL_BUTTON_CANCEL 301
+#define CTL_BUTTON_SHIFT 302
+#define CTL_BUTTON_CAPS 303
+#define CTL_BUTTON_SYMBOLS 304
+#define CTL_BUTTON_LEFT 305
+#define CTL_BUTTON_RIGHT 306
 #define CTL_BUTTON_IP_ADDRESS 307
-#define CTL_BUTTON_CLEAR      308
-#define CTL_BUTTON_LAYOUT     309
+#define CTL_BUTTON_CLEAR 308
+#define CTL_BUTTON_LAYOUT 309
 
-#define CTL_LABEL_HEADING     311
-#define CTL_EDIT              312
-#define CTL_LABEL_HZCODE      313
-#define CTL_LABEL_HZLIST      314
+#define CTL_LABEL_HEADING 311
+#define CTL_EDIT 312
+#define CTL_LABEL_HZCODE 313
+#define CTL_LABEL_HZLIST 314
 
-#define CTL_BUTTON_BACKSPACE    8
-#define CTL_BUTTON_SPACE       32
+#define CTL_BUTTON_BACKSPACE 8
+#define CTL_BUTTON_SPACE 32
 
-#define SEARCH_DELAY         1000
+#define SEARCH_DELAY 1000
 
 CGUIDialogKeyboardGeneric::CGUIDialogKeyboardGeneric()
-: CGUIDialog(WINDOW_DIALOG_KEYBOARD, "DialogKeyboard.xml")
-, CGUIKeyboard()
-, m_pCharCallback(NULL)
+  : CGUIDialog(WINDOW_DIALOG_KEYBOARD, "DialogKeyboard.xml")
+  , CGUIKeyboard()
+  , m_pCharCallback(NULL)
 {
   m_bIsConfirmed = false;
   m_bShift = false;
@@ -88,11 +90,11 @@ CGUIDialogKeyboardGeneric::CGUIDialogKeyboardGeneric()
 
 void CGUIDialogKeyboardGeneric::OnWindowLoaded()
 {
-  CGUIEditControl *edit = static_cast<CGUIEditControl*>(GetControl(CTL_EDIT));
+  CGUIEditControl* edit = static_cast<CGUIEditControl*>(GetControl(CTL_EDIT));
   if (edit)
   {
     // add control CTL_LABEL_HZCODE and CTL_LABEL_HZLIST if not exist
-    CGUIControlGroup *ParentControl = static_cast<CGUIControlGroup*>(edit->GetParentControl());
+    CGUIControlGroup* ParentControl = static_cast<CGUIControlGroup*>(edit->GetParentControl());
     CLabelInfo labelInfo = edit->GetLabelInfo();
     float px = edit->GetXPosition();
     float py = edit->GetYPosition();
@@ -102,7 +104,8 @@ void CGUIDialogKeyboardGeneric::OnWindowLoaded()
     CGUILabelControl* control = static_cast<CGUILabelControl*>(GetControl(CTL_LABEL_HZCODE));
     if (!control)
     {
-      control = new CGUILabelControl(GetID(), CTL_LABEL_HZCODE, px, py + ph, 90, 30, labelInfo, false, false);
+      control = new CGUILabelControl(GetID(), CTL_LABEL_HZCODE, px, py + ph, 90, 30, labelInfo,
+                                     false, false);
       ParentControl->AddControl(control);
     }
 
@@ -110,7 +113,8 @@ void CGUIDialogKeyboardGeneric::OnWindowLoaded()
     if (!control)
     {
       labelInfo.align = XBFONT_CENTER_Y;
-      control = new CGUILabelControl(GetID(), CTL_LABEL_HZLIST, px + 95, py + ph, pw - 95, 30, labelInfo, false, false);
+      control = new CGUILabelControl(GetID(), CTL_LABEL_HZLIST, px + 95, py + ph, pw - 95, 30,
+                                     labelInfo, false, false);
       ParentControl->AddControl(control);
     }
   }
@@ -159,7 +163,9 @@ void CGUIDialogKeyboardGeneric::OnInitWindow()
   }
   // set type
   {
-    CGUIMessage msg(GUI_MSG_SET_TYPE, GetID(), CTL_EDIT, m_hiddenInput ? CGUIEditControl::INPUT_TYPE_PASSWORD : CGUIEditControl::INPUT_TYPE_TEXT);
+    CGUIMessage msg(GUI_MSG_SET_TYPE, GetID(), CTL_EDIT,
+                    m_hiddenInput ? CGUIEditControl::INPUT_TYPE_PASSWORD
+                                  : CGUIEditControl::INPUT_TYPE_TEXT);
     OnMessage(msg);
   }
   SetEditText(m_text);
@@ -178,17 +184,19 @@ void CGUIDialogKeyboardGeneric::OnInitWindow()
   data["title"] = m_strHeading;
   data["type"] = !m_hiddenInput ? "keyboard" : "password";
   data["value"] = GetText();
-  CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Input, "xbmc", "OnInputRequested", data);
+  CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Input, "xbmc",
+                                                     "OnInputRequested", data);
 }
 
-bool CGUIDialogKeyboardGeneric::OnAction(const CAction &action)
+bool CGUIDialogKeyboardGeneric::OnAction(const CAction& action)
 {
   int actionId = action.GetID();
   bool handled = true;
   if (actionId == (KEY_VKEY | XBMCVK_BACK))
     Backspace();
   else if (actionId == ACTION_ENTER ||
-           (actionId == ACTION_SELECT_ITEM && (m_isKeyboardNavigationMode || GetFocusedControlID() == CTL_EDIT)))
+           (actionId == ACTION_SELECT_ITEM &&
+            (m_isKeyboardNavigationMode || GetFocusedControlID() == CTL_EDIT)))
     OnOK();
   else if (actionId == ACTION_SHIFT)
     OnShift();
@@ -196,9 +204,8 @@ bool CGUIDialogKeyboardGeneric::OnAction(const CAction &action)
     OnSymbols();
   // don't handle move left/right and select in the edit control
   else if (!m_isKeyboardNavigationMode &&
-           (actionId == ACTION_MOVE_LEFT ||
-           actionId == ACTION_MOVE_RIGHT ||
-           actionId == ACTION_SELECT_ITEM))
+           (actionId == ACTION_MOVE_LEFT || actionId == ACTION_MOVE_RIGHT ||
+            actionId == ACTION_SELECT_ITEM))
     handled = false;
   else if (actionId == ACTION_VOICE_RECOGNIZE)
     OnVoiceRecognition();
@@ -212,7 +219,7 @@ bool CGUIDialogKeyboardGeneric::OnAction(const CAction &action)
     if (!handled)
     {
       // send action to edit control
-      CGUIControl *edit = GetControl(CTL_EDIT);
+      CGUIControl* edit = GetControl(CTL_EDIT);
       if (edit)
         handled = edit->OnAction(action);
       if (!handled && actionId >= KEY_VKEY && actionId < KEY_ASCII)
@@ -243,104 +250,105 @@ bool CGUIDialogKeyboardGeneric::OnAction(const CAction &action)
 
 bool CGUIDialogKeyboardGeneric::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+
+    switch (iControl)
     {
-      int iControl = message.GetSenderId();
-
-      switch (iControl)
-      {
-      case CTL_BUTTON_DONE:
-        OnOK();
-        break;
-      case CTL_BUTTON_CANCEL:
-        Close();
-        break;
-      case CTL_BUTTON_SHIFT:
-        OnShift();
-        break;
-      case CTL_BUTTON_CAPS:
-        if (m_keyType == LOWER)
-          m_keyType = CAPS;
-        else if (m_keyType == CAPS)
-          m_keyType = LOWER;
-        UpdateButtons();
-        break;
-      case CTL_BUTTON_LAYOUT:
-        OnLayout();
-        break;
-      case CTL_BUTTON_SYMBOLS:
-        OnSymbols();
-        break;
-      case CTL_BUTTON_LEFT:
-        MoveCursor( -1);
-        break;
-      case CTL_BUTTON_RIGHT:
-        MoveCursor(1);
-        break;
-      case CTL_BUTTON_IP_ADDRESS:
-        OnIPAddress();
-        break;
-      case CTL_BUTTON_CLEAR:
-        SetEditText("");
-        break;
-      case CTL_EDIT:
-      {
-        CGUIMessage msg(GUI_MSG_ITEM_SELECTED, GetID(), CTL_EDIT);
-        OnMessage(msg);
-        // update callback I guess?
-        if (m_pCharCallback)
-        { // we did _something_, so make sure our search message filter is reset
-          m_pCharCallback(this, msg.GetLabel());
-        }
-        m_text = msg.GetLabel();
-        return true;
-      }
-      default:
-        OnClickButton(iControl);
-        break;
-      }
-    }
-    break;
-
-  case GUI_MSG_SET_TEXT:
+    case CTL_BUTTON_DONE:
+      OnOK();
+      break;
+    case CTL_BUTTON_CANCEL:
+      Close();
+      break;
+    case CTL_BUTTON_SHIFT:
+      OnShift();
+      break;
+    case CTL_BUTTON_CAPS:
+      if (m_keyType == LOWER)
+        m_keyType = CAPS;
+      else if (m_keyType == CAPS)
+        m_keyType = LOWER;
+      UpdateButtons();
+      break;
+    case CTL_BUTTON_LAYOUT:
+      OnLayout();
+      break;
+    case CTL_BUTTON_SYMBOLS:
+      OnSymbols();
+      break;
+    case CTL_BUTTON_LEFT:
+      MoveCursor(-1);
+      break;
+    case CTL_BUTTON_RIGHT:
+      MoveCursor(1);
+      break;
+    case CTL_BUTTON_IP_ADDRESS:
+      OnIPAddress();
+      break;
+    case CTL_BUTTON_CLEAR:
+      SetEditText("");
+      break;
+    case CTL_EDIT:
     {
-      // the edit control only handles these messages if it is either focused
-      // or its specific control ID is set in the message. As neither is the
-      // case here (focus is on one of the keyboard buttons) we have to force
-      // the control ID of the message to the control ID of the edit control
-      // (unfortunately we have to create a whole copy of the message object for that)
-      CGUIMessage messageCopy(message.GetMessage(), message.GetSenderId(), CTL_EDIT, message.GetParam1(), message.GetParam2(), message.GetItem());
-      messageCopy.SetLabel(message.GetLabel());
-
-      // ensure this goes to the edit control
-      CGUIControl *edit = GetControl(CTL_EDIT);
-      if (edit)
-        edit->OnMessage(messageCopy);
-
-      // close the dialog if requested
-      if (message.GetMessage() == GUI_MSG_SET_TEXT && message.GetParam1() > 0)
-        OnOK();
+      CGUIMessage msg(GUI_MSG_ITEM_SELECTED, GetID(), CTL_EDIT);
+      OnMessage(msg);
+      // update callback I guess?
+      if (m_pCharCallback)
+      { // we did _something_, so make sure our search message filter is reset
+        m_pCharCallback(this, msg.GetLabel());
+      }
+      m_text = msg.GetLabel();
       return true;
     }
-  case GUI_MSG_CODINGTABLE_LOOKUP_COMPLETED:
-    {
-      std::string code = message.GetStringParam();
-      if (code == m_hzcode)
-      {
-        int response = message.GetParam1();
-        auto words = m_codingtable->GetResponse(response);
-        m_words.insert(m_words.end(), words.begin(), words.end());
-        ShowWordList(0);
-      }
+    default:
+      OnClickButton(iControl);
+      break;
     }
+  }
+  break;
+
+  case GUI_MSG_SET_TEXT:
+  {
+    // the edit control only handles these messages if it is either focused
+    // or its specific control ID is set in the message. As neither is the
+    // case here (focus is on one of the keyboard buttons) we have to force
+    // the control ID of the message to the control ID of the edit control
+    // (unfortunately we have to create a whole copy of the message object for that)
+    CGUIMessage messageCopy(message.GetMessage(), message.GetSenderId(), CTL_EDIT,
+                            message.GetParam1(), message.GetParam2(), message.GetItem());
+    messageCopy.SetLabel(message.GetLabel());
+
+    // ensure this goes to the edit control
+    CGUIControl* edit = GetControl(CTL_EDIT);
+    if (edit)
+      edit->OnMessage(messageCopy);
+
+    // close the dialog if requested
+    if (message.GetMessage() == GUI_MSG_SET_TEXT && message.GetParam1() > 0)
+      OnOK();
+    return true;
+  }
+  case GUI_MSG_CODINGTABLE_LOOKUP_COMPLETED:
+  {
+    std::string code = message.GetStringParam();
+    if (code == m_hzcode)
+    {
+      int response = message.GetParam1();
+      auto words = m_codingtable->GetResponse(response);
+      m_words.insert(m_words.end(), words.begin(), words.end());
+      ShowWordList(0);
+    }
+  }
   }
 
   return CGUIDialog::OnMessage(message);
 }
 
-void CGUIDialogKeyboardGeneric::SetEditText(const std::string &text)
+void CGUIDialogKeyboardGeneric::SetEditText(const std::string& text)
 {
   CGUIMessage msg(GUI_MSG_SET_TEXT, GetID(), CTL_EDIT);
   msg.SetLabel(text);
@@ -352,22 +360,23 @@ void CGUIDialogKeyboardGeneric::SetText(const std::string& text)
   m_text = text;
 }
 
-const std::string &CGUIDialogKeyboardGeneric::GetText() const
+const std::string& CGUIDialogKeyboardGeneric::GetText() const
 {
   return m_text;
 }
 
-void CGUIDialogKeyboardGeneric::Character(const std::string &ch)
+void CGUIDialogKeyboardGeneric::Character(const std::string& ch)
 {
-  if (ch.empty()) return;
+  if (ch.empty())
+    return;
   if (!CodingCharacter(ch))
     NormalCharacter(ch);
 }
 
-void CGUIDialogKeyboardGeneric::NormalCharacter(const std::string &ch)
+void CGUIDialogKeyboardGeneric::NormalCharacter(const std::string& ch)
 {
   // send text to edit control
-  CGUIControl *edit = GetControl(CTL_EDIT);
+  CGUIControl* edit = GetControl(CTL_EDIT);
   if (edit)
   {
     CAction action(ACTION_INPUT_TEXT);
@@ -400,7 +409,7 @@ void CGUIDialogKeyboardGeneric::Backspace()
   else
   {
     // send action to edit control
-    CGUIControl *edit = GetControl(CTL_EDIT);
+    CGUIControl* edit = GetControl(CTL_EDIT);
     if (edit)
       edit->OnAction(CAction(ACTION_BACKSPACE));
 
@@ -427,7 +436,8 @@ void CGUIDialogKeyboardGeneric::OnClickButton(int iButtonControl)
     {
       Character(pButton->GetDescription());
       // reset the shift keys
-      if (m_bShift) OnShift();
+      if (m_bShift)
+        OnShift();
     }
   }
 }
@@ -511,7 +521,8 @@ void CGUIDialogKeyboardGeneric::OnDeinitWindow(int nextWindowID)
   // reset the heading (we don't always have this)
   m_strHeading = "";
 
-  CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Input, "xbmc", "OnInputFinished");
+  CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Input, "xbmc",
+                                                     "OnInputFinished");
 }
 
 void CGUIDialogKeyboardGeneric::MoveCursor(int iAmount)
@@ -520,7 +531,7 @@ void CGUIDialogKeyboardGeneric::MoveCursor(int iAmount)
     ChangeWordList(iAmount);
   else
   {
-    CGUIControl *edit = GetControl(CTL_EDIT);
+    CGUIControl* edit = GetControl(CTL_EDIT);
     if (edit)
       edit->OnAction(CAction(iAmount < 0 ? ACTION_CURSOR_LEFT : ACTION_CURSOR_RIGHT));
   }
@@ -532,7 +543,8 @@ void CGUIDialogKeyboardGeneric::OnLayout()
   if (m_currentLayout >= m_layouts.size())
     m_currentLayout = 0;
   CKeyboardLayout layout = m_layouts.empty() ? CKeyboardLayout() : m_layouts[m_currentLayout];
-  CServiceBroker::GetSettingsComponent()->GetSettings()->SetString(CSettings::SETTING_LOCALE_ACTIVEKEYBOARDLAYOUT, layout.GetName());
+  CServiceBroker::GetSettingsComponent()->GetSettings()->SetString(
+      CSettings::SETTING_LOCALE_ACTIVEKEYBOARDLAYOUT, layout.GetName());
   UpdateButtons();
 }
 
@@ -576,18 +588,21 @@ void CGUIDialogKeyboardGeneric::OnVoiceRecognition()
 {
 #ifdef TARGET_ANDROID
   CJNIIntent intent = CJNIIntent(CJNIRecognizerIntent::ACTION_RECOGNIZE_SPEECH);
-  intent.putExtra(CJNIRecognizerIntent::EXTRA_LANGUAGE_MODEL, CJNIRecognizerIntent::LANGUAGE_MODEL_FREE_FORM);
+  intent.putExtra(CJNIRecognizerIntent::EXTRA_LANGUAGE_MODEL,
+                  CJNIRecognizerIntent::LANGUAGE_MODEL_FREE_FORM);
   CJNIIntent result;
-  if (CXBMCApp::WaitForActivityResult(intent, ACTION_RECOGNIZE_SPEECH_REQID, result) == CJNIBase::RESULT_OK)
+  if (CXBMCApp::WaitForActivityResult(intent, ACTION_RECOGNIZE_SPEECH_REQID, result) ==
+      CJNIBase::RESULT_OK)
   {
-    CJNIArrayList<std::string> guesses = result.getStringArrayListExtra(CJNIRecognizerIntent::EXTRA_RESULTS);
+    CJNIArrayList<std::string> guesses =
+        result.getStringArrayListExtra(CJNIRecognizerIntent::EXTRA_RESULTS);
     if (guesses.size())
       SetEditText(guesses.get(0));
   }
 #endif
 }
 
-void CGUIDialogKeyboardGeneric::SetControlLabel(int id, const std::string &label)
+void CGUIDialogKeyboardGeneric::SetControlLabel(int id, const std::string& label)
 { // find all controls with this id, and set all their labels
   CGUIMessage message(GUI_MSG_LABEL_SET, GetID(), id);
   message.SetLabel(label);
@@ -604,7 +619,7 @@ void CGUIDialogKeyboardGeneric::OnOK()
   Close();
 }
 
-void CGUIDialogKeyboardGeneric::SetHeading(const std::string &heading)
+void CGUIDialogKeyboardGeneric::SetHeading(const std::string& heading)
 {
   m_strHeading = heading;
 }
@@ -620,9 +635,15 @@ void CGUIDialogKeyboardGeneric::Cancel()
   Close();
 }
 
-bool CGUIDialogKeyboardGeneric::ShowAndGetInput(char_callback_t pCallback, const std::string &initialString, std::string &typedString, const std::string &heading, bool bHiddenInput)
+bool CGUIDialogKeyboardGeneric::ShowAndGetInput(char_callback_t pCallback,
+                                                const std::string& initialString,
+                                                std::string& typedString,
+                                                const std::string& heading,
+                                                bool bHiddenInput)
 {
-  CGUIDialogKeyboardGeneric *pKeyboard = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogKeyboardGeneric>(WINDOW_DIALOG_KEYBOARD);
+  CGUIDialogKeyboardGeneric* pKeyboard =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogKeyboardGeneric>(
+          WINDOW_DIALOG_KEYBOARD);
 
   if (!pKeyboard)
     return false;
@@ -642,10 +663,11 @@ bool CGUIDialogKeyboardGeneric::ShowAndGetInput(char_callback_t pCallback, const
     typedString = pKeyboard->GetText();
     return true;
   }
-  else return false;
+  else
+    return false;
 }
 
-float CGUIDialogKeyboardGeneric::GetStringWidth(const std::wstring & utf16)
+float CGUIDialogKeyboardGeneric::GetStringWidth(const std::wstring& utf16)
 {
   vecText utf32;
 
@@ -706,7 +728,8 @@ void CGUIDialogKeyboardGeneric::ShowWordList(int direct)
       return;
     for (i = 1; i <= 10; i++)
     {
-      if (m_pos - i < 0 || (i > 1 && width + GetStringWidth(m_words[m_pos - i]) + numwidth > m_listwidth))
+      if (m_pos - i < 0 ||
+          (i > 1 && width + GetStringWidth(m_words[m_pos - i]) + numwidth > m_listwidth))
         break;
       width += GetStringWidth(m_words[m_pos - i]) + numwidth + spacewidth;
     }
@@ -730,7 +753,7 @@ void CGUIDialogKeyboardGeneric::ShowWordList(int direct)
   SET_CONTROL_LABEL(CTL_LABEL_HZLIST, utf8String);
 }
 
-bool CGUIDialogKeyboardGeneric::CodingCharacter(const std::string &ch)
+bool CGUIDialogKeyboardGeneric::CodingCharacter(const std::string& ch)
 {
   if (!m_codingtable)
     return false;

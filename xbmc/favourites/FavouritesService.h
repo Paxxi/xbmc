@@ -27,12 +27,14 @@ public:
 
   bool IsFavourited(const CFileItem& item, int contextWindow) const;
   void GetAll(CFileItemList& items) const;
-  std::string GetExecutePath(const CFileItem &item, int contextWindow) const;
-  std::string GetExecutePath(const CFileItem &item, const std::string &contextWindow) const;
+  std::string GetExecutePath(const CFileItem& item, int contextWindow) const;
+  std::string GetExecutePath(const CFileItem& item, const std::string& contextWindow) const;
   bool AddOrRemove(const CFileItem& item, int contextWindow);
   bool Save(const CFileItemList& items);
 
-  struct FavouritesUpdated { };
+  struct FavouritesUpdated
+  {
+  };
 
   CEventStream<FavouritesUpdated>& Events() { return m_events; }
 
@@ -45,11 +47,10 @@ private:
 
   void OnUpdated();
   bool Persist();
-  std::string GetFavouritesUrl(const CFileItem &item, int contextWindow) const;
+  std::string GetFavouritesUrl(const CFileItem& item, int contextWindow) const;
 
   std::string m_userDataFolder;
   CFileItemList m_favourites;
   CEventSource<FavouritesUpdated> m_events;
   mutable CCriticalSection m_criticalSection;
 };
-

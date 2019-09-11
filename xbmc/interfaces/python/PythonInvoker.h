@@ -23,10 +23,11 @@ struct _ts;
 class CPythonInvoker : public ILanguageInvoker
 {
 public:
-  explicit CPythonInvoker(ILanguageInvocationHandler *invocationHandler);
+  explicit CPythonInvoker(ILanguageInvocationHandler* invocationHandler);
   ~CPythonInvoker() override;
 
-  bool Execute(const std::string &script, const std::vector<std::string> &arguments = std::vector<std::string>()) override;
+  bool Execute(const std::string& script,
+               const std::vector<std::string>& arguments = std::vector<std::string>()) override;
 
   bool IsStopping() const override { return m_stop || ILanguageInvoker::IsStopping(); }
 
@@ -34,8 +35,8 @@ public:
 
 protected:
   // implementation of ILanguageInvoker
-  bool execute(const std::string &script, const std::vector<std::string> &arguments) override;
-  virtual void executeScript(void *fp, const std::string &script, void *module, void *moduleDict);
+  bool execute(const std::string& script, const std::vector<std::string>& arguments) override;
+  virtual void executeScript(void* fp, const std::string& script, void* module, void* moduleDict);
   bool stop(bool abort) override;
   void onExecutionDone() override;
   void onExecutionFailed() override;
@@ -48,22 +49,24 @@ protected:
   virtual void onPythonModuleInitialization(void* moduleDict);
   virtual void onDeinitialization();
 
-  virtual void onSuccess() { }
-  virtual void onAbort() { }
-  virtual void onError(const std::string &exceptionType = "", const std::string &exceptionValue = "", const std::string &exceptionTraceback = "");
+  virtual void onSuccess() {}
+  virtual void onAbort() {}
+  virtual void onError(const std::string& exceptionType = "",
+                       const std::string& exceptionValue = "",
+                       const std::string& exceptionTraceback = "");
 
   std::string m_sourceFile;
   CCriticalSection m_critical;
 
 private:
-  void initializeModules(const std::map<std::string, PythonModuleInitialization> &modules);
+  void initializeModules(const std::map<std::string, PythonModuleInitialization>& modules);
   bool initializeModule(PythonModuleInitialization module);
   void addPath(const std::string& path); // add path in UTF-8 encoding
   void addNativePath(const std::string& path); // add path in system/Python encoding
   void getAddonModuleDeps(const ADDON::AddonPtr& addon, std::set<std::string>& paths);
 
   std::string m_pythonPath;
-  _ts *m_threadState;
+  _ts* m_threadState;
   bool m_stop;
   CEvent m_stoppedEvent;
 

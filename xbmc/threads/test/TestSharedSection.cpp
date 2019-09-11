@@ -25,15 +25,28 @@ class locker : public IRunnable
   CEvent* wait;
 
   std::atomic<long>* mutex;
+
 public:
   volatile bool haslock;
   volatile bool obtainedlock;
 
-  inline locker(CSharedSection& o, std::atomic<long>* mutex_ = NULL, CEvent* wait_ = NULL) :
-    sec(o), wait(wait_), mutex(mutex_), haslock(false), obtainedlock(false) {}
+  inline locker(CSharedSection& o, std::atomic<long>* mutex_ = NULL, CEvent* wait_ = NULL)
+    : sec(o)
+    , wait(wait_)
+    , mutex(mutex_)
+    , haslock(false)
+    , obtainedlock(false)
+  {
+  }
 
-  inline locker(CSharedSection& o, CEvent* wait_ = NULL) :
-    sec(o), wait(wait_), mutex(NULL), haslock(false), obtainedlock(false) {}
+  inline locker(CSharedSection& o, CEvent* wait_ = NULL)
+    : sec(o)
+    , wait(wait_)
+    , mutex(NULL)
+    , haslock(false)
+    , obtainedlock(false)
+  {
+  }
 
   void Run() override
   {
@@ -72,19 +85,19 @@ TEST(TestSharedSection, GetSharedLockWhileTryingExclusiveLock)
 
   CSharedLock l1(sec); // get a shared lock
 
-  locker<CExclusiveLock> l2(sec,&mutex);
+  locker<CExclusiveLock> l2(sec, &mutex);
   thread waitThread1(l2); // try to get an exclusive lock
 
-  EXPECT_TRUE(waitForThread(mutex,1,10000));
-  SleepMillis(10);  // still need to give it a chance to move ahead
+  EXPECT_TRUE(waitForThread(mutex, 1, 10000));
+  SleepMillis(10); // still need to give it a chance to move ahead
 
-  EXPECT_TRUE(!l2.haslock);  // this thread is waiting ...
-  EXPECT_TRUE(!l2.obtainedlock);  // this thread is waiting ...
+  EXPECT_TRUE(!l2.haslock); // this thread is waiting ...
+  EXPECT_TRUE(!l2.obtainedlock); // this thread is waiting ...
 
   // now try and get a SharedLock
-  locker<CSharedLock> l3(sec,&mutex,&event);
+  locker<CSharedLock> l3(sec, &mutex, &event);
   thread waitThread3(l3); // try to get a shared lock
-  EXPECT_TRUE(waitForThread(mutex,2,10000));
+  EXPECT_TRUE(waitForThread(mutex, 2, 10000));
   SleepMillis(10);
   EXPECT_TRUE(l3.haslock);
 
@@ -95,16 +108,16 @@ TEST(TestSharedSection, GetSharedLockWhileTryingExclusiveLock)
   EXPECT_TRUE(!l3.haslock);
 
   // but the exclusive lock should still not have happened
-  EXPECT_TRUE(!l2.haslock);  // this thread is waiting ...
-  EXPECT_TRUE(!l2.obtainedlock);  // this thread is waiting ...
+  EXPECT_TRUE(!l2.haslock); // this thread is waiting ...
+  EXPECT_TRUE(!l2.obtainedlock); // this thread is waiting ...
 
   // let it go
   l1.Leave(); // the last shared lock leaves.
 
   EXPECT_TRUE(waitThread1.timed_join(MILLIS(10000)));
 
-  EXPECT_TRUE(l2.obtainedlock);  // the exclusive lock was captured
-  EXPECT_TRUE(!l2.haslock);  // ... but it doesn't have it anymore
+  EXPECT_TRUE(l2.obtainedlock); // the exclusive lock was captured
+  EXPECT_TRUE(!l2.haslock); // ... but it doesn't have it anymore
 }
 
 TEST(TestSharedSection, TwoCase)
@@ -114,13 +127,13 @@ TEST(TestSharedSection, TwoCase)
   CEvent event;
   std::atomic<long> mutex(0L);
 
-  locker<CSharedLock> l1(sec,&mutex,&event);
+  locker<CSharedLock> l1(sec, &mutex, &event);
 
   {
     CSharedLock lock(sec);
     thread waitThread1(l1);
 
-    EXPECT_TRUE(waitForWaiters(event,1,10000));
+    EXPECT_TRUE(waitForWaiters(event, 1, 10000));
     EXPECT_TRUE(l1.haslock);
 
     event.Set();
@@ -128,19 +141,19 @@ TEST(TestSharedSection, TwoCase)
     EXPECT_TRUE(waitThread1.timed_join(MILLIS(10000)));
   }
 
-  locker<CSharedLock> l2(sec,&mutex,&event);
+  locker<CSharedLock> l2(sec, &mutex, &event);
   {
     CExclusiveLock lock(sec); // get exclusive lock
     thread waitThread2(l2); // thread should block
 
-    EXPECT_TRUE(waitForThread(mutex,1,10000));
+    EXPECT_TRUE(waitForThread(mutex, 1, 10000));
     SleepMillis(10);
 
     EXPECT_TRUE(!l2.haslock);
 
     lock.Leave();
 
-    EXPECT_TRUE(waitForWaiters(event,1,10000));
+    EXPECT_TRUE(waitForWaiters(event, 1, 10000));
     SleepMillis(10);
     EXPECT_TRUE(l2.haslock);
 
@@ -157,13 +170,13 @@ TEST(TestMultipleSharedSection, General)
   CEvent event;
   std::atomic<long> mutex(0L);
 
-  locker<CSharedLock> l1(sec,&mutex, &event);
+  locker<CSharedLock> l1(sec, &mutex, &event);
 
   {
     CSharedLock lock(sec);
     thread waitThread1(l1);
 
-    EXPECT_TRUE(waitForThread(mutex,1,10000));
+    EXPECT_TRUE(waitForThread(mutex, 1, 10000));
     SleepMillis(10);
 
     EXPECT_TRUE(l1.haslock);
@@ -173,10 +186,10 @@ TEST(TestMultipleSharedSection, General)
     EXPECT_TRUE(waitThread1.timed_join(MILLIS(10000)));
   }
 
-  locker<CSharedLock> l2(sec,&mutex,&event);
-  locker<CSharedLock> l3(sec,&mutex,&event);
-  locker<CSharedLock> l4(sec,&mutex,&event);
-  locker<CSharedLock> l5(sec,&mutex,&event);
+  locker<CSharedLock> l2(sec, &mutex, &event);
+  locker<CSharedLock> l3(sec, &mutex, &event);
+  locker<CSharedLock> l4(sec, &mutex, &event);
+  locker<CSharedLock> l5(sec, &mutex, &event);
   {
     CExclusiveLock lock(sec);
     thread waitThread1(l2);
@@ -184,7 +197,7 @@ TEST(TestMultipleSharedSection, General)
     thread waitThread3(l4);
     thread waitThread4(l5);
 
-    EXPECT_TRUE(waitForThread(mutex,4,10000));
+    EXPECT_TRUE(waitForThread(mutex, 4, 10000));
     SleepMillis(10);
 
     EXPECT_TRUE(!l2.haslock);
@@ -194,7 +207,7 @@ TEST(TestMultipleSharedSection, General)
 
     lock.Leave();
 
-    EXPECT_TRUE(waitForWaiters(event,4,10000));
+    EXPECT_TRUE(waitForWaiters(event, 4, 10000));
 
     EXPECT_TRUE(l2.haslock);
     EXPECT_TRUE(l3.haslock);
@@ -209,4 +222,3 @@ TEST(TestMultipleSharedSection, General)
     EXPECT_TRUE(waitThread4.timed_join(MILLIS(10000)));
   }
 }
-

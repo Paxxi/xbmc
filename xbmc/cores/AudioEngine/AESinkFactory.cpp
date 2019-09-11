@@ -23,7 +23,7 @@ void CAESinkFactory::RegisterSink(AESinkRegEntry regEntry)
 {
   m_AESinkRegEntry[regEntry.sinkName] = regEntry;
 
-  IAE *ae = CServiceBroker::GetActiveAE();
+  IAE* ae = CServiceBroker::GetActiveAE();
   if (ae)
     ae->DeviceChange();
 }
@@ -38,7 +38,7 @@ bool CAESinkFactory::HasSinks()
   return !m_AESinkRegEntry.empty();
 }
 
-void CAESinkFactory::ParseDevice(std::string &device, std::string &driver)
+void CAESinkFactory::ParseDevice(std::string& device, std::string& driver)
 {
   int pos = device.find_first_of(':');
   bool found = false;
@@ -60,14 +60,14 @@ void CAESinkFactory::ParseDevice(std::string &device, std::string &driver)
     driver.clear();
 }
 
-IAESink *CAESinkFactory::Create(std::string &device, AEAudioFormat &desiredFormat)
+IAESink* CAESinkFactory::Create(std::string& device, AEAudioFormat& desiredFormat)
 {
   // extract the driver from the device string if it exists
   std::string driver;
   ParseDevice(device, driver);
 
   AEAudioFormat tmpFormat = desiredFormat;
-  IAESink *sink;
+  IAESink* sink;
   std::string tmpDevice = device;
 
   for (auto reg : m_AESinkRegEntry)
@@ -85,11 +85,11 @@ IAESink *CAESinkFactory::Create(std::string &device, AEAudioFormat &desiredForma
   return nullptr;
 }
 
-void CAESinkFactory::EnumerateEx(std::vector<AESinkInfo> &list, bool force)
+void CAESinkFactory::EnumerateEx(std::vector<AESinkInfo>& list, bool force)
 {
   AESinkInfo info;
 
-  for(auto reg : m_AESinkRegEntry)
+  for (auto reg : m_AESinkRegEntry)
   {
     info.m_deviceInfoList.clear();
     info.m_sinkName = reg.second.sinkName;

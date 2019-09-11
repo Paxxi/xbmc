@@ -11,12 +11,18 @@
 #include <androidjni/AudioManager.h>
 #include <androidjni/JNIBase.h>
 
-class CJNIXBMCAudioManagerOnAudioFocusChangeListener : public CJNIAudioManagerAudioFocusChangeListener, public CJNIInterfaceImplem<CJNIXBMCAudioManagerOnAudioFocusChangeListener>
+class CJNIXBMCAudioManagerOnAudioFocusChangeListener
+  : public CJNIAudioManagerAudioFocusChangeListener,
+    public CJNIInterfaceImplem<CJNIXBMCAudioManagerOnAudioFocusChangeListener>
 {
 public:
   CJNIXBMCAudioManagerOnAudioFocusChangeListener();
-  CJNIXBMCAudioManagerOnAudioFocusChangeListener(const CJNIXBMCAudioManagerOnAudioFocusChangeListener& other);
-  explicit CJNIXBMCAudioManagerOnAudioFocusChangeListener(const jni::jhobject &object) : CJNIBase(object) {}
+  CJNIXBMCAudioManagerOnAudioFocusChangeListener(
+      const CJNIXBMCAudioManagerOnAudioFocusChangeListener& other);
+  explicit CJNIXBMCAudioManagerOnAudioFocusChangeListener(const jni::jhobject& object)
+    : CJNIBase(object)
+  {
+  }
   virtual ~CJNIXBMCAudioManagerOnAudioFocusChangeListener();
 
   static void RegisterNatives(JNIEnv* env);

@@ -19,23 +19,33 @@ struct CMusicInfo : CStaticContextMenuAction
   explicit CMusicInfo(MediaType mediaType);
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
+
 private:
   const MediaType m_mediaType;
 };
 
 struct CAlbumInfo : CMusicInfo
 {
-  CAlbumInfo() : CMusicInfo(MediaTypeAlbum) {}
+  CAlbumInfo()
+    : CMusicInfo(MediaTypeAlbum)
+  {
+  }
 };
 
 struct CArtistInfo : CMusicInfo
 {
-  CArtistInfo() : CMusicInfo(MediaTypeArtist) {}
+  CArtistInfo()
+    : CMusicInfo(MediaTypeArtist)
+  {
+  }
 };
 
 struct CSongInfo : CMusicInfo
 {
-  CSongInfo() : CMusicInfo(MediaTypeSong) {}
+  CSongInfo()
+    : CMusicInfo(MediaTypeSong)
+  {
+  }
 };
 
-}
+} // namespace CONTEXTMENU

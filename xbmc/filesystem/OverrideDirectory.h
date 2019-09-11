@@ -23,6 +23,6 @@ public:
   bool Remove(const CURL& url) override;
 
 protected:
-  virtual std::string TranslatePath(const CURL &url) = 0;
+  virtual std::string TranslatePath(const CURL& url) = 0;
 };
-}
+} // namespace XFILE

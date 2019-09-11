@@ -25,7 +25,7 @@ public:
   bool OnMessage(CGUIMessage& message) override;
   void OnWindowLoaded() override;
   void OnWindowUnload() override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
   /*!
    \brief Creates a bookmark of the currently playing video file.
@@ -49,16 +49,17 @@ public:
 
 
   void Update();
+
 protected:
   void GotoBookmark(int iItem);
   void ClearBookmarks();
   static bool AddEpisodeBookmark();
-  static bool AddBookmark(CVideoInfoTag *tag=NULL);
+  static bool AddBookmark(CVideoInfoTag* tag = NULL);
   void Delete(int item);
   void Clear();
   void OnRefreshList();
   void OnPopupMenu(int item);
-  CGUIControl *GetFirstFocusableControl(int id) override;
+  CGUIControl* GetFirstFocusableControl(int id) override;
 
   void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
 

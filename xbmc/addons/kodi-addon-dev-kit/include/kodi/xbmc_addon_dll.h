@@ -11,14 +11,17 @@
 #include "AddonBase.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-  ADDON_STATUS __declspec(dllexport) ADDON_Create(void *callbacks, void* props);
-  ADDON_STATUS __declspec(dllexport) ADDON_CreateEx(void *callbacks, const char* globalApiVersion, void* props);
-  void         __declspec(dllexport) ADDON_Destroy();
+  ADDON_STATUS __declspec(dllexport) ADDON_Create(void* callbacks, void* props);
+  ADDON_STATUS __declspec(dllexport)
+      ADDON_CreateEx(void* callbacks, const char* globalApiVersion, void* props);
+  void __declspec(dllexport) ADDON_Destroy();
   ADDON_STATUS __declspec(dllexport) ADDON_GetStatus();
-  ADDON_STATUS __declspec(dllexport) ADDON_SetSetting(const char *settingName, const void *settingValue);
+  ADDON_STATUS __declspec(dllexport)
+      ADDON_SetSetting(const char* settingName, const void* settingValue);
   __declspec(dllexport) const char* ADDON_GetTypeVersion(int type)
   {
     return kodi::addon::GetTypeVersion(type);

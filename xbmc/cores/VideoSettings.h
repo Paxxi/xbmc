@@ -14,19 +14,19 @@
 
 enum EINTERLACEMETHOD
 {
-  VS_INTERLACEMETHOD_NONE=0,
-  VS_INTERLACEMETHOD_AUTO=1,
-  VS_INTERLACEMETHOD_RENDER_BLEND=2,
-  VS_INTERLACEMETHOD_RENDER_WEAVE=4,
-  VS_INTERLACEMETHOD_RENDER_BOB=6,
-  VS_INTERLACEMETHOD_DEINTERLACE=7,
-  VS_INTERLACEMETHOD_VDPAU_BOB=8,
-  VS_INTERLACEMETHOD_VDPAU_INVERSE_TELECINE=11,
-  VS_INTERLACEMETHOD_VDPAU_TEMPORAL=12,
-  VS_INTERLACEMETHOD_VDPAU_TEMPORAL_HALF=13,
-  VS_INTERLACEMETHOD_VDPAU_TEMPORAL_SPATIAL=14,
-  VS_INTERLACEMETHOD_VDPAU_TEMPORAL_SPATIAL_HALF=15,
-  VS_INTERLACEMETHOD_DEINTERLACE_HALF=16,
+  VS_INTERLACEMETHOD_NONE = 0,
+  VS_INTERLACEMETHOD_AUTO = 1,
+  VS_INTERLACEMETHOD_RENDER_BLEND = 2,
+  VS_INTERLACEMETHOD_RENDER_WEAVE = 4,
+  VS_INTERLACEMETHOD_RENDER_BOB = 6,
+  VS_INTERLACEMETHOD_DEINTERLACE = 7,
+  VS_INTERLACEMETHOD_VDPAU_BOB = 8,
+  VS_INTERLACEMETHOD_VDPAU_INVERSE_TELECINE = 11,
+  VS_INTERLACEMETHOD_VDPAU_TEMPORAL = 12,
+  VS_INTERLACEMETHOD_VDPAU_TEMPORAL_HALF = 13,
+  VS_INTERLACEMETHOD_VDPAU_TEMPORAL_SPATIAL = 14,
+  VS_INTERLACEMETHOD_VDPAU_TEMPORAL_SPATIAL_HALF = 15,
+  VS_INTERLACEMETHOD_DEINTERLACE_HALF = 16,
   VS_INTERLACEMETHOD_VAAPI_BOB = 22,
   VS_INTERLACEMETHOD_VAAPI_MADI = 23,
   VS_INTERLACEMETHOD_VAAPI_MACI = 24,
@@ -40,7 +40,7 @@ enum EINTERLACEMETHOD
 
 enum ESCALINGMETHOD
 {
-  VS_SCALINGMETHOD_NEAREST=0,
+  VS_SCALINGMETHOD_NEAREST = 0,
   VS_SCALINGMETHOD_LINEAR,
   VS_SCALINGMETHOD_CUBIC,
   VS_SCALINGMETHOD_LANCZOS2,
@@ -60,7 +60,7 @@ enum ESCALINGMETHOD
 
 enum ETONEMAPMETHOD
 {
-  VS_TONEMAPMETHOD_OFF=0,
+  VS_TONEMAPMETHOD_OFF = 0,
   VS_TONEMAPMETHOD_REINHARD,
   VS_TONEMAPMETHOD_MAX
 };
@@ -85,15 +85,15 @@ public:
   CVideoSettings();
   ~CVideoSettings() = default;
 
-  bool operator!=(const CVideoSettings &right) const;
+  bool operator!=(const CVideoSettings& right) const;
 
   EINTERLACEMETHOD m_InterlaceMethod;
-  ESCALINGMETHOD   m_ScalingMethod;
-  int m_ViewMode;   // current view mode
+  ESCALINGMETHOD m_ScalingMethod;
+  int m_ViewMode; // current view mode
   float m_CustomZoomAmount; // custom setting zoom amount
   float m_CustomPixelRatio; // custom setting pixel ratio
   float m_CustomVerticalShift; // custom setting vertical shift
-  bool  m_CustomNonLinStretch;
+  bool m_CustomNonLinStretch;
   int m_AudioStream;
   float m_VolumeAmplification;
   int m_SubtitleStream;
@@ -121,11 +121,11 @@ class CCriticalSection;
 class CVideoSettingsLocked
 {
 public:
-  CVideoSettingsLocked(CVideoSettings &vs, CCriticalSection &critSection);
+  CVideoSettingsLocked(CVideoSettings& vs, CCriticalSection& critSection);
   virtual ~CVideoSettingsLocked() = default;
 
-  CVideoSettingsLocked(CVideoSettingsLocked const &) = delete;
-  void operator=(CVideoSettingsLocked const &x) = delete;
+  CVideoSettingsLocked(CVideoSettingsLocked const&) = delete;
+  void operator=(CVideoSettingsLocked const& x) = delete;
 
   void SetSubtitleStream(int stream);
   void SetSubtitleVisible(bool visible);
@@ -137,6 +137,6 @@ public:
   void SetVolumeAmplification(float amp);
 
 protected:
-  CVideoSettings &m_videoSettings;
-  CCriticalSection &m_critSection;
+  CVideoSettings& m_videoSettings;
+  CCriticalSection& m_critSection;
 };

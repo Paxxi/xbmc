@@ -11,7 +11,7 @@
 class IRunnable
 {
 public:
-  virtual void Run()=0;
-  virtual void Cancel() {};
+  virtual void Run() = 0;
+  virtual void Cancel(){};
   virtual ~IRunnable() = default;
 };

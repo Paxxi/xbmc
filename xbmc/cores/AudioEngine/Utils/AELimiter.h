@@ -14,30 +14,21 @@
 
 class CAELimiter
 {
-  private:
-    float m_amplify;
-    float m_attenuation;
-    float m_samplerate;
-    int   m_holdcounter;
-    float m_increase;
+private:
+  float m_amplify;
+  float m_attenuation;
+  float m_samplerate;
+  int m_holdcounter;
+  float m_increase;
 
-  public:
-    CAELimiter();
+public:
+  CAELimiter();
 
-    void SetAmplification(float amplify)
-    {
-      m_amplify = std::max(std::min(amplify, 1000.0f), 0.0f);
-    }
+  void SetAmplification(float amplify) { m_amplify = std::max(std::min(amplify, 1000.0f), 0.0f); }
 
-    float GetAmplification() const
-    {
-      return m_amplify;
-    }
+  float GetAmplification() const { return m_amplify; }
 
-    void SetSamplerate(int samplerate)
-    {
-      m_samplerate = (float)samplerate;
-    }
+  void SetSamplerate(int samplerate) { m_samplerate = (float)samplerate; }
 
-    float Run(float* frame[AE_CH_MAX], int channels, int offset = 0, bool planar = false);
+  float Run(float* frame[AE_CH_MAX], int channels, int offset = 0, bool planar = false);
 };

@@ -21,7 +21,7 @@
 
 // --------------------- Main Functions ---------------------
 
-int CEnvironment::setenv(const std::string &name, const std::string &value, int overwrite /*= 1*/)
+int CEnvironment::setenv(const std::string& name, const std::string& value, int overwrite /*= 1*/)
 {
 #ifdef TARGET_WINDOWS
   return (win_setenv(name, value, overwrite ? autoDetect : addOnly) == 0) ? 0 : -1;
@@ -32,19 +32,19 @@ int CEnvironment::setenv(const std::string &name, const std::string &value, int 
 #endif
 }
 
-std::string CEnvironment::getenv(const std::string &name)
+std::string CEnvironment::getenv(const std::string& name)
 {
 #ifdef TARGET_WINDOWS
   return win_getenv(name);
 #else
-  char * str = ::getenv(name.c_str());
+  char* str = ::getenv(name.c_str());
   if (str == NULL)
     return "";
   return str;
 #endif
 }
 
-int CEnvironment::unsetenv(const std::string &name)
+int CEnvironment::unsetenv(const std::string& name)
 {
 #ifdef TARGET_WINDOWS
   return (win_setenv(name, "", deleteVariable)) == 0 ? 0 : -1;
@@ -53,7 +53,7 @@ int CEnvironment::unsetenv(const std::string &name)
 #endif
 }
 
-int CEnvironment::putenv(const std::string &envstring)
+int CEnvironment::putenv(const std::string& envstring)
 {
   if (envstring.empty())
     return 0;
@@ -62,14 +62,13 @@ int CEnvironment::putenv(const std::string &envstring)
     return -1;
   if (pos == std::string::npos)
     return unsetenv(envstring);
-  if (pos == envstring.length()-1) // '=' is in last position
+  if (pos == envstring.length() - 1) // '=' is in last position
   {
     std::string name(envstring);
-    name.erase(name.length()-1, 1);
+    name.erase(name.length() - 1, 1);
     return unsetenv(name);
   }
-  std::string name(envstring, 0, pos), value(envstring, pos+1);
+  std::string name(envstring, 0, pos), value(envstring, pos + 1);
 
   return setenv(name, value);
 }
-

@@ -20,6 +20,7 @@ enum RenderMethod;
 class CRendererDXVA : public CRendererHQ
 {
   class CRenderBufferImpl;
+
 public:
   ~CRendererDXVA() = default;
 
@@ -33,10 +34,16 @@ public:
   static void GetWeight(std::map<RenderMethod, int>& weights, const VideoPicture& picture);
 
 protected:
-  explicit CRendererDXVA(CVideoSettings& videoSettings) : CRendererHQ(videoSettings) {}
+  explicit CRendererDXVA(CVideoSettings& videoSettings)
+    : CRendererHQ(videoSettings)
+  {
+  }
 
   void CheckVideoParameters() override;
-  void RenderImpl(CD3DTexture& target, CRect& sourceRect, CPoint(&destPoints)[4], uint32_t flags) override;
+  void RenderImpl(CD3DTexture& target,
+                  CRect& sourceRect,
+                  CPoint (&destPoints)[4],
+                  uint32_t flags) override;
   CRenderBuffer* CreateBuffer() override;
   bool UseToneMapping() const override;
 
@@ -58,7 +65,8 @@ public:
   void ReleasePicture() override;
   HRESULT GetResource(ID3D11Resource** ppResource, unsigned* index) const override;
 
-  static DXGI_FORMAT GetDXGIFormat(AVPixelFormat format, DXGI_FORMAT default_fmt = DXGI_FORMAT_UNKNOWN);
+  static DXGI_FORMAT GetDXGIFormat(AVPixelFormat format,
+                                   DXGI_FORMAT default_fmt = DXGI_FORMAT_UNKNOWN);
 
 private:
   bool UploadToTexture();

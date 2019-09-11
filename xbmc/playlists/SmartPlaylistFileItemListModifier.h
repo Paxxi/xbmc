@@ -18,9 +18,9 @@ public:
   CSmartPlaylistFileItemListModifier() = default;
   ~CSmartPlaylistFileItemListModifier() override = default;
 
-  bool CanModify(const CFileItemList &items) const override;
-  bool Modify(CFileItemList &items) const override;
+  bool CanModify(const CFileItemList& items) const override;
+  bool Modify(CFileItemList& items) const override;
 
 private:
-  static std::string GetUrlOption(const std::string &path, const std::string &option);
+  static std::string GetUrlOption(const std::string& path, const std::string& option);
 };

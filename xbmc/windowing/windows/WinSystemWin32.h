@@ -23,20 +23,14 @@ static const DWORD FULLSCREEN_WINDOW_EX_STYLE = WS_EX_APPWINDOW;
 /* Controls the way the window appears and behaves. */
 enum WINDOW_STATE
 {
-  WINDOW_STATE_FULLSCREEN = 1,    // Exclusive fullscreen
+  WINDOW_STATE_FULLSCREEN = 1, // Exclusive fullscreen
   WINDOW_STATE_FULLSCREEN_WINDOW, // Non-exclusive fullscreen window
-  WINDOW_STATE_WINDOWED,          //Movable window with border
-  WINDOW_STATE_BORDERLESS         //Non-movable window with no border
+  WINDOW_STATE_WINDOWED, //Movable window with border
+  WINDOW_STATE_BORDERLESS //Non-movable window with no border
 };
 
-static const char* window_state_names[] =
-{
-  "unknown",
-  "true fullscreen",
-  "windowed fullscreen",
-  "windowed",
-  "borderless"
-};
+static const char* window_state_names[] = {"unknown", "true fullscreen", "windowed fullscreen",
+                                           "windowed", "borderless"};
 
 /* WINDOW_STATE restricted to fullscreen modes. */
 enum WINDOW_FULLSCREEN_STATE
@@ -62,7 +56,7 @@ struct MONITOR_DETAILS
   bool Interlaced;
   bool IsPrimary;
 
-  HMONITOR  hMonitor;
+  HMONITOR hMonitor;
   std::wstring MonitorNameW;
   std::wstring CardNameW;
   std::wstring DeviceNameW;
@@ -89,7 +83,10 @@ public:
   bool CenterWindow() override;
   virtual void NotifyAppFocusChange(bool bGaining) override;
   void ShowOSMouse(bool show) override;
-  bool HasInertialGestures() override { return true; }//if win32 has touchscreen - it uses the win32 gesture api for inertial scrolling
+  bool HasInertialGestures() override
+  {
+    return true;
+  } //if win32 has touchscreen - it uses the win32 gesture api for inertial scrolling
   bool Minimize() override;
   bool Restore() override;
   bool Hide() override;
@@ -98,7 +95,7 @@ public:
   bool UseLimitedColor() override;
 
   // videosync
-  std::unique_ptr<CVideoSync> GetVideoSync(void *clock) override;
+  std::unique_ptr<CVideoSync> GetVideoSync(void* clock) override;
 
   bool WindowedMode() const { return m_state != WINDOW_STATE_FULLSCREEN; }
   bool SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays) override;
@@ -109,15 +106,15 @@ public:
   virtual bool DPIChanged(WORD dpi, RECT windowRect) const;
   bool IsMinimized() const { return m_bMinimized; }
   void SetMinimized(bool minimized) { m_bMinimized = minimized; }
-  void GetConnectedOutputs(std::vector<std::string> *outputs);
+  void GetConnectedOutputs(std::vector<std::string>* outputs);
 
   // touchscreen support
-  typedef BOOL(WINAPI *pGetGestureInfo)(HGESTUREINFO, PGESTUREINFO);
-  typedef BOOL(WINAPI *pSetGestureConfig)(HWND, DWORD, UINT, PGESTURECONFIG, UINT);
-  typedef BOOL(WINAPI *pCloseGestureInfoHandle)(HGESTUREINFO);
-  typedef BOOL(WINAPI *pEnableNonClientDpiScaling)(HWND);
-  pGetGestureInfo         PtrGetGestureInfo;
-  pSetGestureConfig       PtrSetGestureConfig;
+  typedef BOOL(WINAPI* pGetGestureInfo)(HGESTUREINFO, PGESTUREINFO);
+  typedef BOOL(WINAPI* pSetGestureConfig)(HWND, DWORD, UINT, PGESTURECONFIG, UINT);
+  typedef BOOL(WINAPI* pCloseGestureInfoHandle)(HGESTUREINFO);
+  typedef BOOL(WINAPI* pEnableNonClientDpiScaling)(HWND);
+  pGetGestureInfo PtrGetGestureInfo;
+  pSetGestureConfig PtrSetGestureConfig;
   pCloseGestureInfoHandle PtrCloseGestureInfoHandle;
   pEnableNonClientDpiScaling PtrEnableNonClientDpiScaling;
 
@@ -140,8 +137,8 @@ protected:
   virtual void AdjustWindow(bool forceResize = false);
   void CenterCursor() const;
 
-  virtual void Register(IDispResource *resource);
-  virtual void Unregister(IDispResource *resource);
+  virtual void Register(IDispResource* resource);
+  virtual void Unregister(IDispResource* resource);
 
   virtual bool ChangeResolution(const RESOLUTION_INFO& res, bool forceChange = false);
   virtual bool CreateBlankWindows();
@@ -157,7 +154,7 @@ protected:
    \brief Adds a resolution to the list of resolutions if we don't already have it
    \param res resolution to add.
    */
-  static bool AddResolution(const RESOLUTION_INFO &res);
+  static bool AddResolution(const RESOLUTION_INFO& res);
 
   void OnDisplayLost();
   void OnDisplayReset();
@@ -179,11 +176,11 @@ protected:
   bool m_delayDispReset;
   XbmcThreads::EndTime m_dispResetTimer;
 
-  WINDOW_STATE m_state;                       // the state of the window
-  WINDOW_FULLSCREEN_STATE m_fullscreenState;  // the state of the window when in fullscreen
-  WINDOW_WINDOW_STATE m_windowState;          // the state of the window when in windowed
-  DWORD m_windowStyle;                        // the style of the window
-  DWORD m_windowExStyle;                      // the ex style of the window
+  WINDOW_STATE m_state; // the state of the window
+  WINDOW_FULLSCREEN_STATE m_fullscreenState; // the state of the window when in fullscreen
+  WINDOW_WINDOW_STATE m_windowState; // the state of the window when in windowed
+  DWORD m_windowStyle; // the style of the window
+  DWORD m_windowExStyle; // the ex style of the window
   bool m_inFocus;
   bool m_bMinimized;
   bool m_bSizeMoveEnabled = false;
@@ -193,4 +190,3 @@ protected:
 };
 
 extern HWND g_hWnd;
-

@@ -31,19 +31,25 @@ public:
   void Stop();
 
 private:
-  static int HCTLCallback(snd_hctl_elem_t *elem, unsigned int mask);
-  static void FDEventCallback(int id, int fd, short revents, void *data);
+  static int HCTLCallback(snd_hctl_elem_t* elem, unsigned int mask);
+  static void FDEventCallback(int id, int fd, short revents, void* data);
 
   snd_hctl_t* GetHandle(const std::string& ctlHandleName);
   void PutHandle(const std::string& ctlHandleName);
 
   struct CTLHandle
   {
-    snd_hctl_t *handle;
+    snd_hctl_t* handle;
     int useCount = 0;
 
-    explicit CTLHandle(snd_hctl_t *handle_) : handle(handle_) {}
-    CTLHandle() : handle(NULL) {}
+    explicit CTLHandle(snd_hctl_t* handle_)
+      : handle(handle_)
+    {
+    }
+    CTLHandle()
+      : handle(NULL)
+    {
+    }
   };
 
   std::map<std::string, CTLHandle> m_ctlHandles;

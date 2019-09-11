@@ -23,22 +23,25 @@ class CMediaSource final
 public:
   enum SourceType
   {
-    SOURCE_TYPE_UNKNOWN      = 0,
-    SOURCE_TYPE_LOCAL        = 1,
-    SOURCE_TYPE_DVD          = 2,
-    SOURCE_TYPE_VIRTUAL_DVD  = 3,
-    SOURCE_TYPE_REMOTE       = 4,
-    SOURCE_TYPE_VPATH        = 5,
-    SOURCE_TYPE_REMOVABLE    = 6
+    SOURCE_TYPE_UNKNOWN = 0,
+    SOURCE_TYPE_LOCAL = 1,
+    SOURCE_TYPE_DVD = 2,
+    SOURCE_TYPE_VIRTUAL_DVD = 3,
+    SOURCE_TYPE_REMOTE = 4,
+    SOURCE_TYPE_VPATH = 5,
+    SOURCE_TYPE_REMOVABLE = 6
   };
 
-  bool operator==(const CMediaSource &right) const;
+  bool operator==(const CMediaSource& right) const;
 
-  void FromNameAndPaths(const std::string &category, const std::string &name, const std::vector<std::string> &paths);
+  void FromNameAndPaths(const std::string& category,
+                        const std::string& name,
+                        const std::vector<std::string>& paths);
   bool IsWritable() const;
   std::string strName; ///< Name of the share, can be chosen freely.
   std::string strStatus; ///< Status of the share (eg has disk etc.)
-  std::string strDiskUniqueId; ///< removable:// + DVD Label + DVD ID for resume point storage, if available
+  std::string
+      strDiskUniqueId; ///< removable:// + DVD Label + DVD ID for resume point storage, if available
   std::string strPath; ///< Path of the share, eg. iso9660:// or F:
 
   /*!
@@ -78,11 +81,13 @@ public:
   Value is unknown or unspecified.
   */
   LockType m_iLockMode = LOCK_MODE_EVERYONE;
-  std::string m_strLockCode;  ///< Input code for Lock UI to verify, can be chosen freely.
+  std::string m_strLockCode; ///< Input code for Lock UI to verify, can be chosen freely.
   int m_iHasLock = 0;
-  int m_iBadPwdCount = 0; ///< Number of wrong passwords user has entered since share was last unlocked
+  int m_iBadPwdCount =
+      0; ///< Number of wrong passwords user has entered since share was last unlocked
 
-  std::string m_strThumbnailImage; ///< Path to a thumbnail image for the share, or blank for default
+  std::string
+      m_strThumbnailImage; ///< Path to a thumbnail image for the share, or blank for default
 
   std::vector<std::string> vecPaths;
   bool m_ignore = false; /// <Do not store in xml

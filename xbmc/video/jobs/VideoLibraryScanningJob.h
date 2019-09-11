@@ -29,7 +29,9 @@ public:
    \param[in] scanAll Whether to scan all items or not
    \param[in] showProgress Whether to show a progress bar or not
    */
-  CVideoLibraryScanningJob(const std::string& directory, bool scanAll = false, bool showProgress = true);
+  CVideoLibraryScanningJob(const std::string& directory,
+                           bool scanAll = false,
+                           bool showProgress = true);
   ~CVideoLibraryScanningJob() override;
 
   // specialization of CVideoLibraryJob
@@ -37,12 +39,12 @@ public:
   bool Cancel() override;
 
   // specialization of CJob
-  const char *GetType() const override { return "VideoLibraryScanningJob"; }
+  const char* GetType() const override { return "VideoLibraryScanningJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
   // implementation of CVideoLibraryJob
-  bool Work(CVideoDatabase &db) override;
+  bool Work(CVideoDatabase& db) override;
 
 private:
   VIDEO::CVideoInfoScanner m_scanner;

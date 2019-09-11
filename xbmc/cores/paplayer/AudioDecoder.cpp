@@ -50,14 +50,14 @@ void CAudioDecoder::Destroy()
 
   m_pcmBuffer.Destroy();
 
-  if ( m_codec )
+  if (m_codec)
     delete m_codec;
   m_codec = NULL;
 
   m_canPlay = false;
 }
 
-bool CAudioDecoder::Create(const CFileItem &file, int64_t seekOffset)
+bool CAudioDecoder::Create(const CFileItem& file, int64_t seekOffset)
 {
   Destroy();
 
@@ -69,23 +69,25 @@ bool CAudioDecoder::Create(const CFileItem &file, int64_t seekOffset)
   // get correct cache size
   const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
   unsigned int filecache = settings->GetInt(CSettings::SETTING_CACHEAUDIO_INTERNET);
-  if ( file.IsHD() )
+  if (file.IsHD())
     filecache = settings->GetInt(CSettings::SETTING_CACHE_HARDDISK);
-  else if ( file.IsOnDVD() )
+  else if (file.IsOnDVD())
     filecache = settings->GetInt(CSettings::SETTING_CACHEAUDIO_DVDROM);
-  else if ( file.IsOnLAN() )
+  else if (file.IsOnLAN())
     filecache = settings->GetInt(CSettings::SETTING_CACHEAUDIO_LAN);
 
   // create our codec
-  m_codec=CodecFactory::CreateCodecDemux(file, filecache * 1024);
+  m_codec = CodecFactory::CreateCodecDemux(file, filecache * 1024);
 
   if (!m_codec || !m_codec->Init(file, filecache * 1024))
   {
-    CLog::Log(LOGERROR, "CAudioDecoder: Unable to Init Codec while loading file %s", file.GetDynPath().c_str());
+    CLog::Log(LOGERROR, "CAudioDecoder: Unable to Init Codec while loading file %s",
+              file.GetDynPath().c_str());
     Destroy();
     return false;
   }
-  unsigned int blockSize = (m_codec->m_bitsPerSample >> 3) * m_codec->m_format.m_channelLayout.Count();
+  unsigned int blockSize =
+      (m_codec->m_bitsPerSample >> 3) * m_codec->m_format.m_channelLayout.Count();
 
   if (blockSize == 0)
   {
@@ -106,14 +108,14 @@ bool CAudioDecoder::Create(const CFileItem &file, int64_t seekOffset)
     // update ReplayGain from the given tag if it's better then original (cuesheet)
     ReplayGain rgInfo = m_codec->m_tag.GetReplayGain();
     bool anySet = false;
-    if (!rgInfo.Get(ReplayGain::ALBUM).Valid()
-      && file.GetMusicInfoTag()->GetReplayGain().Get(ReplayGain::ALBUM).Valid())
+    if (!rgInfo.Get(ReplayGain::ALBUM).Valid() &&
+        file.GetMusicInfoTag()->GetReplayGain().Get(ReplayGain::ALBUM).Valid())
     {
       rgInfo.Set(ReplayGain::ALBUM, file.GetMusicInfoTag()->GetReplayGain().Get(ReplayGain::ALBUM));
       anySet = true;
     }
-    if (!rgInfo.Get(ReplayGain::TRACK).Valid()
-      && file.GetMusicInfoTag()->GetReplayGain().Get(ReplayGain::TRACK).Valid())
+    if (!rgInfo.Get(ReplayGain::TRACK).Valid() &&
+        file.GetMusicInfoTag()->GetReplayGain().Get(ReplayGain::TRACK).Valid())
     {
       rgInfo.Set(ReplayGain::TRACK, file.GetMusicInfoTag()->GetReplayGain().Get(ReplayGain::TRACK));
       anySet = true;
@@ -146,8 +148,10 @@ int64_t CAudioDecoder::Seek(int64_t time)
   m_rawBufferSize = 0;
   if (!m_codec)
     return 0;
-  if (time < 0) time = 0;
-  if (time > m_codec->m_TotalTime) time = m_codec->m_TotalTime;
+  if (time < 0)
+    time = 0;
+  if (time > m_codec->m_TotalTime)
+    time = m_codec->m_TotalTime;
   return m_codec->Seek(time);
 }
 
@@ -179,7 +183,8 @@ unsigned int CAudioDecoder::GetDataSize(bool checkPktSize)
       else if (checkPktSize && m_pcmBuffer.getMaxReadSize() < PACKET_SIZE)
         m_status = STATUS_ENDED;
     }
-    return std::min(m_pcmBuffer.getMaxReadSize() / (m_codec->m_bitsPerSample >> 3), (unsigned int)OUTPUT_SAMPLES);
+    return std::min(m_pcmBuffer.getMaxReadSize() / (m_codec->m_bitsPerSample >> 3),
+                    (unsigned int)OUTPUT_SAMPLES);
   }
   else
   {
@@ -189,22 +194,26 @@ unsigned int CAudioDecoder::GetDataSize(bool checkPktSize)
   }
 }
 
-void *CAudioDecoder::GetData(unsigned int samples)
+void* CAudioDecoder::GetData(unsigned int samples)
 {
-  unsigned int size  = samples * (m_codec->m_bitsPerSample >> 3);
+  unsigned int size = samples * (m_codec->m_bitsPerSample >> 3);
   if (size > sizeof(m_outputBuffer))
   {
-    CLog::Log(LOGERROR, "CAudioDecoder::GetData - More data was requested then we have space to buffer!");
+    CLog::Log(LOGERROR,
+              "CAudioDecoder::GetData - More data was requested then we have space to buffer!");
     return NULL;
   }
 
   if (size > m_pcmBuffer.getMaxReadSize())
   {
-    CLog::Log(LOGWARNING, "CAudioDecoder::GetData() more bytes/samples (%i) requested than we have to give (%i)!", size, m_pcmBuffer.getMaxReadSize());
+    CLog::Log(
+        LOGWARNING,
+        "CAudioDecoder::GetData() more bytes/samples (%i) requested than we have to give (%i)!",
+        size, m_pcmBuffer.getMaxReadSize());
     size = m_pcmBuffer.getMaxReadSize();
   }
 
-  if (m_pcmBuffer.ReadData((char *)m_outputBuffer, size))
+  if (m_pcmBuffer.ReadData((char*)m_outputBuffer, size))
   {
     if (m_status == STATUS_ENDING && m_pcmBuffer.getMaxReadSize() == 0)
       m_status = STATUS_ENDED;
@@ -216,7 +225,7 @@ void *CAudioDecoder::GetData(unsigned int samples)
   return NULL;
 }
 
-uint8_t *CAudioDecoder::GetRawData(int &size)
+uint8_t* CAudioDecoder::GetRawData(int& size)
 {
   if (m_status == STATUS_ENDING)
     m_status = STATUS_ENDED;
@@ -233,7 +242,7 @@ uint8_t *CAudioDecoder::GetRawData(int &size)
 int CAudioDecoder::ReadSamples(int numsamples)
 {
   if (m_status == STATUS_NO_FILE || m_status == STATUS_ENDING || m_status == STATUS_ENDED)
-    return RET_SLEEP;             // nothing loaded yet
+    return RET_SLEEP; // nothing loaded yet
 
   // start playing once we're fully queued and we're ready to go
   if (m_status == STATUS_QUEUED && m_canPlay)
@@ -245,21 +254,26 @@ int CAudioDecoder::ReadSamples(int numsamples)
   if (m_codec->m_format.m_dataFormat != AE_FMT_RAW)
   {
     // Read in more data
-    int maxsize = std::min<int>(INPUT_SAMPLES, m_pcmBuffer.getMaxWriteSize() / (m_codec->m_bitsPerSample >> 3));
+    int maxsize = std::min<int>(INPUT_SAMPLES,
+                                m_pcmBuffer.getMaxWriteSize() / (m_codec->m_bitsPerSample >> 3));
     numsamples = std::min<int>(numsamples, maxsize);
-    numsamples -= (numsamples % GetFormat().m_channelLayout.Count());  // make sure it's divisible by our number of channels
+    numsamples -=
+        (numsamples %
+         GetFormat().m_channelLayout.Count()); // make sure it's divisible by our number of channels
     if (numsamples)
     {
       int readSize = 0;
-      int result = m_codec->ReadPCM(m_pcmInputBuffer, numsamples * (m_codec->m_bitsPerSample >> 3), &readSize);
+      int result = m_codec->ReadPCM(m_pcmInputBuffer, numsamples * (m_codec->m_bitsPerSample >> 3),
+                                    &readSize);
 
       if (result != READ_ERROR && readSize)
       {
         // move it into our buffer
-        m_pcmBuffer.WriteData((char *)m_pcmInputBuffer, readSize);
+        m_pcmBuffer.WriteData((char*)m_pcmInputBuffer, readSize);
 
         // update status
-        if (m_status == STATUS_QUEUING && m_pcmBuffer.getMaxReadSize() > m_pcmBuffer.getSize() * 0.9)
+        if (m_status == STATUS_QUEUING &&
+            m_pcmBuffer.getMaxReadSize() > m_pcmBuffer.getSize() * 0.9)
         {
           CLog::Log(LOGINFO, "AudioDecoder: File is queued");
           m_status = STATUS_QUEUED;
@@ -322,10 +336,10 @@ int CAudioDecoder::ReadSamples(int numsamples)
   return RET_SLEEP; // nothing to do
 }
 
-float CAudioDecoder::GetReplayGain(float &peakVal)
+float CAudioDecoder::GetReplayGain(float& peakVal)
 {
 #define REPLAY_GAIN_DEFAULT_LEVEL 89.0f
-  const ReplayGainSettings &replayGainSettings = g_application.GetReplayGainSettings();
+  const ReplayGainSettings& replayGainSettings = g_application.GetReplayGainSettings();
   if (replayGainSettings.iType == ReplayGain::NONE)
     return 1.0f;
 
@@ -364,11 +378,13 @@ float CAudioDecoder::GetReplayGain(float &peakVal)
     }
   }
   // convert to a gain type
-  float replaygain = pow(10.0f, (replaydB - REPLAY_GAIN_DEFAULT_LEVEL)* 0.05f);
+  float replaygain = pow(10.0f, (replaydB - REPLAY_GAIN_DEFAULT_LEVEL) * 0.05f);
 
-  CLog::Log(LOGDEBUG, "AudioDecoder::GetReplayGain - Final Replaygain applied: %f, Track/Album Gain %f, Peak %f", replaygain, replaydB, peak);
+  CLog::Log(
+      LOGDEBUG,
+      "AudioDecoder::GetReplayGain - Final Replaygain applied: %f, Track/Album Gain %f, Peak %f",
+      replaygain, replaydB, peak);
 
   peakVal = peak;
   return replaygain;
 }
-

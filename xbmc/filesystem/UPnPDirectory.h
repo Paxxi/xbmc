@@ -20,18 +20,18 @@ class CURL;
 
 namespace XFILE
 {
-class CUPnPDirectory :  public IDirectory
+class CUPnPDirectory : public IDirectory
 {
 public:
-    CUPnPDirectory(void) = default;
-    ~CUPnPDirectory(void) override = default;
+  CUPnPDirectory(void) = default;
+  ~CUPnPDirectory(void) override = default;
 
-    // IDirectory methods
-    bool GetDirectory(const CURL& url, CFileItemList &items) override;
-    bool AllowAll() const override { return true; }
+  // IDirectory methods
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool AllowAll() const override { return true; }
 
-    // class methods
-    static const char* GetFriendlyName(const CURL& url);
-    static bool        GetResource(const CURL &path, CFileItem& item);
+  // class methods
+  static const char* GetFriendlyName(const CURL& url);
+  static bool GetResource(const CURL& path, CFileItem& item);
 };
-}
+} // namespace XFILE

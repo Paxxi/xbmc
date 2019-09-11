@@ -54,4 +54,3 @@ std::vector<AVPixelFormat> CProcessInfoOSX::GetRenderFormats()
 
   return formats;
 }
-

@@ -26,4 +26,4 @@ public:
   static IFile* CreateLoader(const std::string& strFileName);
   static IFile* CreateLoader(const CURL& url);
 };
-}
+} // namespace XFILE

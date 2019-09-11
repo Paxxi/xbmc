@@ -19,11 +19,14 @@ public:
   CHTTPPythonHandler();
   ~CHTTPPythonHandler() override = default;
 
-  IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPPythonHandler(request); }
-  bool CanHandleRequest(const HTTPRequest &request) const override;
+  IHTTPRequestHandler* Create(const HTTPRequest& request) const override
+  {
+    return new CHTTPPythonHandler(request);
+  }
+  bool CanHandleRequest(const HTTPRequest& request) const override;
   bool CanHandleRanges() const override { return false; }
   bool CanBeCached() const override { return false; }
-  bool GetLastModifiedDate(CDateTime &lastModified) const override;
+  bool GetLastModifiedDate(CDateTime& lastModified) const override;
 
   int HandleRequest() override;
 
@@ -34,9 +37,9 @@ public:
   int GetPriority() const override { return 3; }
 
 protected:
-  explicit CHTTPPythonHandler(const HTTPRequest &request);
+  explicit CHTTPPythonHandler(const HTTPRequest& request);
 
-  bool appendPostData(const char *data, size_t size) override;
+  bool appendPostData(const char* data, size_t size) override;
 
 private:
   std::string m_scriptPath;

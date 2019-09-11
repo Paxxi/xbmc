@@ -48,11 +48,12 @@ extern "C" void tracker_library_free_all(DllTrackInfo* pInfo)
   if (!pInfo->dllList.empty())
   {
     CSingleLock lock(g_trackerLock);
-    CLog::Log(LOGDEBUG,"{0}: Detected {1} unloaded dll's", pInfo->pDll->GetFileName(), pInfo->dllList.size());
+    CLog::Log(LOGDEBUG, "{0}: Detected {1} unloaded dll's", pInfo->pDll->GetFileName(),
+              pInfo->dllList.size());
     for (DllListIter it = pInfo->dllList.begin(); it != pInfo->dllList.end(); ++it)
     {
       LibraryLoader* pDll = DllLoaderContainer::GetModule((HMODULE)*it);
-      if( !pDll)
+      if (!pDll)
       {
         CLog::Log(LOGERROR, "%s - Invalid module in tracker", __FUNCTION__);
         return;
@@ -60,7 +61,8 @@ extern "C" void tracker_library_free_all(DllTrackInfo* pInfo)
 
       if (!pDll->IsSystemDll())
       {
-        if (strlen(pDll->GetFileName()) > 0) CLog::Log(LOGDEBUG,"  : %s", pDll->GetFileName());
+        if (strlen(pDll->GetFileName()) > 0)
+          CLog::Log(LOGDEBUG, "  : %s", pDll->GetFileName());
       }
     }
 
@@ -68,7 +70,7 @@ extern "C" void tracker_library_free_all(DllTrackInfo* pInfo)
     for (DllListIter it = pInfo->dllList.begin(); it != pInfo->dllList.end(); ++it)
     {
       LibraryLoader* pDll = DllLoaderContainer::GetModule((HMODULE)*it);
-      if( !pDll)
+      if (!pDll)
       {
         CLog::Log(LOGERROR, "%s - Invalid module in tracker", __FUNCTION__);
         return;
@@ -88,7 +90,8 @@ extern "C" HMODULE __stdcall track_LoadLibraryA(const char* file)
 
   DllTrackInfo* pInfo = tracker_get_dlltrackinfo(loc);
   const char* path = NULL;
-  if (pInfo) path = pInfo->pDll->GetFileName();
+  if (pInfo)
+    path = pInfo->pDll->GetFileName();
 
   HMODULE hHandle = dllLoadLibraryExtended(file, path);
   tracker_library_track(loc, hHandle);
@@ -96,13 +99,16 @@ extern "C" HMODULE __stdcall track_LoadLibraryA(const char* file)
   return hHandle;
 }
 
-extern "C" HMODULE __stdcall track_LoadLibraryExA(const char* lpLibFileName, HANDLE hFile, DWORD dwFlags)
+extern "C" HMODULE __stdcall track_LoadLibraryExA(const char* lpLibFileName,
+                                                  HANDLE hFile,
+                                                  DWORD dwFlags)
 {
   uintptr_t loc = (uintptr_t)_ReturnAddress();
 
   DllTrackInfo* pInfo = tracker_get_dlltrackinfo(loc);
   const char* path = NULL;
-  if (pInfo) path = pInfo->pDll->GetFileName();
+  if (pInfo)
+    path = pInfo->pDll->GetFileName();
 
   HMODULE hHandle = dllLoadLibraryExExtended(lpLibFileName, hFile, dwFlags, path);
   tracker_library_track(loc, hHandle);

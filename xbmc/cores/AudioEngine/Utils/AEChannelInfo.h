@@ -16,7 +16,8 @@
 
 class CHelper_libKODI_audioengine;
 
-class CAEChannelInfo {
+class CAEChannelInfo
+{
   friend class CHelper_libKODI_audioengine;
 
 public:
@@ -48,7 +49,6 @@ public:
   void AddMissingChannels(const CAEChannelInfo& rhs);
 
 private:
-  unsigned int   m_channelCount;
+  unsigned int m_channelCount;
   enum AEChannel m_channels[AE_CH_MAX];
 };
-

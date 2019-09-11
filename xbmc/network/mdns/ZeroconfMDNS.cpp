@@ -7,14 +7,16 @@
  */
 
 #include "ZeroconfMDNS.h"
-#include <arpa/inet.h>
 
-#include <string>
-#include <sstream>
-#include "threads/SingleLock.h"
-#include "utils/log.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "guilib/LocalizeStrings.h"
+#include "threads/SingleLock.h"
+#include "utils/log.h"
+
+#include <sstream>
+#include <string>
+
+#include <arpa/inet.h>
 #if defined(TARGET_WINDOWS)
 #include "platform/win32/WIN32Util.h"
 #endif //TARGET_WINDOWS
@@ -31,14 +33,14 @@ void CZeroconfMDNS::Process()
   CLog::Log(LOGDEBUG, "ZeroconfEmbedded - processing...");
   struct timeval timeout;
   timeout.tv_sec = 1;
-  while (( !m_bStop ))
+  while ((!m_bStop))
     embedded_mDNSmainLoop(timeout);
 #endif //HAS_MDNS_EMBEDDED
-
 }
 
 
-CZeroconfMDNS::CZeroconfMDNS()  : CThread("ZeroconfEmbedded")
+CZeroconfMDNS::CZeroconfMDNS()
+  : CThread("ZeroconfEmbedded")
 {
   m_service = NULL;
 #if defined(HAS_MDNS_EMBEDDED)
@@ -61,24 +63,30 @@ bool CZeroconfMDNS::IsZCdaemonRunning()
 #if !defined(HAS_MDNS_EMBEDDED)
   uint32_t version;
   uint32_t size = sizeof(version);
-  DNSServiceErrorType err = DNSServiceGetProperty(kDNSServiceProperty_DaemonVersion, &version, &size);
-  if(err != kDNSServiceErr_NoError)
+  DNSServiceErrorType err =
+      DNSServiceGetProperty(kDNSServiceProperty_DaemonVersion, &version, &size);
+  if (err != kDNSServiceErr_NoError)
   {
-    CLog::Log(LOGERROR, "ZeroconfMDNS: Zeroconf can't be started probably because Apple's Bonjour Service isn't installed. You can get it by either installing Itunes or Apple's Bonjour Print Service for Windows (http://support.apple.com/kb/DL999)");
-    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, g_localizeStrings.Get(34300), g_localizeStrings.Get(34301), 10000, true);
+    CLog::Log(LOGERROR,
+              "ZeroconfMDNS: Zeroconf can't be started probably because Apple's Bonjour Service "
+              "isn't installed. You can get it by either installing Itunes or Apple's Bonjour "
+              "Print Service for Windows (http://support.apple.com/kb/DL999)");
+    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, g_localizeStrings.Get(34300),
+                                          g_localizeStrings.Get(34301), 10000, true);
     return false;
   }
-  CLog::Log(LOGDEBUG, "ZeroconfMDNS:Bonjour version is %d.%d", version / 10000, version / 100 % 100);
+  CLog::Log(LOGDEBUG, "ZeroconfMDNS:Bonjour version is %d.%d", version / 10000,
+            version / 100 % 100);
 #endif //!HAS_MDNS_EMBEDDED
   return true;
 }
 
 //methods to implement for concrete implementations
 bool CZeroconfMDNS::doPublishService(const std::string& fcr_identifier,
-                      const std::string& fcr_type,
-                      const std::string& fcr_name,
-                      unsigned int f_port,
-                      const std::vector<std::pair<std::string, std::string> >& txt)
+                                     const std::string& fcr_type,
+                                     const std::string& fcr_name,
+                                     unsigned int f_port,
+                                     const std::vector<std::pair<std::string, std::string>>& txt)
 {
   DNSServiceRef netService = NULL;
   TXTRecordRef txtRecord;
@@ -87,28 +95,31 @@ bool CZeroconfMDNS::doPublishService(const std::string& fcr_identifier,
 
 #if !defined(HAS_MDNS_EMBEDDED)
   CSingleLock lock(m_data_guard);
-  if(m_service == NULL)
+  if (m_service == NULL)
   {
     err = DNSServiceCreateConnection(&m_service);
     if (err != kDNSServiceErr_NoError)
     {
-      CLog::Log(LOGERROR, "ZeroconfMDNS: DNSServiceCreateConnection failed with error = %ld", (int) err);
+      CLog::Log(LOGERROR, "ZeroconfMDNS: DNSServiceCreateConnection failed with error = %ld",
+                (int)err);
       return false;
     }
 #ifdef TARGET_WINDOWS_STORE
     CLog::Log(LOGERROR, "ZeroconfMDNS: WSAAsyncSelect not yet supported for TARGET_WINDOWS_STORE");
 #else
-    err = WSAAsyncSelect( (SOCKET) DNSServiceRefSockFD( m_service ), g_hWnd, BONJOUR_EVENT, FD_READ | FD_CLOSE );
+    err = WSAAsyncSelect((SOCKET)DNSServiceRefSockFD(m_service), g_hWnd, BONJOUR_EVENT,
+                         FD_READ | FD_CLOSE);
     if (err != kDNSServiceErr_NoError)
-      CLog::Log(LOGERROR, "ZeroconfMDNS: WSAAsyncSelect failed with error = %ld", (int) err);
+      CLog::Log(LOGERROR, "ZeroconfMDNS: WSAAsyncSelect failed with error = %ld", (int)err);
 #endif
   }
 #endif //!HAS_MDNS_EMBEDDED
 
-  CLog::Log(LOGDEBUG, "ZeroconfMDNS: identifier: %s type: %s name:%s port:%i", fcr_identifier.c_str(), fcr_type.c_str(), fcr_name.c_str(), f_port);
+  CLog::Log(LOGDEBUG, "ZeroconfMDNS: identifier: %s type: %s name:%s port:%i",
+            fcr_identifier.c_str(), fcr_type.c_str(), fcr_name.c_str(), f_port);
 
   //add txt records
-  if(!txt.empty())
+  if (!txt.empty())
   {
     for (const auto& it : txt)
     {
@@ -121,7 +132,10 @@ bool CZeroconfMDNS::doPublishService(const std::string& fcr_identifier,
   {
     CSingleLock lock(m_data_guard);
     netService = m_service;
-    err = DNSServiceRegister(&netService, kDNSServiceFlagsShareConnection, 0, fcr_name.c_str(), fcr_type.c_str(), NULL, NULL, htons(f_port), TXTRecordGetLength(&txtRecord), TXTRecordGetBytesPtr(&txtRecord), registerCallback, NULL);
+    err = DNSServiceRegister(&netService, kDNSServiceFlagsShareConnection, 0, fcr_name.c_str(),
+                             fcr_type.c_str(), NULL, NULL, htons(f_port),
+                             TXTRecordGetLength(&txtRecord), TXTRecordGetBytesPtr(&txtRecord),
+                             registerCallback, NULL);
   }
 
   if (err != kDNSServiceErr_NoError)
@@ -130,7 +144,7 @@ bool CZeroconfMDNS::doPublishService(const std::string& fcr_identifier,
     if (netService)
       DNSServiceRefDeallocate(netService);
 
-    CLog::Log(LOGERROR, "ZeroconfMDNS: DNSServiceRegister returned (error = %ld)", (int) err);
+    CLog::Log(LOGERROR, "ZeroconfMDNS: DNSServiceRegister returned (error = %ld)", (int)err);
   }
   else
   {
@@ -150,18 +164,20 @@ bool CZeroconfMDNS::doForceReAnnounceService(const std::string& fcr_identifier)
   bool ret = false;
   CSingleLock lock(m_data_guard);
   tServiceMap::iterator it = m_services.find(fcr_identifier);
-  if(it != m_services.end())
+  if (it != m_services.end())
   {
     // for force announcing a service with mdns we need
     // to change a txt record - so we diddle between
     // even and odd dummy records here
-    if ( (it->second.updateNumber % 2) == 0)
+    if ((it->second.updateNumber % 2) == 0)
       TXTRecordSetValue(&it->second.txtRecordRef, "xbmcdummy", strlen("evendummy"), "evendummy");
     else
       TXTRecordSetValue(&it->second.txtRecordRef, "xbmcdummy", strlen("odddummy"), "odddummy");
     it->second.updateNumber++;
 
-    if (DNSServiceUpdateRecord(it->second.serviceRef, NULL, 0, TXTRecordGetLength(&it->second.txtRecordRef), TXTRecordGetBytesPtr(&it->second.txtRecordRef), 0) ==  kDNSServiceErr_NoError)
+    if (DNSServiceUpdateRecord(
+            it->second.serviceRef, NULL, 0, TXTRecordGetLength(&it->second.txtRecordRef),
+            TXTRecordGetBytesPtr(&it->second.txtRecordRef), 0) == kDNSServiceErr_NoError)
       ret = true;
   }
   return ret;
@@ -171,7 +187,7 @@ bool CZeroconfMDNS::doRemoveService(const std::string& fcr_ident)
 {
   CSingleLock lock(m_data_guard);
   tServiceMap::iterator it = m_services.find(fcr_ident);
-  if(it != m_services.end())
+  if (it != m_services.end())
   {
     DNSServiceRefDeallocate(it->second.serviceRef);
     TXTRecordDeallocate(&it->second.txtRecordRef);
@@ -201,7 +217,7 @@ void CZeroconfMDNS::doStop()
 #if defined(TARGET_WINDOWS_STORE)
     CLog::Log(LOGERROR, "ZeroconfMDNS: WSAAsyncSelect not yet supported for TARGET_WINDOWS_STORE");
 #else
-    WSAAsyncSelect( (SOCKET) DNSServiceRefSockFD( m_service ), g_hWnd, BONJOUR_EVENT, 0 );
+    WSAAsyncSelect((SOCKET)DNSServiceRefSockFD(m_service), g_hWnd, BONJOUR_EVENT, 0);
 #endif //TARGET_WINDOWS
 
     if (m_service)
@@ -210,11 +226,17 @@ void CZeroconfMDNS::doStop()
   }
 }
 
-void DNSSD_API CZeroconfMDNS::registerCallback(DNSServiceRef sdref, const DNSServiceFlags flags, DNSServiceErrorType errorCode, const char *name, const char *regtype, const char *domain, void *context)
+void DNSSD_API CZeroconfMDNS::registerCallback(DNSServiceRef sdref,
+                                               const DNSServiceFlags flags,
+                                               DNSServiceErrorType errorCode,
+                                               const char* name,
+                                               const char* regtype,
+                                               const char* domain,
+                                               void* context)
 {
-  (void)sdref;    // Unused
-  (void)flags;    // Unused
-  (void)context;  // Unused
+  (void)sdref; // Unused
+  (void)flags; // Unused
+  (void)context; // Unused
 
   if (errorCode == kDNSServiceErr_NoError)
   {
@@ -224,7 +246,8 @@ void DNSSD_API CZeroconfMDNS::registerCallback(DNSServiceRef sdref, const DNSSer
       CLog::Log(LOGDEBUG, "ZeroconfMDNS: %s.%s%s registration removed", name, regtype, domain);
   }
   else if (errorCode == kDNSServiceErr_NameConflict)
-     CLog::Log(LOGDEBUG, "ZeroconfMDNS: %s.%s%s Name in use, please choose another", name, regtype, domain);
+    CLog::Log(LOGDEBUG, "ZeroconfMDNS: %s.%s%s Name in use, please choose another", name, regtype,
+              domain);
   else
     CLog::Log(LOGDEBUG, "ZeroconfMDNS: %s.%s%s error code %d", name, regtype, domain, errorCode);
 }
@@ -234,6 +257,5 @@ void CZeroconfMDNS::ProcessResults()
   CSingleLock lock(m_data_guard);
   DNSServiceErrorType err = DNSServiceProcessResult(m_service);
   if (err != kDNSServiceErr_NoError)
-    CLog::Log(LOGERROR, "ZeroconfMDNS: DNSServiceProcessResult returned (error = %ld)", (int) err);
+    CLog::Log(LOGERROR, "ZeroconfMDNS: DNSServiceProcessResult returned (error = %ld)", (int)err);
 }
-

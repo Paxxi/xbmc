@@ -18,16 +18,26 @@
 class CPiTexture : public CGLTexture
 {
 public:
-  CPiTexture(unsigned int width = 0, unsigned int height = 0, unsigned int format = XB_FMT_A8R8G8B8);
+  CPiTexture(unsigned int width = 0,
+             unsigned int height = 0,
+             unsigned int format = XB_FMT_A8R8G8B8);
   virtual ~CPiTexture();
   void CreateTextureObject();
   void LoadToGPU();
-  void Update(unsigned int width, unsigned int height, unsigned int pitch, unsigned int format, const unsigned char *pixels, bool loadToGPU);
+  void Update(unsigned int width,
+              unsigned int height,
+              unsigned int pitch,
+              unsigned int format,
+              const unsigned char* pixels,
+              bool loadToGPU);
   void Allocate(unsigned int width, unsigned int height, unsigned int format);
-  bool LoadFromFileInternal(const std::string& texturePath, unsigned int maxWidth, unsigned int maxHeight, bool requirePixels, const std::string& strMimeType = "");
+  bool LoadFromFileInternal(const std::string& texturePath,
+                            unsigned int maxWidth,
+                            unsigned int maxHeight,
+                            bool requirePixels,
+                            const std::string& strMimeType = "");
 
 protected:
-
 private:
-  void *m_egl_image;
+  void* m_egl_image;
 };

@@ -28,16 +28,17 @@ using namespace XFILE;
 CHTTPDirectory::CHTTPDirectory(void) = default;
 CHTTPDirectory::~CHTTPDirectory(void) = default;
 
-bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   CCurlFile http;
 
   std::string strName, strLink;
   std::string strBasePath = url.GetFileName();
 
-  if(!http.Open(url))
+  if (!http.Open(url))
   {
-    CLog::Log(LOGERROR, "%s - Unable to get http directory (%s)", __FUNCTION__, url.GetRedacted().c_str());
+    CLog::Log(LOGERROR, "%s - Unable to get http directory (%s)", __FUNCTION__,
+              url.GetRedacted().c_str());
     return false;
   }
 
@@ -45,16 +46,19 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   reItem.RegComp("<a href=\"(.*)\">(.*)</a>");
 
   CRegExp reDateTime(true);
-  reDateTime.RegComp("<td align=\"right\">([0-9]{2})-([A-Z]{3})-([0-9]{4}) ([0-9]{2}):([0-9]{2}) +</td>");
+  reDateTime.RegComp(
+      "<td align=\"right\">([0-9]{2})-([A-Z]{3})-([0-9]{4}) ([0-9]{2}):([0-9]{2}) +</td>");
 
   CRegExp reDateTimeLighttp(true);
-  reDateTimeLighttp.RegComp("<td class=\"m\">([0-9]{4})-([A-Z]{3})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})</td>");
+  reDateTimeLighttp.RegComp(
+      "<td class=\"m\">([0-9]{4})-([A-Z]{3})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})</td>");
 
   CRegExp reDateTimeNginx(true);
   reDateTimeNginx.RegComp("</a> +([0-9]{2})-([A-Z]{3})-([0-9]{4}) ([0-9]{2}):([0-9]{2}) ");
 
   CRegExp reDateTimeApacheNewFormat(true);
-  reDateTimeApacheNewFormat.RegComp("<td align=\"right\">([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}) +</td>");
+  reDateTimeApacheNewFormat.RegComp(
+      "<td align=\"right\">([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}) +</td>");
 
   CRegExp reSize(true);
   reSize.RegComp("> *([0-9.]+)(B|K|M|G| )</td>");
@@ -64,7 +68,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
   /* read response from server into string buffer */
   char buffer[MAX_PATH + 1024];
-  while(http.ReadString(buffer, sizeof(buffer)-1))
+  while (http.ReadString(buffer, sizeof(buffer) - 1))
   {
     std::string strBuffer = buffer;
     std::string fileCharset(http.GetProperty(XFILE::FILE_PROPERTY_CONTENT_CHARSET));
@@ -82,7 +86,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       strLink = reItem.GetMatch(1);
       strName = reItem.GetMatch(2);
 
-      if(strLink[0] == '/')
+      if (strLink[0] == '/')
         strLink = strLink.substr(1);
 
       std::string strNameTemp = StringUtils::Trim(strName);
@@ -105,11 +109,11 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         strLinkOptions = strLinkBase.substr(pos);
         strLinkBase.erase(pos);
       }
-      
+
       // encoding + and ; to URL encode if it is not already encoded by http server used on the remote server (example: Apache)
       // more characters may be added here when required when required by certain http servers
       pos = strLinkBase.find_first_of("+;");
-      while (pos != std::string::npos) 
+      while (pos != std::string::npos)
       {
         std::stringstream convert;
         convert << '%' << std::hex << int(strLinkBase.at(pos));
@@ -152,7 +156,7 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         url2.SetOptions(strLinkOptions);
         pItem->SetURL(url2);
 
-        if(URIUtils::HasSlashAtEnd(pItem->GetPath(), true))
+        if (URIUtils::HasSlashAtEnd(pItem->GetPath(), true))
           pItem->m_bIsFolder = true;
 
         std::string day, month, year, hour, minute;
@@ -196,7 +200,8 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
         if (day.length() > 0 && monthNum > 0 && year.length() > 0)
         {
-          pItem->m_dateTime = CDateTime(atoi(year.c_str()), monthNum, atoi(day.c_str()), atoi(hour.c_str()), atoi(minute.c_str()), 0);
+          pItem->m_dateTime = CDateTime(atoi(year.c_str()), monthNum, atoi(day.c_str()),
+                                        atoi(hour.c_str()), atoi(minute.c_str()), 0);
         }
 
         if (!pItem->m_bIsFolder)
@@ -229,12 +234,14 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
             pItem->m_dwSize = (int64_t)Size;
           }
-          else
-          if (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_bHTTPDirectoryStatFilesize) // As a fallback get the size by stat-ing the file (slow)
+          else if (
+              CServiceBroker::GetSettingsComponent()
+                  ->GetAdvancedSettings()
+                  ->m_bHTTPDirectoryStatFilesize) // As a fallback get the size by stat-ing the file (slow)
           {
             CCurlFile file;
             file.Open(url);
-            pItem->m_dwSize=file.GetLength();
+            pItem->m_dwSize = file.GetLength();
             file.Close();
           }
         }
@@ -249,18 +256,18 @@ bool CHTTPDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   return true;
 }
 
-bool CHTTPDirectory::Exists(const CURL &url)
+bool CHTTPDirectory::Exists(const CURL& url)
 {
   CCurlFile http;
   struct __stat64 buffer;
 
-  if( http.Stat(url, &buffer) != 0 )
+  if (http.Stat(url, &buffer) != 0)
   {
     return false;
   }
 
   if (buffer.st_mode == _S_IFDIR)
-	  return true;
+    return true;
 
   return false;
 }

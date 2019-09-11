@@ -10,13 +10,12 @@
 
 #include "guilib/GUIDialog.h"
 
-class CGUIDialogMusicOSD :
-      public CGUIDialog
+class CGUIDialogMusicOSD : public CGUIDialog
 {
 public:
   CGUIDialogMusicOSD(void);
   ~CGUIDialogMusicOSD(void) override;
-  bool OnMessage(CGUIMessage &message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnMessage(CGUIMessage& message) override;
+  bool OnAction(const CAction& action) override;
   void FrameMove() override;
 };

@@ -21,9 +21,10 @@ using namespace kodi; // addon-dev-kit namespace
 namespace ADDON
 {
 
-void Interface_Network::Init(AddonGlobalInterface *addonInterface)
+void Interface_Network::Init(AddonGlobalInterface* addonInterface)
 {
-  addonInterface->toKodi->kodi_network = static_cast<AddonToKodiFuncTable_kodi_network*>(malloc(sizeof(AddonToKodiFuncTable_kodi_network)));
+  addonInterface->toKodi->kodi_network = static_cast<AddonToKodiFuncTable_kodi_network*>(
+      malloc(sizeof(AddonToKodiFuncTable_kodi_network)));
 
   addonInterface->toKodi->kodi_network->wake_on_lan = wake_on_lan;
   addonInterface->toKodi->kodi_network->get_ip_address = get_ip_address;
@@ -46,7 +47,8 @@ bool Interface_Network::wake_on_lan(void* kodiBase, const char* mac)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr || mac == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_Network::%s - invalid data (addon='%p', mac='%p')", __FUNCTION__, kodiBase, mac);
+    CLog::Log(LOGERROR, "Interface_Network::%s - invalid data (addon='%p', mac='%p')", __FUNCTION__,
+              kodiBase, mac);
     return false;
   }
 
@@ -58,7 +60,8 @@ char* Interface_Network::get_ip_address(void* kodiBase)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_Network::%s - invalid data (addon='%p')", __FUNCTION__, kodiBase);
+    CLog::Log(LOGERROR, "Interface_Network::%s - invalid data (addon='%p')", __FUNCTION__,
+              kodiBase);
     return nullptr;
   }
 

@@ -29,8 +29,8 @@
 
 #define PLAYERCOREFACTORY_XML "playercorefactory.xml"
 
-CPlayerCoreFactory::CPlayerCoreFactory(const CProfileManager &profileManager) :
-  m_profileManager(profileManager)
+CPlayerCoreFactory::CPlayerCoreFactory(const CProfileManager& profileManager)
+  : m_profileManager(profileManager)
 {
   m_settings = CServiceBroker::GetSettingsComponent()->GetSettings();
 
@@ -44,9 +44,11 @@ CPlayerCoreFactory::~CPlayerCoreFactory()
 {
   m_settings->GetSettingsManager()->UnregisterSettingsHandler(this);
 
-  for(std::vector<CPlayerCoreConfig *>::iterator it = m_vecPlayerConfigs.begin(); it != m_vecPlayerConfigs.end(); ++it)
+  for (std::vector<CPlayerCoreConfig*>::iterator it = m_vecPlayerConfigs.begin();
+       it != m_vecPlayerConfigs.end(); ++it)
     delete *it;
-  for(std::vector<CPlayerSelectionRule *>::iterator it = m_vecCoreSelectionRules.begin(); it != m_vecCoreSelectionRules.end(); ++it)
+  for (std::vector<CPlayerSelectionRule*>::iterator it = m_vecCoreSelectionRules.begin();
+       it != m_vecCoreSelectionRules.end(); ++it)
     delete *it;
 }
 
@@ -56,7 +58,8 @@ void CPlayerCoreFactory::OnSettingsLoaded()
   LoadConfiguration(m_profileManager.GetUserDataItem(PLAYERCOREFACTORY_XML), false);
 }
 
-IPlayer* CPlayerCoreFactory::CreatePlayer(const std::string& nameId, IPlayerCallback& callback) const
+IPlayer* CPlayerCoreFactory::CreatePlayer(const std::string& nameId,
+                                          IPlayerCallback& callback) const
 {
   CSingleLock lock(m_section);
   size_t idx = GetPlayerIndex(nameId);
@@ -67,49 +70,54 @@ IPlayer* CPlayerCoreFactory::CreatePlayer(const std::string& nameId, IPlayerCall
   return m_vecPlayerConfigs[idx]->CreatePlayer(callback);
 }
 
-void CPlayerCoreFactory::GetPlayers(std::vector<std::string>&players) const
+void CPlayerCoreFactory::GetPlayers(std::vector<std::string>& players) const
 {
   CSingleLock lock(m_section);
   players.clear();
-  for (auto conf: m_vecPlayerConfigs)
+  for (auto conf : m_vecPlayerConfigs)
   {
     if (conf->m_bPlaysAudio || conf->m_bPlaysVideo)
       players.push_back(conf->m_name);
   }
 }
 
-void CPlayerCoreFactory::GetPlayers(std::vector<std::string>&players, const bool audio, const bool video) const
+void CPlayerCoreFactory::GetPlayers(std::vector<std::string>& players,
+                                    const bool audio,
+                                    const bool video) const
 {
   CSingleLock lock(m_section);
   CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: for video=%d, audio=%d", video, audio);
 
-  for (auto conf: m_vecPlayerConfigs)
+  for (auto conf : m_vecPlayerConfigs)
   {
     if (audio == conf->m_bPlaysAudio && video == conf->m_bPlaysVideo)
     {
       if (std::find(players.begin(), players.end(), conf->m_name) != players.end())
         continue;
 
-      CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: adding player: %s", conf->m_name.c_str());
+      CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: adding player: %s",
+                conf->m_name.c_str());
       players.push_back(conf->m_name);
     }
   }
 }
 
-void CPlayerCoreFactory::GetPlayers(const CFileItem& item, std::vector<std::string>&players) const
+void CPlayerCoreFactory::GetPlayers(const CFileItem& item, std::vector<std::string>& players) const
 {
   CURL url(item.GetDynPath());
 
-  CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers(%s)", CURL::GetRedacted(item.GetDynPath()).c_str());
+  CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers(%s)",
+            CURL::GetRedacted(item.GetDynPath()).c_str());
 
-  std::vector<std::string>validPlayers;
+  std::vector<std::string> validPlayers;
   GetPlayers(validPlayers);
 
   // Process rules
-  for (auto rule: m_vecCoreSelectionRules)
+  for (auto rule : m_vecCoreSelectionRules)
     rule->GetPlayers(item, validPlayers, players);
 
-  CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: matched {0} rules with players", players.size());
+  CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: matched {0} rules with players",
+            players.size());
 
   // Process defaults
 
@@ -121,11 +129,12 @@ void CPlayerCoreFactory::GetPlayers(const CFileItem& item, std::vector<std::stri
     if (idx > -1)
     {
       std::string eVideoDefault = GetPlayerName(idx);
-      CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: adding videodefaultplayer (%s)", eVideoDefault.c_str());
+      CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: adding videodefaultplayer (%s)",
+                eVideoDefault.c_str());
       players.push_back(eVideoDefault);
     }
-    GetPlayers(players, false, true);  // Video-only players
-    GetPlayers(players, true, true);   // Audio & video players
+    GetPlayers(players, false, true); // Video-only players
+    GetPlayers(players, true, true); // Audio & video players
   }
 
   // Set audio default player
@@ -136,11 +145,12 @@ void CPlayerCoreFactory::GetPlayers(const CFileItem& item, std::vector<std::stri
     if (idx > -1)
     {
       std::string eAudioDefault = GetPlayerName(idx);
-      CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: adding audiodefaultplayer (%s)", eAudioDefault.c_str());
-        players.push_back(eAudioDefault);
+      CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: adding audiodefaultplayer (%s)",
+                eAudioDefault.c_str());
+      players.push_back(eAudioDefault);
     }
     GetPlayers(players, true, false); // Audio-only players
-    GetPlayers(players, true, true);  // Audio & video players
+    GetPlayers(players, true, true); // Audio & video players
   }
 
   if (item.IsGame())
@@ -160,18 +170,21 @@ int CPlayerCoreFactory::GetPlayerIndex(const std::string& strCoreName) const
     // Dereference "*default*player" aliases
     std::string strRealCoreName;
     if (StringUtils::EqualsNoCase(strCoreName, "audiodefaultplayer"))
-      strRealCoreName = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_audioDefaultPlayer;
+      strRealCoreName =
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_audioDefaultPlayer;
     else if (StringUtils::EqualsNoCase(strCoreName, "videodefaultplayer"))
-      strRealCoreName = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoDefaultPlayer;
+      strRealCoreName =
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoDefaultPlayer;
     else
       strRealCoreName = strCoreName;
 
-    for(size_t i = 0; i < m_vecPlayerConfigs.size(); i++)
+    for (size_t i = 0; i < m_vecPlayerConfigs.size(); i++)
     {
       if (StringUtils::EqualsNoCase(m_vecPlayerConfigs[i]->GetName(), strRealCoreName))
         return i;
     }
-    CLog::Log(LOGWARNING, "CPlayerCoreFactory::GetPlayer(%s): no such player: %s", strCoreName.c_str(), strRealCoreName.c_str());
+    CLog::Log(LOGWARNING, "CPlayerCoreFactory::GetPlayer(%s): no such player: %s",
+              strCoreName.c_str(), strRealCoreName.c_str());
   }
   return -1;
 }
@@ -185,10 +198,10 @@ std::string CPlayerCoreFactory::GetPlayerName(size_t idx) const
   return m_vecPlayerConfigs[idx]->m_name;
 }
 
-void CPlayerCoreFactory::GetPlayers(std::vector<std::string>&players, std::string &type) const
+void CPlayerCoreFactory::GetPlayers(std::vector<std::string>& players, std::string& type) const
 {
   CSingleLock lock(m_section);
-  for (auto config: m_vecPlayerConfigs)
+  for (auto config : m_vecPlayerConfigs)
   {
     if (config->m_type != type)
       continue;
@@ -196,10 +209,10 @@ void CPlayerCoreFactory::GetPlayers(std::vector<std::string>&players, std::strin
   }
 }
 
-void CPlayerCoreFactory::GetRemotePlayers(std::vector<std::string>&players) const
+void CPlayerCoreFactory::GetRemotePlayers(std::vector<std::string>& players) const
 {
   CSingleLock lock(m_section);
-  for (auto config: m_vecPlayerConfigs)
+  for (auto config : m_vecPlayerConfigs)
   {
     if (config->m_type != "remote")
       continue;
@@ -242,7 +255,7 @@ bool CPlayerCoreFactory::PlaysVideo(const std::string& player) const
 
 std::string CPlayerCoreFactory::GetDefaultPlayer(const CFileItem& item) const
 {
-  std::vector<std::string>players;
+  std::vector<std::string> players;
   GetPlayers(item, players);
 
   //If we have any players return the first one
@@ -252,7 +265,9 @@ std::string CPlayerCoreFactory::GetDefaultPlayer(const CFileItem& item) const
   return "";
 }
 
-std::string CPlayerCoreFactory::SelectPlayerDialog(const std::vector<std::string>&players, float posX, float posY) const
+std::string CPlayerCoreFactory::SelectPlayerDialog(const std::vector<std::string>& players,
+                                                   float posX,
+                                                   float posY) const
 {
   CContextButtons choices;
   if (players.size())
@@ -277,12 +292,12 @@ std::string CPlayerCoreFactory::SelectPlayerDialog(const std::vector<std::string
 
 std::string CPlayerCoreFactory::SelectPlayerDialog(float posX, float posY) const
 {
-  std::vector<std::string>players;
+  std::vector<std::string> players;
   GetPlayers(players);
   return SelectPlayerDialog(players, posX, posY);
 }
 
-bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
+bool CPlayerCoreFactory::LoadConfiguration(const std::string& file, bool clear)
 {
   CSingleLock lock(m_section);
 
@@ -296,11 +311,12 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
   CXBMCTinyXML playerCoreFactoryXML;
   if (!playerCoreFactoryXML.LoadFile(file))
   {
-    CLog::Log(LOGERROR, "Error loading %s, Line %d (%s)", file.c_str(), playerCoreFactoryXML.ErrorRow(), playerCoreFactoryXML.ErrorDesc());
+    CLog::Log(LOGERROR, "Error loading %s, Line %d (%s)", file.c_str(),
+              playerCoreFactoryXML.ErrorRow(), playerCoreFactoryXML.ErrorDesc());
     return false;
   }
 
-  TiXmlElement *pConfig = playerCoreFactoryXML.RootElement();
+  TiXmlElement* pConfig = playerCoreFactoryXML.RootElement();
   if (pConfig == NULL)
   {
     CLog::Log(LOGERROR, "Error loading %s, Bad structure", file.c_str());
@@ -309,11 +325,11 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
 
   if (clear)
   {
-    for (auto config: m_vecPlayerConfigs)
+    for (auto config : m_vecPlayerConfigs)
       delete config;
     m_vecPlayerConfigs.clear();
 
-    for (auto rule: m_vecCoreSelectionRules)
+    for (auto rule : m_vecCoreSelectionRules)
       delete rule;
     m_vecCoreSelectionRules.clear();
 
@@ -337,7 +353,7 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
     return false;
   }
 
-  TiXmlElement *pPlayers = pConfig->FirstChildElement("players");
+  TiXmlElement* pPlayers = pConfig->FirstChildElement("players");
   if (pPlayers)
   {
     TiXmlElement* pPlayer = pPlayers->FirstChildElement("player");
@@ -345,7 +361,8 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
     {
       std::string name = XMLUtils::GetAttribute(pPlayer, "name");
       std::string type = XMLUtils::GetAttribute(pPlayer, "type");
-      if (type.empty()) type = name;
+      if (type.empty())
+        type = name;
       StringUtils::ToLower(type);
 
       std::string internaltype;
@@ -375,7 +392,7 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
     }
   }
 
-  TiXmlElement *pRule = pConfig->FirstChildElement("rules");
+  TiXmlElement* pRule = pConfig->FirstChildElement("rules");
   while (pRule)
   {
     const char* szAction = pRule->Attribute("action");
@@ -387,7 +404,8 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
       }
       else if (stricmp(szAction, "prepend") == 0)
       {
-        m_vecCoreSelectionRules.insert(m_vecCoreSelectionRules.begin(), 1, new CPlayerSelectionRule(pRule));
+        m_vecCoreSelectionRules.insert(m_vecCoreSelectionRules.begin(), 1,
+                                       new CPlayerSelectionRule(pRule));
       }
       else
       {
@@ -412,12 +430,12 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
 void CPlayerCoreFactory::OnPlayerDiscovered(const std::string& id, const std::string& name)
 {
   CSingleLock lock(m_section);
-  std::vector<CPlayerCoreConfig *>::iterator it;
+  std::vector<CPlayerCoreConfig*>::iterator it;
   for (it = m_vecPlayerConfigs.begin(); it != m_vecPlayerConfigs.end(); ++it)
   {
     if ((*it)->GetId() == id)
     {
-      (*it)->m_name  = name;
+      (*it)->m_name = name;
       (*it)->m_type = "remote";
       return;
     }
@@ -442,8 +460,8 @@ void CPlayerCoreFactory::OnPlayerDiscovered(const std::string& id, const std::st
 void CPlayerCoreFactory::OnPlayerRemoved(const std::string& id)
 {
   CSingleLock lock(m_section);
-  std::vector<CPlayerCoreConfig *>::iterator it;
-  for(it = m_vecPlayerConfigs.begin(); it != m_vecPlayerConfigs.end(); ++it)
+  std::vector<CPlayerCoreConfig*>::iterator it;
+  for (it = m_vecPlayerConfigs.begin(); it != m_vecPlayerConfigs.end(); ++it)
   {
     if ((*it)->GetId() == id)
       (*it)->m_type = "";

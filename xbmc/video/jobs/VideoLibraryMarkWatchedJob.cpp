@@ -6,27 +6,29 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <vector>
-
 #include "VideoLibraryMarkWatchedJob.h"
+
 #include "FileItem.h"
 #include "Util.h"
 #include "filesystem/Directory.h"
+
+#include <vector>
 #ifdef HAS_UPNP
 #include "network/upnp/UPnP.h"
 #endif
+#include "ServiceBroker.h"
+#include "profiles/ProfileManager.h"
 #include "pvr/PVRManager.h"
 #include "pvr/recordings/PVRRecordings.h"
-#include "profiles/ProfileManager.h"
 #include "settings/SettingsComponent.h"
-#include "ServiceBroker.h"
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
 
-CVideoLibraryMarkWatchedJob::CVideoLibraryMarkWatchedJob(const CFileItemPtr &item, bool mark)
-  : m_item(item),
-    m_mark(mark)
-{ }
+CVideoLibraryMarkWatchedJob::CVideoLibraryMarkWatchedJob(const CFileItemPtr& item, bool mark)
+  : m_item(item)
+  , m_mark(mark)
+{
+}
 
 CVideoLibraryMarkWatchedJob::~CVideoLibraryMarkWatchedJob() = default;
 
@@ -35,16 +37,18 @@ bool CVideoLibraryMarkWatchedJob::operator==(const CJob* job) const
   if (strcmp(job->GetType(), GetType()) != 0)
     return false;
 
-  const CVideoLibraryMarkWatchedJob* markJob = dynamic_cast<const CVideoLibraryMarkWatchedJob*>(job);
+  const CVideoLibraryMarkWatchedJob* markJob =
+      dynamic_cast<const CVideoLibraryMarkWatchedJob*>(job);
   if (markJob == NULL)
     return false;
 
   return m_item->IsSamePath(markJob->m_item.get()) && markJob->m_mark == m_mark;
 }
 
-bool CVideoLibraryMarkWatchedJob::Work(CVideoDatabase &db)
+bool CVideoLibraryMarkWatchedJob::Work(CVideoDatabase& db)
 {
-  const std::shared_ptr<CProfileManager> profileManager = CServiceBroker::GetSettingsComponent()->GetProfileManager();
+  const std::shared_ptr<CProfileManager> profileManager =
+      CServiceBroker::GetSettingsComponent()->GetProfileManager();
 
   if (!profileManager->GetCurrentProfile().canWriteDatabases())
     return false;
@@ -67,8 +71,8 @@ bool CVideoLibraryMarkWatchedJob::Work(CVideoDatabase &db)
       continue;
 #endif
 
-    if (item->HasPVRRecordingInfoTag() &&
-        CServiceBroker::GetPVRManager().Recordings()->MarkWatched(item->GetPVRRecordingInfoTag(), m_mark))
+    if (item->HasPVRRecordingInfoTag() && CServiceBroker::GetPVRManager().Recordings()->MarkWatched(
+                                              item->GetPVRRecordingInfoTag(), m_mark))
     {
       if (m_mark)
         db.IncrementPlayCount(*item);
@@ -86,7 +90,8 @@ bool CVideoLibraryMarkWatchedJob::Work(CVideoDatabase &db)
 
   db.BeginTransaction();
 
-  for (std::vector<CFileItemPtr>::const_iterator iter = markItems.begin(); iter != markItems.end(); ++iter)
+  for (std::vector<CFileItemPtr>::const_iterator iter = markItems.begin(); iter != markItems.end();
+       ++iter)
   {
     CFileItemPtr item = *iter;
 

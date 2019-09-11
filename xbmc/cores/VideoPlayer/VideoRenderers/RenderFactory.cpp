@@ -15,7 +15,7 @@ using namespace VIDEOPLAYER;
 CCriticalSection renderSection;
 std::map<std::string, VIDEOPLAYER::CreateRenderer> CRendererFactory::m_renderers;
 
-CBaseRenderer* CRendererFactory::CreateRenderer(std::string id, CVideoBuffer *buffer)
+CBaseRenderer* CRendererFactory::CreateRenderer(std::string id, CVideoBuffer* buffer)
 {
   CSingleLock lock(renderSection);
 
@@ -33,7 +33,7 @@ std::vector<std::string> CRendererFactory::GetRenderers()
   CSingleLock lock(renderSection);
 
   std::vector<std::string> ret;
-  for (auto &renderer : m_renderers)
+  for (auto& renderer : m_renderers)
   {
     ret.push_back(renderer.first);
   }

@@ -19,8 +19,8 @@
 
 #include <cassert>
 
-CImageLoader::CImageLoader(const std::string &path, const bool useCache):
-  m_path(path)
+CImageLoader::CImageLoader(const std::string& path, const bool useCache)
+  : m_path(path)
 {
   m_texture = NULL;
   m_use_cache = useCache;
@@ -28,7 +28,7 @@ CImageLoader::CImageLoader(const std::string &path, const bool useCache):
 
 CImageLoader::~CImageLoader()
 {
-  delete(m_texture);
+  delete (m_texture);
 }
 
 bool CImageLoader::DoWork()
@@ -49,10 +49,13 @@ bool CImageLoader::DoWork()
   {
     // direct route - load the image
     unsigned int start = XbmcThreads::SystemClockMillis();
-    m_texture = CBaseTexture::LoadFromFile(loadPath, CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(), CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight());
+    m_texture = CBaseTexture::LoadFromFile(
+        loadPath, CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(),
+        CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight());
 
     if (XbmcThreads::SystemClockMillis() - start > 100)
-      CLog::Log(LOGDEBUG, "%s - took %u ms to load %s", __FUNCTION__, XbmcThreads::SystemClockMillis() - start, loadPath.c_str());
+      CLog::Log(LOGDEBUG, "%s - took %u ms to load %s", __FUNCTION__,
+                XbmcThreads::SystemClockMillis() - start, loadPath.c_str());
 
     if (m_texture)
     {
@@ -63,7 +66,8 @@ bool CImageLoader::DoWork()
     }
 
     // Fallthrough on failure:
-    CLog::Log(LOGERROR, "%s - Direct texture file loading failed for %s", __FUNCTION__, loadPath.c_str());
+    CLog::Log(LOGERROR, "%s - Direct texture file loading failed for %s", __FUNCTION__,
+              loadPath.c_str());
   }
 
   if (!m_use_cache)
@@ -74,8 +78,8 @@ bool CImageLoader::DoWork()
   return (m_texture != NULL);
 }
 
-CGUILargeTextureManager::CLargeTexture::CLargeTexture(const std::string &path):
-  m_path(path)
+CGUILargeTextureManager::CLargeTexture::CLargeTexture(const std::string& path)
+  : m_path(path)
 {
   m_refCount = 1;
   m_timeToDelete = 0;
@@ -135,7 +139,7 @@ void CGUILargeTextureManager::CleanupUnusedImages(bool immediately)
   listIterator it = m_allocated.begin();
   while (it != m_allocated.end())
   {
-    CLargeTexture *image = *it;
+    CLargeTexture* image = *it;
     if (image->DeleteIfRequired(immediately))
       it = m_allocated.erase(it);
     else
@@ -145,12 +149,15 @@ void CGUILargeTextureManager::CleanupUnusedImages(bool immediately)
 
 // if available, increment reference count, and return the image.
 // else, add to the queue list if appropriate.
-bool CGUILargeTextureManager::GetImage(const std::string &path, CTextureArray &texture, bool firstRequest, const bool useCache)
+bool CGUILargeTextureManager::GetImage(const std::string& path,
+                                       CTextureArray& texture,
+                                       bool firstRequest,
+                                       const bool useCache)
 {
   CSingleLock lock(m_listSection);
   for (listIterator it = m_allocated.begin(); it != m_allocated.end(); ++it)
   {
-    CLargeTexture *image = *it;
+    CLargeTexture* image = *it;
     if (image->GetPath() == path)
     {
       if (firstRequest)
@@ -166,12 +173,12 @@ bool CGUILargeTextureManager::GetImage(const std::string &path, CTextureArray &t
   return true;
 }
 
-void CGUILargeTextureManager::ReleaseImage(const std::string &path, bool immediately)
+void CGUILargeTextureManager::ReleaseImage(const std::string& path, bool immediately)
 {
   CSingleLock lock(m_listSection);
   for (listIterator it = m_allocated.begin(); it != m_allocated.end(); ++it)
   {
-    CLargeTexture *image = *it;
+    CLargeTexture* image = *it;
     if (image->GetPath() == path)
     {
       if (image->DecrRef(immediately) && immediately)
@@ -182,7 +189,7 @@ void CGUILargeTextureManager::ReleaseImage(const std::string &path, bool immedia
   for (queueIterator it = m_queued.begin(); it != m_queued.end(); ++it)
   {
     unsigned int id = it->first;
-    CLargeTexture *image = it->second;
+    CLargeTexture* image = it->second;
     if (image->GetPath() == path && image->DecrRef(true))
     {
       // cancel this job
@@ -194,7 +201,7 @@ void CGUILargeTextureManager::ReleaseImage(const std::string &path, bool immedia
 }
 
 // queue the image, and start the background loader if necessary
-void CGUILargeTextureManager::QueueImage(const std::string &path, bool useCache)
+void CGUILargeTextureManager::QueueImage(const std::string& path, bool useCache)
 {
   if (path.empty())
     return;
@@ -202,7 +209,7 @@ void CGUILargeTextureManager::QueueImage(const std::string &path, bool useCache)
   CSingleLock lock(m_listSection);
   for (queueIterator it = m_queued.begin(); it != m_queued.end(); ++it)
   {
-    CLargeTexture *image = it->second;
+    CLargeTexture* image = it->second;
     if (image->GetPath() == path)
     {
       image->AddRef();
@@ -211,12 +218,13 @@ void CGUILargeTextureManager::QueueImage(const std::string &path, bool useCache)
   }
 
   // queue the item
-  CLargeTexture *image = new CLargeTexture(path);
-  unsigned int jobID = CJobManager::GetInstance().AddJob(new CImageLoader(path, useCache), this, CJob::PRIORITY_NORMAL);
+  CLargeTexture* image = new CLargeTexture(path);
+  unsigned int jobID = CJobManager::GetInstance().AddJob(new CImageLoader(path, useCache), this,
+                                                         CJob::PRIORITY_NORMAL);
   m_queued.push_back(std::make_pair(jobID, image));
 }
 
-void CGUILargeTextureManager::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CGUILargeTextureManager::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   // see if we still have this job id
   CSingleLock lock(m_listSection);
@@ -224,8 +232,8 @@ void CGUILargeTextureManager::OnJobComplete(unsigned int jobID, bool success, CJ
   {
     if (it->first == jobID)
     { // found our job
-      CImageLoader *loader = static_cast<CImageLoader*>(job);
-      CLargeTexture *image = it->second;
+      CImageLoader* loader = static_cast<CImageLoader*>(job);
+      CLargeTexture* image = it->second;
       image->SetTexture(loader->m_texture);
       loader->m_texture = NULL; // we want to keep the texture, and jobs are auto-deleted.
       m_queued.erase(it);

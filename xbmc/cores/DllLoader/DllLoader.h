@@ -8,19 +8,12 @@
 
 #pragma once
 
-#include "coffldr.h"
 #include "LibraryLoader.h"
+#include "coffldr.h"
 
-#if defined(__linux__) && \
-    !defined(__powerpc__) && \
-    !defined(__arm__) && \
-    !defined(__aarch64__) && \
-    !defined(__mips__) && \
-    !defined(__SH4__) && \
-    !defined(__sparc__) && \
-    !defined(__arc__) && \
-    !defined(__or1k__) && \
-    !defined(__xtensa__)
+#if defined(__linux__) && !defined(__powerpc__) && !defined(__arm__) && !defined(__aarch64__) && \
+    !defined(__mips__) && !defined(__SH4__) && !defined(__sparc__) && !defined(__arc__) && \
+    !defined(__or1k__) && !defined(__xtensa__)
 #define USE_LDT_KEEPER
 #include "ldt_keeper.h"
 #endif
@@ -34,10 +27,10 @@ class DllLoader;
 
 typedef struct Export
 {
-  const char*   name;
+  const char* name;
   unsigned long ordinal;
-  void*         function;
-  void*         track_function;
+  void* function;
+  void* track_function;
 } Export;
 
 typedef struct ExportEntry
@@ -55,7 +48,11 @@ typedef struct _LoadedList
 class DllLoader : public CoffLoader, public LibraryLoader
 {
 public:
-  DllLoader(const char *dll, bool track = false, bool bSystemDll = false, bool bLoadSymbols = false, Export* exports = NULL);
+  DllLoader(const char* dll,
+            bool track = false,
+            bool bSystemDll = false,
+            bool bLoadSymbols = false,
+            Export* exports = NULL);
   ~DllLoader() override;
 
   bool Load() override;
@@ -69,19 +66,23 @@ public:
 
   Export* GetExportByFunctionName(const char* sFunctionName);
   Export* GetExportByOrdinal(unsigned long ordinal);
+
 protected:
   int Parse();
   int ResolveImports();
 
   void AddExport(unsigned long ordinal, void* function, void* track_function = NULL);
-  void AddExport(char* sFunctionName, unsigned long ordinal, void* function, void* track_function = NULL);
+  void AddExport(char* sFunctionName,
+                 unsigned long ordinal,
+                 void* function,
+                 void* track_function = NULL);
   void AddExport(char* sFunctionName, void* function, void* track_function = NULL);
   void SetExports(Export* exports) { m_pStaticExports = exports; }
 
 protected:
   // Just pointers; dont' delete...
-  ImportDirTable_t *ImportDirTable;
-  ExportDirTable_t *ExportDirTable;
+  ImportDirTable_t* ImportDirTable;
+  ExportDirTable_t* ExportDirTable;
   bool m_bTrack;
   bool m_bSystemDll; // true if this dll should not be removed
   bool m_bLoadSymbols; // when true this dll should not be removed
@@ -95,11 +96,11 @@ protected:
 #endif
 
   void PrintImportLookupTable(unsigned long ImportLookupTable_RVA);
-  void PrintImportTable(ImportDirTable_t *ImportDirTable);
-  void PrintExportTable(ExportDirTable_t *ExportDirTable);
+  void PrintImportTable(ImportDirTable_t* ImportDirTable);
+  void PrintExportTable(ExportDirTable_t* ExportDirTable);
 
   int ResolveOrdinal(const char*, unsigned long, void**);
-  int ResolveName(const char*, char*, void **);
+  int ResolveName(const char*, char*, void**);
   const char* ResolveReferencedDll(const char* dll);
   int LoadExports();
   void LoadSymbols();

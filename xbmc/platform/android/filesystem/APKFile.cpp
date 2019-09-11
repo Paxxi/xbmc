@@ -23,10 +23,10 @@ using namespace XFILE;
 
 CAPKFile::CAPKFile()
 {
-  m_file_pos    = 0;
-  m_file_size   = 0;
-  m_zip_index   =-1;
-  m_zip_file    = NULL;
+  m_file_pos = 0;
+  m_file_size = 0;
+  m_zip_index = -1;
+  m_zip_file = NULL;
   m_zip_archive = NULL;
 }
 
@@ -46,8 +46,7 @@ bool CAPKFile::Open(const CURL& url)
   m_zip_archive = zip_open(host.c_str(), zip_flags, &zip_error);
   if (!m_zip_archive || zip_error)
   {
-    CLog::Log(LOGERROR, "CAPKFile::Open: Unable to open archive : '%s'",
-      host.c_str());
+    CLog::Log(LOGERROR, "CAPKFile::Open: Unable to open archive : '%s'", host.c_str());
     return false;
   }
 
@@ -55,8 +54,7 @@ bool CAPKFile::Open(const CURL& url)
   if (m_zip_index == -1)
   {
     // might not be an error if caller is just testing for presence/absence
-    CLog::Log(LOGDEBUG, "CAPKFile::Open: Unable to locate file : '%s'",
-      path.c_str());
+    CLog::Log(LOGDEBUG, "CAPKFile::Open: Unable to locate file : '%s'", path.c_str());
     zip_close(m_zip_archive);
     m_zip_archive = NULL;
     return false;
@@ -68,8 +66,7 @@ bool CAPKFile::Open(const CURL& url)
   int rtn = zip_stat_index(m_zip_archive, m_zip_index, zip_flags, &sb);
   if (rtn == -1)
   {
-    CLog::Log(LOGERROR, "CAPKFile::Open: Unable to stat file : '%s'",
-      path.c_str());
+    CLog::Log(LOGERROR, "CAPKFile::Open: Unable to stat file : '%s'", path.c_str());
     zip_close(m_zip_archive);
     m_zip_archive = NULL;
     return false;
@@ -81,8 +78,7 @@ bool CAPKFile::Open(const CURL& url)
   m_zip_file = zip_fopen_index(m_zip_archive, m_zip_index, zip_flags);
   if (!m_zip_file)
   {
-    CLog::Log(LOGERROR, "CAPKFile::Open: Unable to open file : '%s'",
-      path.c_str());
+    CLog::Log(LOGERROR, "CAPKFile::Open: Unable to open file : '%s'", path.c_str());
     zip_close(m_zip_archive);
     m_zip_archive = NULL;
     return false;
@@ -104,13 +100,13 @@ void CAPKFile::Close()
   {
     if (m_zip_file)
       zip_fclose(m_zip_file);
-    m_zip_file  = NULL;
+    m_zip_file = NULL;
   }
   zip_close(m_zip_archive);
   m_zip_archive = NULL;
-  m_file_pos    = 0;
-  m_file_size   = 0;
-  m_zip_index   =-1;
+  m_file_pos = 0;
+  m_file_size = 0;
+  m_zip_index = -1;
 }
 
 int64_t CAPKFile::Seek(int64_t iFilePosition, int iWhence)
@@ -119,29 +115,29 @@ int64_t CAPKFile::Seek(int64_t iFilePosition, int iWhence)
   off64_t file_pos = -1;
   if (m_zip_archive && m_zip_file)
   {
-    switch(iWhence)
+    switch (iWhence)
     {
-      default:
-      case SEEK_CUR:
-        // set file offset to current plus offset
-        if (m_file_pos + iFilePosition > m_file_size)
-          return -1;
-        file_pos = m_file_pos + iFilePosition;
-        break;
+    default:
+    case SEEK_CUR:
+      // set file offset to current plus offset
+      if (m_file_pos + iFilePosition > m_file_size)
+        return -1;
+      file_pos = m_file_pos + iFilePosition;
+      break;
 
-      case SEEK_SET:
-        // set file offset to offset
-        if (iFilePosition > m_file_size)
-          return -1;
-        file_pos = iFilePosition;
-        break;
+    case SEEK_SET:
+      // set file offset to offset
+      if (iFilePosition > m_file_size)
+        return -1;
+      file_pos = iFilePosition;
+      break;
 
-      case SEEK_END:
-        // set file offset to EOF minus offset
-        if (iFilePosition > m_file_size)
-          return -1;
-        file_pos = m_file_size - iFilePosition;
-        break;
+    case SEEK_END:
+      // set file offset to EOF minus offset
+      if (iFilePosition > m_file_size)
+        return -1;
+      file_pos = m_file_size - iFilePosition;
+      break;
     }
     // if offset is past current file position
     // then we must close, open then seek from zero.
@@ -163,7 +159,7 @@ int64_t CAPKFile::Seek(int64_t iFilePosition, int iWhence)
   return m_file_pos;
 }
 
-ssize_t CAPKFile::Read(void *lpBuf, size_t uiBufSize)
+ssize_t CAPKFile::Read(void* lpBuf, size_t uiBufSize)
 {
   if (uiBufSize > SSIZE_MAX)
     uiBufSize = SSIZE_MAX;
@@ -199,13 +195,12 @@ int CAPKFile::Stat(const CURL& url, struct __stat64* buffer)
   std::string path = url.GetFileName();
   std::string host = url.GetHostName();
 
-  struct zip *zip_archive;
+  struct zip* zip_archive;
   int zip_flags = 0, zip_error = 0;
   zip_archive = zip_open(host.c_str(), zip_flags, &zip_error);
   if (!zip_archive || zip_error)
   {
-    CLog::Log(LOGERROR, "CAPKFile::Stat: Unable to open archive : '%s'",
-      host.c_str());
+    CLog::Log(LOGERROR, "CAPKFile::Stat: Unable to open archive : '%s'", host.c_str());
     errno = ENOENT;
     return -1;
   }
@@ -219,7 +214,7 @@ int CAPKFile::Stat(const CURL& url, struct __stat64* buffer)
     int rtn = zip_stat_index(zip_archive, zip_index, zip_flags, &sb);
     if (rtn != -1)
     {
-      buffer->st_gid  = 0;
+      buffer->st_gid = 0;
       buffer->st_size = sb.size;
       buffer->st_mode = _S_IFREG;
       buffer->st_atime = sb.mtime;
@@ -241,7 +236,7 @@ int CAPKFile::Stat(const CURL& url, struct __stat64* buffer)
       std::string name = zip_get_name(zip_archive, i, zip_flags);
       if (!name.empty() && URIUtils::PathHasParent(name, path))
       {
-        buffer->st_gid  = 0;
+        buffer->st_gid = 0;
         buffer->st_mode = _S_IFDIR;
         break;
       }
@@ -271,7 +266,7 @@ int64_t CAPKFile::GetLength()
   return m_file_size;
 }
 
-int  CAPKFile::GetChunkSize()
+int CAPKFile::GetChunkSize()
 {
   return 1;
 }

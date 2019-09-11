@@ -73,7 +73,7 @@ bool CWinSystemAndroid::InitWindowSystem()
 
   m_android = new CAndroidUtils();
 
-  m_decoderFilterManager = new(CMediaCodecDecoderFilterManager);
+  m_decoderFilterManager = new (CMediaCodecDecoderFilterManager);
   CServiceBroker::RegisterDecoderFilterManager(m_decoderFilterManager);
 
   CDVDVideoCodecAndroidMediaCodec::Register();
@@ -108,25 +108,27 @@ bool CWinSystemAndroid::DestroyWindowSystem()
 }
 
 bool CWinSystemAndroid::CreateNewWindow(const std::string& name,
-                                    bool fullScreen,
-                                    RESOLUTION_INFO& res)
+                                        bool fullScreen,
+                                        RESOLUTION_INFO& res)
 {
   RESOLUTION_INFO current_resolution;
   current_resolution.iWidth = current_resolution.iHeight = 0;
   RENDER_STEREO_MODE stereo_mode = CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode();
 
-  m_nWidth        = res.iWidth;
-  m_nHeight       = res.iHeight;
-  m_displayWidth  = res.iScreenWidth;
+  m_nWidth = res.iWidth;
+  m_nHeight = res.iHeight;
+  m_displayWidth = res.iScreenWidth;
   m_displayHeight = res.iScreenHeight;
-  m_fRefreshRate  = res.fRefreshRate;
+  m_fRefreshRate = res.fRefreshRate;
 
   if ((m_bWindowCreated && m_android->GetNativeResolution(&current_resolution)) &&
-    current_resolution.iWidth == res.iWidth && current_resolution.iHeight == res.iHeight &&
-    current_resolution.iScreenWidth == res.iScreenWidth && current_resolution.iScreenHeight == res.iScreenHeight &&
-    m_bFullScreen == fullScreen && current_resolution.fRefreshRate == res.fRefreshRate &&
-    (current_resolution.dwFlags & D3DPRESENTFLAG_MODEMASK) == (res.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
-    m_stereo_mode == stereo_mode)
+      current_resolution.iWidth == res.iWidth && current_resolution.iHeight == res.iHeight &&
+      current_resolution.iScreenWidth == res.iScreenWidth &&
+      current_resolution.iScreenHeight == res.iScreenHeight && m_bFullScreen == fullScreen &&
+      current_resolution.fRefreshRate == res.fRefreshRate &&
+      (current_resolution.dwFlags & D3DPRESENTFLAG_MODEMASK) ==
+          (res.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
+      m_stereo_mode == stereo_mode)
   {
     CLog::Log(LOGDEBUG, "CWinSystemAndroid::CreateNewWindow: No need to create a new window");
     return true;
@@ -226,7 +228,8 @@ void CWinSystemAndroid::OnTimeout()
 void CWinSystemAndroid::SetHDMIState(bool connected)
 {
   CSingleLock lock(m_resourceSection);
-  CLog::Log(LOGDEBUG, "CWinSystemAndroid::SetHDMIState: connected: %d, dispResetState: %d", static_cast<int>(connected), m_dispResetState);
+  CLog::Log(LOGDEBUG, "CWinSystemAndroid::SetHDMIState: connected: %d, dispResetState: %d",
+            static_cast<int>(connected), m_dispResetState);
   if (connected && m_dispResetState != RESET_NOTWAITING)
   {
     for (auto resource : m_resources)
@@ -246,7 +249,9 @@ void CWinSystemAndroid::SetHDMIState(bool connected)
     else if (m_dispResetState != RESET_NOTWAITING)
       return;
 
-    int delay = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt("videoscreen.delayrefreshchange") * 100;
+    int delay = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+                    "videoscreen.delayrefreshchange") *
+                100;
 
     if (delay < 2000)
       delay = 2000;
@@ -282,13 +287,13 @@ bool CWinSystemAndroid::Show(bool raise)
   return false;
 }
 
-void CWinSystemAndroid::Register(IDispResource *resource)
+void CWinSystemAndroid::Register(IDispResource* resource)
 {
   CSingleLock lock(m_resourceSection);
   m_resources.push_back(resource);
 }
 
-void CWinSystemAndroid::Unregister(IDispResource *resource)
+void CWinSystemAndroid::Unregister(IDispResource* resource)
 {
   CSingleLock lock(m_resourceSection);
   std::vector<IDispResource*>::iterator i = find(m_resources.begin(), m_resources.end(), resource);
@@ -296,7 +301,7 @@ void CWinSystemAndroid::Unregister(IDispResource *resource)
     m_resources.erase(i);
 }
 
-void CWinSystemAndroid::MessagePush(XBMC_Event *newEvent)
+void CWinSystemAndroid::MessagePush(XBMC_Event* newEvent)
 {
   dynamic_cast<CWinEventsAndroid&>(*m_winEvents).MessagePush(newEvent);
 }

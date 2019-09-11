@@ -23,11 +23,12 @@ CGUIWindowScreensaver::CGUIWindowScreensaver(void)
 {
 }
 
-void CGUIWindowScreensaver::Process(unsigned int currentTime, CDirtyRegionList &regions)
+void CGUIWindowScreensaver::Process(unsigned int currentTime, CDirtyRegionList& regions)
 {
   MarkDirtyRegion();
   CGUIWindow::Process(currentTime, regions);
-  m_renderRegion.SetRect(0, 0, (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(), (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight());
+  m_renderRegion.SetRect(0, 0, (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(),
+                         (float)CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight());
 }
 
 void CGUIWindowScreensaver::Render()
@@ -44,7 +45,7 @@ void CGUIWindowScreensaver::Render()
 }
 
 // called when the mouse is moved/clicked etc. etc.
-EVENT_RESULT CGUIWindowScreensaver::OnMouseEvent(const CPoint &point, const CMouseEvent &event)
+EVENT_RESULT CGUIWindowScreensaver::OnMouseEvent(const CPoint& point, const CMouseEvent& event)
 {
   CServiceBroker::GetGUI()->GetWindowManager().PreviousWindow();
   return EVENT_RESULT_HANDLED;
@@ -55,30 +56,34 @@ bool CGUIWindowScreensaver::OnMessage(CGUIMessage& message)
   switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_DEINIT:
+  {
+    if (m_addon)
     {
-      if (m_addon)
-      {
-        m_addon->Stop();
-        delete m_addon;
-        m_addon = nullptr;
-      }
-
-      CServiceBroker::GetWinSystem()->GetGfxContext().ApplyStateBlock();
+      m_addon->Stop();
+      delete m_addon;
+      m_addon = nullptr;
     }
-    break;
+
+    CServiceBroker::GetWinSystem()->GetGfxContext().ApplyStateBlock();
+  }
+  break;
 
   case GUI_MSG_WINDOW_INIT:
-    {
-      CGUIWindow::OnMessage(message);
+  {
+    CGUIWindow::OnMessage(message);
 
-      CServiceBroker::GetWinSystem()->GetGfxContext().CaptureStateBlock();
+    CServiceBroker::GetWinSystem()->GetGfxContext().CaptureStateBlock();
 
-      const ADDON::BinaryAddonBasePtr addonBase = CServiceBroker::GetBinaryAddonManager().GetInstalledAddonInfo(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_SCREENSAVER_MODE), ADDON::ADDON_SCREENSAVER);
-      if (!addonBase)
-        return false;
-      m_addon = new ADDON::CScreenSaver(addonBase);
-      return m_addon->Start();
-    }
+    const ADDON::BinaryAddonBasePtr addonBase =
+        CServiceBroker::GetBinaryAddonManager().GetInstalledAddonInfo(
+            CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                CSettings::SETTING_SCREENSAVER_MODE),
+            ADDON::ADDON_SCREENSAVER);
+    if (!addonBase)
+      return false;
+    m_addon = new ADDON::CScreenSaver(addonBase);
+    return m_addon->Start();
+  }
 
   case GUI_MSG_CHECK_LOCK:
     if (!g_passwordManager.IsProfileLockUnlocked())

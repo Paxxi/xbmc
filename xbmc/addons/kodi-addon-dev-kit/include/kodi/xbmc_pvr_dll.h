@@ -30,7 +30,7 @@ extern "C"
    * @return PVR_ERROR_NO_ERROR if the properties were fetched successfully.
    * @remarks Valid implementation required.
    */
-  PVR_ERROR GetAddonCapabilities(PVR_ADDON_CAPABILITIES *pCapabilities);
+  PVR_ERROR GetAddonCapabilities(PVR_ADDON_CAPABILITIES* pCapabilities);
 
   /*!
    * @return The name reported by the backend that will be displayed in the UI.
@@ -67,7 +67,7 @@ extern "C"
    * @return PVR_ERROR_NO_ERROR if the hook was called successfully.
    * @remarks Optional. Return PVR_ERROR_NOT_IMPLEMENTED if this add-on won't provide this function.
    */
-  PVR_ERROR CallMenuHook(const PVR_MENUHOOK& menuhook, const PVR_MENUHOOK_DATA &item);
+  PVR_ERROR CallMenuHook(const PVR_MENUHOOK& menuhook, const PVR_MENUHOOK_DATA& item);
   //@}
 
   /*! @name PVR EPG methods
@@ -115,7 +115,7 @@ extern "C"
    * @remarks Required if bSupportsEpgEdl is set to true.
    *          Return PVR_ERROR_NOT_IMPLEMENTED if this add-on won't provide this function.
    */
-  PVR_ERROR GetEPGTagEdl(const EPG_TAG* epgTag, PVR_EDL_ENTRY edl[], int *size);
+  PVR_ERROR GetEPGTagEdl(const EPG_TAG* epgTag, PVR_EDL_ENTRY edl[], int* size);
 
   /*!
    * Get the stream properties for an epg tag from the backend.
@@ -127,7 +127,9 @@ extern "C"
    *          In this case your implementation must fill the property PVR_STREAM_PROPERTY_STREAMURL with the URL Kodi should resolve to playback the epg tag.
    *          Return PVR_ERROR_NOT_IMPLEMENTED if this add-on won't provide this function.
    */
-  PVR_ERROR GetEPGTagStreamProperties(const EPG_TAG* tag, PVR_NAMED_VALUE* properties, unsigned int* iPropertiesCount);
+  PVR_ERROR GetEPGTagStreamProperties(const EPG_TAG* tag,
+                                      PVR_NAMED_VALUE* properties,
+                                      unsigned int* iPropertiesCount);
 
   //@}
 
@@ -341,7 +343,7 @@ extern "C"
    * @remarks Required if bSupportsRecordingEdl is set to true.
    *          Return PVR_ERROR_NOT_IMPLEMENTED if this add-on won't provide this function.
    */
-  PVR_ERROR GetRecordingEdl(const PVR_RECORDING& recording, PVR_EDL_ENTRY edl[], int *size);
+  PVR_ERROR GetRecordingEdl(const PVR_RECORDING& recording, PVR_EDL_ENTRY edl[], int* size);
 
   /*!
    * Retrieve the timer types supported by the backend.
@@ -351,7 +353,7 @@ extern "C"
    * @remarks Required if bSupportsTimers is set to true.
    *          Return PVR_ERROR_NOT_IMPLEMENTED if this add-on won't provide this function.
    */
-  PVR_ERROR GetTimerTypes(PVR_TIMER_TYPE types[], int *typesCount);
+  PVR_ERROR GetTimerTypes(PVR_TIMER_TYPE types[], int* typesCount);
 
   //@}
   /** @name PVR timer methods
@@ -480,7 +482,9 @@ extern "C"
    *          In this case the implementation must fill the property PVR_STREAM_PROPERTY_STREAMURL with the URL Kodi should resolve to playback the channel.
    *          Return PVR_ERROR_NOT_IMPLEMENTED if this add-on won't provide this function.
    */
-  PVR_ERROR GetChannelStreamProperties(const PVR_CHANNEL* channel, PVR_NAMED_VALUE* properties, unsigned int* iPropertiesCount);
+  PVR_ERROR GetChannelStreamProperties(const PVR_CHANNEL* channel,
+                                       PVR_NAMED_VALUE* properties,
+                                       unsigned int* iPropertiesCount);
 
   /*!
    * Get the stream properties for a recording from the backend.
@@ -492,7 +496,9 @@ extern "C"
    *          In this case your implementation must fill the property PVR_STREAM_PROPERTY_STREAMURL with the URL Kodi should resolve to playback the recording.
    *          Return PVR_ERROR_NOT_IMPLEMENTED if this add-on won't provide this function.
    */
-  PVR_ERROR GetRecordingStreamProperties(const PVR_RECORDING* recording, PVR_NAMED_VALUE* properties, unsigned int* iPropertiesCount);
+  PVR_ERROR GetRecordingStreamProperties(const PVR_RECORDING* recording,
+                                         PVR_NAMED_VALUE* properties,
+                                         unsigned int* iPropertiesCount);
 
   /*!
    * Get the stream properties of the stream that's currently being read.
@@ -631,7 +637,7 @@ extern "C"
    * @remarks Optional, and only used if addon has its own demuxer.
    *          Return False if this add-on won't provide this function.
    */
-  bool SeekTime(double time, bool backwards, double *startpts);
+  bool SeekTime(double time, bool backwards, double* startpts);
 
   /*!
    * Notify the pvr addon/demuxer that Kodi wishes to change playback speed
@@ -683,7 +689,7 @@ extern "C"
    * @param times A pointer to the data to be filled by the implementation.
    * @return PVR_ERROR_NO_ERROR on success.
    */
-  PVR_ERROR GetStreamTimes(PVR_STREAM_TIMES *times);
+  PVR_ERROR GetStreamTimes(PVR_STREAM_TIMES* times);
 
   /*!
    * Called by Kodi to assign the function pointers of this add-on to pClient.
@@ -695,90 +701,90 @@ extern "C"
 
     pClient->toAddon.addonInstance = nullptr; // used in future
 
-    pClient->toAddon.GetAddonCapabilities           = GetAddonCapabilities;
-    pClient->toAddon.GetStreamProperties            = GetStreamProperties;
-    pClient->toAddon.GetConnectionString            = GetConnectionString;
-    pClient->toAddon.GetBackendName                 = GetBackendName;
-    pClient->toAddon.GetBackendVersion              = GetBackendVersion;
-    pClient->toAddon.GetDriveSpace                  = GetDriveSpace;
-    pClient->toAddon.OpenDialogChannelScan          = OpenDialogChannelScan;
-    pClient->toAddon.MenuHook                       = CallMenuHook;
+    pClient->toAddon.GetAddonCapabilities = GetAddonCapabilities;
+    pClient->toAddon.GetStreamProperties = GetStreamProperties;
+    pClient->toAddon.GetConnectionString = GetConnectionString;
+    pClient->toAddon.GetBackendName = GetBackendName;
+    pClient->toAddon.GetBackendVersion = GetBackendVersion;
+    pClient->toAddon.GetDriveSpace = GetDriveSpace;
+    pClient->toAddon.OpenDialogChannelScan = OpenDialogChannelScan;
+    pClient->toAddon.MenuHook = CallMenuHook;
 
-    pClient->toAddon.GetEPGForChannel               = GetEPGForChannel;
-    pClient->toAddon.IsEPGTagRecordable             = IsEPGTagRecordable;
-    pClient->toAddon.IsEPGTagPlayable               = IsEPGTagPlayable;
-    pClient->toAddon.GetEPGTagEdl                   = GetEPGTagEdl;
-    pClient->toAddon.GetEPGTagStreamProperties      = GetEPGTagStreamProperties;
+    pClient->toAddon.GetEPGForChannel = GetEPGForChannel;
+    pClient->toAddon.IsEPGTagRecordable = IsEPGTagRecordable;
+    pClient->toAddon.IsEPGTagPlayable = IsEPGTagPlayable;
+    pClient->toAddon.GetEPGTagEdl = GetEPGTagEdl;
+    pClient->toAddon.GetEPGTagStreamProperties = GetEPGTagStreamProperties;
 
-    pClient->toAddon.GetChannelGroupsAmount         = GetChannelGroupsAmount;
-    pClient->toAddon.GetChannelGroups               = GetChannelGroups;
-    pClient->toAddon.GetChannelGroupMembers         = GetChannelGroupMembers;
+    pClient->toAddon.GetChannelGroupsAmount = GetChannelGroupsAmount;
+    pClient->toAddon.GetChannelGroups = GetChannelGroups;
+    pClient->toAddon.GetChannelGroupMembers = GetChannelGroupMembers;
 
-    pClient->toAddon.GetChannelsAmount              = GetChannelsAmount;
-    pClient->toAddon.GetChannels                    = GetChannels;
-    pClient->toAddon.DeleteChannel                  = DeleteChannel;
-    pClient->toAddon.RenameChannel                  = RenameChannel;
-    pClient->toAddon.OpenDialogChannelSettings      = OpenDialogChannelSettings;
-    pClient->toAddon.OpenDialogChannelAdd           = OpenDialogChannelAdd;
+    pClient->toAddon.GetChannelsAmount = GetChannelsAmount;
+    pClient->toAddon.GetChannels = GetChannels;
+    pClient->toAddon.DeleteChannel = DeleteChannel;
+    pClient->toAddon.RenameChannel = RenameChannel;
+    pClient->toAddon.OpenDialogChannelSettings = OpenDialogChannelSettings;
+    pClient->toAddon.OpenDialogChannelAdd = OpenDialogChannelAdd;
 
-    pClient->toAddon.GetRecordingsAmount            = GetRecordingsAmount;
-    pClient->toAddon.GetRecordings                  = GetRecordings;
-    pClient->toAddon.DeleteRecording                = DeleteRecording;
-    pClient->toAddon.UndeleteRecording              = UndeleteRecording;
-    pClient->toAddon.DeleteAllRecordingsFromTrash   = DeleteAllRecordingsFromTrash;
-    pClient->toAddon.RenameRecording                = RenameRecording;
-    pClient->toAddon.SetRecordingLifetime           = SetRecordingLifetime;
-    pClient->toAddon.SetRecordingPlayCount          = SetRecordingPlayCount;
+    pClient->toAddon.GetRecordingsAmount = GetRecordingsAmount;
+    pClient->toAddon.GetRecordings = GetRecordings;
+    pClient->toAddon.DeleteRecording = DeleteRecording;
+    pClient->toAddon.UndeleteRecording = UndeleteRecording;
+    pClient->toAddon.DeleteAllRecordingsFromTrash = DeleteAllRecordingsFromTrash;
+    pClient->toAddon.RenameRecording = RenameRecording;
+    pClient->toAddon.SetRecordingLifetime = SetRecordingLifetime;
+    pClient->toAddon.SetRecordingPlayCount = SetRecordingPlayCount;
     pClient->toAddon.SetRecordingLastPlayedPosition = SetRecordingLastPlayedPosition;
     pClient->toAddon.GetRecordingLastPlayedPosition = GetRecordingLastPlayedPosition;
-    pClient->toAddon.GetRecordingEdl                = GetRecordingEdl;
+    pClient->toAddon.GetRecordingEdl = GetRecordingEdl;
 
-    pClient->toAddon.GetTimerTypes                  = GetTimerTypes;
-    pClient->toAddon.GetTimersAmount                = GetTimersAmount;
-    pClient->toAddon.GetTimers                      = GetTimers;
-    pClient->toAddon.AddTimer                       = AddTimer;
-    pClient->toAddon.DeleteTimer                    = DeleteTimer;
-    pClient->toAddon.UpdateTimer                    = UpdateTimer;
+    pClient->toAddon.GetTimerTypes = GetTimerTypes;
+    pClient->toAddon.GetTimersAmount = GetTimersAmount;
+    pClient->toAddon.GetTimers = GetTimers;
+    pClient->toAddon.AddTimer = AddTimer;
+    pClient->toAddon.DeleteTimer = DeleteTimer;
+    pClient->toAddon.UpdateTimer = UpdateTimer;
 
-    pClient->toAddon.OpenLiveStream                 = OpenLiveStream;
-    pClient->toAddon.CloseLiveStream                = CloseLiveStream;
-    pClient->toAddon.ReadLiveStream                 = ReadLiveStream;
-    pClient->toAddon.SeekLiveStream                 = SeekLiveStream;
-    pClient->toAddon.LengthLiveStream               = LengthLiveStream;
-    pClient->toAddon.SignalStatus                   = SignalStatus;
-    pClient->toAddon.GetDescrambleInfo              = GetDescrambleInfo;
-    pClient->toAddon.GetChannelStreamProperties     = GetChannelStreamProperties;
-    pClient->toAddon.GetRecordingStreamProperties   = GetRecordingStreamProperties;
-    pClient->toAddon.CanPauseStream                 = CanPauseStream;
-    pClient->toAddon.PauseStream                    = PauseStream;
-    pClient->toAddon.CanSeekStream                  = CanSeekStream;
-    pClient->toAddon.SeekTime                       = SeekTime;
-    pClient->toAddon.SetSpeed                       = SetSpeed;
-    pClient->toAddon.FillBuffer                     = FillBuffer;
+    pClient->toAddon.OpenLiveStream = OpenLiveStream;
+    pClient->toAddon.CloseLiveStream = CloseLiveStream;
+    pClient->toAddon.ReadLiveStream = ReadLiveStream;
+    pClient->toAddon.SeekLiveStream = SeekLiveStream;
+    pClient->toAddon.LengthLiveStream = LengthLiveStream;
+    pClient->toAddon.SignalStatus = SignalStatus;
+    pClient->toAddon.GetDescrambleInfo = GetDescrambleInfo;
+    pClient->toAddon.GetChannelStreamProperties = GetChannelStreamProperties;
+    pClient->toAddon.GetRecordingStreamProperties = GetRecordingStreamProperties;
+    pClient->toAddon.CanPauseStream = CanPauseStream;
+    pClient->toAddon.PauseStream = PauseStream;
+    pClient->toAddon.CanSeekStream = CanSeekStream;
+    pClient->toAddon.SeekTime = SeekTime;
+    pClient->toAddon.SetSpeed = SetSpeed;
+    pClient->toAddon.FillBuffer = FillBuffer;
 
-    pClient->toAddon.OpenRecordedStream             = OpenRecordedStream;
-    pClient->toAddon.CloseRecordedStream            = CloseRecordedStream;
-    pClient->toAddon.ReadRecordedStream             = ReadRecordedStream;
-    pClient->toAddon.SeekRecordedStream             = SeekRecordedStream;
-    pClient->toAddon.LengthRecordedStream           = LengthRecordedStream;
+    pClient->toAddon.OpenRecordedStream = OpenRecordedStream;
+    pClient->toAddon.CloseRecordedStream = CloseRecordedStream;
+    pClient->toAddon.ReadRecordedStream = ReadRecordedStream;
+    pClient->toAddon.SeekRecordedStream = SeekRecordedStream;
+    pClient->toAddon.LengthRecordedStream = LengthRecordedStream;
 
-    pClient->toAddon.DemuxReset                     = DemuxReset;
-    pClient->toAddon.DemuxAbort                     = DemuxAbort;
-    pClient->toAddon.DemuxFlush                     = DemuxFlush;
-    pClient->toAddon.DemuxRead                      = DemuxRead;
+    pClient->toAddon.DemuxReset = DemuxReset;
+    pClient->toAddon.DemuxAbort = DemuxAbort;
+    pClient->toAddon.DemuxFlush = DemuxFlush;
+    pClient->toAddon.DemuxRead = DemuxRead;
 
-    pClient->toAddon.GetBackendHostname             = GetBackendHostname;
+    pClient->toAddon.GetBackendHostname = GetBackendHostname;
 
-    pClient->toAddon.IsRealTimeStream               = IsRealTimeStream;
+    pClient->toAddon.IsRealTimeStream = IsRealTimeStream;
 
-    pClient->toAddon.SetEPGTimeFrame                = SetEPGTimeFrame;
+    pClient->toAddon.SetEPGTimeFrame = SetEPGTimeFrame;
 
-    pClient->toAddon.OnSystemSleep                  = OnSystemSleep;
-    pClient->toAddon.OnSystemWake                   = OnSystemWake;
-    pClient->toAddon.OnPowerSavingActivated         = OnPowerSavingActivated;
-    pClient->toAddon.OnPowerSavingDeactivated       = OnPowerSavingDeactivated;
-    pClient->toAddon.GetStreamTimes                 = GetStreamTimes;
+    pClient->toAddon.OnSystemSleep = OnSystemSleep;
+    pClient->toAddon.OnSystemWake = OnSystemWake;
+    pClient->toAddon.OnPowerSavingActivated = OnPowerSavingActivated;
+    pClient->toAddon.OnPowerSavingDeactivated = OnPowerSavingDeactivated;
+    pClient->toAddon.GetStreamTimes = GetStreamTimes;
 
-    pClient->toAddon.GetStreamReadChunkSize         = GetStreamReadChunkSize;
+    pClient->toAddon.GetStreamReadChunkSize = GetStreamReadChunkSize;
   };
 };

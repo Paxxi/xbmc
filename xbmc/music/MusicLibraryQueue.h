@@ -100,13 +100,13 @@ public:
    \brief Adds the given job to the queue.
    \param[in] job Music library job to be queued.
    */
-  void AddJob(CMusicLibraryJob *job);
+  void AddJob(CMusicLibraryJob* job);
 
   /*!
    \brief Cancels the given job and removes it from the queue.
    \param[in] job Music library job to be canceled and removed from the queue.
    */
-  void CancelJob(CMusicLibraryJob *job);
+  void CancelJob(CMusicLibraryJob* job);
 
   /*!
    \brief Cancels all running and queued jobs.
@@ -120,7 +120,7 @@ public:
 
 protected:
   // implementation of IJobCallback
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
 
   /*!
    \brief Notifies all to refresh the current listings.

@@ -114,5 +114,5 @@ private:
   std::unique_ptr<IOSScreenSaver> m_impl;
 };
 
-}
-}
+} // namespace WINDOWING
+} // namespace KODI

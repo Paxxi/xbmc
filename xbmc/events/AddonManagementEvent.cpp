@@ -15,27 +15,47 @@
 
 CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon, const CVariant& description)
   : CAddonEvent(addon, description)
-{ }
+{
+}
 
-CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon, const CVariant& description, const CVariant& details)
+CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon,
+                                             const CVariant& description,
+                                             const CVariant& details)
   : CAddonEvent(addon, description, details)
-{ }
+{
+}
 
-CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon, const CVariant& description, const CVariant& details, const CVariant& executionLabel)
+CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon,
+                                             const CVariant& description,
+                                             const CVariant& details,
+                                             const CVariant& executionLabel)
   : CAddonEvent(addon, description, details, executionLabel)
-{ }
+{
+}
 
-CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon, EventLevel level, const CVariant& description)
+CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon,
+                                             EventLevel level,
+                                             const CVariant& description)
   : CAddonEvent(addon, level, description)
-{ }
+{
+}
 
-CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon, EventLevel level, const CVariant& description, const CVariant& details)
+CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon,
+                                             EventLevel level,
+                                             const CVariant& description,
+                                             const CVariant& details)
   : CAddonEvent(addon, level, description, details)
-{ }
+{
+}
 
-CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon, EventLevel level, const CVariant& description, const CVariant& details, const CVariant& executionLabel)
+CAddonManagementEvent::CAddonManagementEvent(ADDON::AddonPtr addon,
+                                             EventLevel level,
+                                             const CVariant& description,
+                                             const CVariant& details,
+                                             const CVariant& executionLabel)
   : CAddonEvent(addon, level, description, details, executionLabel)
-{ }
+{
+}
 
 std::string CAddonManagementEvent::GetExecutionLabel() const
 {
@@ -51,7 +71,8 @@ bool CAddonManagementEvent::Execute() const
   if (!CanExecute())
     return false;
 
-  CFileItemPtr addonItem = XFILE::CAddonsDirectory::FileItemFromAddon(m_addon, URIUtils::AddFileToFolder("addons://", m_addon->ID()));
+  CFileItemPtr addonItem = XFILE::CAddonsDirectory::FileItemFromAddon(
+      m_addon, URIUtils::AddFileToFolder("addons://", m_addon->ID()));
   if (addonItem == nullptr)
     return false;
 

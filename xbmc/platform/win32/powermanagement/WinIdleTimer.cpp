@@ -12,6 +12,6 @@
 void CWinIdleTimer::StartZero()
 {
   if (!g_application.IsDPMSActive())
-    SetThreadExecutionState(ES_SYSTEM_REQUIRED|ES_DISPLAY_REQUIRED);
+    SetThreadExecutionState(ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
   CStopWatch::StartZero();
 }

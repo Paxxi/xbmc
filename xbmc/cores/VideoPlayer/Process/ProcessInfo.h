@@ -29,21 +29,21 @@ public:
   static CProcessInfo* CreateInstance();
   static void RegisterProcessControl(std::string id, CreateProcessControl createFunc);
   virtual ~CProcessInfo() = default;
-  void SetDataCache(CDataCacheCore *cache);
+  void SetDataCache(CDataCacheCore* cache);
 
   // player video
   void ResetVideoCodecInfo();
-  void SetVideoDecoderName(const std::string &name, bool isHw);
+  void SetVideoDecoderName(const std::string& name, bool isHw);
   std::string GetVideoDecoderName();
   bool IsVideoHwDecoder();
-  void SetVideoDeintMethod(const std::string &method);
+  void SetVideoDeintMethod(const std::string& method);
   std::string GetVideoDeintMethod();
-  void SetVideoPixelFormat(const std::string &pixFormat);
+  void SetVideoPixelFormat(const std::string& pixFormat);
   std::string GetVideoPixelFormat();
-  void SetVideoStereoMode(const std::string &mode);
+  void SetVideoStereoMode(const std::string& mode);
   std::string GetVideoStereoMode();
   void SetVideoDimensions(int width, int height);
-  void GetVideoDimensions(int &width, int &height);
+  void GetVideoDimensions(int& width, int& height);
   void SetVideoFps(float fps);
   float GetVideoFps();
   void SetVideoDAR(float dar);
@@ -52,19 +52,19 @@ public:
   bool GetVideoInterlaced();
   virtual EINTERLACEMETHOD GetFallbackDeintMethod();
   virtual void SetSwDeinterlacingMethods();
-  void UpdateDeinterlacingMethods(std::list<EINTERLACEMETHOD> &methods);
+  void UpdateDeinterlacingMethods(std::list<EINTERLACEMETHOD>& methods);
   bool Supports(EINTERLACEMETHOD method);
   void SetDeinterlacingMethodDefault(EINTERLACEMETHOD method);
   EINTERLACEMETHOD GetDeinterlacingMethodDefault();
   CVideoBufferManager& GetVideoBufferManager();
   std::vector<AVPixelFormat> GetPixFormats();
-  void SetPixFormats(std::vector<AVPixelFormat> &formats);
+  void SetPixFormats(std::vector<AVPixelFormat>& formats);
 
   // player audio info
   void ResetAudioCodecInfo();
-  void SetAudioDecoderName(const std::string &name);
+  void SetAudioDecoderName(const std::string& name);
   std::string GetAudioDecoderName();
-  void SetAudioChannels(const std::string &channels);
+  void SetAudioChannels(const std::string& channels);
   std::string GetAudioChannels();
   void SetAudioSampleRate(int sampleRate);
   int GetAudioSampleRate();
@@ -75,9 +75,9 @@ public:
   // render info
   void SetRenderClockSync(bool enabled);
   bool IsRenderClockSync();
-  void UpdateRenderInfo(CRenderInfo &info);
+  void UpdateRenderInfo(CRenderInfo& info);
   void UpdateRenderBuffers(int queued, int discard, int free);
-  void GetRenderBuffers(int &queued, int &discard, int &free);
+  void GetRenderBuffers(int& queued, int& discard, int& free);
   virtual std::vector<AVPixelFormat> GetRenderFormats();
 
   // player states
@@ -108,13 +108,13 @@ public:
 
   // settings
   CVideoSettings GetVideoSettings();
-  void SetVideoSettings(CVideoSettings &settings);
+  void SetVideoSettings(CVideoSettings& settings);
   CVideoSettingsLocked& UpdateVideoSettings();
 
 protected:
   CProcessInfo();
   static std::map<std::string, CreateProcessControl> m_processControls;
-  CDataCacheCore *m_dataCache = nullptr;
+  CDataCacheCore* m_dataCache = nullptr;
 
   // player video info
   bool m_videoIsHWDecoder;

@@ -8,12 +8,12 @@
 
 #include "VideoLibraryResetResumePointJob.h"
 
-#include <vector>
-
 #include "FileItem.h"
 #include "ServiceBroker.h"
 #include "Util.h"
 #include "filesystem/IDirectory.h"
+
+#include <vector>
 #ifdef HAS_UPNP
 #include "network/upnp/UPnP.h"
 #endif
@@ -34,16 +34,18 @@ bool CVideoLibraryResetResumePointJob::operator==(const CJob* job) const
   if (strcmp(job->GetType(), GetType()) != 0)
     return false;
 
-  const CVideoLibraryResetResumePointJob* resetJob = dynamic_cast<const CVideoLibraryResetResumePointJob*>(job);
+  const CVideoLibraryResetResumePointJob* resetJob =
+      dynamic_cast<const CVideoLibraryResetResumePointJob*>(job);
   if (!resetJob)
     return false;
 
   return m_item->IsSamePath(resetJob->m_item.get());
 }
 
-bool CVideoLibraryResetResumePointJob::Work(CVideoDatabase &db)
+bool CVideoLibraryResetResumePointJob::Work(CVideoDatabase& db)
 {
-  const std::shared_ptr<CProfileManager> profileManager = CServiceBroker::GetSettingsComponent()->GetProfileManager();
+  const std::shared_ptr<CProfileManager> profileManager =
+      CServiceBroker::GetSettingsComponent()->GetProfileManager();
 
   if (!profileManager->GetCurrentProfile().canWriteDatabases())
     return false;
@@ -58,12 +60,14 @@ bool CVideoLibraryResetResumePointJob::Work(CVideoDatabase &db)
   for (const auto& item : items)
   {
 #ifdef HAS_UPNP
-    if (URIUtils::IsUPnP(item->GetPath()) && UPNP::CUPnP::SaveFileState(*item, CBookmark(), false /* updatePlayCount */))
+    if (URIUtils::IsUPnP(item->GetPath()) &&
+        UPNP::CUPnP::SaveFileState(*item, CBookmark(), false /* updatePlayCount */))
       continue;
 #endif
 
     if (item->HasPVRRecordingInfoTag() &&
-        CServiceBroker::GetPVRManager().Recordings()->ResetResumePoint(item->GetPVRRecordingInfoTag()))
+        CServiceBroker::GetPVRManager().Recordings()->ResetResumePoint(
+            item->GetPVRRecordingInfoTag()))
       continue;
 
     resetItems.emplace_back(item);

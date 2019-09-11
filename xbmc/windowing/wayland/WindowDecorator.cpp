@@ -52,7 +52,8 @@ constexpr std::uint32_t BUTTON_COLOR_ACTIVE{0xFFFFFFFFu};
 constexpr std::uint32_t BUTTON_COLOR_INACTIVE{0xFF777777u};
 constexpr std::uint32_t BUTTON_HOVER_COLOR{0xFF555555u};
 
-static_assert(BUTTON_SIZE <= TOP_BAR_HEIGHT - BUTTONS_EDGE_DISTANCE * 2, "Buttons must fit in top bar");
+static_assert(BUTTON_SIZE <= TOP_BAR_HEIGHT - BUTTONS_EDGE_DISTANCE * 2,
+              "Buttons must fit in top bar");
 
 /*
  * Decorations consist of four surfaces, one for each edge of the window. It would
@@ -85,28 +86,19 @@ CRectInt SurfaceGeometry(SurfaceIndex type, CSizeInt mainSurfaceSize)
   // Coordinates are relative to main surface
   switch (type)
   {
-    case SURFACE_TOP:
-      return {
-        CPointInt{-BORDER_WIDTH, -(BORDER_WIDTH + TOP_BAR_HEIGHT)},
-        CSizeInt{mainSurfaceSize.Width() + 2 * BORDER_WIDTH, TOP_BAR_HEIGHT + BORDER_WIDTH}
-      };
-    case SURFACE_RIGHT:
-      return {
-        CPointInt{mainSurfaceSize.Width(), 0},
-        CSizeInt{BORDER_WIDTH, mainSurfaceSize.Height()}
-      };
-    case SURFACE_BOTTOM:
-      return {
-        CPointInt{-BORDER_WIDTH, mainSurfaceSize.Height()},
-        CSizeInt{mainSurfaceSize.Width() + 2 * BORDER_WIDTH, BORDER_WIDTH}
-      };
-    case SURFACE_LEFT:
-      return {
-        CPointInt{-BORDER_WIDTH, 0},
-        CSizeInt{BORDER_WIDTH, mainSurfaceSize.Height()}
-      };
-    default:
-      throw std::logic_error("Invalid surface type");
+  case SURFACE_TOP:
+    return {CPointInt{-BORDER_WIDTH, -(BORDER_WIDTH + TOP_BAR_HEIGHT)},
+            CSizeInt{mainSurfaceSize.Width() + 2 * BORDER_WIDTH, TOP_BAR_HEIGHT + BORDER_WIDTH}};
+  case SURFACE_RIGHT:
+    return {CPointInt{mainSurfaceSize.Width(), 0},
+            CSizeInt{BORDER_WIDTH, mainSurfaceSize.Height()}};
+  case SURFACE_BOTTOM:
+    return {CPointInt{-BORDER_WIDTH, mainSurfaceSize.Height()},
+            CSizeInt{mainSurfaceSize.Width() + 2 * BORDER_WIDTH, BORDER_WIDTH}};
+  case SURFACE_LEFT:
+    return {CPointInt{-BORDER_WIDTH, 0}, CSizeInt{BORDER_WIDTH, mainSurfaceSize.Height()}};
+  default:
+    throw std::logic_error("Invalid surface type");
   }
 }
 
@@ -116,28 +108,18 @@ CRectInt SurfaceOpaqueRegion(SurfaceIndex type, CSizeInt mainSurfaceSize)
   auto size = SurfaceGeometry(type, mainSurfaceSize).ToSize();
   switch (type)
   {
-    case SURFACE_TOP:
-      return {
-        CPointInt{RESIZE_BORDER_WIDTH, RESIZE_BORDER_WIDTH},
-        size - CSizeInt{RESIZE_BORDER_WIDTH * 2, RESIZE_BORDER_WIDTH}
-      };
-    case SURFACE_RIGHT:
-      return {
-        CPointInt{},
-        size - CSizeInt{RESIZE_BORDER_WIDTH, 0}
-      };
-    case SURFACE_BOTTOM:
-      return {
-        CPointInt{RESIZE_BORDER_WIDTH, 0},
-        size - CSizeInt{RESIZE_BORDER_WIDTH * 2, RESIZE_BORDER_WIDTH}
-      };
-    case SURFACE_LEFT:
-      return {
-        CPointInt{RESIZE_BORDER_WIDTH, 0},
-        size - CSizeInt{RESIZE_BORDER_WIDTH, 0}
-      };
-    default:
-      throw std::logic_error("Invalid surface type");
+  case SURFACE_TOP:
+    return {CPointInt{RESIZE_BORDER_WIDTH, RESIZE_BORDER_WIDTH},
+            size - CSizeInt{RESIZE_BORDER_WIDTH * 2, RESIZE_BORDER_WIDTH}};
+  case SURFACE_RIGHT:
+    return {CPointInt{}, size - CSizeInt{RESIZE_BORDER_WIDTH, 0}};
+  case SURFACE_BOTTOM:
+    return {CPointInt{RESIZE_BORDER_WIDTH, 0},
+            size - CSizeInt{RESIZE_BORDER_WIDTH * 2, RESIZE_BORDER_WIDTH}};
+  case SURFACE_LEFT:
+    return {CPointInt{RESIZE_BORDER_WIDTH, 0}, size - CSizeInt{RESIZE_BORDER_WIDTH, 0}};
+  default:
+    throw std::logic_error("Invalid surface type");
   }
 }
 
@@ -158,7 +140,7 @@ std::size_t MemoryBytesForSize(CSizeInt windowSurfaceSize, int scale)
 {
   std::size_t size{};
 
-  for (auto surface : { SURFACE_TOP, SURFACE_RIGHT, SURFACE_BOTTOM, SURFACE_LEFT })
+  for (auto surface : {SURFACE_TOP, SURFACE_RIGHT, SURFACE_BOTTOM, SURFACE_LEFT})
   {
     size += SurfaceGeometry(surface, windowSurfaceSize).Area();
   }
@@ -176,7 +158,7 @@ std::size_t PositionInBuffer(CWindowDecorator::Buffer& buffer, CPointInt positio
   {
     throw std::invalid_argument("Position out of bounds");
   }
-  std::size_t offset{static_cast<std::size_t> (buffer.size.Width() * position.y + position.x)};
+  std::size_t offset{static_cast<std::size_t>(buffer.size.Width() * position.y + position.x)};
   if (offset * BYTES_PER_PIXEL >= buffer.dataSize)
   {
     throw std::invalid_argument("Position out of bounds");
@@ -184,7 +166,10 @@ std::size_t PositionInBuffer(CWindowDecorator::Buffer& buffer, CPointInt positio
   return offset;
 }
 
-void DrawHorizontalLine(CWindowDecorator::Buffer& buffer, std::uint32_t color, CPointInt position, int length)
+void DrawHorizontalLine(CWindowDecorator::Buffer& buffer,
+                        std::uint32_t color,
+                        CPointInt position,
+                        int length)
 {
   auto offsetStart = PositionInBuffer(buffer, position);
   auto offsetEnd = PositionInBuffer(buffer, position + CPointInt{length - 1, 0});
@@ -192,10 +177,15 @@ void DrawHorizontalLine(CWindowDecorator::Buffer& buffer, std::uint32_t color, C
   {
     throw std::invalid_argument("Invalid drawing coordinates");
   }
-  std::fill(buffer.RgbaBuffer() + offsetStart, buffer.RgbaBuffer() + offsetEnd + 1, Endian_SwapLE32(color));
+  std::fill(buffer.RgbaBuffer() + offsetStart, buffer.RgbaBuffer() + offsetEnd + 1,
+            Endian_SwapLE32(color));
 }
 
-void DrawLineWithStride(CWindowDecorator::Buffer& buffer, std::uint32_t color, CPointInt position, int length, int stride)
+void DrawLineWithStride(CWindowDecorator::Buffer& buffer,
+                        std::uint32_t color,
+                        CPointInt position,
+                        int length,
+                        int stride)
 {
   auto offsetStart = PositionInBuffer(buffer, position);
   auto offsetEnd = offsetStart + stride * (length - 1);
@@ -214,7 +204,10 @@ void DrawLineWithStride(CWindowDecorator::Buffer& buffer, std::uint32_t color, C
   }
 }
 
-void DrawVerticalLine(CWindowDecorator::Buffer& buffer, std::uint32_t color, CPointInt position, int length)
+void DrawVerticalLine(CWindowDecorator::Buffer& buffer,
+                      std::uint32_t color,
+                      CPointInt position,
+                      int length)
 {
   DrawLineWithStride(buffer, color, position, length, buffer.size.Width());
 }
@@ -238,23 +231,35 @@ void FillRectangle(CWindowDecorator::Buffer& buffer, std::uint32_t color, CRectI
   }
 }
 
-void DrawHorizontalLine(CWindowDecorator::Surface& surface, std::uint32_t color, CPointInt position, int length)
+void DrawHorizontalLine(CWindowDecorator::Surface& surface,
+                        std::uint32_t color,
+                        CPointInt position,
+                        int length)
 {
   for (int i{0}; i < surface.scale; i++)
   {
-    DrawHorizontalLine(surface.buffer, color, position * surface.scale + CPointInt{0, i}, length * surface.scale);
+    DrawHorizontalLine(surface.buffer, color, position * surface.scale + CPointInt{0, i},
+                       length * surface.scale);
   }
 }
 
-void DrawAngledLine(CWindowDecorator::Surface& surface, std::uint32_t color, CPointInt position, int length, int stride)
+void DrawAngledLine(CWindowDecorator::Surface& surface,
+                    std::uint32_t color,
+                    CPointInt position,
+                    int length,
+                    int stride)
 {
   for (int i{0}; i < surface.scale; i++)
   {
-    DrawLineWithStride(surface.buffer, color, position * surface.scale + CPointInt{i, 0}, length * surface.scale, surface.buffer.size.Width() + stride);
+    DrawLineWithStride(surface.buffer, color, position * surface.scale + CPointInt{i, 0},
+                       length * surface.scale, surface.buffer.size.Width() + stride);
   }
 }
 
-void DrawVerticalLine(CWindowDecorator::Surface& surface, std::uint32_t color, CPointInt position, int length)
+void DrawVerticalLine(CWindowDecorator::Surface& surface,
+                      std::uint32_t color,
+                      CPointInt position,
+                      int length)
 {
   DrawAngledLine(surface, color, position, length, 0);
 }
@@ -266,16 +271,24 @@ void DrawRectangle(CWindowDecorator::Surface& surface, std::uint32_t color, CRec
 {
   for (int i{0}; i < surface.scale; i++)
   {
-    DrawRectangle(surface.buffer, color, {rect.P1() * surface.scale + CPointInt{i, i}, (rect.P2() + CPointInt{1, 1}) * surface.scale - CPointInt{i, i} - CPointInt{1, 1}});
+    DrawRectangle(
+        surface.buffer, color,
+        {rect.P1() * surface.scale + CPointInt{i, i},
+         (rect.P2() + CPointInt{1, 1}) * surface.scale - CPointInt{i, i} - CPointInt{1, 1}});
   }
 }
 
 void FillRectangle(CWindowDecorator::Surface& surface, std::uint32_t color, CRectInt rect)
 {
-  FillRectangle(surface.buffer, color, {rect.P1() * surface.scale, (rect.P2() + CPointInt{1, 1}) * surface.scale - CPointInt{1, 1}});
+  FillRectangle(
+      surface.buffer, color,
+      {rect.P1() * surface.scale, (rect.P2() + CPointInt{1, 1}) * surface.scale - CPointInt{1, 1}});
 }
 
-void DrawButton(CWindowDecorator::Surface& surface, std::uint32_t lineColor, CRectInt rect, bool hover)
+void DrawButton(CWindowDecorator::Surface& surface,
+                std::uint32_t lineColor,
+                CRectInt rect,
+                bool hover)
 {
   if (hover)
   {
@@ -284,76 +297,78 @@ void DrawButton(CWindowDecorator::Surface& surface, std::uint32_t lineColor, CRe
   DrawRectangle(surface, lineColor, rect);
 }
 
-wayland::shell_surface_resize ResizeEdgeForPosition(SurfaceIndex surface, CSizeInt surfaceSize, CPointInt position)
+wayland::shell_surface_resize ResizeEdgeForPosition(SurfaceIndex surface,
+                                                    CSizeInt surfaceSize,
+                                                    CPointInt position)
 {
   switch (surface)
   {
-    case SURFACE_TOP:
-      if (position.y <= RESIZE_MAX_CORNER_DISTANCE)
-      {
-        if (position.x <= RESIZE_MAX_CORNER_DISTANCE)
-        {
-          return wayland::shell_surface_resize::top_left;
-        }
-        else if (position.x >= surfaceSize.Width() - RESIZE_MAX_CORNER_DISTANCE)
-        {
-          return wayland::shell_surface_resize::top_right;
-        }
-        else
-        {
-          return wayland::shell_surface_resize::top;
-        }
-      }
-      else
-      {
-        if (position.x <= RESIZE_MAX_CORNER_DISTANCE)
-        {
-          return wayland::shell_surface_resize::left;
-        }
-        else if (position.x >= surfaceSize.Width() - RESIZE_MAX_CORNER_DISTANCE)
-        {
-          return wayland::shell_surface_resize::right;
-        }
-        else
-        {
-          // Inside title bar, not resizing
-          return wayland::shell_surface_resize::none;
-        }
-      }
-    case SURFACE_RIGHT:
-      if (position.y >= surfaceSize.Height() - RESIZE_MAX_CORNER_DISTANCE)
-      {
-        return wayland::shell_surface_resize::bottom_right;
-      }
-      else
-      {
-        return wayland::shell_surface_resize::right;
-      }
-    case SURFACE_BOTTOM:
+  case SURFACE_TOP:
+    if (position.y <= RESIZE_MAX_CORNER_DISTANCE)
+    {
       if (position.x <= RESIZE_MAX_CORNER_DISTANCE)
       {
-        return wayland::shell_surface_resize::bottom_left;
+        return wayland::shell_surface_resize::top_left;
       }
       else if (position.x >= surfaceSize.Width() - RESIZE_MAX_CORNER_DISTANCE)
       {
-        return wayland::shell_surface_resize::bottom_right;
+        return wayland::shell_surface_resize::top_right;
       }
       else
       {
-        return wayland::shell_surface_resize::bottom;
+        return wayland::shell_surface_resize::top;
       }
-    case SURFACE_LEFT:
-      if (position.y >= surfaceSize.Height() - RESIZE_MAX_CORNER_DISTANCE)
-      {
-        return wayland::shell_surface_resize::bottom_left;
-      }
-      else
+    }
+    else
+    {
+      if (position.x <= RESIZE_MAX_CORNER_DISTANCE)
       {
         return wayland::shell_surface_resize::left;
       }
+      else if (position.x >= surfaceSize.Width() - RESIZE_MAX_CORNER_DISTANCE)
+      {
+        return wayland::shell_surface_resize::right;
+      }
+      else
+      {
+        // Inside title bar, not resizing
+        return wayland::shell_surface_resize::none;
+      }
+    }
+  case SURFACE_RIGHT:
+    if (position.y >= surfaceSize.Height() - RESIZE_MAX_CORNER_DISTANCE)
+    {
+      return wayland::shell_surface_resize::bottom_right;
+    }
+    else
+    {
+      return wayland::shell_surface_resize::right;
+    }
+  case SURFACE_BOTTOM:
+    if (position.x <= RESIZE_MAX_CORNER_DISTANCE)
+    {
+      return wayland::shell_surface_resize::bottom_left;
+    }
+    else if (position.x >= surfaceSize.Width() - RESIZE_MAX_CORNER_DISTANCE)
+    {
+      return wayland::shell_surface_resize::bottom_right;
+    }
+    else
+    {
+      return wayland::shell_surface_resize::bottom;
+    }
+  case SURFACE_LEFT:
+    if (position.y >= surfaceSize.Height() - RESIZE_MAX_CORNER_DISTANCE)
+    {
+      return wayland::shell_surface_resize::bottom_left;
+    }
+    else
+    {
+      return wayland::shell_surface_resize::left;
+    }
 
-    default:
-      return wayland::shell_surface_resize::none;
+  default:
+    return wayland::shell_surface_resize::none;
   }
 }
 
@@ -410,12 +425,18 @@ bool HandleCapabilityChange(wayland::seat_capability caps,
   return false;
 }
 
-}
+} // namespace
 
-CWindowDecorator::CWindowDecorator(IWindowDecorationHandler& handler, CConnection& connection, wayland::surface_t const& mainSurface)
-: m_handler{handler}, m_registry{connection}, m_mainSurface{mainSurface}, m_buttonColor{BUTTON_COLOR_ACTIVE}
+CWindowDecorator::CWindowDecorator(IWindowDecorationHandler& handler,
+                                   CConnection& connection,
+                                   wayland::surface_t const& mainSurface)
+  : m_handler{handler}
+  , m_registry{connection}
+  , m_mainSurface{mainSurface}
+  , m_buttonColor{BUTTON_COLOR_ACTIVE}
 {
-  static_assert(std::tuple_size<decltype(m_borderSurfaces)>::value == SURFACE_COUNT, "SURFACE_COUNT must match surfaces array size");
+  static_assert(std::tuple_size<decltype(m_borderSurfaces)>::value == SURFACE_COUNT,
+                "SURFACE_COUNT must match surfaces array size");
 
   m_registry.RequestSingleton(m_compositor, 1, 4);
   m_registry.RequestSingleton(m_subcompositor, 1, 1, false);
@@ -426,7 +447,8 @@ CWindowDecorator::CWindowDecorator(IWindowDecorationHandler& handler, CConnectio
 
 void CWindowDecorator::AddSeat(CSeat* seat)
 {
-  m_seats.emplace(std::piecewise_construct, std::forward_as_tuple(seat->GetGlobalName()), std::forward_as_tuple(seat));
+  m_seats.emplace(std::piecewise_construct, std::forward_as_tuple(seat->GetGlobalName()),
+                  std::forward_as_tuple(seat));
   seat->AddRawInputHandlerTouch(this);
   seat->AddRawInputHandlerPointer(this);
 }
@@ -439,7 +461,8 @@ void CWindowDecorator::RemoveSeat(CSeat* seat)
   UpdateButtonHoverState();
 }
 
-void CWindowDecorator::OnPointerEnter(CSeat* seat, std::uint32_t serial, wayland::surface_t surface, double surfaceX, double surfaceY)
+void CWindowDecorator::OnPointerEnter(
+    CSeat* seat, std::uint32_t serial, wayland::surface_t surface, double surfaceX, double surfaceY)
 {
   auto seatStateI = m_seats.find(seat->GetGlobalName());
   if (seatStateI == m_seats.end())
@@ -455,8 +478,8 @@ void CWindowDecorator::OnPointerEnter(CSeat* seat, std::uint32_t serial, wayland
     if (m_borderSurfaces[i].surface.wlSurface == surface)
     {
       seatState.pointerEnterSerial = serial;
-      seatState.currentSurface = static_cast<SurfaceIndex> (i);
-      seatState.pointerPosition = {static_cast<float> (surfaceX), static_cast<float> (surfaceY)};
+      seatState.currentSurface = static_cast<SurfaceIndex>(i);
+      seatState.pointerPosition = {static_cast<float>(surfaceX), static_cast<float>(surfaceY)};
       UpdateSeatCursor(seatState);
       UpdateButtonHoverState();
       break;
@@ -479,7 +502,10 @@ void CWindowDecorator::OnPointerLeave(CSeat* seat, std::uint32_t serial, wayland
   UpdateButtonHoverState();
 }
 
-void CWindowDecorator::OnPointerMotion(CSeat* seat, std::uint32_t time, double surfaceX, double surfaceY)
+void CWindowDecorator::OnPointerMotion(CSeat* seat,
+                                       std::uint32_t time,
+                                       double surfaceX,
+                                       double surfaceY)
 {
   auto seatStateI = m_seats.find(seat->GetGlobalName());
   if (seatStateI == m_seats.end())
@@ -489,13 +515,17 @@ void CWindowDecorator::OnPointerMotion(CSeat* seat, std::uint32_t time, double s
   auto& seatState = seatStateI->second;
   if (seatState.currentSurface != SURFACE_COUNT)
   {
-    seatState.pointerPosition = {static_cast<float> (surfaceX), static_cast<float> (surfaceY)};
+    seatState.pointerPosition = {static_cast<float>(surfaceX), static_cast<float>(surfaceY)};
     UpdateSeatCursor(seatState);
     UpdateButtonHoverState();
   }
 }
 
-void CWindowDecorator::OnPointerButton(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::uint32_t button, wayland::pointer_button_state state)
+void CWindowDecorator::OnPointerButton(CSeat* seat,
+                                       std::uint32_t serial,
+                                       std::uint32_t time,
+                                       std::uint32_t button,
+                                       wayland::pointer_button_state state)
 {
   auto seatStateI = m_seats.find(seat->GetGlobalName());
   if (seatStateI == m_seats.end())
@@ -509,7 +539,13 @@ void CWindowDecorator::OnPointerButton(CSeat* seat, std::uint32_t serial, std::u
   }
 }
 
-void CWindowDecorator::OnTouchDown(CSeat* seat, std::uint32_t serial, std::uint32_t time, wayland::surface_t surface, std::int32_t id, double x, double y)
+void CWindowDecorator::OnTouchDown(CSeat* seat,
+                                   std::uint32_t serial,
+                                   std::uint32_t time,
+                                   wayland::surface_t surface,
+                                   std::int32_t id,
+                                   double x,
+                                   double y)
 {
   auto seatStateI = m_seats.find(seat->GetGlobalName());
   if (seatStateI == m_seats.end())
@@ -522,7 +558,8 @@ void CWindowDecorator::OnTouchDown(CSeat* seat, std::uint32_t serial, std::uint3
   {
     if (m_borderSurfaces[i].surface.wlSurface == surface)
     {
-      HandleSeatClick(seatState, static_cast<SurfaceIndex> (i), serial, BTN_LEFT, {static_cast<float> (x), static_cast<float> (y)});
+      HandleSeatClick(seatState, static_cast<SurfaceIndex>(i), serial, BTN_LEFT,
+                      {static_cast<float>(x), static_cast<float>(y)});
     }
   }
 }
@@ -541,7 +578,10 @@ void CWindowDecorator::UpdateSeatCursor(SeatState& seatState)
 
   {
     CSingleLock lock(m_mutex);
-    auto resizeEdge = ResizeEdgeForPosition(seatState.currentSurface, SurfaceGeometry(seatState.currentSurface, m_mainSurfaceSize).ToSize(), CPointInt{seatState.pointerPosition});
+    auto resizeEdge =
+        ResizeEdgeForPosition(seatState.currentSurface,
+                              SurfaceGeometry(seatState.currentSurface, m_mainSurfaceSize).ToSize(),
+                              CPointInt{seatState.pointerPosition});
     if (resizeEdge != wayland::shell_surface_resize::none)
     {
       cursorName = CursorForResizeEdge(resizeEdge);
@@ -562,7 +602,8 @@ void CWindowDecorator::UpdateSeatCursor(SeatState& seatState)
   }
   catch (std::exception const& e)
   {
-    CLog::LogF(LOGERROR, "Could not get required cursor %s from cursor theme: %s", cursorName.c_str(), e.what());
+    CLog::LogF(LOGERROR, "Could not get required cursor %s from cursor theme: %s",
+               cursorName.c_str(), e.what());
     return;
   }
   auto cursorImage = cursor.image(0);
@@ -573,7 +614,9 @@ void CWindowDecorator::UpdateSeatCursor(SeatState& seatState)
   }
   int calcScale{seatState.cursor.can_set_buffer_scale() ? m_scale : 1};
 
-  seatState.seat->SetCursor(seatState.pointerEnterSerial, seatState.cursor, cursorImage.hotspot_x() / calcScale, cursorImage.hotspot_y() / calcScale);
+  seatState.seat->SetCursor(seatState.pointerEnterSerial, seatState.cursor,
+                            cursorImage.hotspot_x() / calcScale,
+                            cursorImage.hotspot_y() / calcScale);
   seatState.cursor.attach(cursorImage.get_buffer(), 0, 0);
   seatState.cursor.damage(0, 0, cursorImage.width() / calcScale, cursorImage.height() / calcScale);
   if (seatState.cursor.can_set_buffer_scale())
@@ -602,7 +645,9 @@ void CWindowDecorator::UpdateButtonHoverState()
   for (auto& button : m_buttons)
   {
     bool wasHovered{button.hovered};
-    button.hovered = std::any_of(pointerPositions.cbegin(), pointerPositions.cend(), [&](CPoint point) { return button.position.PtInRect(CPointInt{point}); });
+    button.hovered =
+        std::any_of(pointerPositions.cbegin(), pointerPositions.cend(),
+                    [&](CPoint point) { return button.position.PtInRect(CPointInt{point}); });
     changed = changed || (button.hovered != wasHovered);
   }
 
@@ -613,39 +658,46 @@ void CWindowDecorator::UpdateButtonHoverState()
   }
 }
 
-void CWindowDecorator::HandleSeatClick(SeatState const& seatState, SurfaceIndex surface, std::uint32_t serial, std::uint32_t button, CPoint position)
+void CWindowDecorator::HandleSeatClick(SeatState const& seatState,
+                                       SurfaceIndex surface,
+                                       std::uint32_t serial,
+                                       std::uint32_t button,
+                                       CPoint position)
 {
   switch (button)
   {
-    case BTN_LEFT:
+  case BTN_LEFT:
+  {
+    CSingleLock lock(m_mutex);
+    auto resizeEdge = ResizeEdgeForPosition(
+        surface, SurfaceGeometry(surface, m_mainSurfaceSize).ToSize(), CPointInt{position});
+    if (resizeEdge == wayland::shell_surface_resize::none)
     {
-      CSingleLock lock(m_mutex);
-      auto resizeEdge = ResizeEdgeForPosition(surface, SurfaceGeometry(surface, m_mainSurfaceSize).ToSize(), CPointInt{position});
-      if (resizeEdge == wayland::shell_surface_resize::none)
+      for (auto const& button : m_buttons)
       {
-        for (auto const& button : m_buttons)
+        if (button.position.PtInRect(CPointInt{position}))
         {
-          if (button.position.PtInRect(CPointInt{position}))
-          {
-            button.onClick();
-            return;
-          }
+          button.onClick();
+          return;
         }
+      }
 
-        m_handler.OnWindowMove(seatState.seat->GetWlSeat(), serial);
-      }
-      else
-      {
-        m_handler.OnWindowResize(seatState.seat->GetWlSeat(), serial, resizeEdge);
-      }
+      m_handler.OnWindowMove(seatState.seat->GetWlSeat(), serial);
+    }
+    else
+    {
+      m_handler.OnWindowResize(seatState.seat->GetWlSeat(), serial, resizeEdge);
+    }
+  }
+  break;
+  case BTN_RIGHT:
+    if (surface == SURFACE_TOP)
+    {
+      m_handler.OnWindowShowContextMenu(seatState.seat->GetWlSeat(), serial,
+                                        CPointInt{position} -
+                                            CPointInt{BORDER_WIDTH, BORDER_WIDTH + TOP_BAR_HEIGHT});
     }
     break;
-    case BTN_RIGHT:
-      if (surface == SURFACE_TOP)
-      {
-        m_handler.OnWindowShowContextMenu(seatState.seat->GetWlSeat(), serial, CPointInt{position} - CPointInt{BORDER_WIDTH, BORDER_WIDTH + TOP_BAR_HEIGHT});
-      }
-      break;
   }
 }
 
@@ -669,7 +721,8 @@ bool CWindowDecorator::StateHasWindowDecorations(IShellSurface::StateBitset stat
   return m_subcompositor && !state.test(IShellSurface::STATE_FULLSCREEN);
 }
 
-CSizeInt CWindowDecorator::CalculateMainSurfaceSize(CSizeInt size, IShellSurface::StateBitset state) const
+CSizeInt CWindowDecorator::CalculateMainSurfaceSize(CSizeInt size,
+                                                    IShellSurface::StateBitset state) const
 {
   if (StateHasWindowDecorations(state))
   {
@@ -683,7 +736,8 @@ CSizeInt CWindowDecorator::CalculateMainSurfaceSize(CSizeInt size, IShellSurface
   }
 }
 
-CSizeInt CWindowDecorator::CalculateFullSurfaceSize(CSizeInt size, IShellSurface::StateBitset state) const
+CSizeInt CWindowDecorator::CalculateFullSurfaceSize(CSizeInt size,
+                                                    IShellSurface::StateBitset state) const
 {
   if (StateHasWindowDecorations(state))
   {
@@ -709,16 +763,23 @@ void CWindowDecorator::SetState(CSizeInt size, int scale, IShellSurface::StateBi
   bool wasDecorations{IsDecorationActive()};
   m_windowState = state;
 
-  m_buttonColor = m_windowState.test(IShellSurface::STATE_ACTIVATED) ? BUTTON_COLOR_ACTIVE : BUTTON_COLOR_INACTIVE;
+  m_buttonColor = m_windowState.test(IShellSurface::STATE_ACTIVATED) ? BUTTON_COLOR_ACTIVE
+                                                                     : BUTTON_COLOR_INACTIVE;
 
-  CLog::Log(LOGDEBUG, "CWindowDecorator::SetState: Setting full surface size %dx%d scale %d (main surface size %dx%d), decorations active: %u", size.Width(), size.Height(), scale, mainSurfaceSize.Width(), mainSurfaceSize.Height(), IsDecorationActive());
+  CLog::Log(LOGDEBUG,
+            "CWindowDecorator::SetState: Setting full surface size %dx%d scale %d (main surface "
+            "size %dx%d), decorations active: %u",
+            size.Width(), size.Height(), scale, mainSurfaceSize.Width(), mainSurfaceSize.Height(),
+            IsDecorationActive());
 
-  if (mainSurfaceSize != m_mainSurfaceSize || scale != m_scale || wasDecorations != IsDecorationActive())
+  if (mainSurfaceSize != m_mainSurfaceSize || scale != m_scale ||
+      wasDecorations != IsDecorationActive())
   {
     if (scale != m_scale)
     {
       // Reload cursor theme
-      CLog::Log(LOGDEBUG, "CWindowDecorator::SetState: Buffer scale changed, reloading cursor theme");
+      CLog::Log(LOGDEBUG,
+                "CWindowDecorator::SetState: Buffer scale changed, reloading cursor theme");
       m_cursorTheme = wayland::cursor_theme_t{};
       for (auto& seat : m_seats)
       {
@@ -773,33 +834,45 @@ void CWindowDecorator::ResetButtons()
       // Minimize
       m_buttons.emplace_back();
       Button& minimize = m_buttons.back();
-      minimize.draw = [this](Surface& surface, CRectInt position, bool hover)
-      {
+      minimize.draw = [this](Surface& surface, CRectInt position, bool hover) {
         DrawButton(surface, m_buttonColor, position, hover);
-        DrawHorizontalLine(surface, m_buttonColor, position.P1() + CPointInt{BUTTON_INNER_SEPARATION, position.Height() - BUTTON_INNER_SEPARATION - 1}, position.Width() - 2 * BUTTON_INNER_SEPARATION);
+        DrawHorizontalLine(
+            surface, m_buttonColor,
+            position.P1() +
+                CPointInt{BUTTON_INNER_SEPARATION, position.Height() - BUTTON_INNER_SEPARATION - 1},
+            position.Width() - 2 * BUTTON_INNER_SEPARATION);
       };
       minimize.onClick = [this] { m_handler.OnWindowMinimize(); };
 
       // Maximize
       m_buttons.emplace_back();
       Button& maximize = m_buttons.back();
-      maximize.draw = [this](Surface& surface, CRectInt position, bool hover)
-      {
+      maximize.draw = [this](Surface& surface, CRectInt position, bool hover) {
         DrawButton(surface, m_buttonColor, position, hover);
-        DrawRectangle(surface, m_buttonColor, {position.P1() + CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION}, position.P2() - CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION}});
-        DrawHorizontalLine(surface, m_buttonColor, position.P1() + CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION + 1}, position.Width() - 2 * BUTTON_INNER_SEPARATION);
+        DrawRectangle(
+            surface, m_buttonColor,
+            {position.P1() + CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION},
+             position.P2() - CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION}});
+        DrawHorizontalLine(surface, m_buttonColor,
+                           position.P1() +
+                               CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION + 1},
+                           position.Width() - 2 * BUTTON_INNER_SEPARATION);
       };
       maximize.onClick = [this] { m_handler.OnWindowMaximize(); };
 
       // Close
       m_buttons.emplace_back();
       Button& close = m_buttons.back();
-      close.draw = [this](Surface& surface, CRectInt position, bool hover)
-      {
+      close.draw = [this](Surface& surface, CRectInt position, bool hover) {
         DrawButton(surface, m_buttonColor, position, hover);
         auto height = position.Height() - 2 * BUTTON_INNER_SEPARATION;
-        DrawAngledLine(surface, m_buttonColor, position.P1() + CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION}, height, 1);
-        DrawAngledLine(surface, m_buttonColor, position.P1() + CPointInt{position.Width() - BUTTON_INNER_SEPARATION - 1, BUTTON_INNER_SEPARATION}, height, -1);
+        DrawAngledLine(surface, m_buttonColor,
+                       position.P1() + CPointInt{BUTTON_INNER_SEPARATION, BUTTON_INNER_SEPARATION},
+                       height, 1);
+        DrawAngledLine(surface, m_buttonColor,
+                       position.P1() + CPointInt{position.Width() - BUTTON_INNER_SEPARATION - 1,
+                                                 BUTTON_INNER_SEPARATION},
+                       height, -1);
       };
       close.onClick = [this] { m_handler.OnWindowClose(); };
     }
@@ -816,7 +889,8 @@ void CWindowDecorator::ResetSurfaces()
   {
     if (!m_borderSurfaces.front().surface.wlSurface)
     {
-      std::generate(m_borderSurfaces.begin(), m_borderSurfaces.end(), std::bind(&CWindowDecorator::MakeBorderSurface, this));
+      std::generate(m_borderSurfaces.begin(), m_borderSurfaces.end(),
+                    std::bind(&CWindowDecorator::MakeBorderSurface, this));
     }
   }
   else
@@ -883,7 +957,8 @@ void CWindowDecorator::ResetShm()
 
 void CWindowDecorator::PositionButtons()
 {
-  CPointInt position{m_borderSurfaces[SURFACE_TOP].surface.size.Width() - BORDER_WIDTH, BORDER_WIDTH + BUTTONS_EDGE_DISTANCE};
+  CPointInt position{m_borderSurfaces[SURFACE_TOP].surface.size.Width() - BORDER_WIDTH,
+                     BORDER_WIDTH + BUTTONS_EDGE_DISTANCE};
   for (auto iter = m_buttons.rbegin(); iter != m_buttons.rend(); iter++)
   {
     position.x -= (BUTTONS_EDGE_DISTANCE + BUTTON_SIZE);
@@ -906,12 +981,14 @@ CWindowDecorator::Buffer CWindowDecorator::GetBuffer(CSizeInt size)
     throw std::logic_error("Remaining SHM pool size is too small for requested buffer");
   }
   // argb8888 support is mandatory
-  auto buffer = m_shmPool.create_buffer(m_memoryAllocatedSize, size.Width(), size.Height(), size.Width() * BYTES_PER_PIXEL, wayland::shm_format::argb8888);
+  auto buffer =
+      m_shmPool.create_buffer(m_memoryAllocatedSize, size.Width(), size.Height(),
+                              size.Width() * BYTES_PER_PIXEL, wayland::shm_format::argb8888);
 
-  void* data{static_cast<std::uint8_t*> (m_memory->Data()) + m_memoryAllocatedSize};
+  void* data{static_cast<std::uint8_t*>(m_memory->Data()) + m_memoryAllocatedSize};
   m_memoryAllocatedSize += totalSize;
 
-  return { data, static_cast<std::size_t> (totalSize), size, std::move(buffer) };
+  return {data, static_cast<std::size_t>(totalSize), size, std::move(buffer)};
 }
 
 void CWindowDecorator::AllocateBuffers()
@@ -921,14 +998,17 @@ void CWindowDecorator::AllocateBuffers()
     auto& borderSurface = m_borderSurfaces[i];
     if (!borderSurface.surface.buffer.data)
     {
-      borderSurface.geometry = SurfaceGeometry(static_cast<SurfaceIndex> (i), m_mainSurfaceSize);
-      borderSurface.windowRect = SurfaceWindowRegion(static_cast<SurfaceIndex> (i), m_mainSurfaceSize);
+      borderSurface.geometry = SurfaceGeometry(static_cast<SurfaceIndex>(i), m_mainSurfaceSize);
+      borderSurface.windowRect =
+          SurfaceWindowRegion(static_cast<SurfaceIndex>(i), m_mainSurfaceSize);
       borderSurface.surface.buffer = GetBuffer(borderSurface.geometry.ToSize() * m_scale);
       borderSurface.surface.scale = m_scale;
       borderSurface.surface.size = borderSurface.geometry.ToSize();
-      auto opaqueRegionGeometry = SurfaceOpaqueRegion(static_cast<SurfaceIndex> (i), m_mainSurfaceSize);
+      auto opaqueRegionGeometry =
+          SurfaceOpaqueRegion(static_cast<SurfaceIndex>(i), m_mainSurfaceSize);
       auto region = m_compositor.create_region();
-      region.add(opaqueRegionGeometry.x1, opaqueRegionGeometry.y1, opaqueRegionGeometry.Width(), opaqueRegionGeometry.Height());
+      region.add(opaqueRegionGeometry.x1, opaqueRegionGeometry.y1, opaqueRegionGeometry.Width(),
+                 opaqueRegionGeometry.Height());
       borderSurface.surface.wlSurface.set_opaque_region(region);
       if (borderSurface.surface.wlSurface.can_set_buffer_scale())
       {
@@ -943,20 +1023,30 @@ void CWindowDecorator::Repaint()
   // Fill transparent (outer) and color (inner)
   for (auto& borderSurface : m_borderSurfaces)
   {
-    std::fill_n(static_cast<std::uint32_t*> (borderSurface.surface.buffer.data), borderSurface.surface.buffer.size.Area(), Endian_SwapLE32(TRANSPARENT));
+    std::fill_n(static_cast<std::uint32_t*>(borderSurface.surface.buffer.data),
+                borderSurface.surface.buffer.size.Area(), Endian_SwapLE32(TRANSPARENT));
     FillRectangle(borderSurface.surface, BORDER_COLOR, borderSurface.windowRect - CSizeInt{1, 1});
   }
   auto& topSurface = m_borderSurfaces[SURFACE_TOP].surface;
   auto innerBorderColor = m_buttonColor;
   // Draw rectangle
-  DrawHorizontalLine(topSurface, innerBorderColor, {BORDER_WIDTH - 1, BORDER_WIDTH - 1}, topSurface.size.Width() - 2 * BORDER_WIDTH + 2);
-  DrawVerticalLine(topSurface, innerBorderColor, {BORDER_WIDTH - 1, BORDER_WIDTH - 1}, topSurface.size.Height() - BORDER_WIDTH + 1);
-  DrawVerticalLine(topSurface, innerBorderColor, {topSurface.size.Width() - BORDER_WIDTH, BORDER_WIDTH - 1}, topSurface.size.Height() - BORDER_WIDTH + 1);
-  DrawVerticalLine(m_borderSurfaces[SURFACE_LEFT].surface, innerBorderColor, {BORDER_WIDTH - 1, 0}, m_borderSurfaces[SURFACE_LEFT].surface.size.Height());
-  DrawVerticalLine(m_borderSurfaces[SURFACE_RIGHT].surface, innerBorderColor, {0, 0}, m_borderSurfaces[SURFACE_RIGHT].surface.size.Height());
-  DrawHorizontalLine(m_borderSurfaces[SURFACE_BOTTOM].surface, innerBorderColor, {BORDER_WIDTH - 1, 0}, m_borderSurfaces[SURFACE_BOTTOM].surface.size.Width() - 2 * BORDER_WIDTH + 2);
+  DrawHorizontalLine(topSurface, innerBorderColor, {BORDER_WIDTH - 1, BORDER_WIDTH - 1},
+                     topSurface.size.Width() - 2 * BORDER_WIDTH + 2);
+  DrawVerticalLine(topSurface, innerBorderColor, {BORDER_WIDTH - 1, BORDER_WIDTH - 1},
+                   topSurface.size.Height() - BORDER_WIDTH + 1);
+  DrawVerticalLine(topSurface, innerBorderColor,
+                   {topSurface.size.Width() - BORDER_WIDTH, BORDER_WIDTH - 1},
+                   topSurface.size.Height() - BORDER_WIDTH + 1);
+  DrawVerticalLine(m_borderSurfaces[SURFACE_LEFT].surface, innerBorderColor, {BORDER_WIDTH - 1, 0},
+                   m_borderSurfaces[SURFACE_LEFT].surface.size.Height());
+  DrawVerticalLine(m_borderSurfaces[SURFACE_RIGHT].surface, innerBorderColor, {0, 0},
+                   m_borderSurfaces[SURFACE_RIGHT].surface.size.Height());
+  DrawHorizontalLine(m_borderSurfaces[SURFACE_BOTTOM].surface, innerBorderColor,
+                     {BORDER_WIDTH - 1, 0},
+                     m_borderSurfaces[SURFACE_BOTTOM].surface.size.Width() - 2 * BORDER_WIDTH + 2);
   // Draw white line into top bar as separator
-  DrawHorizontalLine(topSurface, innerBorderColor, {BORDER_WIDTH - 1, topSurface.size.Height() - 1}, topSurface.size.Width() - 2 * BORDER_WIDTH + 2);
+  DrawHorizontalLine(topSurface, innerBorderColor, {BORDER_WIDTH - 1, topSurface.size.Height() - 1},
+                     topSurface.size.Width() - 2 * BORDER_WIDTH + 2);
   // Draw buttons
   for (auto& button : m_buttons)
   {
@@ -981,12 +1071,11 @@ void CWindowDecorator::CommitAllBuffers()
     if (emplaceResult.second)
     {
       // Buffer was not pending already
-      auto wlBufferC = reinterpret_cast<wl_buffer*> (wlBuffer.c_ptr());
+      auto wlBufferC = reinterpret_cast<wl_buffer*>(wlBuffer.c_ptr());
       // We can refer to the buffer neither by iterator (might be invalidated) nor by
       // capturing the C++ instance in the lambda (would create a reference loop and
       // never allow the object to be freed), so use the raw pointer for now
-      wlBuffer.on_release() = [this, wlBufferC]()
-      {
+      wlBuffer.on_release() = [this, wlBufferC]() {
         CSingleLock lock(m_pendingBuffersMutex);
         // Construct a dummy object for searching the set
         wayland::buffer_t findDummy(wlBufferC, wayland::proxy_t::wrapper_type::foreign);

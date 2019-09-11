@@ -12,8 +12,7 @@
 #include "guilib/GUIDialog.h"
 #include "threads/Event.h"
 
-class CGUIDialogSongInfo :
-      public CGUIDialog
+class CGUIDialogSongInfo : public CGUIDialog
 {
 public:
   CGUIDialogSongInfo(void);
@@ -33,6 +32,7 @@ public:
   void FetchComplete();
 
   static void ShowFor(CFileItem* pItem);
+
 protected:
   void OnInitWindow() override;
   void Update();
@@ -47,5 +47,4 @@ protected:
   bool m_cancelled;
   bool m_hasUpdatedUserrating;
   long m_albumId = -1;
-
 };

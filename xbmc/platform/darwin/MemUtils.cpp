@@ -48,10 +48,9 @@ void GetMemoryStatus(MemoryStatus* buffer)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-braces"
 #endif
-  std::array<int, 2> mib =
-  {
-    CTL_HW,
-    HW_MEMSIZE,
+  std::array<int, 2> mib = {
+      CTL_HW,
+      HW_MEMSIZE,
   };
 #if defined(__apple_build_version__) && __apple_build_version__ < 10000000
 #pragma clang diagnostic pop
@@ -65,7 +64,8 @@ void GetMemoryStatus(MemoryStatus* buffer)
   mach_port_t stat_port = mach_host_self();
   vm_statistics_data_t vm_stat;
   mach_msg_type_number_t count = sizeof(vm_stat) / sizeof(natural_t);
-  if (host_statistics(stat_port, HOST_VM_INFO, reinterpret_cast<host_info_t>(&vm_stat), &count) == 0)
+  if (host_statistics(stat_port, HOST_VM_INFO, reinterpret_cast<host_info_t>(&vm_stat), &count) ==
+      0)
   {
     // Find page size.
 #if defined(TARGET_DARWIN_IOS)
@@ -83,11 +83,12 @@ void GetMemoryStatus(MemoryStatus* buffer)
     if (sysctl(mib.data(), mib.size(), &pageSize, &len, nullptr, 0) == 0)
 #endif
     {
-      uint64_t used = (vm_stat.active_count + vm_stat.inactive_count + vm_stat.wire_count) * pageSize;
+      uint64_t used =
+          (vm_stat.active_count + vm_stat.inactive_count + vm_stat.wire_count) * pageSize;
       buffer->availPhys = buffer->totalPhys - used;
     }
   }
 }
 
-}
-}
+} // namespace MEMORY
+} // namespace KODI

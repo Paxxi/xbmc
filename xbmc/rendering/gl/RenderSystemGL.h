@@ -51,22 +51,25 @@ public:
   void GetViewPort(CRect& viewPort) override;
 
   bool ScissorsCanEffectClipping() override;
-  CRect ClipRectToScissorRect(const CRect &rect) override;
-  void SetScissors(const CRect &rect) override;
+  CRect ClipRectToScissorRect(const CRect& rect) override;
+  void SetScissors(const CRect& rect) override;
   void ResetScissors() override;
 
   void CaptureStateBlock() override;
   void ApplyStateBlock() override;
 
-  void SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor = 0.0f) override;
+  void SetCameraPosition(const CPoint& camera,
+                         int screenWidth,
+                         int screenHeight,
+                         float stereoFactor = 0.0f) override;
 
   void SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW view) override;
   bool SupportsStereo(RENDER_STEREO_MODE mode) const override;
   bool SupportsNPOT(bool dxt) const override;
 
-  void Project(float &x, float &y, float &z) override;
+  void Project(float& x, float& y, float& z) override;
 
-  std::string GetShaderPath(const std::string &filename) override;
+  std::string GetShaderPath(const std::string& filename) override;
 
   void GetGLVersion(int& major, int& minor);
   void GetGLSLVersion(int& major, int& minor);

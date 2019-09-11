@@ -38,12 +38,14 @@ inline static std::wstring prepareWin32DirectoryName(const std::string& strPath)
 }
 
 CWin32Directory::CWin32Directory(void)
-{}
+{
+}
 
 CWin32Directory::~CWin32Directory(void)
-{}
+{
+}
 
-bool CWin32Directory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CWin32Directory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   items.Clear();
 
@@ -61,10 +63,13 @@ bool CWin32Directory::GetDirectory(const CURL& url, CFileItemList &items)
   HANDLE hSearch;
   WIN32_FIND_DATAW findData = {};
 
-  hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
+  hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch,
+                             NULL, FIND_FIRST_EX_LARGE_FETCH);
 
   if (hSearch == INVALID_HANDLE_VALUE)
-    return GetLastError() == ERROR_FILE_NOT_FOUND ? Exists(url) : false; // return true if directory exist and empty
+    return GetLastError() == ERROR_FILE_NOT_FOUND
+               ? Exists(url)
+               : false; // return true if directory exist and empty
 
   do
   {
@@ -87,8 +92,8 @@ bool CWin32Directory::GetDirectory(const CURL& url, CFileItemList &items)
     else
       pItem->SetPath(pathWithSlash + itemName);
 
-    if ((findData.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0
-          || itemName.front() == '.') // mark files starting from dot as hidden
+    if ((findData.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0 ||
+        itemName.front() == '.') // mark files starting from dot as hidden
       pItem->SetProperty("file:hidden", true);
 
     // calculation of size and date costs a little on win32
@@ -100,7 +105,7 @@ bool CWin32Directory::GetDirectory(const CURL& url, CFileItemList &items)
       pItem->m_dateTime = 0;
 
     if (!pItem->m_bIsFolder)
-        pItem->m_dwSize = (__int64(findData.nFileSizeHigh) << 32) + findData.nFileSizeLow;
+      pItem->m_dwSize = (__int64(findData.nFileSizeHigh) << 32) + findData.nFileSizeLow;
 
     items.Add(pItem);
   } while (FindNextFileW(hSearch, &findData));
@@ -163,12 +168,16 @@ bool CWin32Directory::RemoveRecursive(const CURL& url)
   WIN32_FIND_DATAW findData = {};
 
   if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin7))
-    hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
+    hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoBasic, &findData,
+                               FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
   else
-    hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoStandard, &findData, FindExSearchNameMatch, nullptr, 0);
+    hSearch = FindFirstFileExW(searchMask.c_str(), FindExInfoStandard, &findData,
+                               FindExSearchNameMatch, nullptr, 0);
 
   if (hSearch == INVALID_HANDLE_VALUE)
-    return GetLastError() == ERROR_FILE_NOT_FOUND ? Exists(url) : false; // return true if directory exist and empty
+    return GetLastError() == ERROR_FILE_NOT_FOUND
+               ? Exists(url)
+               : false; // return true if directory exist and empty
 
   bool success = true;
   do
@@ -187,7 +196,7 @@ bool CWin32Directory::RemoveRecursive(const CURL& url)
         continue;
       }
 
-      if (!RemoveRecursive(CURL{ path }))
+      if (!RemoveRecursive(CURL{path}))
       {
         success = false;
         break;
@@ -239,7 +248,8 @@ bool CWin32Directory::Create(std::wstring path) const
   if (lastSlashPos < path.length() - 1 && path[lastSlashPos + 1] == L'.')
   {
     DWORD dirAttrs = GetFileAttributesW(path.c_str());
-    if (dirAttrs != INVALID_FILE_ATTRIBUTES && SetFileAttributesW(path.c_str(), dirAttrs | FILE_ATTRIBUTE_HIDDEN))
+    if (dirAttrs != INVALID_FILE_ATTRIBUTES &&
+        SetFileAttributesW(path.c_str(), dirAttrs | FILE_ATTRIBUTE_HIDDEN))
       return true;
   }
 

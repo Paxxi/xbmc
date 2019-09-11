@@ -13,29 +13,29 @@
 
 #include <vector>
 
-#define CONTROL_CHOICES_START  10
-#define CONTROL_NO_BUTTON      CONTROL_CHOICES_START
-#define CONTROL_YES_BUTTON     CONTROL_CHOICES_START + 1
-#define CONTROL_CUSTOM_BUTTON  CONTROL_CHOICES_START + 2
-#define CONTROL_PROGRESS_BAR   20
+#define CONTROL_CHOICES_START 10
+#define CONTROL_NO_BUTTON CONTROL_CHOICES_START
+#define CONTROL_YES_BUTTON CONTROL_CHOICES_START + 1
+#define CONTROL_CUSTOM_BUTTON CONTROL_CHOICES_START + 2
+#define CONTROL_PROGRESS_BAR 20
 
 #define DIALOG_MAX_LINES 3
 #define DIALOG_MAX_CHOICES 3
 
 class CVariant;
 
-class CGUIDialogBoxBase :
-      public CGUIDialog
+class CGUIDialogBoxBase : public CGUIDialog
 {
 public:
-  CGUIDialogBoxBase(int id, const std::string &xmlFile);
+  CGUIDialogBoxBase(int id, const std::string& xmlFile);
   ~CGUIDialogBoxBase(void) override;
   bool OnMessage(CGUIMessage& message) override;
   bool IsConfirmed() const;
   void SetLine(unsigned int iLine, CVariant line);
   void SetText(CVariant text);
   void SetHeading(CVariant heading);
-  void SetChoice(int iButton, const CVariant &choice);
+  void SetChoice(int iButton, const CVariant& choice);
+
 protected:
   std::string GetDefaultLabel(int controlId) const;
   virtual int GetDefaultLabelID(int controlId) const;
@@ -44,9 +44,9 @@ protected:
    localized string.
    \param var the variant to localize.
    */
-  std::string GetLocalized(const CVariant &var) const;
+  std::string GetLocalized(const CVariant& var) const;
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void OnInitWindow() override;
   void OnDeinitWindow(int nextWindowID) override;
 

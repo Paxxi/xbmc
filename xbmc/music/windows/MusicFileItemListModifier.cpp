@@ -19,7 +19,7 @@
 
 using namespace XFILE::MUSICDATABASEDIRECTORY;
 
-bool CMusicFileItemListModifier::CanModify(const CFileItemList &items) const
+bool CMusicFileItemListModifier::CanModify(const CFileItemList& items) const
 {
   if (items.IsMusicDb())
     return true;
@@ -27,7 +27,7 @@ bool CMusicFileItemListModifier::CanModify(const CFileItemList &items) const
   return false;
 }
 
-bool CMusicFileItemListModifier::Modify(CFileItemList &items) const
+bool CMusicFileItemListModifier::Modify(CFileItemList& items) const
 {
   AddQueuingFolder(items);
   return true;
@@ -49,7 +49,8 @@ void CMusicFileItemListModifier::AddQueuingFolder(CFileItemList& items)
     return;
 
   // always show "all" items by default
-  if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MUSICLIBRARY_SHOWALLITEMS))
+  if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+          CSettings::SETTING_MUSICLIBRARY_SHOWALLITEMS))
     return;
 
   // no need for "all" item when only one item
@@ -60,13 +61,13 @@ void CMusicFileItemListModifier::AddQueuingFolder(CFileItemList& items)
 
   // No need for "all" when overview node and child node albums or artists
   if (directoryNode->GetType() == NODE_TYPE_OVERVIEW &&
-     (nodeChildType == NODE_TYPE_ARTIST || nodeChildType == NODE_TYPE_ALBUM))
+      (nodeChildType == NODE_TYPE_ARTIST || nodeChildType == NODE_TYPE_ALBUM))
     return;
 
   switch (nodeChildType)
   {
   case NODE_TYPE_ARTIST:
-    pItem.reset(new CFileItem(g_localizeStrings.Get(15103)));  // "All Artists"
+    pItem.reset(new CFileItem(g_localizeStrings.Get(15103))); // "All Artists"
     musicUrl.AppendPath("-1/");
     pItem->SetPath(musicUrl.ToString());
     break;
@@ -78,7 +79,7 @@ void CMusicFileItemListModifier::AddQueuingFolder(CFileItemList& items)
   case NODE_TYPE_ALBUM_COMPILATIONS:
   case NODE_TYPE_ALBUM_TOP100:
   case NODE_TYPE_YEAR_ALBUM:
-    pItem.reset(new CFileItem(g_localizeStrings.Get(15102)));  // "All Albums"
+    pItem.reset(new CFileItem(g_localizeStrings.Get(15102))); // "All Albums"
     musicUrl.AppendPath("-1/");
     pItem->SetPath(musicUrl.ToString());
     break;
@@ -90,10 +91,16 @@ void CMusicFileItemListModifier::AddQueuingFolder(CFileItemList& items)
   if (pItem)
   {
     pItem->m_bIsFolder = true;
-    pItem->SetSpecialSort(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_bMusicLibraryAllItemsOnBottom ? SortSpecialOnBottom : SortSpecialOnTop);
+    pItem->SetSpecialSort(CServiceBroker::GetSettingsComponent()
+                                  ->GetAdvancedSettings()
+                                  ->m_bMusicLibraryAllItemsOnBottom
+                              ? SortSpecialOnBottom
+                              : SortSpecialOnTop);
     pItem->SetCanQueue(false);
     pItem->SetLabelPreformatted(true);
-    if (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_bMusicLibraryAllItemsOnBottom)
+    if (CServiceBroker::GetSettingsComponent()
+            ->GetAdvancedSettings()
+            ->m_bMusicLibraryAllItemsOnBottom)
       items.Add(pItem);
     else
       items.AddFront(pItem, (items.Size() > 0 && items[0]->IsParentFolder()) ? 1 : 0);

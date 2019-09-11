@@ -15,10 +15,10 @@
 #include "utils/XMLUtils.h"
 #include "utils/log.h"
 
-#define XML_UPNP          "upnpserver"
-#define XML_SERVER_UUID   "UUID"
-#define XML_SERVER_PORT   "Port"
-#define XML_MAX_ITEMS     "MaxReturnedItems"
+#define XML_UPNP "upnpserver"
+#define XML_SERVER_UUID "UUID"
+#define XML_SERVER_PORT "Port"
+#define XML_MAX_ITEMS "MaxReturnedItems"
 #define XML_RENDERER_UUID "UUIDRenderer"
 #define XML_RENDERER_PORT "PortRenderer"
 
@@ -45,7 +45,7 @@ void CUPnPSettings::OnSettingsUnloaded()
   Clear();
 }
 
-bool CUPnPSettings::Load(const std::string &file)
+bool CUPnPSettings::Load(const std::string& file)
 {
   CSingleLock lock(m_critical);
 
@@ -57,11 +57,12 @@ bool CUPnPSettings::Load(const std::string &file)
   CXBMCTinyXML doc;
   if (!doc.LoadFile(file))
   {
-    CLog::Log(LOGERROR, "CUPnPSettings: error loading %s, Line %d\n%s", file.c_str(), doc.ErrorRow(), doc.ErrorDesc());
+    CLog::Log(LOGERROR, "CUPnPSettings: error loading %s, Line %d\n%s", file.c_str(),
+              doc.ErrorRow(), doc.ErrorDesc());
     return false;
   }
 
-  TiXmlElement *pRootElement = doc.RootElement();
+  TiXmlElement* pRootElement = doc.RootElement();
   if (pRootElement == NULL || !StringUtils::EqualsNoCase(pRootElement->Value(), XML_UPNP))
   {
     CLog::Log(LOGERROR, "CUPnPSettings: error loading %s, no <upnpserver> node", file.c_str());
@@ -78,13 +79,13 @@ bool CUPnPSettings::Load(const std::string &file)
   return true;
 }
 
-bool CUPnPSettings::Save(const std::string &file) const
+bool CUPnPSettings::Save(const std::string& file) const
 {
   CSingleLock lock(m_critical);
 
   CXBMCTinyXML doc;
   TiXmlElement xmlRootElement(XML_UPNP);
-  TiXmlNode *pRoot = doc.InsertEndChild(xmlRootElement);
+  TiXmlNode* pRoot = doc.InsertEndChild(xmlRootElement);
   if (pRoot == NULL)
     return false;
 

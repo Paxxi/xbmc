@@ -14,7 +14,8 @@
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
 
-CGUIWindowSplash::CGUIWindowSplash(void) : CGUIWindow(WINDOW_SPLASH, "")
+CGUIWindowSplash::CGUIWindowSplash(void)
+  : CGUIWindow(WINDOW_SPLASH, "")
 {
   m_loadType = LOAD_ON_GUI_INIT;
   m_image = nullptr;
@@ -27,13 +28,17 @@ void CGUIWindowSplash::OnInitWindow()
   if (!CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_splashImage)
     return;
 
-  m_image = std::unique_ptr<CGUIImage>(new CGUIImage(0, 0, 0, 0, CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(), CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight(), CTextureInfo(CUtil::GetSplashPath())));
+  m_image = std::unique_ptr<CGUIImage>(
+      new CGUIImage(0, 0, 0, 0, CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(),
+                    CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight(),
+                    CTextureInfo(CUtil::GetSplashPath())));
   m_image->SetAspectRatio(CAspectRatio::AR_SCALE);
 }
 
 void CGUIWindowSplash::Render()
 {
-  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), true);
+  CServiceBroker::GetWinSystem()->GetGfxContext().SetRenderingResolution(
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(), true);
 
   if (!m_image)
     return;

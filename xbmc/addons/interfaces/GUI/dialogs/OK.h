@@ -11,10 +11,10 @@
 extern "C"
 {
 
-struct AddonGlobalInterface;
+  struct AddonGlobalInterface;
 
-namespace ADDON
-{
+  namespace ADDON
+  {
 
   /*!
    * @brief Global gui Add-on to Kodi callback functions
@@ -40,10 +40,16 @@ namespace ADDON
      * class.
      */
     //@{
-    static void show_and_get_input_single_text(void* kodiBase, const char *heading, const char *text);
-    static void show_and_get_input_line_text(void* kodiBase, const char *heading, const char *line0, const char *line1, const char *line2);
+    static void show_and_get_input_single_text(void* kodiBase,
+                                               const char* heading,
+                                               const char* text);
+    static void show_and_get_input_line_text(void* kodiBase,
+                                             const char* heading,
+                                             const char* line0,
+                                             const char* line1,
+                                             const char* line2);
     //@}
   };
 
-} /* namespace ADDON */
+  } /* namespace ADDON */
 } /* extern "C" */

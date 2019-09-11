@@ -39,11 +39,25 @@ class CInputProcessorKeyboard final : public IRawInputHandlerKeyboard
 public:
   CInputProcessorKeyboard(IInputHandlerKeyboard& handler);
 
-  void OnKeyboardKeymap(CSeat* seat, wayland::keyboard_keymap_format format, std::string const& keymap) override;
-  void OnKeyboardEnter(CSeat* seat, std::uint32_t serial, wayland::surface_t surface, wayland::array_t keys) override;
+  void OnKeyboardKeymap(CSeat* seat,
+                        wayland::keyboard_keymap_format format,
+                        std::string const& keymap) override;
+  void OnKeyboardEnter(CSeat* seat,
+                       std::uint32_t serial,
+                       wayland::surface_t surface,
+                       wayland::array_t keys) override;
   void OnKeyboardLeave(CSeat* seat, std::uint32_t serial, wayland::surface_t surface) override;
-  void OnKeyboardKey(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::uint32_t key, wayland::keyboard_key_state state) override;
-  void OnKeyboardModifiers(CSeat* seat, std::uint32_t serial, std::uint32_t modsDepressed, std::uint32_t modsLatched, std::uint32_t modsLocked, std::uint32_t group) override;
+  void OnKeyboardKey(CSeat* seat,
+                     std::uint32_t serial,
+                     std::uint32_t time,
+                     std::uint32_t key,
+                     wayland::keyboard_key_state state) override;
+  void OnKeyboardModifiers(CSeat* seat,
+                           std::uint32_t serial,
+                           std::uint32_t modsDepressed,
+                           std::uint32_t modsLatched,
+                           std::uint32_t modsLocked,
+                           std::uint32_t group) override;
   void OnKeyboardRepeatInfo(CSeat* seat, std::int32_t rate, std::int32_t delay) override;
 
 private:
@@ -51,7 +65,10 @@ private:
   CInputProcessorKeyboard& operator=(CInputProcessorKeyboard const& other) = delete;
 
   void ConvertAndSendKey(std::uint32_t scancode, bool pressed);
-  XBMC_Event SendKey(unsigned char scancode, XBMCKey key, std::uint16_t unicodeCodepoint, bool pressed);
+  XBMC_Event SendKey(unsigned char scancode,
+                     XBMCKey key,
+                     std::uint16_t unicodeCodepoint,
+                     bool pressed);
   void KeyRepeatTimeout();
 
   IInputHandlerKeyboard& m_handler;
@@ -68,6 +85,6 @@ private:
   CTimer m_keyRepeatTimer;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

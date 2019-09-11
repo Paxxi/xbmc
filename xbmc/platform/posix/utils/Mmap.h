@@ -31,14 +31,8 @@ public:
   CMmap(void* addr, std::size_t length, int prot, int flags, int fildes, off_t offset);
   ~CMmap();
 
-  void* Data() const
-  {
-    return m_memory;
-  }
-  std::size_t Size() const
-  {
-    return m_size;
-  }
+  void* Data() const { return m_memory; }
+  std::size_t Size() const { return m_size; }
 
 private:
   CMmap(CMmap const& other) = delete;
@@ -48,6 +42,6 @@ private:
   void* m_memory;
 };
 
-}
-}
-}
+} // namespace POSIX
+} // namespace UTILS
+} // namespace KODI

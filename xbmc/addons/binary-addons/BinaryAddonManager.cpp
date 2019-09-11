@@ -35,7 +35,10 @@ bool CBinaryAddonManager::Init()
   BINARY_ADDON_LIST binaryAddonList;
   if (!CServiceBroker::GetAddonMgr().GetInstalledBinaryAddons(binaryAddonList))
   {
-    CLog::Log(LOGNOTICE, "CBinaryAddonManager::%s: No binary addons present and related manager, init not necessary", __FUNCTION__);
+    CLog::Log(
+        LOGNOTICE,
+        "CBinaryAddonManager::%s: No binary addons present and related manager, init not necessary",
+        __FUNCTION__);
     return true;
   }
 
@@ -56,7 +59,7 @@ void CBinaryAddonManager::DeInit()
   CServiceBroker::GetAddonMgr().Events().Unsubscribe(this);
 }
 
-bool CBinaryAddonManager::HasInstalledAddons(const TYPE &type) const
+bool CBinaryAddonManager::HasInstalledAddons(const TYPE& type) const
 {
   CSingleLock lock(m_critSection);
   for (auto info : m_installedAddons)
@@ -67,7 +70,7 @@ bool CBinaryAddonManager::HasInstalledAddons(const TYPE &type) const
   return false;
 }
 
-bool CBinaryAddonManager::HasEnabledAddons(const TYPE &type) const
+bool CBinaryAddonManager::HasEnabledAddons(const TYPE& type) const
 {
   CSingleLock lock(m_critSection);
   for (auto info : m_enabledAddons)
@@ -78,19 +81,23 @@ bool CBinaryAddonManager::HasEnabledAddons(const TYPE &type) const
   return false;
 }
 
-bool CBinaryAddonManager::IsAddonInstalled(const std::string& addonId, const TYPE &type/* = ADDON_UNKNOWN*/)
+bool CBinaryAddonManager::IsAddonInstalled(const std::string& addonId,
+                                           const TYPE& type /* = ADDON_UNKNOWN*/)
 {
   CSingleLock lock(m_critSection);
   return (m_installedAddons.find(addonId) != m_installedAddons.end());
 }
 
-bool CBinaryAddonManager::IsAddonEnabled(const std::string& addonId, const TYPE &type/* = ADDON_UNKNOWN*/)
+bool CBinaryAddonManager::IsAddonEnabled(const std::string& addonId,
+                                         const TYPE& type /* = ADDON_UNKNOWN*/)
 {
   CSingleLock lock(m_critSection);
   return (m_enabledAddons.find(addonId) != m_enabledAddons.end());
 }
 
-void CBinaryAddonManager::GetAddonInfos(BinaryAddonBaseList& addonInfos, bool enabledOnly, const TYPE &type) const
+void CBinaryAddonManager::GetAddonInfos(BinaryAddonBaseList& addonInfos,
+                                        bool enabledOnly,
+                                        const TYPE& type) const
 {
   CSingleLock lock(m_critSection);
 
@@ -123,7 +130,8 @@ void CBinaryAddonManager::GetDisabledAddonInfos(BinaryAddonBaseList& addonInfos,
   }
 }
 
-const BinaryAddonBasePtr CBinaryAddonManager::GetInstalledAddonInfo(const std::string& addonId, const TYPE &type/* = ADDON_UNKNOWN*/) const
+const BinaryAddonBasePtr CBinaryAddonManager::GetInstalledAddonInfo(
+    const std::string& addonId, const TYPE& type /* = ADDON_UNKNOWN*/) const
 {
   CSingleLock lock(m_critSection);
 
@@ -131,7 +139,8 @@ const BinaryAddonBasePtr CBinaryAddonManager::GetInstalledAddonInfo(const std::s
   if (addon != m_installedAddons.end() && (type == ADDON_UNKNOWN || addon->second->IsType(type)))
     return addon->second;
 
-  CLog::Log(LOGERROR, "CBinaryAddonManager::%s: Requested addon '%s' unknown as binary", __FUNCTION__, addonId.c_str());
+  CLog::Log(LOGERROR, "CBinaryAddonManager::%s: Requested addon '%s' unknown as binary",
+            __FUNCTION__, addonId.c_str());
   return nullptr;
 }
 
@@ -184,7 +193,8 @@ void CBinaryAddonManager::EnableEvent(const std::string& addonId)
   else
     return;
 
-  CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Enable addon '%s' on binary addon manager", __FUNCTION__, base->ID().c_str());
+  CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Enable addon '%s' on binary addon manager",
+            __FUNCTION__, base->ID().c_str());
   m_enabledAddons[base->ID()] = base;
 }
 
@@ -199,7 +209,8 @@ void CBinaryAddonManager::DisableEvent(const std::string& addonId)
   else
     return;
 
-  CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Disable addon '%s' on binary addon manager", __FUNCTION__, base->ID().c_str());
+  CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Disable addon '%s' on binary addon manager",
+            __FUNCTION__, base->ID().c_str());
   m_enabledAddons.erase(base->ID());
 }
 
@@ -216,7 +227,8 @@ void CBinaryAddonManager::InstalledChangeEvent()
     auto knownAddon = m_installedAddons.find(addon.second->ID());
     if (knownAddon == m_installedAddons.end())
     {
-      CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Adding new binary addon '%s'", __FUNCTION__, addon.second->ID().c_str());
+      CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Adding new binary addon '%s'", __FUNCTION__,
+                addon.second->ID().c_str());
 
       if (!AddAddonBaseEntry(addon))
         continue;
@@ -229,7 +241,8 @@ void CBinaryAddonManager::InstalledChangeEvent()
 
   for (auto addon : deletedAddons)
   {
-    CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Removing binary addon '%s'", __FUNCTION__, addon.first.c_str());
+    CLog::Log(LOGDEBUG, "CBinaryAddonManager::%s: Removing binary addon '%s'", __FUNCTION__,
+              addon.first.c_str());
 
     m_installedAddons.erase(addon.first);
     m_enabledAddons.erase(addon.first);

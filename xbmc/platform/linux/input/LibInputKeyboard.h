@@ -23,9 +23,9 @@ public:
   CLibInputKeyboard();
   ~CLibInputKeyboard();
 
-  void ProcessKey(libinput_event_keyboard *e);
-  void UpdateLeds(libinput_device *dev);
-  void GetRepeat(libinput_device *dev);
+  void ProcessKey(libinput_event_keyboard* e);
+  void UpdateLeds(libinput_device* dev);
+  void GetRepeat(libinput_device* dev);
 
   bool SetKeymap(const std::string& layout);
 
@@ -33,9 +33,9 @@ private:
   XBMCKey XBMCKeyForKeysym(xkb_keysym_t sym, uint32_t scancode);
   void KeyRepeatTimeout();
 
-  xkb_context *m_ctx = nullptr;
-  xkb_keymap *m_keymap = nullptr;
-  xkb_state *m_state = nullptr;
+  xkb_context* m_ctx = nullptr;
+  xkb_keymap* m_keymap = nullptr;
+  xkb_state* m_state = nullptr;
   xkb_mod_index_t m_modindex[4];
   xkb_led_index_t m_ledindex[3];
 

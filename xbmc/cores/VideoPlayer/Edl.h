@@ -13,7 +13,7 @@
 
 namespace EDL
 {
-  struct Cut;
+struct Cut;
 }
 
 class CFileItem;
@@ -23,7 +23,9 @@ class CEdl
 public:
   CEdl();
 
-  bool ReadEditDecisionLists(const CFileItem& fileItem, const float fFramesPerSecond, const int iHeight);
+  bool ReadEditDecisionLists(const CFileItem& fileItem,
+                             const float fFramesPerSecond,
+                             const int iHeight);
   void Clear();
 
   bool HasCut() const;
@@ -41,7 +43,7 @@ public:
   int GetLastCutTime() const;
   void SetLastCutTime(const int iCutTime);
 
-  bool GetNextSceneMarker(bool bPlus, const int iClock, int *iSceneMarker);
+  bool GetNextSceneMarker(bool bPlus, const int iClock, int* iSceneMarker);
 
   static std::string MillisecondsToTimeString(const int iMilliseconds);
 

@@ -29,15 +29,17 @@ CGUIWindowPointer::~CGUIWindowPointer(void) = default;
 
 void CGUIWindowPointer::SetPointer(int pointer)
 {
-  if (m_pointer == pointer) return;
+  if (m_pointer == pointer)
+    return;
   // set the new pointer visible
-  CGUIControl *pControl = GetControl(pointer);
+  CGUIControl* pControl = GetControl(pointer);
   if (pControl)
   {
     pControl->SetVisible(true);
     // disable the old pointer
     pControl = GetControl(m_pointer);
-    if (pControl) pControl->SetVisible(false);
+    if (pControl)
+      pControl->SetVisible(false);
     // set pointer to the new one
     m_pointer = pointer;
   }
@@ -45,7 +47,7 @@ void CGUIWindowPointer::SetPointer(int pointer)
 
 void CGUIWindowPointer::UpdateVisibility()
 {
-  if(CServiceBroker::GetWinSystem()->HasCursor())
+  if (CServiceBroker::GetWinSystem()->HasCursor())
   {
     if (CServiceBroker::GetInputManager().IsMouseActive())
       Open();
@@ -56,7 +58,7 @@ void CGUIWindowPointer::UpdateVisibility()
 
 void CGUIWindowPointer::OnWindowLoaded()
 { // set all our pointer images invisible
-  for (iControls i = m_children.begin();i != m_children.end(); ++i)
+  for (iControls i = m_children.begin(); i != m_children.end(); ++i)
   {
     CGUIControl* pControl = *i;
     pControl->SetVisible(false);
@@ -67,7 +69,7 @@ void CGUIWindowPointer::OnWindowLoaded()
   m_renderOrder = RENDER_ORDER_WINDOW_POINTER;
 }
 
-void CGUIWindowPointer::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUIWindowPointer::Process(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
   bool active = CServiceBroker::GetInputManager().IsMouseActive();
   if (active != m_active)

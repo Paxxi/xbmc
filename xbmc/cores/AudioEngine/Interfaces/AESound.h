@@ -16,7 +16,7 @@ class IAESound
 {
 protected:
   friend class IAE;
-  explicit IAESound(const std::string &filename) {}
+  explicit IAESound(const std::string& filename) {}
   virtual ~IAESound() = default;
 
 public:
@@ -41,4 +41,3 @@ public:
   /* get the current playback volume of this sound */
   virtual float GetVolume() = 0;
 };
-

@@ -7,11 +7,12 @@
  */
 
 #include "LinuxStorageProvider.h"
-#include "guilib/LocalizeStrings.h"
+
 #include "UDevProvider.h"
+#include "guilib/LocalizeStrings.h"
 #ifdef HAS_DBUS
-#include "UDisksProvider.h"
 #include "UDisks2Provider.h"
+#include "UDisksProvider.h"
 #endif
 #include "platform/posix/PosixMountProvider.h"
 
@@ -54,7 +55,7 @@ void CLinuxStorageProvider::Stop()
   m_instance->Stop();
 }
 
-void CLinuxStorageProvider::GetLocalDrives(VECSOURCES &localDrives)
+void CLinuxStorageProvider::GetLocalDrives(VECSOURCES& localDrives)
 {
   // Home directory
   CMediaSource share;
@@ -70,7 +71,7 @@ void CLinuxStorageProvider::GetLocalDrives(VECSOURCES &localDrives)
   m_instance->GetLocalDrives(localDrives);
 }
 
-void CLinuxStorageProvider::GetRemovableDrives(VECSOURCES &removableDrives)
+void CLinuxStorageProvider::GetRemovableDrives(VECSOURCES& removableDrives)
 {
   m_instance->GetRemovableDrives(removableDrives);
 }
@@ -85,7 +86,7 @@ std::vector<std::string> CLinuxStorageProvider::GetDiskUsage()
   return m_instance->GetDiskUsage();
 }
 
-bool CLinuxStorageProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
+bool CLinuxStorageProvider::PumpDriveChangeEvents(IStorageEventsCallback* callback)
 {
   return m_instance->PumpDriveChangeEvents(callback);
 }

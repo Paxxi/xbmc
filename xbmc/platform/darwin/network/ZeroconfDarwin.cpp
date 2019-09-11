@@ -14,7 +14,8 @@
 #include <sstream>
 #include <string>
 
-CZeroconfDarwin::CZeroconfDarwin():m_runloop(0)
+CZeroconfDarwin::CZeroconfDarwin()
+  : m_runloop(0)
 {
   //acquire the main threads event loop
   m_runloop = CFRunLoopGetMain();
@@ -25,7 +26,7 @@ CZeroconfDarwin::~CZeroconfDarwin()
   doStop();
 }
 
-CFHashCode CFHashNullVersion (CFTypeRef cf)
+CFHashCode CFHashNullVersion(CFTypeRef cf)
 {
   return 0;
 }
@@ -33,35 +34,29 @@ CFHashCode CFHashNullVersion (CFTypeRef cf)
 
 //methods to implement for concrete implementations
 bool CZeroconfDarwin::doPublishService(const std::string& fcr_identifier,
-                      const std::string& fcr_type,
-                      const std::string& fcr_name,
-                      unsigned int f_port,
-                      const std::vector<std::pair<std::string, std::string> >& txt)
+                                       const std::string& fcr_type,
+                                       const std::string& fcr_name,
+                                       unsigned int f_port,
+                                       const std::vector<std::pair<std::string, std::string>>& txt)
 {
-  CLog::Log(LOGDEBUG, "CZeroconfDarwin::doPublishService identifier: %s type: %s name:%s port:%i", fcr_identifier.c_str(),
-            fcr_type.c_str(), fcr_name.c_str(), f_port);
+  CLog::Log(LOGDEBUG, "CZeroconfDarwin::doPublishService identifier: %s type: %s name:%s port:%i",
+            fcr_identifier.c_str(), fcr_type.c_str(), fcr_name.c_str(), f_port);
 
-  CFStringRef name = CFStringCreateWithCString (NULL,
-                                                fcr_name.c_str(),
-                                                kCFStringEncodingUTF8
-                                                );
-  CFStringRef type = CFStringCreateWithCString (NULL,
-                                                fcr_type.c_str(),
-                                                kCFStringEncodingUTF8
-                                                );
+  CFStringRef name = CFStringCreateWithCString(NULL, fcr_name.c_str(), kCFStringEncodingUTF8);
+  CFStringRef type = CFStringCreateWithCString(NULL, fcr_type.c_str(), kCFStringEncodingUTF8);
   CFNetServiceRef netService = CFNetServiceCreate(NULL, CFSTR(""), type, name, f_port);
   CFRelease(name);
   CFRelease(type);
 
   //now register it
-  CFNetServiceClientContext clientContext = { 0, this, NULL, NULL, NULL };
+  CFNetServiceClientContext clientContext = {0, this, NULL, NULL, NULL};
 
   CFStreamError error;
   CFNetServiceSetClient(netService, registerCallback, &clientContext);
   CFNetServiceScheduleWithRunLoop(netService, m_runloop, kCFRunLoopCommonModes);
 
   //add txt records
-  if(!txt.empty())
+  if (!txt.empty())
   {
 
     CFDictionaryKeyCallBacks key_cb = kCFTypeDictionaryKeyCallBacks;
@@ -69,13 +64,14 @@ bool CZeroconfDarwin::doPublishService(const std::string& fcr_identifier,
 
     //txt map to dictionary
     CFDataRef txtData = NULL;
-    CFMutableDictionaryRef txtDict = CFDictionaryCreateMutable(NULL, 0, &key_cb, &kCFTypeDictionaryValueCallBacks);
+    CFMutableDictionaryRef txtDict =
+        CFDictionaryCreateMutable(NULL, 0, &key_cb, &kCFTypeDictionaryValueCallBacks);
     for (const auto& it : txt)
     {
       CFStringRef key = CFStringCreateWithCString(NULL, it.first.c_str(), kCFStringEncodingUTF8);
       CFDataRef value = CFDataCreate(NULL, (UInt8*)it.second.c_str(), strlen(it.second.c_str()));
 
-      CFDictionaryAddValue(txtDict,key, value);
+      CFDictionaryAddValue(txtDict, key, value);
       CFRelease(key);
       CFRelease(value);
     }
@@ -87,7 +83,7 @@ bool CZeroconfDarwin::doPublishService(const std::string& fcr_identifier,
     CFRelease(txtDict);
   }
 
-  Boolean result = CFNetServiceRegisterWithOptions (netService, 0, &error);
+  Boolean result = CFNetServiceRegisterWithOptions(netService, 0, &error);
   if (result == false)
   {
     // Something went wrong so lets clean up.
@@ -95,9 +91,12 @@ bool CZeroconfDarwin::doPublishService(const std::string& fcr_identifier,
     CFNetServiceSetClient(netService, NULL, NULL);
     CFRelease(netService);
     netService = NULL;
-    CLog::Log(LOGERROR, "CZeroconfDarwin::doPublishService CFNetServiceRegister returned "
-      "(domain = %d, error = %" PRId64")", (int)error.domain, (int64_t)error.error);
-  } else
+    CLog::Log(LOGERROR,
+              "CZeroconfDarwin::doPublishService CFNetServiceRegister returned "
+              "(domain = %d, error = %" PRId64 ")",
+              (int)error.domain, (int64_t)error.error);
+  }
+  else
   {
     CSingleLock lock(m_data_guard);
     m_services.insert(make_pair(fcr_identifier, netService));
@@ -111,14 +110,14 @@ bool CZeroconfDarwin::doForceReAnnounceService(const std::string& fcr_identifier
   bool ret = false;
   CSingleLock lock(m_data_guard);
   tServiceMap::iterator it = m_services.find(fcr_identifier);
-  if(it != m_services.end())
+  if (it != m_services.end())
   {
     CFNetServiceRef service = it->second;
 
     CFDataRef txtData = CFNetServiceGetTXTData(service);
     // convert the txtdata back and forth is enough to trigger a reannounce later
     CFDictionaryRef txtDict = CFNetServiceCreateDictionaryWithTXTData(NULL, txtData);
-    CFMutableDictionaryRef txtDictMutable =CFDictionaryCreateMutableCopy(NULL, 0, txtDict);
+    CFMutableDictionaryRef txtDictMutable = CFDictionaryCreateMutableCopy(NULL, 0, txtDict);
     txtData = CFNetServiceCreateTXTDataWithDictionary(NULL, txtDictMutable);
 
     // this triggers the reannounce
@@ -136,12 +135,13 @@ bool CZeroconfDarwin::doRemoveService(const std::string& fcr_ident)
 {
   CSingleLock lock(m_data_guard);
   tServiceMap::iterator it = m_services.find(fcr_ident);
-  if(it != m_services.end())
+  if (it != m_services.end())
   {
     cancelRegistration(it->second);
     m_services.erase(it);
     return true;
-  } else
+  }
+  else
     return false;
 }
 
@@ -159,14 +159,17 @@ void CZeroconfDarwin::registerCallback(CFNetServiceRef theService, CFStreamError
   if (error->domain == kCFStreamErrorDomainNetServices)
   {
     CZeroconfDarwin* p_this = reinterpret_cast<CZeroconfDarwin*>(info);
-    switch(error->error) {
-      case kCFNetServicesErrorCollision:
-        CLog::Log(LOGERROR, "CZeroconfDarwin::registerCallback name collision occured");
-        break;
-      default:
-        CLog::Log(LOGERROR, "CZeroconfDarwin::registerCallback returned "
-          "(domain = %d, error = %" PRId64")", (int)error->domain, (int64_t)error->error);
-        break;
+    switch (error->error)
+    {
+    case kCFNetServicesErrorCollision:
+      CLog::Log(LOGERROR, "CZeroconfDarwin::registerCallback name collision occured");
+      break;
+    default:
+      CLog::Log(LOGERROR,
+                "CZeroconfDarwin::registerCallback returned "
+                "(domain = %d, error = %" PRId64 ")",
+                (int)error->domain, (int64_t)error->error);
+      break;
     }
     p_this->cancelRegistration(theService);
     //remove it
@@ -174,7 +177,7 @@ void CZeroconfDarwin::registerCallback(CFNetServiceRef theService, CFStreamError
     for (tServiceMap::iterator it = p_this->m_services.begin(); it != p_this->m_services.end();
          ++it)
     {
-      if(it->second == theService)
+      if (it->second == theService)
       {
         p_this->m_services.erase(it);
         break;

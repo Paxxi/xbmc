@@ -16,62 +16,62 @@
 namespace ADDON
 {
 
-  class IAddonInstanceHandler;
+class IAddonInstanceHandler;
 
-  class CAddonDll;
-  typedef std::shared_ptr<CAddonDll> AddonDllPtr;
+class CAddonDll;
+typedef std::shared_ptr<CAddonDll> AddonDllPtr;
 
-  class CBinaryAddonBase;
-  typedef std::shared_ptr<CBinaryAddonBase> BinaryAddonBasePtr;
-  typedef std::vector<BinaryAddonBasePtr> BinaryAddonBaseList;
+class CBinaryAddonBase;
+typedef std::shared_ptr<CBinaryAddonBase> BinaryAddonBasePtr;
+typedef std::vector<BinaryAddonBasePtr> BinaryAddonBaseList;
 
-  class CBinaryAddonManager
-  {
-  public:
-    CBinaryAddonManager();
-    CBinaryAddonManager(const CBinaryAddonManager&) = delete;
-    ~CBinaryAddonManager();
+class CBinaryAddonManager
+{
+public:
+  CBinaryAddonManager();
+  CBinaryAddonManager(const CBinaryAddonManager&) = delete;
+  ~CBinaryAddonManager();
 
-    bool Init();
-    void DeInit();
+  bool Init();
+  void DeInit();
 
-    /*!
+  /*!
      * @brief Checks system about given type to know related add-on's are
      * installed.
      *
      * @param[in] type Add-on type to check installed
      * @return true if given type is installed
      */
-    bool HasInstalledAddons(const TYPE &type) const;
+  bool HasInstalledAddons(const TYPE& type) const;
 
-    /*!
+  /*!
      * @brief Checks system about given type to know related add-on's are
      * installed and also minimum one enabled.
      *
      * @param[in] type Add-on type to check enabled
      * @return true if given type is enabled
      */
-    bool HasEnabledAddons(const TYPE &type) const;
+  bool HasEnabledAddons(const TYPE& type) const;
 
-    /*!
+  /*!
      * @brief Checks whether an addon is installed.
      *
      * @param[in] addonId id of the addon
      * @param[in] type Add-on type to check installed
      * @return true if installed
      */
-    bool IsAddonInstalled(const std::string& addonId, const TYPE &type = ADDON_UNKNOWN);
+  bool IsAddonInstalled(const std::string& addonId, const TYPE& type = ADDON_UNKNOWN);
 
-    /*!
+  /*!
      * @brief Check whether an addon has been enabled.
      *
      * @param[in] addonId id of the addon
      * @param[in] type Add-on type to check installed and enabled
      * @return true if enabled
      */
-    bool IsAddonEnabled(const std::string& addonId, const TYPE &type = ADDON_UNKNOWN);
+  bool IsAddonEnabled(const std::string& addonId, const TYPE& type = ADDON_UNKNOWN);
 
-    /*!
+  /*!
      * @brief Get a list of add-on's with info's for the on system available
      * ones.
      *
@@ -84,9 +84,9 @@ namespace ADDON
      *                        If a type id becomes added are only add-ons
      *                        returned who match them. Default is for all types.
      */
-    void GetAddonInfos(BinaryAddonBaseList& addonInfos, bool enabledOnly, const TYPE &type) const;
+  void GetAddonInfos(BinaryAddonBaseList& addonInfos, bool enabledOnly, const TYPE& type) const;
 
-    /*!
+  /*!
      * @brief Get a list of disabled add-on's with info's for the on system
      * available ones.
      *
@@ -97,9 +97,9 @@ namespace ADDON
      *                        If a type id becomes added are only add-ons
      *                        returned who match them. Default is for all types.
      */
-    void GetDisabledAddonInfos(BinaryAddonBaseList& addonInfos, const TYPE& type);
+  void GetDisabledAddonInfos(BinaryAddonBaseList& addonInfos, const TYPE& type);
 
-    /*!
+  /*!
      * @brief To get information from a installed add-on
      *
      * @param[in] addonId the add-on id to get the info for
@@ -107,9 +107,10 @@ namespace ADDON
      *                 not a nullptr is returned
      * @return add-on information pointer of installed add-on
      */
-    const BinaryAddonBasePtr GetInstalledAddonInfo(const std::string& addonId, const TYPE &type = ADDON_UNKNOWN) const;
+  const BinaryAddonBasePtr GetInstalledAddonInfo(const std::string& addonId,
+                                                 const TYPE& type = ADDON_UNKNOWN) const;
 
-    /*!
+  /*!
      * @brief Used from other addon manager to get active addon over a from him
      * created CAddonDll.
      *
@@ -117,9 +118,9 @@ namespace ADDON
      * @return if present the pointer to active one or nullptr if not present
      *
      */
-    AddonPtr GetRunningAddon(const std::string& addonId) const;
+  AddonPtr GetRunningAddon(const std::string& addonId) const;
 
-    /*!
+  /*!
      * @brief To get the path where temporary addon parts can be becomes stored
      *
      * @return the base path used for temporary addon paths
@@ -127,23 +128,23 @@ namespace ADDON
      * @warning the folder and his contents becomes deleted during stop and
      * close of Kodi
      */
-    const std::string& GetTempAddonBasePath() { return m_tempAddonBasePath; }
+  const std::string& GetTempAddonBasePath() { return m_tempAddonBasePath; }
 
-  private:
-    bool AddAddonBaseEntry(BINARY_ADDON_LIST_ENTRY& entry);
+private:
+  bool AddAddonBaseEntry(BINARY_ADDON_LIST_ENTRY& entry);
 
-    void OnEvent(const AddonEvent& event);
-    void EnableEvent(const std::string& addonId);
-    void DisableEvent(const std::string& addonId);
-    void InstalledChangeEvent();
+  void OnEvent(const AddonEvent& event);
+  void EnableEvent(const std::string& addonId);
+  void DisableEvent(const std::string& addonId);
+  void InstalledChangeEvent();
 
-    mutable CCriticalSection m_critSection;
+  mutable CCriticalSection m_critSection;
 
-    typedef std::map<std::string, BinaryAddonBasePtr> BinaryAddonMgrBaseList;
-    BinaryAddonMgrBaseList m_installedAddons;
-    BinaryAddonMgrBaseList m_enabledAddons;
+  typedef std::map<std::string, BinaryAddonBasePtr> BinaryAddonMgrBaseList;
+  BinaryAddonMgrBaseList m_installedAddons;
+  BinaryAddonMgrBaseList m_enabledAddons;
 
-    const std::string m_tempAddonBasePath;
-  };
+  const std::string m_tempAddonBasePath;
+};
 
 } /* namespace ADDON */

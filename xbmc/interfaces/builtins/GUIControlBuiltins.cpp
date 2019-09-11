@@ -21,7 +21,8 @@
  */
 static int ControlMove(const std::vector<std::string>& params)
 {
-  CGUIMessage message(GUI_MSG_MOVE_OFFSET, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(),
+  CGUIMessage message(GUI_MSG_MOVE_OFFSET,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(),
                       atoi(params[0].c_str()), atoi(params[1].c_str()));
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
@@ -44,7 +45,8 @@ static int SendClick(const std::vector<std::string>& params)
   }
   else
   { // single param - assume you meant the focused window
-    CGUIMessage message(GUI_MSG_CLICKED, atoi(params[0].c_str()), CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
+    CGUIMessage message(GUI_MSG_CLICKED, atoi(params[0].c_str()),
+                        CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
     CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
   }
 
@@ -60,15 +62,20 @@ static int SendClick(const std::vector<std::string>& params)
 static int SendMessage(const std::vector<std::string>& params)
 {
   int controlID = atoi(params[0].c_str());
-  int windowID = (params.size() == 3) ? CWindowTranslator::TranslateWindow(params[2]) : CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow();
+  int windowID = (params.size() == 3)
+                     ? CWindowTranslator::TranslateWindow(params[2])
+                     : CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow();
   if (params[1] == "moveup")
-    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_MOVE_OFFSET, windowID, controlID, 1);
+    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_MOVE_OFFSET, windowID,
+                                                             controlID, 1);
   else if (params[1] == "movedown")
-    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_MOVE_OFFSET, windowID, controlID, -1);
+    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_MOVE_OFFSET, windowID,
+                                                             controlID, -1);
   else if (params[1] == "pageup")
     CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_PAGE_UP, windowID, controlID);
   else if (params[1] == "pagedown")
-    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_PAGE_DOWN, windowID, controlID);
+    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_PAGE_DOWN, windowID,
+                                                             controlID);
   else if (params[1] == "click")
     CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_CLICKED, controlID, windowID);
 
@@ -84,11 +91,13 @@ static int SendMessage(const std::vector<std::string>& params)
 static int SetFocus(const std::vector<std::string>& params)
 {
   int controlID = atol(params[0].c_str());
-  int subItem = (params.size() > 1) ? atol(params[1].c_str())+1 : 0;
+  int subItem = (params.size() > 1) ? atol(params[1].c_str()) + 1 : 0;
   int absID = 0;
   if (params.size() > 2 && StringUtils::EqualsNoCase(params[2].c_str(), "absolute"))
     absID = 1;
-  CGUIMessage msg(GUI_MSG_SETFOCUS, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(), controlID, subItem, absID);
+  CGUIMessage msg(GUI_MSG_SETFOCUS,
+                  CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(), controlID,
+                  subItem, absID);
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(msg);
 
   return 0;
@@ -100,11 +109,12 @@ static int SetFocus(const std::vector<std::string>& params)
  *
  *  Set Message template parameter to GUI_MSG_PAGE_DOWN/GUI_MSG_PAGE_UP.
  */
-  template<int Message>
+template<int Message>
 static int ShiftPage(const std::vector<std::string>& params)
 {
   int id = atoi(params[0].c_str());
-  CGUIMessage message(Message, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(), id);
+  CGUIMessage message(Message,
+                      CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(), id);
   CServiceBroker::GetGUI()->GetWindowManager().SendMessage(message);
 
   return 0;
@@ -177,12 +187,19 @@ static int ShiftPage(const std::vector<std::string>& params)
 CBuiltins::CommandMap CGUIControlBuiltins::GetOperations() const
 {
   return {
-           {"control.message",  {"Send a given message to a control within a given window", 2, SendMessage}},
-           {"control.move",     {"Tells the specified control to 'move' to another entry specified by offset", 2, ControlMove}},
-           {"control.setfocus", {"Change current focus to a different control id", 1, SetFocus}},
-           {"pagedown",         {"Send a page down event to the pagecontrol with given id", 1, ShiftPage<GUI_MSG_PAGE_DOWN>}},
-           {"pageup",           {"Send a page up event to the pagecontrol with given id", 1, ShiftPage<GUI_MSG_PAGE_UP>}},
-           {"sendclick",        {"Send a click message from the given control to the given window", 1, SendClick}},
-           {"setfocus",         {"Change current focus to a different control id", 1, SetFocus}},
-         };
+      {"control.message",
+       {"Send a given message to a control within a given window", 2, SendMessage}},
+      {"control.move",
+       {"Tells the specified control to 'move' to another entry specified by offset", 2,
+        ControlMove}},
+      {"control.setfocus", {"Change current focus to a different control id", 1, SetFocus}},
+      {"pagedown",
+       {"Send a page down event to the pagecontrol with given id", 1,
+        ShiftPage<GUI_MSG_PAGE_DOWN>}},
+      {"pageup",
+       {"Send a page up event to the pagecontrol with given id", 1, ShiftPage<GUI_MSG_PAGE_UP>}},
+      {"sendclick",
+       {"Send a click message from the given control to the given window", 1, SendClick}},
+      {"setfocus", {"Change current focus to a different control id", 1, SetFocus}},
+  };
 }

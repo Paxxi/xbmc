@@ -24,7 +24,8 @@ constexpr unsigned int defaultTimeout{20000};
  * poll until the lambda returns true or the timeout occurs. If the timeout occurs then
  * the function will return false. Otherwise it will return true.
  */
-template<typename L> inline bool poll(unsigned int timeoutMillis, L lambda)
+template<typename L>
+inline bool poll(unsigned int timeoutMillis, L lambda)
 {
   XbmcThreads::EndTime endTime(timeoutMillis);
   bool lastValue = false;
@@ -37,9 +38,10 @@ template<typename L> inline bool poll(unsigned int timeoutMillis, L lambda)
  * poll until the lambda returns true or the defaultTimeout occurs. If the timeout occurs then
  * the function will return false. Otherwise it will return true.
  */
-template<typename L> inline bool poll(L lambda)
+template<typename L>
+inline bool poll(L lambda)
 {
   return poll(defaultTimeout, lambda);
 }
 
-}
+} // namespace ConditionPoll

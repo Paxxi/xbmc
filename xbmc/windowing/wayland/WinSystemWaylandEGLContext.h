@@ -26,9 +26,7 @@ public:
   CWinSystemWaylandEGLContext();
   virtual ~CWinSystemWaylandEGLContext() = default;
 
-  bool CreateNewWindow(const std::string& name,
-                       bool fullScreen,
-                       RESOLUTION_INFO& res) override;
+  bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
   bool DestroyWindow() override;
   bool DestroyWindowSystem() override;
 
@@ -51,6 +49,6 @@ protected:
   wayland::egl_window_t m_nativeWindow;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

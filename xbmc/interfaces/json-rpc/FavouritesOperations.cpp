@@ -22,7 +22,11 @@
 
 using namespace JSONRPC;
 
-JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string& method,
+                                                    ITransportLayer* transport,
+                                                    IClient* client,
+                                                    const CVariant& parameterObject,
+                                                    CVariant& result)
 {
   CFileItemList favourites;
   CServiceBroker::GetFavouritesService().GetAll(favourites);
@@ -32,7 +36,8 @@ JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, I
   std::set<std::string> fields;
   if (parameterObject.isMember("properties") && parameterObject["properties"].isArray())
   {
-    for (CVariant::const_iterator_array field = parameterObject["properties"].begin_array(); field != parameterObject["properties"].end_array(); field++)
+    for (CVariant::const_iterator_array field = parameterObject["properties"].begin_array();
+         field != parameterObject["properties"].end_array(); field++)
       fields.insert(field->asString());
   }
 
@@ -53,7 +58,7 @@ JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, I
       continue;
 
     object["title"] = item->GetLabel();
-    if (fields.find("thumbnail") !=  fields.end())
+    if (fields.find("thumbnail") != fields.end())
       object["thumbnail"] = item->GetArt("thumb");
 
     if (StringUtils::EqualsNoCase(function, "ActivateWindow"))
@@ -62,7 +67,8 @@ JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, I
       if (fields.find("window") != fields.end())
       {
         if (StringUtils::IsNaturalNumber(parameters[0]))
-          object["window"] = CWindowTranslator::TranslateWindow(strtol(parameters[0].c_str(), NULL, 10));
+          object["window"] =
+              CWindowTranslator::TranslateWindow(strtol(parameters[0].c_str(), NULL, 10));
         else
           object["window"] = parameters[0];
       }
@@ -77,13 +83,13 @@ JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, I
     else if (StringUtils::EqualsNoCase(function, "PlayMedia"))
     {
       object["type"] = "media";
-      if (fields.find("path") !=  fields.end())
+      if (fields.find("path") != fields.end())
         object["path"] = parameters[0];
     }
     else if (StringUtils::EqualsNoCase(function, "RunScript"))
     {
       object["type"] = "script";
-      if (fields.find("path") !=  fields.end())
+      if (fields.find("path") != fields.end())
         object["path"] = parameters[0];
     }
     else
@@ -99,14 +105,19 @@ JSONRPC_STATUS CFavouritesOperations::GetFavourites(const std::string &method, I
   return OK;
 }
 
-JSONRPC_STATUS CFavouritesOperations::AddFavourite(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CFavouritesOperations::AddFavourite(const std::string& method,
+                                                   ITransportLayer* transport,
+                                                   IClient* client,
+                                                   const CVariant& parameterObject,
+                                                   CVariant& result)
 {
   std::string type = parameterObject["type"].asString();
 
   if (type.compare("unknown") == 0)
     return InvalidParams;
 
-  if ((type.compare("media") == 0 || type.compare("script") == 0) && !ParameterNotNull(parameterObject, "path"))
+  if ((type.compare("media") == 0 || type.compare("script") == 0) &&
+      !ParameterNotNull(parameterObject, "path"))
   {
     result["method"] = "Favourites.AddFavourite";
     result["stack"]["message"] = "Missing parameter";
@@ -150,7 +161,7 @@ JSONRPC_STATUS CFavouritesOperations::AddFavourite(const std::string &method, IT
     return InvalidParams;
 
   item.SetLabel(title);
-  if (ParameterNotNull(parameterObject,"thumbnail"))
+  if (ParameterNotNull(parameterObject, "thumbnail"))
     item.SetArt("thumb", parameterObject["thumbnail"].asString());
 
   if (CServiceBroker::GetFavouritesService().AddOrRemove(item, contextWindow))

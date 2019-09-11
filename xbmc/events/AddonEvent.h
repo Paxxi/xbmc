@@ -16,10 +16,20 @@ class CAddonEvent : public CUniqueEvent
 public:
   CAddonEvent(ADDON::AddonPtr addon, const CVariant& description);
   CAddonEvent(ADDON::AddonPtr addon, const CVariant& description, const CVariant& details);
-  CAddonEvent(ADDON::AddonPtr addon, const CVariant& description, const CVariant& details, const CVariant& executionLabel);
+  CAddonEvent(ADDON::AddonPtr addon,
+              const CVariant& description,
+              const CVariant& details,
+              const CVariant& executionLabel);
   CAddonEvent(ADDON::AddonPtr addon, EventLevel level, const CVariant& description);
-  CAddonEvent(ADDON::AddonPtr addon, EventLevel level, const CVariant& description, const CVariant& details);
-  CAddonEvent(ADDON::AddonPtr addon, EventLevel level, const CVariant& description, const CVariant& details, const CVariant& executionLabel);
+  CAddonEvent(ADDON::AddonPtr addon,
+              EventLevel level,
+              const CVariant& description,
+              const CVariant& details);
+  CAddonEvent(ADDON::AddonPtr addon,
+              EventLevel level,
+              const CVariant& description,
+              const CVariant& details,
+              const CVariant& executionLabel);
   ~CAddonEvent() override = default;
 
   const char* GetType() const override { return "AddonEvent"; }

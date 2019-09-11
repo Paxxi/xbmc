@@ -16,27 +16,26 @@
 
 namespace XFILE
 {
-class CMultiPathDirectory :
-      public IDirectory
+class CMultiPathDirectory : public IDirectory
 {
 public:
   CMultiPathDirectory(void);
   ~CMultiPathDirectory(void) override;
-  bool GetDirectory(const CURL& url, CFileItemList &items) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
   bool Exists(const CURL& url) override;
   bool Remove(const CURL& url) override;
 
-  static std::string GetFirstPath(const std::string &strPath);
-  static bool SupportsWriteFileOperations(const std::string &strPath);
+  static std::string GetFirstPath(const std::string& strPath);
+  static bool SupportsWriteFileOperations(const std::string& strPath);
   static bool GetPaths(const CURL& url, std::vector<std::string>& vecPaths);
   static bool GetPaths(const std::string& path, std::vector<std::string>& paths);
   static bool HasPath(const std::string& strPath, const std::string& strPathToFind);
-  static std::string ConstructMultiPath(const std::vector<std::string> &vecPaths);
-  static std::string ConstructMultiPath(const std::set<std::string> &setPaths);
+  static std::string ConstructMultiPath(const std::vector<std::string>& vecPaths);
+  static std::string ConstructMultiPath(const std::set<std::string>& setPaths);
 
 private:
-  void MergeItems(CFileItemList &items);
+  void MergeItems(CFileItemList& items);
   static void AddToMultiPath(std::string& strMultiPath, const std::string& strPath);
-  std::string ConstructMultiPath(const CFileItemList& items, const std::vector<int> &stack);
+  std::string ConstructMultiPath(const CFileItemList& items, const std::vector<int>& stack);
 };
-}
+} // namespace XFILE

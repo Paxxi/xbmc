@@ -20,12 +20,12 @@
 #include "utils/Variant.h"
 
 CGUIDialogVisualisationPresetList::CGUIDialogVisualisationPresetList()
-    : CGUIDialogSelect(WINDOW_DIALOG_VIS_PRESET_LIST)
+  : CGUIDialogSelect(WINDOW_DIALOG_VIS_PRESET_LIST)
 {
   m_loadType = KEEP_IN_MEMORY;
 }
 
-bool CGUIDialogVisualisationPresetList::OnMessage(CGUIMessage &message)
+bool CGUIDialogVisualisationPresetList::OnMessage(CGUIMessage& message)
 {
   switch (message.GetMessage())
   {
@@ -54,7 +54,7 @@ void CGUIDialogVisualisationPresetList::SetVisualisation(CGUIVisualisationContro
   Reset();
   if (!m_viz)
   { // No viz, but show something if this dialog activated
-    SetHeading(CVariant{ 10122 });
+    SetHeading(CVariant{10122});
     CFileItem item(g_localizeStrings.Get(13389));
     Add(item);
   }
@@ -62,7 +62,8 @@ void CGUIDialogVisualisationPresetList::SetVisualisation(CGUIVisualisationContro
   {
     SetUseDetails(false);
     SetMultiSelection(false);
-    SetHeading(CVariant{StringUtils::Format(g_localizeStrings.Get(13407).c_str(), m_viz->Name().c_str())});
+    SetHeading(
+        CVariant{StringUtils::Format(g_localizeStrings.Get(13407).c_str(), m_viz->Name().c_str())});
     std::vector<std::string> presets;
     if (m_viz->GetPresetList(presets))
     {

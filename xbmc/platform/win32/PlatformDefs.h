@@ -13,13 +13,13 @@
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 
-typedef __int64       off64_t;
-typedef __int64       fpos64_t;
-typedef __int64       __off64_t;
-typedef long          __off_t;
+typedef __int64 off64_t;
+typedef __int64 fpos64_t;
+typedef __int64 __off64_t;
+typedef long __off_t;
 
 #if !defined(_SSIZE_T_DEFINED) && !defined(HAVE_SSIZE_T)
-typedef intptr_t      ssize_t;
+typedef intptr_t ssize_t;
 #define _SSIZE_T_DEFINED
 #endif // !_SSIZE_T_DEFINED
 #ifndef SSIZE_MAX
@@ -36,8 +36,8 @@ typedef intptr_t      ssize_t;
 #endif
 
 #if defined TARGET_WINDOWS_DESKTOP
-#define popen   _popen
-#define pclose  _pclose
+#define popen _popen
+#define pclose _pclose
 #endif
 
 #if 0
@@ -54,4 +54,4 @@ typedef intptr_t      ssize_t;
 #define PIXEL_BSHIFT 0
 #endif
 
-extern "C" char * strptime(const char *buf, const char *fmt, struct tm *tm);
+extern "C" char* strptime(const char* buf, const char* fmt, struct tm* tm);

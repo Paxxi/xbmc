@@ -20,18 +20,18 @@
 
 using namespace XFILE;
 
-#define CONTROL_HEADING  1
+#define CONTROL_HEADING 1
 #define CONTROL_TEXTAREA 5
 
 CGUIDialogTextViewer::CGUIDialogTextViewer(void)
-    : CGUIDialog(WINDOW_DIALOG_TEXT_VIEWER, "DialogTextViewer.xml")
+  : CGUIDialog(WINDOW_DIALOG_TEXT_VIEWER, "DialogTextViewer.xml")
 {
   m_loadType = KEEP_IN_MEMORY;
 }
 
 CGUIDialogTextViewer::~CGUIDialogTextViewer(void) = default;
 
-bool CGUIDialogTextViewer::OnAction(const CAction &action)
+bool CGUIDialogTextViewer::OnAction(const CAction& action)
 {
   if (action.GetID() == ACTION_TOGGLE_FONT)
   {
@@ -44,27 +44,27 @@ bool CGUIDialogTextViewer::OnAction(const CAction &action)
 
 bool CGUIDialogTextViewer::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_INIT:
+  {
+    CGUIDialog::OnMessage(message);
+    SetHeading();
+    SetText();
+    UseMonoFont(m_mono);
+    return true;
+  }
+  break;
+  case GUI_MSG_NOTIFY_ALL:
+  {
+    if (message.GetParam1() == GUI_MSG_UPDATE)
     {
-      CGUIDialog::OnMessage(message);
-      SetHeading();
       SetText();
-      UseMonoFont(m_mono);
+      SetHeading();
       return true;
     }
-    break;
-  case GUI_MSG_NOTIFY_ALL:
-    {
-      if (message.GetParam1() == GUI_MSG_UPDATE)
-      {
-        SetText();
-        SetHeading();
-        return true;
-      }
-    }
-    break;
+  }
+  break;
   default:
     break;
   }
@@ -112,19 +112,21 @@ void CGUIDialogTextViewer::ShowForFile(const std::string& path, bool useMonoFont
     std::string data;
     try
     {
-      data.resize(file.GetLength()+1);
+      data.resize(file.GetLength() + 1);
       file.Read(&data[0], file.GetLength());
-      CGUIDialogTextViewer* pDialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogTextViewer>(WINDOW_DIALOG_TEXT_VIEWER);
+      CGUIDialogTextViewer* pDialog =
+          CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogTextViewer>(
+              WINDOW_DIALOG_TEXT_VIEWER);
       pDialog->SetHeading(URIUtils::GetFileName(path));
       pDialog->SetText(data);
       pDialog->UseMonoFont(useMonoFont);
       pDialog->Open();
     }
-    catch(const std::bad_alloc&)
+    catch (const std::bad_alloc&)
     {
       CLog::Log(LOGERROR, "Not enough memory to load text file %s", path.c_str());
     }
-    catch(...)
+    catch (...)
     {
       CLog::Log(LOGERROR, "Exception while trying to view text file %s", path.c_str());
     }

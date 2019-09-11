@@ -17,9 +17,12 @@
 
 using namespace XFILE;
 
-CInputStreamMultiSource::CInputStreamMultiSource(IVideoPlayer* pPlayer, const CFileItem& fileitem, const std::vector<std::string>& filenames) : InputStreamMultiStreams(DVDSTREAM_TYPE_MULTIFILES, fileitem),
-  m_pPlayer(pPlayer),
-  m_filenames(filenames)
+CInputStreamMultiSource::CInputStreamMultiSource(IVideoPlayer* pPlayer,
+                                                 const CFileItem& fileitem,
+                                                 const std::vector<std::string>& filenames)
+  : InputStreamMultiStreams(DVDSTREAM_TYPE_MULTIFILES, fileitem)
+  , m_pPlayer(pPlayer)
+  , m_filenames(filenames)
 {
 }
 
@@ -50,7 +53,7 @@ int CInputStreamMultiSource::GetBlockSize()
   return 0;
 }
 
-bool CInputStreamMultiSource::GetCacheStatus(XFILE::SCacheStatus *status)
+bool CInputStreamMultiSource::GetCacheStatus(XFILE::SCacheStatus* status)
 {
   return false;
 }
@@ -110,13 +113,16 @@ bool CInputStreamMultiSource::Open()
     InputStreamPtr inputstream(CDVDFactoryInputStream::CreateInputStream(m_pPlayer, fileitem));
     if (!inputstream)
     {
-      CLog::Log(LOGERROR, "CDVDPlayer::OpenInputStream - unable to create input stream for file [%s]", m_filenames[i].c_str());
+      CLog::Log(LOGERROR,
+                "CDVDPlayer::OpenInputStream - unable to create input stream for file [%s]",
+                m_filenames[i].c_str());
       continue;
     }
 
     if (!inputstream->Open())
     {
-      CLog::Log(LOGERROR, "CDVDPlayer::OpenInputStream - error opening file [%s]", m_filenames[i].c_str());
+      CLog::Log(LOGERROR, "CDVDPlayer::OpenInputStream - error opening file [%s]",
+                m_filenames[i].c_str());
       continue;
     }
     m_InputStreams.push_back(inputstream);

@@ -17,16 +17,16 @@
 #include <cstring>
 #include <utility>
 
-#define XML_VIEWSTATESETTINGS       "viewstates"
-#define XML_VIEWMODE                "viewmode"
-#define XML_SORTMETHOD              "sortmethod"
-#define XML_SORTORDER               "sortorder"
-#define XML_SORTATTRIBUTES          "sortattributes"
-#define XML_GENERAL                 "general"
-#define XML_SETTINGLEVEL            "settinglevel"
-#define XML_EVENTLOG                "eventlog"
-#define XML_EVENTLOG_LEVEL          "level"
-#define XML_EVENTLOG_LEVEL_HIGHER   "showhigherlevels"
+#define XML_VIEWSTATESETTINGS "viewstates"
+#define XML_VIEWMODE "viewmode"
+#define XML_SORTMETHOD "sortmethod"
+#define XML_SORTORDER "sortorder"
+#define XML_SORTATTRIBUTES "sortattributes"
+#define XML_GENERAL "general"
+#define XML_SETTINGLEVEL "settinglevel"
+#define XML_EVENTLOG "eventlog"
+#define XML_EVENTLOG_LEVEL "level"
+#define XML_EVENTLOG_LEVEL_HIGHER "showhigherlevels"
 
 CViewStateSettings::CViewStateSettings()
 {
@@ -54,7 +54,8 @@ CViewStateSettings::CViewStateSettings()
 
 CViewStateSettings::~CViewStateSettings()
 {
-  for (std::map<std::string, CViewState*>::const_iterator viewState = m_viewStates.begin(); viewState != m_viewStates.end(); ++viewState)
+  for (std::map<std::string, CViewState*>::const_iterator viewState = m_viewStates.begin();
+       viewState != m_viewStates.end(); ++viewState)
     delete viewState->second;
   m_viewStates.clear();
 }
@@ -65,40 +66,45 @@ CViewStateSettings& CViewStateSettings::GetInstance()
   return sViewStateSettings;
 }
 
-bool CViewStateSettings::Load(const TiXmlNode *settings)
+bool CViewStateSettings::Load(const TiXmlNode* settings)
 {
   if (settings == NULL)
     return false;
 
   CSingleLock lock(m_critical);
-  const TiXmlNode *pElement = settings->FirstChildElement(XML_VIEWSTATESETTINGS);
+  const TiXmlNode* pElement = settings->FirstChildElement(XML_VIEWSTATESETTINGS);
   if (pElement == NULL)
   {
     CLog::Log(LOGWARNING, "CViewStateSettings: no <viewstates> tag found");
     return false;
   }
 
-  for (std::map<std::string, CViewState*>::iterator viewState = m_viewStates.begin(); viewState != m_viewStates.end(); ++viewState)
+  for (std::map<std::string, CViewState*>::iterator viewState = m_viewStates.begin();
+       viewState != m_viewStates.end(); ++viewState)
   {
     const TiXmlNode* pViewState = pElement->FirstChildElement(viewState->first);
     if (pViewState == NULL)
       continue;
 
-    XMLUtils::GetInt(pViewState, XML_VIEWMODE, viewState->second->m_viewMode, DEFAULT_VIEW_LIST, DEFAULT_VIEW_MAX);
+    XMLUtils::GetInt(pViewState, XML_VIEWMODE, viewState->second->m_viewMode, DEFAULT_VIEW_LIST,
+                     DEFAULT_VIEW_MAX);
 
     // keep backwards compatibility to the old sorting methods
     if (pViewState->FirstChild(XML_SORTATTRIBUTES) == NULL)
     {
       int sortMethod;
-      if (XMLUtils::GetInt(pViewState, XML_SORTMETHOD, sortMethod, SORT_METHOD_NONE, SORT_METHOD_MAX))
-        viewState->second->m_sortDescription = SortUtils::TranslateOldSortMethod((SORT_METHOD)sortMethod);
+      if (XMLUtils::GetInt(pViewState, XML_SORTMETHOD, sortMethod, SORT_METHOD_NONE,
+                           SORT_METHOD_MAX))
+        viewState->second->m_sortDescription =
+            SortUtils::TranslateOldSortMethod((SORT_METHOD)sortMethod);
     }
     else
     {
       int sortMethod;
       if (XMLUtils::GetInt(pViewState, XML_SORTMETHOD, sortMethod, SortByNone, SortByLastUsed))
         viewState->second->m_sortDescription.sortBy = (SortBy)sortMethod;
-      if (XMLUtils::GetInt(pViewState, XML_SORTATTRIBUTES, sortMethod, SortAttributeNone, SortAttributeIgnoreFolders))
+      if (XMLUtils::GetInt(pViewState, XML_SORTATTRIBUTES, sortMethod, SortAttributeNone,
+                           SortAttributeIgnoreFolders))
         viewState->second->m_sortDescription.sortAttributes = (SortAttribute)sortMethod;
     }
 
@@ -111,7 +117,9 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
   if (pElement != NULL)
   {
     int settingLevel;
-    if (XMLUtils::GetInt(pElement, XML_SETTINGLEVEL, settingLevel, static_cast<int>(SettingLevel::Basic), static_cast<int>(SettingLevel::Expert)))
+    if (XMLUtils::GetInt(pElement, XML_SETTINGLEVEL, settingLevel,
+                         static_cast<int>(SettingLevel::Basic),
+                         static_cast<int>(SettingLevel::Expert)))
       m_settingLevel = (SettingLevel)settingLevel;
     else
       m_settingLevel = SettingLevel::Standard;
@@ -120,7 +128,9 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
     if (pEventLogNode != NULL)
     {
       int eventLevel;
-      if (XMLUtils::GetInt(pEventLogNode, XML_EVENTLOG_LEVEL, eventLevel, static_cast<int>(EventLevel::Basic), static_cast<int>(EventLevel::Error)))
+      if (XMLUtils::GetInt(pEventLogNode, XML_EVENTLOG_LEVEL, eventLevel,
+                           static_cast<int>(EventLevel::Basic),
+                           static_cast<int>(EventLevel::Error)))
         m_eventLevel = (EventLevel)eventLevel;
       else
         m_eventLevel = EventLevel::Basic;
@@ -133,7 +143,7 @@ bool CViewStateSettings::Load(const TiXmlNode *settings)
   return true;
 }
 
-bool CViewStateSettings::Save(TiXmlNode *settings) const
+bool CViewStateSettings::Save(TiXmlNode* settings) const
 {
   if (settings == NULL)
     return false;
@@ -141,27 +151,29 @@ bool CViewStateSettings::Save(TiXmlNode *settings) const
   CSingleLock lock(m_critical);
   // add the <viewstates> tag
   TiXmlElement xmlViewStateElement(XML_VIEWSTATESETTINGS);
-  TiXmlNode *pViewStateNode = settings->InsertEndChild(xmlViewStateElement);
+  TiXmlNode* pViewStateNode = settings->InsertEndChild(xmlViewStateElement);
   if (pViewStateNode == NULL)
   {
     CLog::Log(LOGWARNING, "CViewStateSettings: could not create <viewstates> tag");
     return false;
   }
 
-  for (std::map<std::string, CViewState*>::const_iterator viewState = m_viewStates.begin(); viewState != m_viewStates.end(); ++viewState)
+  for (std::map<std::string, CViewState*>::const_iterator viewState = m_viewStates.begin();
+       viewState != m_viewStates.end(); ++viewState)
   {
     TiXmlElement newElement(viewState->first);
-    TiXmlNode *pNewNode = pViewStateNode->InsertEndChild(newElement);
+    TiXmlNode* pNewNode = pViewStateNode->InsertEndChild(newElement);
     if (pNewNode == NULL)
       continue;
 
     XMLUtils::SetInt(pNewNode, XML_VIEWMODE, viewState->second->m_viewMode);
     XMLUtils::SetInt(pNewNode, XML_SORTMETHOD, (int)viewState->second->m_sortDescription.sortBy);
     XMLUtils::SetInt(pNewNode, XML_SORTORDER, (int)viewState->second->m_sortDescription.sortOrder);
-    XMLUtils::SetInt(pNewNode, XML_SORTATTRIBUTES, (int)viewState->second->m_sortDescription.sortAttributes);
+    XMLUtils::SetInt(pNewNode, XML_SORTATTRIBUTES,
+                     (int)viewState->second->m_sortDescription.sortAttributes);
   }
 
-  TiXmlNode *generalNode = settings->FirstChild(XML_GENERAL);
+  TiXmlNode* generalNode = settings->FirstChild(XML_GENERAL);
   if (generalNode == NULL)
   {
     TiXmlElement generalElement(XML_GENERAL);
@@ -172,7 +184,7 @@ bool CViewStateSettings::Save(TiXmlNode *settings) const
 
   XMLUtils::SetInt(generalNode, XML_SETTINGLEVEL, (int)m_settingLevel);
 
-  TiXmlNode *eventLogNode = generalNode->FirstChild(XML_EVENTLOG);
+  TiXmlNode* eventLogNode = generalNode->FirstChild(XML_EVENTLOG);
   if (eventLogNode == NULL)
   {
     TiXmlElement eventLogElement(XML_EVENTLOG);
@@ -192,7 +204,7 @@ void CViewStateSettings::Clear()
   m_settingLevel = SettingLevel::Standard;
 }
 
-const CViewState* CViewStateSettings::Get(const std::string &viewState) const
+const CViewState* CViewStateSettings::Get(const std::string& viewState) const
 {
   CSingleLock lock(m_critical);
   std::map<std::string, CViewState*>::const_iterator view = m_viewStates.find(viewState);
@@ -202,7 +214,7 @@ const CViewState* CViewStateSettings::Get(const std::string &viewState) const
   return NULL;
 }
 
-CViewState* CViewStateSettings::Get(const std::string &viewState)
+CViewState* CViewStateSettings::Get(const std::string& viewState)
 {
   CSingleLock lock(m_critical);
   std::map<std::string, CViewState*>::iterator view = m_viewStates.find(viewState);
@@ -258,12 +270,14 @@ EventLevel CViewStateSettings::GetNextEventLevel() const
   return level;
 }
 
-void CViewStateSettings::AddViewState(const std::string& strTagName, int defaultView /* = DEFAULT_VIEW_LIST */, SortBy defaultSort /* = SortByLabel */)
+void CViewStateSettings::AddViewState(const std::string& strTagName,
+                                      int defaultView /* = DEFAULT_VIEW_LIST */,
+                                      SortBy defaultSort /* = SortByLabel */)
 {
   if (strTagName.empty() || m_viewStates.find(strTagName) != m_viewStates.end())
     return;
 
-  CViewState *viewState = new CViewState(defaultView, defaultSort, SortOrderAscending);
+  CViewState* viewState = new CViewState(defaultView, defaultSort, SortOrderAscending);
   if (viewState == NULL)
     return;
 

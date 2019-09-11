@@ -14,11 +14,11 @@
 #include <utility>
 #include <vector>
 
-#define VideoPlayer_AUDIO    1
-#define VideoPlayer_VIDEO    2
+#define VideoPlayer_AUDIO 1
+#define VideoPlayer_VIDEO 2
 #define VideoPlayer_SUBTITLE 3
 #define VideoPlayer_TELETEXT 4
-#define VideoPlayer_RDS      5
+#define VideoPlayer_RDS 5
 
 class CDVDMsg;
 class CDVDStreamInfo;
@@ -28,14 +28,15 @@ class IVideoPlayer
 {
 public:
   virtual int OnDiscNavResult(void* pData, int iMessage) = 0;
-  virtual void GetVideoResolution(unsigned int &width, unsigned int &height) = 0;
+  virtual void GetVideoResolution(unsigned int& width, unsigned int& height) = 0;
   virtual ~IVideoPlayer() = default;
 };
 
 class IDVDStreamPlayer
 {
 public:
-  explicit IDVDStreamPlayer(CProcessInfo &processInfo) : m_processInfo(processInfo) {};
+  explicit IDVDStreamPlayer(CProcessInfo& processInfo)
+    : m_processInfo(processInfo){};
   virtual ~IDVDStreamPlayer() = default;
   virtual bool OpenStream(CDVDStreamInfo hint) = 0;
   virtual void CloseStream(bool bWaitForBuffers) = 0;
@@ -51,8 +52,9 @@ public:
     SYNC_WAITSYNC,
     SYNC_INSYNC
   };
+
 protected:
-  CProcessInfo &m_processInfo;
+  CProcessInfo& m_processInfo;
 };
 
 struct SStartMsg
@@ -74,7 +76,8 @@ class CDVDVideoCodec;
 class IDVDStreamPlayerVideo : public IDVDStreamPlayer
 {
 public:
-  explicit IDVDStreamPlayerVideo(CProcessInfo &processInfo) : IDVDStreamPlayer(processInfo) {};
+  explicit IDVDStreamPlayerVideo(CProcessInfo& processInfo)
+    : IDVDStreamPlayer(processInfo){};
   ~IDVDStreamPlayerVideo() override = default;
   bool OpenStream(CDVDStreamInfo hint) override = 0;
   void CloseStream(bool bWaitForBuffers) override = 0;
@@ -101,7 +104,8 @@ class CDVDAudioCodec;
 class IDVDStreamPlayerAudio : public IDVDStreamPlayer
 {
 public:
-  explicit IDVDStreamPlayerAudio(CProcessInfo &processInfo) : IDVDStreamPlayer(processInfo) {};
+  explicit IDVDStreamPlayerAudio(CProcessInfo& processInfo)
+    : IDVDStreamPlayer(processInfo){};
   ~IDVDStreamPlayerAudio() override = default;
   bool OpenStream(CDVDStreamInfo hints) override = 0;
   void CloseStream(bool bWaitForBuffers) override = 0;
@@ -109,11 +113,11 @@ public:
   virtual void Flush(bool sync) = 0;
   bool AcceptsData() const override = 0;
   virtual bool HasData() const = 0;
-  virtual int  GetLevel() const = 0;
+  virtual int GetLevel() const = 0;
   bool IsInited() const override = 0;
   void SendMessage(CDVDMsg* pMsg, int priority = 0) override = 0;
-  virtual void SetVolume(float fVolume) {};
-  virtual void SetMute(bool bOnOff) {};
+  virtual void SetVolume(float fVolume){};
+  virtual void SetMute(bool bOnOff){};
   virtual void SetDynamicRangeCompression(long drc) = 0;
   virtual std::string GetPlayerInfo() = 0;
   virtual int GetAudioChannels() = 0;

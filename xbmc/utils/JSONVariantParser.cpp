@@ -31,7 +31,7 @@ public:
   bool EndArray(rapidjson::SizeType elementCount);
 
 private:
-  template <typename... TArgs>
+  template<typename... TArgs>
   bool Primitive(TArgs... args)
   {
     PushObject(CVariant(std::forward<TArgs>(args)...));
@@ -44,7 +44,7 @@ private:
   void PopObject();
 
   CVariant& m_parsedObject;
-  std::vector<CVariant *> m_parse;
+  std::vector<CVariant*> m_parse;
   std::string m_key;
 
   enum class PARSE_STATUS
@@ -57,11 +57,12 @@ private:
 };
 
 CJSONVariantParserHandler::CJSONVariantParserHandler(CVariant& parsedObject)
-  : m_parsedObject(parsedObject),
-    m_parse(),
-    m_key(),
-    m_status(PARSE_STATUS::Variable)
-{ }
+  : m_parsedObject(parsedObject)
+  , m_parse()
+  , m_key()
+  , m_status(PARSE_STATUS::Variable)
+{
+}
 
 bool CJSONVariantParserHandler::Null()
 {
@@ -155,7 +156,7 @@ void CJSONVariantParserHandler::PushObject(CVariant variant)
   }
   else if (m_status == PARSE_STATUS::Array)
   {
-    CVariant *temp = m_parse[m_parse.size() - 1];
+    CVariant* temp = m_parse[m_parse.size() - 1];
     temp->push_back(variant);
     m_parse.push_back(&(*temp)[temp->size() - 1]);
   }
@@ -172,7 +173,7 @@ void CJSONVariantParserHandler::PushObject(CVariant variant)
 
 void CJSONVariantParserHandler::PopObject()
 {
-  CVariant *variant = m_parse[m_parse.size() - 1];
+  CVariant* variant = m_parse[m_parse.size() - 1];
   m_parse.pop_back();
 
   if (!m_parse.empty())

@@ -22,10 +22,16 @@ namespace POSIX
 class CFileHandle : public CScopeGuard<int, -1, decltype(close)>
 {
 public:
-  CFileHandle() noexcept : CScopeGuard(close, -1) {}
-  explicit CFileHandle(int fd) : CScopeGuard(close, fd) {}
+  CFileHandle() noexcept
+    : CScopeGuard(close, -1)
+  {
+  }
+  explicit CFileHandle(int fd)
+    : CScopeGuard(close, fd)
+  {
+  }
 };
 
-}
-}
-}
+} // namespace POSIX
+} // namespace UTILS
+} // namespace KODI

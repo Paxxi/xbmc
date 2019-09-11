@@ -27,7 +27,7 @@ enum AEResampleFactoryOptions
 class CAEResampleFactory
 {
 public:
-  static IAEResample *Create(uint32_t flags = 0U);
+  static IAEResample* Create(uint32_t flags = 0U);
 };
 
-}
+} // namespace ActiveAE

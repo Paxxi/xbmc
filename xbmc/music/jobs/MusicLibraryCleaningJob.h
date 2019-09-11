@@ -26,13 +26,12 @@ public:
   ~CMusicLibraryCleaningJob() override;
 
   // specialization of CJob
-  const char *GetType() const override { return "MusicLibraryCleaningJob"; }
+  const char* GetType() const override { return "MusicLibraryCleaningJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
   // implementation of CMusicLibraryJob
-  bool Work(CMusicDatabase &db) override;
+  bool Work(CMusicDatabase& db) override;
 
 private:
-
 };

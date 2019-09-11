@@ -6,8 +6,9 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "network/Network.h"
 #include "FileFactory.h"
+
+#include "network/Network.h"
 #ifdef TARGET_POSIX
 #include "platform/posix/filesystem/PosixFile.h"
 #elif defined(TARGET_WINDOWS)
@@ -45,20 +46,20 @@
 #ifdef HAVE_LIBBLURAY
 #include "BlurayFile.h"
 #endif
-#include "PipeFile.h"
-#include "MusicDatabaseFile.h"
-#include "VideoDatabaseFile.h"
-#include "SpecialProtocolFile.h"
-#include "MultiPathFile.h"
-#include "UDFFile.h"
 #include "ImageFile.h"
+#include "MultiPathFile.h"
+#include "MusicDatabaseFile.h"
+#include "PipeFile.h"
 #include "ResourceFile.h"
+#include "ServiceBroker.h"
+#include "SpecialProtocolFile.h"
+#include "UDFFile.h"
 #include "URL.h"
-#include "utils/log.h"
+#include "VideoDatabaseFile.h"
+#include "addons/VFSEntry.h"
 #include "network/WakeOnAccess.h"
 #include "utils/StringUtils.h"
-#include "ServiceBroker.h"
-#include "addons/VFSEntry.h"
+#include "utils/log.h"
 
 using namespace ADDON;
 using namespace XFILE;
@@ -84,25 +85,37 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
     {
       auto prots = StringUtils::Split(vfsAddon->GetProtocols(), "|");
 
-      if (vfsAddon->HasFiles() && std::find(prots.begin(), prots.end(), url.GetProtocol()) != prots.end())
+      if (vfsAddon->HasFiles() &&
+          std::find(prots.begin(), prots.end(), url.GetProtocol()) != prots.end())
         return new CVFSEntryIFileWrapper(vfsAddon);
     }
   }
 
 #if defined(TARGET_ANDROID)
-  if (url.IsProtocol("apk")) return new CAPKFile();
+  if (url.IsProtocol("apk"))
+    return new CAPKFile();
 #endif
-  if (url.IsProtocol("zip")) return new CZipFile();
-  else if (url.IsProtocol("xbt")) return new CXbtFile();
-  else if (url.IsProtocol("musicdb")) return new CMusicDatabaseFile();
-  else if (url.IsProtocol("videodb")) return new CVideoDatabaseFile();
-  else if (url.IsProtocol("library")) return nullptr;
-  else if (url.IsProtocol("pvr")) return nullptr;
-  else if (url.IsProtocol("special")) return new CSpecialProtocolFile();
-  else if (url.IsProtocol("multipath")) return new CMultiPathFile();
-  else if (url.IsProtocol("image")) return new CImageFile();
+  if (url.IsProtocol("zip"))
+    return new CZipFile();
+  else if (url.IsProtocol("xbt"))
+    return new CXbtFile();
+  else if (url.IsProtocol("musicdb"))
+    return new CMusicDatabaseFile();
+  else if (url.IsProtocol("videodb"))
+    return new CVideoDatabaseFile();
+  else if (url.IsProtocol("library"))
+    return nullptr;
+  else if (url.IsProtocol("pvr"))
+    return nullptr;
+  else if (url.IsProtocol("special"))
+    return new CSpecialProtocolFile();
+  else if (url.IsProtocol("multipath"))
+    return new CMultiPathFile();
+  else if (url.IsProtocol("image"))
+    return new CImageFile();
 #ifdef TARGET_POSIX
-  else if (url.IsProtocol("file") || url.GetProtocol().empty()) return new CPosixFile();
+  else if (url.IsProtocol("file") || url.GetProtocol().empty())
+    return new CPosixFile();
 #elif defined(TARGET_WINDOWS)
   else if (url.IsProtocol("file") || url.GetProtocol().empty())
   {
@@ -114,44 +127,56 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
   }
 #endif // TARGET_WINDOWS
 #if defined(HAS_DVD_DRIVE)
-  else if (url.IsProtocol("cdda")) return new CFileCDDA();
+  else if (url.IsProtocol("cdda"))
+    return new CFileCDDA();
 #endif
-  else if (url.IsProtocol("iso9660")) return new CISOFile();
-  else if(url.IsProtocol("udf")) return new CUDFFile();
+  else if (url.IsProtocol("iso9660"))
+    return new CISOFile();
+  else if (url.IsProtocol("udf"))
+    return new CUDFFile();
 #if defined(TARGET_ANDROID)
-  else if (url.IsProtocol("androidapp")) return new CFileAndroidApp();
+  else if (url.IsProtocol("androidapp"))
+    return new CFileAndroidApp();
 #endif
-  else if (url.IsProtocol("pipe")) return new CPipeFile();
+  else if (url.IsProtocol("pipe"))
+    return new CPipeFile();
 #ifdef HAVE_LIBBLURAY
-  else if (url.IsProtocol("bluray")) return new CBlurayFile();
+  else if (url.IsProtocol("bluray"))
+    return new CBlurayFile();
 #endif
-  else if (url.IsProtocol("resource")) return new CResourceFile();
+  else if (url.IsProtocol("resource"))
+    return new CResourceFile();
 #ifdef TARGET_WINDOWS_STORE
-  else if (CWinLibraryFile::IsValid(url)) return new CWinLibraryFile();
+  else if (CWinLibraryFile::IsValid(url))
+    return new CWinLibraryFile();
 #endif
 
-  if (url.IsProtocol("ftp")
-  ||  url.IsProtocol("ftps")
-  ||  url.IsProtocol("rss")
-  ||  url.IsProtocol("rsss")
-  ||  url.IsProtocol("http")
-  ||  url.IsProtocol("https")) return new CCurlFile();
-  else if (url.IsProtocol("dav") || url.IsProtocol("davs")) return new CDAVFile();
-  else if (url.IsProtocol("shout")) return new CShoutcastFile();
+  if (url.IsProtocol("ftp") || url.IsProtocol("ftps") || url.IsProtocol("rss") ||
+      url.IsProtocol("rsss") || url.IsProtocol("http") || url.IsProtocol("https"))
+    return new CCurlFile();
+  else if (url.IsProtocol("dav") || url.IsProtocol("davs"))
+    return new CDAVFile();
+  else if (url.IsProtocol("shout"))
+    return new CShoutcastFile();
 #ifdef HAS_FILESYSTEM_SMB
 #ifdef TARGET_WINDOWS
-  else if (url.IsProtocol("smb")) return new CWin32SMBFile();
+  else if (url.IsProtocol("smb"))
+    return new CWin32SMBFile();
 #else
-  else if (url.IsProtocol("smb")) return new CSMBFile();
+  else if (url.IsProtocol("smb"))
+    return new CSMBFile();
 #endif
 #endif
 #ifdef HAS_FILESYSTEM_NFS
-  else if (url.IsProtocol("nfs")) return new CNFSFile();
+  else if (url.IsProtocol("nfs"))
+    return new CNFSFile();
 #endif
 #ifdef HAS_UPNP
-  else if (url.IsProtocol("upnp")) return new CUPnPFile();
+  else if (url.IsProtocol("upnp"))
+    return new CUPnPFile();
 #endif
 
-  CLog::Log(LOGWARNING, "%s - unsupported protocol(%s) in %s", __FUNCTION__, url.GetProtocol().c_str(), url.GetRedacted().c_str());
+  CLog::Log(LOGWARNING, "%s - unsupported protocol(%s) in %s", __FUNCTION__,
+            url.GetProtocol().c_str(), url.GetRedacted().c_str());
   return NULL;
 }

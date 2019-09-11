@@ -44,6 +44,6 @@ private:
   mutable CCriticalSection m_currentSelectionMutex;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

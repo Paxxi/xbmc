@@ -37,8 +37,7 @@ using namespace ADDON;
 static int ReloadSkin(const std::vector<std::string>& params)
 {
   //  Reload the skin
-  g_application.ReloadSkin(!params.empty() &&
-                           StringUtils::EqualsNoCase(params[0], "confirm"));
+  g_application.ReloadSkin(!params.empty() && StringUtils::EqualsNoCase(params[0], "confirm"));
 
   return 0;
 }
@@ -75,7 +74,7 @@ static int SetAddon(const std::vector<std::string>& params)
 {
   int string = CSkinSettings::GetInstance().TranslateString(params[0]);
   std::vector<ADDON::TYPE> types;
-  for (unsigned int i = 1 ; i < params.size() ; i++)
+  for (unsigned int i = 1; i < params.size(); i++)
   {
     ADDON::TYPE type = CAddonInfo::TranslateType(params[i]);
     if (type != ADDON_UNKNOWN)
@@ -99,11 +98,13 @@ static int SelectBool(const std::vector<std::string>& params)
 {
   std::vector<std::pair<std::string, std::string>> settings;
 
-  CGUIDialogSelect* pDlgSelect = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* pDlgSelect =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
   pDlgSelect->Reset();
   pDlgSelect->SetHeading(CVariant{g_localizeStrings.Get(atoi(params[0].c_str()))});
 
-  for (unsigned int i = 1 ; i < params.size() ; i++)
+  for (unsigned int i = 1; i < params.size(); i++)
   {
     if (params[i].find('|') != std::string::npos)
     {
@@ -116,11 +117,11 @@ static int SelectBool(const std::vector<std::string>& params)
 
   pDlgSelect->Open();
 
-  if(pDlgSelect->IsConfirmed())
+  if (pDlgSelect->IsConfirmed())
   {
     unsigned int iItem = pDlgSelect->GetSelectedItem();
 
-    for (unsigned int i = 0 ; i < settings.size() ; i++)
+    for (unsigned int i = 0; i < settings.size(); i++)
     {
       std::string item = settings[i].second;
       int setting = CSkinSettings::GetInstance().TranslateBool(item);
@@ -188,7 +189,8 @@ static int SetPath(const std::vector<std::string>& params)
     value = params[1];
     URIUtils::AddSlashAtEnd(value);
     bool bIsSource;
-    if (CUtil::GetMatchingSource(value,localShares,bIsSource) < 0) // path is outside shares - add it as a separate one
+    if (CUtil::GetMatchingSource(value, localShares, bIsSource) <
+        0) // path is outside shares - add it as a separate one
     {
       CMediaSource share;
       share.strName = g_localizeStrings.Get(13278);
@@ -230,7 +232,7 @@ static int SetFile(const std::vector<std::string>& params)
     CURL url;
     url.SetProtocol("addons");
     url.SetHostName("enabled");
-    url.SetFileName(strMask+"/");
+    url.SetFileName(strMask + "/");
     localShares.clear();
     std::string content = (params.size() > 2) ? params[2] : "";
     StringUtils::ToLower(content);
@@ -239,7 +241,8 @@ static int SetFile(const std::vector<std::string>& params)
     if (type == ADDON_SCRIPT)
       strMask = ".py";
     std::string replace;
-    if (CGUIDialogFileBrowser::ShowAndGetFile(url.Get(), strMask, CAddonInfo::TranslateType(type, true), replace, true, true, true))
+    if (CGUIDialogFileBrowser::ShowAndGetFile(
+            url.Get(), strMask, CAddonInfo::TranslateType(type, true), replace, true, true, true))
     {
       if (StringUtils::StartsWithNoCase(replace, "addons://"))
         CSkinSettings::GetInstance().SetString(string, URIUtils::GetFileName(replace));
@@ -254,7 +257,8 @@ static int SetFile(const std::vector<std::string>& params)
       value = params[2];
       URIUtils::AddSlashAtEnd(value);
       bool bIsSource;
-      if (CUtil::GetMatchingSource(value,localShares,bIsSource) < 0) // path is outside shares - add it as a separate one
+      if (CUtil::GetMatchingSource(value, localShares, bIsSource) <
+          0) // path is outside shares - add it as a separate one
       {
         CMediaSource share;
         share.strName = g_localizeStrings.Get(13278);
@@ -262,7 +266,8 @@ static int SetFile(const std::vector<std::string>& params)
         localShares.push_back(share);
       }
     }
-    if (CGUIDialogFileBrowser::ShowAndGetFile(localShares, strMask, g_localizeStrings.Get(1033), value))
+    if (CGUIDialogFileBrowser::ShowAndGetFile(localShares, strMask, g_localizeStrings.Get(1033),
+                                              value))
       CSkinSettings::GetInstance().SetString(string, value);
   }
 
@@ -285,7 +290,8 @@ static int SetImage(const std::vector<std::string>& params)
     value = params[1];
     URIUtils::AddSlashAtEnd(value);
     bool bIsSource;
-    if (CUtil::GetMatchingSource(value,localShares,bIsSource) < 0) // path is outside shares - add it as a separate one
+    if (CUtil::GetMatchingSource(value, localShares, bIsSource) <
+        0) // path is outside shares - add it as a separate one
     {
       CMediaSource share;
       share.strName = g_localizeStrings.Get(13278);
@@ -342,13 +348,13 @@ static int SetTheme(const std::vector<std::string>& params)
   const std::string strTheme = settings->GetString(CSettings::SETTING_LOOKANDFEEL_SKINTHEME);
   if (!StringUtils::EqualsNoCase(strTheme, "SKINDEFAULT"))
   {
-    for (size_t i=0;i<vecTheme.size();++i)
+    for (size_t i = 0; i < vecTheme.size(); ++i)
     {
       std::string strTmpTheme(strTheme);
       URIUtils::RemoveExtension(strTmpTheme);
       if (StringUtils::EqualsNoCase(vecTheme[i], strTmpTheme))
       {
-        iTheme=i;
+        iTheme = i;
         break;
       }
     }
@@ -359,10 +365,10 @@ static int SetTheme(const std::vector<std::string>& params)
     iTheme++;
   else if (iParam == -1)
     iTheme--;
-  if (iTheme > (int)vecTheme.size()-1)
+  if (iTheme > (int)vecTheme.size() - 1)
     iTheme = -1;
   if (iTheme < -1)
-    iTheme = vecTheme.size()-1;
+    iTheme = vecTheme.size() - 1;
 
   std::string strSkinTheme = "SKINDEFAULT";
   if (iTheme != -1 && iTheme < (int)vecTheme.size())
@@ -541,21 +547,19 @@ static int SkinDebug(const std::vector<std::string>& params)
 
 CBuiltins::CommandMap CSkinBuiltins::GetOperations() const
 {
-  return {
-           {"reloadskin",         {"Reload Kodi's skin", 0, ReloadSkin}},
-           {"unloadskin",         {"Unload Kodi's skin", 0, UnloadSkin}},
-           {"skin.reset",         {"Resets a skin setting to default", 1, SkinReset}},
-           {"skin.resetsettings", {"Resets all skin settings", 0, SkinResetAll}},
-           {"skin.setaddon",      {"Prompts and set an addon", 2, SetAddon}},
-           {"skin.selectbool",    {"Prompts and set a skin setting", 2, SelectBool}},
-           {"skin.setbool",       {"Sets a skin setting on", 1, SetBool}},
-           {"skin.setfile",       {"Prompts and sets a file", 1, SetFile}},
-           {"skin.setimage",      {"Prompts and sets a skin image", 1, SetImage}},
-           {"skin.setnumeric",    {"Prompts and sets numeric input", 1, SetNumeric}},
-           {"skin.setpath",       {"Prompts and sets a skin path", 1, SetPath}},
-           {"skin.setstring",     {"Prompts and sets skin string", 1, SetString}},
-           {"skin.theme",         {"Control skin theme", 1, SetTheme}},
-           {"skin.toggledebug",   {"Toggle skin debug", 0, SkinDebug}},
-           {"skin.togglesetting", {"Toggles a skin setting on or off", 1, ToggleSetting}}
-  };
+  return {{"reloadskin", {"Reload Kodi's skin", 0, ReloadSkin}},
+          {"unloadskin", {"Unload Kodi's skin", 0, UnloadSkin}},
+          {"skin.reset", {"Resets a skin setting to default", 1, SkinReset}},
+          {"skin.resetsettings", {"Resets all skin settings", 0, SkinResetAll}},
+          {"skin.setaddon", {"Prompts and set an addon", 2, SetAddon}},
+          {"skin.selectbool", {"Prompts and set a skin setting", 2, SelectBool}},
+          {"skin.setbool", {"Sets a skin setting on", 1, SetBool}},
+          {"skin.setfile", {"Prompts and sets a file", 1, SetFile}},
+          {"skin.setimage", {"Prompts and sets a skin image", 1, SetImage}},
+          {"skin.setnumeric", {"Prompts and sets numeric input", 1, SetNumeric}},
+          {"skin.setpath", {"Prompts and sets a skin path", 1, SetPath}},
+          {"skin.setstring", {"Prompts and sets skin string", 1, SetString}},
+          {"skin.theme", {"Control skin theme", 1, SetTheme}},
+          {"skin.toggledebug", {"Toggle skin debug", 0, SkinDebug}},
+          {"skin.togglesetting", {"Toggles a skin setting on or off", 1, ToggleSetting}}};
 }

@@ -8,14 +8,16 @@
 
 #pragma once
 
-#include "AEPackIEC61937.h"
 #include "AEChannelInfo.h"
+#include "AEPackIEC61937.h"
+
 #include <stdint.h>
 
 /* ffmpeg re-defines this, so undef it to squash the warning */
 #undef restrict
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/crc.h>
 }
 
@@ -51,11 +53,13 @@ public:
 class CAEStreamParser
 {
 public:
-
   CAEStreamParser();
   ~CAEStreamParser();
 
-  int AddData(uint8_t *data, unsigned int size, uint8_t **buffer = NULL, unsigned int *bufferSize = 0);
+  int AddData(uint8_t* data,
+              unsigned int size,
+              uint8_t** buffer = NULL,
+              unsigned int* bufferSize = 0);
 
   void SetCoreOnly(bool value) { m_coreOnly = value; }
   unsigned int IsValid() const { return m_hasSync; }
@@ -76,7 +80,7 @@ private:
   unsigned int m_bufferSize = 0;
   unsigned int m_skipBytes = 0;
 
-  typedef unsigned int (CAEStreamParser::*ParseFunc)(uint8_t *data, unsigned int size);
+  typedef unsigned int (CAEStreamParser::*ParseFunc)(uint8_t* data, unsigned int size);
 
   CAEStreamInfo m_info;
   bool m_coreOnly = false;
@@ -84,19 +88,18 @@ private:
   ParseFunc m_syncFunc;
   bool m_hasSync = false;
 
-  unsigned int m_coreSize = 0;         /* core size for dtsHD */
+  unsigned int m_coreSize = 0; /* core size for dtsHD */
   unsigned int m_dtsBlocks = 0;
   unsigned int m_fsize = 0;
-  int m_substreams = 0;       /* used for TrueHD  */
-  AVCRC m_crcTrueHD[1024];  /* TrueHD crc table */
+  int m_substreams = 0; /* used for TrueHD  */
+  AVCRC m_crcTrueHD[1024]; /* TrueHD crc table */
 
-  void GetPacket(uint8_t **buffer, unsigned int *bufferSize);
-  unsigned int DetectType(uint8_t *data, unsigned int size);
-  bool TrySyncAC3(uint8_t *data, unsigned int size, bool resyncing, bool wantEAC3dependent);
-  unsigned int SyncAC3(uint8_t *data, unsigned int size);
-  unsigned int SyncDTS(uint8_t *data, unsigned int size);
-  unsigned int SyncTrueHD(uint8_t *data, unsigned int size);
+  void GetPacket(uint8_t** buffer, unsigned int* bufferSize);
+  unsigned int DetectType(uint8_t* data, unsigned int size);
+  bool TrySyncAC3(uint8_t* data, unsigned int size, bool resyncing, bool wantEAC3dependent);
+  unsigned int SyncAC3(uint8_t* data, unsigned int size);
+  unsigned int SyncDTS(uint8_t* data, unsigned int size);
+  unsigned int SyncTrueHD(uint8_t* data, unsigned int size);
 
   static unsigned int GetTrueHDChannels(const uint16_t chanmap);
 };
-

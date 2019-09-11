@@ -35,38 +35,30 @@ void CRendererDXVA::GetWeight(std::map<RenderMethod, int>& weights, const VideoP
   else
   {
     // check format for buffer
-    const DXGI_FORMAT dxgi_format = CRenderBufferImpl::GetDXGIFormat(av_pixel_format, GetDXGIFormat(picture));
+    const DXGI_FORMAT dxgi_format =
+        CRenderBufferImpl::GetDXGIFormat(av_pixel_format, GetDXGIFormat(picture));
     if (dxgi_format == DXGI_FORMAT_UNKNOWN)
       return;
 
-    CD3D11_TEXTURE2D_DESC texDesc(
-      dxgi_format,
-      FFALIGN(picture.iWidth, 32),
-      FFALIGN(picture.iHeight, 32),
-      1, 1,
-      D3D11_BIND_DECODER,
-      D3D11_USAGE_DYNAMIC,
-      D3D11_CPU_ACCESS_WRITE
-    );
+    CD3D11_TEXTURE2D_DESC texDesc(dxgi_format, FFALIGN(picture.iWidth, 32),
+                                  FFALIGN(picture.iHeight, 32), 1, 1, D3D11_BIND_DECODER,
+                                  D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE);
 
     ComPtr<ID3D11Device> pDevice = DX::DeviceResources::Get()->GetD3DDevice();
     if (FAILED(pDevice->CreateTexture2D(&texDesc, nullptr, nullptr)))
       return;
 
-    if (av_pixel_format == AV_PIX_FMT_NV12 ||
-        av_pixel_format == AV_PIX_FMT_P010 ||
+    if (av_pixel_format == AV_PIX_FMT_NV12 || av_pixel_format == AV_PIX_FMT_P010 ||
         av_pixel_format == AV_PIX_FMT_P016)
       weight += 500; // single copying
 
-    else if (av_pixel_format == AV_PIX_FMT_YUV420P ||
-        av_pixel_format == AV_PIX_FMT_YUV420P10 ||
-        av_pixel_format == AV_PIX_FMT_YUV420P16)
+    else if (av_pixel_format == AV_PIX_FMT_YUV420P || av_pixel_format == AV_PIX_FMT_YUV420P10 ||
+             av_pixel_format == AV_PIX_FMT_YUV420P16)
       weight += 400; // single copying + convert
   }
 
   // prefer DXVA method for interlaced HW decoded material
-  if (av_pixel_format == AV_PIX_FMT_D3D11VA_VLD && 
-    picture.iFlags & DVP_FLAG_INTERLACED)
+  if (av_pixel_format == AV_PIX_FMT_D3D11VA_VLD && picture.iFlags & DVP_FLAG_INTERLACED)
     weight += 1000;
 
   if (weight > 0)
@@ -81,7 +73,7 @@ CRenderInfo CRendererDXVA::GetRenderInfo()
   info.optimal_buffer_size = std::min(NUM_BUFFERS, buffers);
   info.m_deintMethods.push_back(VS_INTERLACEMETHOD_DXVA_AUTO);
 
-  return  info;
+  return info;
 }
 
 bool CRendererDXVA::Configure(const VideoPicture& picture, float fps, unsigned orientation)
@@ -91,12 +83,12 @@ bool CRendererDXVA::Configure(const VideoPicture& picture, float fps, unsigned o
   if (__super::Configure(picture, fps, orientation))
   {
     m_format = picture.videoBuffer->GetFormat();
-    const DXGI_FORMAT dxgi_format = CRenderBufferImpl::GetDXGIFormat(m_format, GetDXGIFormat(picture));
+    const DXGI_FORMAT dxgi_format =
+        CRenderBufferImpl::GetDXGIFormat(m_format, GetDXGIFormat(picture));
 
     // create processor
     m_processor = std::make_unique<DXVA::CProcessorHD>();
-    if (m_processor->PreInit() &&
-        m_processor->Open(m_sourceWidth, m_sourceWidth) &&
+    if (m_processor->PreInit() && m_processor->Open(m_sourceWidth, m_sourceWidth) &&
         m_processor->IsFormatSupported(dxgi_format, support_type))
     {
       return true;
@@ -114,8 +106,7 @@ bool CRendererDXVA::NeedBuffer(int idx)
   {
     const int numPast = m_processor->PastRefs();
     if (m_renderBuffers[idx]->pictureFlags & DVP_FLAG_INTERLACED &&
-      m_renderBuffers[idx]->frameIdx + numPast * 2 >=
-      m_renderBuffers[m_iBufferIndex]->frameIdx)
+        m_renderBuffers[idx]->frameIdx + numPast * 2 >= m_renderBuffers[m_iBufferIndex]->frameIdx)
       return true;
   }
   return false;
@@ -125,16 +116,19 @@ void CRendererDXVA::CheckVideoParameters()
 {
   __super::CheckVideoParameters();
 
-  CreateIntermediateTarget(
-    HasHQScaler() ? m_sourceWidth : m_viewWidth, 
-    HasHQScaler() ? m_sourceHeight : m_viewHeight);
+  CreateIntermediateTarget(HasHQScaler() ? m_sourceWidth : m_viewWidth,
+                           HasHQScaler() ? m_sourceHeight : m_viewHeight);
 }
 
-void CRendererDXVA::RenderImpl(CD3DTexture& target, CRect& sourceRect, CPoint(&destPoints)[4], uint32_t flags)
+void CRendererDXVA::RenderImpl(CD3DTexture& target,
+                               CRect& sourceRect,
+                               CPoint (&destPoints)[4],
+                               uint32_t flags)
 {
   CRect src = sourceRect;
   CRect dst = HasHQScaler() ? sourceRect : ApplyTransforms(CRect(destPoints[0], destPoints[2]));
-  const CRect trg(0.0f, 0.0f, static_cast<float>(target.GetWidth()), static_cast<float>(target.GetHeight()));
+  const CRect trg(0.0f, 0.0f, static_cast<float>(target.GetWidth()),
+                  static_cast<float>(target.GetHeight()));
 
   CWIN32Util::CropSource(src, dst, trg, m_renderOrientation);
 
@@ -142,9 +136,8 @@ void CRendererDXVA::RenderImpl(CD3DTexture& target, CRect& sourceRect, CPoint(&d
   CRenderBuffer* views[8] = {};
   FillBuffersSet(views);
 
-  m_processor->Render(src, dst, target.Get(), views,
-                      flags, buf->frameIdx % UINT32_MAX, m_renderOrientation,
-                      m_videoSettings.m_Contrast, 
+  m_processor->Render(src, dst, target.Get(), views, flags, buf->frameIdx % UINT32_MAX,
+                      m_renderOrientation, m_videoSettings.m_Contrast,
                       m_videoSettings.m_Brightness);
 
   if (!HasHQScaler())
@@ -164,13 +157,13 @@ CRect CRendererDXVA::ApplyTransforms(const CRect& destRect) const
   switch (m_renderOrientation)
   {
   case 90:
-    result = { rotated[3], rotated[1] };
+    result = {rotated[3], rotated[1]};
     break;
   case 180:
     result = destRect;
     break;
   case 270:
-    result = { rotated[1], rotated[3] };
+    result = {rotated[1], rotated[3]};
     break;
   default:
     result = CServiceBroker::GetWinSystem()->GetGfxContext().StereoCorrection(destRect);
@@ -249,7 +242,9 @@ CRenderBuffer* CRendererDXVA::CreateBuffer()
   return new CRenderBufferImpl(m_format, m_sourceWidth, m_sourceHeight);
 }
 
-CRendererDXVA::CRenderBufferImpl::CRenderBufferImpl(AVPixelFormat av_pix_format, unsigned width, unsigned height)
+CRendererDXVA::CRenderBufferImpl::CRenderBufferImpl(AVPixelFormat av_pix_format,
+                                                    unsigned width,
+                                                    unsigned height)
   : CRenderBuffer(av_pix_format, width, height)
 {
   const auto dxgi_format = GetDXGIFormat(av_pix_format);
@@ -286,7 +281,8 @@ bool CRendererDXVA::CRenderBufferImpl::UploadBuffer()
   return UploadToTexture();
 }
 
-HRESULT CRendererDXVA::CRenderBufferImpl::GetResource(ID3D11Resource** ppResource, unsigned* index) const
+HRESULT CRendererDXVA::CRenderBufferImpl::GetResource(ID3D11Resource** ppResource,
+                                                      unsigned* index) const
 {
   if (!ppResource)
     return E_POINTER;
@@ -309,7 +305,8 @@ void CRendererDXVA::CRenderBufferImpl::ReleasePicture()
   m_loaded = false;
 }
 
-DXGI_FORMAT CRendererDXVA::CRenderBufferImpl::GetDXGIFormat(AVPixelFormat format, DXGI_FORMAT default_fmt)
+DXGI_FORMAT CRendererDXVA::CRenderBufferImpl::GetDXGIFormat(AVPixelFormat format,
+                                                            DXGI_FORMAT default_fmt)
 {
   switch (format)
   {
@@ -335,8 +332,8 @@ bool CRendererDXVA::CRenderBufferImpl::UploadToTexture()
 
   // destination
   uint8_t* pData = static_cast<uint8_t*>(rect.pData);
-  uint8_t* dst[] = { pData, pData + m_texture.GetHeight() * rect.RowPitch };
-  int dstStride[] = { static_cast<int>(rect.RowPitch), static_cast<int>(rect.RowPitch) };
+  uint8_t* dst[] = {pData, pData + m_texture.GetHeight() * rect.RowPitch};
+  int dstStride[] = {static_cast<int>(rect.RowPitch), static_cast<int>(rect.RowPitch)};
 
   // source
   uint8_t* src[3];
@@ -349,46 +346,51 @@ bool CRendererDXVA::CRenderBufferImpl::UploadToTexture()
 
   const AVPixelFormat buffer_format = videoBuffer->GetFormat();
   // copy to texture
-  if (buffer_format == AV_PIX_FMT_NV12 ||
-    buffer_format == AV_PIX_FMT_P010 ||
-    buffer_format == AV_PIX_FMT_P016)
+  if (buffer_format == AV_PIX_FMT_NV12 || buffer_format == AV_PIX_FMT_P010 ||
+      buffer_format == AV_PIX_FMT_P016)
   {
-    Concurrency::parallel_invoke([&]() {
-      // copy Y
-      copy_plane(src[0], srcStrides[0], height, width, dst[0], dstStride[0]);
-    }, [&]() {
-      // copy UV
-      copy_plane(src[1], srcStrides[1], height >> 1, width, dst[1], dstStride[1]);
-    });
+    Concurrency::parallel_invoke(
+        [&]() {
+          // copy Y
+          copy_plane(src[0], srcStrides[0], height, width, dst[0], dstStride[0]);
+        },
+        [&]() {
+          // copy UV
+          copy_plane(src[1], srcStrides[1], height >> 1, width, dst[1], dstStride[1]);
+        });
     // copy cache size of UV line again to fix Intel cache issue
     copy_plane(src[1], srcStrides[1], 1, 32, dst[1], dstStride[1]);
   }
   // convert 8bit
   else if (buffer_format == AV_PIX_FMT_YUV420P)
   {
-    Concurrency::parallel_invoke([&]() {
-      // copy Y
-      copy_plane(src[0], srcStrides[0], height, width, dst[0], dstStride[0]);
-    }, [&]() {
-      // convert U+V -> UV
-      convert_yuv420_nv12_chrome(&src[1], &srcStrides[1], height, width, dst[1], dstStride[1]);
-    });
+    Concurrency::parallel_invoke(
+        [&]() {
+          // copy Y
+          copy_plane(src[0], srcStrides[0], height, width, dst[0], dstStride[0]);
+        },
+        [&]() {
+          // convert U+V -> UV
+          convert_yuv420_nv12_chrome(&src[1], &srcStrides[1], height, width, dst[1], dstStride[1]);
+        });
     // copy cache size of UV line again to fix Intel cache issue
     // height and width multiplied by two because they will be divided by func
     convert_yuv420_nv12_chrome(&src[1], &srcStrides[1], 2, 64, dst[1], dstStride[1]);
   }
   // convert 10/16bit
-  else if (buffer_format == AV_PIX_FMT_YUV420P10 ||
-    buffer_format == AV_PIX_FMT_YUV420P16)
+  else if (buffer_format == AV_PIX_FMT_YUV420P10 || buffer_format == AV_PIX_FMT_YUV420P16)
   {
     const uint8_t bpp = buffer_format == AV_PIX_FMT_YUV420P10 ? 10 : 16;
-    Concurrency::parallel_invoke([&]() {
-      // copy Y
-      copy_plane(src[0], srcStrides[0], height, width, dst[0], dstStride[0], bpp);
-    }, [&]() {
-      // convert U+V -> UV
-      convert_yuv420_p01x_chrome(&src[1], &srcStrides[1], height, width, dst[1], dstStride[1], bpp);
-    });
+    Concurrency::parallel_invoke(
+        [&]() {
+          // copy Y
+          copy_plane(src[0], srcStrides[0], height, width, dst[0], dstStride[0], bpp);
+        },
+        [&]() {
+          // convert U+V -> UV
+          convert_yuv420_p01x_chrome(&src[1], &srcStrides[1], height, width, dst[1], dstStride[1],
+                                     bpp);
+        });
     // copy cache size of UV line again to fix Intel cache issue
     // height multiplied by two because it will be divided by func
     convert_yuv420_p01x_chrome(&src[1], &srcStrides[1], 2, 32, dst[1], dstStride[1], bpp);

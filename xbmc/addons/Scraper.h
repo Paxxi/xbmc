@@ -26,7 +26,7 @@ namespace MUSIC_GRABBER
 {
 class CMusicAlbumInfo;
 class CMusicArtistInfo;
-}
+} // namespace MUSIC_GRABBER
 
 typedef enum
 {
@@ -40,7 +40,7 @@ typedef enum
 
 namespace XFILE
 {
-  class CCurlFile;
+class CCurlFile;
 }
 
 class CScraperUrl;
@@ -50,21 +50,25 @@ namespace ADDON
 class CScraper;
 typedef std::shared_ptr<CScraper> ScraperPtr;
 
-std::string TranslateContent(const CONTENT_TYPE &content, bool pretty=false);
-CONTENT_TYPE TranslateContent(const std::string &string);
-TYPE ScraperTypeFromContent(const CONTENT_TYPE &content);
+std::string TranslateContent(const CONTENT_TYPE& content, bool pretty = false);
+CONTENT_TYPE TranslateContent(const std::string& string);
+TYPE ScraperTypeFromContent(const CONTENT_TYPE& content);
 
 // thrown as exception to signal abort or show error dialog
 class CScraperError
 {
 public:
   CScraperError() = default;
-  CScraperError(const std::string &sTitle, const std::string &sMessage) :
-    m_fAborted(false), m_sTitle(sTitle), m_sMessage(sMessage) {}
+  CScraperError(const std::string& sTitle, const std::string& sMessage)
+    : m_fAborted(false)
+    , m_sTitle(sTitle)
+    , m_sMessage(sMessage)
+  {
+  }
 
   bool FAborted() const { return m_fAborted; }
-  const std::string &Title() const { return m_sTitle; }
-  const std::string &Message() const { return m_sMessage; }
+  const std::string& Title() const { return m_sTitle; }
+  const std::string& Message() const { return m_sMessage; }
 
 private:
   bool m_fAborted = true;
@@ -103,14 +107,14 @@ public:
 
   CONTENT_TYPE Content() const { return m_pathContent; }
   bool RequiresSettings() const { return m_requiressettings; }
-  bool Supports(const CONTENT_TYPE &content) const;
+  bool Supports(const CONTENT_TYPE& content) const;
 
   bool IsInUse() const override;
   bool IsNoop();
   bool IsPython() const { return m_isPython; }
 
   // scraper media functions
-  CScraperUrl NfoUrl(const std::string &sNfoContent);
+  CScraperUrl NfoUrl(const std::string& sNfoContent);
 
   /*! \brief Resolve an external ID (e.g. MusicBrainz IDs) to a URL using scrapers
    If we have an ID in hand, e.g. MusicBrainz IDs or TheTVDB Season IDs
@@ -121,46 +125,51 @@ public:
    \return a populated URL pointing to the details page for the given ID or
            an empty URL if we couldn't resolve the ID.
    */
-  CScraperUrl ResolveIDToUrl(const std::string &externalID);
+  CScraperUrl ResolveIDToUrl(const std::string& externalID);
 
-  std::vector<CScraperUrl> FindMovie(XFILE::CCurlFile &fcurl,
-    const std::string &movieTitle, int movieYear, bool fFirst);
-  std::vector<MUSIC_GRABBER::CMusicAlbumInfo> FindAlbum(XFILE::CCurlFile &fcurl,
-    const std::string &sAlbum, const std::string &sArtist = "");
-  std::vector<MUSIC_GRABBER::CMusicArtistInfo> FindArtist(
-    XFILE::CCurlFile &fcurl, const std::string &sArtist);
-  VIDEO::EPISODELIST GetEpisodeList(XFILE::CCurlFile &fcurl, const CScraperUrl &scurl);
+  std::vector<CScraperUrl> FindMovie(XFILE::CCurlFile& fcurl,
+                                     const std::string& movieTitle,
+                                     int movieYear,
+                                     bool fFirst);
+  std::vector<MUSIC_GRABBER::CMusicAlbumInfo> FindAlbum(XFILE::CCurlFile& fcurl,
+                                                        const std::string& sAlbum,
+                                                        const std::string& sArtist = "");
+  std::vector<MUSIC_GRABBER::CMusicArtistInfo> FindArtist(XFILE::CCurlFile& fcurl,
+                                                          const std::string& sArtist);
+  VIDEO::EPISODELIST GetEpisodeList(XFILE::CCurlFile& fcurl, const CScraperUrl& scurl);
 
-  bool GetVideoDetails(XFILE::CCurlFile &fcurl, const CScraperUrl &scurl,
-    bool fMovie/*else episode*/, CVideoInfoTag &video);
-  bool GetAlbumDetails(XFILE::CCurlFile &fcurl, const CScraperUrl &scurl,
-    CAlbum &album);
-  bool GetArtistDetails(XFILE::CCurlFile &fcurl, const CScraperUrl &scurl,
-    const std::string &sSearch, CArtist &artist);
-  bool GetArtwork(XFILE::CCurlFile &fcurl, CVideoInfoTag &details);
+  bool GetVideoDetails(XFILE::CCurlFile& fcurl,
+                       const CScraperUrl& scurl,
+                       bool fMovie /*else episode*/,
+                       CVideoInfoTag& video);
+  bool GetAlbumDetails(XFILE::CCurlFile& fcurl, const CScraperUrl& scurl, CAlbum& album);
+  bool GetArtistDetails(XFILE::CCurlFile& fcurl,
+                        const CScraperUrl& scurl,
+                        const std::string& sSearch,
+                        CArtist& artist);
+  bool GetArtwork(XFILE::CCurlFile& fcurl, CVideoInfoTag& details);
 
 private:
-  CScraper(const CScraper &rhs) = delete;
+  CScraper(const CScraper& rhs) = delete;
   CScraper& operator=(const CScraper&) = delete;
   CScraper(CScraper&&) = delete;
   CScraper& operator=(CScraper&&) = delete;
 
-  std::string SearchStringEncoding() const
-    { return m_parser.GetSearchStringEncoding(); }
+  std::string SearchStringEncoding() const { return m_parser.GetSearchStringEncoding(); }
 
   bool Load();
   std::vector<std::string> Run(const std::string& function,
-                              const CScraperUrl& url,
-                              XFILE::CCurlFile& http,
-                              const std::vector<std::string>* extras = NULL);
+                               const CScraperUrl& url,
+                               XFILE::CCurlFile& http,
+                               const std::vector<std::string>* extras = NULL);
   std::vector<std::string> RunNoThrow(const std::string& function,
-                              const CScraperUrl& url,
-                              XFILE::CCurlFile& http,
-                              const std::vector<std::string>* extras = NULL);
+                                      const CScraperUrl& url,
+                                      XFILE::CCurlFile& http,
+                                      const std::vector<std::string>* extras = NULL);
   std::string InternalRun(const std::string& function,
-                         const CScraperUrl& url,
-                         XFILE::CCurlFile& http,
-                         const std::vector<std::string>* extras);
+                          const CScraperUrl& url,
+                          XFILE::CCurlFile& http,
+                          const std::vector<std::string>* extras);
 
   bool m_fLoaded;
   bool m_isPython = false;
@@ -170,5 +179,4 @@ private:
   CScraperParser m_parser;
 };
 
-}
-
+} // namespace ADDON

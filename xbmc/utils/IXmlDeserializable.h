@@ -15,5 +15,5 @@ class IXmlDeserializable
 public:
   virtual ~IXmlDeserializable() = default;
 
-  virtual bool Deserialize(const TiXmlNode *node) = 0;
+  virtual bool Deserialize(const TiXmlNode* node) = 0;
 };

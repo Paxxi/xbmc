@@ -22,8 +22,8 @@ class COffScreenModeSetting : public CDRMUtils
 public:
   COffScreenModeSetting() = default;
   ~COffScreenModeSetting() { DestroyDrm(); };
-  void FlipPage(struct gbm_bo *bo, bool rendered, bool videoLayer) override {}
-  bool SetVideoMode(const RESOLUTION_INFO& res, struct gbm_bo *bo) override { return false; }
+  void FlipPage(struct gbm_bo* bo, bool rendered, bool videoLayer) override {}
+  bool SetVideoMode(const RESOLUTION_INFO& res, struct gbm_bo* bo) override { return false; }
   bool SetActive(bool active) override { return false; }
   bool InitDrm() override;
   void DestroyDrm() override {}
@@ -34,10 +34,10 @@ public:
 
 private:
   const int DISPLAY_WIDTH = 1280;
-  const int  DISPLAY_HEIGHT= 720;
+  const int DISPLAY_HEIGHT = 720;
   const float DISPLAY_REFRESH = 50.0f;
 };
 
-}
-}
-}
+} // namespace GBM
+} // namespace WINDOWING
+} // namespace KODI

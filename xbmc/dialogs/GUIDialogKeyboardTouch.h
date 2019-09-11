@@ -18,8 +18,12 @@ class CGUIDialogKeyboardTouch : public CGUIDialog, public CGUIKeyboard, public C
 {
 public:
   CGUIDialogKeyboardTouch();
-  bool ShowAndGetInput(char_callback_t pCallback, const std::string &initialString, std::string &typedString, const std::string &heading, bool bHiddenInput) override;
-  bool SetTextToKeyboard(const std::string &text, bool closeKeyboard = false) override;
+  bool ShowAndGetInput(char_callback_t pCallback,
+                       const std::string& initialString,
+                       std::string& typedString,
+                       const std::string& heading,
+                       bool bHiddenInput) override;
+  bool SetTextToKeyboard(const std::string& text, bool closeKeyboard = false) override;
   void Cancel() override;
   int GetWindowId() const override;
 

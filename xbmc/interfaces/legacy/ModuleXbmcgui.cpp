@@ -14,43 +14,52 @@
 #include "guilib/GUIWindowManager.h"
 #include "windowing/GraphicContext.h"
 
-#define NOTIFICATION_INFO     "info"
-#define NOTIFICATION_WARNING  "warning"
-#define NOTIFICATION_ERROR    "error"
+#define NOTIFICATION_INFO "info"
+#define NOTIFICATION_WARNING "warning"
+#define NOTIFICATION_ERROR "error"
 
 namespace XBMCAddon
 {
-  namespace xbmcgui
-  {
-    long getCurrentWindowId()
-    {
-      DelayedCallGuard dg;
-      CSingleLock gl(CServiceBroker::GetWinSystem()->GetGfxContext());
-      return CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow();
-    }
-
-    long getCurrentWindowDialogId()
-    {
-      DelayedCallGuard dg;
-      CSingleLock gl(CServiceBroker::GetWinSystem()->GetGfxContext());
-      return CServiceBroker::GetGUI()->GetWindowManager().GetTopmostModalDialog();
-    }
-
-    long getScreenHeight()
-    {
-      XBMC_TRACE;
-      return CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight();
-    }
-
-    long getScreenWidth()
-    {
-      XBMC_TRACE;
-      return CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth();
-    }
-
-    const char* getNOTIFICATION_INFO()    { return NOTIFICATION_INFO; }
-    const char* getNOTIFICATION_WARNING() { return NOTIFICATION_WARNING; }
-    const char* getNOTIFICATION_ERROR()   { return NOTIFICATION_ERROR; }
-
-  }
+namespace xbmcgui
+{
+long getCurrentWindowId()
+{
+  DelayedCallGuard dg;
+  CSingleLock gl(CServiceBroker::GetWinSystem()->GetGfxContext());
+  return CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow();
 }
+
+long getCurrentWindowDialogId()
+{
+  DelayedCallGuard dg;
+  CSingleLock gl(CServiceBroker::GetWinSystem()->GetGfxContext());
+  return CServiceBroker::GetGUI()->GetWindowManager().GetTopmostModalDialog();
+}
+
+long getScreenHeight()
+{
+  XBMC_TRACE;
+  return CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight();
+}
+
+long getScreenWidth()
+{
+  XBMC_TRACE;
+  return CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth();
+}
+
+const char* getNOTIFICATION_INFO()
+{
+  return NOTIFICATION_INFO;
+}
+const char* getNOTIFICATION_WARNING()
+{
+  return NOTIFICATION_WARNING;
+}
+const char* getNOTIFICATION_ERROR()
+{
+  return NOTIFICATION_ERROR;
+}
+
+} // namespace xbmcgui
+} // namespace XBMCAddon

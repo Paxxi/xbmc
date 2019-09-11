@@ -15,7 +15,8 @@
 
 int CXHandle::m_objectTracker[10] = {0};
 
-HANDLE WINAPI GetCurrentProcess(void) {
+HANDLE WINAPI GetCurrentProcess(void)
+{
   return (HANDLE)-1; // -1 a special value - pseudo handle
 }
 
@@ -28,15 +29,15 @@ CXHandle::CXHandle()
 CXHandle::CXHandle(HandleType nType)
 {
   Init();
-  m_type=nType;
+  m_type = nType;
   m_objectTracker[m_type]++;
 }
 
-CXHandle::CXHandle(const CXHandle &src)
+CXHandle::CXHandle(const CXHandle& src)
 {
   // we shouldnt get here EVER. however, if we do - try to make the best. copy what we can
   // and most importantly - not share any pointer.
-  CLog::Log(LOGWARNING,"%s, copy handle.", __FUNCTION__);
+  CLog::Log(LOGWARNING, "%s, copy handle.", __FUNCTION__);
 
   Init();
 
@@ -59,62 +60,72 @@ CXHandle::~CXHandle()
 
   m_objectTracker[m_type]--;
 
-  if (RecursionCount > 0) {
-    CLog::Log(LOGERROR,"%s, destroying handle with recursion count %d", __FUNCTION__, RecursionCount);
+  if (RecursionCount > 0)
+  {
+    CLog::Log(LOGERROR, "%s, destroying handle with recursion count %d", __FUNCTION__,
+              RecursionCount);
     assert(false);
   }
 
-  if (m_nRefCount > 1) {
-    CLog::Log(LOGERROR,"%s, destroying handle with ref count %d", __FUNCTION__, m_nRefCount);
+  if (m_nRefCount > 1)
+  {
+    CLog::Log(LOGERROR, "%s, destroying handle with ref count %d", __FUNCTION__, m_nRefCount);
     assert(false);
   }
 
-  if (m_hMutex) {
+  if (m_hMutex)
+  {
     delete m_hMutex;
   }
 
-  if (m_internalLock) {
+  if (m_internalLock)
+  {
     delete m_internalLock;
   }
 
-  if (m_hCond) {
+  if (m_hCond)
+  {
     delete m_hCond;
   }
 
-  if ( fd != 0 ) {
+  if (fd != 0)
+  {
     close(fd);
   }
-
 }
 
 void CXHandle::Init()
 {
-  fd=0;
-  m_hMutex=NULL;
-  m_hCond=NULL;
+  fd = 0;
+  m_hMutex = NULL;
+  m_hCond = NULL;
   m_type = HND_NULL;
-  RecursionCount=0;
-  m_bManualEvent=false;
-  m_bEventSet=false;
-  m_nFindFileIterator=0 ;
-  m_nRefCount=1;
+  RecursionCount = 0;
+  m_bManualEvent = false;
+  m_bEventSet = false;
+  m_nFindFileIterator = 0;
+  m_nRefCount = 1;
   m_tmCreation = time(NULL);
   m_internalLock = new CCriticalSection();
 }
 
-void CXHandle::ChangeType(HandleType newType) {
+void CXHandle::ChangeType(HandleType newType)
+{
   m_objectTracker[m_type]--;
   m_type = newType;
   m_objectTracker[m_type]++;
 }
 
-void CXHandle::DumpObjectTracker() {
-  for (int i=0; i< 10; i++) {
-    CLog::Log(LOGDEBUG,"object %d --> %d instances\n", i, m_objectTracker[i]);
+void CXHandle::DumpObjectTracker()
+{
+  for (int i = 0; i < 10; i++)
+  {
+    CLog::Log(LOGDEBUG, "object %d --> %d instances\n", i, m_objectTracker[i]);
   }
 }
 
-bool CloseHandle(HANDLE hObject) {
+bool CloseHandle(HANDLE hObject)
+{
   if (!hObject)
     return false;
 
@@ -133,5 +144,3 @@ bool CloseHandle(HANDLE hObject) {
 
   return true;
 }
-
-

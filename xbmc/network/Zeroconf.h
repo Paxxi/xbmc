@@ -29,7 +29,6 @@ class CCriticalSection;
 class CZeroconf
 {
 public:
-
   //tries to publish this service via zeroconf
   //fcr_identifier can be used to stop or reannounce this service later
   //fcr_type is the zeroconf service type to publish (e.g. _http._tcp for webserver)
@@ -41,7 +40,8 @@ public:
                       const std::string& fcr_type,
                       const std::string& fcr_name,
                       unsigned int f_port,
-                      std::vector<std::pair<std::string, std::string> > txt /*= std::vector<std::pair<std::string, std::string> >()*/);
+                      std::vector<std::pair<std::string, std::string>>
+                          txt /*= std::vector<std::pair<std::string, std::string> >()*/);
 
   //tries to rebroadcast that service on the network without removing/readding
   //this can be achieved by changing a fake txt record. Implementations should
@@ -73,11 +73,11 @@ public:
   // just does nothings, otherwise the platform specific one
   static CZeroconf* GetInstance();
   // release the singleton; (save to call multiple times)
-  static void   ReleaseInstance();
+  static void ReleaseInstance();
   // returns false if ReleaseInstance() was called befores
-  static bool   IsInstantiated() { return  smp_instance != 0; }
+  static bool IsInstantiated() { return smp_instance != 0; }
   // win32: process results from the bonjour daemon
-  virtual void  ProcessResults() {}
+  virtual void ProcessResults() {}
   // returns if the service is started and services are announced
   bool IsStarted() { return m_started; }
 
@@ -88,7 +88,7 @@ protected:
                                 const std::string& fcr_type,
                                 const std::string& fcr_name,
                                 unsigned int f_port,
-                                const std::vector<std::pair<std::string, std::string> >& txt) = 0;
+                                const std::vector<std::pair<std::string, std::string>>& txt) = 0;
 
   //methods to implement for concrete implementations
   //update this service
@@ -101,7 +101,7 @@ protected:
   virtual void doStop() = 0;
 
   // return true if the zeroconf daemon is running
-  virtual bool IsZCdaemonRunning() { return  true; }
+  virtual bool IsZCdaemonRunning() { return true; }
 
 protected:
   //singleton: we don't want to get instantiated nor copied or deleted from outside
@@ -110,11 +110,12 @@ protected:
   virtual ~CZeroconf();
 
 private:
-  struct PublishInfo{
+  struct PublishInfo
+  {
     std::string type;
     std::string name;
     unsigned int port;
-    std::vector<std::pair<std::string, std::string> > txt;
+    std::vector<std::pair<std::string, std::string>> txt;
   };
 
   //protects data

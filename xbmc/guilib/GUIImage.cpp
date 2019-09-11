@@ -15,37 +15,43 @@
 
 using namespace KODI::GUILIB;
 
-CGUIImage::CGUIImage(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& texture)
-    : CGUIControl(parentID, controlID, posX, posY, width, height)
-    , m_texture(posX, posY, width, height, texture)
+CGUIImage::CGUIImage(int parentID,
+                     int controlID,
+                     float posX,
+                     float posY,
+                     float width,
+                     float height,
+                     const CTextureInfo& texture)
+  : CGUIControl(parentID, controlID, posX, posY, width, height)
+  , m_texture(posX, posY, width, height, texture)
 {
   m_crossFadeTime = 0;
   m_currentFadeTime = 0;
   m_lastRenderTime = 0;
   ControlType = GUICONTROL_IMAGE;
-  m_bDynamicResourceAlloc=false;
+  m_bDynamicResourceAlloc = false;
 }
 
-CGUIImage::CGUIImage(const CGUIImage &left)
-  : CGUIControl(left),
-  m_image(left.m_image),
-  m_info(left.m_info),
-  m_texture(left.m_texture),
-  m_fadingTextures(),
-  m_currentTexture(),
-  m_currentFallback()
+CGUIImage::CGUIImage(const CGUIImage& left)
+  : CGUIControl(left)
+  , m_image(left.m_image)
+  , m_info(left.m_info)
+  , m_texture(left.m_texture)
+  , m_fadingTextures()
+  , m_currentTexture()
+  , m_currentFallback()
 {
   m_crossFadeTime = left.m_crossFadeTime;
   // defaults
   m_currentFadeTime = 0;
   m_lastRenderTime = 0;
   ControlType = GUICONTROL_IMAGE;
-  m_bDynamicResourceAlloc=false;
+  m_bDynamicResourceAlloc = false;
 }
 
 CGUIImage::~CGUIImage(void) = default;
 
-void CGUIImage::UpdateVisibility(const CGUIListItem *item)
+void CGUIImage::UpdateVisibility(const CGUIListItem* item)
 {
   CGUIControl::UpdateVisibility(item);
 
@@ -54,7 +60,7 @@ void CGUIImage::UpdateVisibility(const CGUIListItem *item)
   AllocateOnDemand();
 }
 
-void CGUIImage::UpdateInfo(const CGUIListItem *item)
+void CGUIImage::UpdateInfo(const CGUIListItem* item)
 {
   if (m_info.IsConstant())
     return; // nothing to do
@@ -84,7 +90,7 @@ void CGUIImage::AllocateOnDemand()
     AllocResources();
 }
 
-void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
   // check whether our image failed to allocate, and if so drop back to the fallback image
   if (m_texture.FailedToAlloc() && m_texture.GetFileName() != m_info.GetFallback())
@@ -109,9 +115,10 @@ void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions
       frameTime = (unsigned int)(1000 / CServiceBroker::GetWinSystem()->GetGfxContext().GetFPS());
     m_lastRenderTime = currentTime;
 
-    if (m_fadingTextures.size())  // have some fading images
+    if (m_fadingTextures.size()) // have some fading images
     { // anything other than the last old texture needs to be faded out as per usual
-      for (std::vector<CFadingTexture *>::iterator i = m_fadingTextures.begin(); i != m_fadingTextures.end() - 1;)
+      for (std::vector<CFadingTexture*>::iterator i = m_fadingTextures.begin();
+           i != m_fadingTextures.end() - 1;)
       {
         if (!ProcessFading(*i, frameTime, currentTime))
           i = m_fadingTextures.erase(i);
@@ -126,7 +133,7 @@ void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions
       }
       else
       { // keep the last one fading in
-        CFadingTexture *texture = m_fadingTextures[m_fadingTextures.size() - 1];
+        CFadingTexture* texture = m_fadingTextures[m_fadingTextures.size() - 1];
         texture->m_fadeTime += frameTime;
         if (texture->m_fadeTime > m_crossFadeTime)
           texture->m_fadeTime = m_crossFadeTime;
@@ -143,7 +150,8 @@ void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions
     if (m_texture.ReadyToRender() || m_texture.GetFileName().empty())
     { // fade the new one in
       m_currentFadeTime += frameTime;
-      if (m_currentFadeTime > m_crossFadeTime || frameTime == 0) // for if we allocate straight away on creation
+      if (m_currentFadeTime > m_crossFadeTime ||
+          frameTime == 0) // for if we allocate straight away on creation
         m_currentFadeTime = m_crossFadeTime;
     }
     if (m_texture.SetAlpha(GetFadeLevel(m_currentFadeTime)))
@@ -161,7 +169,8 @@ void CGUIImage::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions
 
 void CGUIImage::Render()
 {
-  if (!IsVisible()) return;
+  if (!IsVisible())
+    return;
 
   for (auto& itr : m_fadingTextures)
     itr->m_texture->Render();
@@ -171,7 +180,9 @@ void CGUIImage::Render()
   CGUIControl::Render();
 }
 
-bool CGUIImage::ProcessFading(CGUIImage::CFadingTexture *texture, unsigned int frameTime, unsigned int currentTime)
+bool CGUIImage::ProcessFading(CGUIImage::CFadingTexture* texture,
+                              unsigned int frameTime,
+                              unsigned int currentTime)
 {
   assert(texture);
   if (texture->m_fadeTime <= frameTime)
@@ -193,7 +204,7 @@ bool CGUIImage::ProcessFading(CGUIImage::CFadingTexture *texture, unsigned int f
   return true;
 }
 
-bool CGUIImage::OnAction(const CAction &action)
+bool CGUIImage::OnAction(const CAction& action)
 {
   return false;
 }
@@ -256,7 +267,7 @@ void CGUIImage::SetInvalid()
 void CGUIImage::FreeResourcesButNotAnims()
 {
   FreeTextures();
-  m_bAllocated=false;
+  m_bAllocated = false;
   m_hasProcessed = false;
 }
 
@@ -292,12 +303,12 @@ CRect CGUIImage::CalcRenderRegion() const
   return CGUIControl::CalcRenderRegion().Intersect(region);
 }
 
-const std::string &CGUIImage::GetFileName() const
+const std::string& CGUIImage::GetFileName() const
 {
   return m_texture.GetFileName();
 }
 
-void CGUIImage::SetAspectRatio(const CAspectRatio &aspect)
+void CGUIImage::SetAspectRatio(const CAspectRatio& aspect)
 {
   m_texture.SetAspectRatio(aspect);
 }
@@ -345,8 +356,8 @@ void CGUIImage::DumpTextureUse()
   if (m_texture.IsAllocated())
   {
     if (GetID())
-      CLog::Log(LOGDEBUG, "Image control %u using texture %s",
-                GetID(), m_texture.GetFileName().c_str());
+      CLog::Log(LOGDEBUG, "Image control %u using texture %s", GetID(),
+                m_texture.GetFileName().c_str());
     else
       CLog::Log(LOGDEBUG, "Using texture %s", m_texture.GetFileName().c_str());
   }
@@ -371,7 +382,7 @@ void CGUIImage::SetPosition(float posX, float posY)
   CGUIControl::SetPosition(posX, posY);
 }
 
-void CGUIImage::SetInfo(const GUIINFO::CGUIInfoLabel &info)
+void CGUIImage::SetInfo(const GUIINFO::CGUIInfoLabel& info)
 {
   m_info = info;
   // a constant image never needs updating
@@ -390,11 +401,10 @@ unsigned char CGUIImage::GetFadeLevel(unsigned int time) const
   // solving, we get
   // b(t) = [1 - (1-a)^t] / a
   const float alpha = 0.7f;
-  return (unsigned char)(255.0f * (1 - pow(1-alpha, amount))/alpha);
+  return (unsigned char)(255.0f * (1 - pow(1 - alpha, amount)) / alpha);
 }
 
 std::string CGUIImage::GetDescription(void) const
 {
   return GetFileName();
 }
-

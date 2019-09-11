@@ -46,7 +46,7 @@ protected:
 private:
   bool SupportsSubtitleFeature(int feature);
 
-  void AddSubtitleStreams(std::shared_ptr<CSettingGroup> group, const std::string &settingId);
+  void AddSubtitleStreams(std::shared_ptr<CSettingGroup> group, const std::string& settingId);
 
   int m_subtitleStream;
   bool m_subtitleVisible;
@@ -55,7 +55,14 @@ private:
   std::vector<int> m_subtitleCapabilities;
   static std::string FormatFlags(StreamFlags flags);
 
-  static void SubtitleStreamsOptionFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
+  static void SubtitleStreamsOptionFiller(std::shared_ptr<const CSetting> setting,
+                                          std::vector<IntegerSettingOption>& list,
+                                          int& current,
+                                          void* data);
 
-  static std::string SettingFormatterDelay(std::shared_ptr<const CSettingControlSlider> control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
+  static std::string SettingFormatterDelay(std::shared_ptr<const CSettingControlSlider> control,
+                                           const CVariant& value,
+                                           const CVariant& minimum,
+                                           const CVariant& step,
+                                           const CVariant& maximum);
 };

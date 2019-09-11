@@ -16,28 +16,23 @@
 namespace PVR
 {
 
-CPVRClientMenuHook::CPVRClientMenuHook(const std::string &addonId, const PVR_MENUHOOK &hook)
-: m_addonId(addonId),
-  m_hook(new PVR_MENUHOOK(hook))
+CPVRClientMenuHook::CPVRClientMenuHook(const std::string& addonId, const PVR_MENUHOOK& hook)
+  : m_addonId(addonId)
+  , m_hook(new PVR_MENUHOOK(hook))
 {
-  if (hook.category != PVR_MENUHOOK_UNKNOWN &&
-      hook.category != PVR_MENUHOOK_ALL &&
-      hook.category != PVR_MENUHOOK_CHANNEL &&
-      hook.category != PVR_MENUHOOK_TIMER &&
-      hook.category != PVR_MENUHOOK_EPG &&
-      hook.category != PVR_MENUHOOK_RECORDING &&
-      hook.category != PVR_MENUHOOK_RECORDING &&
-      hook.category != PVR_MENUHOOK_SETTING)
+  if (hook.category != PVR_MENUHOOK_UNKNOWN && hook.category != PVR_MENUHOOK_ALL &&
+      hook.category != PVR_MENUHOOK_CHANNEL && hook.category != PVR_MENUHOOK_TIMER &&
+      hook.category != PVR_MENUHOOK_EPG && hook.category != PVR_MENUHOOK_RECORDING &&
+      hook.category != PVR_MENUHOOK_RECORDING && hook.category != PVR_MENUHOOK_SETTING)
     CLog::LogF(LOGERROR, "Unknown PVR_MENUHOOK_CAT value: %d", hook.category);
 }
 
-bool CPVRClientMenuHook::operator ==(const CPVRClientMenuHook& right) const
+bool CPVRClientMenuHook::operator==(const CPVRClientMenuHook& right) const
 {
   if (this == &right)
     return true;
 
-  return m_addonId == right.m_addonId &&
-         m_hook->iHookId == right.m_hook->iHookId &&
+  return m_addonId == right.m_addonId && m_hook->iHookId == right.m_hook->iHookId &&
          m_hook->iLocalizedStringId == right.m_hook->iLocalizedStringId &&
          m_hook->category == right.m_hook->category;
 }
@@ -92,7 +87,7 @@ std::string CPVRClientMenuHook::GetLabel() const
   return g_localizeStrings.GetAddonString(m_addonId, m_hook->iLocalizedStringId);
 }
 
-void CPVRClientMenuHooks::AddHook(const PVR_MENUHOOK &addonHook)
+void CPVRClientMenuHooks::AddHook(const PVR_MENUHOOK& addonHook)
 {
   if (!m_hooks)
     m_hooks.reset(new std::vector<CPVRClientMenuHook>());
@@ -113,7 +108,8 @@ void CPVRClientMenuHooks::Clear()
   m_hooks.reset();
 }
 
-std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetHooks(std::function<bool(const CPVRClientMenuHook& hook)> function) const
+std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetHooks(
+    std::function<bool(const CPVRClientMenuHook& hook)> function) const
 {
   std::vector<CPVRClientMenuHook> hooks;
 
@@ -130,50 +126,32 @@ std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetHooks(std::function<bool
 
 std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetChannelHooks() const
 {
-  return GetHooks([](const CPVRClientMenuHook& hook)
-  {
-    return hook.IsChannelHook();
-  });
+  return GetHooks([](const CPVRClientMenuHook& hook) { return hook.IsChannelHook(); });
 }
 
 std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetTimerHooks() const
 {
-  return GetHooks([](const CPVRClientMenuHook& hook)
-  {
-    return hook.IsTimerHook();
-  });
+  return GetHooks([](const CPVRClientMenuHook& hook) { return hook.IsTimerHook(); });
 }
 
 std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetEpgHooks() const
 {
-  return GetHooks([](const CPVRClientMenuHook& hook)
-  {
-    return hook.IsEpgHook();
-  });
+  return GetHooks([](const CPVRClientMenuHook& hook) { return hook.IsEpgHook(); });
 }
 
 std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetRecordingHooks() const
 {
-  return GetHooks([](const CPVRClientMenuHook& hook)
-  {
-    return hook.IsRecordingHook();
-  });
+  return GetHooks([](const CPVRClientMenuHook& hook) { return hook.IsRecordingHook(); });
 }
 
 std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetDeletedRecordingHooks() const
 {
-  return GetHooks([](const CPVRClientMenuHook& hook)
-  {
-    return hook.IsDeletedRecordingHook();
-  });
+  return GetHooks([](const CPVRClientMenuHook& hook) { return hook.IsDeletedRecordingHook(); });
 }
 
 std::vector<CPVRClientMenuHook> CPVRClientMenuHooks::GetSettingsHooks() const
 {
-  return GetHooks([](const CPVRClientMenuHook& hook)
-  {
-    return hook.IsSettingsHook();
-  });
+  return GetHooks([](const CPVRClientMenuHook& hook) { return hook.IsSettingsHook(); });
 }
 
 } // namespace PVR

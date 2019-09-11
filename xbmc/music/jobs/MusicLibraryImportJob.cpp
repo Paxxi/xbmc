@@ -11,9 +11,10 @@
 #include "dialogs/GUIDialogProgress.h"
 #include "music/MusicDatabase.h"
 
-CMusicLibraryImportJob::CMusicLibraryImportJob(const std::string& xmlFile, CGUIDialogProgress* progressDialog)
+CMusicLibraryImportJob::CMusicLibraryImportJob(const std::string& xmlFile,
+                                               CGUIDialogProgress* progressDialog)
   : CMusicLibraryProgressJob(nullptr)
-  ,  m_xmlFile(xmlFile)
+  , m_xmlFile(xmlFile)
 {
   if (progressDialog)
     SetProgressIndicators(nullptr, progressDialog);
@@ -34,7 +35,7 @@ bool CMusicLibraryImportJob::operator==(const CJob* job) const
   return !(m_xmlFile != importJob->m_xmlFile);
 }
 
-bool CMusicLibraryImportJob::Work(CMusicDatabase &db)
+bool CMusicLibraryImportJob::Work(CMusicDatabase& db)
 {
   db.ImportFromXML(m_xmlFile, GetProgressDialog());
 

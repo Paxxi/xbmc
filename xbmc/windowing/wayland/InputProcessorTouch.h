@@ -35,7 +35,13 @@ public:
   ~CInputProcessorTouch() noexcept;
   void SetCoordinateScale(std::int32_t scale) { m_coordinateScale = scale; }
 
-  void OnTouchDown(CSeat* seat, std::uint32_t serial, std::uint32_t time, wayland::surface_t surface, std::int32_t id, double x, double y) override;
+  void OnTouchDown(CSeat* seat,
+                   std::uint32_t serial,
+                   std::uint32_t time,
+                   wayland::surface_t surface,
+                   std::int32_t id,
+                   double x,
+                   double y) override;
   void OnTouchUp(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::int32_t id) override;
   void OnTouchMotion(CSeat* seat, std::uint32_t time, std::int32_t id, double x, double y) override;
   void OnTouchCancel(CSeat* seat) override;
@@ -55,9 +61,18 @@ private:
      * send new coordinates but Kodi needs them anyway
      */
     float x, y, size;
-    TouchPoint(std::uint32_t initialEventTime, std::int32_t kodiPointerNumber, float x, float y, float size)
-    : lastEventTime{initialEventTime}, kodiPointerNumber{kodiPointerNumber}, x{x}, y{y}, size{size}
-    {}
+    TouchPoint(std::uint32_t initialEventTime,
+               std::int32_t kodiPointerNumber,
+               float x,
+               float y,
+               float size)
+      : lastEventTime{initialEventTime}
+      , kodiPointerNumber{kodiPointerNumber}
+      , x{x}
+      , y{y}
+      , size{size}
+    {
+    }
   };
 
   void SendTouchPointEvent(TouchInput event, TouchPoint const& point);
@@ -71,6 +86,6 @@ private:
   std::map<std::int32_t, TouchPoint> m_touchPoints;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

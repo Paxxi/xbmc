@@ -400,14 +400,18 @@ public:
    \param file Path to an XML file containing setting values
    \return True if the setting values were successfully loaded, false otherwise
    */
-  bool Load(const std::string &file);
+  bool Load(const std::string& file);
   /*!
   \brief Loads setting values from the given XML element.
 
   \param root XML element containing setting values
   \return True if the setting values were successfully loaded, false otherwise
   */
-  bool Load(const TiXmlElement *root) { bool updated; return CSettingsBase::LoadValuesFromXml(root, updated); }
+  bool Load(const TiXmlElement* root)
+  {
+    bool updated;
+    return CSettingsBase::LoadValuesFromXml(root, updated);
+  }
   /*!
    \brief Loads setting values from the given XML element.
 
@@ -415,7 +419,7 @@ public:
    \param hide Whether to hide the loaded settings or not
    \return True if the setting values were successfully loaded, false otherwise
    */
-  bool LoadHidden(const TiXmlElement *root) { return CSettingsBase::LoadHiddenValuesFromXml(root); }
+  bool LoadHidden(const TiXmlElement* root) { return CSettingsBase::LoadHiddenValuesFromXml(root); }
 
   /*!
    \brief Saves the setting values to the given (XML) file.
@@ -423,7 +427,7 @@ public:
    \param file Path to an XML file
    \return True if the setting values were successfully saved, false otherwise
    */
-  bool Save(const std::string &file);
+  bool Save(const std::string& file);
 
   /*!
    \brief Loads the setting being represented by the given XML node with the
@@ -433,7 +437,7 @@ public:
    \param settingId Setting identifier
    \return True if the setting was successfully loaded from the given XML node, false otherwise
    */
-  bool LoadSetting(const TiXmlNode *node, const std::string &settingId);
+  bool LoadSetting(const TiXmlNode* node, const std::string& settingId);
 
   // overwrite (not override) from CSettingsBase
   bool GetBool(const std::string& id) const;
@@ -462,6 +466,6 @@ private:
   CSettings(const CSettings&) = delete;
   CSettings const& operator=(CSettings const&) = delete;
 
-  bool Initialize(const std::string &file);
+  bool Initialize(const std::string& file);
   bool Reset();
 };

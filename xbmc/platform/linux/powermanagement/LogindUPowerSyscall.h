@@ -26,9 +26,10 @@ public:
   bool CanHibernate() override;
   bool CanReboot() override;
   int BatteryLevel() override;
-  bool PumpPowerEvents(IPowerEventsCallback *callback) override;
+  bool PumpPowerEvents(IPowerEventsCallback* callback) override;
   // we don't require UPower because everything except the battery level works fine without it
   static bool HasLogind();
+
 private:
   CDBusConnection m_connection;
   bool m_canPowerdown;
@@ -42,11 +43,11 @@ private:
   int m_delayLockShutdownFd = -1; // file descriptor for the logind powerdown delay lock
   void UpdateBatteryLevel();
   void InhibitDelayLockSleep();
-  void InhibitDelayLockShutdown();  
-  int InhibitDelayLock(const char *what);
+  void InhibitDelayLockShutdown();
+  int InhibitDelayLock(const char* what);
   void ReleaseDelayLockSleep();
   void ReleaseDelayLockShutdown();
-  void ReleaseDelayLock(int lockFd, const char *what);
-  static bool LogindSetPowerState(const char *state);
-  static bool LogindCheckCapability(const char *capability);
+  void ReleaseDelayLock(int lockFd, const char* what);
+  static bool LogindSetPowerState(const char* state);
+  static bool LogindCheckCapability(const char* capability);
 };

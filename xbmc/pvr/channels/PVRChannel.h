@@ -23,95 +23,93 @@
 
 namespace PVR
 {
-  class CPVREpg;
-  class CPVREpgInfoTag;
-  class CPVRRadioRDSInfoTag;
+class CPVREpg;
+class CPVREpgInfoTag;
+class CPVRRadioRDSInfoTag;
 
-  /** PVR Channel class */
-  class CPVRChannel : public Observable,
-                      public ISerializable,
-                      public ISortable
-  {
-    friend class CPVRDatabase;
+/** PVR Channel class */
+class CPVRChannel : public Observable, public ISerializable, public ISortable
+{
+  friend class CPVRDatabase;
 
-  public:
-    /*! @brief Create a new channel */
-    explicit CPVRChannel(bool bRadio = false);
-    CPVRChannel(const PVR_CHANNEL &channel, unsigned int iClientId);
+public:
+  /*! @brief Create a new channel */
+  explicit CPVRChannel(bool bRadio = false);
+  CPVRChannel(const PVR_CHANNEL& channel, unsigned int iClientId);
 
-  private:
-    CPVRChannel(const CPVRChannel &tag) = delete;
-    CPVRChannel &operator=(const CPVRChannel &channel) = delete;
+private:
+  CPVRChannel(const CPVRChannel& tag) = delete;
+  CPVRChannel& operator=(const CPVRChannel& channel) = delete;
 
-  public:
-    bool operator ==(const CPVRChannel &right) const;
-    bool operator !=(const CPVRChannel &right) const;
+public:
+  bool operator==(const CPVRChannel& right) const;
+  bool operator!=(const CPVRChannel& right) const;
 
-    void Serialize(CVariant& value) const override;
+  void Serialize(CVariant& value) const override;
 
-    /*! @name XBMC related channel methods
+  /*! @name XBMC related channel methods
      */
-    //@{
+  //@{
 
-    /*!
+  /*!
      * @brief Delete this channel from the database and delete the corresponding EPG table if it exists.
      * @return True if it was deleted successfully, false otherwise.
      */
-    bool Delete(void);
+  bool Delete(void);
 
-    /*!
+  /*!
      * @brief Update this channel tag with the data of the given channel tag.
      * @param channel The new channel data.
      * @return True if something changed, false otherwise.
      */
-    bool UpdateFromClient(const CPVRChannelPtr &channel);
+  bool UpdateFromClient(const CPVRChannelPtr& channel);
 
-    /*!
+  /*!
      * @brief Persists the changes in the database.
      * @return True if the changes were saved successfully, false otherwise.
      */
-    bool Persist();
+  bool Persist();
 
-    /*!
+  /*!
      * @return The identifier given to this channel by the TV database.
      */
-    int ChannelID(void) const;
+  int ChannelID(void) const;
 
-    /*!
+  /*!
      * @return True when not persisted yet, false otherwise.
      */
-    bool IsNew(void) const;
+  bool IsNew(void) const;
 
-    /*!
+  /*!
      * @brief Set the identifier for this channel.
      * @param iDatabaseId The new channel ID
      * @return True if the something changed, false otherwise.
      */
-    bool SetChannelID(int iDatabaseId);
+  bool SetChannelID(int iDatabaseId);
 
-    /*!
+  /*!
      * @brief Set the channel number for this channel.
      * @param channelNumber The new channel number
      */
-    void SetChannelNumber(const CPVRChannelNumber& channelNumber);
+  void SetChannelNumber(const CPVRChannelNumber& channelNumber);
 
-    /*!
+  /*!
      * @brief Get the channel number for this channel.
      * @return The channel number.
      */
-    const CPVRChannelNumber& ChannelNumber() const;
+  const CPVRChannelNumber& ChannelNumber() const;
 
-    /*!
+  /*!
      * @return True if this channel is a radio channel, false if not.
      */
-    bool IsRadio(void) const { return m_bIsRadio; }
+  bool IsRadio(void) const { return m_bIsRadio; }
 
-    /*!
+  /*!
      * @return True if this channel is hidden. False if not.
      */
-    bool IsHidden(void) const;
+  bool IsHidden(void) const;
 
-    /*!
+  /*!
      * @brief Set to true to hide this channel. Set to false to unhide it.
      *
      * Set to true to hide this channel. Set to false to unhide it.
@@ -119,14 +117,14 @@ namespace PVR
      * @param bIsHidden The new setting.
      * @return True if the something changed, false otherwise.
      */
-    bool SetHidden(bool bIsHidden);
+  bool SetHidden(bool bIsHidden);
 
-    /*!
+  /*!
      * @return True if this channel is locked. False if not.
      */
-    bool IsLocked(void) const;
+  bool IsLocked(void) const;
 
-    /*!
+  /*!
      * @brief Set to true to lock this channel. Set to false to unlock it.
      *
      * Set to true to lock this channel. Set to false to unlock it.
@@ -134,92 +132,92 @@ namespace PVR
      * @param bIsLocked The new setting.
      * @return True if the something changed, false otherwise.
      */
-    bool SetLocked(bool bIsLocked);
+  bool SetLocked(bool bIsLocked);
 
-    /*!
+  /*!
      * @brief Obtain the Radio RDS data for this channel, if available.
      * @return The Radio RDS data or nullptr.
      */
-    std::shared_ptr<CPVRRadioRDSInfoTag> GetRadioRDSInfoTag() const;
+  std::shared_ptr<CPVRRadioRDSInfoTag> GetRadioRDSInfoTag() const;
 
-    /*!
+  /*!
      * @brief Set the Radio RDS data for the channel.
      * @param tag The RDS data.
      */
-    void SetRadioRDSInfoTag(const std::shared_ptr<CPVRRadioRDSInfoTag>& tag);
+  void SetRadioRDSInfoTag(const std::shared_ptr<CPVRRadioRDSInfoTag>& tag);
 
-    /*!
+  /*!
      * @return True if this channel has archive support, false otherwise
      */
-    bool HasArchive(void) const;
+  bool HasArchive(void) const;
 
-    /*!
+  /*!
      * @return The path to the icon for this channel.
      */
-    std::string IconPath(void) const;
+  std::string IconPath(void) const;
 
-    /*!
+  /*!
      * @return True if this user changed icon via GUI. False if not.
      */
-    bool IsUserSetIcon(void) const;
+  bool IsUserSetIcon(void) const;
 
-    /*!
+  /*!
      * @return whether the user has changed the channel name through the GUI
      */
-    bool IsUserSetName(void) const;
+  bool IsUserSetName(void) const;
 
-    /*!
+  /*!
      * @brief Set the path to the icon for this channel.
      * @param strIconPath The new path.
      * @param bIsUserSetIcon true if user changed the icon via GUI, false otherwise.
      * @return True if the something changed, false otherwise.
      */
-    bool SetIconPath(const std::string &strIconPath, bool bIsUserSetIcon = false);
+  bool SetIconPath(const std::string& strIconPath, bool bIsUserSetIcon = false);
 
-    /*!
+  /*!
      * @return The name for this channel used by XBMC.
      */
-    std::string ChannelName(void) const;
+  std::string ChannelName(void) const;
 
-    /*!
+  /*!
      * @brief Set the name for this channel used by XBMC.
      * @param strChannelName The new channel name.
      * @param bIsUserSetName whether the change was triggered by the user directly
      * @return True if the something changed, false otherwise.
      */
-    bool SetChannelName(const std::string &strChannelName, bool bIsUserSetName = false);
+  bool SetChannelName(const std::string& strChannelName, bool bIsUserSetName = false);
 
-    /*!
+  /*!
      * @return Time channel has been watched last.
      */
-    time_t LastWatched() const;
+  time_t LastWatched() const;
 
-    /*!
+  /*!
      * @brief Last time channel has been watched
      * @param iLastWatched The new value.
      * @return True if the something changed, false otherwise.
      */
-    bool SetLastWatched(time_t iLastWatched);
+  bool SetLastWatched(time_t iLastWatched);
 
-    /*!
+  /*!
      * @brief True if this channel has no file or stream name
      * @return True if this channel has no file or stream name
      */
-    bool IsEmpty() const;
+  bool IsEmpty() const;
 
-    bool IsChanged() const;
+  bool IsChanged() const;
 
-    /*!
+  /*!
      * @brief reset changed flag after persist
      */
-    void Persisted();
-    //@}
+  void Persisted();
+  //@}
 
-    /*! @name Client related channel methods
+  /*! @name Client related channel methods
      */
-    //@{
+  //@{
 
-    /*!
+  /*!
      * @brief A unique identifier for this channel.
      *
      * A unique identifier for this channel.
@@ -227,32 +225,32 @@ namespace PVR
      *
      * @return The Unique ID.
      */
-    int UniqueID(void) const;
+  int UniqueID(void) const;
 
-    /*!
+  /*!
      * @return The identifier of the client that serves this channel.
      */
-    int ClientID(void) const;
+  int ClientID(void) const;
 
-    /*!
+  /*!
      * @brief Set the identifier of the client that serves this channel.
      * @param iClientId The new ID.
      * @return True if the something changed, false otherwise.
      */
-    bool SetClientID(int iClientId);
+  bool SetClientID(int iClientId);
 
-    /*!
+  /*!
      * Get the channel number on the client.
      * @return The channel number on the client.
      */
-    const CPVRChannelNumber& ClientChannelNumber() const;
+  const CPVRChannelNumber& ClientChannelNumber() const;
 
-    /*!
+  /*!
      * @return The name of this channel on the client.
      */
-    std::string ClientChannelName(void) const;
+  std::string ClientChannelName(void) const;
 
-    /*!
+  /*!
      * @brief The stream input type
      *
      * The stream input type
@@ -262,29 +260,29 @@ namespace PVR
      *
      * @return The stream input type
      */
-    std::string InputFormat(void) const;
+  std::string InputFormat(void) const;
 
-    /*!
+  /*!
      * @brief The path in the XBMC VFS to be used by PVRManager to open and read the stream.
      * @return The path in the XBMC VFS to be used by PVRManager to open and read the stream.
      */
-    std::string Path(void) const;
+  std::string Path(void) const;
 
-    // ISortable implementation
-    void ToSortable(SortItem& sortable, Field field) const override;
+  // ISortable implementation
+  void ToSortable(SortItem& sortable, Field field) const override;
 
-    /*!
+  /*!
      * @brief Update the channel path
      * @param channelGroup The (new) name of the group this channel belongs to
      */
-    void UpdatePath(const std::string& channelGroup);
+  void UpdatePath(const std::string& channelGroup);
 
-    /*!
+  /*!
      * @return Storage id for this channel in CPVRChannelGroup
      */
-    std::pair<int, int> StorageId(void) const { return std::make_pair(m_iClientId, m_iUniqueId); }
+  std::pair<int, int> StorageId(void) const { return std::make_pair(m_iClientId, m_iUniqueId); }
 
-    /*!
+  /*!
      * @brief Return true if this channel is encrypted.
      *
      * Return true if this channel is encrypted. Does not inform whether XBMC can play the file.
@@ -292,9 +290,9 @@ namespace PVR
      *
      * @return Return true if this channel is encrypted.
      */
-    bool IsEncrypted(void) const;
+  bool IsEncrypted(void) const;
 
-    /*!
+  /*!
      * @brief Return the encryption system ID for this channel. 0 for FTA.
      *
      * Return the encryption system ID for this channel. 0 for FTA.
@@ -302,54 +300,54 @@ namespace PVR
      *
      * @return Return the encryption system ID for this channel.
      */
-    int EncryptionSystem(void) const;
+  int EncryptionSystem(void) const;
 
-    /*!
+  /*!
      * @return A friendly name for the used encryption system.
      */
-    std::string EncryptionName(void) const;
-    //@}
+  std::string EncryptionName(void) const;
+  //@}
 
-    /*! @name EPG methods
+  /*! @name EPG methods
      */
-    //@{
+  //@{
 
-    /*!
+  /*!
      * @return The ID of the EPG table to use for this channel or -1 if it isn't set.
      */
-    int EpgID(void) const;
+  int EpgID(void) const;
 
-    /*!
+  /*!
      * @brief Change the id of the epg that is linked to this channel
      * @param iEpgId The new epg id
      */
-    void SetEpgID(int iEpgId);
+  void SetEpgID(int iEpgId);
 
-    /*!
+  /*!
      * @brief Create the EPG for this channel, if it does not yet exist
      * @return true if a new epg was created, false otherwise.
      */
-    bool CreateEPG();
+  bool CreateEPG();
 
-    /*!
+  /*!
      * @brief Get the EPG table for this channel.
      * @return The EPG for this channel.
      */
-    CPVREpgPtr GetEPG(void) const;
+  CPVREpgPtr GetEPG(void) const;
 
-    /*!
+  /*!
      * @brief Get the EPG tags for this channel.
      * @return The tags.
      */
-    std::vector<std::shared_ptr<CPVREpgInfoTag>> GetEpgTags() const;
+  std::vector<std::shared_ptr<CPVREpgInfoTag>> GetEpgTags() const;
 
-    /*!
+  /*!
      * @brief Clear the EPG for this channel.
      * @return True if it was cleared, false if not.
      */
-    bool ClearEPG(void) const;
+  bool ClearEPG(void) const;
 
-    /*!
+  /*!
      * @brief Get the EPG tag that is now active on this channel.
      *
      * Get the EPG tag that is now active on this channel.
@@ -357,9 +355,9 @@ namespace PVR
      *
      * @return The EPG tag that is now active.
      */
-    CPVREpgInfoTagPtr GetEPGNow() const;
+  CPVREpgInfoTagPtr GetEPGNow() const;
 
-    /*!
+  /*!
      * @brief Get the EPG tag that was previously active on this channel.
      *
      * Get the EPG tag that was previously active on this channel.
@@ -367,9 +365,9 @@ namespace PVR
      *
      * @return The EPG tag that was previously activ.
      */
-    CPVREpgInfoTagPtr GetEPGPrevious() const;
+  CPVREpgInfoTagPtr GetEPGPrevious() const;
 
-    /*!
+  /*!
      * @brief Get the EPG tag that will be next active on this channel.
      *
      * Get the EPG tag that will be next active on this channel.
@@ -377,21 +375,21 @@ namespace PVR
      *
      * @return The EPG tag that will be next active.
      */
-    CPVREpgInfoTagPtr GetEPGNext() const;
+  CPVREpgInfoTagPtr GetEPGNext() const;
 
-    /*!
+  /*!
      * @return Don't use an EPG for this channel if set to false.
      */
-    bool EPGEnabled(void) const;
+  bool EPGEnabled(void) const;
 
-    /*!
+  /*!
      * @brief Set to true if an EPG should be used for this channel. Set to false otherwise.
      * @param bEPGEnabled The new value.
      * @return True if the something changed, false otherwise.
      */
-    bool SetEPGEnabled(bool bEPGEnabled);
+  bool SetEPGEnabled(bool bEPGEnabled);
 
-    /*!
+  /*!
      * @brief Get the name of the scraper to be used for this channel.
      *
      * Get the name of the scraper to be used for this channel.
@@ -399,9 +397,9 @@ namespace PVR
      *
      * @return The name of the scraper to be used for this channel.
      */
-    std::string EPGScraper(void) const;
+  std::string EPGScraper(void) const;
 
-    /*!
+  /*!
      * @brief Set the name of the scraper to be used for this channel.
      *
      * Set the name of the scraper to be used for this channel.
@@ -410,72 +408,80 @@ namespace PVR
      * @param strScraper The new scraper name.
      * @return True if the something changed, false otherwise.
      */
-    bool SetEPGScraper(const std::string &strScraper);
+  bool SetEPGScraper(const std::string& strScraper);
 
-    bool CanRecord(void) const;
+  bool CanRecord(void) const;
 
-    static std::string GetEncryptionName(int iCaid);
+  static std::string GetEncryptionName(int iCaid);
 
-    /*!
+  /*!
      * @brief Get the client order for this channel
      * @return iOrder The order for this channel
      */
-    int ClientOrder() const { return m_iOrder; }
+  int ClientOrder() const { return m_iOrder; }
 
-    /*!
+  /*!
      * @brief Change the client order for this channel
      * @param iOrder The new order for this channel
      */
-    void SetClientOrder(int iOrder);
+  void SetClientOrder(int iOrder);
 
-    //@}
-  private:
-    /*!
+  //@}
+private:
+  /*!
      * @brief Update the encryption name after SetEncryptionSystem() has been called.
      */
-    void UpdateEncryptionName(void);
+  void UpdateEncryptionName(void);
 
-    /*! @name XBMC related channel data
+  /*! @name XBMC related channel data
      */
-    //@{
-    int m_iChannelId = -1;                         /*!< the identifier given to this channel by the TV database */
-    bool m_bIsRadio = false;                       /*!< true if this channel is a radio channel, false if not */
-    bool m_bIsHidden = false;                      /*!< true if this channel is hidden, false if not */
-    bool m_bIsUserSetName = false;                 /*!< true if user set the channel name via GUI, false if not */
-    bool m_bIsUserSetIcon = false;                 /*!< true if user set the icon via GUI, false if not */
-    bool m_bIsLocked = false;                      /*!< true if channel is locked, false if not */
-    std::string m_strIconPath;                     /*!< the path to the icon for this channel */
-    std::string m_strChannelName;                  /*!< the name for this channel used by XBMC */
-    time_t m_iLastWatched = 0;                     /*!< last time channel has been watched */
-    bool m_bChanged = false;                       /*!< true if anything in this entry was changed that needs to be persisted */
-    CPVRChannelNumber m_channelNumber;             /*!< the number this channel has in the currently selected channel group */
-    std::shared_ptr<CPVRRadioRDSInfoTag> m_rdsTag; /*! < the radio rds data, if available for the channel. */
-    bool m_bHasArchive = false;                    /*!< true if this channel supports archive */
-    //@}
+  //@{
+  int m_iChannelId = -1; /*!< the identifier given to this channel by the TV database */
+  bool m_bIsRadio = false; /*!< true if this channel is a radio channel, false if not */
+  bool m_bIsHidden = false; /*!< true if this channel is hidden, false if not */
+  bool m_bIsUserSetName = false; /*!< true if user set the channel name via GUI, false if not */
+  bool m_bIsUserSetIcon = false; /*!< true if user set the icon via GUI, false if not */
+  bool m_bIsLocked = false; /*!< true if channel is locked, false if not */
+  std::string m_strIconPath; /*!< the path to the icon for this channel */
+  std::string m_strChannelName; /*!< the name for this channel used by XBMC */
+  time_t m_iLastWatched = 0; /*!< last time channel has been watched */
+  bool m_bChanged =
+      false; /*!< true if anything in this entry was changed that needs to be persisted */
+  CPVRChannelNumber
+      m_channelNumber; /*!< the number this channel has in the currently selected channel group */
+  std::shared_ptr<CPVRRadioRDSInfoTag>
+      m_rdsTag; /*! < the radio rds data, if available for the channel. */
+  bool m_bHasArchive = false; /*!< true if this channel supports archive */
+  //@}
 
-    /*! @name EPG related channel data
+  /*! @name EPG related channel data
      */
-    //@{
-    int m_iEpgId = -1;                      /*!< the id of the EPG for this channel */
-    bool m_bEPGEnabled = false;             /*!< don't use an EPG for this channel if set to false */
-    std::string m_strEPGScraper = "client"; /*!< the name of the scraper to be used for this channel */
-    std::shared_ptr<CPVREpg> m_epg;
-    //@}
+  //@{
+  int m_iEpgId = -1; /*!< the id of the EPG for this channel */
+  bool m_bEPGEnabled = false; /*!< don't use an EPG for this channel if set to false */
+  std::string m_strEPGScraper =
+      "client"; /*!< the name of the scraper to be used for this channel */
+  std::shared_ptr<CPVREpg> m_epg;
+  //@}
 
-    /*! @name Client related channel data
+  /*! @name Client related channel data
      */
-    //@{
-    int m_iUniqueId = -1;                    /*!< the unique identifier for this channel */
-    int m_iClientId = -1;                    /*!< the identifier of the client that serves this channel */
-    CPVRChannelNumber m_clientChannelNumber; /*!< the channel number on the client */
-    std::string m_strClientChannelName;      /*!< the name of this channel on the client */
-    std::string m_strInputFormat;            /*!< the stream input type based on ffmpeg/libavformat/allformats.c */
-    std::string m_strFileNameAndPath;        /*!< the filename to be used by PVRManager to open and read the stream */
-    int m_iClientEncryptionSystem = -1;      /*!< the encryption system used by this channel. 0 for FreeToAir, -1 for unknown */
-    std::string m_strClientEncryptionName;   /*!< the name of the encryption system used by this channel */
-    int m_iOrder = 0;                        /*!< the order from this channels currently selected group memeber */
-    //@}
+  //@{
+  int m_iUniqueId = -1; /*!< the unique identifier for this channel */
+  int m_iClientId = -1; /*!< the identifier of the client that serves this channel */
+  CPVRChannelNumber m_clientChannelNumber; /*!< the channel number on the client */
+  std::string m_strClientChannelName; /*!< the name of this channel on the client */
+  std::string
+      m_strInputFormat; /*!< the stream input type based on ffmpeg/libavformat/allformats.c */
+  std::string
+      m_strFileNameAndPath; /*!< the filename to be used by PVRManager to open and read the stream */
+  int m_iClientEncryptionSystem =
+      -1; /*!< the encryption system used by this channel. 0 for FreeToAir, -1 for unknown */
+  std::string
+      m_strClientEncryptionName; /*!< the name of the encryption system used by this channel */
+  int m_iOrder = 0; /*!< the order from this channels currently selected group memeber */
+  //@}
 
-    mutable CCriticalSection m_critSection;
-  };
-}
+  mutable CCriticalSection m_critSection;
+};
+} // namespace PVR

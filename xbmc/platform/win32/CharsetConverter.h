@@ -57,6 +57,6 @@ std::wstring ToW(const char* str, size_t length);
  * \returns UTF-16 string, empty string on failure
  */
 std::wstring ToW(const std::string& str);
-}
-}
-}
+} // namespace WINDOWS
+} // namespace PLATFORM
+} // namespace KODI

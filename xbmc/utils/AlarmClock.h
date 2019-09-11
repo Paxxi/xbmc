@@ -28,11 +28,12 @@ class CAlarmClock : public CThread
 public:
   CAlarmClock();
   ~CAlarmClock() override;
-  void Start(const std::string& strName, float n_secs, const std::string& strCommand, bool bSilent = false, bool bLoop = false);
-  inline bool IsRunning() const
-  {
-    return m_bIsRunning;
-  }
+  void Start(const std::string& strName,
+             float n_secs,
+             const std::string& strCommand,
+             bool bSilent = false,
+             bool bLoop = false);
+  inline bool IsRunning() const { return m_bIsRunning; }
 
   inline bool HasAlarm(const std::string& strName)
   {
@@ -45,10 +46,11 @@ public:
 
   double GetRemaining(const std::string& strName)
   {
-    std::map<std::string,SAlarmClockEvent>::iterator iter;
-    if ((iter=m_event.find(strName)) != m_event.end())
+    std::map<std::string, SAlarmClockEvent>::iterator iter;
+    if ((iter = m_event.find(strName)) != m_event.end())
     {
-      return iter->second.m_fSecs-(iter->second.watch.IsRunning() ? iter->second.watch.GetElapsedSeconds() : 0.f);
+      return iter->second.m_fSecs -
+             (iter->second.watch.IsRunning() ? iter->second.watch.GetElapsedSeconds() : 0.f);
     }
 
     return 0.f;
@@ -56,12 +58,12 @@ public:
 
   void Stop(const std::string& strName, bool bSilent = false);
   void Process() override;
+
 private:
-  std::map<std::string,SAlarmClockEvent> m_event;
+  std::map<std::string, SAlarmClockEvent> m_event;
   CCriticalSection m_events;
 
   bool m_bIsRunning = false;
 };
 
 extern CAlarmClock g_alarmClock;
-

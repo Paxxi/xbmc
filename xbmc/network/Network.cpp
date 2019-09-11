@@ -6,21 +6,23 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-
 #include "Network.h"
+
 #include "ServiceBroker.h"
 #include "messaging/ApplicationMessenger.h"
 #include "network/NetworkServices.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
 #include "utils/log.h"
+
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #ifdef TARGET_WINDOWS
-#include "platform/win32/WIN32Util.h"
 #include "utils/CharsetConverter.h"
+
+#include "platform/win32/WIN32Util.h"
 #endif
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
@@ -30,14 +32,14 @@
 using namespace KODI::MESSAGING;
 
 /* slightly modified in_ether taken from the etherboot project (http://sourceforge.net/projects/etherboot) */
-bool in_ether (const char *bufp, unsigned char *addr)
+bool in_ether(const char* bufp, unsigned char* addr)
 {
   if (strlen(bufp) != 17)
     return false;
 
   char c;
-  const char *orig;
-  unsigned char *ptr = addr;
+  const char* orig;
+  unsigned char* ptr = addr;
   unsigned val;
 
   int i = 0;
@@ -73,7 +75,7 @@ bool in_ether (const char *bufp, unsigned char *addr)
     if (c != 0)
       bufp++;
 
-    *ptr++ = (unsigned char) (val & 0377);
+    *ptr++ = (unsigned char)(val & 0377);
     i++;
 
     if (*bufp == ':' || *bufp == '-')
@@ -86,8 +88,8 @@ bool in_ether (const char *bufp, unsigned char *addr)
   return true;
 }
 
-CNetworkBase::CNetworkBase() :
-  m_services(new CNetworkServices())
+CNetworkBase::CNetworkBase()
+  : m_services(new CNetworkServices())
 {
   CApplicationMessenger::GetInstance().PostMsg(TMSG_NETWORKMESSAGE, SERVICES_UP, 0);
 }
@@ -97,23 +99,23 @@ CNetworkBase::~CNetworkBase()
   CApplicationMessenger::GetInstance().PostMsg(TMSG_NETWORKMESSAGE, SERVICES_DOWN, 0);
 }
 
-int CNetworkBase::ParseHex(char *str, unsigned char *addr)
+int CNetworkBase::ParseHex(char* str, unsigned char* addr)
 {
-   int len = 0;
+  int len = 0;
 
-   while (*str)
-   {
-      int tmp;
-      if (str[1] == 0)
-         return -1;
-      if (sscanf(str, "%02x", (unsigned int *)&tmp) != 1)
-         return -1;
-      addr[len] = tmp;
-      len++;
-      str += 2;
-   }
+  while (*str)
+  {
+    int tmp;
+    if (str[1] == 0)
+      return -1;
+    if (sscanf(str, "%02x", (unsigned int*)&tmp) != 1)
+      return -1;
+    addr[len] = tmp;
+    len++;
+    str += 2;
+  }
 
-   return len;
+  return len;
 }
 
 bool CNetworkBase::GetHostName(std::string& hostname)
@@ -137,14 +139,12 @@ bool CNetworkBase::IsLocalHost(const std::string& hostname)
   if (hostname.empty())
     return false;
 
-  if (StringUtils::StartsWith(hostname, "127.")
-      || (hostname == "::1")
-      || StringUtils::EqualsNoCase(hostname, "localhost"))
+  if (StringUtils::StartsWith(hostname, "127.") || (hostname == "::1") ||
+      StringUtils::EqualsNoCase(hostname, "localhost"))
     return true;
 
   std::string myhostname;
-  if (GetHostName(myhostname)
-      && StringUtils::EqualsNoCase(hostname, myhostname))
+  if (GetHostName(myhostname) && StringUtils::EqualsNoCase(hostname, myhostname))
     return true;
 
   std::vector<CNetworkInterface*>& ifaces = GetInterfaceList();
@@ -155,7 +155,7 @@ bool CNetworkBase::IsLocalHost(const std::string& hostname)
     if (iface && iface->GetCurrentIPAddress() == hostname)
       return true;
 
-     ++iter;
+    ++iter;
   }
 
   return false;
@@ -180,24 +180,24 @@ CNetworkInterface* CNetworkBase::GetFirstConnectedInterface()
 
 bool CNetworkBase::HasInterfaceForIP(unsigned long address)
 {
-   unsigned long subnet;
-   unsigned long local;
-   std::vector<CNetworkInterface*>& ifaces = GetInterfaceList();
-   std::vector<CNetworkInterface*>::const_iterator iter = ifaces.begin();
-   while (iter != ifaces.end())
-   {
-      CNetworkInterface* iface = *iter;
-      if (iface && iface->IsConnected())
-      {
-         subnet = ntohl(inet_addr(iface->GetCurrentNetmask().c_str()));
-         local = ntohl(inet_addr(iface->GetCurrentIPAddress().c_str()));
-         if( (address & subnet) == (local & subnet) )
-            return true;
-      }
-      ++iter;
-   }
+  unsigned long subnet;
+  unsigned long local;
+  std::vector<CNetworkInterface*>& ifaces = GetInterfaceList();
+  std::vector<CNetworkInterface*>::const_iterator iter = ifaces.begin();
+  while (iter != ifaces.end())
+  {
+    CNetworkInterface* iface = *iter;
+    if (iface && iface->IsConnected())
+    {
+      subnet = ntohl(inet_addr(iface->GetCurrentNetmask().c_str()));
+      local = ntohl(inet_addr(iface->GetCurrentIPAddress().c_str()));
+      if ((address & subnet) == (local & subnet))
+        return true;
+    }
+    ++iter;
+  }
 
-   return false;
+  return false;
 }
 
 bool CNetworkBase::IsAvailable(void)
@@ -208,24 +208,24 @@ bool CNetworkBase::IsAvailable(void)
 
 bool CNetworkBase::IsConnected()
 {
-   return GetFirstConnectedInterface() != NULL;
+  return GetFirstConnectedInterface() != NULL;
 }
 
 void CNetworkBase::NetworkMessage(EMESSAGE message, int param)
 {
-  switch( message )
+  switch (message)
   {
-    case SERVICES_UP:
-      CLog::Log(LOGDEBUG, "%s - Starting network services",__FUNCTION__);
-      m_services->Start();
-      break;
+  case SERVICES_UP:
+    CLog::Log(LOGDEBUG, "%s - Starting network services", __FUNCTION__);
+    m_services->Start();
+    break;
 
-    case SERVICES_DOWN:
-      CLog::Log(LOGDEBUG, "%s - Signaling network services to stop",__FUNCTION__);
-      m_services->Stop(false); // tell network services to stop, but don't wait for them yet
-      CLog::Log(LOGDEBUG, "%s - Waiting for network services to stop",__FUNCTION__);
-      m_services->Stop(true); // wait for network services to stop
-      break;
+  case SERVICES_DOWN:
+    CLog::Log(LOGDEBUG, "%s - Signaling network services to stop", __FUNCTION__);
+    m_services->Stop(false); // tell network services to stop, but don't wait for them yet
+    CLog::Log(LOGDEBUG, "%s - Waiting for network services to stop", __FUNCTION__);
+    m_services->Stop(true); // wait for network services to stop
+    break;
   }
 }
 
@@ -233,8 +233,8 @@ bool CNetworkBase::WakeOnLan(const char* mac)
 {
   int i, j, packet;
   unsigned char ethaddr[8];
-  unsigned char buf [128];
-  unsigned char *ptr;
+  unsigned char buf[128];
+  unsigned char* ptr;
 
   // Fetch the hardware address
   if (!in_ether(mac, ethaddr))
@@ -244,9 +244,9 @@ bool CNetworkBase::WakeOnLan(const char* mac)
   }
 
   // Setup the socket
-  if ((packet = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+  if ((packet = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
   {
-    CLog::Log(LOGERROR, "%s - Unable to create socket (%s)", __FUNCTION__, strerror (errno));
+    CLog::Log(LOGERROR, "%s - Unable to create socket (%s)", __FUNCTION__, strerror(errno));
     return false;
   }
 
@@ -257,9 +257,10 @@ bool CNetworkBase::WakeOnLan(const char* mac)
   saddr.sin_port = htons(9);
 
   unsigned int value = 1;
-  if (setsockopt (packet, SOL_SOCKET, SO_BROADCAST, (char*) &value, sizeof( unsigned int ) ) == SOCKET_ERROR)
+  if (setsockopt(packet, SOL_SOCKET, SO_BROADCAST, (char*)&value, sizeof(unsigned int)) ==
+      SOCKET_ERROR)
   {
-    CLog::Log(LOGERROR, "%s - Unable to set socket options (%s)", __FUNCTION__, strerror (errno));
+    CLog::Log(LOGERROR, "%s - Unable to set socket options (%s)", __FUNCTION__, strerror(errno));
     closesocket(packet);
     return false;
   }
@@ -274,9 +275,9 @@ bool CNetworkBase::WakeOnLan(const char* mac)
       *ptr++ = ethaddr[i];
 
   // Send the magic packet
-  if (sendto (packet, (char *)buf, 102, 0, (struct sockaddr *)&saddr, sizeof (saddr)) < 0)
+  if (sendto(packet, (char*)buf, 102, 0, (struct sockaddr*)&saddr, sizeof(saddr)) < 0)
   {
-    CLog::Log(LOGERROR, "%s - Unable to send magic packet (%s)", __FUNCTION__, strerror (errno));
+    CLog::Log(LOGERROR, "%s - Unable to send magic packet (%s)", __FUNCTION__, strerror(errno));
     closesocket(packet);
     return false;
   }
@@ -287,7 +288,10 @@ bool CNetworkBase::WakeOnLan(const char* mac)
 }
 
 // ping helper
-static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, struct timeval& timeOut, bool tryRead)
+static const char* ConnectHostPort(SOCKET soc,
+                                   const struct sockaddr_in& addr,
+                                   struct timeval& timeOut,
+                                   bool tryRead)
 {
   // set non-blocking
 #ifdef TARGET_WINDOWS
@@ -300,7 +304,8 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
   if (result != 0)
     return "set non-blocking option failed";
 
-  result = connect(soc, (const struct sockaddr *)&addr, sizeof(addr)); // non-blocking connect, will fail ..
+  result = connect(soc, (const struct sockaddr*)&addr,
+                   sizeof(addr)); // non-blocking connect, will fail ..
 
   if (result < 0)
   {
@@ -327,9 +332,9 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
 
     { // verify socket connection state
       int err_code = -1;
-      socklen_t code_len = sizeof (err_code);
+      socklen_t code_len = sizeof(err_code);
 
-      result = getsockopt(soc, SOL_SOCKET, SO_ERROR, (char*) &err_code, &code_len);
+      result = getsockopt(soc, SOL_SOCKET, SO_ERROR, (char*)&err_code, &code_len);
 
       if (result != 0)
         return "getsockopt fail";
@@ -349,7 +354,7 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
 
     if (result > 0)
     {
-      char message [32];
+      char message[32];
 
       result = recv(soc, message, sizeof(message), 0);
     }
@@ -364,10 +369,13 @@ static const char* ConnectHostPort(SOCKET soc, const struct sockaddr_in& addr, s
   return 0; // success
 }
 
-bool CNetworkBase::PingHost(unsigned long ipaddr, unsigned short port, unsigned int timeOutMs, bool readability_check)
+bool CNetworkBase::PingHost(unsigned long ipaddr,
+                            unsigned short port,
+                            unsigned int timeOutMs,
+                            bool readability_check)
 {
   if (port == 0) // use icmp ping
-    return PingHost (ipaddr, timeOutMs);
+    return PingHost(ipaddr, timeOutMs);
 
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
@@ -384,9 +392,9 @@ bool CNetworkBase::PingHost(unsigned long ipaddr, unsigned short port, unsigned 
     tmout.tv_sec = timeOutMs / 1000;
     tmout.tv_usec = (timeOutMs % 1000) * 1000;
 
-    err_msg = ConnectHostPort (soc, addr, tmout, readability_check);
+    err_msg = ConnectHostPort(soc, addr, tmout, readability_check);
 
-    (void) closesocket (soc);
+    (void)closesocket(soc);
   }
 
   if (err_msg && *err_msg)
@@ -397,7 +405,8 @@ bool CNetworkBase::PingHost(unsigned long ipaddr, unsigned short port, unsigned 
     std::string sock_err = strerror(errno);
 #endif
 
-    CLog::Log(LOGERROR, "%s(%s:%d) - %s (%s)", __FUNCTION__, inet_ntoa(addr.sin_addr), port, err_msg, sock_err.c_str());
+    CLog::Log(LOGERROR, "%s(%s:%d) - %s (%s)", __FUNCTION__, inet_ntoa(addr.sin_addr), port,
+              err_msg, sock_err.c_str());
   }
 
   return err_msg == 0;
@@ -405,7 +414,10 @@ bool CNetworkBase::PingHost(unsigned long ipaddr, unsigned short port, unsigned 
 
 //creates, binds and listens tcp sockets on the desired port. Set bindLocal to
 //true to bind to localhost only.
-std::vector<SOCKET> CreateTCPServerSocket(const int port, const bool bindLocal, const int backlog, const char *callerName)
+std::vector<SOCKET> CreateTCPServerSocket(const int port,
+                                          const bool bindLocal,
+                                          const int backlog,
+                                          const char* callerName)
 {
 #ifdef WINSOCK_VERSION
   int yes = 1;
@@ -417,7 +429,7 @@ std::vector<SOCKET> CreateTCPServerSocket(const int port, const bool bindLocal, 
   struct addrinfo* results = nullptr;
 
   std::string sPort = StringUtils::Format("%d", port);
-  struct addrinfo hints = { 0 };
+  struct addrinfo hints = {0};
   hints.ai_family = PF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
   hints.ai_flags = AI_PASSIVE;
@@ -439,7 +451,8 @@ std::vector<SOCKET> CreateTCPServerSocket(const int port, const bool bindLocal, 
     if (bind(sock, result->ai_addr, result->ai_addrlen) != 0)
     {
       closesocket(sock);
-      CLog::Log(LOGDEBUG, "%s Server: Failed to bind %s serversocket", callerName, result->ai_family == AF_INET6 ? "IPv6" : "IPv4");
+      CLog::Log(LOGDEBUG, "%s Server: Failed to bind %s serversocket", callerName,
+                result->ai_family == AF_INET6 ? "IPv6" : "IPv4");
       continue;
     }
 
@@ -461,7 +474,8 @@ std::vector<SOCKET> CreateTCPServerSocket(const int port, const bool bindLocal, 
 
 void CNetworkBase::WaitForNet()
 {
-  const int timeout = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_POWERMANAGEMENT_WAITFORNETWORK);
+  const int timeout = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+      CSettings::SETTING_POWERMANAGEMENT_WAITFORNETWORK);
   if (timeout <= 0)
     return; // wait for network is disabled
 
@@ -469,24 +483,27 @@ void CNetworkBase::WaitForNet()
   if (!IsAvailable())
     return;
 
-  CLog::Log(LOGNOTICE, "%s: Waiting for a network interface to come up (Timeout: %d s)", __FUNCTION__, timeout);
+  CLog::Log(LOGNOTICE, "%s: Waiting for a network interface to come up (Timeout: %d s)",
+            __FUNCTION__, timeout);
 
   const static int intervalMs = 200;
   const int numMaxTries = (timeout * 1000) / intervalMs;
 
-  for(int i=0; i < numMaxTries; ++i)
+  for (int i = 0; i < numMaxTries; ++i)
   {
     if (i > 0)
       Sleep(intervalMs);
 
     if (IsConnected())
     {
-      CLog::Log(LOGNOTICE, "%s: A network interface is up after waiting %d ms", __FUNCTION__, i * intervalMs);
+      CLog::Log(LOGNOTICE, "%s: A network interface is up after waiting %d ms", __FUNCTION__,
+                i * intervalMs);
       return;
     }
   }
 
-  CLog::Log(LOGNOTICE, "%s: No network interface did come up within %d s... Giving up...", __FUNCTION__, timeout);
+  CLog::Log(LOGNOTICE, "%s: No network interface did come up within %d s... Giving up...",
+            __FUNCTION__, timeout);
 }
 
 std::string CNetworkBase::GetIpStr(const struct sockaddr* sa)
@@ -495,14 +512,16 @@ std::string CNetworkBase::GetIpStr(const struct sockaddr* sa)
   if (!sa)
     return result;
 
-  char buffer[INET6_ADDRSTRLEN] = { 0 };
+  char buffer[INET6_ADDRSTRLEN] = {0};
   switch (sa->sa_family)
   {
   case AF_INET:
-    inet_ntop(AF_INET, &reinterpret_cast<const struct sockaddr_in *>(sa)->sin_addr, buffer, INET_ADDRSTRLEN);
+    inet_ntop(AF_INET, &reinterpret_cast<const struct sockaddr_in*>(sa)->sin_addr, buffer,
+              INET_ADDRSTRLEN);
     break;
   case AF_INET6:
-    inet_ntop(AF_INET6, &reinterpret_cast<const struct sockaddr_in6 *>(sa)->sin6_addr, buffer, INET6_ADDRSTRLEN);
+    inet_ntop(AF_INET6, &reinterpret_cast<const struct sockaddr_in6*>(sa)->sin6_addr, buffer,
+              INET6_ADDRSTRLEN);
     break;
   default:
     return result;
@@ -519,6 +538,7 @@ std::string CNetworkBase::GetMaskByPrefixLength(uint8_t prefixLength)
 
   struct sockaddr_in sa;
   sa.sin_family = AF_INET;
-  sa.sin_addr.s_addr = htonl(~((1 << (32u - prefixLength)) - 1));;
+  sa.sin_addr.s_addr = htonl(~((1 << (32u - prefixLength)) - 1));
+  ;
   return CNetworkBase::GetIpStr(reinterpret_cast<struct sockaddr*>(&sa));
 }

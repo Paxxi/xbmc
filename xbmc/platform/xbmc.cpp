@@ -14,6 +14,7 @@
 
 #ifdef TARGET_WINDOWS_DESKTOP
 #include "platform/win32/IMMNotificationClient.h"
+
 #include <mmdeviceapi.h>
 #include <wrl/client.h>
 #endif
@@ -22,11 +23,11 @@
 #include "platform/android/activity/XBMCApp.h"
 #endif
 
+#include "commons/Exception.h"
 #include "platform/MessagePrinter.h"
 #include "utils/log.h"
-#include "commons/Exception.h"
 
-extern "C" int XBMC_Run(bool renderGUI, const CAppParamParser &params)
+extern "C" int XBMC_Run(bool renderGUI, const CAppParamParser& params)
 {
   int status = -1;
 
@@ -37,7 +38,7 @@ extern "C" int XBMC_Run(bool renderGUI, const CAppParamParser &params)
   }
 
 #ifdef TARGET_RASPBERRY_PI
-  if(!g_RBP.Initialize())
+  if (!g_RBP.Initialize())
     return false;
   g_RBP.LogFirmwareVersion();
 #elif defined(TARGET_ANDROID)
@@ -60,8 +61,9 @@ extern "C" int XBMC_Run(bool renderGUI, const CAppParamParser &params)
 #ifdef TARGET_WINDOWS_DESKTOP
   Microsoft::WRL::ComPtr<IMMDeviceEnumerator> pEnumerator = nullptr;
   CMMNotificationClient cMMNC;
-  HRESULT hr = CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_ALL, IID_IMMDeviceEnumerator,
-                                reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
+  HRESULT hr =
+      CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_ALL, IID_IMMDeviceEnumerator,
+                       reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
   if (SUCCEEDED(hr))
   {
     pEnumerator->RegisterEndpointNotificationCallback(&cMMNC);

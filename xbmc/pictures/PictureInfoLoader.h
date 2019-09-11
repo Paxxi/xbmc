@@ -31,4 +31,3 @@ protected:
   unsigned int m_tagReads;
   bool m_loadTags;
 };
-

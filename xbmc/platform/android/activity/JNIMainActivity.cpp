@@ -16,7 +16,7 @@ using namespace jni;
 
 CJNIMainActivity* CJNIMainActivity::m_appInstance(NULL);
 
-CJNIMainActivity::CJNIMainActivity(const ANativeActivity *nativeActivity)
+CJNIMainActivity::CJNIMainActivity(const ANativeActivity* nativeActivity)
   : CJNIActivity(nativeActivity)
 {
   m_appInstance = this;
@@ -27,7 +27,7 @@ CJNIMainActivity::~CJNIMainActivity()
   m_appInstance = NULL;
 }
 
-void CJNIMainActivity::_onNewIntent(JNIEnv *env, jobject context, jobject intent)
+void CJNIMainActivity::_onNewIntent(JNIEnv* env, jobject context, jobject intent)
 {
   (void)env;
   (void)context;
@@ -35,19 +35,21 @@ void CJNIMainActivity::_onNewIntent(JNIEnv *env, jobject context, jobject intent
     m_appInstance->onNewIntent(CJNIIntent(jhobject::fromJNI(intent)));
 }
 
-void CJNIMainActivity::_onActivityResult(JNIEnv *env, jobject context, jint requestCode, jint resultCode, jobject resultData)
+void CJNIMainActivity::_onActivityResult(
+    JNIEnv* env, jobject context, jint requestCode, jint resultCode, jobject resultData)
 {
   (void)env;
   (void)context;
   if (m_appInstance)
-    m_appInstance->onActivityResult(requestCode, resultCode, CJNIIntent(jhobject::fromJNI(resultData)));
+    m_appInstance->onActivityResult(requestCode, resultCode,
+                                    CJNIIntent(jhobject::fromJNI(resultData)));
 }
 
-void CJNIMainActivity::_callNative(JNIEnv *env, jobject context, jlong funcAddr, jlong variantAddr)
+void CJNIMainActivity::_callNative(JNIEnv* env, jobject context, jlong funcAddr, jlong variantAddr)
 {
   (void)env;
   (void)context;
-  ((void (*)(CVariant *))funcAddr)((CVariant *)variantAddr);
+  ((void (*)(CVariant*))funcAddr)((CVariant*)variantAddr);
 }
 
 void CJNIMainActivity::_onVisibleBehindCanceled(JNIEnv* env, jobject context)
@@ -58,21 +60,20 @@ void CJNIMainActivity::_onVisibleBehindCanceled(JNIEnv* env, jobject context)
     m_appInstance->onVisibleBehindCanceled();
 }
 
-void CJNIMainActivity::runNativeOnUiThread(void (*callback)(CVariant *), CVariant* variant)
+void CJNIMainActivity::runNativeOnUiThread(void (*callback)(CVariant*), CVariant* variant)
 {
-  call_method<void>(m_context,
-                    "runNativeOnUiThread", "(JJ)V", (jlong)callback, (jlong)variant);
+  call_method<void>(m_context, "runNativeOnUiThread", "(JJ)V", (jlong)callback, (jlong)variant);
 }
 
-void CJNIMainActivity::_onVolumeChanged(JNIEnv *env, jobject context, jint volume)
+void CJNIMainActivity::_onVolumeChanged(JNIEnv* env, jobject context, jint volume)
 {
   (void)env;
   (void)context;
-  if(m_appInstance)
+  if (m_appInstance)
     m_appInstance->onVolumeChanged(volume);
 }
 
-void CJNIMainActivity::_onInputDeviceAdded(JNIEnv *env, jobject context, jint deviceId)
+void CJNIMainActivity::_onInputDeviceAdded(JNIEnv* env, jobject context, jint deviceId)
 {
   static_cast<void>(env);
   static_cast<void>(context);
@@ -81,7 +82,7 @@ void CJNIMainActivity::_onInputDeviceAdded(JNIEnv *env, jobject context, jint de
     m_appInstance->onInputDeviceAdded(deviceId);
 }
 
-void CJNIMainActivity::_onInputDeviceChanged(JNIEnv *env, jobject context, jint deviceId)
+void CJNIMainActivity::_onInputDeviceChanged(JNIEnv* env, jobject context, jint deviceId)
 {
   static_cast<void>(env);
   static_cast<void>(context);
@@ -90,7 +91,7 @@ void CJNIMainActivity::_onInputDeviceChanged(JNIEnv *env, jobject context, jint 
     m_appInstance->onInputDeviceChanged(deviceId);
 }
 
-void CJNIMainActivity::_onInputDeviceRemoved(JNIEnv *env, jobject context, jint deviceId)
+void CJNIMainActivity::_onInputDeviceRemoved(JNIEnv* env, jobject context, jint deviceId)
 {
   static_cast<void>(env);
   static_cast<void>(context);
@@ -99,28 +100,25 @@ void CJNIMainActivity::_onInputDeviceRemoved(JNIEnv *env, jobject context, jint 
     m_appInstance->onInputDeviceRemoved(deviceId);
 }
 
-void CJNIMainActivity::_doFrame(JNIEnv *env, jobject context, jlong frameTimeNanos)
+void CJNIMainActivity::_doFrame(JNIEnv* env, jobject context, jlong frameTimeNanos)
 {
   (void)env;
   (void)context;
-  if(m_appInstance)
+  if (m_appInstance)
     m_appInstance->doFrame(frameTimeNanos);
 }
 
 CJNIRect CJNIMainActivity::getDisplayRect()
 {
-  return call_method<jhobject>(m_context,
-                               "getDisplayRect", "()Landroid/graphics/Rect;");
+  return call_method<jhobject>(m_context, "getDisplayRect", "()Landroid/graphics/Rect;");
 }
 
 void CJNIMainActivity::registerMediaButtonEventReceiver()
 {
-  call_method<void>(m_context,
-                    "registerMediaButtonEventReceiver", "()V");
+  call_method<void>(m_context, "registerMediaButtonEventReceiver", "()V");
 }
 
 void CJNIMainActivity::unregisterMediaButtonEventReceiver()
 {
-  call_method<void>(m_context,
-                    "unregisterMediaButtonEventReceiver", "()V");
+  call_method<void>(m_context, "unregisterMediaButtonEventReceiver", "()V");
 }

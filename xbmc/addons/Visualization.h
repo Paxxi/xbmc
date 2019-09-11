@@ -22,11 +22,11 @@ public:
 
   bool Start(int channels, int samplesPerSec, int bitsPerSample, const std::string& songName);
   void Stop();
-  void AudioData(const float* audioData, int audioDataLength, float *freqData, int freqDataLength);
+  void AudioData(const float* audioData, int audioDataLength, float* freqData, int freqDataLength);
   bool IsDirty();
   void Render();
-  void GetInfo(VIS_INFO *info);
-  bool OnAction(VIS_ACTION action, const void *param);
+  void GetInfo(VIS_INFO* info);
+  bool OnAction(VIS_ACTION action, const void* param);
   bool HasPresets();
   bool GetPresetList(std::vector<std::string>& vecpresets);
   int GetActivePreset();
@@ -39,7 +39,8 @@ private:
   std::string m_profilePath; /*!< To add-on sended profile path */
   std::vector<std::string> m_presets; /*!< cached preset list */
 
-  AddonInstance_Visualization m_struct; /*!< Interface table who contains function addresses and fixed values */
+  AddonInstance_Visualization
+      m_struct; /*!< Interface table who contains function addresses and fixed values */
 
   // Static function to transfer data from add-on to kodi
   static void transfer_preset(void* kodiInstance, const char* preset);

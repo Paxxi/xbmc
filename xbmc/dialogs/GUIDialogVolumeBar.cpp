@@ -23,9 +23,10 @@ CGUIDialogVolumeBar::CGUIDialogVolumeBar(void)
 
 CGUIDialogVolumeBar::~CGUIDialogVolumeBar(void) = default;
 
-bool CGUIDialogVolumeBar::OnAction(const CAction &action)
+bool CGUIDialogVolumeBar::OnAction(const CAction& action)
 {
-  if (action.GetID() == ACTION_VOLUME_UP || action.GetID() == ACTION_VOLUME_DOWN || action.GetID() == ACTION_VOLUME_SET || action.GetID() == ACTION_MUTE)
+  if (action.GetID() == ACTION_VOLUME_UP || action.GetID() == ACTION_VOLUME_DOWN ||
+      action.GetID() == ACTION_VOLUME_SET || action.GetID() == ACTION_MUTE)
   {
     if (g_application.IsMuted() || g_application.GetVolume(false) <= VOLUME_MINIMUM)
     { // cancel the timer, dialog needs to stay visible
@@ -43,7 +44,7 @@ bool CGUIDialogVolumeBar::OnAction(const CAction &action)
 
 bool CGUIDialogVolumeBar::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_INIT:
   case GUI_MSG_WINDOW_DEINIT:
@@ -52,14 +53,14 @@ bool CGUIDialogVolumeBar::OnMessage(CGUIMessage& message)
   return false; // don't process anything other than what we need!
 }
 
-void CGUIDialogVolumeBar::RegisterCallback(IGUIVolumeBarCallback *callback)
+void CGUIDialogVolumeBar::RegisterCallback(IGUIVolumeBarCallback* callback)
 {
   CSingleLock lock(m_callbackMutex);
 
   m_callbacks.insert(callback);
 }
 
-void CGUIDialogVolumeBar::UnregisterCallback(IGUIVolumeBarCallback *callback)
+void CGUIDialogVolumeBar::UnregisterCallback(IGUIVolumeBarCallback* callback)
 {
   CSingleLock lock(m_callbackMutex);
 
@@ -71,7 +72,7 @@ bool CGUIDialogVolumeBar::IsVolumeBarEnabled() const
   CSingleLock lock(m_callbackMutex);
 
   // Hide volume bar if any callbacks are shown
-  for (const auto &callback : m_callbacks)
+  for (const auto& callback : m_callbacks)
   {
     if (callback->IsShown())
       return false;

@@ -26,14 +26,14 @@ CPosixDirectory::CPosixDirectory(void) = default;
 
 CPosixDirectory::~CPosixDirectory(void) = default;
 
-bool CPosixDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CPosixDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   std::string root = url.Get();
 
   if (IsAliasShortcut(root, true))
     TranslateAliasShortcut(root);
 
-  DIR *dir = opendir(root.c_str());
+  DIR* dir = opendir(root.c_str());
   if (!dir)
     return false;
 
@@ -137,7 +137,7 @@ bool CPosixDirectory::RemoveRecursive(const CURL& url)
   if (IsAliasShortcut(root, true))
     TranslateAliasShortcut(root);
 
-  DIR *dir = opendir(root.c_str());
+  DIR* dir = opendir(root.c_str());
   if (!dir)
     return false;
 
@@ -167,7 +167,7 @@ bool CPosixDirectory::RemoveRecursive(const CURL& url)
 
     if (entry->d_type == DT_DIR || (bStat && S_ISDIR(buffer.st_mode)))
     {
-      if (!RemoveRecursive(CURL{ itemPath }))
+      if (!RemoveRecursive(CURL{itemPath}))
       {
         success = false;
         break;

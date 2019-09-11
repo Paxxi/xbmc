@@ -16,41 +16,41 @@
 
 namespace CONTEXTMENU
 {
-  bool CFavouriteContextMenuAction::IsVisible(const CFileItem& item) const
-  {
-    return URIUtils::IsProtocol(item.GetPath(), "favourites");
-  }
+bool CFavouriteContextMenuAction::IsVisible(const CFileItem& item) const
+{
+  return URIUtils::IsProtocol(item.GetPath(), "favourites");
+}
 
-  bool CFavouriteContextMenuAction::Execute(const CFileItemPtr& item) const
+bool CFavouriteContextMenuAction::Execute(const CFileItemPtr& item) const
+{
+  CFileItemList items;
+  CServiceBroker::GetFavouritesService().GetAll(items);
+  for (const auto& favourite : items)
   {
-    CFileItemList items;
-    CServiceBroker::GetFavouritesService().GetAll(items);
-    for (const auto& favourite : items)
+    if (favourite->GetPath() == item->GetPath())
     {
-      if (favourite->GetPath() == item->GetPath())
-      {
-        if (DoExecute(items, favourite))
-          return CServiceBroker::GetFavouritesService().Save(items);
-      }
+      if (DoExecute(items, favourite))
+        return CServiceBroker::GetFavouritesService().Save(items);
     }
-    return false;
   }
+  return false;
+}
 
-  bool CRemoveFavourite::DoExecute(CFileItemList &items, const CFileItemPtr& item) const
-  {
-    int iBefore = items.Size();
-    items.Remove(item.get());
-    return items.Size() == iBefore - 1;
-  }
+bool CRemoveFavourite::DoExecute(CFileItemList& items, const CFileItemPtr& item) const
+{
+  int iBefore = items.Size();
+  items.Remove(item.get());
+  return items.Size() == iBefore - 1;
+}
 
-  bool CRenameFavourite::DoExecute(CFileItemList&, const CFileItemPtr& item) const
-  {
-    return CGUIDialogFavourites::ChooseAndSetNewName(item);
-  }
+bool CRenameFavourite::DoExecute(CFileItemList&, const CFileItemPtr& item) const
+{
+  return CGUIDialogFavourites::ChooseAndSetNewName(item);
+}
 
-  bool CChooseThumbnailForFavourite::DoExecute(CFileItemList&, const CFileItemPtr& item) const
-  {
-    return CGUIDialogFavourites::ChooseAndSetNewThumbnail(item);
-  }
+bool CChooseThumbnailForFavourite::DoExecute(CFileItemList&, const CFileItemPtr& item) const
+{
+  return CGUIDialogFavourites::ChooseAndSetNewThumbnail(item);
+}
 
 } // namespace CONTEXTMENU

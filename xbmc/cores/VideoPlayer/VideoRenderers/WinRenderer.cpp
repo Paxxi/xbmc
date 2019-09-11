@@ -35,15 +35,14 @@ struct render_details
   template<class T>
   constexpr static render_details get(RenderMethod method, const std::string& name)
   {
-    return { method, name, T::Create, T::GetWeight };
+    return {method, name, T::Create, T::GetWeight};
   }
 };
 
-static std::vector<render_details> RenderMethodDetails =
-{
-  render_details::get<CRendererSoftware>(RENDER_SW, "Software"),
-  render_details::get<CRendererShaders>(RENDER_PS, "Pixel Shaders"),
-  render_details::get<CRendererDXVA>(RENDER_DXVA, "DXVA"),
+static std::vector<render_details> RenderMethodDetails = {
+    render_details::get<CRendererSoftware>(RENDER_SW, "Software"),
+    render_details::get<CRendererShaders>(RENDER_PS, "Pixel Shaders"),
+    render_details::get<CRendererDXVA>(RENDER_DXVA, "DXVA"),
 };
 
 CBaseRenderer* CWinRenderer::Create(CVideoBuffer*)
@@ -70,7 +69,8 @@ CWinRenderer::~CWinRenderer()
 
 CRendererBase* CWinRenderer::SelectRenderer(const VideoPicture& picture)
 {
-  int iRequestedMethod = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_VIDEOPLAYER_RENDERMETHOD);
+  int iRequestedMethod = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+      CSettings::SETTING_VIDEOPLAYER_RENDERMETHOD);
   CLog::LogF(LOGDEBUG, "requested render method: %d", iRequestedMethod);
 
   std::map<RenderMethod, int> weights;
@@ -105,7 +105,7 @@ CRendererBase* CWinRenderer::SelectRenderer(const VideoPicture& picture)
   default:
   {
     const auto it = std::max_element(weights.begin(), weights.end(),
-      [](auto& w1, auto& w2) { return w1.second < w2.second; });
+                                     [](auto& w1, auto& w2) { return w1.second < w2.second; });
 
     if (it != weights.end())
     {
@@ -120,7 +120,7 @@ CRendererBase* CWinRenderer::SelectRenderer(const VideoPicture& picture)
   }
 
   const auto it = std::find_if(RenderMethodDetails.begin(), RenderMethodDetails.end(),
-    [method](render_details& d) { return d.method == method; });
+                               [method](render_details& d) { return d.method == method; });
 
   if (it != RenderMethodDetails.end())
   {
@@ -135,8 +135,8 @@ CRendererBase* CWinRenderer::SelectRenderer(const VideoPicture& picture)
 CRect CWinRenderer::GetScreenRect() const
 {
   CRect screenRect(0.f, 0.f,
-    static_cast<float>(CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth()),
-    static_cast<float>(CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight()));
+                   static_cast<float>(CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth()),
+                   static_cast<float>(CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight()));
 
   switch (CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode())
   {
@@ -153,16 +153,16 @@ CRect CWinRenderer::GetScreenRect() const
   return screenRect;
 }
 
-bool CWinRenderer::Configure(const VideoPicture &picture, float fps, unsigned int orientation)
+bool CWinRenderer::Configure(const VideoPicture& picture, float fps, unsigned int orientation)
 {
-  m_sourceWidth       = picture.iWidth;
-  m_sourceHeight      = picture.iHeight;
+  m_sourceWidth = picture.iWidth;
+  m_sourceHeight = picture.iHeight;
   m_renderOrientation = orientation;
   m_fps = fps;
-  m_iFlags = GetFlagsChromaPosition(picture.chroma_position)
-           | GetFlagsColorMatrix(picture.color_space, picture.iWidth, picture.iHeight)
-           | GetFlagsColorPrimaries(picture.color_primaries)
-           | GetFlagsStereoMode(picture.stereoMode);
+  m_iFlags = GetFlagsChromaPosition(picture.chroma_position) |
+             GetFlagsColorMatrix(picture.color_space, picture.iWidth, picture.iHeight) |
+             GetFlagsColorPrimaries(picture.color_primaries) |
+             GetFlagsStereoMode(picture.stereoMode);
   m_format = picture.videoBuffer->GetFormat();
 
   // calculate the input frame aspect ratio
@@ -186,7 +186,7 @@ int CWinRenderer::NextBuffer() const
   return m_renderer->NextBuffer();
 }
 
-void CWinRenderer::AddVideoPicture(const VideoPicture &picture, int index)
+void CWinRenderer::AddVideoPicture(const VideoPicture& picture, int index)
 {
   m_renderer->AddVideoPicture(picture, index);
 }
@@ -200,18 +200,20 @@ void CWinRenderer::Update()
   m_renderer->ManageTextures();
 }
 
-void CWinRenderer::RenderUpdate(int index, int index2, bool clear, unsigned int flags, unsigned int alpha)
+void CWinRenderer::RenderUpdate(
+    int index, int index2, bool clear, unsigned int flags, unsigned int alpha)
 {
   if (!m_bConfigured)
     return;
 
   if (clear)
-    CServiceBroker::GetWinSystem()->GetGfxContext().Clear(DX::Windowing()->UseLimitedColor() ? 0x101010 : 0);
+    CServiceBroker::GetWinSystem()->GetGfxContext().Clear(
+        DX::Windowing()->UseLimitedColor() ? 0x101010 : 0);
   DX::Windowing()->SetAlphaBlendEnable(alpha < 255);
 
   ManageRenderArea();
-  m_renderer->Render(index, index2, DX::Windowing()->GetBackBuffer(), 
-                     m_sourceRect, m_destRect, GetScreenRect(), flags);
+  m_renderer->Render(index, index2, DX::Windowing()->GetBackBuffer(), m_sourceRect, m_destRect,
+                     GetScreenRect(), flags);
 }
 
 bool CWinRenderer::RenderCapture(CRenderCapture* capture)
@@ -222,7 +224,8 @@ bool CWinRenderer::RenderCapture(CRenderCapture* capture)
   capture->BeginRender();
   if (capture->GetState() != CAPTURESTATE_FAILED)
   {
-    const CRect destRect(0, 0, static_cast<float>(capture->GetWidth()), static_cast<float>(capture->GetHeight()));
+    const CRect destRect(0, 0, static_cast<float>(capture->GetWidth()),
+                         static_cast<float>(capture->GetHeight()));
 
     m_renderer->Render(capture->GetTarget(), m_sourceRect, destRect, GetScreenRect());
     capture->EndRender();
@@ -266,20 +269,16 @@ bool CWinRenderer::Flush(bool saveBuffers)
 
 bool CWinRenderer::Supports(ERENDERFEATURE feature)
 {
-  if(feature == RENDERFEATURE_BRIGHTNESS)
+  if (feature == RENDERFEATURE_BRIGHTNESS)
     return true;
 
-  if(feature == RENDERFEATURE_CONTRAST)
+  if (feature == RENDERFEATURE_CONTRAST)
     return true;
 
-  if (feature == RENDERFEATURE_STRETCH         ||
-      feature == RENDERFEATURE_NONLINSTRETCH   ||
-      feature == RENDERFEATURE_ZOOM            ||
-      feature == RENDERFEATURE_VERTICAL_SHIFT  ||
-      feature == RENDERFEATURE_PIXEL_RATIO     ||
-      feature == RENDERFEATURE_ROTATION        ||
-      feature == RENDERFEATURE_POSTPROCESS     ||
-      feature == RENDERFEATURE_TONEMAP)
+  if (feature == RENDERFEATURE_STRETCH || feature == RENDERFEATURE_NONLINSTRETCH ||
+      feature == RENDERFEATURE_ZOOM || feature == RENDERFEATURE_VERTICAL_SHIFT ||
+      feature == RENDERFEATURE_PIXEL_RATIO || feature == RENDERFEATURE_ROTATION ||
+      feature == RENDERFEATURE_POSTPROCESS || feature == RENDERFEATURE_TONEMAP)
     return true;
 
   return false;

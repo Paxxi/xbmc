@@ -34,27 +34,28 @@
 #define UDISKS2_INTERFACE_FILESYSTEM "org.freedesktop.UDisks2.Filesystem"
 #define UDISKS2_INTERFACE_MANAGER "org.freedesktop.UDisks2.Manager"
 
-#define UDISKS2_MATCH_RULE "type='signal',sender='" UDISKS2_SERVICE_UDISKS2 "',path_namespace='" UDISKS2_PATH_UDISKS2 "'"
+#define UDISKS2_MATCH_RULE \
+  "type='signal',sender='" UDISKS2_SERVICE_UDISKS2 "',path_namespace='" UDISKS2_PATH_UDISKS2 "'"
 
-CUDisks2Provider::Drive::Drive(const char *object) : m_object(object)
+CUDisks2Provider::Drive::Drive(const char* object)
+  : m_object(object)
 {
 }
 
 bool CUDisks2Provider::Drive::IsOptical()
 {
-  return std::any_of(m_mediaCompatibility.begin(), m_mediaCompatibility.end(), [](std::string kind)
-  {
-    return kind.compare(0, 7, "optical") == 0;
-  });
+  return std::any_of(m_mediaCompatibility.begin(), m_mediaCompatibility.end(),
+                     [](std::string kind) { return kind.compare(0, 7, "optical") == 0; });
 }
 
 std::string CUDisks2Provider::Drive::toString()
 {
-  return StringUtils::Format("Drive %s: IsRemovable %s IsOptical %s",
-                             m_object, BOOL2SZ(m_isRemovable), BOOL2SZ(IsOptical()));
+  return StringUtils::Format("Drive %s: IsRemovable %s IsOptical %s", m_object,
+                             BOOL2SZ(m_isRemovable), BOOL2SZ(IsOptical()));
 }
 
-CUDisks2Provider::Block::Block(const char *object) : m_object(object)
+CUDisks2Provider::Block::Block(const char* object)
+  : m_object(object)
 {
 }
 
@@ -65,19 +66,20 @@ bool CUDisks2Provider::Block::IsReady()
 
 std::string CUDisks2Provider::Block::toString()
 {
-  return StringUtils::Format("Block device %s: Device %s Label %s IsSystem: %s Drive %s",
-                             m_object, m_device, m_label.empty() ? "none" : m_label,
-                             BOOL2SZ(m_isSystem), m_driveobject.empty() ? "none" : m_driveobject);
+  return StringUtils::Format("Block device %s: Device %s Label %s IsSystem: %s Drive %s", m_object,
+                             m_device, m_label.empty() ? "none" : m_label, BOOL2SZ(m_isSystem),
+                             m_driveobject.empty() ? "none" : m_driveobject);
 }
 
-CUDisks2Provider::Filesystem::Filesystem(const char *object) : m_object(object)
+CUDisks2Provider::Filesystem::Filesystem(const char* object)
+  : m_object(object)
 {
 }
 
 std::string CUDisks2Provider::Filesystem::toString()
 {
-  return StringUtils::Format("Filesystem %s: IsMounted %s MountPoint %s",
-                             m_object, BOOL2SZ(m_isMounted), m_mountPoint.empty() ? "none" : m_mountPoint);
+  return StringUtils::Format("Filesystem %s: IsMounted %s MountPoint %s", m_object,
+                             BOOL2SZ(m_isMounted), m_mountPoint.empty() ? "none" : m_mountPoint);
 }
 
 bool CUDisks2Provider::Filesystem::IsReady()
@@ -92,7 +94,8 @@ bool CUDisks2Provider::Filesystem::IsOptical()
 
 bool CUDisks2Provider::Filesystem::Mount()
 {
-  if (m_block->m_isSystem) {
+  if (m_block->m_isSystem)
+  {
     CLog::Log(LOGDEBUG, "UDisks2: Skip mount of system device %s", toString());
     return false;
   }
@@ -106,14 +109,15 @@ bool CUDisks2Provider::Filesystem::Mount()
     CLog::Log(LOGDEBUG, "UDisks2: Mounting %s", m_block->m_device);
     CDBusMessage message(UDISKS2_SERVICE_UDISKS2, m_object, UDISKS2_INTERFACE_FILESYSTEM, "Mount");
     AppendEmptyOptions(message.GetArgumentIter());
-    DBusMessage *reply = message.SendSystem();
+    DBusMessage* reply = message.SendSystem();
     return (reply && dbus_message_get_type(reply) != DBUS_MESSAGE_TYPE_ERROR);
   }
 }
 
 bool CUDisks2Provider::Filesystem::Unmount()
 {
-  if (m_block->m_isSystem) {
+  if (m_block->m_isSystem)
+  {
     CLog::Log(LOGDEBUG, "UDisks2: Skip unmount of system device %s", toString());
     return false;
   }
@@ -125,9 +129,10 @@ bool CUDisks2Provider::Filesystem::Unmount()
   else
   {
     CLog::Log(LOGDEBUG, "UDisks2: Unmounting %s", m_block->m_device);
-    CDBusMessage message(UDISKS2_SERVICE_UDISKS2, m_object, UDISKS2_INTERFACE_FILESYSTEM, "Unmount");
+    CDBusMessage message(UDISKS2_SERVICE_UDISKS2, m_object, UDISKS2_INTERFACE_FILESYSTEM,
+                         "Unmount");
     AppendEmptyOptions(message.GetArgumentIter());
-    DBusMessage *reply = message.SendSystem();
+    DBusMessage* reply = message.SendSystem();
     return (reply && dbus_message_get_type(reply) != DBUS_MESSAGE_TYPE_ERROR);
   }
 }
@@ -160,9 +165,10 @@ CMediaSource CUDisks2Provider::Filesystem::ToMediaShare()
 
 bool CUDisks2Provider::Filesystem::IsApproved()
 {
-  return IsReady() &&
-         (m_isMounted && m_mountPoint != "/" && m_mountPoint != "/boot" && m_mountPoint.compare(0, 6, "/boot/") != 0) /*||
-         m_block->m_drive->m_isOptical*/;
+  return IsReady() && (m_isMounted && m_mountPoint != "/" && m_mountPoint != "/boot" &&
+                       m_mountPoint.compare(0, 6, "/boot/") != 0) /*||
+         m_block->m_drive->m_isOptical*/
+      ;
 }
 
 CUDisks2Provider::CUDisks2Provider()
@@ -187,19 +193,19 @@ CUDisks2Provider::CUDisks2Provider()
 
 CUDisks2Provider::~CUDisks2Provider()
 {
-  for (auto &elt : m_filesystems)
+  for (auto& elt : m_filesystems)
   {
     delete elt.second;
   }
   m_filesystems.clear();
 
-  for (auto &elt : m_blocks)
+  for (auto& elt : m_blocks)
   {
     delete elt.second;
   }
   m_blocks.clear();
 
-  for (auto &elt : m_drives)
+  for (auto& elt : m_drives)
   {
     delete elt.second;
   }
@@ -209,14 +215,15 @@ CUDisks2Provider::~CUDisks2Provider()
 void CUDisks2Provider::Initialize()
 {
   CLog::Log(LOGDEBUG, "Selected UDisks2 as storage provider");
-  m_daemonVersion = CDBusUtil::GetVariant(UDISKS2_SERVICE_UDISKS2, UDISKS2_PATH_MANAGER, UDISKS2_INTERFACE_MANAGER,
-                                          "Version").asString();
+  m_daemonVersion = CDBusUtil::GetVariant(UDISKS2_SERVICE_UDISKS2, UDISKS2_PATH_MANAGER,
+                                          UDISKS2_INTERFACE_MANAGER, "Version")
+                        .asString();
   CLog::Log(LOGDEBUG, "UDisks2: Daemon version %s", m_daemonVersion);
 
   CLog::Log(LOGDEBUG, "UDisks2: Querying available devices");
   CDBusMessage message(UDISKS2_SERVICE_UDISKS2, UDISKS2_PATH_UDISKS2, DBUS_INTERFACE_OBJECT_MANAGER,
                        "GetManagedObjects");
-  DBusMessage *reply = message.SendSystem();
+  DBusMessage* reply = message.SendSystem();
 
   if (reply && dbus_message_get_type(reply) != DBUS_MESSAGE_TYPE_ERROR)
   {
@@ -224,7 +231,7 @@ void CUDisks2Provider::Initialize()
   }
 }
 
-bool CUDisks2Provider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
+bool CUDisks2Provider::PumpDriveChangeEvents(IStorageEventsCallback* callback)
 {
   if (m_connection)
   {
@@ -241,7 +248,8 @@ bool CUDisks2Provider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
         HandleInterfacesAdded(msg.get());
         return false;
       }
-      else if (dbus_message_is_signal(msg.get(), DBUS_INTERFACE_OBJECT_MANAGER, "InterfacesRemoved"))
+      else if (dbus_message_is_signal(msg.get(), DBUS_INTERFACE_OBJECT_MANAGER,
+                                      "InterfacesRemoved"))
       {
         return HandleInterfacesRemoved(msg.get(), callback);
       }
@@ -256,18 +264,18 @@ bool CUDisks2Provider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
 
 bool CUDisks2Provider::HasUDisks2()
 {
-  return CDBusUtil::TryMethodCall(DBUS_BUS_SYSTEM, UDISKS2_SERVICE_UDISKS2, UDISKS2_PATH_UDISKS2, DBUS_INTERFACE_PEER,
-                                  "Ping");
+  return CDBusUtil::TryMethodCall(DBUS_BUS_SYSTEM, UDISKS2_SERVICE_UDISKS2, UDISKS2_PATH_UDISKS2,
+                                  DBUS_INTERFACE_PEER, "Ping");
 }
 
-bool CUDisks2Provider::Eject(const std::string &mountpath)
+bool CUDisks2Provider::Eject(const std::string& mountpath)
 {
   std::string path(mountpath);
   URIUtils::RemoveSlashAtEnd(path);
 
-  for (const auto &elt: m_filesystems)
+  for (const auto& elt : m_filesystems)
   {
-    Filesystem *fs = elt.second;
+    Filesystem* fs = elt.second;
     if (fs->m_mountPoint == path)
     {
       return fs->Unmount();
@@ -283,17 +291,17 @@ std::vector<std::string> CUDisks2Provider::GetDiskUsage()
   return legacy.GetDiskUsage();
 }
 
-void CUDisks2Provider::GetDisks(VECSOURCES &devices, bool enumerateRemovable)
+void CUDisks2Provider::GetDisks(VECSOURCES& devices, bool enumerateRemovable)
 {
-  for (const auto &elt: m_filesystems)
+  for (const auto& elt : m_filesystems)
   {
-    Filesystem *fs = elt.second;
+    Filesystem* fs = elt.second;
     if (fs->IsApproved() && fs->m_block->m_isSystem != enumerateRemovable)
       devices.push_back(fs->ToMediaShare());
   }
 }
 
-void CUDisks2Provider::DriveAdded(Drive *drive)
+void CUDisks2Provider::DriveAdded(Drive* drive)
 {
   CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: Drive added - %s", drive->toString());
 
@@ -305,7 +313,7 @@ void CUDisks2Provider::DriveAdded(Drive *drive)
 
   m_drives[drive->m_object] = drive;
 
-  for (auto &elt: m_blocks)
+  for (auto& elt : m_blocks)
   {
     auto block = elt.second;
     if (block->m_driveobject == drive->m_object)
@@ -326,7 +334,7 @@ bool CUDisks2Provider::DriveRemoved(std::string object)
     m_drives.erase(object);
   }
 
-  for (auto &elt: m_blocks)
+  for (auto& elt : m_blocks)
   {
     auto block = elt.second;
     if (block->m_driveobject == object)
@@ -338,7 +346,7 @@ bool CUDisks2Provider::DriveRemoved(std::string object)
   return false;
 }
 
-void CUDisks2Provider::BlockAdded(Block *block, bool isNew)
+void CUDisks2Provider::BlockAdded(Block* block, bool isNew)
 {
   if (isNew)
   {
@@ -383,7 +391,7 @@ bool CUDisks2Provider::BlockRemoved(std::string object)
   return false;
 }
 
-void CUDisks2Provider::FilesystemAdded(Filesystem *fs, bool isNew)
+void CUDisks2Provider::FilesystemAdded(Filesystem* fs, bool isNew)
 {
   if (isNew)
   {
@@ -394,20 +402,22 @@ void CUDisks2Provider::FilesystemAdded(Filesystem *fs, bool isNew)
 
     if (m_filesystems[fs->m_object])
     {
-      CLog::Log(LOGWARNING, "UDisks2: Inconsistency found! FilesystemAdded on an indexed filesystem");
+      CLog::Log(LOGWARNING,
+                "UDisks2: Inconsistency found! FilesystemAdded on an indexed filesystem");
       delete m_filesystems[fs->m_object];
     }
 
     m_filesystems[fs->m_object] = fs;
   }
 
-  if (fs->IsReady() && !fs->m_isMounted && CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_handleMounting)
+  if (fs->IsReady() && !fs->m_isMounted &&
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_handleMounting)
   {
     fs->Mount();
   }
 }
 
-bool CUDisks2Provider::FilesystemRemoved(const char *object, IStorageEventsCallback *callback)
+bool CUDisks2Provider::FilesystemRemoved(const char* object, IStorageEventsCallback* callback)
 {
   CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: Filesystem removed (%s)", object);
   bool result = false;
@@ -425,7 +435,7 @@ bool CUDisks2Provider::FilesystemRemoved(const char *object, IStorageEventsCallb
   return result;
 }
 
-void CUDisks2Provider::HandleManagedObjects(DBusMessage *msg)
+void CUDisks2Provider::HandleManagedObjects(DBusMessage* msg)
 {
   DBusMessageIter msgIter, dictIter;
   dbus_message_iter_init(msg, &msgIter);
@@ -439,14 +449,14 @@ void CUDisks2Provider::HandleManagedObjects(DBusMessage *msg)
   }
 }
 
-void CUDisks2Provider::HandleInterfacesAdded(DBusMessage *msg)
+void CUDisks2Provider::HandleInterfacesAdded(DBusMessage* msg)
 {
   DBusMessageIter msgIter;
   dbus_message_iter_init(msg, &msgIter);
   ParseInterfaces(&msgIter);
 }
 
-bool CUDisks2Provider::HandleInterfacesRemoved(DBusMessage *msg, IStorageEventsCallback *callback)
+bool CUDisks2Provider::HandleInterfacesRemoved(DBusMessage* msg, IStorageEventsCallback* callback)
 {
   DBusMessageIter msgIter, ifaceIter;
   const char *path, *iface;
@@ -464,11 +474,11 @@ bool CUDisks2Provider::HandleInterfacesRemoved(DBusMessage *msg, IStorageEventsC
   return result;
 }
 
-bool CUDisks2Provider::HandlePropertiesChanged(DBusMessage *msg, IStorageEventsCallback *callback)
+bool CUDisks2Provider::HandlePropertiesChanged(DBusMessage* msg, IStorageEventsCallback* callback)
 {
   DBusMessageIter msgIter, propsIter;
-  const char *object = dbus_message_get_path(msg);
-  const char *iface;
+  const char* object = dbus_message_get_path(msg);
+  const char* iface;
 
   dbus_message_iter_init(msg, &msgIter);
   dbus_message_iter_get_basic(&msgIter, &iface);
@@ -491,44 +501,48 @@ bool CUDisks2Provider::HandlePropertiesChanged(DBusMessage *msg, IStorageEventsC
   return false;
 }
 
-bool CUDisks2Provider::DrivePropertiesChanged(const char *object, DBusMessageIter *propsIter)
+bool CUDisks2Provider::DrivePropertiesChanged(const char* object, DBusMessageIter* propsIter)
 {
   if (m_drives.count(object) > 0)
   {
     auto drive = m_drives[object];
     CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: Before update: %s", drive->toString());
-    auto ParseDriveProperty = std::bind(&CUDisks2Provider::ParseDriveProperty, this, std::placeholders::_1,
-                                        std::placeholders::_2, std::placeholders::_3);
+    auto ParseDriveProperty =
+        std::bind(&CUDisks2Provider::ParseDriveProperty, this, std::placeholders::_1,
+                  std::placeholders::_2, std::placeholders::_3);
     ParseProperties(drive, propsIter, ParseDriveProperty);
     CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: After update: %s", drive->toString());
   }
   return false;
 }
 
-bool CUDisks2Provider::BlockPropertiesChanged(const char *object, DBusMessageIter *propsIter)
+bool CUDisks2Provider::BlockPropertiesChanged(const char* object, DBusMessageIter* propsIter)
 {
   if (m_blocks.count(object) > 0)
   {
     auto block = m_blocks[object];
     CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: Before update: %s", block->toString());
-    auto ParseBlockProperty = std::bind(&CUDisks2Provider::ParseBlockProperty, this, std::placeholders::_1,
-                                        std::placeholders::_2, std::placeholders::_3);
+    auto ParseBlockProperty =
+        std::bind(&CUDisks2Provider::ParseBlockProperty, this, std::placeholders::_1,
+                  std::placeholders::_2, std::placeholders::_3);
     ParseProperties(block, propsIter, ParseBlockProperty);
     CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: After update: %s", block->toString());
   }
   return false;
 }
 
-bool CUDisks2Provider::FilesystemPropertiesChanged(const char *object, DBusMessageIter *propsIter, IStorageEventsCallback *callback)
+bool CUDisks2Provider::FilesystemPropertiesChanged(const char* object,
+                                                   DBusMessageIter* propsIter,
+                                                   IStorageEventsCallback* callback)
 {
   if (m_filesystems.count(object) > 0)
   {
     auto fs = m_filesystems[object];
     CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: Before update: %s", fs->toString());
     bool wasMounted = fs->m_isMounted;
-    auto ParseFilesystemProperty = std::bind(&CUDisks2Provider::ParseFilesystemProperty, this,
-                                             std::placeholders::_1,
-                                             std::placeholders::_2, std::placeholders::_3);
+    auto ParseFilesystemProperty =
+        std::bind(&CUDisks2Provider::ParseFilesystemProperty, this, std::placeholders::_1,
+                  std::placeholders::_2, std::placeholders::_3);
     ParseProperties(fs, propsIter, ParseFilesystemProperty);
     CLog::Log(LOGDEBUG, LOGDBUS, "UDisks2: After update: %s", fs->toString());
 
@@ -550,7 +564,9 @@ bool CUDisks2Provider::FilesystemPropertiesChanged(const char *object, DBusMessa
   return false;
 }
 
-bool CUDisks2Provider::RemoveInterface(const char *path, const char *iface, IStorageEventsCallback *callback)
+bool CUDisks2Provider::RemoveInterface(const char* path,
+                                       const char* iface,
+                                       IStorageEventsCallback* callback)
 {
   if (strcmp(iface, UDISKS2_INTERFACE_DRIVE) == 0)
   {
@@ -571,31 +587,33 @@ bool CUDisks2Provider::RemoveInterface(const char *path, const char *iface, ISto
 }
 
 
-void CUDisks2Provider::ParseInterfaces(DBusMessageIter *objIter)
+void CUDisks2Provider::ParseInterfaces(DBusMessageIter* objIter)
 {
   DBusMessageIter dictIter;
-  const char *object;
+  const char* object;
   dbus_message_iter_get_basic(objIter, &object);
   dbus_message_iter_next(objIter);
   dbus_message_iter_recurse(objIter, &dictIter);
   while (dbus_message_iter_get_arg_type(&dictIter) == DBUS_TYPE_DICT_ENTRY)
   {
     DBusMessageIter ifaceIter, propsIter;
-    const char *iface;
+    const char* iface;
     dbus_message_iter_recurse(&dictIter, &ifaceIter);
     dbus_message_iter_get_basic(&ifaceIter, &iface);
     dbus_message_iter_next(&ifaceIter);
     dbus_message_iter_recurse(&ifaceIter, &propsIter);
-    ParseInterface(object, iface, &propsIter/*, &discovery*/);
+    ParseInterface(object, iface, &propsIter /*, &discovery*/);
     dbus_message_iter_next(&dictIter);
   }
 }
 
-void CUDisks2Provider::ParseInterface(const char *object, const char *iface, DBusMessageIter *propsIter)
+void CUDisks2Provider::ParseInterface(const char* object,
+                                      const char* iface,
+                                      DBusMessageIter* propsIter)
 {
   if (strcmp(iface, UDISKS2_INTERFACE_DRIVE) == 0)
   {
-    auto *drive = new Drive(object);
+    auto* drive = new Drive(object);
     auto f = std::bind(&CUDisks2Provider::ParseDriveProperty, this, std::placeholders::_1,
                        std::placeholders::_2, std::placeholders::_3);
     ParseProperties(drive, propsIter, f);
@@ -603,7 +621,7 @@ void CUDisks2Provider::ParseInterface(const char *object, const char *iface, DBu
   }
   else if (strcmp(iface, UDISKS2_INTERFACE_BLOCK) == 0)
   {
-    auto *block = new Block(object);
+    auto* block = new Block(object);
     auto f = std::bind(&CUDisks2Provider::ParseBlockProperty, this, std::placeholders::_1,
                        std::placeholders::_2, std::placeholders::_3);
     ParseProperties(block, propsIter, f);
@@ -611,7 +629,7 @@ void CUDisks2Provider::ParseInterface(const char *object, const char *iface, DBu
   }
   else if (strcmp(iface, UDISKS2_INTERFACE_FILESYSTEM) == 0)
   {
-    auto *fs = new Filesystem(object);
+    auto* fs = new Filesystem(object);
     auto f = std::bind(&CUDisks2Provider::ParseFilesystemProperty, this, std::placeholders::_1,
                        std::placeholders::_2, std::placeholders::_3);
     ParseProperties(fs, propsIter, f);
@@ -621,12 +639,12 @@ void CUDisks2Provider::ParseInterface(const char *object, const char *iface, DBu
 
 
 template<class Object, class Function>
-void CUDisks2Provider::ParseProperties(Object *ref, DBusMessageIter *propsIter, Function f)
+void CUDisks2Provider::ParseProperties(Object* ref, DBusMessageIter* propsIter, Function f)
 {
   while (dbus_message_iter_get_arg_type(propsIter) == DBUS_TYPE_DICT_ENTRY)
   {
     DBusMessageIter propIter, varIter;
-    const char *key;
+    const char* key;
 
     dbus_message_iter_recurse(propsIter, &propIter);
 
@@ -639,154 +657,155 @@ void CUDisks2Provider::ParseProperties(Object *ref, DBusMessageIter *propsIter, 
 
     dbus_message_iter_next(propsIter);
   }
-
 }
 
-void CUDisks2Provider::ParseDriveProperty(Drive *drive, const char *key, DBusMessageIter *varIter)
+void CUDisks2Provider::ParseDriveProperty(Drive* drive, const char* key, DBusMessageIter* varIter)
 {
   switch (dbus_message_iter_get_arg_type(varIter))
   {
-    case DBUS_TYPE_BOOLEAN:
+  case DBUS_TYPE_BOOLEAN:
+  {
+    dbus_bool_t value;
+
+    if (strcmp(key, "Removable") == 0)
     {
-      dbus_bool_t value;
-
-      if (strcmp(key, "Removable") == 0)
-      {
-        dbus_message_iter_get_basic(varIter, &value);
-        drive->m_isRemovable = static_cast<bool>(value);
-      }
-
-      break;
+      dbus_message_iter_get_basic(varIter, &value);
+      drive->m_isRemovable = static_cast<bool>(value);
     }
-    case DBUS_TYPE_ARRAY:
+
+    break;
+  }
+  case DBUS_TYPE_ARRAY:
+  {
+    DBusMessageIter arrIter;
+
+    if (strcmp(key, "MediaCompatibility") == 0)
     {
-      DBusMessageIter arrIter;
-
-      if (strcmp(key, "MediaCompatibility") == 0)
+      dbus_message_iter_recurse(varIter, &arrIter);
+      while (dbus_message_iter_get_arg_type(&arrIter) == DBUS_TYPE_STRING)
       {
-        dbus_message_iter_recurse(varIter, &arrIter);
-        while (dbus_message_iter_get_arg_type(&arrIter) == DBUS_TYPE_STRING)
-        {
-          const char *compatibility;
-          dbus_message_iter_get_basic(&arrIter, &compatibility);
-          drive->m_mediaCompatibility.push_back(std::string(compatibility));
-          dbus_message_iter_next(&arrIter);
-        }
+        const char* compatibility;
+        dbus_message_iter_get_basic(&arrIter, &compatibility);
+        drive->m_mediaCompatibility.push_back(std::string(compatibility));
+        dbus_message_iter_next(&arrIter);
       }
-
-      break;
     }
-    default:
-      break;
+
+    break;
+  }
+  default:
+    break;
   }
 }
 
 
-void CUDisks2Provider::ParseBlockProperty(Block *block, const char *key, DBusMessageIter *varIter)
+void CUDisks2Provider::ParseBlockProperty(Block* block, const char* key, DBusMessageIter* varIter)
 {
   switch (dbus_message_iter_get_arg_type(varIter))
   {
-    case DBUS_TYPE_OBJECT_PATH:
+  case DBUS_TYPE_OBJECT_PATH:
+  {
+    const char* value;
+
+    if (strcmp(key, "Drive") == 0)
     {
-      const char *value;
-
-      if (strcmp(key, "Drive") == 0)
-      {
-        dbus_message_iter_get_basic(varIter, &value);
-        block->m_driveobject.assign(value);
-      }
-
-      break;
+      dbus_message_iter_get_basic(varIter, &value);
+      block->m_driveobject.assign(value);
     }
-    case DBUS_TYPE_STRING:
+
+    break;
+  }
+  case DBUS_TYPE_STRING:
+  {
+    const char* value;
+
+    if (strcmp(key, "IdLabel") == 0)
     {
-      const char *value;
-
-      if (strcmp(key, "IdLabel") == 0)
-      {
-        dbus_message_iter_get_basic(varIter, &value);
-        block->m_label.assign(value);
-      }
-
-      break;
+      dbus_message_iter_get_basic(varIter, &value);
+      block->m_label.assign(value);
     }
-    case DBUS_TYPE_BOOLEAN:
+
+    break;
+  }
+  case DBUS_TYPE_BOOLEAN:
+  {
+    dbus_bool_t value;
+
+    if (strcmp(key, "HintSystem") == 0)
     {
-      dbus_bool_t value;
-
-      if (strcmp(key, "HintSystem") == 0)
-      {
-        dbus_message_iter_get_basic(varIter, &value);
-        block->m_isSystem = static_cast<bool>(value);
-      }
-
-      break;
+      dbus_message_iter_get_basic(varIter, &value);
+      block->m_isSystem = static_cast<bool>(value);
     }
-    case DBUS_TYPE_UINT64:
+
+    break;
+  }
+  case DBUS_TYPE_UINT64:
+  {
+    dbus_uint64_t value;
+
+    if (strcmp(key, "Size") == 0)
     {
-      dbus_uint64_t value;
-
-      if (strcmp(key, "Size") == 0)
-      {
-        dbus_message_iter_get_basic(varIter, &value);
-        block->m_size = value;
-      }
-
-      break;
+      dbus_message_iter_get_basic(varIter, &value);
+      block->m_size = value;
     }
-    case DBUS_TYPE_ARRAY:
+
+    break;
+  }
+  case DBUS_TYPE_ARRAY:
+  {
+    DBusMessageIter arrIter;
+
+    if (strcmp(key, "PreferredDevice") == 0)
     {
-      DBusMessageIter arrIter;
-
-      if (strcmp(key, "PreferredDevice") == 0)
-      {
-        dbus_message_iter_recurse(varIter, &arrIter);
-        block->m_device.assign(ParseByteArray(&arrIter));
-      }
-
-      break;
+      dbus_message_iter_recurse(varIter, &arrIter);
+      block->m_device.assign(ParseByteArray(&arrIter));
     }
-    default:
-      break;
+
+    break;
+  }
+  default:
+    break;
   }
 }
 
-void CUDisks2Provider::ParseFilesystemProperty(Filesystem *fs, const char *key, DBusMessageIter *varIter)
+void CUDisks2Provider::ParseFilesystemProperty(Filesystem* fs,
+                                               const char* key,
+                                               DBusMessageIter* varIter)
 {
   switch (dbus_message_iter_get_arg_type(varIter))
   {
-    case DBUS_TYPE_ARRAY:
+  case DBUS_TYPE_ARRAY:
+  {
+    DBusMessageIter arrIter;
+
+    if (strcmp(key, "MountPoints") == 0)
     {
-      DBusMessageIter arrIter;
+      dbus_message_iter_recurse(varIter, &arrIter);
 
-      if (strcmp(key, "MountPoints") == 0)
+      if (dbus_message_iter_get_arg_type(&arrIter) == DBUS_TYPE_ARRAY)
       {
-        dbus_message_iter_recurse(varIter, &arrIter);
+        DBusMessageIter valIter;
 
-        if (dbus_message_iter_get_arg_type(&arrIter) == DBUS_TYPE_ARRAY)
-        {
-          DBusMessageIter valIter;
+        dbus_message_iter_recurse(&arrIter, &valIter);
+        fs->m_mountPoint.assign(ParseByteArray(&valIter));
 
-          dbus_message_iter_recurse(&arrIter, &valIter);
-          fs->m_mountPoint.assign(ParseByteArray(&valIter));
-
-          dbus_message_iter_next(&arrIter);
-        }
-        else
-        {
-          fs->m_mountPoint.clear();
-        }
-        fs->m_isMounted = !fs->m_mountPoint.empty();
+        dbus_message_iter_next(&arrIter);
       }
-
-      break;
+      else
+      {
+        fs->m_mountPoint.clear();
+      }
+      fs->m_isMounted = !fs->m_mountPoint.empty();
     }
-    default:
-      break;
+
+    break;
+  }
+  default:
+    break;
   }
 }
 
-std::string CUDisks2Provider::ParseByteArray(DBusMessageIter *arrIter)
+std::string CUDisks2Provider::ParseByteArray(DBusMessageIter* arrIter)
 {
   std::ostringstream strStream;
 
@@ -803,10 +822,9 @@ std::string CUDisks2Provider::ParseByteArray(DBusMessageIter *arrIter)
   return strStream.str();
 }
 
-void CUDisks2Provider::AppendEmptyOptions(DBusMessageIter *argsIter)
+void CUDisks2Provider::AppendEmptyOptions(DBusMessageIter* argsIter)
 {
   DBusMessageIter dictIter;
   dbus_message_iter_open_container(argsIter, DBUS_TYPE_ARRAY, "{sv}", &dictIter);
   dbus_message_iter_close_container(argsIter, &dictIter);
 }
-

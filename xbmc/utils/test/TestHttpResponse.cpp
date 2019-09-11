@@ -18,14 +18,15 @@ TEST(TestHttpResponse, General)
   a.AddHeader("date", "Sun, 01 Jul 2012 00:00:00 -0400");
   a.AddHeader("content-type", "text/html");
   content = "<html>\r\n"
-             "  <body>\r\n"
-             "    <h1>XBMC TestHttpResponse Page</h1>\r\n"
-             "    <p>blah blah blah</p>\r\n"
-             "  </body>\r\n"
-             "</html>\r\n";
+            "  <body>\r\n"
+            "    <h1>XBMC TestHttpResponse Page</h1>\r\n"
+            "    <p>blah blah blah</p>\r\n"
+            "  </body>\r\n"
+            "</html>\r\n";
   a.SetContent(content.c_str(), content.length());
 
-  response = a.Create();;
+  response = a.Create();
+  ;
   EXPECT_EQ((unsigned int)210, response.size());
 
   refstr = "HTTP/1.1 200 OK\r\n"

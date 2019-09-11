@@ -13,8 +13,8 @@
 
 using namespace VIDEO;
 using ::testing::Test;
-using ::testing::WithParamInterface;
 using ::testing::ValuesIn;
+using ::testing::WithParamInterface;
 
 typedef struct
 {
@@ -24,24 +24,24 @@ typedef struct
 } TestEntry;
 
 static const TestEntry TestData[] = {
-  //season+episode
-  {"foo.S02E03.mkv",   2, {3} },
-  {"foo.203.mkv",      2, {3} },
-  //episode only
-  {"foo.Ep03.mkv",     1, {3} },
-  {"foo.Ep_03.mkv",    1, {3} },
-  {"foo.Part.III.mkv", 1, {3} },
-  {"foo.Part.3.mkv",   1, {3} },
-  {"foo.E03.mkv",      1, {3} },
-  {"foo.2009.E03.mkv", 1, {3} },
-  // multi-episode
-  {"The Legend of Korra - S01E01-02 - Welcome to Republic City & A Leaf in the Wind.mkv", 1, { 1, 2 } },
-  {"foo.S01E01E02.mkv", 1, {1,2} },
-  {"foo.S01E03E04E05.mkv", 1, {3,4,5} }
-};
+    //season+episode
+    {"foo.S02E03.mkv", 2, {3}},
+    {"foo.203.mkv", 2, {3}},
+    //episode only
+    {"foo.Ep03.mkv", 1, {3}},
+    {"foo.Ep_03.mkv", 1, {3}},
+    {"foo.Part.III.mkv", 1, {3}},
+    {"foo.Part.3.mkv", 1, {3}},
+    {"foo.E03.mkv", 1, {3}},
+    {"foo.2009.E03.mkv", 1, {3}},
+    // multi-episode
+    {"The Legend of Korra - S01E01-02 - Welcome to Republic City & A Leaf in the Wind.mkv",
+     1,
+     {1, 2}},
+    {"foo.S01E01E02.mkv", 1, {1, 2}},
+    {"foo.S01E03E04E05.mkv", 1, {3, 4, 5}}};
 
-class TestVideoInfoScanner : public Test,
-                             public WithParamInterface<TestEntry>
+class TestVideoInfoScanner : public Test, public WithParamInterface<TestEntry>
 {
 };
 

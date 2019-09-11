@@ -30,7 +30,7 @@ public:
   class CFadingTexture
   {
   public:
-    CFadingTexture(const CGUITexture &texture, unsigned int fadeTime)
+    CFadingTexture(const CGUITexture& texture, unsigned int fadeTime)
     {
       // create a copy of our texture, and allocate resources
       m_texture = new CGUITexture(texture);
@@ -44,24 +44,30 @@ public:
       delete m_texture;
     };
 
-    CGUITexture *m_texture;  ///< texture to fade out
+    CGUITexture* m_texture; ///< texture to fade out
     unsigned int m_fadeTime; ///< time to fade out (ms)
-    bool         m_fading;   ///< whether we're fading out
+    bool m_fading; ///< whether we're fading out
 
   private:
     CFadingTexture(const CFadingTexture&) = delete;
     CFadingTexture& operator=(const CFadingTexture&) = delete;
   };
 
-  CGUIImage(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& texture);
-  CGUIImage(const CGUIImage &left);
+  CGUIImage(int parentID,
+            int controlID,
+            float posX,
+            float posY,
+            float width,
+            float height,
+            const CTextureInfo& texture);
+  CGUIImage(const CGUIImage& left);
   ~CGUIImage(void) override;
-  CGUIImage *Clone() const override { return new CGUIImage(*this); };
+  CGUIImage* Clone() const override { return new CGUIImage(*this); };
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
-  void UpdateVisibility(const CGUIListItem *item = NULL) override;
-  bool OnAction(const CAction &action) override ;
+  void UpdateVisibility(const CGUIListItem* item = NULL) override;
+  bool OnAction(const CAction& action) override;
   bool OnMessage(CGUIMessage& message) override;
   void AllocResources() override;
   void FreeResources(bool immediately = false) override;
@@ -69,11 +75,13 @@ public:
   bool IsDynamicallyAllocated() override { return m_bDynamicResourceAlloc; };
   void SetInvalid() override;
   bool CanFocus() const override;
-  void UpdateInfo(const CGUIListItem *item = NULL) override;
+  void UpdateInfo(const CGUIListItem* item = NULL) override;
 
-  virtual void SetInfo(const KODI::GUILIB::GUIINFO::CGUIInfoLabel &info);
-  virtual void SetFileName(const std::string& strFileName, bool setConstant = false, const bool useCache = true);
-  virtual void SetAspectRatio(const CAspectRatio &aspect);
+  virtual void SetInfo(const KODI::GUILIB::GUIINFO::CGUIInfoLabel& info);
+  virtual void SetFileName(const std::string& strFileName,
+                           bool setConstant = false,
+                           const bool useCache = true);
+  virtual void SetAspectRatio(const CAspectRatio& aspect);
   void SetWidth(float width) override;
   void SetHeight(float height) override;
   void SetPosition(float posX, float posY) override;
@@ -94,7 +102,7 @@ protected:
   virtual void FreeTextures(bool immediately = false);
   void FreeResourcesButNotAnims();
   unsigned char GetFadeLevel(unsigned int time) const;
-  bool ProcessFading(CFadingTexture *texture, unsigned int frameTime, unsigned int currentTime);
+  bool ProcessFading(CFadingTexture* texture, unsigned int frameTime, unsigned int currentTime);
 
   bool m_bDynamicResourceAlloc;
 
@@ -103,7 +111,7 @@ protected:
   KODI::GUILIB::GUIINFO::CGUIInfoLabel m_info;
 
   CGUITexture m_texture;
-  std::vector<CFadingTexture *> m_fadingTextures;
+  std::vector<CFadingTexture*> m_fadingTextures;
   std::string m_currentTexture;
   std::string m_currentFallback;
 
@@ -111,4 +119,3 @@ protected:
   unsigned int m_currentFadeTime;
   unsigned int m_lastRenderTime;
 };
-

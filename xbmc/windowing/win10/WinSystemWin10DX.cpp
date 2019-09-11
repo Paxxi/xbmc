@@ -18,7 +18,8 @@ std::unique_ptr<CWinSystemBase> CWinSystemBase::CreateWinSystem()
   return std::make_unique<CWinSystemWin10DX>();
 }
 
-CWinSystemWin10DX::CWinSystemWin10DX() : CRenderSystemDX()
+CWinSystemWin10DX::CWinSystemWin10DX()
+  : CRenderSystemDX()
 {
 }
 
@@ -41,7 +42,9 @@ void CWinSystemWin10DX::PresentRenderImpl(bool rendered)
     Sleep(40);
 }
 
-bool CWinSystemWin10DX::CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res)
+bool CWinSystemWin10DX::CreateNewWindow(const std::string& name,
+                                        bool fullScreen,
+                                        RESOLUTION_INFO& res)
 {
   const MONITOR_DETAILS* monitor = GetDefaultMonitor();
   if (!monitor)
@@ -50,9 +53,11 @@ bool CWinSystemWin10DX::CreateNewWindow(const std::string& name, bool fullScreen
   m_deviceResources = DX::DeviceResources::Get();
   m_deviceResources->SetWindow(m_coreWindow);
 
-  if (CWinSystemWin10::CreateNewWindow(name, fullScreen, res) && m_deviceResources->HasValidDevice())
+  if (CWinSystemWin10::CreateNewWindow(name, fullScreen, res) &&
+      m_deviceResources->HasValidDevice())
   {
-    CGenericTouchInputHandler::GetInstance().RegisterHandler(&CGenericTouchActionHandler::GetInstance());
+    CGenericTouchInputHandler::GetInstance().RegisterHandler(
+        &CGenericTouchActionHandler::GetInstance());
     CGenericTouchInputHandler::GetInstance().SetScreenDPI(m_deviceResources->GetDpi());
     return true;
   }
@@ -68,13 +73,14 @@ bool CWinSystemWin10DX::DestroyRenderSystem()
   return true;
 }
 
-void CWinSystemWin10DX::ShowSplash(const std::string & message)
+void CWinSystemWin10DX::ShowSplash(const std::string& message)
 {
   CRenderSystemBase::ShowSplash(message);
 
   // this will prevent killing the app by watchdog timeout during loading
   if (m_coreWindow != nullptr)
-    m_coreWindow.Dispatcher().ProcessEvents(winrt::Windows::UI::Core::CoreProcessEventsOption::ProcessAllIfPresent);
+    m_coreWindow.Dispatcher().ProcessEvents(
+        winrt::Windows::UI::Core::CoreProcessEventsOption::ProcessAllIfPresent);
 }
 
 void CWinSystemWin10DX::SetDeviceFullScreen(bool fullScreen, RESOLUTION_INFO& res)
@@ -138,7 +144,9 @@ void CWinSystemWin10DX::OnResize(int width, int height)
     CreateBackBuffer();
 }
 
-bool CWinSystemWin10DX::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays)
+bool CWinSystemWin10DX::SetFullScreen(bool fullScreen,
+                                      RESOLUTION_INFO& res,
+                                      bool blankOtherDisplays)
 {
   bool const result = CWinSystemWin10::SetFullScreen(fullScreen, res, blankOtherDisplays);
   CRenderSystemDX::OnResize();

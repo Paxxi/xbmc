@@ -17,15 +17,15 @@ public:
   ~CGUIWindowVideoPlaylist(void) override;
 
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
   bool OnBack(int actionID) override;
 
 protected:
-  bool OnPlayMedia(int iItem, const std::string &player = "") override;
+  bool OnPlayMedia(int iItem, const std::string& player = "") override;
   void UpdateButtons() override;
   void MarkPlaying();
 
-  void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
   bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
 
   void OnMove(int iItem, int iAction);

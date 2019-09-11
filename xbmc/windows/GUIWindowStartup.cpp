@@ -15,13 +15,13 @@
 #include "input/Key.h"
 
 CGUIWindowStartup::CGUIWindowStartup(void)
-    : CGUIWindow(WINDOW_STARTUP_ANIM, "Startup.xml")
+  : CGUIWindow(WINDOW_STARTUP_ANIM, "Startup.xml")
 {
 }
 
 CGUIWindowStartup::~CGUIWindowStartup(void) = default;
 
-bool CGUIWindowStartup::OnAction(const CAction &action)
+bool CGUIWindowStartup::OnAction(const CAction& action)
 {
   if (action.IsMouse())
     return true;

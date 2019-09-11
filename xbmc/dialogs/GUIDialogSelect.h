@@ -26,8 +26,8 @@ public:
   bool OnBack(int actionID) override;
 
   void Reset();
-  int  Add(const std::string& strLabel);
-  int  Add(const CFileItem& item);
+  int Add(const std::string& strLabel);
+  int Add(const CFileItem& item);
   void SetItems(const CFileItemList& items);
   const CFileItemPtr GetSelectedFileItem() const;
   int GetSelectedItem() const;
@@ -36,15 +36,15 @@ public:
   bool IsButtonPressed();
   void Sort(bool bSortOrder = true);
   void SetSelected(int iSelected);
-  void SetSelected(const std::string &strSelectedLabel);
+  void SetSelected(const std::string& strSelectedLabel);
   void SetSelected(std::vector<int> selectedIndexes);
-  void SetSelected(const std::vector<std::string> &selectedLabels);
+  void SetSelected(const std::vector<std::string>& selectedLabels);
   void SetUseDetails(bool useDetails);
   void SetMultiSelection(bool multiSelection);
 
 protected:
   explicit CGUIDialogSelect(int windowid);
-  CGUIControl *GetFirstFocusableControl(int id) override;
+  CGUIControl* GetFirstFocusableControl(int id) override;
   void OnWindowLoaded() override;
   void OnInitWindow() override;
   void OnDeinitWindow(int nextWindowID) override;

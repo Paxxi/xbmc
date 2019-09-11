@@ -12,12 +12,12 @@
 
 class CPlatformWin10 : public CPlatform
 {
-  public:
-    /**\brief C'tor */
-    CPlatformWin10();
+public:
+  /**\brief C'tor */
+  CPlatformWin10();
 
-    /**\brief D'tor */
-    virtual ~CPlatformWin10();
+  /**\brief D'tor */
+  virtual ~CPlatformWin10();
 
-    void Init() override;
+  void Init() override;
 };

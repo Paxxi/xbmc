@@ -22,25 +22,23 @@ protected:
   TestFileFactory()
   {
     std::vector<std::string> advancedsettings =
-      CXBMCTestUtils::Instance().getAdvancedSettingsFiles();
-    std::vector<std::string> guisettings =
-      CXBMCTestUtils::Instance().getGUISettingsFiles();
+        CXBMCTestUtils::Instance().getAdvancedSettingsFiles();
+    std::vector<std::string> guisettings = CXBMCTestUtils::Instance().getGUISettingsFiles();
 
-    const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
+    const std::shared_ptr<CSettings> settings =
+        CServiceBroker::GetSettingsComponent()->GetSettings();
     for (const auto& it : guisettings)
       settings->Load(it);
 
-    const std::shared_ptr<CAdvancedSettings> advancedSettings = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
+    const std::shared_ptr<CAdvancedSettings> advancedSettings =
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
     for (const auto& it : advancedsettings)
       advancedSettings->ParseSettingsFile(it);
 
     settings->SetLoaded();
   }
 
-  ~TestFileFactory() override
-  {
-    CServiceBroker::GetSettingsComponent()->GetSettings()->Unload();
-  }
+  ~TestFileFactory() override { CServiceBroker::GetSettingsComponent()->GetSettings()->Unload(); }
 };
 
 /* The tests for XFILE::CFileFactory are tested indirectly through
@@ -56,21 +54,19 @@ TEST_F(TestFileFactory, Read)
   unsigned char buf[16];
   int64_t count = 0;
 
-  std::vector<std::string> urls =
-    CXBMCTestUtils::Instance().getTestFileFactoryReadUrls();
+  std::vector<std::string> urls = CXBMCTestUtils::Instance().getTestFileFactoryReadUrls();
 
   for (const auto& url : urls)
   {
     std::cout << "Testing URL: " << url << std::endl;
     ASSERT_TRUE(file.Open(url));
-    std::cout << "file.GetLength(): " <<
-      testing::PrintToString(file.GetLength()) << std::endl;
-    std::cout << "file.Seek(file.GetLength() / 2, SEEK_CUR) return value: " <<
-      testing::PrintToString(file.Seek(file.GetLength() / 2, SEEK_CUR)) << std::endl;
-    std::cout << "file.Seek(0, SEEK_END) return value: " <<
-      testing::PrintToString(file.Seek(0, SEEK_END)) << std::endl;
-    std::cout << "file.Seek(0, SEEK_SET) return value: " <<
-      testing::PrintToString(file.Seek(0, SEEK_SET)) << std::endl;
+    std::cout << "file.GetLength(): " << testing::PrintToString(file.GetLength()) << std::endl;
+    std::cout << "file.Seek(file.GetLength() / 2, SEEK_CUR) return value: "
+              << testing::PrintToString(file.Seek(file.GetLength() / 2, SEEK_CUR)) << std::endl;
+    std::cout << "file.Seek(0, SEEK_END) return value: "
+              << testing::PrintToString(file.Seek(0, SEEK_END)) << std::endl;
+    std::cout << "file.Seek(0, SEEK_SET) return value: "
+              << testing::PrintToString(file.Seek(0, SEEK_SET)) << std::endl;
     std::cout << "File contents:" << std::endl;
     while ((size = file.Read(buf, sizeof(buf))) > 0)
     {
@@ -82,7 +78,7 @@ TEST_F(TestFileFactory, Read)
         str = StringUtils::Format("%02X ", buf[i]);
         std::cout << str;
       }
-      while (i++ < static_cast<ssize_t> (sizeof(buf)))
+      while (i++ < static_cast<ssize_t>(sizeof(buf)))
         std::cout << "   ";
       std::cout << " [";
       for (i = 0; i < size; i++)
@@ -109,8 +105,7 @@ TEST_F(TestFileFactory, Write)
   str = CXBMCTestUtils::Instance().getTestFileFactoryWriteInputFile();
   ASSERT_TRUE(inputfile.Open(str));
 
-  std::vector<std::string> urls =
-    CXBMCTestUtils::Instance().getTestFileFactoryWriteUrls();
+  std::vector<std::string> urls = CXBMCTestUtils::Instance().getTestFileFactoryWriteUrls();
 
   for (const auto& url : urls)
   {
@@ -126,12 +121,12 @@ TEST_F(TestFileFactory, Write)
     std::cout << "Reading..." << std::endl;
     ASSERT_TRUE(file.Open(url));
     EXPECT_EQ(inputfile.GetLength(), file.GetLength());
-    std::cout << "file.Seek(file.GetLength() / 2, SEEK_CUR) return value: " <<
-      testing::PrintToString(file.Seek(file.GetLength() / 2, SEEK_CUR)) << std::endl;
-    std::cout << "file.Seek(0, SEEK_END) return value: " <<
-      testing::PrintToString(file.Seek(0, SEEK_END)) << std::endl;
-    std::cout << "file.Seek(0, SEEK_SET) return value: " <<
-      testing::PrintToString(file.Seek(0, SEEK_SET)) << std::endl;
+    std::cout << "file.Seek(file.GetLength() / 2, SEEK_CUR) return value: "
+              << testing::PrintToString(file.Seek(file.GetLength() / 2, SEEK_CUR)) << std::endl;
+    std::cout << "file.Seek(0, SEEK_END) return value: "
+              << testing::PrintToString(file.Seek(0, SEEK_END)) << std::endl;
+    std::cout << "file.Seek(0, SEEK_SET) return value: "
+              << testing::PrintToString(file.Seek(0, SEEK_SET)) << std::endl;
     std::cout << "File contents:\n";
     while ((size = file.Read(buf, sizeof(buf))) > 0)
     {

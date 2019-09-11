@@ -19,13 +19,14 @@
 #include <map>
 #include <string>
 
-#define VOLUME_DRC_MINIMUM 0    // 0dB
+#define VOLUME_DRC_MINIMUM 0 // 0dB
 #define VOLUME_DRC_MAXIMUM 6000 // 60dB
 
 class TiXmlNode;
 
-typedef enum {
-  WatchedModeAll        = 0,
+typedef enum
+{
+  WatchedModeAll = 0,
   WatchedModeUnwatched,
   WatchedModeWatched
 } WatchedMode;
@@ -35,8 +36,8 @@ class CMediaSettings : public ISettingCallback, public ISettingsHandler, public 
 public:
   static CMediaSettings& GetInstance();
 
-  bool Load(const TiXmlNode *settings) override;
-  bool Save(TiXmlNode *settings) const override;
+  bool Load(const TiXmlNode* settings) override;
+  bool Save(TiXmlNode* settings) const override;
 
   void OnSettingAction(std::shared_ptr<const CSetting> setting) override;
   void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
@@ -55,20 +56,20 @@ public:
    \return the current watch mode for this content type, WATCH_MODE_ALL if the content type is unknown.
    \sa SetWatchMode
    */
-  int GetWatchedMode(const std::string &content) const;
+  int GetWatchedMode(const std::string& content) const;
 
   /*! \brief Set the watched mode for the given content type
    \param content Current content type
    \param value Watched mode to set
    \sa GetWatchMode
    */
-  void SetWatchedMode(const std::string &content, WatchedMode mode);
+  void SetWatchedMode(const std::string& content, WatchedMode mode);
 
   /*! \brief Cycle the watched mode for the given content type
    \param content Current content type
    \sa GetWatchMode, SetWatchMode
    */
-  void CycleWatchedMode(const std::string &content);
+  void CycleWatchedMode(const std::string& content);
 
   void SetMusicPlaylistRepeat(bool repeats) { m_musicPlaylistRepeat = repeats; }
   void SetMusicPlaylistShuffled(bool shuffled) { m_musicPlaylistShuffle = shuffled; }
@@ -79,7 +80,10 @@ public:
   bool DoesVideoStartWindowed() const { return m_videoStartWindowed; }
   void SetVideoStartWindowed(bool windowed) { m_videoStartWindowed = windowed; }
   int GetAdditionalSubtitleDirectoryChecked() const { return m_additionalSubtitleDirectoryChecked; }
-  void SetAdditionalSubtitleDirectoryChecked(int checked) { m_additionalSubtitleDirectoryChecked = checked; }
+  void SetAdditionalSubtitleDirectoryChecked(int checked)
+  {
+    m_additionalSubtitleDirectoryChecked = checked;
+  }
 
   int GetMusicNeedsUpdate() const { return m_musicNeedsUpdate; }
   void SetMusicNeedsUpdate(int version) { m_musicNeedsUpdate = version; }
@@ -92,7 +96,7 @@ protected:
   CMediaSettings& operator=(CMediaSettings const&) = delete;
   ~CMediaSettings() override;
 
-  static std::string GetWatchedContent(const std::string &content);
+  static std::string GetWatchedContent(const std::string& content);
 
 private:
   CVideoSettings m_defaultVideoSettings;

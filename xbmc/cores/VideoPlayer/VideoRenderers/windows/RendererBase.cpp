@@ -47,7 +47,11 @@ void CRenderBuffer::ReleasePicture()
 }
 
 CRenderBuffer::CRenderBuffer(AVPixelFormat av_pix_format, unsigned width, unsigned height)
-  : av_format(av_pix_format) , m_width(width) , m_height(height), m_widthTex(width), m_heightTex(height)
+  : av_format(av_pix_format)
+  , m_width(width)
+  , m_height(height)
+  , m_widthTex(width)
+  , m_heightTex(height)
 {
 }
 
@@ -136,16 +140,9 @@ CRendererBase::~CRendererBase()
 CRenderInfo CRendererBase::GetRenderInfo()
 {
   CRenderInfo info;
-  info.formats =
-  {
-    AV_PIX_FMT_D3D11VA_VLD,
-    AV_PIX_FMT_NV12,
-    AV_PIX_FMT_P010,
-    AV_PIX_FMT_P016,
-    AV_PIX_FMT_YUV420P,
-    AV_PIX_FMT_YUV420P10,
-    AV_PIX_FMT_YUV420P16
-  };
+  info.formats = {AV_PIX_FMT_D3D11VA_VLD, AV_PIX_FMT_NV12,    AV_PIX_FMT_P010,
+                  AV_PIX_FMT_P016,        AV_PIX_FMT_YUV420P, AV_PIX_FMT_YUV420P10,
+                  AV_PIX_FMT_YUV420P16};
   info.max_buffer_size = NUM_BUFFERS;
   info.optimal_buffer_size = 4;
 
@@ -175,15 +172,24 @@ void CRendererBase::AddVideoPicture(const VideoPicture& picture, int index)
   }
 }
 
-void CRendererBase::Render(int index, int index2, CD3DTexture& target, const CRect& sourceRect, 
-                           const CRect& destRect, const CRect& viewRect, unsigned flags)
+void CRendererBase::Render(int index,
+                           int index2,
+                           CD3DTexture& target,
+                           const CRect& sourceRect,
+                           const CRect& destRect,
+                           const CRect& viewRect,
+                           unsigned flags)
 {
   m_iBufferIndex = index;
   ManageTextures();
   Render(target, sourceRect, destRect, viewRect, flags);
 }
 
-void CRendererBase::Render(CD3DTexture& target, const CRect& sourceRect, const CRect& destRect, const CRect& viewRect, unsigned flags)
+void CRendererBase::Render(CD3DTexture& target,
+                           const CRect& sourceRect,
+                           const CRect& destRect,
+                           const CRect& viewRect,
+                           unsigned flags)
 {
   if (m_iNumBuffers == 0)
     return;
@@ -196,7 +202,7 @@ void CRendererBase::Render(CD3DTexture& target, const CRect& sourceRect, const C
   }
 
   if (m_viewWidth != static_cast<unsigned>(viewRect.Width()) ||
-    m_viewHeight != static_cast<unsigned>(viewRect.Height()))
+      m_viewHeight != static_cast<unsigned>(viewRect.Height()))
   {
     m_viewWidth = static_cast<unsigned>(viewRect.Width());
     m_viewHeight = static_cast<unsigned>(viewRect.Height());
@@ -208,14 +214,15 @@ void CRendererBase::Render(CD3DTexture& target, const CRect& sourceRect, const C
   UpdateVideoFilters();
 
   CPoint dest[4];
-  CRect source = sourceRect;     // can be changed
+  CRect source = sourceRect; // can be changed
   CRect(destRect).GetQuad(dest); // can be changed
 
   RenderImpl(m_IntermediateTarget, source, dest, flags);
 
   if (UseToneMapping())
   {
-    m_outputShader->SetDisplayMetadata(buf->hasDisplayMetadata, buf->displayMetadata, buf->hasLightMetadata, buf->lightMetadata);
+    m_outputShader->SetDisplayMetadata(buf->hasDisplayMetadata, buf->displayMetadata,
+                                       buf->hasLightMetadata, buf->lightMetadata);
     m_outputShader->SetToneMapParam(m_videoSettings.m_ToneMapParam);
   }
 
@@ -226,7 +233,10 @@ void CRendererBase::Render(CD3DTexture& target, const CRect& sourceRect, const C
   DX::Windowing()->ApplyStateBlock();
 }
 
-void CRendererBase::FinalOutput(CD3DTexture& source, CD3DTexture& target, const CRect& src, const CPoint(&destPoints)[4])
+void CRendererBase::FinalOutput(CD3DTexture& source,
+                                CD3DTexture& target,
+                                const CRect& src,
+                                const CPoint (&destPoints)[4])
 {
   m_outputShader->Render(source, src, destPoints, target);
 }
@@ -297,8 +307,8 @@ bool CRendererBase::CreateIntermediateTarget(unsigned width, unsigned height, bo
   DXGI_FORMAT format = DX::Windowing()->GetBackBuffer().GetFormat();
 
   // don't create new one if it exists with requested size and format
-  if (m_IntermediateTarget.Get() && m_IntermediateTarget.GetFormat() == format
-    && m_IntermediateTarget.GetWidth() == width && m_IntermediateTarget.GetHeight() == height)
+  if (m_IntermediateTarget.Get() && m_IntermediateTarget.GetFormat() == format &&
+      m_IntermediateTarget.GetWidth() == width && m_IntermediateTarget.GetHeight() == height)
     return true;
 
   if (m_IntermediateTarget.Get())
@@ -306,7 +316,8 @@ bool CRendererBase::CreateIntermediateTarget(unsigned width, unsigned height, bo
 
   CLog::LogF(LOGDEBUG, "intermediate target format %i.", format);
 
-  if (!m_IntermediateTarget.Create(width, height, 1, dynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT, format))
+  if (!m_IntermediateTarget.Create(width, height, 1,
+                                   dynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT, format))
   {
     CLog::LogF(LOGERROR, "intermediate target creation failed.");
     return false;
@@ -326,13 +337,16 @@ void CRendererBase::OnCMSConfigChanged(unsigned flags)
       return 0;
 
     const auto lutData = static_cast<uint16_t*>(KODI::MEMORY::AlignedMalloc(dataSize, 16));
-    bool success = m_colorManager->GetVideo3dLut(flags, &m_cmsToken, CMS_DATA_FMT_RGBA, lutSize, lutData);
+    bool success =
+        m_colorManager->GetVideo3dLut(flags, &m_cmsToken, CMS_DATA_FMT_RGBA, lutSize, lutData);
     if (success)
     {
-      success = COutputShader::CreateLUTView(lutSize, lutData, false, m_pLUTView.ReleaseAndGetAddressOf());
+      success = COutputShader::CreateLUTView(lutSize, lutData, false,
+                                             m_pLUTView.ReleaseAndGetAddressOf());
     }
     else
-      CLog::LogFunction(LOGERROR, "CRendererBase::OnCMSConfigChanged", "unable to loading the 3dlut data.");
+      CLog::LogFunction(LOGERROR, "CRendererBase::OnCMSConfigChanged",
+                        "unable to loading the 3dlut data.");
 
     KODI::MEMORY::AlignedFree(lutData);
     if (!success)
@@ -350,7 +364,7 @@ void CRendererBase::OnCMSConfigChanged(unsigned flags)
 }
 
 // this is copy from CBaseRenderer::ReorderDrawPoints()
-void CRendererBase::ReorderDrawPoints(const CRect& destRect, CPoint(&rotatedPoints)[4]) const
+void CRendererBase::ReorderDrawPoints(const CRect& destRect, CPoint (&rotatedPoints)[4]) const
 {
   // 0 - top left, 1 - top right, 2 - bottom right, 3 - bottom left
   float origMat[4][2] = {{destRect.x1, destRect.y1},

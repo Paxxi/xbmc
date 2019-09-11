@@ -19,17 +19,13 @@
 
 using namespace ADDON;
 
-const std::vector<TYPE> ADDON_TYPES = {
-  ADDON_VFS,
-  ADDON_IMAGEDECODER,
-  ADDON_AUDIODECODER
-};
+const std::vector<TYPE> ADDON_TYPES = {ADDON_VFS, ADDON_IMAGEDECODER, ADDON_AUDIODECODER};
 
-CFileExtensionProvider::CFileExtensionProvider(ADDON::CAddonMgr &addonManager,
-                                               ADDON::CBinaryAddonManager &binaryAddonManager) :
-  m_advancedSettings(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()),
-  m_addonManager(addonManager),
-  m_binaryAddonManager(binaryAddonManager)
+CFileExtensionProvider::CFileExtensionProvider(ADDON::CAddonMgr& addonManager,
+                                               ADDON::CBinaryAddonManager& binaryAddonManager)
+  : m_advancedSettings(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings())
+  , m_addonManager(addonManager)
+  , m_binaryAddonManager(binaryAddonManager)
 {
   SetAddonExtensions();
 
@@ -95,7 +91,7 @@ std::string CFileExtensionProvider::GetFileFolderExtensions() const
   return extensions;
 }
 
-std::string CFileExtensionProvider::GetAddonExtensions(const TYPE &type) const
+std::string CFileExtensionProvider::GetAddonExtensions(const TYPE& type) const
 {
   auto it = m_addonExtensions.find(type);
   if (it != m_addonExtensions.end())
@@ -104,7 +100,7 @@ std::string CFileExtensionProvider::GetAddonExtensions(const TYPE &type) const
   return "";
 }
 
-std::string CFileExtensionProvider::GetAddonFileFolderExtensions(const TYPE &type) const
+std::string CFileExtensionProvider::GetAddonFileFolderExtensions(const TYPE& type) const
 {
   auto it = m_addonExtensions.find(type);
   if (it != m_addonExtensions.end())
@@ -155,7 +151,8 @@ void CFileExtensionProvider::SetAddonExtensions(const TYPE& type)
 
   m_addonExtensions.insert(make_pair(type, StringUtils::Join(extensions, "|")));
   if (!fileFolderExtensions.empty())
-    m_addonFileFolderExtensions.insert(make_pair(type, StringUtils::Join(fileFolderExtensions, "|")));
+    m_addonFileFolderExtensions.insert(
+        make_pair(type, StringUtils::Join(fileFolderExtensions, "|")));
 }
 
 void CFileExtensionProvider::OnAddonEvent(const AddonEvent& event)
@@ -164,7 +161,7 @@ void CFileExtensionProvider::OnAddonEvent(const AddonEvent& event)
       typeid(event) == typeid(AddonEvents::Disabled) ||
       typeid(event) == typeid(AddonEvents::ReInstalled))
   {
-    for (auto &type : ADDON_TYPES)
+    for (auto& type : ADDON_TYPES)
     {
       if (m_addonManager.HasType(event.id, type))
       {
@@ -181,5 +178,5 @@ void CFileExtensionProvider::OnAddonEvent(const AddonEvent& event)
 
 bool CFileExtensionProvider::EncodedHostName(const std::string& protocol) const
 {
-  return std::find(m_encoded.begin(),m_encoded.end(),protocol) != m_encoded.end();
+  return std::find(m_encoded.begin(), m_encoded.end(), protocol) != m_encoded.end();
 }

@@ -18,7 +18,8 @@ using namespace XFILE::MUSICDATABASEDIRECTORY;
 
 CMusicDbUrl::CMusicDbUrl()
   : CDbUrl()
-{ }
+{
+}
 
 CMusicDbUrl::~CMusicDbUrl() = default;
 
@@ -34,87 +35,87 @@ bool CMusicDbUrl::parse()
 
   switch (dirType)
   {
-    case NODE_TYPE_ARTIST:
-      m_type = "artists";
-      break;
+  case NODE_TYPE_ARTIST:
+    m_type = "artists";
+    break;
 
-    case NODE_TYPE_ALBUM:
-    case NODE_TYPE_ALBUM_RECENTLY_ADDED:
-    case NODE_TYPE_ALBUM_RECENTLY_PLAYED:
-    case NODE_TYPE_ALBUM_TOP100:
-    case NODE_TYPE_ALBUM_COMPILATIONS:
-    case NODE_TYPE_YEAR_ALBUM:
-      m_type = "albums";
-      break;
+  case NODE_TYPE_ALBUM:
+  case NODE_TYPE_ALBUM_RECENTLY_ADDED:
+  case NODE_TYPE_ALBUM_RECENTLY_PLAYED:
+  case NODE_TYPE_ALBUM_TOP100:
+  case NODE_TYPE_ALBUM_COMPILATIONS:
+  case NODE_TYPE_YEAR_ALBUM:
+    m_type = "albums";
+    break;
 
-    case NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS:
-    case NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS:
-    case NODE_TYPE_ALBUM_TOP100_SONGS:
-    case NODE_TYPE_ALBUM_COMPILATIONS_SONGS:
-    case NODE_TYPE_SONG:
-    case NODE_TYPE_SONG_TOP100:
-    case NODE_TYPE_YEAR_SONG:
-    case NODE_TYPE_SINGLES:
-      m_type = "songs";
-      break;
+  case NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS:
+  case NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS:
+  case NODE_TYPE_ALBUM_TOP100_SONGS:
+  case NODE_TYPE_ALBUM_COMPILATIONS_SONGS:
+  case NODE_TYPE_SONG:
+  case NODE_TYPE_SONG_TOP100:
+  case NODE_TYPE_YEAR_SONG:
+  case NODE_TYPE_SINGLES:
+    m_type = "songs";
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   switch (childType)
   {
-    case NODE_TYPE_ARTIST:
-      m_type = "artists";
-      break;
+  case NODE_TYPE_ARTIST:
+    m_type = "artists";
+    break;
 
-    case NODE_TYPE_ALBUM:
-    case NODE_TYPE_ALBUM_RECENTLY_ADDED:
-    case NODE_TYPE_ALBUM_RECENTLY_PLAYED:
-    case NODE_TYPE_ALBUM_TOP100:
-    case NODE_TYPE_YEAR_ALBUM:
-      m_type = "albums";
-      break;
+  case NODE_TYPE_ALBUM:
+  case NODE_TYPE_ALBUM_RECENTLY_ADDED:
+  case NODE_TYPE_ALBUM_RECENTLY_PLAYED:
+  case NODE_TYPE_ALBUM_TOP100:
+  case NODE_TYPE_YEAR_ALBUM:
+    m_type = "albums";
+    break;
 
-    case NODE_TYPE_SONG:
-    case NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS:
-    case NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS:
-    case NODE_TYPE_ALBUM_TOP100_SONGS:
-    case NODE_TYPE_ALBUM_COMPILATIONS_SONGS:
-    case NODE_TYPE_SONG_TOP100:
-    case NODE_TYPE_YEAR_SONG:
-    case NODE_TYPE_SINGLES:
-      m_type = "songs";
-      break;
+  case NODE_TYPE_SONG:
+  case NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS:
+  case NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS:
+  case NODE_TYPE_ALBUM_TOP100_SONGS:
+  case NODE_TYPE_ALBUM_COMPILATIONS_SONGS:
+  case NODE_TYPE_SONG_TOP100:
+  case NODE_TYPE_YEAR_SONG:
+  case NODE_TYPE_SINGLES:
+    m_type = "songs";
+    break;
 
-    case NODE_TYPE_GENRE:
-      m_type = "genres";
-      break;
+  case NODE_TYPE_GENRE:
+    m_type = "genres";
+    break;
 
-    case NODE_TYPE_SOURCE:
-      m_type = "sources";
-      break;
+  case NODE_TYPE_SOURCE:
+    m_type = "sources";
+    break;
 
-    case NODE_TYPE_ROLE:
-      m_type = "roles";
-      break;
+  case NODE_TYPE_ROLE:
+    m_type = "roles";
+    break;
 
-    case NODE_TYPE_YEAR:
-      m_type = "years";
-      break;
+  case NODE_TYPE_YEAR:
+    m_type = "years";
+    break;
 
-    case NODE_TYPE_ALBUM_COMPILATIONS:
-      m_type = "albums";
-      break;
+  case NODE_TYPE_ALBUM_COMPILATIONS:
+    m_type = "albums";
+    break;
 
-    case NODE_TYPE_TOP100:
-      m_type = "top100";
-      break;
+  case NODE_TYPE_TOP100:
+    m_type = "top100";
+    break;
 
-    case NODE_TYPE_ROOT:
-    case NODE_TYPE_OVERVIEW:
-    default:
-      return false;
+  case NODE_TYPE_ROOT:
+  case NODE_TYPE_OVERVIEW:
+  default:
+    return false;
   }
 
   if (m_type.empty())
@@ -146,7 +147,7 @@ bool CMusicDbUrl::parse()
   return true;
 }
 
-bool CMusicDbUrl::validateOption(const std::string &key, const CVariant &value)
+bool CMusicDbUrl::validateOption(const std::string& key, const CVariant& value)
 {
   if (!CDbUrl::validateOption(key, value))
     return false;

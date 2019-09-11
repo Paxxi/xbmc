@@ -31,8 +31,8 @@ protected:
 private:
   bool SendPacket(CIrssMessage& message);
   int ReadPacket(CIrssMessage& message);
-  int ReadN(char *buffer, int n);
-  bool WriteN(const char *buffer, int n);
+  int ReadN(char* buffer, int n);
+  bool WriteN(const char* buffer, int n);
   bool Connect(bool logMessages);
   void Close();
   bool HandleRemoteEvent(CIrssMessage& message);

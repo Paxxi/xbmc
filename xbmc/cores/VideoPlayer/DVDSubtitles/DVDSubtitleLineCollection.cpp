@@ -104,8 +104,8 @@ void CDVDSubtitleLineCollection::Clear()
     delete pElement;
   }
 
-  m_pTail    = NULL;
-  m_pHead    = NULL;
+  m_pTail = NULL;
+  m_pHead = NULL;
   m_pCurrent = NULL;
-  m_iSize    = 0;
+  m_iSize = 0;
 }

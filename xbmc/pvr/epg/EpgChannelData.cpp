@@ -14,24 +14,24 @@
 using namespace PVR;
 
 CPVREpgChannelData::CPVREpgChannelData(int iClientId, int iUniqueClientChannelId)
-: m_iClientId(iClientId),
-  m_iUniqueClientChannelId(iUniqueClientChannelId)
+  : m_iClientId(iClientId)
+  , m_iUniqueClientChannelId(iUniqueClientChannelId)
 {
 }
 
 CPVREpgChannelData::CPVREpgChannelData(const CPVRChannel& channel)
-: m_bIsRadio(channel.IsRadio()),
-  m_iClientId(channel.ClientID()),
-  m_iUniqueClientChannelId(channel.UniqueID()),
-  m_bIsHidden(channel.IsHidden()),
-  m_bIsLocked(channel.IsLocked()),
-  m_bIsEPGEnabled(channel.EPGEnabled()),
-  m_iChannelId(channel.ChannelID()),
-  m_strIconPath(channel.IconPath()),
-  m_strChannelName(channel.ChannelName()),
-  m_strSortableChannelNumber(channel.ChannelNumber().SortableChannelNumber()),
-  m_strSortableClientChannelNumber(channel.ClientChannelNumber().SortableChannelNumber()),
-  m_iOrder(channel.ClientOrder())
+  : m_bIsRadio(channel.IsRadio())
+  , m_iClientId(channel.ClientID())
+  , m_iUniqueClientChannelId(channel.UniqueID())
+  , m_bIsHidden(channel.IsHidden())
+  , m_bIsLocked(channel.IsLocked())
+  , m_bIsEPGEnabled(channel.EPGEnabled())
+  , m_iChannelId(channel.ChannelID())
+  , m_strIconPath(channel.IconPath())
+  , m_strChannelName(channel.ChannelName())
+  , m_strSortableChannelNumber(channel.ChannelNumber().SortableChannelNumber())
+  , m_strSortableClientChannelNumber(channel.ClientChannelNumber().SortableChannelNumber())
+  , m_iOrder(channel.ClientOrder())
 {
   SetLastWatched(channel.LastWatched());
 }
@@ -126,7 +126,8 @@ const std::string& CPVREpgChannelData::SortableClientChannelNumber() const
   return m_strSortableClientChannelNumber;
 }
 
-void CPVREpgChannelData::SetSortableClientChannelNumber(const std::string& strSortableClientChannelNumber)
+void CPVREpgChannelData::SetSortableClientChannelNumber(
+    const std::string& strSortableClientChannelNumber)
 {
   m_strSortableClientChannelNumber = strSortableClientChannelNumber;
 }

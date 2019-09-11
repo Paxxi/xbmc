@@ -31,8 +31,8 @@ inline void* memcpy_aligned(void* dst, const void* src, size_t size, uint8_t bpp
       return memcpy(dst, src, size);
     else
     {
-      uint16_t * y = (uint16_t*)(src);
-      uint16_t * d = (uint16_t*)(dst);
+      uint16_t* y = (uint16_t*)(src);
+      uint16_t* d = (uint16_t*)(dst);
       for (size_t x = 0; x < (size >> 1); x++)
       {
         d[x] = y[x] << shift;
@@ -51,7 +51,7 @@ inline void* memcpy_aligned(void* dst, const void* src, size_t size, uint8_t bpp
 
   _mm_sfence();
 
-  while(pTrg < pTrgEnd)
+  while (pTrg < pTrgEnd)
   //for (i = 0; i < size - 63; i += 64)
   {
     xmm1 = _mm_load_si128(pSrc);
@@ -145,7 +145,13 @@ inline void* memcpy_aligned(void* dst, const void* src, size_t size, uint8_t bpp
 #endif
 }
 
-inline void copy_plane(uint8_t *const src, const int srcStride, int height, int width, uint8_t *const dst, const int dstStride, uint8_t bpp = 0)
+inline void copy_plane(uint8_t* const src,
+                       const int srcStride,
+                       int height,
+                       int width,
+                       uint8_t* const dst,
+                       const int dstStride,
+                       uint8_t bpp = 0)
 {
 #if defined(HAVE_SSE2)
   _mm_sfence();
@@ -157,14 +163,19 @@ inline void copy_plane(uint8_t *const src, const int srcStride, int height, int 
   {
     for (size_t line = 0; line < height; ++line)
     {
-      uint8_t * s = src + srcStride * line;
-      uint8_t * d = dst + dstStride * line;
+      uint8_t* s = src + srcStride * line;
+      uint8_t* d = dst + dstStride * line;
       memcpy_aligned(d, s, srcStride, bpp);
     }
   }
 }
 
-inline void convert_yuv420_nv12_chrome(uint8_t *const *src, const int *srcStride, int height, int width, uint8_t *const dst, const int dstStride)
+inline void convert_yuv420_nv12_chrome(uint8_t* const* src,
+                                       const int* srcStride,
+                                       int height,
+                                       int width,
+                                       uint8_t* const dst,
+                                       const int dstStride)
 {
 #if defined(HAVE_SSE2)
   __m128i xmm0, xmm1, xmm2, xmm3, xmm4;
@@ -177,9 +188,9 @@ inline void convert_yuv420_nv12_chrome(uint8_t *const *src, const int *srcStride
 
   for (line = 0; line < chromaHeight; ++line)
   {
-    uint8_t * u = src[0] + line * srcStride[0];
-    uint8_t * v = src[1] + line * srcStride[1];
-    uint8_t * d = dst + line * dstStride;
+    uint8_t* u = src[0] + line * srcStride[0];
+    uint8_t* v = src[1] + line * srcStride[1];
+    uint8_t* d = dst + line * dstStride;
 
     // if memory is not aligned use memcpy
 #if defined(HAVE_SSE2)
@@ -210,15 +221,16 @@ inline void convert_yuv420_nv12_chrome(uint8_t *const *src, const int *srcStride
         xmm2 = _mm_unpacklo_epi8(xmm3, xmm2);
         xmm1 = _mm_unpackhi_epi8(xmm3, xmm1);
 
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 0), xmm0);
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 16), xmm4);
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 32), xmm2);
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 48), xmm1);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 0), xmm0);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 16), xmm4);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 32), xmm2);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 48), xmm1);
       }
       if (((size_t)chroma_width) & 0xF)
       {
         d += (i << 1);
-        u += i; v += i;
+        u += i;
+        v += i;
         for (; i < chroma_width; ++i)
         {
           *d++ = *u++;
@@ -234,15 +246,21 @@ inline void convert_yuv420_nv12_chrome(uint8_t *const *src, const int *srcStride
         xmm0 = _mm_unpacklo_epi8(xmm1, xmm0);
         xmm2 = _mm_unpackhi_epi8(xmm1, xmm2);
 
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 0), xmm0);
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 16), xmm2);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 0), xmm0);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 16), xmm2);
       }
     }
 #endif
   }
 }
 
-inline void convert_yuv420_p01x_chrome(uint8_t *const *src, const int *srcStride, int height, int width, uint8_t *const dst, const int dstStride, uint8_t bpp)
+inline void convert_yuv420_p01x_chrome(uint8_t* const* src,
+                                       const int* srcStride,
+                                       int height,
+                                       int width,
+                                       uint8_t* const dst,
+                                       const int dstStride,
+                                       uint8_t bpp)
 {
   const uint8_t shift = 16 - bpp;
 #if defined(HAVE_SSE2)
@@ -257,9 +275,9 @@ inline void convert_yuv420_p01x_chrome(uint8_t *const *src, const int *srcStride
 
   for (line = 0; line < chromaHeight; ++line)
   {
-    uint16_t * u = (uint16_t*)(src[0] + line * srcStride[0]);
-    uint16_t * v = (uint16_t*)(src[1] + line * srcStride[1]);
-    uint16_t * d = (uint16_t*)(dst + line * dstStride);
+    uint16_t* u = (uint16_t*)(src[0] + line * srcStride[0]);
+    uint16_t* v = (uint16_t*)(src[1] + line * srcStride[1]);
+    uint16_t* d = (uint16_t*)(dst + line * dstStride);
 
     // if memory is not aligned use memcpy
 #if defined(HAVE_SSE2)
@@ -295,17 +313,22 @@ inline void convert_yuv420_p01x_chrome(uint8_t *const *src, const int *srcStride
         xmm2 = _mm_unpacklo_epi16(xmm3, xmm2);
         xmm1 = _mm_unpackhi_epi16(xmm3, xmm1);
 
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 0), xmm0);
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 8), xmm4);
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 16), xmm2);
-        _mm_stream_si128((__m128i *)(d + (i << 1) + 24), xmm1);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 0), xmm0);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 8), xmm4);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 16), xmm2);
+        _mm_stream_si128((__m128i*)(d + (i << 1) + 24), xmm1);
       }
     }
 #endif
   }
 }
 
-inline void convert_yuv420_nv12(uint8_t *const src[], const int srcStride[], int height, int width, uint8_t *const dst[], const int dstStride[])
+inline void convert_yuv420_nv12(uint8_t* const src[],
+                                const int srcStride[],
+                                int height,
+                                int width,
+                                uint8_t* const dst[],
+                                const int dstStride[])
 {
   // Convert to NV12 - Luma
   copy_plane(src[0], srcStride[0], height, width, dst[0], dstStride[0]);
@@ -313,7 +336,13 @@ inline void convert_yuv420_nv12(uint8_t *const src[], const int srcStride[], int
   convert_yuv420_nv12_chrome(&src[1], &srcStride[1], height, width, dst[1], dstStride[1]);
 }
 
-inline void convert_yuv420_p01x(uint8_t *const src[], const int srcStride[], int height, int width, uint8_t *const dst[], const int dstStride[], uint8_t bpp)
+inline void convert_yuv420_p01x(uint8_t* const src[],
+                                const int srcStride[],
+                                int height,
+                                int width,
+                                uint8_t* const dst[],
+                                const int dstStride[],
+                                uint8_t bpp)
 {
   // Convert to P01x - Luma
   copy_plane(src[0], srcStride[0], height, width, dst[0], dstStride[0], bpp);

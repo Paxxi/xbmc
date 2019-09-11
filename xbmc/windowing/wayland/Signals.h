@@ -24,6 +24,7 @@ class ISignalHandlerData
 {
 protected:
   ~ISignalHandlerData() {}
+
 public:
   virtual void Unregister(RegistrationIdentifierType id) = 0;
 };
@@ -36,8 +37,10 @@ class CSignalRegistration
   template<typename ManagedT>
   friend class CSignalHandlerList;
 
-  CSignalRegistration(std::shared_ptr<ISignalHandlerData> const& list, RegistrationIdentifierType registration)
-  : m_list{list}, m_registration{registration}
+  CSignalRegistration(std::shared_ptr<ISignalHandlerData> const& list,
+                      RegistrationIdentifierType registration)
+    : m_list{list}
+    , m_registration{registration}
   {
   }
 
@@ -47,10 +50,7 @@ class CSignalRegistration
 public:
   CSignalRegistration() noexcept = default;
 
-  CSignalRegistration(CSignalRegistration&& other) noexcept
-  {
-    *this = std::move(other);
-  }
+  CSignalRegistration(CSignalRegistration&& other) noexcept { *this = std::move(other); }
 
   inline CSignalRegistration& operator=(CSignalRegistration&& other) noexcept
   {
@@ -60,10 +60,7 @@ public:
     return *this;
   }
 
-  ~CSignalRegistration() noexcept
-  {
-    Unregister();
-  }
+  ~CSignalRegistration() noexcept { Unregister(); }
 
   inline void Unregister()
   {
@@ -114,7 +111,7 @@ public:
 
   public:
     iterator(typename std::map<RegistrationIdentifierType, ManagedT>::const_iterator it)
-    : m_it{it}
+      : m_it{it}
     {
     }
     iterator& operator++()
@@ -122,29 +119,21 @@ public:
       ++m_it;
       return *this;
     }
-    bool operator==(iterator const& right) const
-    {
-      return m_it == right.m_it;
-    }
-    bool operator!=(iterator const& right) const
-    {
-      return !(*this == right);
-    }
-    ManagedT const& operator*()
-    {
-      return m_it->second;
-    }
+    bool operator==(iterator const& right) const { return m_it == right.m_it; }
+    bool operator!=(iterator const& right) const { return !(*this == right); }
+    ManagedT const& operator*() { return m_it->second; }
   };
 
   CSignalHandlerList()
-  : m_data{new Data}
-  {}
+    : m_data{new Data}
+  {
+  }
 
   CSignalRegistration Register(ManagedT const& handler)
   {
     CSingleLock lock(m_data->m_handlerCriticalSection);
     bool inserted{false};
-    while(!inserted)
+    while (!inserted)
     {
       inserted = m_data->m_handlers.emplace(++m_lastRegistrationId, handler).second;
     }
@@ -162,29 +151,20 @@ public:
     CSingleLock lock(m_data->m_handlerCriticalSection);
     for (auto const& handler : *this)
     {
-      handler.operator() (std::forward<ArgsT>(args)...);
+      handler.operator()(std::forward<ArgsT>(args)...);
     }
   }
 
-  iterator begin() const
-  {
-    return iterator(m_data->m_handlers.cbegin());
-  }
+  iterator begin() const { return iterator(m_data->m_handlers.cbegin()); }
 
-  iterator end() const
-  {
-    return iterator(m_data->m_handlers.cend());
-  }
+  iterator end() const { return iterator(m_data->m_handlers.cend()); }
 
   /**
    * Get critical section for accessing the handler list
    * \note You must lock this yourself if you iterate through the handler
    * list manually without using \ref Invoke or similar.
    */
-  CCriticalSection const& CriticalSection() const
-  {
-    return m_data->m_handlerCriticalSection;
-  }
+  CCriticalSection const& CriticalSection() const { return m_data->m_handlerCriticalSection; }
 };
 
-}
+} // namespace KODI

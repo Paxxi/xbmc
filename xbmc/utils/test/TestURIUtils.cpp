@@ -39,7 +39,8 @@ TEST_F(TestURIUtils, GetDirectory)
 {
   EXPECT_STREQ("/path/to/", URIUtils::GetDirectory("/path/to/movie.avi").c_str());
   EXPECT_STREQ("/path/to/", URIUtils::GetDirectory("/path/to/").c_str());
-  EXPECT_STREQ("/path/to/|option=foo", URIUtils::GetDirectory("/path/to/movie.avi|option=foo").c_str());
+  EXPECT_STREQ("/path/to/|option=foo",
+               URIUtils::GetDirectory("/path/to/movie.avi|option=foo").c_str());
   EXPECT_STREQ("/path/to/|option=foo", URIUtils::GetDirectory("/path/to/|option=foo").c_str());
   EXPECT_STREQ("", URIUtils::GetDirectory("movie.avi").c_str());
   EXPECT_STREQ("", URIUtils::GetDirectory("movie.avi|option=foo").c_str());
@@ -53,24 +54,23 @@ TEST_F(TestURIUtils, GetDirectory)
 
 TEST_F(TestURIUtils, GetExtension)
 {
-  EXPECT_STREQ(".avi",
-               URIUtils::GetExtension("/path/to/movie.avi").c_str());
+  EXPECT_STREQ(".avi", URIUtils::GetExtension("/path/to/movie.avi").c_str());
 }
 
 TEST_F(TestURIUtils, HasExtension)
 {
-  EXPECT_TRUE (URIUtils::HasExtension("/path/to/movie.AvI"));
+  EXPECT_TRUE(URIUtils::HasExtension("/path/to/movie.AvI"));
   EXPECT_FALSE(URIUtils::HasExtension("/path/to/movie"));
   EXPECT_FALSE(URIUtils::HasExtension("/path/.to/movie"));
   EXPECT_FALSE(URIUtils::HasExtension(""));
 
-  EXPECT_TRUE (URIUtils::HasExtension("/path/to/movie.AvI", ".avi"));
+  EXPECT_TRUE(URIUtils::HasExtension("/path/to/movie.AvI", ".avi"));
   EXPECT_FALSE(URIUtils::HasExtension("/path/to/movie.AvI", ".mkv"));
   EXPECT_FALSE(URIUtils::HasExtension("/path/.avi/movie", ".avi"));
   EXPECT_FALSE(URIUtils::HasExtension("", ".avi"));
 
-  EXPECT_TRUE (URIUtils::HasExtension("/path/movie.AvI", ".avi|.mkv|.mp4"));
-  EXPECT_TRUE (URIUtils::HasExtension("/path/movie.AvI", ".mkv|.avi|.mp4"));
+  EXPECT_TRUE(URIUtils::HasExtension("/path/movie.AvI", ".avi|.mkv|.mp4"));
+  EXPECT_TRUE(URIUtils::HasExtension("/path/movie.AvI", ".mkv|.avi|.mp4"));
   EXPECT_FALSE(URIUtils::HasExtension("/path/movie.AvI", ".mpg|.mkv|.mp4"));
   EXPECT_FALSE(URIUtils::HasExtension("/path.mkv/movie.AvI", ".mpg|.mkv|.mp4"));
   EXPECT_FALSE(URIUtils::HasExtension("", ".avi|.mkv|.mp4"));
@@ -78,8 +78,7 @@ TEST_F(TestURIUtils, HasExtension)
 
 TEST_F(TestURIUtils, GetFileName)
 {
-  EXPECT_STREQ("movie.avi",
-               URIUtils::GetFileName("/path/to/movie.avi").c_str());
+  EXPECT_STREQ("movie.avi", URIUtils::GetFileName("/path/to/movie.avi").c_str());
 }
 
 TEST_F(TestURIUtils, RemoveExtension)
@@ -142,9 +141,9 @@ TEST_F(TestURIUtils, SplitPath)
 TEST_F(TestURIUtils, SplitPathLocal)
 {
 #ifndef TARGET_LINUX
-  const char *path = "C:\\path\\to\\movie.avi";
+  const char* path = "C:\\path\\to\\movie.avi";
 #else
-  const char *path = "/path/to/movie.avi";
+  const char* path = "/path/to/movie.avi";
 #endif
   std::vector<std::string> strarray;
 
@@ -189,30 +188,36 @@ TEST_F(TestURIUtils, SubstitutePath)
 
   from = "C:\\My Videos";
   to = "https://myserver/some%20other%20path";
-  CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_pathSubstitutions.push_back(std::make_pair(from, to));
+  CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_pathSubstitutions.push_back(
+      std::make_pair(from, to));
 
   from = "/this/path1";
   to = "/some/other/path2";
-  CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_pathSubstitutions.push_back(std::make_pair(from, to));
+  CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_pathSubstitutions.push_back(
+      std::make_pair(from, to));
 
   from = "davs://otherserver/my%20music%20path";
   to = "D:\\Local Music\\MP3 Collection";
-  CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_pathSubstitutions.push_back(std::make_pair(from, to));
+  CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_pathSubstitutions.push_back(
+      std::make_pair(from, to));
 
   ref = "https://myserver/some%20other%20path/sub%20dir/movie%20name.avi";
   var = URIUtils::SubstitutePath("C:\\My Videos\\sub dir\\movie name.avi");
   EXPECT_STREQ(ref.c_str(), var.c_str());
 
   ref = "C:\\My Videos\\sub dir\\movie name.avi";
-  var = URIUtils::SubstitutePath("https://myserver/some%20other%20path/sub%20dir/movie%20name.avi", true);
+  var = URIUtils::SubstitutePath("https://myserver/some%20other%20path/sub%20dir/movie%20name.avi",
+                                 true);
   EXPECT_STREQ(ref.c_str(), var.c_str());
 
   ref = "D:\\Local Music\\MP3 Collection\\Phil Collins\\Some CD\\01 - Two Hearts.mp3";
-  var = URIUtils::SubstitutePath("davs://otherserver/my%20music%20path/Phil%20Collins/Some%20CD/01%20-%20Two%20Hearts.mp3");
+  var = URIUtils::SubstitutePath(
+      "davs://otherserver/my%20music%20path/Phil%20Collins/Some%20CD/01%20-%20Two%20Hearts.mp3");
   EXPECT_STREQ(ref.c_str(), var.c_str());
 
   ref = "davs://otherserver/my%20music%20path/Phil%20Collins/Some%20CD/01%20-%20Two%20Hearts.mp3";
-  var = URIUtils::SubstitutePath("D:\\Local Music\\MP3 Collection\\Phil Collins\\Some CD\\01 - Two Hearts.mp3", true);
+  var = URIUtils::SubstitutePath(
+      "D:\\Local Music\\MP3 Collection\\Phil Collins\\Some CD\\01 - Two Hearts.mp3", true);
   EXPECT_STREQ(ref.c_str(), var.c_str());
 
   ref = "/some/other/path2/to/movie.avi";
@@ -544,23 +549,38 @@ TEST_F(TestURIUtils, GetRealPath)
 
   // test rar/zip paths
   ref = "zip://%2fpath%2fto%2fzip/subpath/to/file";
-  EXPECT_STRCASEEQ(ref.c_str(), URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/../subpath/to/file").c_str());
-  EXPECT_STRCASEEQ(ref.c_str(), URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/./subpath/to/file").c_str());
-  EXPECT_STRCASEEQ(ref.c_str(), URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/subpath/to/./file").c_str());
-  EXPECT_STRCASEEQ(ref.c_str(), URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/subpath/to/some/../file").c_str());
+  EXPECT_STRCASEEQ(ref.c_str(),
+                   URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/../subpath/to/file").c_str());
+  EXPECT_STRCASEEQ(ref.c_str(),
+                   URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/./subpath/to/file").c_str());
+  EXPECT_STRCASEEQ(ref.c_str(),
+                   URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/subpath/to/./file").c_str());
+  EXPECT_STRCASEEQ(
+      ref.c_str(),
+      URIUtils::GetRealPath("zip://%2fpath%2fto%2fzip/subpath/to/some/../file").c_str());
 
-  EXPECT_STRCASEEQ(ref.c_str(), URIUtils::GetRealPath("zip://%2fpath%2fto%2f.%2fzip/subpath/to/file").c_str());
-  EXPECT_STRCASEEQ(ref.c_str(), URIUtils::GetRealPath("zip://%2fpath%2fto%2fsome%2f..%2fzip/subpath/to/file").c_str());
+  EXPECT_STRCASEEQ(ref.c_str(),
+                   URIUtils::GetRealPath("zip://%2fpath%2fto%2f.%2fzip/subpath/to/file").c_str());
+  EXPECT_STRCASEEQ(
+      ref.c_str(),
+      URIUtils::GetRealPath("zip://%2fpath%2fto%2fsome%2f..%2fzip/subpath/to/file").c_str());
 
   // test zip/zip path
-  ref ="zip://zip%3a%2f%2f%252Fpath%252Fto%252Fzip%2fpath%2fto%2fzip/subpath/to/file";
-  EXPECT_STRCASEEQ(ref.c_str(), URIUtils::GetRealPath("zip://zip%3a%2f%2f%252Fpath%252Fto%252Fsome%252F..%252Fzip%2fpath%2fto%2fsome%2f..%2fzip/subpath/to/some/../file").c_str());
+  ref = "zip://zip%3a%2f%2f%252Fpath%252Fto%252Fzip%2fpath%2fto%2fzip/subpath/to/file";
+  EXPECT_STRCASEEQ(ref.c_str(),
+                   URIUtils::GetRealPath("zip://"
+                                         "zip%3a%2f%2f%252Fpath%252Fto%252Fsome%252F..%252Fzip%"
+                                         "2fpath%2fto%2fsome%2f..%2fzip/subpath/to/some/../file")
+                       .c_str());
 }
 
 TEST_F(TestURIUtils, UpdateUrlEncoding)
 {
-  std::string oldUrl = "stack://zip://%2fpath%2fto%2farchive%2fsome%2darchive%2dfile%2eCD1%2ezip/video.avi , zip://%2fpath%2fto%2farchive%2fsome%2darchive%2dfile%2eCD2%2ezip/video.avi";
-  std::string newUrl = "stack://zip://%2fpath%2fto%2farchive%2fsome-archive-file.CD1.zip/video.avi , zip://%2fpath%2fto%2farchive%2fsome-archive-file.CD2.zip/video.avi";
+  std::string oldUrl =
+      "stack://zip://%2fpath%2fto%2farchive%2fsome%2darchive%2dfile%2eCD1%2ezip/video.avi , "
+      "zip://%2fpath%2fto%2farchive%2fsome%2darchive%2dfile%2eCD2%2ezip/video.avi";
+  std::string newUrl = "stack://zip://%2fpath%2fto%2farchive%2fsome-archive-file.CD1.zip/video.avi "
+                       ", zip://%2fpath%2fto%2farchive%2fsome-archive-file.CD2.zip/video.avi";
 
   EXPECT_TRUE(URIUtils::UpdateUrlEncoding(oldUrl));
   EXPECT_STRCASEEQ(newUrl.c_str(), oldUrl.c_str());

@@ -13,7 +13,7 @@
 
 TEST(TestUrlOptions, Clear)
 {
-  const char *key = "foo";
+  const char* key = "foo";
 
   CUrlOptions urlOptions;
   urlOptions.AddOption(key, "bar");
@@ -25,17 +25,17 @@ TEST(TestUrlOptions, Clear)
 
 TEST(TestUrlOptions, AddOption)
 {
-  const char *keyChar = "char";
-  const char *keyString = "string";
-  const char *keyEmpty = "empty";
-  const char *keyInt = "int";
-  const char *keyFloat = "float";
-  const char *keyDouble = "double";
-  const char *keyBool = "bool";
+  const char* keyChar = "char";
+  const char* keyString = "string";
+  const char* keyEmpty = "empty";
+  const char* keyInt = "int";
+  const char* keyFloat = "float";
+  const char* keyDouble = "double";
+  const char* keyBool = "bool";
 
-  const char *valueChar = "valueChar";
+  const char* valueChar = "valueChar";
   const std::string valueString = "valueString";
-  const char *valueEmpty = "";
+  const char* valueEmpty = "";
   int valueInt = 1;
   float valueFloat = 1.0f;
   double valueDouble = 1.0;
@@ -138,7 +138,7 @@ TEST(TestUrlOptions, AddOptions)
 
 TEST(TestUrlOptions, RemoveOption)
 {
-  const char *key = "foo";
+  const char* key = "foo";
 
   CUrlOptions urlOptions;
   urlOptions.AddOption(key, "bar");
@@ -150,7 +150,7 @@ TEST(TestUrlOptions, RemoveOption)
 
 TEST(TestUrlOptions, HasOption)
 {
-  const char *key = "foo";
+  const char* key = "foo";
 
   CUrlOptions urlOptions;
   urlOptions.AddOption(key, "bar");
@@ -160,15 +160,15 @@ TEST(TestUrlOptions, HasOption)
 
 TEST(TestUrlOptions, GetOptions)
 {
-  const char *key1 = "foo";
-  const char *key2 = "key";
-  const char *value1 = "bar";
-  const char *value2 = "value";
+  const char* key1 = "foo";
+  const char* key2 = "key";
+  const char* value1 = "bar";
+  const char* value2 = "value";
 
   CUrlOptions urlOptions;
   urlOptions.AddOption(key1, value1);
   urlOptions.AddOption(key2, value2);
-  const CUrlOptions::UrlOptions &options = urlOptions.GetOptions();
+  const CUrlOptions::UrlOptions& options = urlOptions.GetOptions();
   EXPECT_FALSE(options.empty());
   EXPECT_EQ(2U, options.size());
 
@@ -185,7 +185,7 @@ TEST(TestUrlOptions, GetOptions)
 
 TEST(TestUrlOptions, GetOptionsString)
 {
-  const char *ref = "foo=bar&key";
+  const char* ref = "foo=bar&key";
 
   CUrlOptions urlOptions(ref);
   std::string value = urlOptions.GetOptionsString();

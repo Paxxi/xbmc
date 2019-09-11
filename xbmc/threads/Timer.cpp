@@ -13,16 +13,18 @@
 #include <algorithm>
 
 CTimer::CTimer(std::function<void()> const& callback)
-  : CThread("Timer"),
-    m_callback(callback),
-    m_timeout(0),
-    m_interval(false),
-    m_endTime(0)
-{ }
+  : CThread("Timer")
+  , m_callback(callback)
+  , m_timeout(0)
+  , m_interval(false)
+  , m_endTime(0)
+{
+}
 
-CTimer::CTimer(ITimerCallback *callback)
+CTimer::CTimer(ITimerCallback* callback)
   : CTimer(std::bind(&ITimerCallback::OnTimeout, callback))
-{ }
+{
+}
 
 CTimer::~CTimer()
 {

@@ -25,4 +25,4 @@ protected:
   std::string TranslatePath(const CURL& url) override;
   static VIDEODB_CONTENT_TYPE GetType(const CURL& url);
 };
-}
+} // namespace XFILE

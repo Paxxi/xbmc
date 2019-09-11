@@ -116,7 +116,8 @@ AddonDllPtr CBinaryAddonBase::GetAddon(const IAddonInstanceHandler* handler)
 {
   if (handler == nullptr)
   {
-    CLog::Log(LOGERROR, "CBinaryAddonBase::%s: for Id '%s' called with empty instance handler", __FUNCTION__, ID().c_str());
+    CLog::Log(LOGERROR, "CBinaryAddonBase::%s: for Id '%s' called with empty instance handler",
+              __FUNCTION__, ID().c_str());
     return nullptr;
   }
 
@@ -136,7 +137,8 @@ void CBinaryAddonBase::ReleaseAddon(const IAddonInstanceHandler* handler)
 {
   if (handler == nullptr)
   {
-    CLog::Log(LOGERROR, "CBinaryAddonBase::%s: for Id '%s' called with empty instance handler", __FUNCTION__, ID().c_str());
+    CLog::Log(LOGERROR, "CBinaryAddonBase::%s: for Id '%s' called with empty instance handler",
+              __FUNCTION__, ID().c_str());
     return;
   }
 
@@ -160,4 +162,3 @@ AddonDllPtr CBinaryAddonBase::GetActiveAddon()
   CSingleLock lock(m_critSection);
   return m_activeAddon;
 }
-

@@ -12,13 +12,13 @@
 
 namespace XFILE
 {
-  class CMusicSearchDirectory : public IDirectory
-  {
-  public:
-    CMusicSearchDirectory(void);
-    ~CMusicSearchDirectory(void) override;
-    bool GetDirectory(const CURL& url, CFileItemList &items) override;
-    bool Exists(const CURL& url) override;
-    bool AllowAll() const override { return true; }
-  };
-}
+class CMusicSearchDirectory : public IDirectory
+{
+public:
+  CMusicSearchDirectory(void);
+  ~CMusicSearchDirectory(void) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool Exists(const CURL& url) override;
+  bool AllowAll() const override { return true; }
+};
+} // namespace XFILE

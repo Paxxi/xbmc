@@ -15,7 +15,8 @@
 using namespace XFILE;
 
 CVideoTagLoaderPlugin::CVideoTagLoaderPlugin(const CFileItem& item, bool forceRefresh)
-  : IVideoInfoTagLoader(item, nullptr, false), m_force_refresh(forceRefresh)
+  : IVideoInfoTagLoader(item, nullptr, false)
+  , m_force_refresh(forceRefresh)
 {
   if (forceRefresh)
     return;
@@ -32,7 +33,9 @@ bool CVideoTagLoaderPlugin::HasInfo() const
   return m_tag || m_force_refresh;
 }
 
-CInfoScanner::INFO_TYPE CVideoTagLoaderPlugin::Load(CVideoInfoTag& tag, bool, std::vector<EmbeddedArt>*)
+CInfoScanner::INFO_TYPE CVideoTagLoaderPlugin::Load(CVideoInfoTag& tag,
+                                                    bool,
+                                                    std::vector<EmbeddedArt>*)
 {
   if (m_force_refresh)
   {
@@ -47,7 +50,7 @@ CInfoScanner::INFO_TYPE CVideoTagLoaderPlugin::Load(CVideoInfoTag& tag, bool, st
       return CInfoScanner::ERROR_NFO;
     if (!items.IsEmpty())
     {
-      const CFileItemPtr &item = items[0];
+      const CFileItemPtr& item = items[0];
       m_art.reset(new CGUIListItem::ArtMap(item->GetArt()));
       if (item->HasVideoInfoTag())
       {

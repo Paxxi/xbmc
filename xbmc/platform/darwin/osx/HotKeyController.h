@@ -24,9 +24,9 @@ extern NSString* const MediaKeyPreviousNotification;
 {
   CFMachPortRef m_eventPort;
   CFRunLoopSourceRef m_runLoopSource;
-  BOOL          m_active;
-  BOOL          m_controlSysVolume;
-  BOOL          m_controlSysPower;
+  BOOL m_active;
+  BOOL m_controlSysVolume;
+  BOOL m_controlSysPower;
 }
 
 + (HotKeyController*)sharedController;
@@ -36,13 +36,13 @@ extern NSString* const MediaKeyPreviousNotification;
 
 - (CFMachPortRef)eventPort;
 
-- (void)sysPower:  (BOOL)enable;
+- (void)sysPower:(BOOL)enable;
 - (BOOL)controlPower;
 
-- (void)sysVolume: (BOOL)enable;
+- (void)sysVolume:(BOOL)enable;
 - (BOOL)controlVolume;
 
-- (void)setActive: (BOOL)active;
+- (void)setActive:(BOOL)active;
 - (BOOL)getActive;
 
 @end

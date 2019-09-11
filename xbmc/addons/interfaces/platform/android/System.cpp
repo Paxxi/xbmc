@@ -27,11 +27,10 @@ void Interface_Android::Register()
   CAddonDll::RegisterInterface(Get);
 }
 
-void* Interface_Android::Get(const std::string &name, const std::string &version)
+void* Interface_Android::Get(const std::string& name, const std::string& version)
 {
-  if (name == INTERFACE_ANDROID_SYSTEM_NAME
-  && version >= INTERFACE_ANDROID_SYSTEM_VERSION_MIN
-  && version <= INTERFACE_ANDROID_SYSTEM_VERSION)
+  if (name == INTERFACE_ANDROID_SYSTEM_NAME && version >= INTERFACE_ANDROID_SYSTEM_VERSION_MIN &&
+      version <= INTERFACE_ANDROID_SYSTEM_VERSION)
     return &function_table;
 
   return nullptr;
@@ -47,7 +46,7 @@ int Interface_Android::get_sdk_version()
   return CXBMCApp::get()->getActivity()->sdkVersion;
 }
 
-const char *Interface_Android::get_class_name()
+const char* Interface_Android::get_class_name()
 {
   return CCompileInfo::GetClass();
 }

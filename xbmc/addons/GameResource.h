@@ -25,4 +25,4 @@ public:
   bool IsAllowed(const std::string& file) const override { return true; }
 };
 
-}
+} // namespace ADDON

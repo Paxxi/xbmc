@@ -13,8 +13,8 @@
 
 #pragma once
 
-#include "ifo_types.h"
 #include "dvd_reader.h"
+#include "ifo_types.h"
 #include "nav_types.h"
 
 /*
@@ -23,7 +23,7 @@
  * A regular data block from the DVD has been returned.
  * This one should be demuxed and decoded for playback.
  */
-#define DVDNAV_BLOCK_OK			 0
+#define DVDNAV_BLOCK_OK 0
 
 
 /*
@@ -31,7 +31,7 @@
  *
  * Just ignore this.
  */
-#define DVDNAV_NOP			 1
+#define DVDNAV_NOP 1
 
 
 /*
@@ -45,9 +45,10 @@
  * A length of 0xff means an infinite still which has to be skipped
  * indirectly by some user interaction.
  */
-#define DVDNAV_STILL_FRAME		 2
+#define DVDNAV_STILL_FRAME 2
 
-typedef struct {
+typedef struct
+{
   /* The length (in seconds) the still frame should be displayed for,
    * or 0xff if infinite. */
   int length;
@@ -59,9 +60,10 @@ typedef struct {
  *
  * Inform the SPU decoding/overlaying engine to switch SPU channels.
  */
-#define DVDNAV_SPU_STREAM_CHANGE	 3
+#define DVDNAV_SPU_STREAM_CHANGE 3
 
-typedef struct {
+typedef struct
+{
   /* The physical (MPEG) stream number for widescreen SPU display.
    * Use this, if you blend the SPU on an anamorphic image before
    * unsqueezing it. */
@@ -87,9 +89,10 @@ typedef struct {
  *
  * Inform the audio decoder to switch channels.
  */
-#define DVDNAV_AUDIO_STREAM_CHANGE	 4
+#define DVDNAV_AUDIO_STREAM_CHANGE 4
 
-typedef struct {
+typedef struct
+{
   /* The physical (MPEG) stream number. */
   int physical;
 
@@ -106,12 +109,13 @@ typedef struct {
  * information only when necessary and update the decoding/displaying
  * accordingly.
  */
-#define DVDNAV_VTS_CHANGE		 5
+#define DVDNAV_VTS_CHANGE 5
 
-typedef struct {
-  int old_vtsN;                 /* the old VTS number */
+typedef struct
+{
+  int old_vtsN; /* the old VTS number */
   dvd_read_domain_t old_domain; /* the old domain */
-  int new_vtsN;                 /* the new VTS number */
+  int new_vtsN; /* the new VTS number */
   dvd_read_domain_t new_domain; /* the new domain */
 } dvdnav_vts_change_event_t;
 
@@ -126,16 +130,17 @@ typedef struct {
  * Some useful information for accurate time display is also reported
  * together with this event.
  */
-#define DVDNAV_CELL_CHANGE		 6
+#define DVDNAV_CELL_CHANGE 6
 
-typedef struct {
-  int     cellN;       /* the new cell number */
-  int     pgN;         /* the current program number */
+typedef struct
+{
+  int cellN; /* the new cell number */
+  int pgN; /* the current program number */
   int64_t cell_length; /* the length of the current cell in PTS ticks */
-  int64_t pg_length;   /* the length of the current program in PTS ticks */
-  int64_t pgc_length;  /* the length of the current program chain in PTS ticks */
-  int64_t cell_start;  /* the start time of the current cell relatively to the PGC in PTS ticks */
-  int64_t pg_start;    /* the start time of the current PG relatively to the PGC in PTS ticks */
+  int64_t pg_length; /* the length of the current program in PTS ticks */
+  int64_t pgc_length; /* the length of the current program chain in PTS ticks */
+  int64_t cell_start; /* the start time of the current cell relatively to the PGC in PTS ticks */
+  int64_t pg_start; /* the start time of the current PG relatively to the PGC in PTS ticks */
 } dvdnav_cell_change_event_t;
 
 
@@ -153,7 +158,7 @@ typedef struct {
  * NAV packets can also be used for time display, because they are
  * timestamped relatively to the current Cell.
  */
-#define DVDNAV_NAV_PACKET		 7
+#define DVDNAV_NAV_PACKET 7
 
 
 /*
@@ -162,7 +167,7 @@ typedef struct {
  * Applications should end playback here. A subsequent dvdnav_get_next_block()
  * call will restart the VM from the beginning of the DVD.
  */
-#define DVDNAV_STOP			 8
+#define DVDNAV_STOP 8
 
 
 /*
@@ -176,17 +181,18 @@ typedef struct {
  * to handle the mode 2 highlighting (that is some different colour the
  * button turns to on activation) in your application.
  */
-#define DVDNAV_HIGHLIGHT		 9
+#define DVDNAV_HIGHLIGHT 9
 
-typedef struct {
+typedef struct
+{
   /* highlight mode: 0 - hide, 1 - show, 2 - activate, currently always 1 */
   int display;
 
   /* FIXME: these fields are currently not set */
-  uint32_t palette;     /* The CLUT entries for the highlight palette
+  uint32_t palette; /* The CLUT entries for the highlight palette
 			   (4-bits per entry -> 4 entries) */
-  uint16_t sx,sy,ex,ey; /* The start/end x,y positions */
-  uint32_t pts;         /* Highlight PTS to match with SPU */
+  uint16_t sx, sy, ex, ey; /* The start/end x,y positions */
+  uint32_t pts; /* Highlight PTS to match with SPU */
 
   /* button number for the SPU decoder/overlaying engine */
   uint32_t buttonN;
@@ -199,7 +205,7 @@ typedef struct {
  * Inform the SPU decoder/overlaying engine to update its colour lookup table.
  * The CLUT is given as 16 uint32_t's in the buffer.
  */
-#define DVDNAV_SPU_CLUT_CHANGE		10
+#define DVDNAV_SPU_CLUT_CHANGE 10
 
 
 /*
@@ -208,7 +214,7 @@ typedef struct {
  * A non-seamless operation has been performed. Applications can drop all
  * their internal fifo's content, which will speed up the response.
  */
-#define DVDNAV_HOP_CHANNEL		12
+#define DVDNAV_HOP_CHANNEL 12
 
 
 /*
@@ -222,5 +228,4 @@ typedef struct {
  * when they receive this type of event.
  * Once this is achieved, call dvdnav_skip_wait().
  */
-#define DVDNAV_WAIT			13
-
+#define DVDNAV_WAIT 13

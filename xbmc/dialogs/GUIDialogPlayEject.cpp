@@ -18,11 +18,11 @@
 
 #include <utility>
 
-#define ID_BUTTON_PLAY      11
-#define ID_BUTTON_EJECT     10
+#define ID_BUTTON_PLAY 11
+#define ID_BUTTON_EJECT 10
 
 CGUIDialogPlayEject::CGUIDialogPlayEject()
-    : CGUIDialogYesNo(WINDOW_DIALOG_PLAY_EJECT)
+  : CGUIDialogYesNo(WINDOW_DIALOG_PLAY_EJECT)
 {
 }
 
@@ -75,16 +75,17 @@ void CGUIDialogPlayEject::OnInitWindow()
   CGUIDialogYesNo::OnInitWindow();
 }
 
-bool CGUIDialogPlayEject::ShowAndGetInput(const CFileItem & item,
-  unsigned int uiAutoCloseTime /* = 0 */)
+bool CGUIDialogPlayEject::ShowAndGetInput(const CFileItem& item,
+                                          unsigned int uiAutoCloseTime /* = 0 */)
 {
   // Make sure we're actually dealing with a Disc Stub
   if (!item.IsDiscStub())
     return false;
 
   // Create the dialog
-  CGUIDialogPlayEject * pDialog = (CGUIDialogPlayEject *)CServiceBroker::GetGUI()->GetWindowManager().
-    GetWindow(WINDOW_DIALOG_PLAY_EJECT);
+  CGUIDialogPlayEject* pDialog =
+      (CGUIDialogPlayEject*)CServiceBroker::GetGUI()->GetWindowManager().GetWindow(
+          WINDOW_DIALOG_PLAY_EJECT);
   if (!pDialog)
     return false;
 
@@ -93,7 +94,7 @@ bool CGUIDialogPlayEject::ShowAndGetInput(const CFileItem & item,
   CXBMCTinyXML discStubXML;
   if (discStubXML.LoadFile(item.GetPath()))
   {
-    TiXmlElement * pRootElement = discStubXML.RootElement();
+    TiXmlElement* pRootElement = discStubXML.RootElement();
     if (!pRootElement || strcmpi(pRootElement->Value(), "discstub") != 0)
       CLog::Log(LOGERROR, "Error loading %s, no <discstub> node", item.GetPath().c_str());
     else

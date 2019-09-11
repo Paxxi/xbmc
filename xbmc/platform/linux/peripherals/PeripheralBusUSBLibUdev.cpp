@@ -7,71 +7,74 @@
  */
 
 #include "PeripheralBusUSBLibUdev.h"
+
 #include "peripherals/Peripherals.h"
-extern "C" {
+extern "C"
+{
 #include <libudev.h>
 }
-#include <poll.h>
 #include "utils/log.h"
 
+#include <poll.h>
+
 #ifndef USB_CLASS_PER_INTERFACE
-#define USB_CLASS_PER_INTERFACE         0
+#define USB_CLASS_PER_INTERFACE 0
 #endif
 
 #ifndef USB_CLASS_AUDIO
-#define USB_CLASS_AUDIO                 1
+#define USB_CLASS_AUDIO 1
 #endif
 
 #ifndef USB_CLASS_COMM
-#define USB_CLASS_COMM                  2
+#define USB_CLASS_COMM 2
 #endif
 
 #ifndef USB_CLASS_HID
-#define USB_CLASS_HID                   3
+#define USB_CLASS_HID 3
 #endif
 
 #ifndef USB_CLASS_PHYSICAL
-#define USB_CLASS_PHYSICAL              5
+#define USB_CLASS_PHYSICAL 5
 #endif
 
 #ifndef USB_CLASS_PTP
-#define USB_CLASS_PTP                   6
+#define USB_CLASS_PTP 6
 #endif
 
 #ifndef USB_CLASS_PRINTER
-#define USB_CLASS_PRINTER               7
+#define USB_CLASS_PRINTER 7
 #endif
 
 #ifndef USB_CLASS_MASS_STORAGE
-#define USB_CLASS_MASS_STORAGE          8
+#define USB_CLASS_MASS_STORAGE 8
 #endif
 
 #ifndef USB_CLASS_HUB
-#define USB_CLASS_HUB                   9
+#define USB_CLASS_HUB 9
 #endif
 
 #ifndef USB_CLASS_DATA
-#define USB_CLASS_DATA                  10
+#define USB_CLASS_DATA 10
 #endif
 
 #ifndef USB_CLASS_APP_SPEC
-#define USB_CLASS_APP_SPEC              0xfe
+#define USB_CLASS_APP_SPEC 0xfe
 #endif
 
 #ifndef USB_CLASS_VENDOR_SPEC
-#define USB_CLASS_VENDOR_SPEC           0xff
+#define USB_CLASS_VENDOR_SPEC 0xff
 #endif
 
 using namespace PERIPHERALS;
 
-CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals& manager) :
-    CPeripheralBus("PeripBusUSBUdev", manager, PERIPHERAL_BUS_USB)
+CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals& manager)
+  : CPeripheralBus("PeripBusUSBUdev", manager, PERIPHERAL_BUS_USB)
 {
   /* the Process() method in this class overrides the one in CPeripheralBus, so leave this set to true */
   m_bNeedsPolling = true;
 
-  m_udev          = NULL;
-  m_udevMon       = NULL;
+  m_udev = NULL;
+  m_udevMon = NULL;
 
   if (!(m_udev = udev_new()))
   {
@@ -93,9 +96,9 @@ CPeripheralBusUSB::~CPeripheralBusUSB(void)
   udev_unref(m_udev);
 }
 
-bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults &results)
+bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults& results)
 {
-  struct udev_enumerate *enumerate;
+  struct udev_enumerate* enumerate;
   struct udev_list_entry *devices, *dev_list_entry;
   struct udev_device *dev(NULL), *parent(NULL);
   enumerate = udev_enumerate_new(m_udev);
@@ -119,7 +122,8 @@ bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults &results)
     if (bContinue)
     {
       dev = udev_device_get_parent(udev_device_get_parent(parent));
-      if (!dev || !udev_device_get_sysattr_value(dev,"idVendor") || !udev_device_get_sysattr_value(dev, "idProduct"))
+      if (!dev || !udev_device_get_sysattr_value(dev, "idVendor") ||
+          !udev_device_get_sysattr_value(dev, "idProduct"))
         bContinue = false;
     }
 
@@ -141,11 +145,13 @@ bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults &results)
       }
 
       PeripheralScanResult result(m_type);
-      result.m_iVendorId   = PeripheralTypeTranslator::HexStringToInt(udev_device_get_sysattr_value(dev, "idVendor"));
-      result.m_iProductId  = PeripheralTypeTranslator::HexStringToInt(udev_device_get_sysattr_value(dev, "idProduct"));
-      result.m_type        = GetType(iClass);
+      result.m_iVendorId =
+          PeripheralTypeTranslator::HexStringToInt(udev_device_get_sysattr_value(dev, "idVendor"));
+      result.m_iProductId =
+          PeripheralTypeTranslator::HexStringToInt(udev_device_get_sysattr_value(dev, "idProduct"));
+      result.m_type = GetType(iClass);
       result.m_strLocation = udev_device_get_syspath(dev);
-      result.m_iSequence   = GetNumberOfPeripheralsWithId(result.m_iVendorId, result.m_iProductId);
+      result.m_iSequence = GetNumberOfPeripheralsWithId(result.m_iVendorId, result.m_iProductId);
       if (!results.ContainsResult(result))
         results.m_results.push_back(result);
     }
@@ -229,12 +235,13 @@ bool CPeripheralBusUSB::WaitForUpdate()
     return false;
 
   /* we have to read the message from the queue, even though we're not actually using it */
-  struct udev_device *dev = udev_monitor_receive_device(m_udevMon);
+  struct udev_device* dev = udev_monitor_receive_device(m_udevMon);
   if (dev)
     udev_device_unref(dev);
   else
   {
-    CLog::Log(LOGERROR, "%s - failed to get device from udev_monitor_receive_device()", __FUNCTION__);
+    CLog::Log(LOGERROR, "%s - failed to get device from udev_monitor_receive_device()",
+              __FUNCTION__);
     Clear();
     return false;
   }

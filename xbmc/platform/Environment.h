@@ -57,14 +57,14 @@ public:
    * 					variable is already present, then variable will be unchanged and function returns success.
    * \return Zero on success, non-zero on error.
    */
-  static int setenv(const std::string &name, const std::string &value, int overwrite = 1);
+  static int setenv(const std::string& name, const std::string& value, int overwrite = 1);
   /**
    * \fn static int CEnvironment::unsetenv(const std::string &name);
    * \brief Deletes environment variable.
    * \param name The environment variable name to delete.
    * \return Zero on success, non-zero on error.
    */
-  static int unsetenv(const std::string &name);
+  static int unsetenv(const std::string& name);
 
   /**
    * \fn static int CEnvironment::putenv(const std::string &envstring);
@@ -73,7 +73,7 @@ public:
    * 					will be deleted from the environment.
    * \return Zero on success, non-zero on error.
    */
-  static int putenv(const std::string &envstring);
+  static int putenv(const std::string& envstring);
   /**
    * \fn static std::string CEnvironment::getenv(const std::string &name);
    * \brief Gets value of environment variable in UTF-8 encoding.
@@ -81,18 +81,20 @@ public:
    * \return Copy of of environment variable value or empty string if variable in not present in environment.
    * \sa xbmc_getenvUtf8, xbmc_getenvW
    */
-  static std::string getenv(const std::string &name);
+  static std::string getenv(const std::string& name);
+
 private:
 #ifdef TARGET_WINDOWS
-  enum updateAction:int
+  enum updateAction : int
   {
     addOrUpdateOnly = -2,
     deleteVariable = -1,
-    addOnly =  0,
+    addOnly = 0,
     autoDetect = 1
   };
-  static int win_setenv(const std::string &name, const std::string &value = "", updateAction action = autoDetect);
-  static std::string win_getenv(const std::string &name);
+  static int win_setenv(const std::string& name,
+                        const std::string& value = "",
+                        updateAction action = autoDetect);
+  static std::string win_getenv(const std::string& name);
 #endif // TARGET_WINDOWS
 };
-

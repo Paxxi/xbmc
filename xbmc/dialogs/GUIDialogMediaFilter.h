@@ -32,11 +32,12 @@ public:
   ~CGUIDialogMediaFilter() override;
 
   // specializations of CGUIControl
-  bool OnMessage(CGUIMessage &message) override;
+  bool OnMessage(CGUIMessage& message) override;
 
-  static void ShowAndEditMediaFilter(const std::string &path, CSmartPlaylist &filter);
+  static void ShowAndEditMediaFilter(const std::string& path, CSmartPlaylist& filter);
 
-  typedef struct {
+  typedef struct
+  {
     std::string mediaType;
     Field field;
     uint32_t label;
@@ -45,8 +46,8 @@ public:
     std::string controlFormat;
     CDatabaseQueryRule::SEARCH_OPERATOR ruleOperator;
     std::shared_ptr<CSetting> setting;
-    CSmartPlaylistRule *rule;
-    void *data;
+    CSmartPlaylistRule* rule;
+    void* data;
   } Filter;
 
 protected:
@@ -59,30 +60,39 @@ protected:
 
   // specialization of CGUIDialogSettingsBase
   bool AllowResettingSettings() const override { return false; }
-  void Save() override { }
+  void Save() override {}
   unsigned int GetDelayMs() const override { return 500; }
 
   // specialization of CGUIDialogSettingsManualBase
   void SetupView() override;
   void InitializeSettings() override;
 
-  bool SetPath(const std::string &path);
+  bool SetPath(const std::string& path);
   void UpdateControls();
   void TriggerFilter() const;
   void Reset(bool filtersOnly = false);
 
-  int GetItems(const Filter &filter, std::vector<std::string> &items, bool countOnly = false);
-  void GetRange(const Filter &filter, int &min, int &interval, int &max);
-  void GetRange(const Filter &filter, float &min, float &interval, float &max);
-  bool GetMinMax(const std::string &table, const std::string &field, int &min, int &max, const CDatabase::Filter &filter = CDatabase::Filter());
+  int GetItems(const Filter& filter, std::vector<std::string>& items, bool countOnly = false);
+  void GetRange(const Filter& filter, int& min, int& interval, int& max);
+  void GetRange(const Filter& filter, float& min, float& interval, float& max);
+  bool GetMinMax(const std::string& table,
+                 const std::string& field,
+                 int& min,
+                 int& max,
+                 const CDatabase::Filter& filter = CDatabase::Filter());
 
-  CSmartPlaylistRule* AddRule(Field field, CDatabaseQueryRule::SEARCH_OPERATOR ruleOperator = CDatabaseQueryRule::OPERATOR_CONTAINS);
+  CSmartPlaylistRule* AddRule(
+      Field field,
+      CDatabaseQueryRule::SEARCH_OPERATOR ruleOperator = CDatabaseQueryRule::OPERATOR_CONTAINS);
   void DeleteRule(Field field);
 
-  static void GetStringListOptions(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data);
+  static void GetStringListOptions(std::shared_ptr<const CSetting> setting,
+                                   std::vector<StringSettingOption>& list,
+                                   std::string& current,
+                                   void* data);
 
   CDbUrl* m_dbUrl;
   std::string m_mediaType;
-  CSmartPlaylist *m_filter;
+  CSmartPlaylist* m_filter;
   std::map<std::string, Filter> m_filters;
 };

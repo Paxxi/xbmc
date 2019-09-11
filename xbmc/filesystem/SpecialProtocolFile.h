@@ -21,4 +21,4 @@ public:
 protected:
   std::string TranslatePath(const CURL& url) override;
 };
-}
+} // namespace XFILE

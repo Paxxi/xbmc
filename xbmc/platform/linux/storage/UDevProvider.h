@@ -25,18 +25,18 @@ public:
   void Initialize() override;
   void Stop() override;
 
-  void GetLocalDrives(VECSOURCES &localDrives) override;
-  void GetRemovableDrives(VECSOURCES &removableDrives) override;
+  void GetLocalDrives(VECSOURCES& localDrives) override;
+  void GetRemovableDrives(VECSOURCES& removableDrives) override;
 
   bool Eject(const std::string& mountpath) override;
 
   std::vector<std::string> GetDiskUsage() override;
 
-  bool PumpDriveChangeEvents(IStorageEventsCallback *callback) override;
+  bool PumpDriveChangeEvents(IStorageEventsCallback* callback) override;
 
 private:
   void GetDisks(VECSOURCES& devices, bool removable);
 
-  struct udev         *m_udev;
-  struct udev_monitor *m_udevMon;
+  struct udev* m_udev;
+  struct udev_monitor* m_udevMon;
 };

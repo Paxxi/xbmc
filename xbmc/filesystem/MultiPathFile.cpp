@@ -16,7 +16,8 @@ using namespace XFILE;
 
 CMultiPathFile::CMultiPathFile(void)
   : COverrideFile(false)
-{ }
+{
+}
 
 CMultiPathFile::~CMultiPathFile(void) = default;
 

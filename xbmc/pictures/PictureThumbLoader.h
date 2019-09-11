@@ -21,7 +21,7 @@ public:
   bool LoadItemCached(CFileItem* pItem) override;
   bool LoadItemLookup(CFileItem* pItem) override;
   void SetRegenerateThumbs(bool regenerate) { m_regenerateThumbs = regenerate; };
-  static void ProcessFoldersAndArchives(CFileItem *pItem);
+  static void ProcessFoldersAndArchives(CFileItem* pItem);
 
   /*!
    \brief Callback from CThumbExtractor on completion of a generated image
@@ -30,7 +30,7 @@ public:
 
    \sa CImageLoader, IJobCallback
    */
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
 
 protected:
   void OnLoaderFinish() override;

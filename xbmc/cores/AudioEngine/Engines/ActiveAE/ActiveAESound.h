@@ -22,7 +22,7 @@ class CActiveAE;
 class CActiveAESound : public IAESound
 {
 public:
-  CActiveAESound (const std::string &filename, CActiveAE *ae);
+  CActiveAESound(const std::string& filename, CActiveAE* ae);
   ~CActiveAESound() override;
 
   void Play() override;
@@ -35,8 +35,8 @@ public:
   float GetVolume() override { return m_volume; }
 
   uint8_t** InitSound(bool orig, SampleConfig config, int nb_samples);
-  bool StoreSound(bool orig, uint8_t **buffer, int samples, int linesize);
-  CSoundPacket *GetSound(bool orig);
+  bool StoreSound(bool orig, uint8_t** buffer, int samples, int linesize);
+  CSoundPacket* GetSound(bool orig);
 
   bool IsConverted() { return m_isConverted; }
   void SetConverted(bool state) { m_isConverted = state; }
@@ -47,21 +47,21 @@ public:
   int GetFileSize() { return m_fileSize; }
   bool IsSeekPossible() { return m_isSeekPossible; }
 
-  static int Read(void *h, uint8_t* buf, int size);
-  static int64_t Seek(void *h, int64_t pos, int whence);
+  static int Read(void* h, uint8_t* buf, int size);
+  static int64_t Seek(void* h, int64_t pos, int whence);
 
 protected:
-  CActiveAE *m_activeAE;
+  CActiveAE* m_activeAE;
   std::string m_filename;
-  XFILE::CFile *m_pFile;
+  XFILE::CFile* m_pFile;
   bool m_isSeekPossible;
   int m_fileSize;
   float m_volume;
   AEChannel m_channel;
 
-  CSoundPacket *m_orig_sound;
-  CSoundPacket *m_dst_sound;
+  CSoundPacket* m_orig_sound;
+  CSoundPacket* m_dst_sound;
 
   bool m_isConverted;
 };
-}
+} // namespace ActiveAE

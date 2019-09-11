@@ -14,11 +14,12 @@
 #include "utils/Variant.h"
 #include "utils/XBMCTinyXML.h"
 
-#define SETTINGS_XML_ROOT   "settings"
+#define SETTINGS_XML_ROOT "settings"
 
 CSettingsBase::CSettingsBase()
   : m_settingsManager(new CSettingsManager())
-{ }
+{
+}
 
 CSettingsBase::~CSettingsBase()
 {
@@ -95,7 +96,9 @@ bool CSettingsBase::LoadHiddenValuesFromXml(const TiXmlElement* root)
   bool success = m_settingsManager->Load(root, updated, false, &loadedSettings);
   if (success)
   {
-    for(std::map<std::string, std::shared_ptr<CSetting>>::const_iterator setting = loadedSettings.begin(); setting != loadedSettings.end(); ++setting)
+    for (std::map<std::string, std::shared_ptr<CSetting>>::const_iterator setting =
+             loadedSettings.begin();
+         setting != loadedSettings.end(); ++setting)
       setting->second->SetVisible(false);
   }
 
@@ -153,7 +156,8 @@ void CSettingsBase::Uninitialize()
   m_initialized = false;
 }
 
-void CSettingsBase::RegisterCallback(ISettingCallback* callback, const std::set<std::string>& settingList)
+void CSettingsBase::RegisterCallback(ISettingCallback* callback,
+                                     const std::set<std::string>& settingList)
 {
   m_settingsManager->RegisterCallback(callback, settingList);
 }
@@ -163,7 +167,7 @@ void CSettingsBase::UnregisterCallback(ISettingCallback* callback)
   m_settingsManager->UnregisterCallback(callback);
 }
 
-bool CSettingsBase::FindIntInList(const std::string &id, int value) const
+bool CSettingsBase::FindIntInList(const std::string& id, int value) const
 {
   if (id.empty())
     return false;
@@ -255,7 +259,7 @@ bool CSettingsBase::SetList(const std::string& id, const std::vector<CVariant>& 
   return CSettingUtils::SetList(std::static_pointer_cast<CSettingList>(setting), value);
 }
 
-bool CSettingsBase::SetDefault(const std::string &id)
+bool CSettingsBase::SetDefault(const std::string& id)
 {
   return m_settingsManager->SetDefault(id);
 }

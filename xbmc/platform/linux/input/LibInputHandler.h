@@ -33,12 +33,12 @@ public:
 
 private:
   void Process() override;
-  void ProcessEvent(libinput_event *ev);
-  void DeviceAdded(libinput_device *dev);
-  void DeviceRemoved(libinput_device *dev);
+  void ProcessEvent(libinput_event* ev);
+  void DeviceAdded(libinput_device* dev);
+  void DeviceRemoved(libinput_device* dev);
 
-  udev *m_udev;
-  libinput *m_li;
+  udev* m_udev;
+  libinput* m_li;
   int m_liFd;
 
   std::unique_ptr<CLibInputKeyboard> m_keyboard;
@@ -47,4 +47,3 @@ private:
   std::unique_ptr<CLibInputTouch> m_touch;
   std::vector<libinput_device*> m_devices;
 };
-

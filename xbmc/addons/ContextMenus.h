@@ -17,7 +17,10 @@ namespace CONTEXTMENU
 
 struct CAddonInfo : CStaticContextMenuAction
 {
-  CAddonInfo() : CStaticContextMenuAction(19033) {}
+  CAddonInfo()
+    : CStaticContextMenuAction(19033)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override { return item.HasAddonInfo(); }
   bool Execute(const CFileItemPtr& item) const override
   {
@@ -27,29 +30,41 @@ struct CAddonInfo : CStaticContextMenuAction
 
 struct CAddonSettings : CStaticContextMenuAction
 {
-  CAddonSettings() : CStaticContextMenuAction(10004) {}
+  CAddonSettings()
+    : CStaticContextMenuAction(10004)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
 };
 
 struct CCheckForUpdates : CStaticContextMenuAction
 {
-  CCheckForUpdates() : CStaticContextMenuAction(24034) {}
+  CCheckForUpdates()
+    : CStaticContextMenuAction(24034)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
 };
 
 struct CEnableAddon : CStaticContextMenuAction
 {
-  CEnableAddon() : CStaticContextMenuAction(24022) {}
+  CEnableAddon()
+    : CStaticContextMenuAction(24022)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
 };
 
 struct CDisableAddon : CStaticContextMenuAction
 {
-  CDisableAddon() : CStaticContextMenuAction(24021) {}
+  CDisableAddon()
+    : CStaticContextMenuAction(24021)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
 };
-}
+} // namespace CONTEXTMENU

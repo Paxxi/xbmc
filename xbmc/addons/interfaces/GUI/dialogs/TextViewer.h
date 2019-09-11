@@ -11,10 +11,10 @@
 extern "C"
 {
 
-struct AddonGlobalInterface;
+  struct AddonGlobalInterface;
 
-namespace ADDON
-{
+  namespace ADDON
+  {
 
   /*!
    * @brief Global gui Add-on to Kodi callback functions
@@ -40,9 +40,9 @@ namespace ADDON
      * class.
      */
     //@{
-    static void open(void* kodiBase, const char *heading, const char *text);
+    static void open(void* kodiBase, const char* heading, const char* text);
     //@}
   };
 
-} /* namespace ADDON */
+  } /* namespace ADDON */
 } /* extern "C" */

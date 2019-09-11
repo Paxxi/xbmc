@@ -59,7 +59,7 @@ bool CDecoderFilter::isValid(const CDVDStreamInfo& streamInfo) const
   return true;
 }
 
-bool CDecoderFilter::Load(const TiXmlNode *node)
+bool CDecoderFilter::Load(const TiXmlNode* node)
 {
   bool flagBool = false;
 
@@ -83,7 +83,7 @@ bool CDecoderFilter::Load(const TiXmlNode *node)
   return true;
 }
 
-bool CDecoderFilter::Save(TiXmlNode *node) const
+bool CDecoderFilter::Save(TiXmlNode* node) const
 {
   // Now write each of the pieces of information we need...
   XMLUtils::SetString(node, TAG_NAME, m_name);
@@ -126,18 +126,20 @@ bool CDecoderFilterManager::Load()
   CXBMCTinyXML xmlDoc;
   if (!xmlDoc.LoadFile(fileName))
   {
-    CLog::Log(LOGERROR, "%s: error loading: line %d, %s", CLASSNAME, xmlDoc.ErrorRow(), xmlDoc.ErrorDesc());
+    CLog::Log(LOGERROR, "%s: error loading: line %d, %s", CLASSNAME, xmlDoc.ErrorRow(),
+              xmlDoc.ErrorDesc());
     return false;
   }
 
-  const TiXmlElement *pRootElement = xmlDoc.RootElement();
+  const TiXmlElement* pRootElement = xmlDoc.RootElement();
   if (!pRootElement || !StringUtils::EqualsNoCase(pRootElement->ValueStr(), TAG_ROOT))
   {
-    CLog::Log(LOGERROR, "%s: invalid root element (%s)", CLASSNAME, pRootElement->ValueStr().c_str());
+    CLog::Log(LOGERROR, "%s: invalid root element (%s)", CLASSNAME,
+              pRootElement->ValueStr().c_str());
     return false;
   }
 
-  const TiXmlElement *pFilter = pRootElement->FirstChildElement(TAG_FILTER);
+  const TiXmlElement* pFilter = pRootElement->FirstChildElement(TAG_FILTER);
   while (pFilter)
   {
     CDecoderFilter filter("");
@@ -156,7 +158,7 @@ bool CDecoderFilterManager::Save() const
 
   CXBMCTinyXML doc;
   TiXmlElement xmlRootElement(TAG_ROOT);
-  TiXmlNode *pRoot = doc.InsertEndChild(xmlRootElement);
+  TiXmlNode* pRoot = doc.InsertEndChild(xmlRootElement);
   if (pRoot == NULL)
     return false;
 
@@ -164,7 +166,7 @@ bool CDecoderFilterManager::Save() const
   {
     // Write the resolution tag
     TiXmlElement filterElem(TAG_FILTER);
-    TiXmlNode *pNode = pRoot->InsertEndChild(filterElem);
+    TiXmlNode* pNode = pRoot->InsertEndChild(filterElem);
     if (pNode == NULL)
       return false;
 

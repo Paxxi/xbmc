@@ -56,4 +56,4 @@ private:
 
   const std::map<ADDON::TYPE, std::string> m_activeSettings;
 };
-};
+}; // namespace ADDON

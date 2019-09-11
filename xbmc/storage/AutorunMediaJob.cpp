@@ -17,15 +17,17 @@
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
 
-CAutorunMediaJob::CAutorunMediaJob(const std::string &label, const std::string &path):
-  m_path(path),
-  m_label(label)
+CAutorunMediaJob::CAutorunMediaJob(const std::string& label, const std::string& path)
+  : m_path(path)
+  , m_label(label)
 {
 }
 
 bool CAutorunMediaJob::DoWork()
 {
-  CGUIDialogSelect* pDialog= CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* pDialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
 
   // wake up and turn off the screensaver if it's active
   g_application.WakeUpScreenSaverAndDPMS();
@@ -46,26 +48,27 @@ bool CAutorunMediaJob::DoWork()
   int selection = pDialog->GetSelectedItem();
   if (selection >= 0)
   {
-    std::string strAction = StringUtils::Format("ActivateWindow(%s, %s)", GetWindowString(selection), m_path.c_str());
+    std::string strAction =
+        StringUtils::Format("ActivateWindow(%s, %s)", GetWindowString(selection), m_path.c_str());
     CBuiltins::GetInstance().Execute(strAction);
   }
 
   return true;
 }
 
-const char *CAutorunMediaJob::GetWindowString(int selection)
+const char* CAutorunMediaJob::GetWindowString(int selection)
 {
   switch (selection)
   {
-    case 0:
-      return "Videos";
-    case 1:
-      return "Music";
-    case 2:
-      return "Pictures";
-    case 3:
-      return "FileManager";
-    default:
-      return "FileManager";
+  case 0:
+    return "Videos";
+  case 1:
+    return "Music";
+  case 2:
+    return "Pictures";
+  case 3:
+    return "FileManager";
+  default:
+    return "FileManager";
   }
 }

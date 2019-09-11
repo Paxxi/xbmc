@@ -53,5 +53,5 @@ public:
    */
   virtual void OnApplicationMessage(ThreadMessage* msg) = 0;
 };
-}
-}
+} // namespace MESSAGING
+} // namespace KODI

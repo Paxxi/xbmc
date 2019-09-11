@@ -35,68 +35,68 @@ class CUPnPServer;
 class CUPnP
 {
 public:
-    CUPnP();
-    ~CUPnP();
+  CUPnP();
+  ~CUPnP();
 
-    // server
-    bool StartServer();
-    void StopServer();
+  // server
+  bool StartServer();
+  void StopServer();
 
-    // client
-    void StartClient();
-    void StopClient();
-    bool IsClientStarted() { return (m_MediaBrowser != NULL); }
+  // client
+  void StartClient();
+  void StopClient();
+  bool IsClientStarted() { return (m_MediaBrowser != NULL); }
 
-    // controller
-    void StartController();
-    void StopController();
-    bool IsControllerStarted() { return (m_MediaController != NULL); }
+  // controller
+  void StartController();
+  void StopController();
+  bool IsControllerStarted() { return (m_MediaController != NULL); }
 
-    // renderer
-    bool StartRenderer();
-    void StopRenderer();
-    void UpdateState();
+  // renderer
+  bool StartRenderer();
+  void StopRenderer();
+  void UpdateState();
 
-    // class methods
-    static CUPnP* GetInstance();
-    static CUPnPServer* GetServer();
-    static void   ReleaseInstance(bool bWait);
-    static bool   IsInstantiated() { return upnp != NULL; }
+  // class methods
+  static CUPnP* GetInstance();
+  static CUPnPServer* GetServer();
+  static void ReleaseInstance(bool bWait);
+  static bool IsInstantiated() { return upnp != NULL; }
 
-    static bool MarkWatched(const CFileItem& item,
-                            const bool watched);
+  static bool MarkWatched(const CFileItem& item, const bool watched);
 
-    static bool SaveFileState(const CFileItem& item,
-                              const CBookmark& bookmark,
-                              const bool updatePlayCount);
+  static bool SaveFileState(const CFileItem& item,
+                            const CBookmark& bookmark,
+                            const bool updatePlayCount);
 
-    static void RegisterUserdata(void* ptr);
-    static void UnregisterUserdata(void* ptr);
+  static void RegisterUserdata(void* ptr);
+  static void UnregisterUserdata(void* ptr);
+
 private:
-    CUPnP(const CUPnP&) = delete;
-    CUPnP& operator=(const CUPnP&) = delete;
+  CUPnP(const CUPnP&) = delete;
+  CUPnP& operator=(const CUPnP&) = delete;
 
-    void CreateControlPoint();
-    void DestroyControlPoint();
+  void CreateControlPoint();
+  void DestroyControlPoint();
 
-    // methods
-    CUPnPRenderer* CreateRenderer(int port = 0);
-    CUPnPServer*   CreateServer(int port = 0);
+  // methods
+  CUPnPRenderer* CreateRenderer(int port = 0);
+  CUPnPServer* CreateServer(int port = 0);
 
 public:
-    PLT_SyncMediaBrowser*       m_MediaBrowser;
-    PLT_MediaController*        m_MediaController;
+  PLT_SyncMediaBrowser* m_MediaBrowser;
+  PLT_MediaController* m_MediaController;
 
 private:
-    std::string                 m_IP;
-    PLT_UPnP*                   m_UPnP;
-    NPT_LogHandler*             m_LogHandler;
-    CDeviceHostReferenceHolder* m_ServerHolder;
-    CRendererReferenceHolder*   m_RendererHolder;
-    CCtrlPointReferenceHolder*  m_CtrlPointHolder;
+  std::string m_IP;
+  PLT_UPnP* m_UPnP;
+  NPT_LogHandler* m_LogHandler;
+  CDeviceHostReferenceHolder* m_ServerHolder;
+  CRendererReferenceHolder* m_RendererHolder;
+  CCtrlPointReferenceHolder* m_CtrlPointHolder;
 
 
-    static CUPnP* upnp;
+  static CUPnP* upnp;
 };
 
 } /* namespace UPNP */

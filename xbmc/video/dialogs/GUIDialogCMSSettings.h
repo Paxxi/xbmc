@@ -32,9 +32,8 @@ protected:
   void InitializeSettings() override;
 
 private:
-  static void Cms3dLutsFiller(
-    std::shared_ptr<const CSetting> setting,
-    std::vector<StringSettingOption> &list,
-    std::string &current,
-    void *data);
+  static void Cms3dLutsFiller(std::shared_ptr<const CSetting> setting,
+                              std::vector<StringSettingOption>& list,
+                              std::string& current,
+                              void* data);
 };

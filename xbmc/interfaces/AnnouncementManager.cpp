@@ -25,7 +25,8 @@
 
 using namespace ANNOUNCEMENT;
 
-CAnnouncementManager::CAnnouncementManager() : CThread("Announce")
+CAnnouncementManager::CAnnouncementManager()
+  : CThread("Announce")
 {
 }
 
@@ -44,25 +45,25 @@ void CAnnouncementManager::Deinitialize()
   m_bStop = true;
   m_queueEvent.Set();
   StopThread();
-  CSingleLock lock (m_announcersCritSection);
+  CSingleLock lock(m_announcersCritSection);
   m_announcers.clear();
 }
 
-void CAnnouncementManager::AddAnnouncer(IAnnouncer *listener)
+void CAnnouncementManager::AddAnnouncer(IAnnouncer* listener)
 {
   if (!listener)
     return;
 
-  CSingleLock lock (m_announcersCritSection);
+  CSingleLock lock(m_announcersCritSection);
   m_announcers.push_back(listener);
 }
 
-void CAnnouncementManager::RemoveAnnouncer(IAnnouncer *listener)
+void CAnnouncementManager::RemoveAnnouncer(IAnnouncer* listener)
 {
   if (!listener)
     return;
 
-  CSingleLock lock (m_announcersCritSection);
+  CSingleLock lock(m_announcersCritSection);
   for (unsigned int i = 0; i < m_announcers.size(); i++)
   {
     if (m_announcers[i] == listener)
@@ -73,24 +74,34 @@ void CAnnouncementManager::RemoveAnnouncer(IAnnouncer *listener)
   }
 }
 
-void CAnnouncementManager::Announce(AnnouncementFlag flag, const char *sender, const char *message)
+void CAnnouncementManager::Announce(AnnouncementFlag flag, const char* sender, const char* message)
 {
   CVariant data;
   Announce(flag, sender, message, CFileItemPtr(), data);
 }
 
-void CAnnouncementManager::Announce(AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
+void CAnnouncementManager::Announce(AnnouncementFlag flag,
+                                    const char* sender,
+                                    const char* message,
+                                    const CVariant& data)
 {
   Announce(flag, sender, message, CFileItemPtr(), data);
 }
 
-void CAnnouncementManager::Announce(AnnouncementFlag flag, const char *sender, const char *message, const std::shared_ptr<const CFileItem>& item)
+void CAnnouncementManager::Announce(AnnouncementFlag flag,
+                                    const char* sender,
+                                    const char* message,
+                                    const std::shared_ptr<const CFileItem>& item)
 {
   CVariant data;
   Announce(flag, sender, message, item, data);
 }
 
-void CAnnouncementManager::Announce(AnnouncementFlag flag, const char *sender, const char *message, const std::shared_ptr<const CFileItem>& item, const CVariant &data)
+void CAnnouncementManager::Announce(AnnouncementFlag flag,
+                                    const char* sender,
+                                    const char* message,
+                                    const std::shared_ptr<const CFileItem>& item,
+                                    const CVariant& data)
 {
   CAnnounceData announcement;
   announcement.flag = flag;
@@ -102,13 +113,16 @@ void CAnnouncementManager::Announce(AnnouncementFlag flag, const char *sender, c
     announcement.item = CFileItemPtr(new CFileItem(*item));
 
   {
-    CSingleLock lock (m_queueCritSection);
+    CSingleLock lock(m_queueCritSection);
     m_announcementQueue.push_back(announcement);
   }
   m_queueEvent.Set();
 }
 
-void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
+void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag,
+                                      const char* sender,
+                                      const char* message,
+                                      const CVariant& data)
 {
   CLog::Log(LOGDEBUG, "CAnnouncementManager - Announcement: %s from %s", message, sender);
 
@@ -116,12 +130,16 @@ void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag, const char *sender,
 
   // Make a copy of announcers. They may be removed or even remove themselves during execution of IAnnouncer::Announce()!
 
-  std::vector<IAnnouncer *> announcers(m_announcers);
+  std::vector<IAnnouncer*> announcers(m_announcers);
   for (unsigned int i = 0; i < announcers.size(); i++)
     announcers[i]->Announce(flag, sender, message, data);
 }
 
-void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag, const char *sender, const char *message, CFileItemPtr item, const CVariant &data)
+void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag,
+                                      const char* sender,
+                                      const char* message,
+                                      CFileItemPtr item,
+                                      const CVariant& data)
 {
   if (item == nullptr)
   {
@@ -134,7 +152,7 @@ void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag, const char *sender,
   std::string type;
   int id = 0;
 
-  if(item->HasPVRChannelInfoTag())
+  if (item->HasPVRChannelInfoTag())
   {
     const PVR::CPVRChannelPtr channel(item->GetPVRChannelInfoTag());
     id = channel->ChannelID();
@@ -152,7 +170,7 @@ void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag, const char *sender,
 
     //! @todo Can be removed once this is properly handled when starting playback of a file
     if (id <= 0 && !item->GetPath().empty() &&
-       (!item->HasProperty(LOOKUP_PROPERTY) || item->GetProperty(LOOKUP_PROPERTY).asBoolean()))
+        (!item->HasProperty(LOOKUP_PROPERTY) || item->GetProperty(LOOKUP_PROPERTY).asBoolean()))
     {
       CVideoDatabase videodatabase;
       if (videodatabase.Open())
@@ -171,7 +189,8 @@ void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag, const char *sender,
     if (!item->GetVideoInfoTag()->m_type.empty())
       type = item->GetVideoInfoTag()->m_type;
     else
-      CVideoDatabase::VideoContentTypeToString((VIDEODB_CONTENT_TYPE)item->GetVideoContentType(), type);
+      CVideoDatabase::VideoContentTypeToString((VIDEODB_CONTENT_TYPE)item->GetVideoContentType(),
+                                               type);
 
     if (id <= 0)
     {
@@ -213,7 +232,7 @@ void CAnnouncementManager::DoAnnounce(AnnouncementFlag flag, const char *sender,
 
     //! @todo Can be removed once this is properly handled when starting playback of a file
     if (id <= 0 && !item->GetPath().empty() &&
-       (!item->HasProperty(LOOKUP_PROPERTY) || item->GetProperty(LOOKUP_PROPERTY).asBoolean()))
+        (!item->HasProperty(LOOKUP_PROPERTY) || item->GetProperty(LOOKUP_PROPERTY).asBoolean()))
     {
       CMusicDatabase musicdatabase;
       if (musicdatabase.Open())
@@ -274,14 +293,15 @@ void CAnnouncementManager::Process()
 
   while (!m_bStop)
   {
-    CSingleLock lock (m_queueCritSection);
+    CSingleLock lock(m_queueCritSection);
     if (!m_announcementQueue.empty())
     {
       auto announcement = m_announcementQueue.front();
       m_announcementQueue.pop_front();
       {
         CSingleExit ex(m_queueCritSection);
-        DoAnnounce(announcement.flag, announcement.sender.c_str(), announcement.message.c_str(), announcement.item, announcement.data);
+        DoAnnounce(announcement.flag, announcement.sender.c_str(), announcement.message.c_str(),
+                   announcement.item, announcement.data);
       }
     }
     else

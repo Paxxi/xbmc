@@ -22,19 +22,20 @@
 
 using namespace MUSIC_INFO;
 
-#define START_FADE_LENGTH  2.0f // 2 seconds on startup
+#define START_FADE_LENGTH 2.0f // 2 seconds on startup
 
-#define CONTROL_VIS          2
+#define CONTROL_VIS 2
 
 CGUIWindowVisualisation::CGUIWindowVisualisation(void)
-    : CGUIWindow(WINDOW_VISUALISATION, "MusicVisualisation.xml"),
-      m_initTimer(true), m_lockedTimer(true)
+  : CGUIWindow(WINDOW_VISUALISATION, "MusicVisualisation.xml")
+  , m_initTimer(true)
+  , m_lockedTimer(true)
 {
   m_bShowPreset = false;
   m_loadType = KEEP_IN_MEMORY;
 }
 
-bool CGUIWindowVisualisation::OnAction(const CAction &action)
+bool CGUIWindowVisualisation::OnAction(const CAction& action)
 {
   bool passToVis = false;
   switch (action.GetID())
@@ -48,13 +49,17 @@ bool CGUIWindowVisualisation::OnAction(const CAction &action)
     break;
 
   case ACTION_SHOW_INFO:
-    {
-      m_initTimer.Stop();
-      CServiceBroker::GetSettingsComponent()->GetSettings()->SetBool(CSettings::SETTING_MYMUSIC_SONGTHUMBINVIS,
-                                            CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPlayerInfoProvider().ToggleShowInfo());
-      return true;
-    }
-    break;
+  {
+    m_initTimer.Stop();
+    CServiceBroker::GetSettingsComponent()->GetSettings()->SetBool(
+        CSettings::SETTING_MYMUSIC_SONGTHUMBINVIS, CServiceBroker::GetGUI()
+                                                       ->GetInfoManager()
+                                                       .GetInfoProviders()
+                                                       .GetPlayerInfoProvider()
+                                                       .ToggleShowInfo());
+    return true;
+  }
+  break;
 
   case ACTION_SHOW_OSD:
     CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_DIALOG_MUSIC_OSD);
@@ -68,33 +73,37 @@ bool CGUIWindowVisualisation::OnAction(const CAction &action)
     break;
 
   case ACTION_VIS_PRESET_LOCK:
-    { // show the locked icon + fall through so that the vis handles the locking
-      if (!m_bShowPreset)
-      {
-        m_lockedTimer.StartZero();
-      }
-      passToVis = true;
-    }
-    break;
-  case ACTION_VIS_PRESET_SHOW:
+  { // show the locked icon + fall through so that the vis handles the locking
+    if (!m_bShowPreset)
     {
-      if (!m_lockedTimer.IsRunning() || m_bShowPreset)
-        m_bShowPreset = !m_bShowPreset;
-      return true;
+      m_lockedTimer.StartZero();
     }
-    break;
+    passToVis = true;
+  }
+  break;
+  case ACTION_VIS_PRESET_SHOW:
+  {
+    if (!m_lockedTimer.IsRunning() || m_bShowPreset)
+      m_bShowPreset = !m_bShowPreset;
+    return true;
+  }
+  break;
 
   case ACTION_DECREASE_RATING:
   case ACTION_INCREASE_RATING:
-    {
-      // actual action is taken care of in CApplication::OnAction()
-      m_initTimer.StartZero();
-      CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPlayerInfoProvider().SetShowInfo(true);
-    }
-    break;
+  {
+    // actual action is taken care of in CApplication::OnAction()
+    m_initTimer.StartZero();
+    CServiceBroker::GetGUI()
+        ->GetInfoManager()
+        .GetInfoProviders()
+        .GetPlayerInfoProvider()
+        .SetShowInfo(true);
+  }
+  break;
     //! @todo These should be mapped to its own function - at the moment it's overriding
     //! the global action of fastforward/rewind and OSD.
-/*  case KEY_BUTTON_Y:
+    /*  case KEY_BUTTON_Y:
     g_application.m_CdgParser.Pause();
     return true;
     break;
@@ -112,7 +121,7 @@ bool CGUIWindowVisualisation::OnAction(const CAction &action)
 
   if (passToVis)
   {
-    CGUIControl *control = GetControl(CONTROL_VIS);
+    CGUIControl* control = GetControl(CONTROL_VIS);
     if (control)
       return control->OnAction(action);
   }
@@ -122,64 +131,66 @@ bool CGUIWindowVisualisation::OnAction(const CAction &action)
 
 bool CGUIWindowVisualisation::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_GET_VISUALISATION:
   case GUI_MSG_VISUALISATION_RELOAD:
   case GUI_MSG_PLAYBACK_STARTED:
-    {
-      CGUIControl *control = GetControl(CONTROL_VIS);
-      if (control)
-        return control->OnMessage(message);
-    }
-    break;
+  {
+    CGUIControl* control = GetControl(CONTROL_VIS);
+    if (control)
+      return control->OnMessage(message);
+  }
+  break;
   case GUI_MSG_VISUALISATION_ACTION:
   {
     CAction action(message.GetParam1());
     return OnAction(action);
   }
   case GUI_MSG_WINDOW_DEINIT:
-    {
-      if (IsActive()) // save any changed settings from the OSD
-        CServiceBroker::GetSettingsComponent()->GetSettings()->Save();
+  {
+    if (IsActive()) // save any changed settings from the OSD
+      CServiceBroker::GetSettingsComponent()->GetSettings()->Save();
 
-      // close all active modal dialogs
-      CServiceBroker::GetGUI()->GetWindowManager().CloseInternalModalDialogs(true);
-    }
-    break;
+    // close all active modal dialogs
+    CServiceBroker::GetGUI()->GetWindowManager().CloseInternalModalDialogs(true);
+  }
+  break;
   case GUI_MSG_WINDOW_INIT:
-    {
-      // check whether we've come back here from a window during which time we've actually
-      // stopped playing music
-      if (message.GetParam1() == WINDOW_INVALID && !g_application.GetAppPlayer().IsPlayingAudio())
-      { // why are we here if nothing is playing???
-        CServiceBroker::GetGUI()->GetWindowManager().PreviousWindow();
-        return true;
-      }
-
-      // hide or show the preset button(s)
-      CGUIInfoManager& infoMgr = CServiceBroker::GetGUI()->GetInfoManager();
-      infoMgr.GetInfoProviders().GetPlayerInfoProvider().SetShowInfo(true);  // always show the info initially.
-      CGUIWindow::OnMessage(message);
-      if (infoMgr.GetCurrentSongTag())
-        m_tag = *infoMgr.GetCurrentSongTag();
-
-      if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYMUSIC_SONGTHUMBINVIS))
-      { // always on
-        m_initTimer.Stop();
-      }
-      else
-      {
-        // start display init timer (fade out after 3 secs...)
-        m_initTimer.StartZero();
-      }
+  {
+    // check whether we've come back here from a window during which time we've actually
+    // stopped playing music
+    if (message.GetParam1() == WINDOW_INVALID && !g_application.GetAppPlayer().IsPlayingAudio())
+    { // why are we here if nothing is playing???
+      CServiceBroker::GetGUI()->GetWindowManager().PreviousWindow();
       return true;
     }
+
+    // hide or show the preset button(s)
+    CGUIInfoManager& infoMgr = CServiceBroker::GetGUI()->GetInfoManager();
+    infoMgr.GetInfoProviders().GetPlayerInfoProvider().SetShowInfo(
+        true); // always show the info initially.
+    CGUIWindow::OnMessage(message);
+    if (infoMgr.GetCurrentSongTag())
+      m_tag = *infoMgr.GetCurrentSongTag();
+
+    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+            CSettings::SETTING_MYMUSIC_SONGTHUMBINVIS))
+    { // always on
+      m_initTimer.Stop();
+    }
+    else
+    {
+      // start display init timer (fade out after 3 secs...)
+      m_initTimer.StartZero();
+    }
+    return true;
+  }
   }
   return CGUIWindow::OnMessage(message);
 }
 
-EVENT_RESULT CGUIWindowVisualisation::OnMouseEvent(const CPoint &point, const CMouseEvent &event)
+EVENT_RESULT CGUIWindowVisualisation::OnMouseEvent(const CPoint& point, const CMouseEvent& event)
 {
   if (event.m_id == ACTION_MOUSE_RIGHT_CLICK)
   { // no control found to absorb this click - go back to GUI
@@ -190,7 +201,8 @@ EVENT_RESULT CGUIWindowVisualisation::OnMouseEvent(const CPoint &point, const CM
     return EVENT_RESULT_UNHANDLED;
   if (event.m_id != ACTION_MOUSE_MOVE || event.m_offsetX || event.m_offsetY)
   { // some other mouse action has occurred - bring up the OSD
-    CGUIDialog *pOSD = CServiceBroker::GetGUI()->GetWindowManager().GetDialog(WINDOW_DIALOG_MUSIC_OSD);
+    CGUIDialog* pOSD =
+        CServiceBroker::GetGUI()->GetWindowManager().GetDialog(WINDOW_DIALOG_MUSIC_OSD);
     if (pOSD)
     {
       pOSD->SetAutoClose(3000);
@@ -214,10 +226,13 @@ void CGUIWindowVisualisation::FrameMove()
     m_initTimer.StartZero();
     infoMgr.GetInfoProviders().GetPlayerInfoProvider().SetShowInfo(true);
   }
-  if (m_initTimer.IsRunning() && m_initTimer.GetElapsedSeconds() > (float)CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_songInfoDuration)
+  if (m_initTimer.IsRunning() &&
+      m_initTimer.GetElapsedSeconds() >
+          (float)CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_songInfoDuration)
   {
     m_initTimer.Stop();
-    if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYMUSIC_SONGTHUMBINVIS))
+    if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+            CSettings::SETTING_MYMUSIC_SONGTHUMBINVIS))
     { // reached end of fade in, fade out again
       infoMgr.GetInfoProviders().GetPlayerInfoProvider().SetShowInfo(false);
     }

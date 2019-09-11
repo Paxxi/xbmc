@@ -22,7 +22,7 @@ using namespace PLAYLIST;
 
 CPlayList* CPlayListFactory::Create(const std::string& filename)
 {
-  CFileItem item(filename,false);
+  CFileItem item(filename, false);
   return Create(item);
 }
 
@@ -37,21 +37,16 @@ CPlayList* CPlayListFactory::Create(const CFileItem& item)
     std::string strMimeType = item.GetMimeType();
     StringUtils::ToLower(strMimeType);
 
-    if (strMimeType == "video/x-ms-asf"
-    || strMimeType == "video/x-ms-asx"
-    || strMimeType == "video/x-ms-wmv"
-    || strMimeType == "video/x-ms-wma"
-    || strMimeType == "video/x-ms-wfs"
-    || strMimeType == "video/x-ms-wvx"
-    || strMimeType == "video/x-ms-wax")
+    if (strMimeType == "video/x-ms-asf" || strMimeType == "video/x-ms-asx" ||
+        strMimeType == "video/x-ms-wmv" || strMimeType == "video/x-ms-wma" ||
+        strMimeType == "video/x-ms-wfs" || strMimeType == "video/x-ms-wvx" ||
+        strMimeType == "video/x-ms-wax")
       return new CPlayListASX();
 
     if (strMimeType == "audio/x-pn-realaudio")
       return new CPlayListRAM();
 
-    if (strMimeType == "audio/x-scpls"
-    || strMimeType == "playlist"
-    || strMimeType == "text/html")
+    if (strMimeType == "audio/x-scpls" || strMimeType == "playlist" || strMimeType == "text/html")
       return new CPlayListPLS();
 
     // online m3u8 files are for hls streaming -- do not treat as playlist
@@ -98,7 +93,6 @@ CPlayList* CPlayListFactory::Create(const CFileItem& item)
     return new CPlayListXSPF();
 
   return NULL;
-
 }
 
 bool CPlayListFactory::IsPlaylist(const CFileItem& item)
@@ -106,7 +100,7 @@ bool CPlayListFactory::IsPlaylist(const CFileItem& item)
   std::string strMimeType = item.GetMimeType();
   StringUtils::ToLower(strMimeType);
 
-/* These are a bit uncertain
+  /* These are a bit uncertain
   if(strMimeType == "video/x-ms-asf"
   || strMimeType == "video/x-ms-asx"
   || strMimeType == "video/x-ms-wmv"
@@ -122,9 +116,8 @@ bool CPlayListFactory::IsPlaylist(const CFileItem& item)
   if (item.IsInternetStream() && item.IsType(".m3u8"))
     return false;
 
-  if(strMimeType == "audio/x-pn-realaudio"
-  || strMimeType == "playlist"
-  || strMimeType == "audio/x-mpegurl")
+  if (strMimeType == "audio/x-pn-realaudio" || strMimeType == "playlist" ||
+      strMimeType == "audio/x-mpegurl")
     return true;
 
   return IsPlaylist(item.GetDynPath());
@@ -132,13 +125,10 @@ bool CPlayListFactory::IsPlaylist(const CFileItem& item)
 
 bool CPlayListFactory::IsPlaylist(const CURL& url)
 {
-  return URIUtils::HasExtension(url,
-                                ".m3u|.b4s|.pls|.strm|.wpl|.asx|.ram|.url|.pxml|.xspf");
+  return URIUtils::HasExtension(url, ".m3u|.b4s|.pls|.strm|.wpl|.asx|.ram|.url|.pxml|.xspf");
 }
 
 bool CPlayListFactory::IsPlaylist(const std::string& filename)
 {
-  return URIUtils::HasExtension(filename,
-                     ".m3u|.b4s|.pls|.strm|.wpl|.asx|.ram|.url|.pxml|.xspf");
+  return URIUtils::HasExtension(filename, ".m3u|.b4s|.pls|.strm|.wpl|.asx|.ram|.url|.pxml|.xspf");
 }
-

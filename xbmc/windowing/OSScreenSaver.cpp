@@ -13,7 +13,7 @@
 using namespace KODI::WINDOWING;
 
 COSScreenSaverManager::COSScreenSaverManager(std::unique_ptr<IOSScreenSaver> impl)
-: m_impl{std::move(impl)}
+  : m_impl{std::move(impl)}
 {
 }
 
@@ -45,22 +45,26 @@ void COSScreenSaverManager::RemoveInhibitor()
 }
 
 COSScreenSaverInhibitor::COSScreenSaverInhibitor() noexcept
-: m_active{false}, m_manager{}
+  : m_active{false}
+  , m_manager{}
 {
 }
 
 COSScreenSaverInhibitor::COSScreenSaverInhibitor(COSScreenSaverManager* manager)
-: m_active{true}, m_manager{manager}
+  : m_active{true}
+  , m_manager{manager}
 {
 }
 
 COSScreenSaverInhibitor::COSScreenSaverInhibitor(COSScreenSaverInhibitor&& other) noexcept
-: m_active{false}, m_manager{}
+  : m_active{false}
+  , m_manager{}
 {
   *this = std::move(other);
 }
 
-COSScreenSaverInhibitor& COSScreenSaverInhibitor::operator=(COSScreenSaverInhibitor&& other) noexcept
+COSScreenSaverInhibitor& COSScreenSaverInhibitor::operator=(
+    COSScreenSaverInhibitor&& other) noexcept
 {
   Release();
   m_active = other.m_active;
@@ -93,6 +97,3 @@ COSScreenSaverInhibitor::~COSScreenSaverInhibitor() noexcept
 {
   Release();
 }
-
-
-

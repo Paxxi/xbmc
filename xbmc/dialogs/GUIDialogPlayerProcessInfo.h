@@ -16,5 +16,5 @@ public:
   CGUIDialogPlayerProcessInfo(void);
   ~CGUIDialogPlayerProcessInfo(void) override;
 
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 };

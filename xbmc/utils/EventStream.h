@@ -22,7 +22,6 @@ template<typename Event>
 class CEventStream
 {
 public:
-
   template<typename A>
   void Subscribe(A* owner, void (A::*fn)(const Event&))
   {
@@ -65,15 +64,16 @@ template<typename Event>
 class CEventSource : public CEventStream<Event>
 {
 public:
-  explicit CEventSource() : m_queue(false, 1, CJob::PRIORITY_HIGH) {};
+  explicit CEventSource()
+    : m_queue(false, 1, CJob::PRIORITY_HIGH){};
 
   template<typename A>
   void Publish(A event)
   {
     CSingleLock lock(this->m_criticalSection);
     auto& subscriptions = this->m_subscriptions;
-    auto task = [subscriptions, event](){
-      for (auto& s: subscriptions)
+    auto task = [subscriptions, event]() {
+      for (auto& s : subscriptions)
         s->HandleEvent(event);
     };
     lock.Leave();

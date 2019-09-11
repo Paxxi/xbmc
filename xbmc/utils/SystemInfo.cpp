@@ -6,33 +6,35 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <limits.h>
+#include "SystemInfo.h"
 
 #include "threads/SystemClock.h"
-#include "SystemInfo.h"
+
+#include <limits.h>
 #ifndef TARGET_POSIX
 #include <conio.h>
 #else
 #include <sys/utsname.h>
 #endif
-#include "guilib/guiinfo/GUIInfoLabels.h"
-#include "filesystem/CurlFile.h"
-#include "filesystem/File.h"
-#include "network/Network.h"
-#include "ServiceBroker.h"
-#include "rendering/RenderSystem.h"
-#include "guilib/LocalizeStrings.h"
 #include "CPUInfo.h"
 #include "CompileInfo.h"
+#include "ServiceBroker.h"
+#include "filesystem/CurlFile.h"
+#include "filesystem/File.h"
+#include "guilib/LocalizeStrings.h"
+#include "guilib/guiinfo/GUIInfoLabels.h"
+#include "network/Network.h"
+#include "platform/Filesystem.h"
+#include "rendering/RenderSystem.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "platform/Filesystem.h"
 #include "utils/log.h"
 
 #ifdef TARGET_WINDOWS
-#include <dwmapi.h>
 #include "utils/CharsetConverter.h"
+
 #include <VersionHelpers.h>
+#include <dwmapi.h>
 
 #ifdef TARGET_WINDOWS_STORE
 #include <winrt/Windows.Security.ExchangeActiveSyncProvisioning.h>
@@ -43,8 +45,9 @@ using namespace winrt::Windows::Security::ExchangeActiveSyncProvisioning;
 using namespace winrt::Windows::System;
 using namespace winrt::Windows::System::Profile;
 #endif
-#include <wincrypt.h>
 #include "platform/win32/CharsetConverter.h"
+
+#include <wincrypt.h>
 #endif
 #if defined(TARGET_DARWIN)
 #include "platform/darwin/DarwinUtils.h"
@@ -58,18 +61,20 @@ using namespace winrt::Windows::System::Profile;
 
 /* Platform identification */
 #if defined(TARGET_DARWIN)
+#include "utils/auto_buffer.h"
+
 #include <Availability.h>
 #include <mach-o/arch.h>
 #include <sys/sysctl.h>
-#include "utils/auto_buffer.h"
 #elif defined(TARGET_ANDROID)
 #include <android/api-level.h>
 #include <sys/system_properties.h>
 #elif defined(TARGET_FREEBSD)
 #include <sys/param.h>
 #elif defined(TARGET_LINUX)
-#include <linux/version.h>
 #include "utils/SysfsUtils.h"
+
+#include <linux/version.h>
 #endif
 
 #include <system_error>
@@ -86,19 +91,19 @@ static bool sysGetVersionExWByRef(OSVERSIONINFOEXW& osVerInfo)
   ZeroMemory(&osVerInfo, sizeof(osVerInfo));
   osVerInfo.dwOSVersionInfoSize = sizeof(osVerInfo);
 
-  typedef NTSTATUS(__stdcall *RtlGetVersionPtr)(RTL_OSVERSIONINFOEXW* pOsInfo);
+  typedef NTSTATUS(__stdcall * RtlGetVersionPtr)(RTL_OSVERSIONINFOEXW * pOsInfo);
   static HMODULE hNtDll = GetModuleHandleW(L"ntdll.dll");
   if (hNtDll != NULL)
   {
-    static RtlGetVersionPtr RtlGetVer = (RtlGetVersionPtr) GetProcAddress(hNtDll, "RtlGetVersion");
+    static RtlGetVersionPtr RtlGetVer = (RtlGetVersionPtr)GetProcAddress(hNtDll, "RtlGetVersion");
     if (RtlGetVer && RtlGetVer(&osVerInfo) == 0)
       return true;
   }
   // failed to get OS information directly from ntdll.dll
   // use GetVersionExW() as fallback
   // note: starting from Windows 8.1 GetVersionExW() may return unfaithful information
-  if (GetVersionExW((OSVERSIONINFOW*) &osVerInfo) != 0)
-      return true;
+  if (GetVersionExW((OSVERSIONINFOW*)&osVerInfo) != 0)
+    return true;
 
   ZeroMemory(&osVerInfo, sizeof(osVerInfo));
   return false;
@@ -174,7 +179,8 @@ static std::string getValueFromOs_release(std::string key)
   }
 
   // unescape characters
-  for (size_t slashPos = value.find('\\'); slashPos < value.length() - 1; slashPos = value.find('\\', slashPos))
+  for (size_t slashPos = value.find('\\'); slashPos < value.length() - 1;
+       slashPos = value.find('\\', slashPos))
   {
     if (value[slashPos + 1] == '\n')
       value.erase(slashPos, 2);
@@ -247,18 +253,20 @@ CSysInfoJob::CSysInfoJob() = default;
 
 bool CSysInfoJob::DoWork()
 {
-  m_info.systemUptime      = GetSystemUpTime(false);
+  m_info.systemUptime = GetSystemUpTime(false);
   m_info.systemTotalUptime = GetSystemUpTime(true);
-  m_info.internetState     = GetInternetState();
-  m_info.videoEncoder      = GetVideoEncoder();
-  m_info.cpuFrequency      = GetCPUFreqInfo();
-  m_info.osVersionInfo     = CSysInfo::GetOsPrettyNameWithVersion() + " (kernel: " + CSysInfo::GetKernelName() + " " + CSysInfo::GetKernelVersionFull() + ")";
-  m_info.macAddress        = GetMACAddress();
-  m_info.batteryLevel      = GetBatteryLevel();
+  m_info.internetState = GetInternetState();
+  m_info.videoEncoder = GetVideoEncoder();
+  m_info.cpuFrequency = GetCPUFreqInfo();
+  m_info.osVersionInfo = CSysInfo::GetOsPrettyNameWithVersion() +
+                         " (kernel: " + CSysInfo::GetKernelName() + " " +
+                         CSysInfo::GetKernelVersionFull() + ")";
+  m_info.macAddress = GetMACAddress();
+  m_info.batteryLevel = GetBatteryLevel();
   return true;
 }
 
-const CSysData &CSysInfoJob::GetData() const
+const CSysData& CSysInfoJob::GetData() const
 {
   return m_info;
 }
@@ -300,21 +308,22 @@ std::string CSysInfoJob::GetBatteryLevel()
 
 double CSysInfoJob::GetCPUFrequency()
 {
-#if defined (TARGET_POSIX) || defined(TARGET_WINDOWS)
-  return double (g_cpuInfo.getCPUFrequency());
+#if defined(TARGET_POSIX) || defined(TARGET_WINDOWS)
+  return double(g_cpuInfo.getCPUFrequency());
 #else
   return 0;
 #endif
 }
 
-bool CSysInfoJob::SystemUpTime(int iInputMinutes, int &iMinutes, int &iHours, int &iDays)
+bool CSysInfoJob::SystemUpTime(int iInputMinutes, int& iMinutes, int& iHours, int& iDays)
 {
-  iHours = 0; iDays = 0;
+  iHours = 0;
+  iDays = 0;
   iMinutes = iInputMinutes;
   if (iMinutes >= 60) // Hour's
   {
     iHours = iMinutes / 60;
-    iMinutes = iMinutes - (iHours *60);
+    iMinutes = iMinutes - (iHours * 60);
   }
   if (iHours >= 24) // Days
   {
@@ -327,9 +336,9 @@ bool CSysInfoJob::SystemUpTime(int iInputMinutes, int &iMinutes, int &iHours, in
 std::string CSysInfoJob::GetSystemUpTime(bool bTotalUptime)
 {
   std::string strSystemUptime;
-  int iInputMinutes, iMinutes,iHours,iDays;
+  int iInputMinutes, iMinutes, iHours, iDays;
 
-  if(bTotalUptime)
+  if (bTotalUptime)
   {
     //Total Uptime
     iInputMinutes = g_sysinfo.GetTotalUptime() + ((int)(XbmcThreads::SystemClockMillis() / 60000));
@@ -340,31 +349,29 @@ std::string CSysInfoJob::GetSystemUpTime(bool bTotalUptime)
     iInputMinutes = (int)(XbmcThreads::SystemClockMillis() / 60000);
   }
 
-  SystemUpTime(iInputMinutes,iMinutes, iHours, iDays);
+  SystemUpTime(iInputMinutes, iMinutes, iHours, iDays);
   if (iDays > 0)
   {
-    strSystemUptime = StringUtils::Format("%i %s, %i %s, %i %s",
-                                          iDays, g_localizeStrings.Get(12393).c_str(),
-                                          iHours, g_localizeStrings.Get(12392).c_str(),
-                                          iMinutes, g_localizeStrings.Get(12391).c_str());
+    strSystemUptime = StringUtils::Format(
+        "%i %s, %i %s, %i %s", iDays, g_localizeStrings.Get(12393).c_str(), iHours,
+        g_localizeStrings.Get(12392).c_str(), iMinutes, g_localizeStrings.Get(12391).c_str());
   }
-  else if (iDays == 0 && iHours >= 1 )
+  else if (iDays == 0 && iHours >= 1)
   {
-    strSystemUptime = StringUtils::Format("%i %s, %i %s",
-                                          iHours, g_localizeStrings.Get(12392).c_str(),
-                                          iMinutes, g_localizeStrings.Get(12391).c_str());
+    strSystemUptime =
+        StringUtils::Format("%i %s, %i %s", iHours, g_localizeStrings.Get(12392).c_str(), iMinutes,
+                            g_localizeStrings.Get(12391).c_str());
   }
-  else if (iDays == 0 && iHours == 0 &&  iMinutes >= 0)
+  else if (iDays == 0 && iHours == 0 && iMinutes >= 0)
   {
-    strSystemUptime = StringUtils::Format("%i %s",
-                                          iMinutes, g_localizeStrings.Get(12391).c_str());
+    strSystemUptime = StringUtils::Format("%i %s", iMinutes, g_localizeStrings.Get(12391).c_str());
   }
   return strSystemUptime;
 }
 
 std::string CSysInfo::TranslateInfo(int info) const
 {
-  switch(info)
+  switch (info)
   {
   case SYSTEM_VIDEO_ENCODER_INFO:
     return m_info.videoEncoder;
@@ -395,7 +402,8 @@ void CSysInfo::Reset()
   m_info.Reset();
 }
 
-CSysInfo::CSysInfo(void) : CInfoLoader(15 * 1000)
+CSysInfo::CSysInfo(void)
+  : CInfoLoader(15 * 1000)
 {
   memset(MD5_Sign, 0, sizeof(MD5_Sign));
   m_iSystemTimeTotalUp = 0;
@@ -403,24 +411,24 @@ CSysInfo::CSysInfo(void) : CInfoLoader(15 * 1000)
 
 CSysInfo::~CSysInfo() = default;
 
-bool CSysInfo::Load(const TiXmlNode *settings)
+bool CSysInfo::Load(const TiXmlNode* settings)
 {
   if (settings == NULL)
     return false;
 
-  const TiXmlElement *pElement = settings->FirstChildElement("general");
+  const TiXmlElement* pElement = settings->FirstChildElement("general");
   if (pElement)
     XMLUtils::GetInt(pElement, "systemtotaluptime", m_iSystemTimeTotalUp, 0, INT_MAX);
 
   return true;
 }
 
-bool CSysInfo::Save(TiXmlNode *settings) const
+bool CSysInfo::Save(TiXmlNode* settings) const
 {
   if (settings == NULL)
     return false;
 
-  TiXmlNode *generalNode = settings->FirstChild("general");
+  TiXmlNode* generalNode = settings->FirstChild("general");
   if (generalNode == NULL)
   {
     TiXmlElement generalNodeNew("general");
@@ -441,11 +449,16 @@ const std::string& CSysInfo::GetAppName(void)
   return appName;
 }
 
-bool CSysInfo::GetDiskSpace(std::string drive,int& iTotal, int& iTotalFree, int& iTotalUsed, int& iPercentFree, int& iPercentUsed)
+bool CSysInfo::GetDiskSpace(std::string drive,
+                            int& iTotal,
+                            int& iTotalFree,
+                            int& iTotalUsed,
+                            int& iPercentFree,
+                            int& iPercentUsed)
 {
   using namespace KODI::PLATFORM::FILESYSTEM;
 
-  space_info total = { 0 };
+  space_info total = {0};
   std::error_code ec;
 
   // None of this makes sense but the idea of total space
@@ -561,12 +574,13 @@ std::string CSysInfo::GetKernelVersionFull(void)
 #if defined(TARGET_WINDOWS_DESKTOP)
   OSVERSIONINFOEXW osvi;
   if (sysGetVersionExWByRef(osvi))
-    kernelVersionFull = StringUtils::Format("%d.%d.%d", osvi.dwMajorVersion, osvi.dwMinorVersion, osvi.dwBuildNumber);
-#elif  defined(TARGET_WINDOWS_STORE)
+    kernelVersionFull = StringUtils::Format("%d.%d.%d", osvi.dwMajorVersion, osvi.dwMinorVersion,
+                                            osvi.dwBuildNumber);
+#elif defined(TARGET_WINDOWS_STORE)
   // get the system version number
   auto sv = AnalyticsInfo::VersionInfo().DeviceFamilyVersion();
   wchar_t* end;
-  unsigned long long  v = wcstoull(sv.c_str(), &end, 10);
+  unsigned long long v = wcstoull(sv.c_str(), &end, 10);
   unsigned long long v1 = (v & 0xFFFF000000000000L) >> 48;
   unsigned long long v2 = (v & 0x0000FFFF00000000L) >> 32;
   unsigned long long v3 = (v & 0x00000000FFFF0000L) >> 16;
@@ -603,7 +617,7 @@ std::string CSysInfo::GetOsName(bool emptyIfUnknown /* = false*/)
   static std::string osName;
   if (osName.empty())
   {
-#if defined (TARGET_WINDOWS)
+#if defined(TARGET_WINDOWS)
     osName = GetKernelName() + "-based OS";
 #elif defined(TARGET_FREEBSD)
     osName = GetKernelName(true); // FIXME: for FreeBSD OS name is a kernel name
@@ -611,7 +625,7 @@ std::string CSysInfo::GetOsName(bool emptyIfUnknown /* = false*/)
     osName = "iOS";
 #elif defined(TARGET_DARWIN_OSX)
     osName = "OS X";
-#elif defined (TARGET_ANDROID)
+#elif defined(TARGET_ANDROID)
     osName = "Android";
 #elif defined(TARGET_LINUX)
     osName = getValueFromOs_release("NAME");
@@ -674,7 +688,7 @@ std::string CSysInfo::GetOsPrettyNameWithVersion(void)
   if (!osNameVer.empty())
     return osNameVer;
 
-#if defined (TARGET_WINDOWS_DESKTOP)
+#if defined(TARGET_WINDOWS_DESKTOP)
   OSVERSIONINFOEXW osvi = {};
 
   osNameVer = "Windows ";
@@ -732,7 +746,8 @@ std::string CSysInfo::GetOsPrettyNameWithVersion(void)
 #elif defined(TARGET_FREEBSD) || defined(TARGET_DARWIN)
   osNameVer = GetOsName() + " " + GetOsVersion();
 #elif defined(TARGET_ANDROID)
-  osNameVer = GetOsName() + " " + GetOsVersion() + " API level " +   StringUtils::Format("%d", CJNIBuild::SDK_INT);
+  osNameVer = GetOsName() + " " + GetOsVersion() + " API level " +
+              StringUtils::Format("%d", CJNIBuild::SDK_INT);
 #elif defined(TARGET_LINUX)
   osNameVer = getValueFromOs_release("PRETTY_NAME");
   if (osNameVer.empty())
@@ -753,7 +768,6 @@ std::string CSysInfo::GetOsPrettyNameWithVersion(void)
     osNameVer = "Unknown OS Unknown version";
 
   return osNameVer;
-
 }
 
 std::string CSysInfo::GetManufacturerName(void)
@@ -813,7 +827,8 @@ std::string CSysInfo::GetModelName(void)
     {
       XUTILS::auto_buffer buf(nameLen);
       if (sysctlbyname("hw.model", buf.get(), &nameLen, NULL, 0) == 0 && nameLen == buf.size())
-        modelName.assign(buf.get(), nameLen - 1); // assign exactly 'nameLen-1' characters to 'modelName'
+        modelName.assign(buf.get(),
+                         nameLen - 1); // assign exactly 'nameLen-1' characters to 'modelName'
     }
 #elif defined(TARGET_WINDOWS_STORE)
     auto eas = EasClientDeviceInformation();
@@ -879,11 +894,11 @@ CSysInfo::WindowsVersion CSysInfo::GetWindowsVersion()
       else if (osvi.dwMajorVersion == 10 && osvi.dwMinorVersion == 0 && osvi.dwBuildNumber >= 16299)
         m_WinVer = WindowsVersionWin10_FCU;
       /* Insert checks for new Windows versions here */
-      else if ( (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion > 3) || osvi.dwMajorVersion > 10)
+      else if ((osvi.dwMajorVersion == 6 && osvi.dwMinorVersion > 3) || osvi.dwMajorVersion > 10)
         m_WinVer = WindowsVersionFuture;
     }
   }
-#elif  defined(TARGET_WINDOWS_STORE)
+#elif defined(TARGET_WINDOWS_STORE)
   m_WinVer = WindowsVersionWin10;
 #endif // TARGET_WINDOWS
   return m_WinVer;
@@ -916,7 +931,8 @@ int CSysInfo::GetKernelBitness(void)
 #elif defined(TARGET_WINDOWS_DESKTOP)
     SYSTEM_INFO si;
     GetNativeSystemInfo(&si);
-    if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL || si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM)
+    if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL ||
+        si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM)
       kernelBitness = 32;
     else if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
       kernelBitness = 64;
@@ -936,8 +952,8 @@ int CSysInfo::GetKernelBitness(void)
     if (uname(&un) == 0)
     {
       std::string machine(un.machine);
-      if (machine == "x86_64" || machine == "amd64" || machine == "arm64" || machine == "aarch64" || machine == "ppc64" ||
-          machine == "ia64" || machine == "mips64" || machine == "s390x")
+      if (machine == "x86_64" || machine == "amd64" || machine == "arm64" || machine == "aarch64" ||
+          machine == "ppc64" || machine == "ia64" || machine == "mips64" || machine == "s390x")
         kernelBitness = 64;
       else
         kernelBitness = 32;
@@ -960,14 +976,15 @@ const std::string& CSysInfo::GetKernelCpuFamily(void)
     GetNativeSystemInfo(&si);
     if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL ||
         si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
-        kernelCpuFamily = "x86";
+      kernelCpuFamily = "x86";
     else if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM)
       kernelCpuFamily = "ARM";
 #elif defined(TARGET_DARWIN)
     const NXArchInfo* archInfo = NXGetLocalArchInfo();
     if (archInfo)
     {
-      const cpu_type_t cpuType = (archInfo->cputype & ~CPU_ARCH_ABI64); // get CPU family without 64-bit ABI flag
+      const cpu_type_t cpuType =
+          (archInfo->cputype & ~CPU_ARCH_ABI64); // get CPU family without 64-bit ABI flag
       if (cpuType == CPU_TYPE_I386)
         kernelCpuFamily = "x86";
       else if (cpuType == CPU_TYPE_ARM)
@@ -988,7 +1005,8 @@ const std::string& CSysInfo::GetKernelCpuFamily(void)
         kernelCpuFamily = "ARM";
       else if (machine.compare(0, 4, "mips", 4) == 0)
         kernelCpuFamily = "MIPS";
-      else if (machine.compare(0, 4, "i686", 4) == 0 || machine == "i386" || machine == "amd64" ||  machine.compare(0, 3, "x86", 3) == 0)
+      else if (machine.compare(0, 4, "i686", 4) == 0 || machine == "i386" || machine == "amd64" ||
+               machine.compare(0, 3, "x86", 3) == 0)
         kernelCpuFamily = "x86";
       else if (machine.compare(0, 4, "s390", 4) == 0)
         kernelCpuFamily = "s390";
@@ -1016,8 +1034,8 @@ bool CSysInfo::HasInternet()
 
 std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
 {
- int percent;
- return GetHddSpaceInfo( percent, drive, shortText);
+  int percent;
+  return GetHddSpaceInfo(percent, drive, shortText);
 }
 
 std::string CSysInfo::GetHddSpaceInfo(int& percent, int drive, bool shortText)
@@ -1029,19 +1047,19 @@ std::string CSysInfo::GetHddSpaceInfo(int& percent, int drive, bool shortText)
   {
     if (shortText)
     {
-      switch(drive)
+      switch (drive)
       {
-        case SYSTEM_FREE_SPACE:
-          percent = percentFree;
-          break;
-        case SYSTEM_USED_SPACE:
-          percent = percentused;
-          break;
+      case SYSTEM_FREE_SPACE:
+        percent = percentFree;
+        break;
+      case SYSTEM_USED_SPACE:
+        percent = percentused;
+        break;
       }
     }
     else
     {
-      switch(drive)
+      switch (drive)
       {
       case SYSTEM_FREE_SPACE:
         strRet = StringUtils::Format("%i MB %s", totalFree, g_localizeStrings.Get(160).c_str());
@@ -1083,7 +1101,7 @@ std::string CSysInfo::GetUserAgent()
 #ifndef TARGET_WINDOWS_STORE
   BOOL bIsWow = FALSE;
   if (IsWow64Process(GetCurrentProcess(), &bIsWow) && bIsWow)
-      result.append("; WOW64");
+    result.append("; WOW64");
   else
 #endif
   {
@@ -1100,14 +1118,14 @@ std::string CSysInfo::GetUserAgent()
 #if defined(TARGET_DARWIN_EMBEDDED)
   std::string iDevStr(GetModelName()); // device model name with number of model version
   size_t iDevStrDigit = iDevStr.find_first_of("0123456789");
-  std::string iDev(iDevStr, 0, iDevStrDigit);  // device model name without number
+  std::string iDev(iDevStr, 0, iDevStrDigit); // device model name without number
   if (iDevStrDigit == 0)
     iDev = "unknown";
   result += iDev + "; ";
   std::string iOSVersion(GetOsVersion());
   size_t lastDotPos = iOSVersion.rfind('.');
-  if (lastDotPos != std::string::npos && iOSVersion.find('.') != lastDotPos
-      && iOSVersion.find_first_not_of('0', lastDotPos + 1) == std::string::npos)
+  if (lastDotPos != std::string::npos && iOSVersion.find('.') != lastDotPos &&
+      iOSVersion.find_first_not_of('0', lastDotPos + 1) == std::string::npos)
     iOSVersion.erase(lastDotPos);
   StringUtils::Replace(iOSVersion, '.', '_');
   if (iDev == "iPad" || iDev == "AppleTV")
@@ -1168,7 +1186,8 @@ std::string CSysInfo::GetUserAgent()
   result += ")";
 
   if (GetAppName() != "Kodi")
-    result += " Kodi_Fork_" + GetAppName() + "/1.0"; // default fork number is '1.0', replace it with actual number if necessary
+    result += " Kodi_Fork_" + GetAppName() +
+              "/1.0"; // default fork number is '1.0', replace it with actual number if necessary
 
 #ifdef TARGET_LINUX
   // Add distribution name
@@ -1179,7 +1198,7 @@ std::string CSysInfo::GetUserAgent()
 
 #ifdef TARGET_RASPBERRY_PI
   result += " HW_RaspberryPi/1.0";
-#elif defined (TARGET_DARWIN_EMBEDDED)
+#elif defined(TARGET_DARWIN_EMBEDDED)
   std::string iDevVer;
   if (iDevStrDigit == std::string::npos)
     iDevVer = "0.0";
@@ -1214,7 +1233,8 @@ std::string CSysInfo::GetUserAgent()
 
 std::string CSysInfo::GetDeviceName()
 {
-  std::string friendlyName = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_SERVICES_DEVICENAME);
+  std::string friendlyName = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+      CSettings::SETTING_SERVICES_DEVICENAME);
   if (StringUtils::EqualsNoCase(friendlyName, CCompileInfo::GetAppName()))
   {
     std::string hostname("[unknown]");
@@ -1232,7 +1252,8 @@ std::string CSysInfo::GetVersionShort()
   if (strlen(CCompileInfo::GetSuffix()) == 0)
     return StringUtils::Format("%d.%d", CCompileInfo::GetMajor(), CCompileInfo::GetMinor());
   else
-    return StringUtils::Format("%d.%d-%s", CCompileInfo::GetMajor(), CCompileInfo::GetMinor(), CCompileInfo::GetSuffix());
+    return StringUtils::Format("%d.%d-%s", CCompileInfo::GetMajor(), CCompileInfo::GetMinor(),
+                               CCompileInfo::GetSuffix());
 }
 
 std::string CSysInfo::GetVersion()
@@ -1296,20 +1317,25 @@ std::string CSysInfo::GetBuildTargetPlatformVersionDecoded(void)
 #if defined(TARGET_DARWIN_OSX)
 #if defined(MAC_OS_X_VERSION_10_10) && __MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
   if (__MAC_OS_X_VERSION_MIN_REQUIRED % 10)
-    return StringUtils::Format("version %d.%d", (__MAC_OS_X_VERSION_MIN_REQUIRED / 1000) % 100, (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 100);
+    return StringUtils::Format("version %d.%d", (__MAC_OS_X_VERSION_MIN_REQUIRED / 1000) % 100,
+                               (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 100);
   else
     return StringUtils::Format("version %d.%d.%d", (__MAC_OS_X_VERSION_MIN_REQUIRED / 1000) % 100,
-    (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 100, __MAC_OS_X_VERSION_MIN_REQUIRED % 10);
-#else  // defined(MAC_OS_X_VERSION_10_10) && __MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
+                               (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 100,
+                               __MAC_OS_X_VERSION_MIN_REQUIRED % 10);
+#else // defined(MAC_OS_X_VERSION_10_10) && __MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
   if (__MAC_OS_X_VERSION_MIN_REQUIRED % 10)
-    return StringUtils::Format("version %d.%d", (__MAC_OS_X_VERSION_MIN_REQUIRED / 100) % 100, (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 10);
+    return StringUtils::Format("version %d.%d", (__MAC_OS_X_VERSION_MIN_REQUIRED / 100) % 100,
+                               (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 10);
   else
     return StringUtils::Format("version %d.%d.%d", (__MAC_OS_X_VERSION_MIN_REQUIRED / 100) % 100,
-      (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 10, __MAC_OS_X_VERSION_MIN_REQUIRED % 10);
+                               (__MAC_OS_X_VERSION_MIN_REQUIRED / 10) % 10,
+                               __MAC_OS_X_VERSION_MIN_REQUIRED % 10);
 #endif // defined(MAC_OS_X_VERSION_10_10) && __MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
 #elif defined(TARGET_DARWIN_IOS)
   return StringUtils::Format("version %d.%d.%d", (__IPHONE_OS_VERSION_MIN_REQUIRED / 10000) % 100,
-                             (__IPHONE_OS_VERSION_MIN_REQUIRED / 100) % 100, __IPHONE_OS_VERSION_MIN_REQUIRED % 100);
+                             (__IPHONE_OS_VERSION_MIN_REQUIRED / 100) % 100,
+                             __IPHONE_OS_VERSION_MIN_REQUIRED % 100);
 #elif defined(TARGET_FREEBSD)
   // FIXME: should works well starting from FreeBSD 8.1
   static const int major = (__FreeBSD_version / 100000) % 100;
@@ -1324,10 +1350,12 @@ std::string CSysInfo::GetBuildTargetPlatformVersionDecoded(void)
 #elif defined(TARGET_ANDROID)
   return "API level " XSTR_MACRO(__ANDROID_API__);
 #elif defined(TARGET_LINUX)
-  return StringUtils::Format("version %d.%d.%d", (LINUX_VERSION_CODE >> 16) & 0xFF , (LINUX_VERSION_CODE >> 8) & 0xFF, LINUX_VERSION_CODE & 0xFF);
+  return StringUtils::Format("version %d.%d.%d", (LINUX_VERSION_CODE >> 16) & 0xFF,
+                             (LINUX_VERSION_CODE >> 8) & 0xFF, LINUX_VERSION_CODE & 0xFF);
 #elif defined(TARGET_WINDOWS)
 #ifdef NTDDI_VERSION
-  std::string version(StringUtils::Format("version %d.%d", int(NTDDI_VERSION >> 24) & 0xFF, int(NTDDI_VERSION >> 16) & 0xFF));
+  std::string version(StringUtils::Format("version %d.%d", int(NTDDI_VERSION >> 24) & 0xFF,
+                                          int(NTDDI_VERSION >> 16) & 0xFF));
   if (SPVER(NTDDI_VERSION))
     version += StringUtils::Format(" SP%d", int(SPVER(NTDDI_VERSION)));
   return version;
@@ -1343,16 +1371,19 @@ std::string CSysInfo::GetBuildTargetCpuFamily(void)
 {
 #if defined(__thumb__) || defined(_M_ARMT)
   return "ARM (Thumb)";
-#elif defined(__arm__) || defined(_M_ARM) || defined (__aarch64__)
+#elif defined(__arm__) || defined(_M_ARM) || defined(__aarch64__)
   return "ARM";
 #elif defined(__mips__) || defined(mips) || defined(__mips)
   return "MIPS";
-#elif defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64) || \
-   defined(i386) || defined(__i386) || defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__) || defined(_M_IX86) || defined(_X86_)
+#elif defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || \
+    defined(_M_X64) || defined(_M_AMD64) || defined(i386) || defined(__i386) || \
+    defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__) || \
+    defined(_M_IX86) || defined(_X86_)
   return "x86";
 #elif defined(__s390x__)
   return "s390";
-#elif defined(__powerpc) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ppc__) || defined(__ppc64__) || defined(_M_PPC)
+#elif defined(__powerpc) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ppc__) || \
+    defined(__ppc64__) || defined(_M_PPC)
   return "PowerPC";
 #else
   return "unknown CPU family";
@@ -1365,11 +1396,12 @@ std::string CSysInfo::GetUsedCompilerNameAndVer(void)
 #ifdef __clang_version__
   return "Clang " __clang_version__;
 #else // ! __clang_version__
-  return "Clang " XSTR_MACRO(__clang_major__) "." XSTR_MACRO(__clang_minor__) "." XSTR_MACRO(__clang_patchlevel__);
+  return "Clang " XSTR_MACRO(__clang_major__) "." XSTR_MACRO(__clang_minor__) "." XSTR_MACRO(
+      __clang_patchlevel__);
 #endif //! __clang_version__
-#elif defined (__INTEL_COMPILER)
+#elif defined(__INTEL_COMPILER)
   return "Intel Compiler " XSTR_MACRO(__INTEL_COMPILER);
-#elif defined (__GNUC__)
+#elif defined(__GNUC__)
   std::string compilerStr;
 #ifdef __llvm__
   /* Note: this will not detect GCC + DragonEgg */
@@ -1377,9 +1409,10 @@ std::string CSysInfo::GetUsedCompilerNameAndVer(void)
 #else // __llvm__
   compilerStr = "GCC ";
 #endif // !__llvm__
-  compilerStr += XSTR_MACRO(__GNUC__) "." XSTR_MACRO(__GNUC_MINOR__) "." XSTR_MACRO(__GNUC_PATCHLEVEL__);
+  compilerStr +=
+      XSTR_MACRO(__GNUC__) "." XSTR_MACRO(__GNUC_MINOR__) "." XSTR_MACRO(__GNUC_PATCHLEVEL__);
   return compilerStr;
-#elif defined (_MSC_VER)
+#elif defined(_MSC_VER)
   return "MSVC " XSTR_MACRO(_MSC_FULL_VER);
 #else
   return "unknown compiler";
@@ -1423,12 +1456,12 @@ CSysInfo::WindowsDeviceFamily CSysInfo::GetWindowsDeviceFamily()
   return WindowsDeviceFamily::Desktop;
 }
 
-CJob *CSysInfo::GetJob() const
+CJob* CSysInfo::GetJob() const
 {
   return new CSysInfoJob();
 }
 
-void CSysInfo::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CSysInfo::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   m_info = static_cast<CSysInfoJob*>(job)->GetData();
   CInfoLoader::OnJobComplete(jobID, success, job);

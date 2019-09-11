@@ -63,5 +63,5 @@ enum class RENDERFEATURE
   PIXEL_RATIO,
 };
 
-}
-}
+} // namespace RETRO
+} // namespace KODI

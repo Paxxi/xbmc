@@ -7,14 +7,16 @@
  */
 
 #include "SysfsUtils.h"
-#include "utils/log.h"
-#include "utils/StringUtils.h"
 
-#include <unistd.h>
+#include "utils/StringUtils.h"
+#include "utils/log.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <string.h>
+
+#include <fcntl.h>
+#include <unistd.h>
 
 #ifdef TARGET_WINDOWS_STORE
 #include <io.h>
@@ -31,7 +33,7 @@ int SysfsUtils::SetString(const std::string& path, const std::string& valstr)
     close(fd);
   }
   if (ret)
-    CLog::Log(LOGERROR, "%s: error writing %s",__FUNCTION__, path.c_str());
+    CLog::Log(LOGERROR, "%s: error writing %s", __FUNCTION__, path.c_str());
 
   return ret;
 }
@@ -54,7 +56,7 @@ int SysfsUtils::GetString(const std::string& path, std::string& valstr)
     return 0;
   }
 
-  CLog::Log(LOGERROR, "%s: error reading %s",__FUNCTION__, path.c_str());
+  CLog::Log(LOGERROR, "%s: error reading %s", __FUNCTION__, path.c_str());
   valstr = "fail";
   return -1;
 }
@@ -72,7 +74,7 @@ int SysfsUtils::SetInt(const std::string& path, const int val)
     close(fd);
   }
   if (ret)
-    CLog::Log(LOGERROR, "%s: error writing %s",__FUNCTION__, path.c_str());
+    CLog::Log(LOGERROR, "%s: error writing %s", __FUNCTION__, path.c_str());
 
   return ret;
 }
@@ -92,12 +94,12 @@ int SysfsUtils::GetInt(const std::string& path, int& val)
     close(fd);
   }
   if (ret)
-    CLog::Log(LOGERROR, "%s: error reading %s",__FUNCTION__, path.c_str());
+    CLog::Log(LOGERROR, "%s: error reading %s", __FUNCTION__, path.c_str());
 
   return ret;
 }
 
-bool SysfsUtils::Has(const std::string &path)
+bool SysfsUtils::Has(const std::string& path)
 {
   int fd = open(path.c_str(), O_RDONLY);
   if (fd >= 0)
@@ -108,7 +110,7 @@ bool SysfsUtils::Has(const std::string &path)
   return false;
 }
 
-bool SysfsUtils::HasRW(const std::string &path)
+bool SysfsUtils::HasRW(const std::string& path)
 {
   int fd = open(path.c_str(), O_RDWR);
   if (fd >= 0)

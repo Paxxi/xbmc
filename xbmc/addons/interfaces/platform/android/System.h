@@ -16,11 +16,11 @@ namespace ADDON
 struct Interface_Android
 {
   static void Register();
-  static void* Get(const std::string &name, const std::string &version);
+  static void* Get(const std::string& name, const std::string& version);
 
   static void* get_jni_env();
   static int get_sdk_version();
-  static const char *get_class_name();
+  static const char* get_class_name();
 };
 
 } //namespace ADDON

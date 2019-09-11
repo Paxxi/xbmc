@@ -18,8 +18,11 @@ public:
   CHTTPWebinterfaceAddonsHandler() = default;
   ~CHTTPWebinterfaceAddonsHandler() override = default;
 
-  IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPWebinterfaceAddonsHandler(request); }
-  bool CanHandleRequest(const HTTPRequest &request) const override;
+  IHTTPRequestHandler* Create(const HTTPRequest& request) const override
+  {
+    return new CHTTPWebinterfaceAddonsHandler(request);
+  }
+  bool CanHandleRequest(const HTTPRequest& request) const override;
 
   int HandleRequest() override;
 
@@ -28,9 +31,10 @@ public:
   int GetPriority() const override { return 4; }
 
 protected:
-  explicit CHTTPWebinterfaceAddonsHandler(const HTTPRequest &request)
+  explicit CHTTPWebinterfaceAddonsHandler(const HTTPRequest& request)
     : IHTTPRequestHandler(request)
-  { }
+  {
+  }
 
 private:
   std::string m_responseData;

@@ -21,11 +21,10 @@ public:
   virtual ~CPosixResourceCounter();
 
   double GetCPUUsage();
-  void   Reset();
+  void Reset();
 
 protected:
-  struct rusage  m_usage;
+  struct rusage m_usage;
   struct timeval m_tmLastCheck;
   double m_dLastUsage;
 };
-

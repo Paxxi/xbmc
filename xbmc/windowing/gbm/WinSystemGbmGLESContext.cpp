@@ -31,8 +31,9 @@
 using namespace KODI::WINDOWING::GBM;
 
 CWinSystemGbmGLESContext::CWinSystemGbmGLESContext()
-: CWinSystemGbmEGLContext(EGL_PLATFORM_GBM_MESA, "EGL_MESA_platform_gbm")
-{}
+  : CWinSystemGbmEGLContext(EGL_PLATFORM_GBM_MESA, "EGL_MESA_platform_gbm")
+{
+}
 
 std::unique_ptr<CWinSystemBase> CWinSystemBase::CreateWinSystem()
 {
@@ -74,12 +75,14 @@ bool CWinSystemGbmGLESContext::InitWindowSystem()
   return true;
 }
 
-bool CWinSystemGbmGLESContext::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays)
+bool CWinSystemGbmGLESContext::SetFullScreen(bool fullScreen,
+                                             RESOLUTION_INFO& res,
+                                             bool blankOtherDisplays)
 {
-  if (res.iWidth != m_nWidth ||
-      res.iHeight != m_nHeight)
+  if (res.iWidth != m_nWidth || res.iHeight != m_nHeight)
   {
-    CLog::Log(LOGDEBUG, "CWinSystemGbmGLESContext::%s - resolution changed, creating a new window", __FUNCTION__);
+    CLog::Log(LOGDEBUG, "CWinSystemGbmGLESContext::%s - resolution changed, creating a new window",
+              __FUNCTION__);
     CreateNewWindow("", fullScreen, res);
   }
 

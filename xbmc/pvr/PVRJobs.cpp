@@ -69,33 +69,44 @@ bool CPVRPlayChannelOnStartupJob::DoWork()
   return CServiceBroker::GetPVRManager().GUIActions()->PlayChannelOnStartup();
 }
 
-CPVREventlogJob::CPVREventlogJob(bool bNotifyUser, bool bError, const std::string &label, const std::string &msg, const std::string &icon)
+CPVREventlogJob::CPVREventlogJob(bool bNotifyUser,
+                                 bool bError,
+                                 const std::string& label,
+                                 const std::string& msg,
+                                 const std::string& icon)
 {
   AddEvent(bNotifyUser, bError, label, msg, icon);
 }
 
-void CPVREventlogJob::AddEvent(bool bNotifyUser, bool bError, const std::string &label, const std::string &msg, const std::string &icon)
+void CPVREventlogJob::AddEvent(bool bNotifyUser,
+                               bool bError,
+                               const std::string& label,
+                               const std::string& msg,
+                               const std::string& icon)
 {
   m_events.emplace_back(Event(bNotifyUser, bError, label, msg, icon));
 }
 
 bool CPVREventlogJob::DoWork()
 {
-  for (const auto &event : m_events)
+  for (const auto& event : m_events)
   {
     if (event.m_bNotifyUser)
-      CGUIDialogKaiToast::QueueNotification(
-        event.m_bError ? CGUIDialogKaiToast::Error : CGUIDialogKaiToast::Info, event.m_label.c_str(), event.m_msg, 5000, true);
+      CGUIDialogKaiToast::QueueNotification(event.m_bError ? CGUIDialogKaiToast::Error
+                                                           : CGUIDialogKaiToast::Info,
+                                            event.m_label.c_str(), event.m_msg, 5000, true);
 
     // Write event log entry.
-    CServiceBroker::GetEventLog().Add(
-      EventPtr(new CNotificationEvent(event.m_label, event.m_msg, event.m_icon, event.m_bError ? EventLevel::Error : EventLevel::Information)));
+    CServiceBroker::GetEventLog().Add(EventPtr(
+        new CNotificationEvent(event.m_label, event.m_msg, event.m_icon,
+                               event.m_bError ? EventLevel::Error : EventLevel::Information)));
   }
   return true;
 }
 
-CPVRSearchMissingChannelIconsJob::CPVRSearchMissingChannelIconsJob(const std::vector<std::shared_ptr<CPVRChannelGroup>>& groups, bool bUpdateDb)
-: m_updater(new CPVRGUIChannelIconUpdater(groups, bUpdateDb))
+CPVRSearchMissingChannelIconsJob::CPVRSearchMissingChannelIconsJob(
+    const std::vector<std::shared_ptr<CPVRChannelGroup>>& groups, bool bUpdateDb)
+  : m_updater(new CPVRGUIChannelIconUpdater(groups, bUpdateDb))
 {
 }
 
@@ -107,7 +118,8 @@ bool CPVRSearchMissingChannelIconsJob::DoWork(void)
 
 bool CPVRClientConnectionJob::DoWork(void)
 {
-  CServiceBroker::GetPVRManager().Clients()->ConnectionStateChange(m_client, m_connectString, m_state, m_message);
+  CServiceBroker::GetPVRManager().Clients()->ConnectionStateChange(m_client, m_connectString,
+                                                                   m_state, m_message);
   return true;
 }
 

@@ -22,12 +22,17 @@
 
 using namespace XFILE;
 
-CGUIViewStateWindowPrograms::CGUIViewStateWindowPrograms(const CFileItemList& items) : CGUIViewState(items)
+CGUIViewStateWindowPrograms::CGUIViewStateWindowPrograms(const CFileItemList& items)
+  : CGUIViewState(items)
 {
-  AddSortMethod(SortByLabel, 551, LABEL_MASKS("%K", "%I", "%L", ""),  // Titel, Size | Foldername, empty
-    CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_FILELISTS_IGNORETHEWHENSORTING) ? SortAttributeIgnoreArticle : SortAttributeNone);
+  AddSortMethod(SortByLabel, 551,
+                LABEL_MASKS("%K", "%I", "%L", ""), // Titel, Size | Foldername, empty
+                CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                    CSettings::SETTING_FILELISTS_IGNORETHEWHENSORTING)
+                    ? SortAttributeIgnoreArticle
+                    : SortAttributeNone);
 
-  const CViewState *viewState = CViewStateSettings::GetInstance().Get("programs");
+  const CViewState* viewState = CViewStateSettings::GetInstance().Get("programs");
   SetSortMethod(viewState->m_sortDescription);
   SetViewAsControl(viewState->m_viewMode);
   SetSortOrder(viewState->m_sortDescription.sortOrder);
@@ -37,7 +42,8 @@ CGUIViewStateWindowPrograms::CGUIViewStateWindowPrograms(const CFileItemList& it
 
 void CGUIViewStateWindowPrograms::SaveViewState()
 {
-  SaveViewToDb(m_items.GetPath(), WINDOW_PROGRAMS, CViewStateSettings::GetInstance().Get("programs"));
+  SaveViewToDb(m_items.GetPath(), WINDOW_PROGRAMS,
+               CViewStateSettings::GetInstance().Get("programs"));
 }
 
 std::string CGUIViewStateWindowPrograms::GetLockType()
@@ -66,8 +72,7 @@ VECSOURCES& CGUIViewStateWindowPrograms::GetSources()
   }
 #endif
 
-  VECSOURCES *programSources = CMediaSourceSettings::GetInstance().GetSources("programs");
+  VECSOURCES* programSources = CMediaSourceSettings::GetInstance().GetSources("programs");
   AddOrReplace(*programSources, CGUIViewState::GetSources());
   return *programSources;
 }
-

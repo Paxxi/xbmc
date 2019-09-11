@@ -26,22 +26,22 @@ bool CALSAHControlMonitor::Add(const std::string& ctlHandleName,
                                unsigned int device,
                                const std::string& name)
 {
-  snd_hctl_t *hctl = GetHandle(ctlHandleName);
+  snd_hctl_t* hctl = GetHandle(ctlHandleName);
 
   if (!hctl)
   {
     return false;
   }
 
-  snd_ctl_elem_id_t *id;
+  snd_ctl_elem_id_t* id;
 
   snd_ctl_elem_id_alloca(&id);
 
   snd_ctl_elem_id_set_interface(id, interface);
-  snd_ctl_elem_id_set_name     (id, name.c_str());
-  snd_ctl_elem_id_set_device   (id, device);
+  snd_ctl_elem_id_set_name(id, name.c_str());
+  snd_ctl_elem_id_set_device(id, device);
 
-  snd_hctl_elem_t *elem = snd_hctl_find_elem(hctl, id);
+  snd_hctl_elem_t* elem = snd_hctl_find_elem(hctl, id);
 
   if (!elem)
   {
@@ -81,10 +81,8 @@ void CALSAHControlMonitor::Start()
 
     for (int j = 0; j < fdcount; ++j)
     {
-      monitoredFDs.push_back(CFDEventMonitor::MonitoredFD(pollfds[j].fd,
-                                                          pollfds[j].events,
-                                                          FDEventCallback,
-                                                          it->second.handle));
+      monitoredFDs.push_back(CFDEventMonitor::MonitoredFD(pollfds[j].fd, pollfds[j].events,
+                                                          FDEventCallback, it->second.handle));
     }
   }
 
@@ -98,7 +96,7 @@ void CALSAHControlMonitor::Stop()
   m_fdMonitorIds.clear();
 }
 
-int CALSAHControlMonitor::HCTLCallback(snd_hctl_elem_t *elem, unsigned int mask)
+int CALSAHControlMonitor::HCTLCallback(snd_hctl_elem_t* elem, unsigned int mask)
 {
   /* _REMOVE is a special value instead of a bit and must be checked first */
   if (mask == SND_CTL_EVENT_MASK_REMOVE)
@@ -122,10 +120,10 @@ int CALSAHControlMonitor::HCTLCallback(snd_hctl_elem_t *elem, unsigned int mask)
   return 0;
 }
 
-void CALSAHControlMonitor::FDEventCallback(int id, int fd, short revents, void *data)
+void CALSAHControlMonitor::FDEventCallback(int id, int fd, short revents, void* data)
 {
   /* Run ALSA event handling when the FD has events */
-  snd_hctl_t *hctl = (snd_hctl_t *)data;
+  snd_hctl_t* hctl = (snd_hctl_t*)data;
   snd_hctl_handle_events(hctl);
 }
 
@@ -133,16 +131,18 @@ snd_hctl_t* CALSAHControlMonitor::GetHandle(const std::string& ctlHandleName)
 {
   if (!m_ctlHandles.count(ctlHandleName))
   {
-    snd_hctl_t *hctl;
+    snd_hctl_t* hctl;
 
     if (snd_hctl_open(&hctl, ctlHandleName.c_str(), 0) != 0)
     {
-        CLog::Log(LOGWARNING, "CALSAHControlMonitor::GetHandle - snd_hctl_open() failed for \"%s\"", ctlHandleName.c_str());
-        return NULL;
+      CLog::Log(LOGWARNING, "CALSAHControlMonitor::GetHandle - snd_hctl_open() failed for \"%s\"",
+                ctlHandleName.c_str());
+      return NULL;
     }
     if (snd_hctl_load(hctl) != 0)
     {
-      CLog::Log(LOGERROR, "CALSAHControlMonitor::GetHandle - snd_hctl_load() failed for \"%s\"", ctlHandleName.c_str());
+      CLog::Log(LOGERROR, "CALSAHControlMonitor::GetHandle - snd_hctl_load() failed for \"%s\"",
+                ctlHandleName.c_str());
       snd_hctl_close(hctl);
       return NULL;
     }

@@ -68,10 +68,10 @@ protected:
   void InitializeSettings() override;
 
 private:
-  void SetLabel2(const std::string &settingid, const std::string &label);
-  void ToggleState(const std::string &settingid, bool enabled);
+  void SetLabel2(const std::string& settingid, const std::string& label);
+  void ToggleState(const std::string& settingid, bool enabled);
   using CGUIDialogSettingsManualBase::SetFocus;
-  void SetFocus(const std::string &settingid);
+  void SetFocus(const std::string& settingid);
   void ResetDefaults();
 
   /*!

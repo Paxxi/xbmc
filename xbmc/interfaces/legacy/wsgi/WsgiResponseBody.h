@@ -12,40 +12,40 @@
 
 namespace XBMCAddon
 {
-  namespace xbmcwsgi
-  {
-    /// \defgroup python_xbmcwsgi_WsgiResponseBody WsgiResponseBody
-    /// \ingroup python_xbmcwsgi
-    /// @{
-    /// @brief **Represents the write callable returned by the start_response callable passed to a WSGI handler.**
-    ///
-    /// \python_class{ WsgiResponseBody() }
-    ///
-    ///-------------------------------------------------------------------------
-    ///
-    class WsgiResponseBody : public AddonClass
-    {
-    public:
-      WsgiResponseBody();
-      ~WsgiResponseBody() override;
+namespace xbmcwsgi
+{
+/// \defgroup python_xbmcwsgi_WsgiResponseBody WsgiResponseBody
+/// \ingroup python_xbmcwsgi
+/// @{
+/// @brief **Represents the write callable returned by the start_response callable passed to a WSGI handler.**
+///
+/// \python_class{ WsgiResponseBody() }
+///
+///-------------------------------------------------------------------------
+///
+class WsgiResponseBody : public AddonClass
+{
+public:
+  WsgiResponseBody();
+  ~WsgiResponseBody() override;
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      /// \ingroup python_xbmcwsgi_WsgiInputStreamIterator
-      /// \python_func{ operator(status, response_headers[, exc_info]) }
-      ///------------------------------------------------------------------------
-      ///
-      /// Callable implementation to write data to the response.
-      ///
-      /// @param data            string data to write
-      ///
-      operator()(...);
+  /// \ingroup python_xbmcwsgi_WsgiInputStreamIterator
+  /// \python_func{ operator(status, response_headers[, exc_info]) }
+  ///------------------------------------------------------------------------
+  ///
+  /// Callable implementation to write data to the response.
+  ///
+  /// @param data            string data to write
+  ///
+  operator()(...);
 #else
-      void operator()(const String& data);
+  void operator()(const String& data);
 #endif
 
 #if !defined SWIG && !defined DOXYGEN_SHOULD_SKIP_THIS
-      String m_data;
+  String m_data;
 #endif
-    };
-  }
-}
+};
+} // namespace xbmcwsgi
+} // namespace XBMCAddon

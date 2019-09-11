@@ -30,12 +30,12 @@ public:
   ~CMusicLibraryExportJob() override;
 
   // specialization of CJob
-  const char *GetType() const override { return "MusicLibraryExportJob"; }
+  const char* GetType() const override { return "MusicLibraryExportJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
   // implementation of CMusicLibraryJob
-  bool Work(CMusicDatabase &db) override;
+  bool Work(CMusicDatabase& db) override;
 
 private:
   CLibExportSettings m_settings;

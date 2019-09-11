@@ -29,17 +29,21 @@ bool CDVDSubtitleStream::Open(const std::string& strFile)
 {
   CFileItem item(strFile, false);
   item.SetContentLookup(false);
-  std::shared_ptr<CDVDInputStream> pInputStream(CDVDFactoryInputStream::CreateInputStream(NULL, item));
+  std::shared_ptr<CDVDInputStream> pInputStream(
+      CDVDFactoryInputStream::CreateInputStream(NULL, item));
   if (pInputStream && pInputStream->Open())
   {
     // prepare buffer
     size_t totalread = 0;
     XUTILS::auto_buffer buf(1024);
 
-    if (URIUtils::HasExtension(strFile, ".sub") && IsIncompatible(pInputStream.get(), buf, &totalread))
+    if (URIUtils::HasExtension(strFile, ".sub") &&
+        IsIncompatible(pInputStream.get(), buf, &totalread))
     {
-      CLog::Log(LOGDEBUG, "%s: file %s seems to be a vob sub"
-        "file without an idx file, skipping it", __FUNCTION__, CURL::GetRedacted(pInputStream->GetFileName()).c_str());
+      CLog::Log(LOGDEBUG,
+                "%s: file %s seems to be a vob sub"
+                "file without an idx file, skipping it",
+                __FUNCTION__, CURL::GetRedacted(pInputStream->GetFileName()).c_str());
       buf.clear();
       return false;
     }
@@ -52,7 +56,8 @@ bool CDVDSubtitleStream::Open(const std::string& strFile)
       if (totalread == buf.size())
         buf.resize(buf.size() + chunksize);
 
-      read = pInputStream->Read((uint8_t*)buf.get() + totalread, static_cast<int>(buf.size() - totalread));
+      read = pInputStream->Read((uint8_t*)buf.get() + totalread,
+                                static_cast<int>(buf.size() - totalread));
       if (read > 0)
         totalread += read;
     } while (read > 0);
@@ -91,14 +96,17 @@ bool CDVDSubtitleStream::Open(const std::string& strFile)
   return false;
 }
 
-bool CDVDSubtitleStream::IsIncompatible(CDVDInputStream* pInputStream, XUTILS::auto_buffer& buf, size_t* bytesRead)
+bool CDVDSubtitleStream::IsIncompatible(CDVDInputStream* pInputStream,
+                                        XUTILS::auto_buffer& buf,
+                                        size_t* bytesRead)
 {
   if (!pInputStream)
     return true;
 
-  static const uint8_t vobsub[] = { 0x00, 0x00, 0x01, 0xBA };
+  static const uint8_t vobsub[] = {0x00, 0x00, 0x01, 0xBA};
 
-  int read = pInputStream->Read(reinterpret_cast<uint8_t*>(buf.get()), static_cast<int>(buf.size()));
+  int read =
+      pInputStream->Read(reinterpret_cast<uint8_t*>(buf.get()), static_cast<int>(buf.size()));
 
   if (read < 0)
   {
@@ -127,21 +135,21 @@ long CDVDSubtitleStream::Seek(long offset, int whence)
 {
   switch (whence)
   {
-    case SEEK_CUR:
-    {
-      m_stringstream.seekg(offset, std::ios::cur);
-      break;
-    }
-    case SEEK_END:
-    {
-      m_stringstream.seekg(offset, std::ios::end);
-      break;
-    }
-    case SEEK_SET:
-    {
-      m_stringstream.seekg(offset, std::ios::beg);
-      break;
-    }
+  case SEEK_CUR:
+  {
+    m_stringstream.seekg(offset, std::ios::cur);
+    break;
+  }
+  case SEEK_END:
+  {
+    m_stringstream.seekg(offset, std::ios::end);
+    break;
+  }
+  case SEEK_SET:
+  {
+    m_stringstream.seekg(offset, std::ios::beg);
+    break;
+  }
   }
   return (int)m_stringstream.tellg();
 }
@@ -153,4 +161,3 @@ char* CDVDSubtitleStream::ReadLine(char* buf, int iLen)
   else
     return NULL;
 }
-

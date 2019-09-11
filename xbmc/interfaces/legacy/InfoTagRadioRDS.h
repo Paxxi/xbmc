@@ -14,453 +14,453 @@
 
 namespace XBMCAddon
 {
-  namespace xbmc
-  {
-    //
-    /// \defgroup python_InfoTagRadioRDS InfoTagRadioRDS
-    /// \ingroup python_xbmc
-    /// @{
-    /// @brief **Kodi's radio RDS info tag class.**
-    ///
-    /// \python_class{ InfoTagRadioRDS() }
-    ///
-    /// To get radio RDS info tag data of currently played PVR radio channel source.
-    ///
-    /// @note Info tag load is only be possible from present player class.\n
-    /// Also is all the data variable from radio channels and not known on beginning
-    /// of radio receiving.
-    ///
-    ///
-    ///--------------------------------------------------------------------------
-    ///
-    /// **Example:**
-    /// ~~~~~~~~~~~~~{.py}
-    /// ...
-    /// tag = xbmc.Player().getRadioRDSInfoTag()
-    ///
-    /// title  = tag.getTitle()
-    /// artist = tag.getArtist()
-    /// ...
-    /// ~~~~~~~~~~~~~
-    //
-    class InfoTagRadioRDS : public AddonClass
-    {
-    private:
-      PVR::CPVRRadioRDSInfoTagPtr infoTag;
+namespace xbmc
+{
+//
+/// \defgroup python_InfoTagRadioRDS InfoTagRadioRDS
+/// \ingroup python_xbmc
+/// @{
+/// @brief **Kodi's radio RDS info tag class.**
+///
+/// \python_class{ InfoTagRadioRDS() }
+///
+/// To get radio RDS info tag data of currently played PVR radio channel source.
+///
+/// @note Info tag load is only be possible from present player class.\n
+/// Also is all the data variable from radio channels and not known on beginning
+/// of radio receiving.
+///
+///
+///--------------------------------------------------------------------------
+///
+/// **Example:**
+/// ~~~~~~~~~~~~~{.py}
+/// ...
+/// tag = xbmc.Player().getRadioRDSInfoTag()
+///
+/// title  = tag.getTitle()
+/// artist = tag.getArtist()
+/// ...
+/// ~~~~~~~~~~~~~
+//
+class InfoTagRadioRDS : public AddonClass
+{
+private:
+  PVR::CPVRRadioRDSInfoTagPtr infoTag;
 
-    public:
+public:
 #ifndef SWIG
-      explicit InfoTagRadioRDS(const PVR::CPVRChannelPtr& channel);
+  explicit InfoTagRadioRDS(const PVR::CPVRChannelPtr& channel);
 #endif
-      InfoTagRadioRDS();
-      ~InfoTagRadioRDS() override;
+  InfoTagRadioRDS();
+  ~InfoTagRadioRDS() override;
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getTitle() }
-      ///-----------------------------------------------------------------------
-      /// Title of the item on the air; i.e. song title.
-      ///
-      /// @return Title
-      ///
-      getTitle();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getTitle() }
+  ///-----------------------------------------------------------------------
+  /// Title of the item on the air; i.e. song title.
+  ///
+  /// @return Title
+  ///
+  getTitle();
 #else
-      String getTitle();
-#endif
-
-#ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getBand() }
-      ///-----------------------------------------------------------------------
-      /// Band of the item on air.
-      ///
-      /// @return Band
-      ///
-      getBand();
-#else
-      String getBand();
+  String getTitle();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getArtist() }
-      ///-----------------------------------------------------------------------
-      /// Artist of the item on air.
-      ///
-      /// @return Artist
-      ///
-      getArtist();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getBand() }
+  ///-----------------------------------------------------------------------
+  /// Band of the item on air.
+  ///
+  /// @return Band
+  ///
+  getBand();
 #else
-      String getArtist();
+  String getBand();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getComposer() }
-      ///-----------------------------------------------------------------------
-      /// Get the Composer of the music.
-      ///
-      /// @return Composer
-      ///
-      getComposer();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getArtist() }
+  ///-----------------------------------------------------------------------
+  /// Artist of the item on air.
+  ///
+  /// @return Artist
+  ///
+  getArtist();
 #else
-      String getComposer();
+  String getArtist();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getConductor() }
-      ///-----------------------------------------------------------------------
-      /// Get the Conductor of the Band.
-      ///
-      /// @return Conductor
-      ///
-      getConductor();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getComposer() }
+  ///-----------------------------------------------------------------------
+  /// Get the Composer of the music.
+  ///
+  /// @return Composer
+  ///
+  getComposer();
 #else
-      String getConductor();
+  String getComposer();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getAlbum() }
-      ///-----------------------------------------------------------------------
-      /// Album of item on air.
-      ///
-      /// @return Album name
-      ///
-      getAlbum();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getConductor() }
+  ///-----------------------------------------------------------------------
+  /// Get the Conductor of the Band.
+  ///
+  /// @return Conductor
+  ///
+  getConductor();
 #else
-      String getAlbum();
+  String getConductor();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getComment() }
-      ///-----------------------------------------------------------------------
-      /// Get Comment text from channel.
-      ///
-      /// @return Comment
-      ///
-      getComment();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getAlbum() }
+  ///-----------------------------------------------------------------------
+  /// Album of item on air.
+  ///
+  /// @return Album name
+  ///
+  getAlbum();
 #else
-      String getComment();
+  String getAlbum();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getAlbumTrackNumber() }
-      ///-----------------------------------------------------------------------
-      /// Get the album track number of currently sended music.
-      ///
-      /// @return Track Number
-      ///
-      getAlbumTrackNumber();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getComment() }
+  ///-----------------------------------------------------------------------
+  /// Get Comment text from channel.
+  ///
+  /// @return Comment
+  ///
+  getComment();
 #else
-      int getAlbumTrackNumber();
+  String getComment();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoNews() }
-      ///-----------------------------------------------------------------------
-      /// Get News informations.
-      ///
-      /// @return News Information
-      ///
-      getInfoNews();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getAlbumTrackNumber() }
+  ///-----------------------------------------------------------------------
+  /// Get the album track number of currently sended music.
+  ///
+  /// @return Track Number
+  ///
+  getAlbumTrackNumber();
 #else
-      String getInfoNews();
+  int getAlbumTrackNumber();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoNewsLocal() }
-      ///-----------------------------------------------------------------------
-      /// Get Local news informations.
-      ///
-      /// @return Local News Information
-      ///
-      getInfoNewsLocal();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoNews() }
+  ///-----------------------------------------------------------------------
+  /// Get News informations.
+  ///
+  /// @return News Information
+  ///
+  getInfoNews();
 #else
-      String getInfoNewsLocal();
+  String getInfoNews();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoSport() }
-      ///-----------------------------------------------------------------------
-      /// Get Sport informations.
-      ///
-      /// @return Sport Information
-      ///
-      getInfoSport();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoNewsLocal() }
+  ///-----------------------------------------------------------------------
+  /// Get Local news informations.
+  ///
+  /// @return Local News Information
+  ///
+  getInfoNewsLocal();
 #else
-      String getInfoSport();
+  String getInfoNewsLocal();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoStock() }
-      ///-----------------------------------------------------------------------
-      /// Get Stock informations.
-      ///
-      /// @return Stock Information
-      ///
-      getInfoStock();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoSport() }
+  ///-----------------------------------------------------------------------
+  /// Get Sport informations.
+  ///
+  /// @return Sport Information
+  ///
+  getInfoSport();
 #else
-      String getInfoStock();
+  String getInfoSport();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoWeather() }
-      ///-----------------------------------------------------------------------
-      /// Get Weather informations.
-      ///
-      /// @return Weather Information
-      ///
-      getInfoWeather();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoStock() }
+  ///-----------------------------------------------------------------------
+  /// Get Stock informations.
+  ///
+  /// @return Stock Information
+  ///
+  getInfoStock();
 #else
-      String getInfoWeather();
+  String getInfoStock();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoHoroscope() }
-      ///-----------------------------------------------------------------------
-      /// Get Horoscope informations.
-      ///
-      /// @return Horoscope Information
-      ///
-      getInfoHoroscope();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoWeather() }
+  ///-----------------------------------------------------------------------
+  /// Get Weather informations.
+  ///
+  /// @return Weather Information
+  ///
+  getInfoWeather();
 #else
-      String getInfoHoroscope();
+  String getInfoWeather();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoCinema() }
-      ///-----------------------------------------------------------------------
-      /// Get Cinema informations.
-      ///
-      /// @return Cinema Information
-      ///
-      getInfoCinema();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoHoroscope() }
+  ///-----------------------------------------------------------------------
+  /// Get Horoscope informations.
+  ///
+  /// @return Horoscope Information
+  ///
+  getInfoHoroscope();
 #else
-      String getInfoCinema();
+  String getInfoHoroscope();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoLottery() }
-      ///-----------------------------------------------------------------------
-      /// Get Lottery informations.
-      ///
-      /// @return Lottery Information
-      ///
-      getInfoLottery();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoCinema() }
+  ///-----------------------------------------------------------------------
+  /// Get Cinema informations.
+  ///
+  /// @return Cinema Information
+  ///
+  getInfoCinema();
 #else
-      String getInfoLottery();
+  String getInfoCinema();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getInfoOther() }
-      ///-----------------------------------------------------------------------
-      /// Get other informations.
-      ///
-      /// @return Other Information
-      ///
-      getInfoOther();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoLottery() }
+  ///-----------------------------------------------------------------------
+  /// Get Lottery informations.
+  ///
+  /// @return Lottery Information
+  ///
+  getInfoLottery();
 #else
-      String getInfoOther();
+  String getInfoLottery();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getEditorialStaff() }
-      ///-----------------------------------------------------------------------
-      /// Get Editorial Staff names.
-      ///
-      /// @return Editorial Staff
-      ///
-      getEditorialStaff();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getInfoOther() }
+  ///-----------------------------------------------------------------------
+  /// Get other informations.
+  ///
+  /// @return Other Information
+  ///
+  getInfoOther();
 #else
-      String getEditorialStaff();
+  String getInfoOther();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getProgStation() }
-      ///-----------------------------------------------------------------------
-      /// Name describing station.
-      ///
-      /// @return Program Station
-      ///
-      getProgStation();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getEditorialStaff() }
+  ///-----------------------------------------------------------------------
+  /// Get Editorial Staff names.
+  ///
+  /// @return Editorial Staff
+  ///
+  getEditorialStaff();
 #else
-      String getProgStation();
+  String getEditorialStaff();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getProgStyle() }
-      ///-----------------------------------------------------------------------
-      /// The the radio channel style currently used.
-      ///
-      /// @return Program Style
-      ///
-      getProgStyle();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getProgStation() }
+  ///-----------------------------------------------------------------------
+  /// Name describing station.
+  ///
+  /// @return Program Station
+  ///
+  getProgStation();
 #else
-      String getProgStyle();
+  String getProgStation();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getProgHost() }
-      ///-----------------------------------------------------------------------
-      /// Host of current radio show.
-      ///
-      /// @return Program Host
-      ///
-      getProgHost();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getProgStyle() }
+  ///-----------------------------------------------------------------------
+  /// The the radio channel style currently used.
+  ///
+  /// @return Program Style
+  ///
+  getProgStyle();
 #else
-      String getProgHost();
+  String getProgStyle();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getProgWebsite() }
-      ///-----------------------------------------------------------------------
-      /// Link to URL (web page) for radio station homepage.
-      ///
-      /// @return Program Website
-      ///
-      getProgWebsite();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getProgHost() }
+  ///-----------------------------------------------------------------------
+  /// Host of current radio show.
+  ///
+  /// @return Program Host
+  ///
+  getProgHost();
 #else
-      String getProgWebsite();
+  String getProgHost();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getProgNow() }
-      ///-----------------------------------------------------------------------
-      /// Current radio program show.
-      ///
-      /// @return Program Now
-      ///
-      getProgNow();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getProgWebsite() }
+  ///-----------------------------------------------------------------------
+  /// Link to URL (web page) for radio station homepage.
+  ///
+  /// @return Program Website
+  ///
+  getProgWebsite();
 #else
-      String getProgNow();
+  String getProgWebsite();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getProgNext() }
-      ///-----------------------------------------------------------------------
-      /// Next program show.
-      ///
-      /// @return Program Next
-      ///
-      getProgNext();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getProgNow() }
+  ///-----------------------------------------------------------------------
+  /// Current radio program show.
+  ///
+  /// @return Program Now
+  ///
+  getProgNow();
 #else
-      String getProgNext();
+  String getProgNow();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getPhoneHotline() }
-      ///-----------------------------------------------------------------------
-      /// Telephone number of the radio station's hotline.
-      ///
-      /// @return Phone Hotline
-      ///
-      getPhoneHotline();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getProgNext() }
+  ///-----------------------------------------------------------------------
+  /// Next program show.
+  ///
+  /// @return Program Next
+  ///
+  getProgNext();
 #else
-      String getPhoneHotline();
+  String getProgNext();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getEMailHotline() }
-      ///-----------------------------------------------------------------------
-      /// Email address of the radio station's studio.
-      ///
-      /// @return EMail Hotline
-      ///
-      getEMailHotline();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getPhoneHotline() }
+  ///-----------------------------------------------------------------------
+  /// Telephone number of the radio station's hotline.
+  ///
+  /// @return Phone Hotline
+  ///
+  getPhoneHotline();
 #else
-      String getEMailHotline();
+  String getPhoneHotline();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getPhoneStudio() }
-      ///-----------------------------------------------------------------------
-      /// Telephone number of the radio station's studio.
-      ///
-      /// @return Phone Studio
-      ///
-      getPhoneStudio();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getEMailHotline() }
+  ///-----------------------------------------------------------------------
+  /// Email address of the radio station's studio.
+  ///
+  /// @return EMail Hotline
+  ///
+  getEMailHotline();
 #else
-      String getPhoneStudio();
+  String getEMailHotline();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getEMailStudio() }
-      ///-----------------------------------------------------------------------
-      /// Email address of radio station studio.
-      ///
-      /// @return EMail Studio
-      ///
-      getEMailStudio();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getPhoneStudio() }
+  ///-----------------------------------------------------------------------
+  /// Telephone number of the radio station's studio.
+  ///
+  /// @return Phone Studio
+  ///
+  getPhoneStudio();
 #else
-      String getEMailStudio();
+  String getPhoneStudio();
 #endif
 
 #ifdef DOXYGEN_SHOULD_USE_THIS
-      ///
-      /// @ingroup python_InfoTagRadioRDS
-      /// @brief \python_func{ getSMSStudio() }
-      ///-----------------------------------------------------------------------
-      /// SMS (Text Messaging) number for studio.
-      ///
-      /// @return SMS Studio
-      ///
-      getSMSStudio();
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getEMailStudio() }
+  ///-----------------------------------------------------------------------
+  /// Email address of radio station studio.
+  ///
+  /// @return EMail Studio
+  ///
+  getEMailStudio();
 #else
-      String getSMSStudio();
+  String getEMailStudio();
 #endif
-    };
-    //@}
-  }
-}
+
+#ifdef DOXYGEN_SHOULD_USE_THIS
+  ///
+  /// @ingroup python_InfoTagRadioRDS
+  /// @brief \python_func{ getSMSStudio() }
+  ///-----------------------------------------------------------------------
+  /// SMS (Text Messaging) number for studio.
+  ///
+  /// @return SMS Studio
+  ///
+  getSMSStudio();
+#else
+  String getSMSStudio();
+#endif
+};
+//@}
+} // namespace xbmc
+} // namespace XBMCAddon

@@ -24,25 +24,28 @@ int WaylandToXbmcButton(std::uint32_t button)
   // Wayland button is evdev code
   switch (button)
   {
-    case BTN_LEFT:
-      return XBMC_BUTTON_LEFT;
-    case BTN_MIDDLE:
-      return XBMC_BUTTON_MIDDLE;
-    case BTN_RIGHT:
-      return XBMC_BUTTON_RIGHT;
-    default:
-      return -1;
+  case BTN_LEFT:
+    return XBMC_BUTTON_LEFT;
+  case BTN_MIDDLE:
+    return XBMC_BUTTON_MIDDLE;
+  case BTN_RIGHT:
+    return XBMC_BUTTON_RIGHT;
+  default:
+    return -1;
   }
 }
 
-}
+} // namespace
 
-CInputProcessorPointer::CInputProcessorPointer(wayland::surface_t const& surface, IInputHandlerPointer& handler)
-: m_surface{surface}, m_handler{handler}
+CInputProcessorPointer::CInputProcessorPointer(wayland::surface_t const& surface,
+                                               IInputHandlerPointer& handler)
+  : m_surface{surface}
+  , m_handler{handler}
 {
 }
 
-void CInputProcessorPointer::OnPointerEnter(CSeat* seat, std::uint32_t serial, wayland::surface_t surface, double surfaceX, double surfaceY)
+void CInputProcessorPointer::OnPointerEnter(
+    CSeat* seat, std::uint32_t serial, wayland::surface_t surface, double surfaceX, double surfaceY)
 {
   if (surface == m_surface)
   {
@@ -53,7 +56,9 @@ void CInputProcessorPointer::OnPointerEnter(CSeat* seat, std::uint32_t serial, w
   }
 }
 
-void CInputProcessorPointer::OnPointerLeave(CSeat* seat, std::uint32_t serial, wayland::surface_t surface)
+void CInputProcessorPointer::OnPointerLeave(CSeat* seat,
+                                            std::uint32_t serial,
+                                            wayland::surface_t surface)
 {
   if (m_pointerOnSurface)
   {
@@ -62,7 +67,10 @@ void CInputProcessorPointer::OnPointerLeave(CSeat* seat, std::uint32_t serial, w
   }
 }
 
-void CInputProcessorPointer::OnPointerMotion(CSeat* seat, std::uint32_t time, double surfaceX, double surfaceY)
+void CInputProcessorPointer::OnPointerMotion(CSeat* seat,
+                                             std::uint32_t time,
+                                             double surfaceX,
+                                             double surfaceY)
 {
   if (m_pointerOnSurface)
   {
@@ -71,7 +79,11 @@ void CInputProcessorPointer::OnPointerMotion(CSeat* seat, std::uint32_t time, do
   }
 }
 
-void CInputProcessorPointer::OnPointerButton(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::uint32_t button, wayland::pointer_button_state state)
+void CInputProcessorPointer::OnPointerButton(CSeat* seat,
+                                             std::uint32_t serial,
+                                             std::uint32_t time,
+                                             std::uint32_t button,
+                                             wayland::pointer_button_state state)
 {
   if (m_pointerOnSurface)
   {
@@ -87,7 +99,10 @@ void CInputProcessorPointer::OnPointerButton(CSeat* seat, std::uint32_t serial, 
   }
 }
 
-void CInputProcessorPointer::OnPointerAxis(CSeat* seat, std::uint32_t time, wayland::pointer_axis axis, double value)
+void CInputProcessorPointer::OnPointerAxis(CSeat* seat,
+                                           std::uint32_t time,
+                                           wayland::pointer_axis axis,
+                                           double value)
 {
   if (m_pointerOnSurface)
   {
@@ -96,7 +111,8 @@ void CInputProcessorPointer::OnPointerAxis(CSeat* seat, std::uint32_t time, wayl
     // generates one scroll button event for XBMC
 
     // Negative is up
-    auto xbmcButton = static_cast<unsigned char> ((value < 0.0) ? XBMC_BUTTON_WHEELUP : XBMC_BUTTON_WHEELDOWN);
+    auto xbmcButton =
+        static_cast<unsigned char>((value < 0.0) ? XBMC_BUTTON_WHEELUP : XBMC_BUTTON_WHEELDOWN);
     // Simulate a single click of the wheel-equivalent "button"
     SendMouseButton(xbmcButton, true);
     SendMouseButton(xbmcButton, false);
@@ -105,7 +121,7 @@ void CInputProcessorPointer::OnPointerAxis(CSeat* seat, std::uint32_t time, wayl
 
 std::uint16_t CInputProcessorPointer::ConvertMouseCoordinate(double coord) const
 {
-  return static_cast<std::uint16_t> (std::round(coord * m_coordinateScale));
+  return static_cast<std::uint16_t>(std::round(coord * m_coordinateScale));
 }
 
 void CInputProcessorPointer::SetMousePosFromSurface(CPointGen<double> position)
@@ -122,7 +138,7 @@ void CInputProcessorPointer::SendMouseMotion()
 
 void CInputProcessorPointer::SendMouseButton(unsigned char button, bool pressed)
 {
-  XBMC_Event event{static_cast<unsigned char> (pressed ? XBMC_MOUSEBUTTONDOWN : XBMC_MOUSEBUTTONUP)};
+  XBMC_Event event{static_cast<unsigned char>(pressed ? XBMC_MOUSEBUTTONDOWN : XBMC_MOUSEBUTTONUP)};
   event.button = {button, m_pointerPosition.x, m_pointerPosition.y};
   m_handler.OnPointerEvent(event);
 }

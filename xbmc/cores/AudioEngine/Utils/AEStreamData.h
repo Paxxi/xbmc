@@ -13,7 +13,7 @@
  */
 enum AEStreamOptions
 {
-  AESTREAM_FORCE_RESAMPLE = 1 << 0,   /* force resample even if rates match */
-  AESTREAM_PAUSED         = 1 << 1,   /* create the stream paused */
-  AESTREAM_AUTOSTART      = 1 << 2,   /* autostart the stream when enough data is buffered */
+  AESTREAM_FORCE_RESAMPLE = 1 << 0, /* force resample even if rates match */
+  AESTREAM_PAUSED = 1 << 1, /* create the stream paused */
+  AESTREAM_AUTOSTART = 1 << 2, /* autostart the stream when enough data is buffered */
 };

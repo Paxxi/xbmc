@@ -39,13 +39,12 @@ XBMCHelper* XBMCHelper::smp_instance = 0;
 #define SOFA_CONTROL_PROGRAM "Sofa Control"
 #define XBMC_LAUNCH_PLIST "org.xbmc.helper.plist"
 
-static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount);
+static int GetBSDProcessList(kinfo_proc** procList, size_t* procCount);
 
-XBMCHelper&
-XBMCHelper::GetInstance()
+XBMCHelper& XBMCHelper::GetInstance()
 {
   CAtomicSpinLock lock(sg_singleton_lock_variable);
-  if( ! smp_instance )
+  if (!smp_instance)
   {
     smp_instance = new XBMCHelper();
   }
@@ -81,7 +80,8 @@ XBMCHelper::XBMCHelper()
 
   // Compute the configuration file name.
   m_configFile = getenv("HOME");
-  m_configFile += "/Library/Application Support/" + std::string(CCompileInfo::GetAppName()) + "/XBMCHelper.conf";
+  m_configFile += "/Library/Application Support/" + std::string(CCompileInfo::GetAppName()) +
+                  "/XBMCHelper.conf";
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ bool XBMCHelper::OnSettingChanging(std::shared_ptr<const CSetting> setting)
   if (setting == NULL)
     return false;
 
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
   if (settingId == CSettings::SETTING_INPUT_APPLEREMOTEMODE)
   {
     int remoteMode = std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
@@ -99,7 +99,8 @@ bool XBMCHelper::OnSettingChanging(std::shared_ptr<const CSetting> setting)
     if (remoteMode != APPLE_REMOTE_DISABLED)
     {
       // if starting the event server fails, we have to revert the change
-      if (!CServiceBroker::GetSettingsComponent()->GetSettings()->SetBool("services.esenabled", true))
+      if (!CServiceBroker::GetSettingsComponent()->GetSettings()->SetBool("services.esenabled",
+                                                                          true))
         return false;
     }
 
@@ -107,7 +108,8 @@ bool XBMCHelper::OnSettingChanging(std::shared_ptr<const CSetting> setting)
     if (IsRunning() && GetMode() != remoteMode)
     {
       bool cancelled;
-      if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{13144}, CVariant{13145}, cancelled, CVariant{""}, CVariant{""}, 10000))
+      if (!CGUIDialogYesNo::ShowAndGetInput(CVariant{13144}, CVariant{13145}, cancelled,
+                                            CVariant{""}, CVariant{""}, 10000))
         return false;
       // reload configuration
       else
@@ -139,7 +141,7 @@ void XBMCHelper::Start()
   int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
   // try multiple times in case startup failed for some reason
   int retries = 5;
-  while(pid == -1 && retries-- > 0)
+  while (pid == -1 && retries-- > 0)
   {
     //printf("Asking helper to start.\n");
     // use -x to have XBMCHelper read its configure file
@@ -158,7 +160,7 @@ void XBMCHelper::Stop()
   int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
   if (pid != -1)
   {
-    CLog::Log(LOGDEBUG,"XBMCHelper: Sending SIGKILL to %s\n", XBMC_HELPER_PROGRAM);
+    CLog::Log(LOGDEBUG, "XBMCHelper: Sending SIGKILL to %s\n", XBMC_HELPER_PROGRAM);
     kill(pid, SIGKILL);
   }
 }
@@ -194,15 +196,16 @@ void XBMCHelper::Configure()
   {
     // Build a new config string.
     std::string strConfig;
-    switch (m_mode) {
-      case APPLE_REMOTE_UNIVERSAL:
-        strConfig = "--universal ";
-        break;
-      case APPLE_REMOTE_MULTIREMOTE:
-        strConfig = "--multiremote ";
-        break;
-      default:
-        break;
+    switch (m_mode)
+    {
+    case APPLE_REMOTE_UNIVERSAL:
+      strConfig = "--universal ";
+      break;
+    case APPLE_REMOTE_MULTIREMOTE:
+      strConfig = "--multiremote ";
+      break;
+    default:
+      break;
     }
     std::stringstream strPort;
     strPort << "--port " << m_port;
@@ -216,9 +219,9 @@ void XBMCHelper::Configure()
     strConfig += strDelay;
 
     // Find out where we're running from.
-    char real_path[2*MAXPATHLEN];
-    char given_path[2*MAXPATHLEN];
-    uint32_t path_size = 2*MAXPATHLEN;
+    char real_path[2 * MAXPATHLEN];
+    char given_path[2 * MAXPATHLEN];
+    uint32_t path_size = 2 * MAXPATHLEN;
 
     if (_NSGetExecutablePath(given_path, &path_size) == 0)
     {
@@ -261,7 +264,8 @@ void XBMCHelper::Configure()
 void XBMCHelper::HandleLaunchAgent()
 {
   bool oldAlwaysOn = m_alwaysOn;
-  m_alwaysOn = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_INPUT_APPLEREMOTEALWAYSON);
+  m_alwaysOn = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+      CSettings::SETTING_INPUT_APPLEREMOTEALWAYSON);
 
   // Installation/uninstallation.
   if (oldAlwaysOn == false && m_alwaysOn == true)
@@ -284,29 +288,29 @@ void XBMCHelper::Install()
 
   if (plistData != "")
   {
-      std::string launchd_args;
+    std::string launchd_args;
 
-      // Replace PATH with path to app.
-      int start = plistData.find("${PATH}");
-      plistData.replace(start, 7, m_helperFile.c_str(), m_helperFile.length());
+    // Replace PATH with path to app.
+    int start = plistData.find("${PATH}");
+    plistData.replace(start, 7, m_helperFile.c_str(), m_helperFile.length());
 
-      // Replace ARG1 with a single argument, additional args
-      // will need ARG2, ARG3 added to plist.
-      launchd_args = "-x";
-      start = plistData.find("${ARG1}");
-      plistData.replace(start, 7, launchd_args.c_str(), launchd_args.length());
+    // Replace ARG1 with a single argument, additional args
+    // will need ARG2, ARG3 added to plist.
+    launchd_args = "-x";
+    start = plistData.find("${ARG1}");
+    plistData.replace(start, 7, launchd_args.c_str(), launchd_args.length());
 
-      // Install it.
-      WriteFile(m_launchAgentInstallFile.c_str(), plistData);
+    // Install it.
+    WriteFile(m_launchAgentInstallFile.c_str(), plistData);
 
-      // Load it if not running already.
-      int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
-      if (pid == -1)
-      {
-          std::string cmd = "/bin/launchctl load ";
-          cmd += m_launchAgentInstallFile;
-          system(cmd.c_str());
-      }
+    // Load it if not running already.
+    int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
+    if (pid == -1)
+    {
+      std::string cmd = "/bin/launchctl load ";
+      cmd += m_launchAgentInstallFile;
+      system(cmd.c_str());
+    }
   }
 }
 
@@ -319,7 +323,7 @@ void XBMCHelper::Uninstall()
   system(cmd.c_str());
 
   //this also stops the helper, so restart it here again, if not disabled
-  if(m_mode != APPLE_REMOTE_DISABLED)
+  if (m_mode != APPLE_REMOTE_DISABLED)
     Start();
 
   // Remove the plist file.
@@ -330,7 +334,7 @@ void XBMCHelper::Uninstall()
 /////////////////////////////////////////////////////////////////////////////
 bool XBMCHelper::IsRunning()
 {
-  return (GetProcessPid(XBMC_HELPER_PROGRAM)!=-1);
+  return (GetProcessPid(XBMC_HELPER_PROGRAM) != -1);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -356,7 +360,7 @@ std::string XBMCHelper::ReadFile(const char* fileName)
   std::ifstream is;
 
   is.open(fileName);
-  if( is.good() )
+  if (is.good())
   {
     // Get length of file:
     is.seekg(0, std::ios::end);
@@ -364,10 +368,10 @@ std::string XBMCHelper::ReadFile(const char* fileName)
     is.seekg(0, std::ios::beg);
 
     // Allocate memory:
-    char* buffer = new char [length+1];
+    char* buffer = new char[length + 1];
 
     // Read data as a block:
-    is.read(buffer,length);
+    is.read(buffer, length);
     is.close();
     buffer[length] = '\0';
 
@@ -404,7 +408,7 @@ int XBMCHelper::GetProcessPid(const char* strProgram)
   GetBSDProcessList(&mylist, &mycount);
   for (size_t k = 0; k < mycount && ret == -1; k++)
   {
-    kinfo_proc *proc = NULL;
+    kinfo_proc* proc = NULL;
     proc = &mylist[k];
 
     // Process names are at most sixteen characters long.
@@ -414,7 +418,7 @@ int XBMCHelper::GetProcessPid(const char* strProgram)
     }
   }
 
-  free (mylist);
+  free(mylist);
 
   return ret;
 }
@@ -428,13 +432,13 @@ typedef struct kinfo_proc kinfo_proc;
 // On success, the function returns 0.
 // On error, the function returns a BSD errno value.
 //
-static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount)
+static int GetBSDProcessList(kinfo_proc** procList, size_t* procCount)
 {
   // example from http://developer.apple.com/qa/qa2001/qa1123.html
   int err;
-  kinfo_proc * result;
+  kinfo_proc* result;
   bool done;
-  static const int name[] = { CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0 };
+  static const int name[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
 
   // Declaring name as const requires us to cast it when passing it to
   // sysctl because the prototype doesn't include the const modifier.
@@ -463,15 +467,14 @@ static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount)
 
     // Call sysctl with a NULL buffer.
     length = 0;
-    err = sysctl((int *) name, (sizeof(name) / sizeof(*name)) - 1, NULL,
-        &length, NULL, 0);
+    err = sysctl((int*)name, (sizeof(name) / sizeof(*name)) - 1, NULL, &length, NULL, 0);
     if (err == -1)
       err = errno;
 
     // Allocate an appropriately sized buffer based on the results from the previous call.
     if (err == 0)
     {
-      result = (kinfo_proc*) malloc(length);
+      result = (kinfo_proc*)malloc(length);
       if (result == NULL)
         err = ENOMEM;
     }
@@ -481,8 +484,7 @@ static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount)
     //
     if (err == 0)
     {
-      err = sysctl((int *) name, (sizeof(name) / sizeof(*name)) - 1, result,
-          &length, NULL, 0);
+      err = sysctl((int*)name, (sizeof(name) / sizeof(*name)) - 1, result, &length, NULL, 0);
 
       if (err == -1)
         err = errno;
@@ -512,6 +514,6 @@ static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount)
   if (err == 0)
     *procCount = length / sizeof(kinfo_proc);
 
-  assert( (err == 0) == (*procList != NULL) );
+  assert((err == 0) == (*procList != NULL));
   return err;
 }

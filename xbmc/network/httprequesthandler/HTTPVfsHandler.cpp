@@ -15,7 +15,7 @@
 #include "settings/MediaSourceSettings.h"
 #include "utils/URIUtils.h"
 
-CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
+CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest& request)
   : CHTTPFileHandler(request)
 {
   std::string file;
@@ -32,7 +32,7 @@ CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
         accessible = true;
       else
       {
-        std::string sourceTypes[] = { "video", "music", "pictures" };
+        std::string sourceTypes[] = {"video", "music", "pictures"};
         unsigned int size = sizeof(sourceTypes) / sizeof(std::string);
 
         std::string realPath = URIUtils::GetRealPath(file);
@@ -40,7 +40,7 @@ CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
         while (URIUtils::IsInArchive(realPath))
           realPath = CURL(realPath).GetHostName();
 
-        VECSOURCES *sources = NULL;
+        VECSOURCES* sources = NULL;
         for (unsigned int index = 0; index < size && !accessible; index++)
         {
           sources = CMediaSourceSettings::GetInstance().GetSources(sourceTypes[index]);
@@ -83,7 +83,7 @@ CHTTPVfsHandler::CHTTPVfsHandler(const HTTPRequest &request)
   SetFile(file, responseStatus);
 }
 
-bool CHTTPVfsHandler::CanHandleRequest(const HTTPRequest &request) const
+bool CHTTPVfsHandler::CanHandleRequest(const HTTPRequest& request) const
 {
   return request.pathUrl.find("/vfs") == 0;
 }

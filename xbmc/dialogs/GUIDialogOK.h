@@ -16,8 +16,7 @@ class CVariant;
 
 using namespace KODI::MESSAGING;
 
-class CGUIDialogOK :
-      public CGUIDialogBoxBase
+class CGUIDialogOK : public CGUIDialogBoxBase
 {
 public:
   CGUIDialogOK(void);
@@ -34,6 +33,7 @@ public:
   \sa KODI::MESSAGING::HELPERS::DialogOKMessage
   */
   bool ShowAndGetInput(const HELPERS::DialogOKMessage& options);
+
 protected:
   void OnInitWindow() override;
   int GetDefaultLabelID(int controlId) const override;

@@ -6,24 +6,26 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "threads/SystemClock.h"
 #include "UdpClient.h"
+
+#include "threads/SystemClock.h"
 #ifdef TARGET_POSIX
 #include <sys/ioctl.h>
 #endif
 #include "Network.h"
-#include "windowing/GraphicContext.h"
-#include "utils/log.h"
-#include "utils/TimeUtils.h"
-
 #include "threads/SingleLock.h"
+#include "utils/TimeUtils.h"
+#include "utils/log.h"
+#include "windowing/GraphicContext.h"
 
 #include <arpa/inet.h>
 
 #define UDPCLIENT_DEBUG_LEVEL LOGDEBUG
 
-CUdpClient::CUdpClient(void) : CThread("UDPClient")
-{}
+CUdpClient::CUdpClient(void)
+  : CThread("UDPClient")
+{
+}
 
 CUdpClient::~CUdpClient(void) = default;
 
@@ -44,7 +46,8 @@ bool CUdpClient::Create(void)
   CLog::Log(UDPCLIENT_DEBUG_LEVEL, "UDPCLIENT: Setting broadcast socket option...");
 
   unsigned int value = 1;
-  if ( setsockopt( client_socket, SOL_SOCKET, SO_BROADCAST, (char*) &value, sizeof( unsigned int ) ) == SOCKET_ERROR)
+  if (setsockopt(client_socket, SOL_SOCKET, SO_BROADCAST, (char*)&value, sizeof(unsigned int)) ==
+      SOCKET_ERROR)
   {
     CLog::Log(UDPCLIENT_DEBUG_LEVEL, "UDPCLIENT: Unable to set socket option.");
     return false;
@@ -71,7 +74,7 @@ void CUdpClient::Destroy()
 
 void CUdpClient::OnStartup()
 {
-  SetPriority( GetMinPriority() );
+  SetPriority(GetMinPriority());
 }
 
 bool CUdpClient::Broadcast(int aPort, const std::string& aMessage)
@@ -138,14 +141,16 @@ void CUdpClient::Process()
   char messageBuffer[1024];
   DWORD dataAvailable;
 
-  while ( !m_bStop )
+  while (!m_bStop)
   {
     fd_set readset, exceptset;
-    FD_ZERO(&readset);    FD_SET(client_socket, &readset);
-    FD_ZERO(&exceptset);  FD_SET(client_socket, &exceptset);
+    FD_ZERO(&readset);
+    FD_SET(client_socket, &readset);
+    FD_ZERO(&exceptset);
+    FD_SET(client_socket, &exceptset);
 
     int nfds = (int)(client_socket);
-    timeval tv = { 0, 100000 };
+    timeval tv = {0, 100000};
     if (select(nfds, &readset, NULL, &exceptset, &tv) < 0)
     {
       CLog::Log(LOGERROR, "UDPCLIENT: failed to select on socket");
@@ -160,7 +165,7 @@ void CUdpClient::Process()
     while (dataAvailable > 0)
     {
       // read data
-      int messageLength = sizeof(messageBuffer) - 1 ;
+      int messageLength = sizeof(messageBuffer) - 1;
 #ifndef TARGET_POSIX
       int remoteAddressSize;
 #else
@@ -168,7 +173,8 @@ void CUdpClient::Process()
 #endif
       remoteAddressSize = sizeof(remoteAddress);
 
-      int ret = recvfrom(client_socket, messageBuffer, messageLength, 0, (struct sockaddr *) & remoteAddress, &remoteAddressSize);
+      int ret = recvfrom(client_socket, messageBuffer, messageLength, 0,
+                         (struct sockaddr*)&remoteAddress, &remoteAddressSize);
       if (ret != SOCKET_ERROR)
       {
         // Packet received
@@ -178,9 +184,10 @@ void CUdpClient::Process()
         std::string message = messageBuffer;
 
         CLog::Log(UDPCLIENT_DEBUG_LEVEL, "UDPCLIENT RX: %u\t\t<- '%s'",
-                  XbmcThreads::SystemClockMillis(), message.c_str() );
+                  XbmcThreads::SystemClockMillis(), message.c_str());
 
-        OnMessage(remoteAddress, message, reinterpret_cast<unsigned char*>(messageBuffer), messageLength);
+        OnMessage(remoteAddress, message, reinterpret_cast<unsigned char*>(messageBuffer),
+                  messageLength);
       }
       else
       {
@@ -193,7 +200,9 @@ void CUdpClient::Process()
     }
 
     // dispatch a single command if any pending
-    while(DispatchNextCommand()) {}
+    while (DispatchNextCommand())
+    {
+    }
   }
 
   closesocket(client_socket);
@@ -220,15 +229,16 @@ bool CUdpClient::DispatchNextCommand()
   if (command.binarySize > 0)
   {
     // only perform the following if logging level at debug
-    CLog::Log(UDPCLIENT_DEBUG_LEVEL, "UDPCLIENT TX: %u\t\t-> "
-                                     "<binary payload %u bytes>",
-              XbmcThreads::SystemClockMillis(), command.binarySize );
+    CLog::Log(UDPCLIENT_DEBUG_LEVEL,
+              "UDPCLIENT TX: %u\t\t-> "
+              "<binary payload %u bytes>",
+              XbmcThreads::SystemClockMillis(), command.binarySize);
 
     do
     {
-      ret = sendto(client_socket, (const char*) command.binary, command.binarySize, 0, (struct sockaddr *) & command.address, sizeof(command.address));
-    }
-    while (ret == -1);
+      ret = sendto(client_socket, (const char*)command.binary, command.binarySize, 0,
+                   (struct sockaddr*)&command.address, sizeof(command.address));
+    } while (ret == -1);
 
     delete[] command.binary;
   }
@@ -236,13 +246,13 @@ bool CUdpClient::DispatchNextCommand()
   {
     // only perform the following if logging level at debug
     CLog::Log(UDPCLIENT_DEBUG_LEVEL, "UDPCLIENT TX: %u\t\t-> '%s'",
-              XbmcThreads::SystemClockMillis(), command.message.c_str() );
+              XbmcThreads::SystemClockMillis(), command.message.c_str());
 
     do
     {
-      ret = sendto(client_socket, command.message.c_str(), command.message.size(), 0, (struct sockaddr *) & command.address, sizeof(command.address));
-    }
-    while (ret == -1 && !m_bStop);
+      ret = sendto(client_socket, command.message.c_str(), command.message.size(), 0,
+                   (struct sockaddr*)&command.address, sizeof(command.address));
+    } while (ret == -1 && !m_bStop);
   }
   return true;
 }

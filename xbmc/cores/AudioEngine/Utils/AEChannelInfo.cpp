@@ -54,15 +54,25 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
   bool dstHasBC = false;
 
   for (unsigned int c = 0; c < rhs.m_channelCount; ++c)
-    switch(rhs.m_channels[c])
+    switch (rhs.m_channels[c])
     {
-      case AE_CH_SL: dstHasSL = true; break;
-      case AE_CH_SR: dstHasSR = true; break;
-      case AE_CH_BL: dstHasRL = true; break;
-      case AE_CH_BR: dstHasRR = true; break;
-      case AE_CH_BC: dstHasBC = true; break;
-      default:
-        break;
+    case AE_CH_SL:
+      dstHasSL = true;
+      break;
+    case AE_CH_SR:
+      dstHasSR = true;
+      break;
+    case AE_CH_BL:
+      dstHasRL = true;
+      break;
+    case AE_CH_BR:
+      dstHasRR = true;
+      break;
+    case AE_CH_BC:
+      dstHasBC = true;
+      break;
+    default:
+      break;
     }
 
   CAEChannelInfo newInfo;
@@ -70,13 +80,23 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
   {
     switch (m_channels[i])
     {
-      case AE_CH_SL: srcHasSL = true; break;
-      case AE_CH_SR: srcHasSR = true; break;
-      case AE_CH_BL: srcHasRL = true; break;
-      case AE_CH_BR: srcHasRR = true; break;
-      case AE_CH_BC: srcHasBC = true; break;
-      default:
-        break;
+    case AE_CH_SL:
+      srcHasSL = true;
+      break;
+    case AE_CH_SR:
+      srcHasSR = true;
+      break;
+    case AE_CH_BL:
+      srcHasRL = true;
+      break;
+    case AE_CH_BR:
+      srcHasRR = true;
+      break;
+    case AE_CH_BC:
+      srcHasBC = true;
+      break;
+    default:
+      break;
     }
 
     bool found = false;
@@ -161,18 +181,18 @@ CAEChannelInfo& CAEChannelInfo::operator=(const enum AEStdChLayout rhs)
   assert(rhs > AE_CH_LAYOUT_INVALID && rhs < AE_CH_LAYOUT_MAX);
 
   static enum AEChannel layouts[AE_CH_LAYOUT_MAX][9] = {
-    {AE_CH_FC, AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_LFE, AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_FC , AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_FC , AE_CH_LFE, AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_BL , AE_CH_BR , AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_BL , AE_CH_BR , AE_CH_LFE, AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_FC , AE_CH_BL , AE_CH_BR , AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_FC , AE_CH_LFE,  AE_CH_BL , AE_CH_BR , AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_FC , AE_CH_BL , AE_CH_BR , AE_CH_SL , AE_CH_SR, AE_CH_NULL},
-    {AE_CH_FL, AE_CH_FR, AE_CH_FC , AE_CH_LFE, AE_CH_BL , AE_CH_BR , AE_CH_SL , AE_CH_SR, AE_CH_NULL}
-  };
+      {AE_CH_FC, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_LFE, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_LFE, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_BL, AE_CH_BR, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_BL, AE_CH_BR, AE_CH_LFE, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_BL, AE_CH_BR, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_LFE, AE_CH_BL, AE_CH_BR, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_BL, AE_CH_BR, AE_CH_SL, AE_CH_SR, AE_CH_NULL},
+      {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_LFE, AE_CH_BL, AE_CH_BR, AE_CH_SL, AE_CH_SR,
+       AE_CH_NULL}};
 
   *this = layouts[rhs];
   return *this;
@@ -211,13 +231,13 @@ CAEChannelInfo& CAEChannelInfo::operator-=(const enum AEChannel& rhs)
   assert(rhs > AE_CH_NULL && rhs < AE_CH_MAX);
 
   unsigned int i = 0;
-  while(i < m_channelCount && m_channels[i] != rhs)
+  while (i < m_channelCount && m_channels[i] != rhs)
     i++;
   if (i >= m_channelCount)
     return *this; // Channel not found
 
-  for(; i < m_channelCount-1; i++)
-    m_channels[i] = m_channels[i+1];
+  for (; i < m_channelCount - 1; i++)
+    m_channels[i] = m_channels[i + 1];
 
   m_channels[i] = AE_CH_NULL;
   m_channelCount--;
@@ -241,7 +261,7 @@ CAEChannelInfo::operator std::string() const
     s.append(GetChName(m_channels[i]));
     s.append(", ");
   }
-  s.append(GetChName(m_channels[m_channelCount-1]));
+  s.append(GetChName(m_channels[m_channelCount - 1]));
 
   return s;
 }
@@ -274,31 +294,21 @@ const char* CAEChannelInfo::GetChName(const enum AEChannel ch)
 {
   assert(ch >= 0 && ch < AE_CH_MAX);
 
-  static const char* channels[AE_CH_MAX] =
-  {
-    "RAW" ,
-    "FL"  , "FR" , "FC" , "LFE", "BL"  , "BR"  , "FLOC",
-    "FROC", "BC" , "SL" , "SR" , "TFL" , "TFR" , "TFC" ,
-    "TC"  , "TBL", "TBR", "TBC", "BLOC", "BROC",
+  static const char* channels[AE_CH_MAX] = {
+      "RAW", "FL", "FR", "FC", "LFE", "BL", "BR", "FLOC", "FROC", "BC", "SL", "SR", "TFL", "TFR",
+      "TFC", "TC", "TBL", "TBR", "TBC", "BLOC", "BROC",
 
-    /* p16v devices */
-    "UNKNOWN1" , "UNKNOWN2" , "UNKNOWN3" , "UNKNOWN4" ,
-    "UNKNOWN5" , "UNKNOWN6" , "UNKNOWN7" , "UNKNOWN8" ,
-    "UNKNOWN9" , "UNKNOWN10", "UNKNOWN11", "UNKNOWN12",
-    "UNKNOWN13", "UNKNOWN14", "UNKNOWN15", "UNKNOWN16",
-    "UNKNOWN17", "UNKNOWN18", "UNKNOWN19", "UNKNOWN20",
-    "UNKNOWN21", "UNKNOWN22", "UNKNOWN23", "UNKNOWN24",
-    "UNKNOWN25", "UNKNOWN26", "UNKNOWN27", "UNKNOWN28",
-    "UNKNOWN29", "UNKNOWN30", "UNKNOWN31", "UNKNOWN32",
-    "UNKNOWN33", "UNKNOWN34", "UNKNOWN35", "UNKNOWN36",
-    "UNKNOWN37", "UNKNOWN38", "UNKNOWN39", "UNKNOWN40",
-    "UNKNOWN41", "UNKNOWN42", "UNKNOWN43", "UNKNOWN44",
-    "UNKNOWN45", "UNKNOWN46", "UNKNOWN47", "UNKNOWN48",
-    "UNKNOWN49", "UNKNOWN50", "UNKNOWN51", "UNKNOWN52",
-    "UNKNOWN53", "UNKNOWN54", "UNKNOWN55", "UNKNOWN56",
-    "UNKNOWN57", "UNKNOWN58", "UNKNOWN59", "UNKNOWN60",
-    "UNKNOWN61", "UNKNOWN62", "UNKNOWN63", "UNKNOWN64"
-  };
+      /* p16v devices */
+      "UNKNOWN1", "UNKNOWN2", "UNKNOWN3", "UNKNOWN4", "UNKNOWN5", "UNKNOWN6", "UNKNOWN7",
+      "UNKNOWN8", "UNKNOWN9", "UNKNOWN10", "UNKNOWN11", "UNKNOWN12", "UNKNOWN13", "UNKNOWN14",
+      "UNKNOWN15", "UNKNOWN16", "UNKNOWN17", "UNKNOWN18", "UNKNOWN19", "UNKNOWN20", "UNKNOWN21",
+      "UNKNOWN22", "UNKNOWN23", "UNKNOWN24", "UNKNOWN25", "UNKNOWN26", "UNKNOWN27", "UNKNOWN28",
+      "UNKNOWN29", "UNKNOWN30", "UNKNOWN31", "UNKNOWN32", "UNKNOWN33", "UNKNOWN34", "UNKNOWN35",
+      "UNKNOWN36", "UNKNOWN37", "UNKNOWN38", "UNKNOWN39", "UNKNOWN40", "UNKNOWN41", "UNKNOWN42",
+      "UNKNOWN43", "UNKNOWN44", "UNKNOWN45", "UNKNOWN46", "UNKNOWN47", "UNKNOWN48", "UNKNOWN49",
+      "UNKNOWN50", "UNKNOWN51", "UNKNOWN52", "UNKNOWN53", "UNKNOWN54", "UNKNOWN55", "UNKNOWN56",
+      "UNKNOWN57", "UNKNOWN58", "UNKNOWN59", "UNKNOWN60", "UNKNOWN61", "UNKNOWN62", "UNKNOWN63",
+      "UNKNOWN64"};
 
   return channels[ch];
 }

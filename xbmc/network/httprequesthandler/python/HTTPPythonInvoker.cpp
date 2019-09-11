@@ -11,11 +11,13 @@
 #include "CompileInfo.h"
 #include "utils/StringUtils.h"
 
-CHTTPPythonInvoker::CHTTPPythonInvoker(ILanguageInvocationHandler* invocationHandler, HTTPPythonRequest* request)
-  : CPythonInvoker(invocationHandler),
-    m_request(request),
-    m_internalError(false)
-{ }
+CHTTPPythonInvoker::CHTTPPythonInvoker(ILanguageInvocationHandler* invocationHandler,
+                                       HTTPPythonRequest* request)
+  : CPythonInvoker(invocationHandler)
+  , m_request(request)
+  , m_internalError(false)
+{
+}
 
 CHTTPPythonInvoker::~CHTTPPythonInvoker()
 {
@@ -33,7 +35,9 @@ void CHTTPPythonInvoker::onAbort()
   m_request->responseStatus = MHD_HTTP_INTERNAL_SERVER_ERROR;
 }
 
-void CHTTPPythonInvoker::onError(const std::string& exceptionType /* = "" */, const std::string& exceptionValue /* = "" */, const std::string& exceptionTraceback /* = "" */)
+void CHTTPPythonInvoker::onError(const std::string& exceptionType /* = "" */,
+                                 const std::string& exceptionValue /* = "" */,
+                                 const std::string& exceptionTraceback /* = "" */)
 {
   if (m_request == NULL)
     return;
@@ -52,7 +56,7 @@ void CHTTPPythonInvoker::onError(const std::string& exceptionType /* = "" */, co
     output += "\n";
   }
 
-  if (!exceptionTraceback .empty())
+  if (!exceptionTraceback.empty())
     output += exceptionTraceback;
 
   // replace all special characters
@@ -69,5 +73,6 @@ void CHTTPPythonInvoker::onError(const std::string& exceptionType /* = "" */, co
     output.insert(output.find('\n'), "</b>");
   }
 
-  m_request->responseData = "<html><head><title>" + std::string(CCompileInfo::GetAppName()) + ": python error</title></head><body>" + output + "</body></html>";
+  m_request->responseData = "<html><head><title>" + std::string(CCompileInfo::GetAppName()) +
+                            ": python error</title></head><body>" + output + "</body></html>";
 }

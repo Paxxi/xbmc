@@ -11,4 +11,3 @@
 #include <windows.h>
 
 typedef HANDLE ThreadLwpId;
-

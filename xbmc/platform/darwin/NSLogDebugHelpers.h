@@ -1,4 +1,4 @@
-	/*
+/*
  *  NSLogDebugHelpers.h
  *  xbmclauncher
  *
@@ -14,7 +14,7 @@
 
 #define DEBUG
 #ifdef DEBUG
-#define LOG(s, ...)  NSLog(@"[DEBUG] " s, ##__VA_ARGS__)
+#define LOG(s, ...) NSLog(@"[DEBUG] " s, ##__VA_ARGS__)
 #define ILOG(s, ...) NSLog(@"[INFO]  " s, ##__VA_ARGS__)
 #define ELOG(s, ...) NSLog(@"[ERROR] " s, ##__VA_ARGS__)
 #define DLOG(s, ...) LOG(s, ##__VA_ARGS__)

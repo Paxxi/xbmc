@@ -13,9 +13,9 @@
 #include <cstring>
 #include <stdio.h>
 
-#include <unistd.h> /* FreeBSD can't write standalone headers */
 #include <sys/sysctl.h> /* FreeBSD can't write standalone headers */
 #include <sys/types.h>
+#include <unistd.h> /* FreeBSD can't write standalone headers */
 
 namespace KODI
 {
@@ -79,5 +79,5 @@ void GetMemoryStatus(MemoryStatus* buffer)
   buffer->availPhys = mem_inactive + mem_cache + mem_free;
 }
 
-}
-}
+} // namespace MEMORY
+} // namespace KODI

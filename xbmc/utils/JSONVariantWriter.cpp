@@ -15,7 +15,7 @@
 #include <rapidjson/writer.h>
 
 template<class TWriter>
-bool InternalWrite(TWriter& writer, const CVariant &value)
+bool InternalWrite(TWriter& writer, const CVariant& value)
 {
   switch (value.type())
   {
@@ -52,8 +52,7 @@ bool InternalWrite(TWriter& writer, const CVariant &value)
 
     for (CVariant::const_iterator_map itr = value.begin_map(); itr != value.end_map(); ++itr)
     {
-      if (!writer.Key(itr->first.c_str()) ||
-        !InternalWrite(writer, itr->second))
+      if (!writer.Key(itr->first.c_str()) || !InternalWrite(writer, itr->second))
         return false;
     }
 
@@ -68,7 +67,7 @@ bool InternalWrite(TWriter& writer, const CVariant &value)
   return false;
 }
 
-bool CJSONVariantWriter::Write(const CVariant &value, std::string& output, bool compact)
+bool CJSONVariantWriter::Write(const CVariant& value, std::string& output, bool compact)
 {
   rapidjson::StringBuffer stringBuffer;
   if (compact)

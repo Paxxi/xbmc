@@ -18,13 +18,8 @@
 namespace
 {
 // Mapping of PowerSavingMode to X11's mode constants.
-const CARD16 X_DPMS_MODES[] =
-{
-  DPMSModeStandby,
-  DPMSModeSuspend,
-  DPMSModeOff
-};
-}
+const CARD16 X_DPMS_MODES[] = {DPMSModeStandby, DPMSModeSuspend, DPMSModeOff};
+} // namespace
 
 CX11DPMSSupport::CX11DPMSSupport()
 {

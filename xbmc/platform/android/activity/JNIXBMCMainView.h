@@ -16,7 +16,9 @@
 #include <androidjni/Surface.h>
 #include <androidjni/SurfaceHolder.h>
 
-class CJNIXBMCMainView : virtual public CJNIBase, public CJNISurfaceHolderCallback, public CJNIInterfaceImplem<CJNIXBMCMainView>
+class CJNIXBMCMainView : virtual public CJNIBase,
+                         public CJNISurfaceHolderCallback,
+                         public CJNIInterfaceImplem<CJNIXBMCMainView>
 {
 public:
   CJNIXBMCMainView(CJNISurfaceHolderCallback* callback);
@@ -41,7 +43,8 @@ protected:
   static CEvent m_surfaceCreated;
 
   static void _attach(JNIEnv* env, jobject thiz);
-  static void _surfaceChanged(JNIEnv* env, jobject thiz, jobject holder, jint format, jint width, jint height);
+  static void _surfaceChanged(
+      JNIEnv* env, jobject thiz, jobject holder, jint format, jint width, jint height);
   static void _surfaceCreated(JNIEnv* env, jobject thiz, jobject holder);
   static void _surfaceDestroyed(JNIEnv* env, jobject thiz, jobject holder);
 };

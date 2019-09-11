@@ -25,11 +25,11 @@ public:
   CVideoLibraryResetResumePointJob(const CFileItemPtr item);
   ~CVideoLibraryResetResumePointJob() override = default;
 
-  const char *GetType() const override { return "CVideoLibraryResetResumePointJob"; }
+  const char* GetType() const override { return "CVideoLibraryResetResumePointJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
-  bool Work(CVideoDatabase &db) override;
+  bool Work(CVideoDatabase& db) override;
 
 private:
   CFileItemPtr m_item;

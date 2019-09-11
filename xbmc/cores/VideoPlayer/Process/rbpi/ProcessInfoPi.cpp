@@ -25,7 +25,9 @@ CProcessInfo* CProcessInfoPi::Create()
 CProcessInfoPi::CProcessInfoPi()
 {
   /* Create dummy component with attached pool */
-  std::shared_ptr<IVideoBufferPool> pool = std::make_shared<CMMALPool>(MMAL_COMPONENT_DEFAULT_VIDEO_DECODER, false, MMAL_NUM_OUTPUT_BUFFERS, 0, MMAL_ENCODING_UNKNOWN, MMALStateFFDec);
+  std::shared_ptr<IVideoBufferPool> pool = std::make_shared<CMMALPool>(
+      MMAL_COMPONENT_DEFAULT_VIDEO_DECODER, false, MMAL_NUM_OUTPUT_BUFFERS, 0,
+      MMAL_ENCODING_UNKNOWN, MMALStateFFDec);
   m_videoBufferManager.RegisterPool(pool);
 }
 

@@ -22,7 +22,7 @@ using namespace KODI::MESSAGING;
 
 using KODI::MESSAGING::HELPERS::DialogResponse;
 
-#define LANGUAGE_ADDON_PREFIX   "resource.language."
+#define LANGUAGE_ADDON_PREFIX "resource.language."
 
 namespace ADDON
 {
@@ -59,7 +59,8 @@ CLanguageResource::CLanguageResource(const AddonInfoPtr& addonInfo)
     m_dvdLanguageSubtitle = m_locale.GetLanguageCode();
 
   // parse <sorttokens>
-  const CAddonExtensions* sorttokensElement = Type(ADDON_RESOURCE_LANGUAGE)->GetElement("sorttokens");
+  const CAddonExtensions* sorttokensElement =
+      Type(ADDON_RESOURCE_LANGUAGE)->GetElement("sorttokens");
   if (sorttokensElement != nullptr)
   {
     /* First loop goes around rows e.g.
@@ -89,7 +90,9 @@ CLanguageResource::CLanguageResource(const AddonInfoPtr& addonInfo)
 
 bool CLanguageResource::IsInUse() const
 {
-  return StringUtils::EqualsNoCase(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOCALE_LANGUAGE), ID());
+  return StringUtils::EqualsNoCase(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                                       CSettings::SETTING_LOCALE_LANGUAGE),
+                                   ID());
 }
 
 void CLanguageResource::OnPostInstall(bool update, bool modal)
@@ -98,20 +101,20 @@ void CLanguageResource::OnPostInstall(bool update, bool modal)
     return;
 
   if (IsInUse() ||
-     (!update && !modal &&
+      (!update && !modal &&
        (HELPERS::ShowYesNoDialogText(CVariant{Name()}, CVariant{24132}) == DialogResponse::YES)))
   {
     if (IsInUse())
       g_langInfo.SetLanguage(ID());
     else
-      CServiceBroker::GetSettingsComponent()->GetSettings()->SetString(CSettings::SETTING_LOCALE_LANGUAGE, ID());
+      CServiceBroker::GetSettingsComponent()->GetSettings()->SetString(
+          CSettings::SETTING_LOCALE_LANGUAGE, ID());
   }
 }
 
-bool CLanguageResource::IsAllowed(const std::string &file) const
+bool CLanguageResource::IsAllowed(const std::string& file) const
 {
-  return file.empty() ||
-         StringUtils::EqualsNoCase(file.c_str(), "langinfo.xml") ||
+  return file.empty() || StringUtils::EqualsNoCase(file.c_str(), "langinfo.xml") ||
          StringUtils::EqualsNoCase(file.c_str(), "strings.po");
 }
 
@@ -128,7 +131,7 @@ std::string CLanguageResource::GetAddonId(const std::string& locale)
   return addonId;
 }
 
-bool CLanguageResource::FindLegacyLanguage(const std::string &locale, std::string &legacyLanguage)
+bool CLanguageResource::FindLegacyLanguage(const std::string& locale, std::string& legacyLanguage)
 {
   if (locale.empty())
     return false;
@@ -143,4 +146,4 @@ bool CLanguageResource::FindLegacyLanguage(const std::string &locale, std::strin
   return true;
 }
 
-}
+} // namespace ADDON

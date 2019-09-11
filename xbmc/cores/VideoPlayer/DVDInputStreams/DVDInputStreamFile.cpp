@@ -19,7 +19,8 @@
 using namespace XFILE;
 
 CDVDInputStreamFile::CDVDInputStreamFile(const CFileItem& fileitem, unsigned int flags)
-  : CDVDInputStream(DVDSTREAM_TYPE_FILE, fileitem), m_flags(flags)
+  : CDVDInputStream(DVDSTREAM_TYPE_FILE, fileitem)
+  , m_flags(flags)
 {
   m_pFile = NULL;
   m_eof = true;
@@ -58,13 +59,17 @@ bool CDVDInputStreamFile::Open()
    * 3) No buffer
    * 4) Buffer all non-local (remote) filesystems
    */
-  if (!URIUtils::IsOnDVD(m_item.GetDynPath()) && !URIUtils::IsBluray(m_item.GetDynPath())) // Never cache these
+  if (!URIUtils::IsOnDVD(m_item.GetDynPath()) &&
+      !URIUtils::IsBluray(m_item.GetDynPath())) // Never cache these
   {
-    unsigned int iCacheBufferMode = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_cacheBufferMode;
-    if ((iCacheBufferMode == CACHE_BUFFER_MODE_INTERNET && URIUtils::IsInternetStream(m_item.GetDynPath(), true))
-     || (iCacheBufferMode == CACHE_BUFFER_MODE_TRUE_INTERNET && URIUtils::IsInternetStream(m_item.GetDynPath(), false))
-     || (iCacheBufferMode == CACHE_BUFFER_MODE_REMOTE && URIUtils::IsRemote(m_item.GetDynPath()))
-     || (iCacheBufferMode == CACHE_BUFFER_MODE_ALL))
+    unsigned int iCacheBufferMode =
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_cacheBufferMode;
+    if ((iCacheBufferMode == CACHE_BUFFER_MODE_INTERNET &&
+         URIUtils::IsInternetStream(m_item.GetDynPath(), true)) ||
+        (iCacheBufferMode == CACHE_BUFFER_MODE_TRUE_INTERNET &&
+         URIUtils::IsInternetStream(m_item.GetDynPath(), false)) ||
+        (iCacheBufferMode == CACHE_BUFFER_MODE_REMOTE && URIUtils::IsRemote(m_item.GetDynPath())) ||
+        (iCacheBufferMode == CACHE_BUFFER_MODE_ALL))
     {
       flags |= READ_CACHED;
     }
@@ -75,11 +80,8 @@ bool CDVDInputStreamFile::Open()
 
   std::string content = m_item.GetMimeType();
 
-  if (content == "video/mp4" ||
-      content == "video/x-msvideo" ||
-      content == "video/avi" ||
-      content == "video/x-matroska" ||
-      content == "video/x-matroska-3d")
+  if (content == "video/mp4" || content == "video/x-msvideo" || content == "video/avi" ||
+      content == "video/x-matroska" || content == "video/x-matroska-3d")
     flags |= READ_MULTI_STREAM;
 
   // open file in binary mode
@@ -113,7 +115,8 @@ void CDVDInputStreamFile::Close()
 
 int CDVDInputStreamFile::Read(uint8_t* buf, int buf_size)
 {
-  if(!m_pFile) return -1;
+  if (!m_pFile)
+    return -1;
 
   ssize_t ret = m_pFile->Read(buf, buf_size);
 
@@ -129,15 +132,17 @@ int CDVDInputStreamFile::Read(uint8_t* buf, int buf_size)
 
 int64_t CDVDInputStreamFile::Seek(int64_t offset, int whence)
 {
-  if(!m_pFile) return -1;
+  if (!m_pFile)
+    return -1;
 
-  if(whence == SEEK_POSSIBLE)
+  if (whence == SEEK_POSSIBLE)
     return m_pFile->IoControl(IOCTRL_SEEK_POSSIBLE, NULL);
 
   int64_t ret = m_pFile->Seek(offset, whence);
 
   /* if we succeed, we are not eof anymore */
-  if( ret >= 0 ) m_eof = false;
+  if (ret >= 0)
+    m_eof = false;
 
   return ret;
 }
@@ -149,9 +154,9 @@ int64_t CDVDInputStreamFile::GetLength()
   return 0;
 }
 
-bool CDVDInputStreamFile::GetCacheStatus(XFILE::SCacheStatus *status)
+bool CDVDInputStreamFile::GetCacheStatus(XFILE::SCacheStatus* status)
 {
-  if(m_pFile && m_pFile->IoControl(IOCTRL_CACHE_STATUS, status) >= 0)
+  if (m_pFile && m_pFile->IoControl(IOCTRL_CACHE_STATUS, status) >= 0)
     return true;
   else
     return false;
@@ -162,7 +167,7 @@ BitstreamStats CDVDInputStreamFile::GetBitstreamStats() const
   if (!m_pFile)
     return m_stats; // dummy return. defined in CDVDInputStream
 
-  if(m_pFile->GetBitstreamStats())
+  if (m_pFile->GetBitstreamStats())
     return *m_pFile->GetBitstreamStats();
   else
     return m_stats;
@@ -170,7 +175,7 @@ BitstreamStats CDVDInputStreamFile::GetBitstreamStats() const
 
 int CDVDInputStreamFile::GetBlockSize()
 {
-  if(m_pFile)
+  if (m_pFile)
     return m_pFile->GetChunkSize();
   else
     return 0;
@@ -179,8 +184,10 @@ int CDVDInputStreamFile::GetBlockSize()
 void CDVDInputStreamFile::SetReadRate(unsigned rate)
 {
   // Increase requested rate by 10%:
-  unsigned maxrate = (unsigned) (1.1 * rate);
+  unsigned maxrate = (unsigned)(1.1 * rate);
 
-  if(m_pFile->IoControl(IOCTRL_CACHE_SETRATE, &maxrate) >= 0)
-    CLog::Log(LOGDEBUG, "CDVDInputStreamFile::SetReadRate - set cache throttle rate to %u bytes per second", maxrate);
+  if (m_pFile->IoControl(IOCTRL_CACHE_SETRATE, &maxrate) >= 0)
+    CLog::Log(LOGDEBUG,
+              "CDVDInputStreamFile::SetReadRate - set cache throttle rate to %u bytes per second",
+              maxrate);
 }

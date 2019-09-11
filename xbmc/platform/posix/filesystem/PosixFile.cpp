@@ -58,7 +58,7 @@ bool CPosixFile::Open(const CURL& url)
   return m_fd != -1;
 }
 
-bool CPosixFile::OpenForWrite(const CURL& url, bool bOverWrite /* = false*/ )
+bool CPosixFile::OpenForWrite(const CURL& url, bool bOverWrite /* = false*/)
 {
   if (m_fd >= 0)
     return false;
@@ -67,7 +67,8 @@ bool CPosixFile::OpenForWrite(const CURL& url, bool bOverWrite /* = false*/ )
   if (filename.empty())
     return false;
 
-  m_fd = open(filename.c_str(), O_RDWR | O_CREAT | (bOverWrite ? O_TRUNC : 0), S_IWUSR | S_IRUSR | S_IRGRP | S_IWGRP | S_IROTH);
+  m_fd = open(filename.c_str(), O_RDWR | O_CREAT | (bOverWrite ? O_TRUNC : 0),
+              S_IWUSR | S_IRUSR | S_IRGRP | S_IWGRP | S_IROTH);
   if (m_fd < 0)
     return false;
 
@@ -166,8 +167,8 @@ int64_t CPosixFile::Seek(int64_t iFilePosition, int iWhence /* = SEEK_SET*/)
   //! @todo properly support with detection in configure
   //! Android special case: Android doesn't substitute off64_t for off_t and similar functions
   m_filePos = lseek64(m_fd, (off64_t)iFilePosition, iWhence);
-#else  // !TARGET_ANDROID
-  const off_t filePosOffT = (off_t) iFilePosition;
+#else // !TARGET_ANDROID
+  const off_t filePosOffT = (off_t)iFilePosition;
   // check for parameter overflow
   if (sizeof(int64_t) != sizeof(off_t) && iFilePosition != filePosOffT)
     return -1;
@@ -183,7 +184,7 @@ int CPosixFile::Truncate(int64_t size)
   if (m_fd < 0)
     return -1;
 
-  const off_t sizeOffT = (off_t) size;
+  const off_t sizeOffT = (off_t)size;
   // check for parameter overflow
   if (sizeof(int64_t) != sizeof(off_t) && size != sizeOffT)
     return -1;
@@ -227,7 +228,7 @@ int CPosixFile::IoControl(EIoControl request, void* param)
 
   if (request == IOCTRL_NATIVE)
   {
-    if(!param)
+    if (!param)
       return -1;
     return ioctl(m_fd, ((SNativeIoControl*)param)->request, ((SNativeIoControl*)param)->param);
   }
@@ -296,12 +297,16 @@ bool CPosixFile::Rename(const CURL& url, const CURL& urlnew)
     return true;
 
   if (errno == EACCES || errno == EPERM)
-    CLog::LogF(LOGWARNING, "Can't access file \"%s\" for rename to \"%s\"", name.c_str(), newName.c_str());
+    CLog::LogF(LOGWARNING, "Can't access file \"%s\" for rename to \"%s\"", name.c_str(),
+               newName.c_str());
 
   // rename across mount points - need to copy/delete
   if (errno == EXDEV)
   {
-    CLog::LogF(LOGDEBUG, "Source file \"%s\" and target file \"%s\" are located on different filesystems, copy&delete will be used instead of rename", name.c_str(), newName.c_str());
+    CLog::LogF(LOGDEBUG,
+               "Source file \"%s\" and target file \"%s\" are located on different filesystems, "
+               "copy&delete will be used instead of rename",
+               name.c_str(), newName.c_str());
     if (XFILE::CFile::Copy(name, newName))
     {
       if (XFILE::CFile::Delete(name))

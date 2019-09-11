@@ -22,292 +22,312 @@ namespace ADDON
 extern "C"
 {
 
-void Interface_GUIDialogProgress::Init(AddonGlobalInterface* addonInterface)
-{
-  addonInterface->toKodi->kodi_gui->dialogProgress = static_cast<AddonToKodiFuncTable_kodi_gui_dialogProgress*>(malloc(sizeof(AddonToKodiFuncTable_kodi_gui_dialogProgress)));
-
-  addonInterface->toKodi->kodi_gui->dialogProgress->new_dialog = new_dialog;
-  addonInterface->toKodi->kodi_gui->dialogProgress->delete_dialog = delete_dialog;
-  addonInterface->toKodi->kodi_gui->dialogProgress->open = open;
-  addonInterface->toKodi->kodi_gui->dialogProgress->set_heading = set_heading;
-  addonInterface->toKodi->kodi_gui->dialogProgress->set_line = set_line;
-  addonInterface->toKodi->kodi_gui->dialogProgress->set_can_cancel = set_can_cancel;
-  addonInterface->toKodi->kodi_gui->dialogProgress->is_canceled = is_canceled;
-  addonInterface->toKodi->kodi_gui->dialogProgress->set_percentage = set_percentage;
-  addonInterface->toKodi->kodi_gui->dialogProgress->get_percentage = get_percentage;
-  addonInterface->toKodi->kodi_gui->dialogProgress->show_progress_bar = show_progress_bar;
-  addonInterface->toKodi->kodi_gui->dialogProgress->set_progress_max = set_progress_max;
-  addonInterface->toKodi->kodi_gui->dialogProgress->set_progress_advance = set_progress_advance;
-  addonInterface->toKodi->kodi_gui->dialogProgress->abort = abort;
-}
-
-void Interface_GUIDialogProgress::DeInit(AddonGlobalInterface* addonInterface)
-{
-  free(addonInterface->toKodi->kodi_gui->dialogProgress);
-}
-
-void* Interface_GUIDialogProgress::new_dialog(void* kodiBase)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  void Interface_GUIDialogProgress::Init(AddonGlobalInterface* addonInterface)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return nullptr;
+    addonInterface->toKodi->kodi_gui->dialogProgress =
+        static_cast<AddonToKodiFuncTable_kodi_gui_dialogProgress*>(
+            malloc(sizeof(AddonToKodiFuncTable_kodi_gui_dialogProgress)));
+
+    addonInterface->toKodi->kodi_gui->dialogProgress->new_dialog = new_dialog;
+    addonInterface->toKodi->kodi_gui->dialogProgress->delete_dialog = delete_dialog;
+    addonInterface->toKodi->kodi_gui->dialogProgress->open = open;
+    addonInterface->toKodi->kodi_gui->dialogProgress->set_heading = set_heading;
+    addonInterface->toKodi->kodi_gui->dialogProgress->set_line = set_line;
+    addonInterface->toKodi->kodi_gui->dialogProgress->set_can_cancel = set_can_cancel;
+    addonInterface->toKodi->kodi_gui->dialogProgress->is_canceled = is_canceled;
+    addonInterface->toKodi->kodi_gui->dialogProgress->set_percentage = set_percentage;
+    addonInterface->toKodi->kodi_gui->dialogProgress->get_percentage = get_percentage;
+    addonInterface->toKodi->kodi_gui->dialogProgress->show_progress_bar = show_progress_bar;
+    addonInterface->toKodi->kodi_gui->dialogProgress->set_progress_max = set_progress_max;
+    addonInterface->toKodi->kodi_gui->dialogProgress->set_progress_advance = set_progress_advance;
+    addonInterface->toKodi->kodi_gui->dialogProgress->abort = abort;
   }
 
-  CGUIDialogProgress *dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
-  if (!dialog)
+  void Interface_GUIDialogProgress::DeInit(AddonGlobalInterface* addonInterface)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (dialog='%p') on addon '%s'",
-              __FUNCTION__, static_cast<void*>(dialog), addon->ID().c_str());
-    return nullptr;
+    free(addonInterface->toKodi->kodi_gui->dialogProgress);
   }
 
-  return dialog;
-}
-
-void Interface_GUIDialogProgress::delete_dialog(void* kodiBase, void* handle)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  void* Interface_GUIDialogProgress::new_dialog(void* kodiBase)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return nullptr;
+    }
+
+    CGUIDialogProgress* dialog =
+        CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(
+            WINDOW_DIALOG_PROGRESS);
+    if (!dialog)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (dialog='%p') on addon '%s'",
+          __FUNCTION__, static_cast<void*>(dialog), addon->ID().c_str());
+      return nullptr;
+    }
+
+    return dialog;
   }
 
-  if (!handle)
+  void Interface_GUIDialogProgress::delete_dialog(void* kodiBase, void* handle)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->Close();
   }
 
-  static_cast<CGUIDialogProgress*>(handle)->Close();
-}
-
-void Interface_GUIDialogProgress::open(void* kodiBase, void* handle)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  void Interface_GUIDialogProgress::open(void* kodiBase, void* handle)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->Open();
   }
 
-  if (!handle)
+  void Interface_GUIDialogProgress::set_heading(void* kodiBase, void* handle, const char* heading)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle || !heading)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p', heading='%p') "
+          "on addon '%s'",
+          __FUNCTION__, handle, static_cast<const void*>(heading), addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->SetHeading(heading);
   }
 
-  static_cast<CGUIDialogProgress*>(handle)->Open();
-}
-
-void Interface_GUIDialogProgress::set_heading(void* kodiBase, void* handle, const char* heading)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  void Interface_GUIDialogProgress::set_line(void* kodiBase,
+                                             void* handle,
+                                             unsigned int line,
+                                             const char* text)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle || !text)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p', text='%p') on "
+          "addon '%s'",
+          __FUNCTION__, handle, static_cast<const void*>(text), addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->SetLine(line, text);
   }
 
-  if (!handle || !heading)
+  void Interface_GUIDialogProgress::set_can_cancel(void* kodiBase, void* handle, bool canCancel)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p', heading='%p') "
-              "on addon '%s'",
-              __FUNCTION__, handle, static_cast<const void*>(heading), addon->ID().c_str());
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->SetCanCancel(canCancel);
   }
 
-  static_cast<CGUIDialogProgress*>(handle)->SetHeading(heading);
-}
-
-void Interface_GUIDialogProgress::set_line(void* kodiBase, void* handle, unsigned int line, const char* text)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  bool Interface_GUIDialogProgress::is_canceled(void* kodiBase, void* handle)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return false;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return false;
+    }
+
+    return static_cast<CGUIDialogProgress*>(handle)->IsCanceled();
   }
 
-  if (!handle || !text)
+  void Interface_GUIDialogProgress::set_percentage(void* kodiBase, void* handle, int percentage)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p', text='%p') on "
-              "addon '%s'",
-              __FUNCTION__, handle, static_cast<const void*>(text), addon->ID().c_str());
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->SetPercentage(percentage);
   }
 
-  static_cast<CGUIDialogProgress*>(handle)->SetLine(line, text);
-}
-
-void Interface_GUIDialogProgress::set_can_cancel(void* kodiBase, void* handle, bool canCancel)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  int Interface_GUIDialogProgress::get_percentage(void* kodiBase, void* handle)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return 0;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return 0;
+    }
+
+    return static_cast<CGUIDialogProgress*>(handle)->GetPercentage();
   }
 
-  if (!handle)
+  void Interface_GUIDialogProgress::show_progress_bar(void* kodiBase, void* handle, bool onOff)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->ShowProgressBar(onOff);
   }
 
-  static_cast<CGUIDialogProgress*>(handle)->SetCanCancel(canCancel);
-}
-
-bool Interface_GUIDialogProgress::is_canceled(void* kodiBase, void* handle)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  void Interface_GUIDialogProgress::set_progress_max(void* kodiBase, void* handle, int max)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return false;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->SetProgressMax(max);
   }
 
-  if (!handle)
+  void Interface_GUIDialogProgress::set_progress_advance(void* kodiBase, void* handle, int nSteps)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return false;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return;
+    }
+
+    static_cast<CGUIDialogProgress*>(handle)->SetProgressAdvance(nSteps);
   }
 
-  return static_cast<CGUIDialogProgress*>(handle)->IsCanceled();
-}
-
-void Interface_GUIDialogProgress::set_percentage(void* kodiBase, void* handle, int percentage)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  bool Interface_GUIDialogProgress::abort(void* kodiBase, void* handle)
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
+      return false;
+    }
+
+    if (!handle)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
+          __FUNCTION__, handle, addon->ID().c_str());
+      return false;
+    }
+
+    return static_cast<CGUIDialogProgress*>(handle)->Abort();
   }
-
-  if (!handle)
-  {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return;
-  }
-
-  static_cast<CGUIDialogProgress*>(handle)->SetPercentage(percentage);
-}
-
-int Interface_GUIDialogProgress::get_percentage(void* kodiBase, void* handle)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
-  {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return 0;
-  }
-
-  if (!handle)
-  {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return 0;
-  }
-
-  return static_cast<CGUIDialogProgress*>(handle)->GetPercentage();
-}
-
-void Interface_GUIDialogProgress::show_progress_bar(void* kodiBase, void* handle, bool onOff)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
-  {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
-  }
-
-  if (!handle)
-  {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return;
-  }
-
-  static_cast<CGUIDialogProgress*>(handle)->ShowProgressBar(onOff);
-}
-
-void Interface_GUIDialogProgress::set_progress_max(void* kodiBase, void* handle, int max)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
-  {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
-  }
-
-  if (!handle)
-  {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return;
-  }
-
-  static_cast<CGUIDialogProgress*>(handle)->SetProgressMax(max);
-}
-
-void Interface_GUIDialogProgress::set_progress_advance(void* kodiBase, void* handle, int nSteps)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
-  {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return;
-  }
-
-  if (!handle)
-  {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return;
-  }
-
-  static_cast<CGUIDialogProgress*>(handle)->SetProgressAdvance(nSteps);
-}
-
-bool Interface_GUIDialogProgress::abort(void* kodiBase, void* handle)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
-  {
-    CLog::Log(LOGERROR, "Interface_GUIDialogProgress::%s - invalid data", __FUNCTION__);
-    return false;
-  }
-
-  if (!handle)
-  {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogProgress::%s - invalid handler data (handle='%p') on addon '%s'",
-              __FUNCTION__, handle, addon->ID().c_str());
-    return false;
-  }
-
-  return static_cast<CGUIDialogProgress*>(handle)->Abort();
-}
 
 } /* extern "C" */
 } /* namespace ADDON */

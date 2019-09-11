@@ -16,7 +16,7 @@ TEST(TestMathUtils, round_int)
 
   for (i = -8; i < 8; ++i)
   {
-    double d = 0.25*i;
+    double d = 0.25 * i;
     refval = (i < 0) ? (i - 1) / 4 : (i + 2) / 4;
     varval = MathUtils::round_int(d);
     EXPECT_EQ(refval, varval);
@@ -29,7 +29,7 @@ TEST(TestMathUtils, truncate_int)
 
   for (i = -8; i < 8; ++i)
   {
-    double d = 0.25*i;
+    double d = 0.25 * i;
     refval = i / 4;
     varval = MathUtils::truncate_int(d);
     EXPECT_EQ(refval, varval);

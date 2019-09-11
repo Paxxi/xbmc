@@ -22,21 +22,14 @@
 
 CMediaCodecDecoderFilterManager::CMediaCodecDecoderFilterManager()
 {
-  static const char *blacklisted_decoders[] = {
-    // No software decoders
-    "OMX.google",
-    // For Rockchip non-standard components
-    "AVCDecoder",
-    "AVCDecoder_FLASH",
-    "FLVDecoder",
-    "M2VDecoder",
-    "M4vH263Decoder",
-    "RVDecoder",
-    "VC1Decoder",
-    "VPXDecoder",
-    // End of Rockchip
-    NULL
-  };
+  static const char* blacklisted_decoders[] = {// No software decoders
+                                               "OMX.google",
+                                               // For Rockchip non-standard components
+                                               "AVCDecoder", "AVCDecoder_FLASH", "FLVDecoder",
+                                               "M2VDecoder", "M4vH263Decoder", "RVDecoder",
+                                               "VC1Decoder", "VPXDecoder",
+                                               // End of Rockchip
+                                               NULL};
 
   unsigned int num_codecs = CJNIMediaCodecList::getCodecCount();
   for (int i = 0; i < num_codecs; i++)
@@ -47,7 +40,7 @@ CMediaCodecDecoderFilterManager::CMediaCodecDecoderFilterManager()
 
     std::string codecname = codec_info.getName();
     uint32_t flags = CDecoderFilter::FLAG_GENERAL_ALLOWED | CDecoderFilter::FLAG_DVD_ALLOWED;
-    for (const char **ptr = blacklisted_decoders; *ptr && flags; ptr++)
+    for (const char** ptr = blacklisted_decoders; *ptr && flags; ptr++)
     {
       if (!strnicmp(*ptr, codecname.c_str(), strlen(*ptr)))
         flags = 0;
@@ -57,4 +50,3 @@ CMediaCodecDecoderFilterManager::CMediaCodecDecoderFilterManager()
   }
   Save();
 }
-

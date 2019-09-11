@@ -9,19 +9,20 @@
 // defined in PlatformDefs.h but I don't want to include that here
 typedef unsigned char BYTE;
 
-#include "utils/log.h"
-#include "utils/SystemInfo.h"
-#include "Application.h"
-#include "powermanagement/PowerManager.h"
-#include "ServiceBroker.h"
 #include "CocoaPowerSyscall.h"
 
-  #include <IOKit/pwr_mgt/IOPMLib.h>
-  #include <IOKit/ps/IOPowerSources.h>
-  #include <IOKit/ps/IOPSKeys.h>
-  #include <ApplicationServices/ApplicationServices.h>
+#include "Application.h"
+#include "ServiceBroker.h"
+#include "powermanagement/PowerManager.h"
+#include "utils/SystemInfo.h"
+#include "utils/log.h"
 
 #include "platform/darwin/osx/CocoaInterface.h"
+
+#include <ApplicationServices/ApplicationServices.h>
+#include <IOKit/ps/IOPSKeys.h>
+#include <IOKit/ps/IOPowerSources.h>
+#include <IOKit/pwr_mgt/IOPMLib.h>
 
 IPowerSyscall* CCocoaPowerSyscall::CreateInstance()
 {
@@ -36,18 +37,18 @@ void CCocoaPowerSyscall::Register()
 OSStatus SendAppleEventToSystemProcess(AEEventID eventToSendID)
 {
   AEAddressDesc targetDesc;
-  static const  ProcessSerialNumber kPSNOfSystemProcess = {0, kSystemProcess };
-  AppleEvent    eventReply  = {typeNull, NULL};
-  AppleEvent    eventToSend = {typeNull, NULL};
+  static const ProcessSerialNumber kPSNOfSystemProcess = {0, kSystemProcess};
+  AppleEvent eventReply = {typeNull, NULL};
+  AppleEvent eventToSend = {typeNull, NULL};
 
-  OSStatus status = AECreateDesc(typeProcessSerialNumber,
-    &kPSNOfSystemProcess, sizeof(kPSNOfSystemProcess), &targetDesc);
+  OSStatus status = AECreateDesc(typeProcessSerialNumber, &kPSNOfSystemProcess,
+                                 sizeof(kPSNOfSystemProcess), &targetDesc);
 
   if (status != noErr)
     return status;
 
-  status = AECreateAppleEvent(kCoreEventClass, eventToSendID,
-    &targetDesc, kAutoGenerateReturnID, kAnyTransactionID, &eventToSend);
+  status = AECreateAppleEvent(kCoreEventClass, eventToSendID, &targetDesc, kAutoGenerateReturnID,
+                              kAnyTransactionID, &eventToSend);
   AEDisposeDesc(&targetDesc);
 
   if (status != noErr)
@@ -140,8 +141,8 @@ bool CCocoaPowerSyscall::CanPowerdown(void)
 bool CCocoaPowerSyscall::CanSuspend(void)
 {
   bool result;
-  result =IOPMSleepEnabled();
-  return(result);
+  result = IOPMSleepEnabled();
+  return (result);
 }
 
 bool CCocoaPowerSyscall::CanHibernate(void)
@@ -188,7 +189,8 @@ int CCocoaPowerSyscall::BatteryLevel(void)
 
   for (CFIndex i = 0; i < CFArrayGetCount(powerSources); i++)
   {
-    CFDictionaryRef powerSource = IOPSGetPowerSourceDescription(powerSourceInfo, CFArrayGetValueAtIndex(powerSources, i));
+    CFDictionaryRef powerSource =
+        IOPSGetPowerSourceDescription(powerSourceInfo, CFArrayGetValueAtIndex(powerSources, i));
     if (!powerSource)
       break;
 
@@ -207,7 +209,7 @@ int CCocoaPowerSyscall::BatteryLevel(void)
   return batteryLevel * 100;
 }
 
-bool CCocoaPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
+bool CCocoaPowerSyscall::PumpPowerEvents(IPowerEventsCallback* callback)
 {
   if (m_OnSuspend)
   {
@@ -239,8 +241,8 @@ void CCocoaPowerSyscall::CreateOSPowerCallBacks(void)
   if (m_root_port)
   {
     // add the notification port to the application runloop
-    CFRunLoopAddSource(CFRunLoopGetCurrent(),
-      IONotificationPortGetRunLoopSource(m_notify_port), kCFRunLoopDefaultMode);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), IONotificationPortGetRunLoopSource(m_notify_port),
+                       kCFRunLoopDefaultMode);
   }
   else
   {
@@ -262,8 +264,8 @@ void CCocoaPowerSyscall::DeleteOSPowerCallBacks(void)
 {
   // we no longer want sleep/wake notifications
   // remove the sleep notification port from the application runloop
-  CFRunLoopRemoveSource( CFRunLoopGetCurrent(),
-    IONotificationPortGetRunLoopSource(m_notify_port), kCFRunLoopDefaultMode );
+  CFRunLoopRemoveSource(CFRunLoopGetCurrent(), IONotificationPortGetRunLoopSource(m_notify_port),
+                        kCFRunLoopDefaultMode);
   // deregister for system sleep notifications
   IODeregisterForSystemPower(&m_notifier_object);
   // IORegisterForSystemPower implicitly opens the Root Power Domain IOService
@@ -277,105 +279,113 @@ void CCocoaPowerSyscall::DeleteOSPowerCallBacks(void)
   {
     if (m_power_source)
     {
-      CFRunLoopRemoveSource( CFRunLoopGetCurrent(), m_power_source, kCFRunLoopDefaultMode );
+      CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_power_source, kCFRunLoopDefaultMode);
       CFRelease(m_power_source);
     }
   }
 }
 
-void CCocoaPowerSyscall::OSPowerCallBack(void *refcon, io_service_t service, natural_t msg_type, void *msg_arg)
+void CCocoaPowerSyscall::OSPowerCallBack(void* refcon,
+                                         io_service_t service,
+                                         natural_t msg_type,
+                                         void* msg_arg)
 {
-  CCocoaPowerSyscall  *ctx;
+  CCocoaPowerSyscall* ctx;
 
   ctx = (CCocoaPowerSyscall*)refcon;
 
   switch (msg_type)
   {
-    case kIOMessageCanSystemSleep:
-      // System has been idle for sleeptime and will sleep soon.
-      // we can either allow or cancel this notification.
-      // if we don't respond, OS will sleep in 30 second.
-      ctx->m_OnSuspend = true;
-      IOAllowPowerChange(ctx->m_root_port, (long)msg_arg);
-      //CLog::Log(LOGDEBUG, "%s - kIOMessageCanSystemSleep", __FUNCTION__);
+  case kIOMessageCanSystemSleep:
+    // System has been idle for sleeptime and will sleep soon.
+    // we can either allow or cancel this notification.
+    // if we don't respond, OS will sleep in 30 second.
+    ctx->m_OnSuspend = true;
+    IOAllowPowerChange(ctx->m_root_port, (long)msg_arg);
+    //CLog::Log(LOGDEBUG, "%s - kIOMessageCanSystemSleep", __FUNCTION__);
     break;
-    case kIOMessageSystemWillSleep:
-      // System demanded sleep from:
-      //   1) selecting sleep from the Apple menu.
-      //   2) closing the lid of a laptop.
-      //   3) running out of battery power.
-      ctx->m_OnSuspend = true;
-      // force processing of this power event. This callback runs
-      // in main thread so we can do this.
-      CServiceBroker::GetPowerManager().ProcessEvents();
-      IOAllowPowerChange(ctx->m_root_port, (long)msg_arg);
-      //CLog::Log(LOGDEBUG, "%s - kIOMessageSystemWillSleep", __FUNCTION__);
-      // let XBMC know system will sleep
-      //! @todo implement
+  case kIOMessageSystemWillSleep:
+    // System demanded sleep from:
+    //   1) selecting sleep from the Apple menu.
+    //   2) closing the lid of a laptop.
+    //   3) running out of battery power.
+    ctx->m_OnSuspend = true;
+    // force processing of this power event. This callback runs
+    // in main thread so we can do this.
+    CServiceBroker::GetPowerManager().ProcessEvents();
+    IOAllowPowerChange(ctx->m_root_port, (long)msg_arg);
+    //CLog::Log(LOGDEBUG, "%s - kIOMessageSystemWillSleep", __FUNCTION__);
+    // let XBMC know system will sleep
+    //! @todo implement
     break;
-    case kIOMessageSystemHasPoweredOn:
-      // System has awakened from sleep.
-      // let XBMC know system has woke
-      //! @todo implement
-      ctx->m_OnResume = true;
-      //CLog::Log(LOGDEBUG, "%s - kIOMessageSystemHasPoweredOn", __FUNCTION__);
+  case kIOMessageSystemHasPoweredOn:
+    // System has awakened from sleep.
+    // let XBMC know system has woke
+    //! @todo implement
+    ctx->m_OnResume = true;
+    //CLog::Log(LOGDEBUG, "%s - kIOMessageSystemHasPoweredOn", __FUNCTION__);
     break;
-	}
+  }
 }
 
 static bool stringsAreEqual(CFStringRef a, CFStringRef b)
 {
-	if (a == nil || b == nil)
-		return 0;
-	return (CFStringCompare (a, b, 0) == kCFCompareEqualTo);
+  if (a == nil || b == nil)
+    return 0;
+  return (CFStringCompare(a, b, 0) == kCFCompareEqualTo);
 }
 
-void CCocoaPowerSyscall::OSPowerSourceCallBack(void *refcon)
+void CCocoaPowerSyscall::OSPowerSourceCallBack(void* refcon)
 {
   // Called whenever any power source is added, removed, or changes.
   // When on battery, we get called periodically as battery level changes.
-  CCocoaPowerSyscall  *ctx = (CCocoaPowerSyscall*)refcon;
+  CCocoaPowerSyscall* ctx = (CCocoaPowerSyscall*)refcon;
 
   CFTypeRef power_sources_info = IOPSCopyPowerSourcesInfo();
   CFArrayRef power_sources_list = IOPSCopyPowerSourcesList(power_sources_info);
 
   for (int i = 0; i < CFArrayGetCount(power_sources_list); i++)
   {
-		CFTypeRef power_source;
-		CFDictionaryRef description;
+    CFTypeRef power_source;
+    CFDictionaryRef description;
 
-		power_source = CFArrayGetValueAtIndex(power_sources_list, i);
-		description  = IOPSGetPowerSourceDescription(power_sources_info, power_source);
+    power_source = CFArrayGetValueAtIndex(power_sources_list, i);
+    description = IOPSGetPowerSourceDescription(power_sources_info, power_source);
 
     // skip power sources that are not present (i.e. an absent second battery in a 2-battery machine)
-    if ((CFBooleanRef)CFDictionaryGetValue(description, CFSTR(kIOPSIsPresentKey)) == kCFBooleanFalse)
+    if ((CFBooleanRef)CFDictionaryGetValue(description, CFSTR(kIOPSIsPresentKey)) ==
+        kCFBooleanFalse)
       continue;
 
-    if (stringsAreEqual((CFStringRef)CFDictionaryGetValue(description, CFSTR (kIOPSTransportTypeKey)), CFSTR (kIOPSInternalType)))
+    if (stringsAreEqual(
+            (CFStringRef)CFDictionaryGetValue(description, CFSTR(kIOPSTransportTypeKey)),
+            CFSTR(kIOPSInternalType)))
     {
-      CFStringRef currentState = (CFStringRef)CFDictionaryGetValue(description, CFSTR (kIOPSPowerSourceStateKey));
+      CFStringRef currentState =
+          (CFStringRef)CFDictionaryGetValue(description, CFSTR(kIOPSPowerSourceStateKey));
 
-      if (stringsAreEqual (currentState, CFSTR (kIOPSACPowerValue)))
+      if (stringsAreEqual(currentState, CFSTR(kIOPSACPowerValue)))
       {
         ctx->m_OnBattery = false;
         ctx->m_BatteryPercent = 100;
         ctx->m_SentBatteryMessage = false;
       }
-      else if (stringsAreEqual (currentState, CFSTR (kIOPSBatteryPowerValue)))
+      else if (stringsAreEqual(currentState, CFSTR(kIOPSBatteryPowerValue)))
       {
         CFNumberRef cf_number_ref;
         int32_t curCapacity, maxCapacity;
 
-        cf_number_ref = (CFNumberRef)CFDictionaryGetValue(description, CFSTR(kIOPSCurrentCapacityKey));
+        cf_number_ref =
+            (CFNumberRef)CFDictionaryGetValue(description, CFSTR(kIOPSCurrentCapacityKey));
         CFNumberGetValue(cf_number_ref, kCFNumberSInt32Type, &curCapacity);
 
         cf_number_ref = (CFNumberRef)CFDictionaryGetValue(description, CFSTR(kIOPSMaxCapacityKey));
         CFNumberGetValue(cf_number_ref, kCFNumberSInt32Type, &maxCapacity);
 
         ctx->m_OnBattery = true;
-        ctx->m_BatteryPercent = (int)((double)curCapacity/(double)maxCapacity * 100);
+        ctx->m_BatteryPercent = (int)((double)curCapacity / (double)maxCapacity * 100);
       }
-		}
+    }
   }
 
   CFRelease(power_sources_list);

@@ -12,9 +12,10 @@
 #include "music/MusicDatabase.h"
 #include "settings/LibExportSettings.h"
 
-CMusicLibraryExportJob::CMusicLibraryExportJob(const CLibExportSettings& settings, CGUIDialogProgress* progressDialog)
-  : CMusicLibraryProgressJob(NULL),
-    m_settings(settings)
+CMusicLibraryExportJob::CMusicLibraryExportJob(const CLibExportSettings& settings,
+                                               CGUIDialogProgress* progressDialog)
+  : CMusicLibraryProgressJob(NULL)
+  , m_settings(settings)
 {
   if (progressDialog)
     SetProgressIndicators(NULL, progressDialog);
@@ -35,7 +36,7 @@ bool CMusicLibraryExportJob::operator==(const CJob* job) const
   return !(m_settings != exportJob->m_settings);
 }
 
-bool CMusicLibraryExportJob::Work(CMusicDatabase &db)
+bool CMusicLibraryExportJob::Work(CMusicDatabase& db)
 {
   db.ExportToXML(m_settings, GetProgressDialog());
 

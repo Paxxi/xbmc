@@ -117,4 +117,4 @@ AddonPtr CAddonBuilder::Generate(const AddonInfoPtr& info, TYPE type)
   return AddonPtr();
 }
 
-}
+} // namespace ADDON

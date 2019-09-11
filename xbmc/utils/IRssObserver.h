@@ -20,6 +20,6 @@ protected:
   ~IRssObserver() = default;
 
 public:
-  virtual void OnFeedUpdate(const vecText &feed) = 0;
+  virtual void OnFeedUpdate(const vecText& feed) = 0;
   virtual void OnFeedRelease() = 0;
 };

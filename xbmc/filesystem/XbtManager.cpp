@@ -108,11 +108,9 @@ CXbtManager::XBTFReaders::const_iterator CXbtManager::ProcessFile(const CURL& pa
   if (!reader->Open(filePath))
     return m_readers.end();
 
-  XBTFReader xbtfReader = {
-    reader,
-    reader->GetLastModificationTimestamp()
-  };
-  std::pair<XBTFReaders::iterator, bool> result = m_readers.insert(std::make_pair(filePath, xbtfReader));
+  XBTFReader xbtfReader = {reader, reader->GetLastModificationTimestamp()};
+  std::pair<XBTFReaders::iterator, bool> result =
+      m_readers.insert(std::make_pair(filePath, xbtfReader));
   return result.first;
 }
 
@@ -124,4 +122,4 @@ std::string CXbtManager::NormalizePath(const CURL& path)
   return path.Get();
 }
 
-}
+} // namespace XFILE

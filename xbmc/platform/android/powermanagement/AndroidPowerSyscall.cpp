@@ -21,17 +21,19 @@ void CAndroidPowerSyscall::Register()
 }
 
 CAndroidPowerSyscall::CAndroidPowerSyscall()
-{ }
+{
+}
 
 CAndroidPowerSyscall::~CAndroidPowerSyscall()
-{ }
+{
+}
 
 int CAndroidPowerSyscall::BatteryLevel(void)
 {
   return CXBMCApp::GetBatteryLevel();
 }
 
-bool CAndroidPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
+bool CAndroidPowerSyscall::PumpPowerEvents(IPowerEventsCallback* callback)
 {
   return true;
 }

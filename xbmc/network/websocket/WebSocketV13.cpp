@@ -18,26 +18,26 @@
 #include <sstream>
 #include <string>
 
-#define WS_HTTP_METHOD          "GET"
-#define WS_HTTP_TAG             "HTTP/"
+#define WS_HTTP_METHOD "GET"
+#define WS_HTTP_TAG "HTTP/"
 
-#define WS_HEADER_UPGRADE       "Upgrade"
-#define WS_HEADER_UPGRADE_LC    "upgrade"
-#define WS_HEADER_CONNECTION    "Connection"
+#define WS_HEADER_UPGRADE "Upgrade"
+#define WS_HEADER_UPGRADE_LC "upgrade"
+#define WS_HEADER_CONNECTION "Connection"
 #define WS_HEADER_CONNECTION_LC "connection"
 
-#define WS_HEADER_KEY_LC        "sec-websocket-key"         // "Sec-WebSocket-Key"
-#define WS_HEADER_ACCEPT        "Sec-WebSocket-Accept"
-#define WS_HEADER_PROTOCOL      "Sec-WebSocket-Protocol"
-#define WS_HEADER_PROTOCOL_LC   "sec-websocket-protocol"    // "Sec-WebSocket-Protocol"
+#define WS_HEADER_KEY_LC "sec-websocket-key" // "Sec-WebSocket-Key"
+#define WS_HEADER_ACCEPT "Sec-WebSocket-Accept"
+#define WS_HEADER_PROTOCOL "Sec-WebSocket-Protocol"
+#define WS_HEADER_PROTOCOL_LC "sec-websocket-protocol" // "Sec-WebSocket-Protocol"
 
-#define WS_PROTOCOL_JSONRPC     "jsonrpc.xbmc.org"
+#define WS_PROTOCOL_JSONRPC "jsonrpc.xbmc.org"
 #define WS_HEADER_UPGRADE_VALUE "websocket"
 
-bool CWebSocketV13::Handshake(const char* data, size_t length, std::string &response)
+bool CWebSocketV13::Handshake(const char* data, size_t length, std::string& response)
 {
   std::string strHeader(data, length);
-  const char *value;
+  const char* value;
   HttpParser header;
   if (header.addBytes(data, length) != HttpParser::Done)
   {
@@ -62,13 +62,15 @@ bool CWebSocketV13::Handshake(const char* data, size_t length, std::string &resp
   }
 
   pos += strlen(WS_HTTP_TAG);
-  std::istringstream converter(strHeader.substr(pos, strHeader.find_first_of(" \r\n\t", pos) - pos));
+  std::istringstream converter(
+      strHeader.substr(pos, strHeader.find_first_of(" \r\n\t", pos) - pos));
   float fVersion;
   converter >> fVersion;
 
   if (fVersion < 1.1f)
   {
-    CLog::Log(LOGINFO, "WebSocket [RFC6455]: invalid HTTP version %f (1.1 or higher expected)", fVersion);
+    CLog::Log(LOGINFO, "WebSocket [RFC6455]: invalid HTTP version %f (1.1 or higher expected)",
+              fVersion);
     return false;
   }
 
@@ -83,7 +85,8 @@ bool CWebSocketV13::Handshake(const char* data, size_t length, std::string &resp
 
   // There must be a "Upgrade" header with the value "websocket"
   value = header.getValue(WS_HEADER_UPGRADE_LC);
-  if (value == NULL || strnicmp(value, WS_HEADER_UPGRADE_VALUE, strlen(WS_HEADER_UPGRADE_VALUE)) != 0)
+  if (value == NULL ||
+      strnicmp(value, WS_HEADER_UPGRADE_VALUE, strlen(WS_HEADER_UPGRADE_VALUE)) != 0)
   {
     CLog::Log(LOGINFO, "WebSocket [RFC6455]: invalid \"%s\" received", WS_HEADER_UPGRADE);
     return true;
@@ -94,7 +97,9 @@ bool CWebSocketV13::Handshake(const char* data, size_t length, std::string &resp
   std::vector<std::string> elements;
   if (value != nullptr)
     elements = StringUtils::Split(value, ",");
-  if (elements.empty() || !std::any_of(elements.begin(), elements.end(), [](std::string& elem) { return StringUtils::EqualsNoCase(StringUtils::Trim(elem), WS_HEADER_UPGRADE); }))
+  if (elements.empty() || !std::any_of(elements.begin(), elements.end(), [](std::string& elem) {
+        return StringUtils::EqualsNoCase(StringUtils::Trim(elem), WS_HEADER_UPGRADE);
+      }))
   {
     CLog::Log(LOGINFO, "WebSocket [RFC6455]: invalid \"%s\" received", WS_HEADER_CONNECTION_LC);
     return true;
@@ -139,11 +144,14 @@ bool CWebSocketV13::Handshake(const char* data, size_t length, std::string &resp
   return true;
 }
 
-const CWebSocketFrame* CWebSocketV13::Close(WebSocketCloseReason reason /* = WebSocketCloseNormal */, const std::string &message /* = "" */)
+const CWebSocketFrame* CWebSocketV13::Close(
+    WebSocketCloseReason reason /* = WebSocketCloseNormal */, const std::string& message /* = "" */)
 {
-  if (m_state == WebSocketStateNotConnected || m_state == WebSocketStateHandshaking || m_state == WebSocketStateClosed)
+  if (m_state == WebSocketStateNotConnected || m_state == WebSocketStateHandshaking ||
+      m_state == WebSocketStateClosed)
   {
-    CLog::Log(LOGINFO, "WebSocket [RFC6455]: Cannot send a closing handshake if no connection has been established");
+    CLog::Log(LOGINFO, "WebSocket [RFC6455]: Cannot send a closing handshake if no connection has "
+                       "been established");
     return NULL;
   }
 

@@ -33,17 +33,13 @@ namespace WAYLAND
 class COutput
 {
 public:
-  COutput(std::uint32_t globalName, wayland::output_t const & output, std::function<void()> doneHandler);
+  COutput(std::uint32_t globalName,
+          wayland::output_t const& output,
+          std::function<void()> doneHandler);
   ~COutput() noexcept;
 
-  wayland::output_t const& GetWaylandOutput() const
-  {
-    return m_output;
-  }
-  std::uint32_t GetGlobalName() const
-  {
-    return m_globalName;
-  }
+  wayland::output_t const& GetWaylandOutput() const { return m_output; }
+  std::uint32_t GetGlobalName() const { return m_globalName; }
   /**
    * Get output position in compositor coordinate space
    * \return (x, y) tuple of output position
@@ -72,23 +68,19 @@ public:
     CSingleLock lock(m_geometryCriticalSection);
     return m_model;
   }
-  std::int32_t GetScale() const
-  {
-    return m_scale;
-  }
+  std::int32_t GetScale() const { return m_scale; }
 
   struct Mode
   {
     CSizeInt size;
     std::int32_t refreshMilliHz;
     Mode(CSizeInt size, std::int32_t refreshMilliHz)
-    : size{size}, refreshMilliHz(refreshMilliHz)
-    {}
-
-    float GetRefreshInHz() const
+      : size{size}
+      , refreshMilliHz(refreshMilliHz)
     {
-      return refreshMilliHz / 1000.0f;
     }
+
+    float GetRefreshInHz() const { return refreshMilliHz / 1000.0f; }
 
     std::tuple<std::int32_t, std::int32_t, std::int32_t> AsTuple() const
     {
@@ -96,26 +88,14 @@ public:
     }
 
     // Comparison operator needed for std::set
-    bool operator<(const Mode& right) const
-    {
-      return AsTuple() < right.AsTuple();
-    }
+    bool operator<(const Mode& right) const { return AsTuple() < right.AsTuple(); }
 
-    bool operator==(const Mode& right) const
-    {
-      return AsTuple() == right.AsTuple();
-    }
+    bool operator==(const Mode& right) const { return AsTuple() == right.AsTuple(); }
 
-    bool operator!=(const Mode& right) const
-    {
-      return !(*this == right);
-    }
+    bool operator!=(const Mode& right) const { return !(*this == right); }
   };
 
-  std::set<Mode> const& GetModes() const
-  {
-    return m_modes;
-  }
+  std::set<Mode> const& GetModes() const { return m_modes; }
   Mode const& GetCurrentMode() const;
   Mode const& GetPreferredMode() const;
 
@@ -147,6 +127,6 @@ private:
 };
 
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

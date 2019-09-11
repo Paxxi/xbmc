@@ -42,17 +42,20 @@ public:
 
   virtual void SetViewPort(const CRect& viewPort) = 0;
   virtual void GetViewPort(CRect& viewPort) = 0;
-  virtual void RestoreViewPort() {};
+  virtual void RestoreViewPort(){};
 
   virtual bool ScissorsCanEffectClipping() { return false; }
-  virtual CRect ClipRectToScissorRect(const CRect &rect) { return CRect(); }
-  virtual void SetScissors(const CRect &rect) = 0;
+  virtual CRect ClipRectToScissorRect(const CRect& rect) { return CRect(); }
+  virtual void SetScissors(const CRect& rect) = 0;
   virtual void ResetScissors() = 0;
 
   virtual void CaptureStateBlock() = 0;
   virtual void ApplyStateBlock() = 0;
 
-  virtual void SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor = 0.f) = 0;
+  virtual void SetCameraPosition(const CPoint& camera,
+                                 int screenWidth,
+                                 int screenHeight,
+                                 float stereoFactor = 0.f) = 0;
   virtual void SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW view)
   {
     m_stereoMode = mode;
@@ -62,9 +65,9 @@ public:
   /**
    * Project (x,y,z) 3d scene coordinates to (x,y) 2d screen coordinates
    */
-  virtual void Project(float &x, float &y, float &z) { }
+  virtual void Project(float& x, float& y, float& z) {}
 
-  virtual std::string GetShaderPath(const std::string &filename) { return ""; }
+  virtual std::string GetShaderPath(const std::string& filename) { return ""; }
 
   void GetRenderVersion(unsigned int& major, unsigned int& minor) const;
   const std::string& GetRenderVendor() const { return m_RenderVendor; }
@@ -78,16 +81,16 @@ public:
   virtual void ShowSplash(const std::string& message);
 
 protected:
-  bool                m_bRenderCreated;
-  bool                m_bVSync;
-  unsigned int        m_maxTextureSize;
-  unsigned int        m_minDXTPitch;
+  bool m_bRenderCreated;
+  bool m_bVSync;
+  unsigned int m_maxTextureSize;
+  unsigned int m_minDXTPitch;
 
-  std::string   m_RenderRenderer;
-  std::string   m_RenderVendor;
-  std::string   m_RenderVersion;
-  int          m_RenderVersionMinor;
-  int          m_RenderVersionMajor;
+  std::string m_RenderRenderer;
+  std::string m_RenderVendor;
+  std::string m_RenderVersion;
+  int m_RenderVersionMinor;
+  int m_RenderVersionMajor;
   RENDER_STEREO_VIEW m_stereoView = RENDER_STEREO_VIEW_OFF;
   RENDER_STEREO_MODE m_stereoMode = RENDER_STEREO_MODE_OFF;
   bool m_limitedColorRange = false;
@@ -95,4 +98,3 @@ protected:
   std::unique_ptr<CGUIImage> m_splashImage;
   std::unique_ptr<CGUITextLayout> m_splashMessageLayout;
 };
-

@@ -7,20 +7,23 @@
  */
 
 #include "DVDAudioCodecFFmpeg.h"
-#include "ServiceBroker.h"
+
 #include "../../DVDStreamInfo.h"
-#include "utils/log.h"
+#include "DVDCodecs/DVDCodecs.h"
+#include "ServiceBroker.h"
+#include "cores/AudioEngine/Utils/AEUtil.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "DVDCodecs/DVDCodecs.h"
-#include "cores/AudioEngine/Utils/AEUtil.h"
+#include "utils/log.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/opt.h>
 }
 
-CDVDAudioCodecFFmpeg::CDVDAudioCodecFFmpeg(CProcessInfo &processInfo) : CDVDAudioCodec(processInfo)
+CDVDAudioCodecFFmpeg::CDVDAudioCodecFFmpeg(CProcessInfo& processInfo)
+  : CDVDAudioCodec(processInfo)
 {
   m_pCodecContext = NULL;
 
@@ -37,11 +40,11 @@ CDVDAudioCodecFFmpeg::~CDVDAudioCodecFFmpeg()
   Dispose();
 }
 
-bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
+bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo& hints, CDVDCodecOptions& options)
 {
   if (hints.cryptoSession)
   {
-    CLog::Log(LOGERROR,"CDVDAudioCodecFFmpeg::Open() CryptoSessions unsupported!");
+    CLog::Log(LOGERROR, "CDVDAudioCodecFFmpeg::Open() CryptoSessions unsupported!");
     return false;
   }
 
@@ -49,7 +52,8 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   bool allowdtshddecode = true;
 
   // set any special options
-  for(std::vector<CDVDCodecOption>::iterator it = options.m_keys.begin(); it != options.m_keys.end(); ++it)
+  for (std::vector<CDVDCodecOption>::iterator it = options.m_keys.begin();
+       it != options.m_keys.end(); ++it)
     if (it->m_name == "allowdtshddecode")
       allowdtshddecode = atoi(it->m_value.c_str()) != 0;
 
@@ -61,7 +65,7 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
 
   if (!pCodec)
   {
-    CLog::Log(LOGDEBUG,"CDVDAudioCodecFFmpeg::Open() Unable to find codec %d", hints.codec);
+    CLog::Log(LOGDEBUG, "CDVDAudioCodecFFmpeg::Open() Unable to find codec %d", hints.codec);
     return false;
   }
 
@@ -84,13 +88,14 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   m_pCodecContext->bit_rate = hints.bitrate;
   m_pCodecContext->bits_per_coded_sample = hints.bitspersample;
 
-  if(m_pCodecContext->bits_per_coded_sample == 0)
+  if (m_pCodecContext->bits_per_coded_sample == 0)
     m_pCodecContext->bits_per_coded_sample = 16;
 
-  if( hints.extradata && hints.extrasize > 0 )
+  if (hints.extradata && hints.extrasize > 0)
   {
-    m_pCodecContext->extradata = (uint8_t*)av_mallocz(hints.extrasize + AV_INPUT_BUFFER_PADDING_SIZE);
-    if(m_pCodecContext->extradata)
+    m_pCodecContext->extradata =
+        (uint8_t*)av_mallocz(hints.extrasize + AV_INPUT_BUFFER_PADDING_SIZE);
+    if (m_pCodecContext->extradata)
     {
       m_pCodecContext->extradata_size = hints.extrasize;
       memcpy(m_pCodecContext->extradata, hints.extradata, hints.extrasize);
@@ -103,7 +108,7 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
 
   if (avcodec_open2(m_pCodecContext, pCodec, NULL) < 0)
   {
-    CLog::Log(LOGDEBUG,"CDVDAudioCodecFFmpeg::Open() Unable to open codec");
+    CLog::Log(LOGDEBUG, "CDVDAudioCodecFFmpeg::Open() Unable to open codec");
     Dispose();
     return false;
   }
@@ -121,7 +126,8 @@ bool CDVDAudioCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
 
   m_codecName = "ff-" + std::string(m_pCodecContext->codec->name);
 
-  CLog::Log(LOGNOTICE,"CDVDAudioCodecFFmpeg::Open() Successful opened audio decoder %s", m_pCodecContext->codec->name);
+  CLog::Log(LOGNOTICE, "CDVDAudioCodecFFmpeg::Open() Successful opened audio decoder %s",
+            m_pCodecContext->codec->name);
 
   return true;
 }
@@ -132,7 +138,7 @@ void CDVDAudioCodecFFmpeg::Dispose()
   avcodec_free_context(&m_pCodecContext);
 }
 
-bool CDVDAudioCodecFFmpeg::AddData(const DemuxPacket &packet)
+bool CDVDAudioCodecFFmpeg::AddData(const DemuxPacket& packet)
 {
   if (!m_pCodecContext)
     return false;
@@ -146,8 +152,12 @@ bool CDVDAudioCodecFFmpeg::AddData(const DemuxPacket &packet)
   av_init_packet(&avpkt);
   avpkt.data = packet.pData;
   avpkt.size = packet.iSize;
-  avpkt.dts = (packet.dts == DVD_NOPTS_VALUE) ? AV_NOPTS_VALUE : static_cast<int64_t>(packet.dts / DVD_TIME_BASE * AV_TIME_BASE);
-  avpkt.pts = (packet.pts == DVD_NOPTS_VALUE) ? AV_NOPTS_VALUE : static_cast<int64_t>(packet.pts / DVD_TIME_BASE * AV_TIME_BASE);
+  avpkt.dts = (packet.dts == DVD_NOPTS_VALUE)
+                  ? AV_NOPTS_VALUE
+                  : static_cast<int64_t>(packet.dts / DVD_TIME_BASE * AV_TIME_BASE);
+  avpkt.pts = (packet.pts == DVD_NOPTS_VALUE)
+                  ? AV_NOPTS_VALUE
+                  : static_cast<int64_t>(packet.pts / DVD_TIME_BASE * AV_TIME_BASE);
   avpkt.side_data = static_cast<AVPacketSideData*>(packet.pSideData);
   avpkt.side_data_elems = packet.iSideDataElems;
 
@@ -162,7 +172,7 @@ bool CDVDAudioCodecFFmpeg::AddData(const DemuxPacket &packet)
   return true;
 }
 
-void CDVDAudioCodecFFmpeg::GetData(DVDAudioFrame &frame)
+void CDVDAudioCodecFFmpeg::GetData(DVDAudioFrame& frame)
 {
   frame.nb_frames = 0;
 
@@ -176,15 +186,16 @@ void CDVDAudioCodecFFmpeg::GetData(DVDAudioFrame &frame)
   frame.passthrough = false;
   frame.format.m_dataFormat = m_format.m_dataFormat;
   frame.format.m_channelLayout = m_format.m_channelLayout;
-  frame.framesize = (CAEUtil::DataFormatToBits(frame.format.m_dataFormat) >> 3) * frame.format.m_channelLayout.Count();
-  if(frame.framesize == 0)
+  frame.framesize = (CAEUtil::DataFormatToBits(frame.format.m_dataFormat) >> 3) *
+                    frame.format.m_channelLayout.Count();
+  if (frame.framesize == 0)
     return;
 
-  frame.nb_frames = bytes/frame.framesize;
+  frame.nb_frames = bytes / frame.framesize;
   frame.framesOut = 0;
   frame.planes = AE_IS_PLANAR(frame.format.m_dataFormat) ? frame.format.m_channelLayout.Count() : 1;
 
-  for (unsigned int i=0; i<frame.planes; i++)
+  for (unsigned int i = 0; i < frame.planes; i++)
     frame.data[i] = data[i];
 
   frame.bits_per_sample = CAEUtil::DataFormatToBits(frame.format.m_dataFormat);
@@ -199,7 +210,7 @@ void CDVDAudioCodecFFmpeg::GetData(DVDAudioFrame &frame)
     frame.duration = 0.0;
 
   int64_t bpts = m_pFrame->best_effort_timestamp;
-  if(bpts != AV_NOPTS_VALUE)
+  if (bpts != AV_NOPTS_VALUE)
     frame.pts = (double)bpts * DVD_TIME_BASE / AV_TIME_BASE;
   else
     frame.pts = DVD_NOPTS_VALUE;
@@ -220,7 +231,7 @@ int CDVDAudioCodecFFmpeg::GetData(uint8_t** dst)
     {
       for (int i = 0; i < m_pFrame->nb_side_data; i++)
       {
-        AVFrameSideData *sd = m_pFrame->side_data[i];
+        AVFrameSideData* sd = m_pFrame->side_data[i];
         if (sd->data)
         {
           if (sd->type == AV_FRAME_DATA_MATRIXENCODING)
@@ -239,11 +250,11 @@ int CDVDAudioCodecFFmpeg::GetData(uint8_t** dst)
     m_format.m_dataFormat = GetDataFormat();
     m_format.m_channelLayout = GetChannelMap();
     m_format.m_sampleRate = GetSampleRate();
-    m_format.m_frameSize = m_format.m_channelLayout.Count() *
-                           CAEUtil::DataFormatToBits(m_format.m_dataFormat) >> 3;
+    m_format.m_frameSize =
+        m_format.m_channelLayout.Count() * CAEUtil::DataFormatToBits(m_format.m_dataFormat) >> 3;
 
     int planes = av_sample_fmt_is_planar(m_pCodecContext->sample_fmt) ? m_pFrame->channels : 1;
-    for (int i=0; i<planes; i++)
+    for (int i = 0; i < planes; i++)
       dst[i] = m_pFrame->extended_data[i];
 
     return m_pFrame->nb_samples * m_pFrame->channels *
@@ -255,7 +266,8 @@ int CDVDAudioCodecFFmpeg::GetData(uint8_t** dst)
 
 void CDVDAudioCodecFFmpeg::Reset()
 {
-  if (m_pCodecContext) avcodec_flush_buffers(m_pCodecContext);
+  if (m_pCodecContext)
+    avcodec_flush_buffers(m_pCodecContext);
   m_eof = false;
 }
 
@@ -273,22 +285,32 @@ int CDVDAudioCodecFFmpeg::GetSampleRate()
 
 enum AEDataFormat CDVDAudioCodecFFmpeg::GetDataFormat()
 {
-  switch(m_pCodecContext->sample_fmt)
+  switch (m_pCodecContext->sample_fmt)
   {
-    case AV_SAMPLE_FMT_U8 : return AE_FMT_U8;
-    case AV_SAMPLE_FMT_U8P : return AE_FMT_U8P;
-    case AV_SAMPLE_FMT_S16: return AE_FMT_S16NE;
-    case AV_SAMPLE_FMT_S16P: return AE_FMT_S16NEP;
-    case AV_SAMPLE_FMT_S32: return AE_FMT_S32NE;
-    case AV_SAMPLE_FMT_S32P: return AE_FMT_S32NEP;
-    case AV_SAMPLE_FMT_FLT: return AE_FMT_FLOAT;
-    case AV_SAMPLE_FMT_FLTP: return AE_FMT_FLOATP;
-    case AV_SAMPLE_FMT_DBL: return AE_FMT_DOUBLE;
-    case AV_SAMPLE_FMT_DBLP: return AE_FMT_DOUBLEP;
-    case AV_SAMPLE_FMT_NONE:
-    default:
-      CLog::Log(LOGERROR, "CDVDAudioCodecFFmpeg::GetDataFormat - invalid data format");
-      return AE_FMT_INVALID;
+  case AV_SAMPLE_FMT_U8:
+    return AE_FMT_U8;
+  case AV_SAMPLE_FMT_U8P:
+    return AE_FMT_U8P;
+  case AV_SAMPLE_FMT_S16:
+    return AE_FMT_S16NE;
+  case AV_SAMPLE_FMT_S16P:
+    return AE_FMT_S16NEP;
+  case AV_SAMPLE_FMT_S32:
+    return AE_FMT_S32NE;
+  case AV_SAMPLE_FMT_S32P:
+    return AE_FMT_S32NEP;
+  case AV_SAMPLE_FMT_FLT:
+    return AE_FMT_FLOAT;
+  case AV_SAMPLE_FMT_FLTP:
+    return AE_FMT_FLOATP;
+  case AV_SAMPLE_FMT_DBL:
+    return AE_FMT_DOUBLE;
+  case AV_SAMPLE_FMT_DBLP:
+    return AE_FMT_DOUBLEP;
+  case AV_SAMPLE_FMT_NONE:
+  default:
+    CLog::Log(LOGERROR, "CDVDAudioCodecFFmpeg::GetDataFormat - invalid data format");
+    return AE_FMT_INVALID;
   }
 }
 
@@ -321,7 +343,7 @@ int CDVDAudioCodecFFmpeg::GetProfile()
 static unsigned count_bits(int64_t value)
 {
   unsigned bits = 0;
-  for(;value;++bits)
+  for (; value; ++bits)
     value &= value - 1;
   return bits;
 }
@@ -332,7 +354,7 @@ void CDVDAudioCodecFFmpeg::BuildChannelMap()
     return; //nothing to do here
 
   m_channels = m_pCodecContext->channels;
-  m_layout   = m_pCodecContext->channel_layout;
+  m_layout = m_pCodecContext->channel_layout;
 
   int64_t layout;
 
@@ -341,30 +363,51 @@ void CDVDAudioCodecFFmpeg::BuildChannelMap()
     layout = m_pCodecContext->channel_layout;
   else
   {
-    CLog::Log(LOGINFO, "CDVDAudioCodecFFmpeg::GetChannelMap - FFmpeg reported %d channels, but the layout contains %d ignoring", m_pCodecContext->channels, bits);
+    CLog::Log(LOGINFO,
+              "CDVDAudioCodecFFmpeg::GetChannelMap - FFmpeg reported %d channels, but the layout "
+              "contains %d ignoring",
+              m_pCodecContext->channels, bits);
     layout = av_get_default_channel_layout(m_pCodecContext->channels);
   }
 
   m_channelLayout.Reset();
 
-  if (layout & AV_CH_FRONT_LEFT           ) m_channelLayout += AE_CH_FL  ;
-  if (layout & AV_CH_FRONT_RIGHT          ) m_channelLayout += AE_CH_FR  ;
-  if (layout & AV_CH_FRONT_CENTER         ) m_channelLayout += AE_CH_FC  ;
-  if (layout & AV_CH_LOW_FREQUENCY        ) m_channelLayout += AE_CH_LFE ;
-  if (layout & AV_CH_BACK_LEFT            ) m_channelLayout += AE_CH_BL  ;
-  if (layout & AV_CH_BACK_RIGHT           ) m_channelLayout += AE_CH_BR  ;
-  if (layout & AV_CH_FRONT_LEFT_OF_CENTER ) m_channelLayout += AE_CH_FLOC;
-  if (layout & AV_CH_FRONT_RIGHT_OF_CENTER) m_channelLayout += AE_CH_FROC;
-  if (layout & AV_CH_BACK_CENTER          ) m_channelLayout += AE_CH_BC  ;
-  if (layout & AV_CH_SIDE_LEFT            ) m_channelLayout += AE_CH_SL  ;
-  if (layout & AV_CH_SIDE_RIGHT           ) m_channelLayout += AE_CH_SR  ;
-  if (layout & AV_CH_TOP_CENTER           ) m_channelLayout += AE_CH_TC  ;
-  if (layout & AV_CH_TOP_FRONT_LEFT       ) m_channelLayout += AE_CH_TFL ;
-  if (layout & AV_CH_TOP_FRONT_CENTER     ) m_channelLayout += AE_CH_TFC ;
-  if (layout & AV_CH_TOP_FRONT_RIGHT      ) m_channelLayout += AE_CH_TFR ;
-  if (layout & AV_CH_TOP_BACK_LEFT        ) m_channelLayout += AE_CH_BL  ;
-  if (layout & AV_CH_TOP_BACK_CENTER      ) m_channelLayout += AE_CH_BC  ;
-  if (layout & AV_CH_TOP_BACK_RIGHT       ) m_channelLayout += AE_CH_BR  ;
+  if (layout & AV_CH_FRONT_LEFT)
+    m_channelLayout += AE_CH_FL;
+  if (layout & AV_CH_FRONT_RIGHT)
+    m_channelLayout += AE_CH_FR;
+  if (layout & AV_CH_FRONT_CENTER)
+    m_channelLayout += AE_CH_FC;
+  if (layout & AV_CH_LOW_FREQUENCY)
+    m_channelLayout += AE_CH_LFE;
+  if (layout & AV_CH_BACK_LEFT)
+    m_channelLayout += AE_CH_BL;
+  if (layout & AV_CH_BACK_RIGHT)
+    m_channelLayout += AE_CH_BR;
+  if (layout & AV_CH_FRONT_LEFT_OF_CENTER)
+    m_channelLayout += AE_CH_FLOC;
+  if (layout & AV_CH_FRONT_RIGHT_OF_CENTER)
+    m_channelLayout += AE_CH_FROC;
+  if (layout & AV_CH_BACK_CENTER)
+    m_channelLayout += AE_CH_BC;
+  if (layout & AV_CH_SIDE_LEFT)
+    m_channelLayout += AE_CH_SL;
+  if (layout & AV_CH_SIDE_RIGHT)
+    m_channelLayout += AE_CH_SR;
+  if (layout & AV_CH_TOP_CENTER)
+    m_channelLayout += AE_CH_TC;
+  if (layout & AV_CH_TOP_FRONT_LEFT)
+    m_channelLayout += AE_CH_TFL;
+  if (layout & AV_CH_TOP_FRONT_CENTER)
+    m_channelLayout += AE_CH_TFC;
+  if (layout & AV_CH_TOP_FRONT_RIGHT)
+    m_channelLayout += AE_CH_TFR;
+  if (layout & AV_CH_TOP_BACK_LEFT)
+    m_channelLayout += AE_CH_BL;
+  if (layout & AV_CH_TOP_BACK_CENTER)
+    m_channelLayout += AE_CH_BC;
+  if (layout & AV_CH_TOP_BACK_RIGHT)
+    m_channelLayout += AE_CH_BR;
 
   m_channels = m_pCodecContext->channels;
 }

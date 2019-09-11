@@ -19,8 +19,8 @@ public:
   ~CGUIWindowSettingsCategory() override;
 
   // specialization of CGUIControl
-  bool OnMessage(CGUIMessage &message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnMessage(CGUIMessage& message) override;
+  bool OnAction(const CAction& action) override;
   bool OnBack(int actionID) override;
   int GetID() const override { return CGUIDialogSettingsManagerBase::GetID() + m_iSection; };
 

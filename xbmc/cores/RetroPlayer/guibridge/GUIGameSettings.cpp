@@ -16,9 +16,9 @@
 using namespace KODI;
 using namespace RETRO;
 
-CGUIGameSettings::CGUIGameSettings(CRPProcessInfo &processInfo) :
-  m_processInfo(processInfo),
-  m_guiSettings(processInfo.GetRenderContext().GetGameSettings())
+CGUIGameSettings::CGUIGameSettings(CRPProcessInfo& processInfo)
+  : m_processInfo(processInfo)
+  , m_guiSettings(processInfo.GetRenderContext().GetGameSettings())
 {
   // Reset game settings
   m_guiSettings = m_processInfo.GetRenderContext().GetDefaultGameSettings();
@@ -40,7 +40,7 @@ CRenderSettings CGUIGameSettings::GetSettings() const
   return m_renderSettings;
 }
 
-void CGUIGameSettings::Notify(const Observable &obs, const ObservableMessage msg)
+void CGUIGameSettings::Notify(const Observable& obs, const ObservableMessage msg)
 {
   switch (msg)
   {

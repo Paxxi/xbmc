@@ -17,7 +17,10 @@ namespace CONTEXTMENU
 {
 
 CMusicInfo::CMusicInfo(MediaType mediaType)
-      : CStaticContextMenuAction(19033), m_mediaType(mediaType) {}
+  : CStaticContextMenuAction(19033)
+  , m_mediaType(mediaType)
+{
+}
 
 bool CMusicInfo::IsVisible(const CFileItem& item) const
 {
@@ -30,4 +33,4 @@ bool CMusicInfo::Execute(const CFileItemPtr& item) const
   return true;
 }
 
-}
+} // namespace CONTEXTMENU

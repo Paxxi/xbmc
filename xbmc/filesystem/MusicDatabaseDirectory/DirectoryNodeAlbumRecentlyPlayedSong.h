@@ -12,16 +12,15 @@
 
 namespace XFILE
 {
-  namespace MUSICDATABASEDIRECTORY
-  {
-    class CDirectoryNodeAlbumRecentlyPlayedSong : public CDirectoryNode
-    {
-    public:
-      CDirectoryNodeAlbumRecentlyPlayedSong(const std::string& strName, CDirectoryNode* pParent);
-    protected:
-      bool GetContent(CFileItemList& items) const override;
-    };
-  }
-}
+namespace MUSICDATABASEDIRECTORY
+{
+class CDirectoryNodeAlbumRecentlyPlayedSong : public CDirectoryNode
+{
+public:
+  CDirectoryNodeAlbumRecentlyPlayedSong(const std::string& strName, CDirectoryNode* pParent);
 
-
+protected:
+  bool GetContent(CFileItemList& items) const override;
+};
+} // namespace MUSICDATABASEDIRECTORY
+} // namespace XFILE

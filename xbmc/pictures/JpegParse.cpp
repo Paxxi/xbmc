@@ -24,20 +24,22 @@
 #ifdef TARGET_WINDOWS
 #include <windows.h>
 #else
-#include <memory.h>
 #include <cstring>
+
+#include <memory.h>
 typedef unsigned char BYTE;
 #endif
 
 #ifndef min
-#define min(a,b) (a)>(b)?(b):(a)
+#define min(a, b) (a) > (b) ? (b) : (a)
 #endif
 
 using namespace XFILE;
 
 //--------------------------------------------------------------------------
-#define JPEG_PARSE_STRING_ID_BASE       21500
-enum {
+#define JPEG_PARSE_STRING_ID_BASE 21500
+enum
+{
   ProcessUnknown = JPEG_PARSE_STRING_ID_BASE,
   ProcessSof0,
   ProcessSof1,
@@ -55,13 +57,11 @@ enum {
 };
 
 
-
-
 //--------------------------------------------------------------------------
 // Constructor
 //--------------------------------------------------------------------------
-CJpegParse::CJpegParse():
-  m_SectionBuffer(NULL)
+CJpegParse::CJpegParse()
+  : m_SectionBuffer(NULL)
 {
   memset(&m_ExifInfo, 0, sizeof(m_ExifInfo));
   memset(&m_IPTCInfo, 0, sizeof(m_IPTCInfo));
@@ -70,10 +70,10 @@ CJpegParse::CJpegParse():
 //--------------------------------------------------------------------------
 // Process a SOFn marker.  This is useful for the image dimensions
 //--------------------------------------------------------------------------
-void CJpegParse::ProcessSOFn (void)
+void CJpegParse::ProcessSOFn(void)
 {
-  m_ExifInfo.Height = CExifParse::Get16(m_SectionBuffer+3);
-  m_ExifInfo.Width  = CExifParse::Get16(m_SectionBuffer+5);
+  m_ExifInfo.Height = CExifParse::Get16(m_SectionBuffer + 3);
+  m_ExifInfo.Width = CExifParse::Get16(m_SectionBuffer + 5);
 
   unsigned char num_components = m_SectionBuffer[7];
   if (num_components != 3)
@@ -91,7 +91,7 @@ void CJpegParse::ProcessSOFn (void)
 // Read a section from a JPEG file. Note that this function allocates memory.
 // It must be called in pair with ReleaseSection
 //--------------------------------------------------------------------------
-bool CJpegParse::GetSection (CFile& infile, const unsigned short sectionLength)
+bool CJpegParse::GetSection(CFile& infile, const unsigned short sectionLength)
 {
   if (sectionLength < 2)
   {
@@ -111,8 +111,9 @@ bool CJpegParse::GetSection (CFile& infile, const unsigned short sectionLength)
 
   unsigned int len = (unsigned int)sectionLength;
 
-  size_t bytesRead = infile.Read(m_SectionBuffer+sizeof(sectionLength), len-sizeof(sectionLength));
-  if (bytesRead != sectionLength-sizeof(sectionLength))
+  size_t bytesRead =
+      infile.Read(m_SectionBuffer + sizeof(sectionLength), len - sizeof(sectionLength));
+  if (bytesRead != sectionLength - sizeof(sectionLength))
   {
     printf("JpgParse: premature end of file?");
     ReleaseSection();
@@ -125,7 +126,7 @@ bool CJpegParse::GetSection (CFile& infile, const unsigned short sectionLength)
 // Deallocate memory allocated in GetSection. This function must always
 // be paired by a preceeding GetSection call.
 //--------------------------------------------------------------------------
-void CJpegParse::ReleaseSection (void)
+void CJpegParse::ReleaseSection(void)
 {
   delete[] m_SectionBuffer;
   m_SectionBuffer = NULL;
@@ -135,7 +136,7 @@ void CJpegParse::ReleaseSection (void)
 // Parse the marker stream until SOS or EOI is seen; infile has already been
 // successfully open
 //--------------------------------------------------------------------------
-bool CJpegParse::ExtractInfo (CFile& infile)
+bool CJpegParse::ExtractInfo(CFile& infile)
 {
   // Get file marker (two bytes - must be 0xFFD8 for JPEG files
   BYTE a;
@@ -150,10 +151,11 @@ bool CJpegParse::ExtractInfo (CFile& infile)
     return false;
   }
 
-  for(;;)
+  for (;;)
   {
     BYTE marker = 0;
-    for (a=0; a<7; a++) {
+    for (a = 0; a < 7; a++)
+    {
       bytesRead = infile.Read(&marker, sizeof(BYTE));
       if (marker != 0xFF)
         break;
@@ -177,82 +179,82 @@ bool CJpegParse::ExtractInfo (CFile& infile)
       return false;
     }
 
-    switch(marker)
+    switch (marker)
     {
-      case M_SOS:   // stop before hitting compressed data
+    case M_SOS: // stop before hitting compressed data
       return true;
 
-      case M_EOI:   // in case it's a tables-only JPEG stream
-        printf("JpgParse: No image in jpeg!");
-        return false;
+    case M_EOI: // in case it's a tables-only JPEG stream
+      printf("JpgParse: No image in jpeg!");
+      return false;
       break;
 
-      case M_COM: // Comment section
-        GetSection(infile, itemlen);
-        if (m_SectionBuffer != NULL)
-        {
-       //   CExifParse::FixComment(comment);          // Ensure comment is printable
-          unsigned short length = min(itemlen - 2, MAX_COMMENT);
-          strncpy(m_ExifInfo.FileComment, (char *)&m_SectionBuffer[2], length);
-          m_ExifInfo.FileComment[length] = '\0';
-		    }
-        ReleaseSection();
+    case M_COM: // Comment section
+      GetSection(infile, itemlen);
+      if (m_SectionBuffer != NULL)
+      {
+        //   CExifParse::FixComment(comment);          // Ensure comment is printable
+        unsigned short length = min(itemlen - 2, MAX_COMMENT);
+        strncpy(m_ExifInfo.FileComment, (char*)&m_SectionBuffer[2], length);
+        m_ExifInfo.FileComment[length] = '\0';
+      }
+      ReleaseSection();
       break;
 
-      case M_SOF0:
-      case M_SOF1:
-      case M_SOF2:
-      case M_SOF3:
-      case M_SOF5:
-      case M_SOF6:
-      case M_SOF7:
-      case M_SOF9:
-      case M_SOF10:
-      case M_SOF11:
-      case M_SOF13:
-      case M_SOF14:
-      case M_SOF15:
-        GetSection(infile, itemlen);
-        if ((m_SectionBuffer != NULL) && (itemlen >= 7))
-        {
-          ProcessSOFn();
-          m_ExifInfo.Process = marker;
-        }
-        ReleaseSection();
+    case M_SOF0:
+    case M_SOF1:
+    case M_SOF2:
+    case M_SOF3:
+    case M_SOF5:
+    case M_SOF6:
+    case M_SOF7:
+    case M_SOF9:
+    case M_SOF10:
+    case M_SOF11:
+    case M_SOF13:
+    case M_SOF14:
+    case M_SOF15:
+      GetSection(infile, itemlen);
+      if ((m_SectionBuffer != NULL) && (itemlen >= 7))
+      {
+        ProcessSOFn();
+        m_ExifInfo.Process = marker;
+      }
+      ReleaseSection();
       break;
 
-      case M_IPTC:
-        GetSection(infile, itemlen);
-        if (m_SectionBuffer != NULL)
-        {
-          CIptcParse::Process(m_SectionBuffer, itemlen, &m_IPTCInfo);
-        }
-        ReleaseSection();
+    case M_IPTC:
+      GetSection(infile, itemlen);
+      if (m_SectionBuffer != NULL)
+      {
+        CIptcParse::Process(m_SectionBuffer, itemlen, &m_IPTCInfo);
+      }
+      ReleaseSection();
       break;
 
-      case M_EXIF:
-        // Seen files from some 'U-lead' software with Vivitar scanner
-        // that uses marker 31 for non exif stuff.  Thus make sure
-        // it says 'Exif' in the section before treating it as exif.
-        GetSection(infile, itemlen);
-        if (m_SectionBuffer != NULL)
-        {
-          CExifParse exif;
-          exif.Process(m_SectionBuffer, itemlen, &m_ExifInfo);
-        }
-        ReleaseSection();
+    case M_EXIF:
+      // Seen files from some 'U-lead' software with Vivitar scanner
+      // that uses marker 31 for non exif stuff.  Thus make sure
+      // it says 'Exif' in the section before treating it as exif.
+      GetSection(infile, itemlen);
+      if (m_SectionBuffer != NULL)
+      {
+        CExifParse exif;
+        exif.Process(m_SectionBuffer, itemlen, &m_ExifInfo);
+      }
+      ReleaseSection();
       break;
 
-      case M_JFIF:
-        // Regular jpegs always have this tag, exif images have the exif
-        // marker instead, althogh ACDsee will write images with both markers.
-        // this program will re-create this marker on absence of exif marker.
-        // hence no need to keep the copy from the file.
-      // fall through to default case
-      default:
-        // Skip any other sections.
-        GetSection(infile, itemlen);
-        ReleaseSection();
+    case M_JFIF:
+      // Regular jpegs always have this tag, exif images have the exif
+      // marker instead, althogh ACDsee will write images with both markers.
+      // this program will re-create this marker on absence of exif marker.
+      // hence no need to keep the copy from the file.
+    // fall through to default case
+    default:
+      // Skip any other sections.
+      GetSection(infile, itemlen);
+      ReleaseSection();
       break;
     }
   }
@@ -262,7 +264,7 @@ bool CJpegParse::ExtractInfo (CFile& infile)
 //--------------------------------------------------------------------------
 // Process a file. Check if it is JPEG. Extract exif/iptc info if it is.
 //--------------------------------------------------------------------------
-bool CJpegParse::Process (const char *picFileName)
+bool CJpegParse::Process(const char* picFileName)
 {
   CFile file;
 
@@ -272,7 +274,7 @@ bool CJpegParse::Process (const char *picFileName)
   // File exists and successfully opened. Start processing
   // Gather all information about the file
 
-/*    // Get file name...
+  /*    // Get file name...
   CStdString tmp, urlFName, path;
   CURL url(picFileName);
   url.GetURLWithoutUserDetails(urlFName);
@@ -313,4 +315,3 @@ bool CJpegParse::Process (const char *picFileName)
   file.Close();
   return result;
 }
-

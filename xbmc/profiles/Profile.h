@@ -24,7 +24,7 @@ public:
   class CLock
   {
   public:
-    CLock(LockType type = LOCK_MODE_EVERYONE, const std::string &password = "");
+    CLock(LockType type = LOCK_MODE_EVERYONE, const std::string& password = "");
     void Validate();
 
     LockType mode;
@@ -39,18 +39,18 @@ public:
     bool games;
   };
 
-  CProfile(const std::string &directory = "", const std::string &name = "", const int id = -1);
+  CProfile(const std::string& directory = "", const std::string& name = "", const int id = -1);
   ~CProfile(void);
 
-  void Load(const TiXmlNode *node, int nextIdProfile);
-  void Save(TiXmlNode *root) const;
+  void Load(const TiXmlNode* node, int nextIdProfile);
+  void Save(TiXmlNode* root) const;
 
-  const std::string& getDate() const { return m_date;}
+  const std::string& getDate() const { return m_date; }
   int getId() const { return m_id; }
-  const std::string& getName() const { return m_name;}
-  const std::string& getDirectory() const { return m_directory;}
-  const std::string& getThumb() const { return m_thumb;}
-  const std::string& getLockCode() const { return m_locks.code;}
+  const std::string& getName() const { return m_name; }
+  const std::string& getDirectory() const { return m_directory; }
+  const std::string& getThumb() const { return m_thumb; }
+  const std::string& getLockCode() const { return m_locks.code; }
   LockType getLockMode() const { return m_locks.mode; }
 
   bool hasDatabases() const { return m_bDatabases; }
@@ -70,18 +70,18 @@ public:
   bool filesLocked() const { return m_locks.files; }
   bool programsLocked() const { return m_locks.programs; }
   bool gamesLocked() const { return m_locks.games; }
-  const CLock &GetLocks() const { return m_locks; }
+  const CLock& GetLocks() const { return m_locks; }
 
-  void setName(const std::string& name) {m_name = name;}
-  void setDirectory(const std::string& directory) {m_directory = directory;}
-  void setDate(const std::string& strDate) { m_date = strDate;}
+  void setName(const std::string& name) { m_name = name; }
+  void setDirectory(const std::string& directory) { m_directory = directory; }
+  void setDate(const std::string& strDate) { m_date = strDate; }
   void setDate();
-  void setThumb(const std::string& thumb) {m_thumb = thumb;}
+  void setThumb(const std::string& thumb) { m_thumb = thumb; }
   void setDatabases(bool bHas) { m_bDatabases = bHas; }
   void setWriteDatabases(bool bCan) { m_bCanWrite = bCan; }
   void setSources(bool bHas) { m_bSources = bHas; }
   void setWriteSources(bool bCan) { m_bCanWriteSources = bCan; }
-  void SetLocks(const CLock &locks);
+  void SetLocks(const CLock& locks);
 
 private:
   std::string m_directory;

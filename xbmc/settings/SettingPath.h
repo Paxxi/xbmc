@@ -15,20 +15,23 @@
 class CSettingPath : public CSettingString
 {
 public:
-  CSettingPath(const std::string &id, CSettingsManager *settingsManager = nullptr);
-  CSettingPath(const std::string &id, int label, const std::string &value, CSettingsManager *settingsManager = nullptr);
-  CSettingPath(const std::string &id, const CSettingPath &setting);
+  CSettingPath(const std::string& id, CSettingsManager* settingsManager = nullptr);
+  CSettingPath(const std::string& id,
+               int label,
+               const std::string& value,
+               CSettingsManager* settingsManager = nullptr);
+  CSettingPath(const std::string& id, const CSettingPath& setting);
   ~CSettingPath() override = default;
 
-  SettingPtr Clone(const std::string &id) const override;
+  SettingPtr Clone(const std::string& id) const override;
 
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
-  bool SetValue(const std::string &value) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
+  bool SetValue(const std::string& value) override;
 
   bool Writable() const { return m_writable; }
   void SetWritable(bool writable) { m_writable = writable; }
   const std::vector<std::string>& GetSources() const { return m_sources; }
-  void SetSources(const std::vector<std::string> &sources) { m_sources = sources; }
+  void SetSources(const std::vector<std::string>& sources) { m_sources = sources; }
   bool HideExtension() const { return m_hideExtension; }
   void SetHideExtension(bool hideExtension) { m_hideExtension = hideExtension; }
   const std::string& GetMasking() const { return m_masking; }
@@ -36,7 +39,7 @@ public:
 
 private:
   using CSettingString::copy;
-  void copy(const CSettingPath &setting);
+  void copy(const CSettingPath& setting);
 
   bool m_writable = true;
   std::vector<std::string> m_sources;

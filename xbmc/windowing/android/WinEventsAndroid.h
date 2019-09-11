@@ -22,22 +22,21 @@ class CWinEventsAndroid : public IWinEvents, public CThread
 {
 public:
   CWinEventsAndroid();
- ~CWinEventsAndroid();
+  ~CWinEventsAndroid();
 
-  void            MessagePush(XBMC_Event *newEvent);
-  void            MessagePushRepeat(XBMC_Event *repeatEvent);
-  bool            MessagePump();
+  void MessagePush(XBMC_Event* newEvent);
+  void MessagePushRepeat(XBMC_Event* repeatEvent);
+  bool MessagePump();
 
 private:
-  size_t          GetQueueSize();
+  size_t GetQueueSize();
 
   // for CThread
-  virtual void    Process();
+  virtual void Process();
 
-  CCriticalSection             m_eventsCond;
-  std::list<XBMC_Event>        m_events;
+  CCriticalSection m_eventsCond;
+  std::list<XBMC_Event> m_events;
 
-  CCriticalSection             m_lasteventCond;
-  std::queue<XBMC_Event>       m_lastevent;
+  CCriticalSection m_lasteventCond;
+  std::queue<XBMC_Event> m_lastevent;
 };
-

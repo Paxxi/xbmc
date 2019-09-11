@@ -20,4 +20,4 @@ public:
   static void RemoveTags(std::string& strHTML);
   static void ConvertHTMLToW(const std::wstring& strHTML, std::wstring& strStripped);
 };
-}
+} // namespace HTML

@@ -16,8 +16,8 @@
 #include "GUIControl.h"
 #include "GUITexture.h"
 
-#define ALLOWED_DIRECTIONS_ALL   0
-#define ALLOWED_DIRECTIONS_UPDOWN  1
+#define ALLOWED_DIRECTIONS_ALL 0
+#define ALLOWED_DIRECTIONS_UPDOWN 1
 #define ALLOWED_DIRECTIONS_LEFTRIGHT 2
 
 #define DIRECTION_NONE 0
@@ -33,16 +33,21 @@
 class CGUIMoverControl : public CGUIControl
 {
 public:
-  CGUIMoverControl(int parentID, int controlID,
-                   float posX, float posY, float width, float height,
-                   const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus);
+  CGUIMoverControl(int parentID,
+                   int controlID,
+                   float posX,
+                   float posY,
+                   float width,
+                   float height,
+                   const CTextureInfo& textureFocus,
+                   const CTextureInfo& textureNoFocus);
 
   ~CGUIMoverControl(void) override;
-  CGUIMoverControl *Clone() const override { return new CGUIMoverControl(*this); };
+  CGUIMoverControl* Clone() const override { return new CGUIMoverControl(*this); };
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
   void OnUp() override;
   void OnDown() override;
   void OnLeft() override;
@@ -54,12 +59,12 @@ public:
   void SetPosition(float posX, float posY) override;
   void SetLimits(int iX1, int iY1, int iX2, int iY2);
   void SetLocation(int iLocX, int iLocY, bool bSetPosition = true);
-  int GetXLocation() const { return m_iLocationX;};
-  int GetYLocation() const { return m_iLocationY;};
+  int GetXLocation() const { return m_iLocationX; };
+  int GetYLocation() const { return m_iLocationY; };
   bool CanFocus() const override { return true; };
 
 protected:
-  EVENT_RESULT OnMouseEvent(const CPoint &point, const CMouseEvent &event) override;
+  EVENT_RESULT OnMouseEvent(const CPoint& point, const CMouseEvent& event) override;
   bool UpdateColors() override;
   bool SetAlpha(unsigned char alpha);
   void UpdateSpeed(int nDirection);
@@ -76,4 +81,3 @@ protected:
   int m_iX1, m_iX2, m_iY1, m_iY2;
   int m_iLocationX, m_iLocationY;
 };
-

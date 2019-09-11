@@ -10,22 +10,28 @@
 
 namespace XbmcThreads
 {
-  /**
+/**
    * This will create a new predicate from an old predicate P with
    *  inverse truth value. This predicate is safe to use in a
    *  TightConditionVariable<P>
    */
-  template <class P> class InversePredicate
+template<class P>
+class InversePredicate
+{
+  P predicate;
+
+public:
+  inline explicit InversePredicate(P predicate_)
+    : predicate(predicate_)
   {
-    P predicate;
+  }
+  inline InversePredicate(const InversePredicate<P>& other)
+    : predicate(other.predicate)
+  {
+  }
+  inline InversePredicate<P>& operator=(InversePredicate<P>& other) { predicate = other.predicate; }
 
-  public:
-    inline explicit InversePredicate(P predicate_) : predicate(predicate_) {}
-    inline InversePredicate(const InversePredicate<P>& other) : predicate(other.predicate) {}
-    inline InversePredicate<P>& operator=(InversePredicate<P>& other) { predicate = other.predicate; }
+  inline bool operator!() const { return !(!predicate); }
+};
 
-    inline bool operator!() const { return !(!predicate); }
-  };
-
-}
-
+} // namespace XbmcThreads

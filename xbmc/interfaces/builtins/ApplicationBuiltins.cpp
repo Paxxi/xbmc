@@ -36,19 +36,19 @@ using namespace KODI::MESSAGING;
  */
 static int Extract(const std::vector<std::string>& params)
 {
-    // Detects if file is zip or rar then extracts
-    std::string strDestDirect;
-    if (params.size() < 2)
-      strDestDirect = URIUtils::GetDirectory(params[0]);
-    else
-      strDestDirect = params[1];
+  // Detects if file is zip or rar then extracts
+  std::string strDestDirect;
+  if (params.size() < 2)
+    strDestDirect = URIUtils::GetDirectory(params[0]);
+  else
+    strDestDirect = params[1];
 
-    URIUtils::AddSlashAtEnd(strDestDirect);
+  URIUtils::AddSlashAtEnd(strDestDirect);
 
-    if (URIUtils::IsZIP(params[0]))
-      g_ZipManager.ExtractArchive(params[0],strDestDirect);
-    else
-      CLog::Log(LOGERROR, "Extract, No archive given");
+  if (URIUtils::IsZIP(params[0]))
+    g_ZipManager.ExtractArchive(params[0], strDestDirect);
+  else
+    CLog::Log(LOGERROR, "Extract, No archive given");
 
   return 0;
 }
@@ -81,7 +81,8 @@ static int NotifyAll(const std::vector<std::string>& params)
     }
   }
 
-  CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Other, params[0].c_str(), params[1].c_str(), data);
+  CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Other, params[0].c_str(),
+                                                     params[1].c_str(), data);
 
   return 0;
 }
@@ -97,11 +98,12 @@ static int SetVolume(const std::vector<std::string>& params)
   float volume = (float)strtod(params[0].c_str(), nullptr);
 
   g_application.SetVolume(volume);
-  if(oldVolume != volume)
+  if (oldVolume != volume)
   {
-    if(params.size() > 1 && StringUtils::EqualsNoCase(params[1], "showVolumeBar"))
+    if (params.size() > 1 && StringUtils::EqualsNoCase(params[1], "showVolumeBar"))
     {
-      CApplicationMessenger::GetInstance().PostMsg(TMSG_VOLUME_SHOW, oldVolume < volume ? ACTION_VOLUME_UP : ACTION_VOLUME_DOWN);
+      CApplicationMessenger::GetInstance().PostMsg(
+          TMSG_VOLUME_SHOW, oldVolume < volume ? ACTION_VOLUME_UP : ACTION_VOLUME_DOWN);
     }
   }
 
@@ -113,8 +115,10 @@ static int SetVolume(const std::vector<std::string>& params)
  */
 static int ToggleDebug(const std::vector<std::string>& params)
 {
-  bool debug = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_DEBUG_SHOWLOGINFO);
-  CServiceBroker::GetSettingsComponent()->GetSettings()->SetBool(CSettings::SETTING_DEBUG_SHOWLOGINFO, !debug);
+  bool debug = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+      CSettings::SETTING_DEBUG_SHOWLOGINFO);
+  CServiceBroker::GetSettingsComponent()->GetSettings()->SetBool(
+      CSettings::SETTING_DEBUG_SHOWLOGINFO, !debug);
   CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->SetDebugMode(!debug);
 
   return 0;
@@ -203,13 +207,13 @@ static int WakeOnLAN(const std::vector<std::string>& params)
 
 CBuiltins::CommandMap CApplicationBuiltins::GetOperations() const
 {
-  return {
-           {"extract", {"Extracts the specified archive", 1, Extract}},
-           {"mute", {"Mute the player", 0, Mute}},
-           {"notifyall", {"Notify all connected clients", 2, NotifyAll}},
-           {"setvolume", {"Set the current volume", 1, SetVolume}},
-           {"toggledebug", {"Enables/disables debug mode", 0, ToggleDebug}},
-           {"toggledpms", {"Toggle DPMS mode manually", 0, ToggleDPMS}},
-           {"wakeonlan", {"Sends the wake-up packet to the broadcast address for the specified MAC address", 1, WakeOnLAN}}
-         };
+  return {{"extract", {"Extracts the specified archive", 1, Extract}},
+          {"mute", {"Mute the player", 0, Mute}},
+          {"notifyall", {"Notify all connected clients", 2, NotifyAll}},
+          {"setvolume", {"Set the current volume", 1, SetVolume}},
+          {"toggledebug", {"Enables/disables debug mode", 0, ToggleDebug}},
+          {"toggledpms", {"Toggle DPMS mode manually", 0, ToggleDPMS}},
+          {"wakeonlan",
+           {"Sends the wake-up packet to the broadcast address for the specified MAC address", 1,
+            WakeOnLAN}}};
 }

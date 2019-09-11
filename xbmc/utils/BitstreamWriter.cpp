@@ -8,7 +8,7 @@
 
 #include "BitstreamWriter.h"
 
-CBitstreamWriter::CBitstreamWriter(uint8_t *buffer, unsigned int buffer_size, int writer_le)
+CBitstreamWriter::CBitstreamWriter(uint8_t* buffer, unsigned int buffer_size, int writer_le)
   : writer_le(writer_le)
   , bit_buf(0)
   , bit_left(32)
@@ -48,7 +48,8 @@ void CBitstreamWriter::WriteBits(int n, unsigned int value)
   if (writer_le)
   {
     bit_buf |= value << (32 - bit_left);
-    if (n >= bit_left) {
+    if (n >= bit_left)
+    {
       BS_WL32(buf_ptr, bit_buf);
       buf_ptr += 4;
       bit_buf = (bit_left == 32) ? 0 : value >> bit_left;
@@ -58,11 +59,13 @@ void CBitstreamWriter::WriteBits(int n, unsigned int value)
   }
   else
   {
-    if (n < bit_left) {
+    if (n < bit_left)
+    {
       bit_buf = (bit_buf << n) | value;
       bit_left -= n;
     }
-    else {
+    else
+    {
       bit_buf <<= bit_left;
       bit_buf |= value >> (n - bit_left);
       BS_WB32(buf_ptr, bit_buf);

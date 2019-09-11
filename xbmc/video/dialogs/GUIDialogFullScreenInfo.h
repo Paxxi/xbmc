@@ -10,12 +10,10 @@
 
 #include "guilib/GUIDialog.h"
 
-class CGUIDialogFullScreenInfo :
-      public CGUIDialog
+class CGUIDialogFullScreenInfo : public CGUIDialog
 {
 public:
   CGUIDialogFullScreenInfo(void);
   ~CGUIDialogFullScreenInfo(void) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 };
-

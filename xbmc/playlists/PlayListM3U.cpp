@@ -41,7 +41,6 @@ const char* CPlayListM3U::OffsetMarker = "#EXT-KX-OFFSET";
 //   E:\Program Files\Winamp3\demo.mp3
 
 
-
 // example m3u8 containing streams of different bitrates
 //   #EXTM3U
 //   #EXT-X-STREAM-INF:PROGRAM-ID=1, BANDWIDTH=1600000
@@ -62,7 +61,7 @@ bool CPlayListM3U::Load(const std::string& strFileName)
   char szLine[4096];
   std::string strLine;
   std::string strInfo;
-  std::vector<std::pair<std::string, std::string> > properties;
+  std::vector<std::pair<std::string, std::string>> properties;
 
   int lDuration = 0;
   int iStartOffset = 0;
@@ -74,7 +73,7 @@ bool CPlayListM3U::Load(const std::string& strFileName)
   URIUtils::GetParentPath(strFileName, m_strBasePath);
 
   CFile file;
-  if (!file.Open(strFileName) )
+  if (!file.Open(strFileName))
   {
     file.Close();
     return false;
@@ -90,9 +89,7 @@ bool CPlayListM3U::Load(const std::string& strFileName)
       // start of info
       size_t iColon = strLine.find(":");
       size_t iComma = strLine.find(",");
-      if (iColon != std::string::npos &&
-          iComma != std::string::npos &&
-          iComma > iColon)
+      if (iColon != std::string::npos && iComma != std::string::npos && iComma > iColon)
       {
         // Read the info and duration
         iColon++;
@@ -107,9 +104,7 @@ bool CPlayListM3U::Load(const std::string& strFileName)
     {
       size_t iColon = strLine.find(":");
       size_t iComma = strLine.find(",");
-      if (iColon != std::string::npos &&
-        iComma != std::string::npos &&
-        iComma > iColon)
+      if (iColon != std::string::npos && iComma != std::string::npos && iComma > iColon)
       {
         // Read the start and end offset
         iColon++;
@@ -118,24 +113,20 @@ bool CPlayListM3U::Load(const std::string& strFileName)
         iEndOffset = atoi(strLine.substr(iComma).c_str());
       }
     }
-    else if (StringUtils::StartsWith(strLine, PropertyMarker)
-    || StringUtils::StartsWith(strLine, VLCOptMarker))
+    else if (StringUtils::StartsWith(strLine, PropertyMarker) ||
+             StringUtils::StartsWith(strLine, VLCOptMarker))
     {
       size_t iColon = strLine.find(":");
       size_t iEqualSign = strLine.find("=");
-      if (iColon != std::string::npos &&
-        iEqualSign != std::string::npos &&
-        iEqualSign > iColon)
+      if (iColon != std::string::npos && iEqualSign != std::string::npos && iEqualSign > iColon)
       {
         std::string strFirst, strSecond;
         properties.push_back(std::make_pair(
-          StringUtils::Trim((strFirst = strLine.substr(iColon+1, iEqualSign - iColon -1))),
-          StringUtils::Trim((strSecond = strLine.substr(iEqualSign +1))))
-          );
+            StringUtils::Trim((strFirst = strLine.substr(iColon + 1, iEqualSign - iColon - 1))),
+            StringUtils::Trim((strSecond = strLine.substr(iEqualSign + 1)))));
       }
     }
-    else if (strLine != StartMarker &&
-             !StringUtils::StartsWith(strLine, ArtistMarker) &&
+    else if (strLine != StartMarker && !StringUtils::StartsWith(strLine, ArtistMarker) &&
              !StringUtils::StartsWith(strLine, AlbumMarker))
     {
       std::string strFileName = strLine;
@@ -175,13 +166,15 @@ bool CPlayListM3U::Load(const std::string& strFileName)
           newItem->GetMusicInfoTag()->SetLoaded();
           newItem->GetMusicInfoTag()->SetTitle(strInfo);
           if (iEndOffset)
-            lDuration = static_cast<int>(CUtil::ConvertMilliSecsToSecsIntRounded(iEndOffset - iStartOffset));
+            lDuration = static_cast<int>(
+                CUtil::ConvertMilliSecsToSecsIntRounded(iEndOffset - iStartOffset));
         }
-        if (newItem->IsVideo() && !newItem->HasVideoInfoTag()) // File is a video and needs a VideoInfoTag
+        if (newItem->IsVideo() &&
+            !newItem->HasVideoInfoTag()) // File is a video and needs a VideoInfoTag
           newItem->GetVideoInfoTag()->Reset(); // Force VideoInfoTag creation
         if (lDuration && newItem->IsAudio())
           newItem->GetMusicInfoTag()->SetDuration(lDuration);
-        for (auto &prop : properties)
+        for (auto& prop : properties)
         {
           newItem->SetProperty(prop.first, prop.second);
         }
@@ -213,40 +206,43 @@ void CPlayListM3U::Save(const std::string& strFileName) const
     return;
   std::string strPlaylist = CUtil::MakeLegalPath(strFileName);
   CFile file;
-  if (!file.OpenForWrite(strPlaylist,true))
+  if (!file.OpenForWrite(strPlaylist, true))
   {
     CLog::Log(LOGERROR, "Could not save M3U playlist: [%s]", strPlaylist.c_str());
     return;
   }
-  std::string strLine = StringUtils::Format("%s\n",StartMarker);
+  std::string strLine = StringUtils::Format("%s\n", StartMarker);
   if (file.Write(strLine.c_str(), strLine.size()) != static_cast<ssize_t>(strLine.size()))
     return; // error
 
   for (int i = 0; i < (int)m_vecItems.size(); ++i)
   {
     CFileItemPtr item = m_vecItems[i];
-    std::string strDescription=item->GetLabel();
+    std::string strDescription = item->GetLabel();
     g_charsetConverter.utf8ToStringCharset(strDescription);
-    strLine = StringUtils::Format( "%s:%i,%s\n", InfoMarker, item->GetMusicInfoTag()->GetDuration() / 1000, strDescription.c_str() );
+    strLine =
+        StringUtils::Format("%s:%i,%s\n", InfoMarker, item->GetMusicInfoTag()->GetDuration() / 1000,
+                            strDescription.c_str());
     if (file.Write(strLine.c_str(), strLine.size()) != static_cast<ssize_t>(strLine.size()))
       return; // error
     if (item->m_lStartOffset != 0 || item->m_lEndOffset != 0)
     {
-      strLine = StringUtils::Format("%s:%" PRIi64 ",%" PRIi64 "\n", OffsetMarker, item->m_lStartOffset, item->m_lEndOffset);
-      file.Write(strLine.c_str(),strLine.size());
+      strLine = StringUtils::Format("%s:%" PRIi64 ",%" PRIi64 "\n", OffsetMarker,
+                                    item->m_lStartOffset, item->m_lEndOffset);
+      file.Write(strLine.c_str(), strLine.size());
     }
     std::string strFileName = ResolveURL(item);
     g_charsetConverter.utf8ToStringCharset(strFileName);
-    strLine = StringUtils::Format("%s\n",strFileName.c_str());
+    strLine = StringUtils::Format("%s\n", strFileName.c_str());
     if (file.Write(strLine.c_str(), strLine.size()) != static_cast<ssize_t>(strLine.size()))
       return; // error
   }
   file.Close();
 }
 
-std::map< std::string, std::string > CPlayListM3U::ParseStreamLine(const std::string &streamLine)
+std::map<std::string, std::string> CPlayListM3U::ParseStreamLine(const std::string& streamLine)
 {
-  std::map< std::string, std::string > params;
+  std::map<std::string, std::string> params;
 
   // ensure the line has something beyond the stream marker and ':'
   if (streamLine.size() < strlen(StreamMarker) + 2)
@@ -273,4 +269,3 @@ std::map< std::string, std::string > CPlayListM3U::ParseStreamLine(const std::st
 
   return params;
 }
-

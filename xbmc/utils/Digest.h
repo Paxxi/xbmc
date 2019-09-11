@@ -106,17 +106,15 @@ struct TypedDigest
   CDigest::Type type{CDigest::Type::INVALID};
   std::string value;
 
-  TypedDigest()
-  {}
+  TypedDigest() {}
 
   TypedDigest(CDigest::Type type, std::string const& value)
-  : type(type), value(value)
-  {}
-
-  bool Empty() const
+    : type(type)
+    , value(value)
   {
-    return (type == CDigest::Type::INVALID || value.empty());
   }
+
+  bool Empty() const { return (type == CDigest::Type::INVALID || value.empty()); }
 };
 
 inline bool operator==(TypedDigest const& left, TypedDigest const& right)
@@ -135,5 +133,5 @@ inline bool operator!=(TypedDigest const& left, TypedDigest const& right)
 
 std::ostream& operator<<(std::ostream& os, TypedDigest const& digest);
 
-}
-}
+} // namespace UTILITY
+} // namespace KODI

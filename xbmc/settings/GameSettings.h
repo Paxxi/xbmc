@@ -17,18 +17,18 @@ class CGameSettings : public Observable
 {
 public:
   CGameSettings() { Reset(); }
-  CGameSettings(const CGameSettings &other) { *this = other; }
+  CGameSettings(const CGameSettings& other) { *this = other; }
 
-  CGameSettings &operator=(const CGameSettings &rhs);
+  CGameSettings& operator=(const CGameSettings& rhs);
 
   // Restore game settings to default
   void Reset();
 
-  bool operator==(const CGameSettings &rhs) const;
-  bool operator!=(const CGameSettings &rhs) const { return !(*this == rhs); }
+  bool operator==(const CGameSettings& rhs) const;
+  bool operator!=(const CGameSettings& rhs) const { return !(*this == rhs); }
 
-  const std::string &VideoFilter() const { return m_videoFilter; }
-  void SetVideoFilter(const std::string &videoFilter);
+  const std::string& VideoFilter() const { return m_videoFilter; }
+  void SetVideoFilter(const std::string& videoFilter);
 
   KODI::RETRO::STRETCHMODE StretchMode() const { return m_stretchMode; }
   void SetStretchMode(KODI::RETRO::STRETCHMODE stretchMode);

@@ -22,8 +22,7 @@ CUDFDirectory::CUDFDirectory(void) = default;
 
 CUDFDirectory::~CUDFDirectory(void) = default;
 
-bool CUDFDirectory::GetDirectory(const CURL& url,
-                                 CFileItemList &items)
+bool CUDFDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   std::string strRoot, strSub;
   CURL url2(url);
@@ -33,22 +32,22 @@ bool CUDFDirectory::GetDirectory(const CURL& url,
     url2.SetProtocol("udf");
     url2.SetHostName(url.Get());
   }
-  strRoot  = url2.Get();
-  strSub   = url2.GetFileName();
+  strRoot = url2.Get();
+  strSub = url2.GetFileName();
 
   URIUtils::AddSlashAtEnd(strRoot);
   URIUtils::AddSlashAtEnd(strSub);
 
   udf25 udfIsoReader;
-  if(!udfIsoReader.Open(url2.GetHostName().c_str()))
-     return false;
+  if (!udfIsoReader.Open(url2.GetHostName().c_str()))
+    return false;
 
-  udf_dir_t *dirp = udfIsoReader.OpenDir(strSub.c_str());
+  udf_dir_t* dirp = udfIsoReader.OpenDir(strSub.c_str());
 
   if (dirp == NULL)
     return false;
 
-  udf_dirent_t *dp = NULL;
+  udf_dirent_t* dp = NULL;
   while ((dp = udfIsoReader.ReadDir(dirp)) != NULL)
   {
     if (dp->d_type == DVD_DT_DIR)

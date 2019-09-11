@@ -20,47 +20,69 @@ public:
   explicit CVideoInfo(MediaType mediaType);
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
+
 private:
   const MediaType m_mediaType;
 };
 
 struct CTVShowInfo : CVideoInfo
 {
-  CTVShowInfo() : CVideoInfo(MediaTypeTvShow) {}
+  CTVShowInfo()
+    : CVideoInfo(MediaTypeTvShow)
+  {
+  }
 };
 
 struct CEpisodeInfo : CVideoInfo
 {
-  CEpisodeInfo() : CVideoInfo(MediaTypeEpisode) {}
+  CEpisodeInfo()
+    : CVideoInfo(MediaTypeEpisode)
+  {
+  }
 };
 
 struct CMusicVideoInfo : CVideoInfo
 {
-  CMusicVideoInfo() : CVideoInfo(MediaTypeMusicVideo) {}
+  CMusicVideoInfo()
+    : CVideoInfo(MediaTypeMusicVideo)
+  {
+  }
 };
 
 struct CMovieInfo : CVideoInfo
 {
-  CMovieInfo() : CVideoInfo(MediaTypeMovie) {}
+  CMovieInfo()
+    : CVideoInfo(MediaTypeMovie)
+  {
+  }
 };
 
 struct CRemoveResumePoint : CStaticContextMenuAction
 {
-  CRemoveResumePoint() : CStaticContextMenuAction(38209) {}
+  CRemoveResumePoint()
+    : CStaticContextMenuAction(38209)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
 };
 
 struct CMarkWatched : CStaticContextMenuAction
 {
-  CMarkWatched() : CStaticContextMenuAction(16103) {}
+  CMarkWatched()
+    : CStaticContextMenuAction(16103)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
 };
 
 struct CMarkUnWatched : CStaticContextMenuAction
 {
-  CMarkUnWatched() : CStaticContextMenuAction(16104) {}
+  CMarkUnWatched()
+    : CStaticContextMenuAction(16104)
+  {
+  }
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& item) const override;
 };
@@ -78,4 +100,4 @@ struct CPlay : IContextMenuItem
   bool IsVisible(const CFileItem& item) const override;
   bool Execute(const CFileItemPtr& _item) const override;
 };
-}
+} // namespace CONTEXTMENU

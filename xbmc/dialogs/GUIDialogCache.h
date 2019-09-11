@@ -19,7 +19,9 @@ class CGUIDialogProgress;
 class CGUIDialogCache : public CThread, public XFILE::IFileCallback
 {
 public:
-  CGUIDialogCache(DWORD dwDelay = 0, const std::string& strHeader="", const std::string& strMsg="");
+  CGUIDialogCache(DWORD dwDelay = 0,
+                  const std::string& strHeader = "",
+                  const std::string& strMsg = "");
   ~CGUIDialogCache() override;
   void SetHeader(const std::string& strHeader);
   void SetHeader(int nHeader);
@@ -34,7 +36,6 @@ public:
   bool OnFileCallback(void* pContext, int ipercent, float avgSpeed) override;
 
 protected:
-
   void OpenDialog();
 
   XbmcThreads::EndTime m_endtime;

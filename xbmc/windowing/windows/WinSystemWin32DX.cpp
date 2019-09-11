@@ -7,15 +7,17 @@
  */
 
 #include "WinSystemWin32DX.h"
+
 #include "commons/ilog.h"
-#include "platform/win32/CharsetConverter.h"
 #include "rendering/dx/RenderContext.h"
 #include "settings/DisplaySettings.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "utils/log.h"
 #include "utils/SystemInfo.h"
+#include "utils/log.h"
 #include "windowing/GraphicContext.h"
+
+#include "platform/win32/CharsetConverter.h"
 
 #include "system.h"
 
@@ -26,19 +28,23 @@
 #pragma comment(lib, "EasyHook64.lib")
 #endif
 #pragma comment(lib, "dxgi.lib")
-#pragma warning(disable: 4091)
+#pragma warning(disable : 4091)
 #include <d3d10umddi.h>
-#pragma warning(default: 4091)
+#pragma warning(default : 4091)
 
 using KODI::PLATFORM::WINDOWS::FromW;
 
 // User Mode Driver hooks definitions
-void APIENTRY HookCreateResource(D3D10DDI_HDEVICE hDevice, const D3D10DDIARG_CREATERESOURCE* pResource, D3D10DDI_HRESOURCE hResource, D3D10DDI_HRTRESOURCE hRtResource);
-HRESULT APIENTRY HookCreateDevice(D3D10DDI_HADAPTER hAdapter, D3D10DDIARG_CREATEDEVICE* pCreateData);
-HRESULT APIENTRY HookOpenAdapter10_2(D3D10DDIARG_OPENADAPTER *pOpenData);
-static PFND3D10DDI_OPENADAPTER s_fnOpenAdapter10_2{ nullptr };
-static PFND3D10DDI_CREATEDEVICE s_fnCreateDeviceOrig{ nullptr };
-static PFND3D10DDI_CREATERESOURCE s_fnCreateResourceOrig{ nullptr };
+void APIENTRY HookCreateResource(D3D10DDI_HDEVICE hDevice,
+                                 const D3D10DDIARG_CREATERESOURCE* pResource,
+                                 D3D10DDI_HRESOURCE hResource,
+                                 D3D10DDI_HRTRESOURCE hRtResource);
+HRESULT APIENTRY HookCreateDevice(D3D10DDI_HADAPTER hAdapter,
+                                  D3D10DDIARG_CREATEDEVICE* pCreateData);
+HRESULT APIENTRY HookOpenAdapter10_2(D3D10DDIARG_OPENADAPTER* pOpenData);
+static PFND3D10DDI_OPENADAPTER s_fnOpenAdapter10_2{nullptr};
+static PFND3D10DDI_CREATEDEVICE s_fnCreateDeviceOrig{nullptr};
+static PFND3D10DDI_CREATERESOURCE s_fnCreateResourceOrig{nullptr};
 
 std::unique_ptr<CWinSystemBase> CWinSystemBase::CreateWinSystem()
 {
@@ -46,7 +52,8 @@ std::unique_ptr<CWinSystemBase> CWinSystemBase::CreateWinSystem()
   return winSystem;
 }
 
-CWinSystemWin32DX::CWinSystemWin32DX() : CRenderSystemDX()
+CWinSystemWin32DX::CWinSystemWin32DX()
+  : CRenderSystemDX()
   , m_hDriverModule(nullptr)
   , m_hHook(nullptr)
 {
@@ -71,9 +78,13 @@ void CWinSystemWin32DX::PresentRenderImpl(bool rendered)
     Sleep(40);
 }
 
-bool CWinSystemWin32DX::CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res)
+bool CWinSystemWin32DX::CreateNewWindow(const std::string& name,
+                                        bool fullScreen,
+                                        RESOLUTION_INFO& res)
 {
-  const MONITOR_DETAILS* monitor = GetDisplayDetails(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_VIDEOSCREEN_MONITOR));
+  const MONITOR_DETAILS* monitor =
+      GetDisplayDetails(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+          CSettings::SETTING_VIDEOSCREEN_MONITOR));
   if (!monitor)
     return false;
 
@@ -82,7 +93,8 @@ bool CWinSystemWin32DX::CreateNewWindow(const std::string& name, bool fullScreen
   // setting monitor before creating window for proper hooking into a driver
   m_deviceResources->SetMonitor(m_hMonitor);
 
-  return CWinSystemWin32::CreateNewWindow(name, fullScreen, res) && m_deviceResources->HasValidDevice();
+  return CWinSystemWin32::CreateNewWindow(name, fullScreen, res) &&
+         m_deviceResources->HasValidDevice();
 }
 
 void CWinSystemWin32DX::SetWindow(HWND hWnd) const
@@ -126,7 +138,8 @@ void CWinSystemWin32DX::OnMove(int x, int y)
   if (newMonitor != m_hMonitor)
   {
     MONITOR_DETAILS* details = GetDisplayDetails(newMonitor);
-    CDisplaySettings::GetInstance().SetMonitor(KODI::PLATFORM::WINDOWS::FromW(details->MonitorNameW));
+    CDisplaySettings::GetInstance().SetMonitor(
+        KODI::PLATFORM::WINDOWS::FromW(details->MonitorNameW));
     m_deviceResources->SetMonitor(newMonitor);
     m_hMonitor = newMonitor;
   }
@@ -170,7 +183,7 @@ void CWinSystemWin32DX::OnScreenChange(HMONITOR monitor)
   m_deviceResources->SetMonitor(monitor);
 }
 
-bool CWinSystemWin32DX::ChangeResolution(const RESOLUTION_INFO &res, bool forceChange)
+bool CWinSystemWin32DX::ChangeResolution(const RESOLUTION_INFO& res, bool forceChange)
 {
   bool changed = CWinSystemWin32::ChangeResolution(res, forceChange);
   // this is a try to fix FCU issue after changing resolution
@@ -190,7 +203,9 @@ void CWinSystemWin32DX::OnResize(int width, int height)
     CreateBackBuffer();
 }
 
-bool CWinSystemWin32DX::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays)
+bool CWinSystemWin32DX::SetFullScreen(bool fullScreen,
+                                      RESOLUTION_INFO& res,
+                                      bool blankOtherDisplays)
 {
   bool const result = CWinSystemWin32::SetFullScreen(fullScreen, res, blankOtherDisplays);
   CRenderSystemDX::OnResize();
@@ -238,13 +253,14 @@ void CWinSystemWin32DX::InitHooks(IDXGIOutput* pOutput)
   if (!deviceFound)
     return;
 
-  CLog::LogF(LOGDEBUG, "Hooking into UserModeDriver on device %s. ", FromW(displayDevice.DeviceKey));
+  CLog::LogF(LOGDEBUG, "Hooking into UserModeDriver on device %s. ",
+             FromW(displayDevice.DeviceKey));
   wchar_t* keyName =
 #ifndef _M_X64
-  // on x64 system and x32 build use UserModeDriverNameWow key
-  CSysInfo::GetKernelBitness() == 64 ? keyName = L"UserModeDriverNameWow" :
+      // on x64 system and x32 build use UserModeDriverNameWow key
+      CSysInfo::GetKernelBitness() == 64 ? keyName = L"UserModeDriverNameWow" :
 #endif // !_WIN64
-    L"UserModeDriverName";
+                                         L"UserModeDriverName";
 
   DWORD dwType = REG_MULTI_SZ;
   HKEY hKey = nullptr;
@@ -253,8 +269,10 @@ void CWinSystemWin32DX::InitHooks(IDXGIOutput* pOutput)
   LSTATUS lstat;
 
   // to void \Registry\Machine at the beginning, we use shifted pointer at 18
-  if (ERROR_SUCCESS == (lstat = RegOpenKeyExW(HKEY_LOCAL_MACHINE, displayDevice.DeviceKey + 18, 0, KEY_READ, &hKey))
-    && ERROR_SUCCESS == (lstat = RegQueryValueExW(hKey, keyName, nullptr, &dwType, (LPBYTE)&value, &valueLength)))
+  if (ERROR_SUCCESS == (lstat = RegOpenKeyExW(HKEY_LOCAL_MACHINE, displayDevice.DeviceKey + 18, 0,
+                                              KEY_READ, &hKey)) &&
+      ERROR_SUCCESS ==
+          (lstat = RegQueryValueExW(hKey, keyName, nullptr, &dwType, (LPBYTE)&value, &valueLength)))
   {
     // 1. registry value has a list of drivers for each API with the following format: dx9\0dx10\0dx11\0dx12\0\0
     // 2. we split the value by \0
@@ -277,21 +295,23 @@ void CWinSystemWin32DX::InitHooks(IDXGIOutput* pOutput)
       m_hDriverModule = LoadLibraryW(it->c_str());
       if (m_hDriverModule != nullptr)
       {
-        s_fnOpenAdapter10_2 = reinterpret_cast<PFND3D10DDI_OPENADAPTER>(GetProcAddress(m_hDriverModule, "OpenAdapter10_2"));
+        s_fnOpenAdapter10_2 = reinterpret_cast<PFND3D10DDI_OPENADAPTER>(
+            GetProcAddress(m_hDriverModule, "OpenAdapter10_2"));
         if (s_fnOpenAdapter10_2 != nullptr)
         {
-          ULONG ACLEntries[1] = { 0 };
+          ULONG ACLEntries[1] = {0};
           m_hHook = new HOOK_TRACE_INFO();
           // install and activate hook into a driver
-          if (SUCCEEDED(LhInstallHook(s_fnOpenAdapter10_2, HookOpenAdapter10_2, nullptr, m_hHook))
-            && SUCCEEDED(LhSetInclusiveACL(ACLEntries, 1, m_hHook)))
+          if (SUCCEEDED(
+                  LhInstallHook(s_fnOpenAdapter10_2, HookOpenAdapter10_2, nullptr, m_hHook)) &&
+              SUCCEEDED(LhSetInclusiveACL(ACLEntries, 1, m_hHook)))
           {
             CLog::LogF(LOGDEBUG, "D3D11 hook installed and activated.");
             break;
           }
           else
           {
-            CLog::Log(LOGDEBUG, __FUNCTION__": Unable ot install and activate D3D11 hook.");
+            CLog::Log(LOGDEBUG, __FUNCTION__ ": Unable ot install and activate D3D11 hook.");
             SAFE_DELETE(m_hHook);
             FreeLibrary(m_hDriverModule);
             m_hDriverModule = nullptr;
@@ -316,27 +336,37 @@ void CWinSystemWin32DX::FixRefreshRateIfNecessary(const D3D10DDIARG_CREATERESOUR
     if (refreshRate > 10.0f && refreshRate < 300.0f)
     {
       // interlaced
-      if (pResource->pPrimaryDesc->ModeDesc.ScanlineOrdering > DXGI_DDI_MODE_SCANLINE_ORDER_PROGRESSIVE)
+      if (pResource->pPrimaryDesc->ModeDesc.ScanlineOrdering >
+          DXGI_DDI_MODE_SCANLINE_ORDER_PROGRESSIVE)
         refreshRate /= 2;
 
       uint32_t refreshNum, refreshDen;
       DX::GetRefreshRatio(static_cast<uint32_t>(floor(m_fRefreshRate)), &refreshNum, &refreshDen);
-      float diff = fabs(refreshRate - static_cast<float>(refreshNum) / static_cast<float>(refreshDen)) / refreshRate;
-      CLog::LogF(LOGDEBUG, "refreshRate: %0.4f, desired: %0.4f, deviation: %.5f, fixRequired: %s, %d",
-        refreshRate, m_fRefreshRate, diff, (diff > 0.0005 && diff < 0.1) ? "yes" : "no", pResource->pPrimaryDesc->Flags);
+      float diff =
+          fabs(refreshRate - static_cast<float>(refreshNum) / static_cast<float>(refreshDen)) /
+          refreshRate;
+      CLog::LogF(LOGDEBUG,
+                 "refreshRate: %0.4f, desired: %0.4f, deviation: %.5f, fixRequired: %s, %d",
+                 refreshRate, m_fRefreshRate, diff, (diff > 0.0005 && diff < 0.1) ? "yes" : "no",
+                 pResource->pPrimaryDesc->Flags);
       if (diff > 0.0005 && diff < 0.1)
       {
         pResource->pPrimaryDesc->ModeDesc.RefreshRate.Numerator = refreshNum;
         pResource->pPrimaryDesc->ModeDesc.RefreshRate.Denominator = refreshDen;
-        if (pResource->pPrimaryDesc->ModeDesc.ScanlineOrdering > DXGI_DDI_MODE_SCANLINE_ORDER_PROGRESSIVE)
+        if (pResource->pPrimaryDesc->ModeDesc.ScanlineOrdering >
+            DXGI_DDI_MODE_SCANLINE_ORDER_PROGRESSIVE)
           pResource->pPrimaryDesc->ModeDesc.RefreshRate.Numerator *= 2;
-        CLog::LogF(LOGDEBUG, "refreshRate fix applied -> %0.3f", RATIONAL_TO_FLOAT(pResource->pPrimaryDesc->ModeDesc.RefreshRate));
+        CLog::LogF(LOGDEBUG, "refreshRate fix applied -> %0.3f",
+                   RATIONAL_TO_FLOAT(pResource->pPrimaryDesc->ModeDesc.RefreshRate));
       }
     }
   }
 }
 
-void APIENTRY HookCreateResource(D3D10DDI_HDEVICE hDevice, const D3D10DDIARG_CREATERESOURCE* pResource, D3D10DDI_HRESOURCE hResource, D3D10DDI_HRTRESOURCE hRtResource)
+void APIENTRY HookCreateResource(D3D10DDI_HDEVICE hDevice,
+                                 const D3D10DDIARG_CREATERESOURCE* pResource,
+                                 D3D10DDI_HRESOURCE hResource,
+                                 D3D10DDI_HRTRESOURCE hRtResource)
 {
   if (pResource && pResource->pPrimaryDesc)
   {
@@ -357,7 +387,7 @@ HRESULT APIENTRY HookCreateDevice(D3D10DDI_HADAPTER hAdapter, D3D10DDIARG_CREATE
   return hr;
 }
 
-HRESULT APIENTRY HookOpenAdapter10_2(D3D10DDIARG_OPENADAPTER *pOpenData)
+HRESULT APIENTRY HookOpenAdapter10_2(D3D10DDIARG_OPENADAPTER* pOpenData)
 {
   HRESULT hr = s_fnOpenAdapter10_2(pOpenData);
   if (pOpenData->pAdapterFuncs->pfnCreateDevice)

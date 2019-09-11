@@ -11,7 +11,8 @@
 #include <cassert>
 
 COSScreenSaverX11::COSScreenSaverX11(Display* dpy)
-: m_dpy(dpy), m_screensaverResetTimer(std::bind(&COSScreenSaverX11::ResetScreenSaver, this))
+  : m_dpy(dpy)
+  , m_screensaverResetTimer(std::bind(&COSScreenSaverX11::ResetScreenSaver, this))
 {
   assert(m_dpy);
 }

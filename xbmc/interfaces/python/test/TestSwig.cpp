@@ -14,8 +14,10 @@ using namespace PythonBindings;
 
 TEST(TestSwig, TypeConversion)
 {
-  EXPECT_TRUE(isParameterRightType("p.XBMCAddon::xbmcgui::ListItem","p.XBMCAddon::xbmcgui::ListItem","XBMCAddon::xbmc::"));
-  EXPECT_TRUE(isParameterRightType("p.XBMCAddon::xbmc::PlayList","p.PlayList","XBMCAddon::xbmc::"));
-  EXPECT_TRUE(isParameterRightType("p.PlayList","p.XBMCAddon::xbmc::PlayList","XBMCAddon::xbmc::"));
+  EXPECT_TRUE(isParameterRightType("p.XBMCAddon::xbmcgui::ListItem",
+                                   "p.XBMCAddon::xbmcgui::ListItem", "XBMCAddon::xbmc::"));
+  EXPECT_TRUE(
+      isParameterRightType("p.XBMCAddon::xbmc::PlayList", "p.PlayList", "XBMCAddon::xbmc::"));
+  EXPECT_TRUE(
+      isParameterRightType("p.PlayList", "p.XBMCAddon::xbmc::PlayList", "XBMCAddon::xbmc::"));
 }
-

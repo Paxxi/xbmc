@@ -7,48 +7,49 @@
  */
 
 #include "DVDFileInfo.h"
-#include "ServiceBroker.h"
-#include "threads/SystemClock.h"
+
+#include "DVDInputStreams/DVDInputStream.h"
+#include "DVDStreamInfo.h"
 #include "FileItem.h"
+#include "ServiceBroker.h"
+#include "filesystem/StackDirectory.h"
+#include "pictures/Picture.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
-#include "pictures/Picture.h"
-#include "video/VideoInfoTag.h"
-#include "filesystem/StackDirectory.h"
-#include "utils/log.h"
+#include "threads/SystemClock.h"
 #include "utils/URIUtils.h"
-
-#include "DVDStreamInfo.h"
-#include "DVDInputStreams/DVDInputStream.h"
+#include "utils/log.h"
+#include "video/VideoInfoTag.h"
 #ifdef HAVE_LIBBLURAY
 #include "DVDInputStreams/DVDInputStreamBluray.h"
 #endif
-#include "DVDInputStreams/DVDFactoryInputStream.h"
-#include "DVDDemuxers/DVDDemux.h"
-#include "DVDDemuxers/DVDDemuxUtils.h"
-#include "DVDDemuxers/DVDFactoryDemuxer.h"
 #include "DVDCodecs/DVDFactoryCodec.h"
 #include "DVDCodecs/Video/DVDVideoCodec.h"
 #include "DVDCodecs/Video/DVDVideoCodecFFmpeg.h"
+#include "DVDDemuxers/DVDDemux.h"
+#include "DVDDemuxers/DVDDemuxUtils.h"
 #include "DVDDemuxers/DVDDemuxVobsub.h"
+#include "DVDDemuxers/DVDFactoryDemuxer.h"
+#include "DVDInputStreams/DVDFactoryInputStream.h"
 #include "Process/ProcessInfo.h"
-
-#include <libavcodec/avcodec.h>
-#include <libswscale/swscale.h>
-#include "filesystem/File.h"
-#include "cores/FFmpeg.h"
 #include "TextureCache.h"
 #include "Util.h"
+#include "cores/FFmpeg.h"
+#include "filesystem/File.h"
 #include "utils/LangCodeExpander.h"
 
 #include <cstdlib>
 #include <memory>
 
-extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libswscale/swscale.h>
+
+extern "C"
+{
 #include <libavformat/avformat.h>
 }
 
-bool CDVDFileInfo::GetFileDuration(const std::string &path, int& duration)
+bool CDVDFileInfo::GetFileDuration(const std::string& path, int& duration)
 {
   std::unique_ptr<CDVDDemux> demux;
 
@@ -73,22 +74,22 @@ bool CDVDFileInfo::GetFileDuration(const std::string &path, int& duration)
 
 int DegreeToOrientation(int degrees)
 {
-  switch(degrees)
+  switch (degrees)
   {
-    case 90:
-      return 5;
-    case 180:
-      return 2;
-    case 270:
-      return 7;
-    default:
-      return 0;
+  case 90:
+    return 5;
+  case 180:
+    return 2;
+  case 270:
+    return 7;
+  default:
+    return 0;
   }
 }
 
 bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
-                                CTextureDetails &details,
-                                CStreamDetails *pStreamDetails,
+                                CTextureDetails& details,
+                                CStreamDetails* pStreamDetails,
                                 int64_t pos)
 {
   const std::string redactPath = CURL::GetRedacted(fileItem.GetPath());
@@ -109,18 +110,18 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
     return false;
   }
 
-  CDVDDemux *pDemuxer = NULL;
+  CDVDDemux* pDemuxer = NULL;
 
   try
   {
     pDemuxer = CDVDFactoryDemuxer::CreateDemuxer(pInputStream, true);
-    if(!pDemuxer)
+    if (!pDemuxer)
     {
       CLog::Log(LOGERROR, "%s - Error creating demuxer", __FUNCTION__);
       return false;
     }
   }
-  catch(...)
+  catch (...)
   {
     CLog::Log(LOGERROR, "%s - Exception thrown when opening demuxer", __FUNCTION__);
     if (pDemuxer)
@@ -145,18 +146,18 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
 
     CUtil::ScanForExternalSubtitles(video_path, filenames);
 
-    for(unsigned int i=0;i<filenames.size();i++)
+    for (unsigned int i = 0; i < filenames.size(); i++)
     {
       // if vobsub subtitle:
       if (URIUtils::GetExtension(filenames[i]) == ".idx")
       {
         std::string strSubFile;
-        if ( CUtil::FindVobSubPair(filenames, filenames[i], strSubFile) )
+        if (CUtil::FindVobSubPair(filenames, filenames[i], strSubFile))
           AddExternalSubtitleToDetails(video_path, *pStreamDetails, filenames[i], strSubFile);
       }
       else
       {
-        if ( !CUtil::IsVobSub(filenames, filenames[i]) )
+        if (!CUtil::IsVobSub(filenames, filenames[i]))
         {
           AddExternalSubtitleToDetails(video_path, *pStreamDetails, filenames[i]);
         }
@@ -186,7 +187,7 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
 
   if (nVideoStream != -1)
   {
-    CDVDVideoCodec *pVideoCodec;
+    CDVDVideoCodec* pVideoCodec;
     std::unique_ptr<CProcessInfo> pProcessInfo(CProcessInfo::CreateInstance());
     std::vector<AVPixelFormat> pixFmts;
     pixFmts.push_back(AV_PIX_FMT_YUV420P);
@@ -202,7 +203,8 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
       int nTotalLen = pDemuxer->GetStreamLength();
       int nSeekTo = (pos == -1) ? nTotalLen / 3 : pos;
 
-      CLog::Log(LOGDEBUG,"%s - seeking to pos %dms (total: %dms) in %s", __FUNCTION__, nSeekTo, nTotalLen, redactPath.c_str());
+      CLog::Log(LOGDEBUG, "%s - seeking to pos %dms (total: %dms) in %s", __FUNCTION__, nSeekTo,
+                nTotalLen, redactPath.c_str());
       if (pDemuxer->SeekTime(nSeekTo, true))
       {
         CDVDVideoCodec::VCReturn iDecoderState = CDVDVideoCodec::VC_NONE;
@@ -235,7 +237,7 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
 
           if (iDecoderState == CDVDVideoCodec::VC_PICTURE)
           {
-            if(!(picture.iFlags & DVP_FLAG_DROPPED))
+            if (!(picture.iFlags & DVP_FLAG_DROPPED))
               break;
           }
 
@@ -244,33 +246,37 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
         if (iDecoderState == CDVDVideoCodec::VC_PICTURE && !(picture.iFlags & DVP_FLAG_DROPPED))
         {
           {
-            unsigned int nWidth = std::min(picture.iDisplayWidth, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_imageRes);
+            unsigned int nWidth =
+                std::min(picture.iDisplayWidth,
+                         CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_imageRes);
             double aspect = (double)picture.iDisplayWidth / (double)picture.iDisplayHeight;
-            if(hint.forced_aspect && hint.aspect != 0)
+            if (hint.forced_aspect && hint.aspect != 0)
               aspect = hint.aspect;
             unsigned int nHeight = (unsigned int)((double)nWidth / aspect);
 
-            uint8_t *pOutBuf = (uint8_t*)av_malloc(nWidth * nHeight * 4);
-            struct SwsContext *context = sws_getContext(picture.iWidth, picture.iHeight,
-                  AV_PIX_FMT_YUV420P, nWidth, nHeight, AV_PIX_FMT_BGRA, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+            uint8_t* pOutBuf = (uint8_t*)av_malloc(nWidth * nHeight * 4);
+            struct SwsContext* context =
+                sws_getContext(picture.iWidth, picture.iHeight, AV_PIX_FMT_YUV420P, nWidth, nHeight,
+                               AV_PIX_FMT_BGRA, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 
             if (context)
             {
-              uint8_t *planes[YuvImage::MAX_PLANES];
+              uint8_t* planes[YuvImage::MAX_PLANES];
               int stride[YuvImage::MAX_PLANES];
               picture.videoBuffer->GetPlanes(planes);
               picture.videoBuffer->GetStrides(stride);
-              uint8_t *src[4]= { planes[0], planes[1], planes[2], 0 };
-              int srcStride[] = { stride[0], stride[1], stride[2], 0 };
-              uint8_t *dst[] = { pOutBuf, 0, 0, 0 };
-              int dstStride[] = { (int)nWidth*4, 0, 0, 0 };
+              uint8_t* src[4] = {planes[0], planes[1], planes[2], 0};
+              int srcStride[] = {stride[0], stride[1], stride[2], 0};
+              uint8_t* dst[] = {pOutBuf, 0, 0, 0};
+              int dstStride[] = {(int)nWidth * 4, 0, 0, 0};
               int orientation = DegreeToOrientation(hint.orientation);
               sws_scale(context, src, srcStride, 0, picture.iHeight, dst, dstStride);
               sws_freeContext(context);
 
               details.width = nWidth;
               details.height = nHeight;
-              CPicture::CacheTexture(pOutBuf, nWidth, nHeight, nWidth * 4, orientation, nWidth, nHeight, CTextureCache::GetCachedPath(details.file));
+              CPicture::CacheTexture(pOutBuf, nWidth, nHeight, nWidth * 4, orientation, nWidth,
+                                     nHeight, CTextureCache::GetCachedPath(details.file));
               bOk = true;
             }
             av_free(pOutBuf);
@@ -278,7 +284,8 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
         }
         else
         {
-          CLog::Log(LOGDEBUG,"%s - decode failed in %s after %d packets.", __FUNCTION__, redactPath.c_str(), packetsTried);
+          CLog::Log(LOGDEBUG, "%s - decode failed in %s after %d packets.", __FUNCTION__,
+                    redactPath.c_str(), packetsTried);
         }
       }
       delete pVideoCodec;
@@ -288,15 +295,16 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
   if (pDemuxer)
     delete pDemuxer;
 
-  if(!bOk)
+  if (!bOk)
   {
     XFILE::CFile file;
-    if(file.OpenForWrite(CTextureCache::GetCachedPath(details.file)))
+    if (file.OpenForWrite(CTextureCache::GetCachedPath(details.file)))
       file.Close();
   }
 
   unsigned int nTotalTime = XbmcThreads::SystemClockMillis() - nTime;
-  CLog::Log(LOGDEBUG,"%s - measured %u ms to extract thumb from file <%s> in %d packets. ", __FUNCTION__, nTotalTime, redactPath.c_str(), packetsTried);
+  CLog::Log(LOGDEBUG, "%s - measured %u ms to extract thumb from file <%s> in %d packets. ",
+            __FUNCTION__, nTotalTime, redactPath.c_str(), packetsTried);
   return bOk;
 }
 
@@ -304,7 +312,7 @@ bool CDVDFileInfo::ExtractThumb(const CFileItem& fileItem,
  * \brief Open the item pointed to by pItem and extract streamdetails
  * \return true if the stream details have changed
  */
-bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
+bool CDVDFileInfo::GetFileStreamDetails(CFileItem* pItem)
 {
   if (!pItem)
     return false;
@@ -336,10 +344,11 @@ bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
     return false;
   }
 
-  CDVDDemux *pDemuxer = CDVDFactoryDemuxer::CreateDemuxer(pInputStream, true);
+  CDVDDemux* pDemuxer = CDVDFactoryDemuxer::CreateDemuxer(pInputStream, true);
   if (pDemuxer)
   {
-    bool retVal = DemuxerToStreamDetails(pInputStream, pDemuxer, pItem->GetVideoInfoTag()->m_streamDetails, strFileNameAndPath);
+    bool retVal = DemuxerToStreamDetails(
+        pInputStream, pDemuxer, pItem->GetVideoInfoTag()->m_streamDetails, strFileNameAndPath);
     delete pDemuxer;
     return retVal;
   }
@@ -349,7 +358,10 @@ bool CDVDFileInfo::GetFileStreamDetails(CFileItem *pItem)
   }
 }
 
-bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInputStream, CDVDDemux *pDemuxer, const std::vector<CStreamDetailSubtitle> &subs, CStreamDetails &details)
+bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInputStream,
+                                          CDVDDemux* pDemuxer,
+                                          const std::vector<CStreamDetailSubtitle>& subs,
+                                          CStreamDetails& details)
 {
   bool result = DemuxerToStreamDetails(pInputStream, pDemuxer, details);
   for (unsigned int i = 0; i < subs.size(); i++)
@@ -363,7 +375,10 @@ bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInpu
 }
 
 /* returns true if details have been added */
-bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInputStream, CDVDDemux *pDemux, CStreamDetails &details, const std::string &path)
+bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInputStream,
+                                          CDVDDemux* pDemux,
+                                          CStreamDetails& details,
+                                          const std::string& path)
 {
   bool retVal = false;
   details.Reset();
@@ -373,7 +388,7 @@ bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInpu
   {
     if (stream->type == STREAM_VIDEO && !(stream->flags & AV_DISPOSITION_ATTACHED_PIC))
     {
-      CStreamDetailVideo *p = new CStreamDetailVideo();
+      CStreamDetailVideo* p = new CStreamDetailVideo();
       CDemuxStreamVideo* vstream = static_cast<CDemuxStreamVideo*>(stream);
       p->m_iWidth = vstream->iWidth;
       p->m_iHeight = vstream->iHeight;
@@ -395,9 +410,9 @@ bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInpu
         // skip first path as we already know the duration
         for (int i = 1; i < files.Size(); i++)
         {
-           int duration = 0;
-           if (CDVDFileInfo::GetFileDuration(files[i]->GetDynPath(), duration))
-             p->m_iDuration = p->m_iDuration + duration;
+          int duration = 0;
+          if (CDVDFileInfo::GetFileDuration(files[i]->GetDynPath(), duration))
+            p->m_iDuration = p->m_iDuration + duration;
         }
       }
 
@@ -411,7 +426,7 @@ bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInpu
 
     else if (stream->type == STREAM_AUDIO)
     {
-      CStreamDetailAudio *p = new CStreamDetailAudio();
+      CStreamDetailAudio* p = new CStreamDetailAudio();
       p->m_iChannels = static_cast<CDemuxStreamAudio*>(stream)->iChannels;
       p->m_strLanguage = stream->language;
       p->m_strCodec = pDemux->GetStreamCodecName(stream->demuxerId, stream->uniqueId);
@@ -421,12 +436,12 @@ bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInpu
 
     else if (stream->type == STREAM_SUBTITLE)
     {
-      CStreamDetailSubtitle *p = new CStreamDetailSubtitle();
+      CStreamDetailSubtitle* p = new CStreamDetailSubtitle();
       p->m_strLanguage = stream->language;
       details.AddStream(p);
       retVal = true;
     }
-  }  /* for iStream */
+  } /* for iStream */
 
   details.DetermineBestStreams();
 #ifdef HAVE_LIBBLURAY
@@ -435,21 +450,26 @@ bool CDVDFileInfo::DemuxerToStreamDetails(std::shared_ptr<CDVDInputStream> pInpu
   {
     if (std::static_pointer_cast<CDVDInputStreamBluray>(pInputStream)->GetTotalTime() > 0)
     {
-      const CStreamDetailVideo* dVideo = static_cast<const CStreamDetailVideo*>(details.GetNthStream(CStreamDetail::VIDEO, 0));
+      const CStreamDetailVideo* dVideo =
+          static_cast<const CStreamDetailVideo*>(details.GetNthStream(CStreamDetail::VIDEO, 0));
       CStreamDetailVideo* detailVideo = const_cast<CStreamDetailVideo*>(dVideo);
       if (detailVideo)
-        detailVideo->m_iDuration = std::static_pointer_cast<CDVDInputStreamBluray>(pInputStream)->GetTotalTime() / 1000;
+        detailVideo->m_iDuration =
+            std::static_pointer_cast<CDVDInputStreamBluray>(pInputStream)->GetTotalTime() / 1000;
     }
   }
 #endif
   return retVal;
 }
 
-bool CDVDFileInfo::AddExternalSubtitleToDetails(const std::string &path, CStreamDetails &details, const std::string& filename, const std::string& subfilename)
+bool CDVDFileInfo::AddExternalSubtitleToDetails(const std::string& path,
+                                                CStreamDetails& details,
+                                                const std::string& filename,
+                                                const std::string& subfilename)
 {
   std::string ext = URIUtils::GetExtension(filename);
   std::string vobsubfile = subfilename;
-  if(ext == ".idx")
+  if (ext == ".idx")
   {
     if (vobsubfile.empty())
       vobsubfile = URIUtils::ReplaceExtension(filename, ".sub");
@@ -458,27 +478,26 @@ bool CDVDFileInfo::AddExternalSubtitleToDetails(const std::string &path, CStream
     if (!v.Open(filename, STREAM_SOURCE_NONE, vobsubfile))
       return false;
 
-    for(CDemuxStream* stream : v.GetStreams())
+    for (CDemuxStream* stream : v.GetStreams())
     {
-      CStreamDetailSubtitle *dsub = new CStreamDetailSubtitle();
+      CStreamDetailSubtitle* dsub = new CStreamDetailSubtitle();
       std::string lang = stream->language;
       dsub->m_strLanguage = g_LangCodeExpander.ConvertToISO6392B(lang);
       details.AddStream(dsub);
     }
     return true;
   }
-  if(ext == ".sub")
+  if (ext == ".sub")
   {
-    std::string strReplace(URIUtils::ReplaceExtension(filename,".idx"));
+    std::string strReplace(URIUtils::ReplaceExtension(filename, ".idx"));
     if (XFILE::CFile::Exists(strReplace))
       return false;
   }
 
-  CStreamDetailSubtitle *dsub = new CStreamDetailSubtitle();
+  CStreamDetailSubtitle* dsub = new CStreamDetailSubtitle();
   ExternalStreamInfo info = CUtil::GetExternalStreamDetailsFromFilename(path, filename);
   dsub->m_strLanguage = g_LangCodeExpander.ConvertToISO6392B(info.language);
   details.AddStream(dsub);
 
   return true;
 }
-

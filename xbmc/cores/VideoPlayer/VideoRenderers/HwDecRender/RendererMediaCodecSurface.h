@@ -18,19 +18,20 @@ public:
   CRendererMediaCodecSurface();
   virtual ~CRendererMediaCodecSurface();
 
-  static CBaseRenderer* Create(CVideoBuffer *buffer);
+  static CBaseRenderer* Create(CVideoBuffer* buffer);
   static bool Register();
 
   virtual bool RenderCapture(CRenderCapture* capture) override;
-  virtual void AddVideoPicture(const VideoPicture &picture, int index) override;
+  virtual void AddVideoPicture(const VideoPicture& picture, int index) override;
   virtual void ReleaseBuffer(int idx) override;
-  virtual bool Configure(const VideoPicture &picture, float fps, unsigned int orientation) override;
+  virtual bool Configure(const VideoPicture& picture, float fps, unsigned int orientation) override;
   virtual bool IsConfigured() override { return m_bConfigured; };
-  virtual bool ConfigChanged(const VideoPicture &picture) override { return false; };
+  virtual bool ConfigChanged(const VideoPicture& picture) override { return false; };
   virtual CRenderInfo GetRenderInfo() override;
-  virtual void UnInit() override {};
-  virtual void Update() override {};
-  virtual void RenderUpdate(int index, int index2, bool clear, unsigned int flags, unsigned int alpha) override;
+  virtual void UnInit() override{};
+  virtual void Update() override{};
+  virtual void RenderUpdate(
+      int index, int index2, bool clear, unsigned int flags, unsigned int alpha) override;
   virtual bool SupportsMultiPassRendering() override { return false; };
 
   // Player functions
@@ -53,6 +54,6 @@ private:
 
   struct BUFFER
   {
-    CVideoBuffer *videoBuffer = nullptr;
+    CVideoBuffer* videoBuffer = nullptr;
   } m_buffers[4];
 };

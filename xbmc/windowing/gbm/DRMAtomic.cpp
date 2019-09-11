@@ -80,23 +80,25 @@ void CDRMAtomic::DrmAtomicCommit(int fb_id, int flags, bool rendered, bool video
     ret = drmModeAtomicCommit(m_fd, m_req, flags, nullptr);
     if (ret < 0)
     {
-      CLog::Log(LOGERROR, "CDRMAtomic::%s - atomic commit failed: %s", __FUNCTION__, strerror(errno));
+      CLog::Log(LOGERROR, "CDRMAtomic::%s - atomic commit failed: %s", __FUNCTION__,
+                strerror(errno));
     }
   }
 
   if (flags & DRM_MODE_ATOMIC_ALLOW_MODESET)
   {
     if (drmModeDestroyPropertyBlob(m_fd, blob_id) != 0)
-      CLog::Log(LOGERROR, "CDRMAtomic::%s - failed to destroy property blob: %s", __FUNCTION__, strerror(errno));
+      CLog::Log(LOGERROR, "CDRMAtomic::%s - failed to destroy property blob: %s", __FUNCTION__,
+                strerror(errno));
   }
 
   drmModeAtomicFree(m_req);
   m_req = drmModeAtomicAlloc();
 }
 
-void CDRMAtomic::FlipPage(struct gbm_bo *bo, bool rendered, bool videoLayer)
+void CDRMAtomic::FlipPage(struct gbm_bo* bo, bool rendered, bool videoLayer)
 {
-  struct drm_fb *drm_fb = nullptr;
+  struct drm_fb* drm_fb = nullptr;
 
   if (rendered)
   {
@@ -134,7 +136,8 @@ bool CDRMAtomic::InitDrm()
   auto ret = drmSetClientCap(m_fd, DRM_CLIENT_CAP_ATOMIC, 1);
   if (ret)
   {
-    CLog::Log(LOGERROR, "CDRMAtomic::%s - no atomic modesetting support: %s", __FUNCTION__, strerror(errno));
+    CLog::Log(LOGERROR, "CDRMAtomic::%s - no atomic modesetting support: %s", __FUNCTION__,
+              strerror(errno));
     return false;
   }
 
@@ -162,7 +165,7 @@ void CDRMAtomic::DestroyDrm()
   m_req = nullptr;
 }
 
-bool CDRMAtomic::SetVideoMode(const RESOLUTION_INFO& res, struct gbm_bo *bo)
+bool CDRMAtomic::SetVideoMode(const RESOLUTION_INFO& res, struct gbm_bo* bo)
 {
   m_need_modeset = true;
 
@@ -177,7 +180,7 @@ bool CDRMAtomic::SetActive(bool active)
   return true;
 }
 
-bool CDRMAtomic::AddProperty(struct drm_object *object, const char *name, uint64_t value)
+bool CDRMAtomic::AddProperty(struct drm_object* object, const char* name, uint64_t value)
 {
   uint32_t property_id = this->GetPropertyId(object, name);
   if (!property_id)
@@ -197,7 +200,8 @@ bool CDRMAtomic::ResetPlanes()
   drmModePlaneResPtr plane_resources = drmModeGetPlaneResources(m_fd);
   if (!plane_resources)
   {
-    CLog::Log(LOGERROR, "CDRMAtomic::%s - drmModeGetPlaneResources failed: %s", __FUNCTION__, strerror(errno));
+    CLog::Log(LOGERROR, "CDRMAtomic::%s - drmModeGetPlaneResources failed: %s", __FUNCTION__,
+              strerror(errno));
     return false;
   }
 
@@ -211,7 +215,8 @@ bool CDRMAtomic::ResetPlanes()
 
     if (!CDRMUtils::GetProperties(m_fd, plane->plane_id, DRM_MODE_OBJECT_PLANE, &object))
     {
-      CLog::Log(LOGERROR, "CDRMAtomic::%s - could not get plane %u properties: %s", __FUNCTION__, plane->plane_id, strerror(errno));\
+      CLog::Log(LOGERROR, "CDRMAtomic::%s - could not get plane %u properties: %s", __FUNCTION__,
+                plane->plane_id, strerror(errno));
       drmModeFreePlane(plane);
       continue;
     }

@@ -36,18 +36,19 @@ struct ButtonStateFinder
     : m_keycode(state.m_iKeyCode)
     , m_map(state.m_mapName)
     , m_button(state.m_buttonName)
-  {}
+  {
+  }
 
   bool operator()(const CEventButtonState& state)
   {
-    return state.m_mapName    == m_map
-        && state.m_iKeyCode   == m_keycode
-        && state.m_buttonName == m_button;
+    return state.m_mapName == m_map && state.m_iKeyCode == m_keycode &&
+           state.m_buttonName == m_button;
   }
-  private:
+
+private:
   unsigned short m_keycode;
-  std::string    m_map;
-  std::string    m_button;
+  std::string m_map;
+  std::string m_button;
 };
 
 /************************************************************************/
@@ -55,28 +56,28 @@ struct ButtonStateFinder
 /************************************************************************/
 void CEventButtonState::Load()
 {
-  if ( m_iKeyCode == 0 )
+  if (m_iKeyCode == 0)
   {
-    if ( (m_mapName.length() > 0) && (m_buttonName.length() > 0) )
+    if ((m_mapName.length() > 0) && (m_buttonName.length() > 0))
     {
-      if ( m_mapName.compare("KB") == 0 ) // standard keyboard map
+      if (m_mapName.compare("KB") == 0) // standard keyboard map
       {
-        m_iKeyCode = CKeyboardTranslator::TranslateString( m_buttonName.c_str() );
+        m_iKeyCode = CKeyboardTranslator::TranslateString(m_buttonName.c_str());
       }
-      else if  ( m_mapName.compare("XG") == 0 ) // xbox gamepad map
+      else if (m_mapName.compare("XG") == 0) // xbox gamepad map
       {
-        m_iKeyCode = CGamepadTranslator::TranslateString( m_buttonName.c_str() );
+        m_iKeyCode = CGamepadTranslator::TranslateString(m_buttonName.c_str());
       }
-      else if  ( m_mapName.compare("R1") == 0 ) // xbox remote map
+      else if (m_mapName.compare("R1") == 0) // xbox remote map
       {
-        m_iKeyCode = CIRTranslator::TranslateString( m_buttonName.c_str() );
+        m_iKeyCode = CIRTranslator::TranslateString(m_buttonName.c_str());
       }
-      else if  ( m_mapName.compare("R2") == 0 ) // xbox universal remote map
+      else if (m_mapName.compare("R2") == 0) // xbox universal remote map
       {
-        m_iKeyCode = CIRTranslator::TranslateUniversalRemoteString( m_buttonName.c_str() );
+        m_iKeyCode = CIRTranslator::TranslateUniversalRemoteString(m_buttonName.c_str());
       }
-      else if ( (m_mapName.length() > 3) &&
-                (StringUtils::StartsWith(m_mapName, "LI:")) ) // starts with LI: ?
+      else if ((m_mapName.length() > 3) &&
+               (StringUtils::StartsWith(m_mapName, "LI:"))) // starts with LI: ?
       {
         CLog::Log(LOGNOTICE, "ES: LIRC support not implemented");
       }
@@ -90,17 +91,16 @@ void CEventButtonState::Load()
   }
   else
   {
-    if (m_mapName.length() > 3 &&
-        (StringUtils::StartsWith(m_mapName, "JS")) )
+    if (m_mapName.length() > 3 && (StringUtils::StartsWith(m_mapName, "JS")))
     {
-      m_joystickName = m_mapName.substr(2);  // <num>:joyname
-      m_iControllerNumber = (unsigned char)(*(m_joystickName.c_str()))
-        - (unsigned char)'0'; // convert <num> to int
+      m_joystickName = m_mapName.substr(2); // <num>:joyname
+      m_iControllerNumber =
+          (unsigned char)(*(m_joystickName.c_str())) - (unsigned char)'0'; // convert <num> to int
       m_joystickName = m_joystickName.substr(2); // extract joyname
     }
 
     if (m_mapName.length() > 3 &&
-        (StringUtils::StartsWith(m_mapName, "CC")) ) // custom map - CC:<controllerName>
+        (StringUtils::StartsWith(m_mapName, "CC"))) // custom map - CC:<controllerName>
     {
       m_customControllerName = m_mapName.substr(3);
     }
@@ -110,44 +110,47 @@ void CEventButtonState::Load()
 /************************************************************************/
 /* CEventClient                                                         */
 /************************************************************************/
-bool CEventClient::AddPacket(CEventPacket *packet)
+bool CEventClient::AddPacket(CEventPacket* packet)
 {
   if (!packet)
     return false;
 
   ResetTimeout();
-  if ( packet->Size() > 1 )
+  if (packet->Size() > 1)
   {
     //! @todo limit payload size
-    if (m_seqPackets[ packet->Sequence() ])
+    if (m_seqPackets[packet->Sequence()])
     {
-      if(!m_bSequenceError)
-        CLog::Log(LOGWARNING, "CEventClient::AddPacket - received packet with same sequence number (%d) as previous packet from eventclient %s", packet->Sequence(), m_deviceName.c_str());
+      if (!m_bSequenceError)
+        CLog::Log(LOGWARNING,
+                  "CEventClient::AddPacket - received packet with same sequence number (%d) as "
+                  "previous packet from eventclient %s",
+                  packet->Sequence(), m_deviceName.c_str());
       m_bSequenceError = true;
-      delete m_seqPackets[ packet->Sequence() ];
+      delete m_seqPackets[packet->Sequence()];
     }
 
-    m_seqPackets[ packet->Sequence() ] = packet;
+    m_seqPackets[packet->Sequence()] = packet;
     if (m_seqPackets.size() == packet->Size())
     {
       unsigned int iSeqPayloadSize = 0;
-      for (unsigned int i = 1 ; i<=packet->Size() ; i++)
+      for (unsigned int i = 1; i <= packet->Size(); i++)
       {
         iSeqPayloadSize += m_seqPackets[i]->PayloadSize();
       }
       unsigned int offset = 0;
-      void *newPayload = NULL;
+      void* newPayload = NULL;
       newPayload = malloc(iSeqPayloadSize);
       if (newPayload)
       {
-        unsigned char *payloadPtr = (unsigned char *)newPayload;
+        unsigned char* payloadPtr = (unsigned char*)newPayload;
         unsigned int packets = packet->Size(); // packet can be deleted in this loop
-        for (unsigned int i = 1 ; i<=packets ; i++)
+        for (unsigned int i = 1; i <= packets; i++)
         {
           memcpy((void*)(payloadPtr + offset), m_seqPackets[i]->Payload(),
                  m_seqPackets[i]->PayloadSize());
           offset += m_seqPackets[i]->PayloadSize();
-          if (i>1)
+          if (i > 1)
           {
             delete m_seqPackets[i];
             m_seqPackets[i] = NULL;
@@ -176,10 +179,10 @@ void CEventClient::ProcessEvents()
 {
   if (!m_readyPackets.empty())
   {
-    while ( ! m_readyPackets.empty() )
+    while (!m_readyPackets.empty())
     {
-      ProcessPacket( m_readyPackets.front() );
-      if ( ! m_readyPackets.empty() ) // in case the BYE packet cleared the queues
+      ProcessPacket(m_readyPackets.front());
+      if (!m_readyPackets.empty()) // in case the BYE packet cleared the queues
       {
         delete m_readyPackets.front();
         m_readyPackets.pop();
@@ -188,7 +191,7 @@ void CEventClient::ProcessEvents()
   }
 }
 
-bool CEventClient::GetNextAction(CEventAction &action)
+bool CEventClient::GetNextAction(CEventAction& action)
 {
   CSingleLock lock(m_critSection);
   if (!m_actionQueue.empty())
@@ -205,7 +208,7 @@ bool CEventClient::GetNextAction(CEventAction &action)
   }
 }
 
-bool CEventClient::ProcessPacket(CEventPacket *packet)
+bool CEventClient::ProcessPacket(CEventPacket* packet)
 {
   if (!packet)
     return false;
@@ -257,14 +260,14 @@ bool CEventClient::ProcessPacket(CEventPacket *packet)
   return valid;
 }
 
-bool CEventClient::OnPacketHELO(CEventPacket *packet)
+bool CEventClient::OnPacketHELO(CEventPacket* packet)
 {
   //! @todo check it last HELO packet was received less than 5 minutes back
   //!       if so, do not show notification of connection.
   if (Greeted())
     return false;
 
-  unsigned char *payload = (unsigned char *)packet->Payload();
+  unsigned char* payload = (unsigned char*)packet->Payload();
   int psize = (int)packet->PayloadSize();
 
   // parse device name
@@ -292,7 +295,7 @@ bool CEventClient::OnPacketHELO(CEventPacket *packet)
 
   // image data if any
   std::string iconfile = "special://temp/helo";
-  if (m_eLogoType != LT_NONE && psize>0)
+  if (m_eLogoType != LT_NONE && psize > 0)
   {
     switch (m_eLogoType)
     {
@@ -309,7 +312,7 @@ bool CEventClient::OnPacketHELO(CEventPacket *packet)
       break;
     }
     XFILE::CFile file;
-    if (!file.OpenForWrite(iconfile, true) || file.Write((const void *)payload, psize) != psize)
+    if (!file.OpenForWrite(iconfile, true) || file.Write((const void*)payload, psize) != psize)
     {
       CLog::Log(LOGERROR, "ES: Could not write icon file");
       m_eLogoType = LT_NONE;
@@ -319,19 +322,17 @@ bool CEventClient::OnPacketHELO(CEventPacket *packet)
   m_bGreeted = true;
   if (m_eLogoType == LT_NONE)
   {
-    CGUIDialogKaiToast::QueueNotification(g_localizeStrings.Get(33200),
-                                          m_deviceName.c_str());
+    CGUIDialogKaiToast::QueueNotification(g_localizeStrings.Get(33200), m_deviceName.c_str());
   }
   else
   {
-    CGUIDialogKaiToast::QueueNotification(iconfile.c_str(),
-                                          g_localizeStrings.Get(33200),
+    CGUIDialogKaiToast::QueueNotification(iconfile.c_str(), g_localizeStrings.Get(33200),
                                           m_deviceName.c_str());
   }
   return true;
 }
 
-bool CEventClient::OnPacketBYE(CEventPacket *packet)
+bool CEventClient::OnPacketBYE(CEventPacket* packet)
 {
   if (!Greeted())
     return false;
@@ -343,9 +344,9 @@ bool CEventClient::OnPacketBYE(CEventPacket *packet)
   return true;
 }
 
-bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
+bool CEventClient::OnPacketBUTTON(CEventPacket* packet)
 {
-  unsigned char *payload = (unsigned char *)packet->Payload();
+  unsigned char* payload = (unsigned char*)packet->Payload();
   int psize = (int)packet->PayloadSize();
 
   std::string map, button;
@@ -377,45 +378,41 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
   }
 
   unsigned int keycode;
-  if(flags & PTB_USE_NAME)
+  if (flags & PTB_USE_NAME)
     keycode = 0;
-  else if(flags & PTB_VKEY)
-    keycode = bcode|KEY_VKEY;
-  else if(flags & PTB_UNICODE)
-    keycode = bcode|ES_FLAG_UNICODE;
+  else if (flags & PTB_VKEY)
+    keycode = bcode | KEY_VKEY;
+  else if (flags & PTB_UNICODE)
+    keycode = bcode | ES_FLAG_UNICODE;
   else
     keycode = bcode;
 
   float famount = 0;
   bool active = (flags & PTB_DOWN) ? true : false;
-  
+
   CLog::Log(LOGDEBUG, "EventClient: button code %d %s", bcode, active ? "pressed" : "released");
 
-  if(flags & PTB_USE_AMOUNT)
+  if (flags & PTB_USE_AMOUNT)
   {
-    if(flags & PTB_AXIS)
-      famount = (float)amount/65535.0f*2.0f-1.0f;
+    if (flags & PTB_AXIS)
+      famount = (float)amount / 65535.0f * 2.0f - 1.0f;
     else
-      famount = (float)amount/65535.0f;
+      famount = (float)amount / 65535.0f;
   }
   else
     famount = (active ? 1.0f : 0.0f);
 
-  if(flags & PTB_QUEUE)
+  if (flags & PTB_QUEUE)
   {
     /* find the last queued item of this type */
     CSingleLock lock(m_critSection);
 
-    CEventButtonState state( keycode,
-                             map,
-                             button,
-                             famount,
-                             (flags & (PTB_AXIS|PTB_AXISSINGLE)) ? true  : false,
-                             (flags & PTB_NO_REPEAT)             ? false : true,
-                             (flags & PTB_USE_AMOUNT)            ? true : false );
+    CEventButtonState state(
+        keycode, map, button, famount, (flags & (PTB_AXIS | PTB_AXISSINGLE)) ? true : false,
+        (flags & PTB_NO_REPEAT) ? false : true, (flags & PTB_USE_AMOUNT) ? true : false);
 
     /* correct non active events so they work with rest of code */
-    if(!active)
+    if (!active)
     {
       state.m_bActive = false;
       state.m_bRepeat = false;
@@ -423,30 +420,30 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
     }
 
     std::list<CEventButtonState>::reverse_iterator it;
-    it = find_if( m_buttonQueue.rbegin() , m_buttonQueue.rend(), ButtonStateFinder(state));
+    it = find_if(m_buttonQueue.rbegin(), m_buttonQueue.rend(), ButtonStateFinder(state));
 
-    if(it == m_buttonQueue.rend())
+    if (it == m_buttonQueue.rend())
     {
-      if(active)
+      if (active)
         m_buttonQueue.push_back(state);
     }
     else
     {
-      if(!active && it->m_bActive)
+      if (!active && it->m_bActive)
       {
         /* since modifying the list invalidates the reverse iterator */
         std::list<CEventButtonState>::iterator it2 = (++it).base();
 
         /* if last event had an amount, we must resend without amount */
-        if(it2->m_bUseAmount && it2->m_fAmount != 0.0)
+        if (it2->m_bUseAmount && it2->m_fAmount != 0.0)
         {
           m_buttonQueue.push_back(state);
         }
 
         /* if the last event was waiting for a repeat interval, it has executed already.*/
-        if(it2->m_bRepeat)
+        if (it2->m_bRepeat)
         {
-          if(it2->m_iNextRepeat > 0)
+          if (it2->m_iNextRepeat > 0)
           {
             m_buttonQueue.erase(it2);
           }
@@ -456,12 +453,11 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
             it2->m_bActive = false;
           }
         }
-
       }
-      else if(active && !it->m_bActive)
+      else if (active && !it->m_bActive)
       {
         m_buttonQueue.push_back(state);
-        if(!state.m_bRepeat && state.m_bAxis && state.m_fAmount != 0.0)
+        if (!state.m_bRepeat && state.m_bAxis && state.m_fAmount != 0.0)
         {
           state.m_bActive = false;
           state.m_bRepeat = false;
@@ -476,14 +472,14 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
   else
   {
     CSingleLock lock(m_critSection);
-    if ( flags & PTB_DOWN )
+    if (flags & PTB_DOWN)
     {
-      m_currentButton.m_iKeyCode   = keycode;
-      m_currentButton.m_mapName    = map;
+      m_currentButton.m_iKeyCode = keycode;
+      m_currentButton.m_mapName = map;
       m_currentButton.m_buttonName = button;
-      m_currentButton.m_fAmount    = famount;
-      m_currentButton.m_bRepeat    = (flags & PTB_NO_REPEAT)  ? false : true;
-      m_currentButton.m_bAxis      = (flags & PTB_AXIS)       ? true : false;
+      m_currentButton.m_fAmount = famount;
+      m_currentButton.m_bRepeat = (flags & PTB_NO_REPEAT) ? false : true;
+      m_currentButton.m_bAxis = (flags & PTB_AXIS) ? true : false;
       m_currentButton.m_iNextRepeat = 0;
       m_currentButton.SetActive();
       m_currentButton.Load();
@@ -492,17 +488,13 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
     {
       /* when a button is released that had amount, make sure *
        * to resend the keypress with an amount of 0           */
-      if((flags & PTB_USE_AMOUNT) && m_currentButton.m_fAmount > 0.0)
+      if ((flags & PTB_USE_AMOUNT) && m_currentButton.m_fAmount > 0.0)
       {
-        CEventButtonState state( m_currentButton.m_iKeyCode,
-                                 m_currentButton.m_mapName,
-                                 m_currentButton.m_buttonName,
-                                 0.0,
-                                 m_currentButton.m_bAxis,
-                                 false,
-                                 true );
+        CEventButtonState state(m_currentButton.m_iKeyCode, m_currentButton.m_mapName,
+                                m_currentButton.m_buttonName, 0.0, m_currentButton.m_bAxis, false,
+                                true);
 
-        m_buttonQueue.push_back (state);
+        m_buttonQueue.push_back(state);
       }
       m_currentButton.Reset();
     }
@@ -511,9 +503,9 @@ bool CEventClient::OnPacketBUTTON(CEventPacket *packet)
   return true;
 }
 
-bool CEventClient::OnPacketMOUSE(CEventPacket *packet)
+bool CEventClient::OnPacketMOUSE(CEventPacket* packet)
 {
-  unsigned char *payload = (unsigned char *)packet->Payload();
+  unsigned char* payload = (unsigned char*)packet->Payload();
   int psize = (int)packet->PayloadSize();
   unsigned char flags;
   unsigned short mx, my;
@@ -532,7 +524,7 @@ bool CEventClient::OnPacketMOUSE(CEventPacket *packet)
 
   {
     CSingleLock lock(m_critSection);
-    if ( flags & PTM_ABSOLUTE )
+    if (flags & PTM_ABSOLUTE)
     {
       m_iMouseX = mx;
       m_iMouseY = my;
@@ -543,9 +535,9 @@ bool CEventClient::OnPacketMOUSE(CEventPacket *packet)
   return true;
 }
 
-bool CEventClient::OnPacketNOTIFICATION(CEventPacket *packet)
+bool CEventClient::OnPacketNOTIFICATION(CEventPacket* packet)
 {
-  unsigned char *payload = (unsigned char *)packet->Payload();
+  unsigned char* payload = (unsigned char*)packet->Payload();
   int psize = (int)packet->PayloadSize();
   std::string title, message;
 
@@ -569,7 +561,7 @@ bool CEventClient::OnPacketNOTIFICATION(CEventPacket *packet)
 
   // image data if any
   std::string iconfile = "special://temp/notification";
-  if (m_eLogoType != LT_NONE && psize>0)
+  if (m_eLogoType != LT_NONE && psize > 0)
   {
     switch (m_eLogoType)
     {
@@ -587,7 +579,7 @@ bool CEventClient::OnPacketNOTIFICATION(CEventPacket *packet)
     }
 
     XFILE::CFile file;
-    if (!file.OpenForWrite(iconfile, true) || file.Write((const void *)payload, psize) != psize)
+    if (!file.OpenForWrite(iconfile, true) || file.Write((const void*)payload, psize) != psize)
     {
       CLog::Log(LOGERROR, "ES: Could not write icon file");
       m_eLogoType = LT_NONE;
@@ -596,21 +588,18 @@ bool CEventClient::OnPacketNOTIFICATION(CEventPacket *packet)
 
   if (m_eLogoType == LT_NONE)
   {
-    CGUIDialogKaiToast::QueueNotification(title.c_str(),
-                                          message.c_str());
+    CGUIDialogKaiToast::QueueNotification(title.c_str(), message.c_str());
   }
   else
   {
-    CGUIDialogKaiToast::QueueNotification(iconfile.c_str(),
-                                          title.c_str(),
-                                          message.c_str());
+    CGUIDialogKaiToast::QueueNotification(iconfile.c_str(), title.c_str(), message.c_str());
   }
   return true;
 }
 
-bool CEventClient::OnPacketLOG(CEventPacket *packet)
+bool CEventClient::OnPacketLOG(CEventPacket* packet)
 {
-  unsigned char *payload = (unsigned char *)packet->Payload();
+  unsigned char* payload = (unsigned char*)packet->Payload();
   int psize = (int)packet->PayloadSize();
   std::string logmsg;
   unsigned char ltype;
@@ -624,9 +613,9 @@ bool CEventClient::OnPacketLOG(CEventPacket *packet)
   return true;
 }
 
-bool CEventClient::OnPacketACTION(CEventPacket *packet)
+bool CEventClient::OnPacketACTION(CEventPacket* packet)
 {
-  unsigned char *payload = (unsigned char *)packet->Payload();
+  unsigned char* payload = (unsigned char*)packet->Payload();
   int psize = (int)packet->PayloadSize();
   std::string actionString;
   unsigned char actionType;
@@ -636,40 +625,41 @@ bool CEventClient::OnPacketACTION(CEventPacket *packet)
   if (!ParseString(payload, psize, actionString))
     return false;
 
-  switch(actionType)
+  switch (actionType)
   {
   case AT_EXEC_BUILTIN:
   case AT_BUTTON:
-    {
-      CSingleLock lock(m_critSection);
-      m_actionQueue.push(CEventAction(actionString.c_str(), actionType));
-    }
-    break;
+  {
+    CSingleLock lock(m_critSection);
+    m_actionQueue.push(CEventAction(actionString.c_str(), actionType));
+  }
+  break;
 
   default:
-    CLog::Log(LOGDEBUG, "ES: Failed - ActionType: %i ActionString: %s", actionType, actionString.c_str());
+    CLog::Log(LOGDEBUG, "ES: Failed - ActionType: %i ActionString: %s", actionType,
+              actionString.c_str());
     return false;
     break;
   }
   return true;
 }
 
-bool CEventClient::ParseString(unsigned char* &payload, int &psize, std::string& parsedVal)
+bool CEventClient::ParseString(unsigned char*& payload, int& psize, std::string& parsedVal)
 {
   if (psize <= 0)
     return false;
 
-  unsigned char *pos = (unsigned char *)memchr((void*)payload, (int)'\0', psize);
+  unsigned char* pos = (unsigned char*)memchr((void*)payload, (int)'\0', psize);
   if (!pos)
     return false;
 
   parsedVal = (char*)payload;
   psize -= ((pos - payload) + 1);
-  payload = pos+1;
+  payload = pos + 1;
   return true;
 }
 
-bool CEventClient::ParseByte(unsigned char* &payload, int &psize, unsigned char& parsedVal)
+bool CEventClient::ParseByte(unsigned char*& payload, int& psize, unsigned char& parsedVal)
 {
   if (psize <= 0)
     return false;
@@ -680,32 +670,32 @@ bool CEventClient::ParseByte(unsigned char* &payload, int &psize, unsigned char&
   return true;
 }
 
-bool CEventClient::ParseUInt32(unsigned char* &payload, int &psize, unsigned int& parsedVal)
+bool CEventClient::ParseUInt32(unsigned char*& payload, int& psize, unsigned int& parsedVal)
 {
   if (psize < 4)
     return false;
 
-  parsedVal = ntohl(*((unsigned int *)payload));
-  payload+=4;
-  psize-=4;
+  parsedVal = ntohl(*((unsigned int*)payload));
+  payload += 4;
+  psize -= 4;
   return true;
 }
 
-bool CEventClient::ParseUInt16(unsigned char* &payload, int &psize, unsigned short& parsedVal)
+bool CEventClient::ParseUInt16(unsigned char*& payload, int& psize, unsigned short& parsedVal)
 {
   if (psize < 2)
     return false;
 
-  parsedVal = ntohs(*((unsigned short *)payload));
-  payload+=2;
-  psize-=2;
+  parsedVal = ntohs(*((unsigned short*)payload));
+  payload += 2;
+  psize -= 2;
   return true;
 }
 
 void CEventClient::FreePacketQueues()
 {
   CSingleLock lock(m_critSection);
-  while ( ! m_readyPackets.empty() )
+  while (!m_readyPackets.empty())
   {
     delete m_readyPackets.front();
     m_readyPackets.pop();
@@ -723,12 +713,15 @@ void CEventClient::FreePacketQueues()
   m_seqPackets.clear();
 }
 
-unsigned int CEventClient::GetButtonCode(std::string& strMapName, bool& isAxis, float& amount, bool &isJoystick)
+unsigned int CEventClient::GetButtonCode(std::string& strMapName,
+                                         bool& isAxis,
+                                         float& amount,
+                                         bool& isJoystick)
 {
   CSingleLock lock(m_critSection);
   unsigned int bcode = 0;
 
-  if ( m_currentButton.Active() )
+  if (m_currentButton.Active())
   {
     bcode = m_currentButton.KeyCode();
     strMapName = m_currentButton.JoystickName();
@@ -742,27 +735,27 @@ unsigned int CEventClient::GetButtonCode(std::string& strMapName, bool& isAxis, 
     isAxis = m_currentButton.Axis();
     amount = m_currentButton.Amount();
 
-    if ( ! m_currentButton.Repeat() )
+    if (!m_currentButton.Repeat())
       m_currentButton.Reset();
     else
     {
-      if ( ! CheckButtonRepeat(m_currentButton.m_iNextRepeat) )
+      if (!CheckButtonRepeat(m_currentButton.m_iNextRepeat))
         bcode = 0;
     }
     return bcode;
   }
 
-  if(m_buttonQueue.empty())
+  if (m_buttonQueue.empty())
     return 0;
 
 
   std::list<CEventButtonState> repeat;
   std::list<CEventButtonState>::iterator it;
-  for(it = m_buttonQueue.begin(); bcode == 0 && it != m_buttonQueue.end(); ++it)
+  for (it = m_buttonQueue.begin(); bcode == 0 && it != m_buttonQueue.end(); ++it)
   {
-    bcode        = it->KeyCode();
-    strMapName   = it->JoystickName();
-    isJoystick   = true;
+    bcode = it->KeyCode();
+    strMapName = it->JoystickName();
+    isJoystick = true;
 
     if (strMapName.length() == 0)
     {
@@ -770,16 +763,16 @@ unsigned int CEventClient::GetButtonCode(std::string& strMapName, bool& isAxis, 
       isJoystick = false;
     }
 
-    isAxis       = it->Axis();
-    amount       = it->Amount();
+    isAxis = it->Axis();
+    amount = it->Amount();
 
-    if(it->Repeat())
+    if (it->Repeat())
     {
       /* MUST update m_iNextRepeat before resend */
       bool skip = !it->Axis() && !CheckButtonRepeat(it->m_iNextRepeat);
 
       repeat.push_back(*it);
-      if(skip)
+      if (skip)
       {
         bcode = 0;
         continue;
@@ -805,16 +798,16 @@ bool CEventClient::GetMousePos(float& x, float& y)
   return false;
 }
 
-bool CEventClient::CheckButtonRepeat(unsigned int &next)
+bool CEventClient::CheckButtonRepeat(unsigned int& next)
 {
   unsigned int now = XbmcThreads::SystemClockMillis();
 
-  if ( next == 0 )
+  if (next == 0)
   {
     next = now + m_iRepeatDelay;
     return true;
   }
-  else if ( now > next )
+  else if (now > next)
   {
     next = now + m_iRepeatSpeed;
     return true;
@@ -825,7 +818,7 @@ bool CEventClient::CheckButtonRepeat(unsigned int &next)
 bool CEventClient::Alive() const
 {
   // 60 seconds timeout
-  if ( (time(NULL) - m_lastPing) > 60 )
+  if ((time(NULL) - m_lastPing) > 60)
     return false;
   return true;
 }

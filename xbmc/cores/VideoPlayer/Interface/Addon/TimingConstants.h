@@ -11,9 +11,18 @@
 #define DVD_TIME_BASE 1000000
 #define DVD_NOPTS_VALUE 0xFFF0000000000000
 
-constexpr int DVD_TIME_TO_MSEC(double x) { return static_cast<int>(x * 1000 / DVD_TIME_BASE); }
-constexpr double DVD_SEC_TO_TIME(double x) { return x * DVD_TIME_BASE; }
-constexpr double DVD_MSEC_TO_TIME(double x) { return x * DVD_TIME_BASE / 1000; }
+constexpr int DVD_TIME_TO_MSEC(double x)
+{
+  return static_cast<int>(x * 1000 / DVD_TIME_BASE);
+}
+constexpr double DVD_SEC_TO_TIME(double x)
+{
+  return x * DVD_TIME_BASE;
+}
+constexpr double DVD_MSEC_TO_TIME(double x)
+{
+  return x * DVD_TIME_BASE / 1000;
+}
 
-#define DVD_PLAYSPEED_PAUSE       0       // frame stepping
-#define DVD_PLAYSPEED_NORMAL      1000
+#define DVD_PLAYSPEED_PAUSE 0 // frame stepping
+#define DVD_PLAYSPEED_NORMAL 1000

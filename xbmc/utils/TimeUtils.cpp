@@ -7,13 +7,14 @@
  */
 
 #include "TimeUtils.h"
+
 #include "XBDateTime.h"
 #include "threads/SystemClock.h"
 #include "windowing/GraphicContext.h"
 
-#if   defined(TARGET_DARWIN)
-#include <mach/mach_time.h>
+#if defined(TARGET_DARWIN)
 #include <CoreVideo/CVHostTime.h>
+#include <mach/mach_time.h>
 #elif defined(TARGET_WINDOWS)
 #include <windows.h>
 #else
@@ -23,11 +24,11 @@
 int64_t CurrentHostCounter(void)
 {
 #if defined(TARGET_DARWIN)
-  return( (int64_t)CVGetCurrentHostTime() );
+  return ((int64_t)CVGetCurrentHostTime());
 #elif defined(TARGET_WINDOWS)
   LARGE_INTEGER PerformanceCount;
   QueryPerformanceCounter(&PerformanceCount);
-  return( (int64_t)PerformanceCount.QuadPart );
+  return ((int64_t)PerformanceCount.QuadPart);
 #else
   struct timespec now;
 #if defined(CLOCK_MONOTONIC_RAW) && !defined(TARGET_ANDROID)
@@ -35,20 +36,20 @@ int64_t CurrentHostCounter(void)
 #else
   clock_gettime(CLOCK_MONOTONIC, &now);
 #endif // CLOCK_MONOTONIC_RAW && !TARGET_ANDROID
-  return( ((int64_t)now.tv_sec * 1000000000L) + now.tv_nsec );
+  return (((int64_t)now.tv_sec * 1000000000L) + now.tv_nsec);
 #endif
 }
 
 int64_t CurrentHostFrequency(void)
 {
 #if defined(TARGET_DARWIN)
-  return( (int64_t)CVGetHostClockFrequency() );
+  return ((int64_t)CVGetHostClockFrequency());
 #elif defined(TARGET_WINDOWS)
   LARGE_INTEGER Frequency;
   QueryPerformanceFrequency(&Frequency);
-  return( (int64_t)Frequency.QuadPart );
+  return ((int64_t)Frequency.QuadPart);
 #else
-  return( (int64_t)1000000000L );
+  return ((int64_t)1000000000L);
 #endif
 }
 
@@ -76,7 +77,7 @@ CDateTime CTimeUtils::GetLocalTime(time_t time)
 {
   CDateTime result;
 
-  tm *local;
+  tm* local;
 #ifdef HAVE_LOCALTIME_R
   tm res = {};
   local = localtime_r(&time, &res); // Conversion to local time

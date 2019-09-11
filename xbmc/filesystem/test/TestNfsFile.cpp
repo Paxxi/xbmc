@@ -16,8 +16,8 @@
 #include <gtest/gtest.h>
 
 using ::testing::Test;
-using ::testing::WithParamInterface;
 using ::testing::ValuesIn;
+using ::testing::WithParamInterface;
 
 struct SplitPath
 {
@@ -27,38 +27,38 @@ struct SplitPath
   bool expectedResultExport;
   bool expectedResultPath;
 } g_TestData[] = {
-                   {"nfs://192.168.0.1:2049/srv/test/tvmedia/foo.txt", "/srv/test", "//tvmedia/foo.txt", true, true},
-                   {"nfs://192.168.0.1/srv/test/tv/media/foo.txt", "/srv/test/tv", "//media/foo.txt", true, true},
-                   {"nfs://192.168.0.1:2049/srv/test/tvmedia", "/srv/test", "//tvmedia", true, true},
-                   {"nfs://192.168.0.1:2049/srv/test/tvmedia/", "/srv/test", "//tvmedia/", true, true},
-                   {"nfs://192.168.0.1:2049/srv/test/tv/media", "/srv/test/tv", "//media", true, true},
-                   {"nfs://192.168.0.1:2049/srv/test/tv/media/", "/srv/test/tv", "//media/", true, true},
-                   {"nfs://192.168.0.1:2049/srv/test/tv", "/srv/test/tv", "//", true, true},
-                   {"nfs://192.168.0.1:2049/srv/test/", "/srv/test", "//", true, true},
-                   {"nfs://192.168.0.1:2049/", "/", "//", true, true},
-                   {"nfs://192.168.0.1:2049/notexported/foo.txt", "/", "//notexported/foo.txt", true, true},
+    {"nfs://192.168.0.1:2049/srv/test/tvmedia/foo.txt", "/srv/test", "//tvmedia/foo.txt", true,
+     true},
+    {"nfs://192.168.0.1/srv/test/tv/media/foo.txt", "/srv/test/tv", "//media/foo.txt", true, true},
+    {"nfs://192.168.0.1:2049/srv/test/tvmedia", "/srv/test", "//tvmedia", true, true},
+    {"nfs://192.168.0.1:2049/srv/test/tvmedia/", "/srv/test", "//tvmedia/", true, true},
+    {"nfs://192.168.0.1:2049/srv/test/tv/media", "/srv/test/tv", "//media", true, true},
+    {"nfs://192.168.0.1:2049/srv/test/tv/media/", "/srv/test/tv", "//media/", true, true},
+    {"nfs://192.168.0.1:2049/srv/test/tv", "/srv/test/tv", "//", true, true},
+    {"nfs://192.168.0.1:2049/srv/test/", "/srv/test", "//", true, true},
+    {"nfs://192.168.0.1:2049/", "/", "//", true, true},
+    {"nfs://192.168.0.1:2049/notexported/foo.txt", "/", "//notexported/foo.txt", true, true},
 
-                   {"nfs://192.168.0.1:2049/notexported/foo.txt", "/notexported", "//foo.txt", false, false},
-                 };
+    {"nfs://192.168.0.1:2049/notexported/foo.txt", "/notexported", "//foo.txt", false, false},
+};
 
-class TestNfs : public Test,
-                public WithParamInterface<SplitPath>
+class TestNfs : public Test, public WithParamInterface<SplitPath>
 {
 };
 
 class ExportList
 {
-  public:
-    std::list<std::string> data;
+public:
+  std::list<std::string> data;
 
-    ExportList()
-    {
-      data.push_back("/srv/test");
-      data.push_back("/srv/test/tv");
-      data.push_back("/");
-      data.sort();
-      data.reverse();
-    }
+  ExportList()
+  {
+    data.push_back("/srv/test");
+    data.push_back("/srv/test/tv");
+    data.push_back("/");
+    data.sort();
+    data.reverse();
+  }
 };
 
 static ExportList exportList;

@@ -13,7 +13,7 @@
 class CStopWatch
 {
 public:
-  explicit CStopWatch(bool useFrameTime=false);
+  explicit CStopWatch(bool useFrameTime = false);
   ~CStopWatch();
 
   /*!
@@ -21,10 +21,7 @@ public:
 
     \return True if stopwatch has been started but not stopped.
   */
-  inline bool IsRunning() const
-  {
-    return m_isRunning;
-  }
+  inline bool IsRunning() const { return m_isRunning; }
 
   /*!
     \brief Record start time and change state to running.
@@ -49,7 +46,7 @@ public:
   */
   inline void Stop()
   {
-    if(m_isRunning)
+    if (m_isRunning)
     {
       m_stopTick = GetTicks();
       m_isRunning = false;
@@ -85,14 +82,11 @@ public:
 
     \return Elapsed time, in milliseconds, as a float.
   */
-  float GetElapsedMilliseconds() const
-  {
-    return GetElapsedSeconds() * 1000.0f;
-  }
+  float GetElapsedMilliseconds() const { return GetElapsedSeconds() * 1000.0f; }
 
 private:
   int64_t GetTicks() const;
-  float m_timerPeriod;        // to save division in GetElapsed...()
+  float m_timerPeriod; // to save division in GetElapsed...()
   int64_t m_startTick;
   int64_t m_stopTick;
   bool m_isRunning;

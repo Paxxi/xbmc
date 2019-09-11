@@ -21,7 +21,7 @@ CGUIInfoBool::CGUIInfoBool(bool value)
 
 CGUIInfoBool::~CGUIInfoBool() = default;
 
-void CGUIInfoBool::Parse(const std::string &expression, int context)
+void CGUIInfoBool::Parse(const std::string& expression, int context)
 {
   if (expression == "true")
     m_value = true;
@@ -34,7 +34,7 @@ void CGUIInfoBool::Parse(const std::string &expression, int context)
   }
 }
 
-void CGUIInfoBool::Update(const CGUIListItem *item /*= NULL*/)
+void CGUIInfoBool::Update(const CGUIListItem* item /*= NULL*/)
 {
   if (m_info)
     m_value = m_info->Get(item);

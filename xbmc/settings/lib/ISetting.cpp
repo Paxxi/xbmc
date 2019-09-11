@@ -14,13 +14,14 @@
 
 #include <string>
 
-ISetting::ISetting(const std::string &id, CSettingsManager *settingsManager /* = nullptr */)
+ISetting::ISetting(const std::string& id, CSettingsManager* settingsManager /* = nullptr */)
   : m_id(id)
   , m_settingsManager(settingsManager)
   , m_requirementCondition(settingsManager)
-{ }
+{
+}
 
-bool ISetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
+bool ISetting::Deserialize(const TiXmlNode* node, bool update /* = false */)
 {
   if (node == nullptr)
     return false;
@@ -46,7 +47,7 @@ bool ISetting::Deserialize(const TiXmlNode *node, bool update /* = false */)
   return m_requirementCondition.Deserialize(requirementNode);
 }
 
-bool ISetting::DeserializeIdentification(const TiXmlNode *node, std::string &identification)
+bool ISetting::DeserializeIdentification(const TiXmlNode* node, std::string& identification)
 {
   if (node == nullptr)
     return false;

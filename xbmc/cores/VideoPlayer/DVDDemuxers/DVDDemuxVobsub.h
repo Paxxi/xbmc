@@ -37,13 +37,14 @@ public:
   void EnableStream(int id, bool enable) override;
 
 private:
-  class CStream
-    : public CDemuxStreamSubtitle
+  class CStream : public CDemuxStreamSubtitle
   {
   public:
     explicit CStream(CDVDDemuxVobsub* parent)
-      : m_discard(false), m_parent(parent)
-    {}
+      : m_discard(false)
+      , m_parent(parent)
+    {
+    }
 
     bool m_discard;
     CDVDDemuxVobsub* m_parent;
@@ -52,8 +53,8 @@ private:
   typedef struct STimestamp
   {
     int64_t pos;
-    double  pts;
-    int     id;
+    double pts;
+    int id;
   } STimestamp;
 
   std::string m_Filename;
@@ -73,7 +74,7 @@ private:
 
   struct sorter
   {
-    bool operator()(const STimestamp &p1, const STimestamp &p2)
+    bool operator()(const STimestamp& p1, const STimestamp& p2)
     {
       return p1.pts < p2.pts || (p1.pts == p2.pts && p1.id < p2.id);
     }

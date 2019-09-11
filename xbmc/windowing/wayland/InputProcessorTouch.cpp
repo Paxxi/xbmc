@@ -13,11 +13,17 @@
 using namespace KODI::WINDOWING::WAYLAND;
 
 CInputProcessorTouch::CInputProcessorTouch(wayland::surface_t const& surface)
-: m_surface{surface}
+  : m_surface{surface}
 {
 }
 
-void CInputProcessorTouch::OnTouchDown(CSeat* seat, std::uint32_t serial, std::uint32_t time, wayland::surface_t surface, std::int32_t id, double x, double y)
+void CInputProcessorTouch::OnTouchDown(CSeat* seat,
+                                       std::uint32_t serial,
+                                       std::uint32_t time,
+                                       wayland::surface_t surface,
+                                       std::int32_t id,
+                                       double x,
+                                       double y)
 {
   if (surface != m_surface)
   {
@@ -30,8 +36,7 @@ void CInputProcessorTouch::OnTouchDown(CSeat* seat, std::uint32_t serial, std::u
   for (int testPointer{0}; testPointer < CGenericTouchInputHandler::MAX_POINTERS; testPointer++)
   {
     if (std::all_of(m_touchPoints.cbegin(), m_touchPoints.cend(),
-                    [=](decltype(m_touchPoints)::value_type const& pair)
-                    {
+                    [=](decltype(m_touchPoints)::value_type const& pair) {
                       return (pair.second.kodiPointerNumber != testPointer);
                     }))
     {
@@ -42,12 +47,19 @@ void CInputProcessorTouch::OnTouchDown(CSeat* seat, std::uint32_t serial, std::u
 
   if (kodiPointer != -1)
   {
-    auto it = m_touchPoints.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(time, kodiPointer, x * m_coordinateScale, y * m_coordinateScale, 0.0f)).first;
+    auto it = m_touchPoints
+                  .emplace(std::piecewise_construct, std::forward_as_tuple(id),
+                           std::forward_as_tuple(time, kodiPointer, x * m_coordinateScale,
+                                                 y * m_coordinateScale, 0.0f))
+                  .first;
     SendTouchPointEvent(TouchInputDown, it->second);
   }
 }
 
-void CInputProcessorTouch::OnTouchUp(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::int32_t id)
+void CInputProcessorTouch::OnTouchUp(CSeat* seat,
+                                     std::uint32_t serial,
+                                     std::uint32_t time,
+                                     std::int32_t id)
 {
   auto it = m_touchPoints.find(id);
   if (it != m_touchPoints.end())
@@ -59,7 +71,8 @@ void CInputProcessorTouch::OnTouchUp(CSeat* seat, std::uint32_t serial, std::uin
   }
 }
 
-void CInputProcessorTouch::OnTouchMotion(CSeat* seat, std::uint32_t time, std::int32_t id, double x, double y)
+void CInputProcessorTouch::OnTouchMotion(
+    CSeat* seat, std::uint32_t time, std::int32_t id, double x, double y)
 {
   auto it = m_touchPoints.find(id);
   if (it != m_touchPoints.end())
@@ -115,10 +128,14 @@ void CInputProcessorTouch::SendTouchPointEvent(TouchInput event, const TouchPoin
       UpdateTouchPoint(point.second);
     }
   }
-  CGenericTouchInputHandler::GetInstance().HandleTouchInput(event, point.x, point.y, point.lastEventTime * INT64_C(1000000), point.kodiPointerNumber, point.size);
+  CGenericTouchInputHandler::GetInstance().HandleTouchInput(event, point.x, point.y,
+                                                            point.lastEventTime * INT64_C(1000000),
+                                                            point.kodiPointerNumber, point.size);
 }
 
 void CInputProcessorTouch::UpdateTouchPoint(const TouchPoint& point)
 {
-  CGenericTouchInputHandler::GetInstance().UpdateTouchPointer(point.kodiPointerNumber, point.x, point.y, point.lastEventTime * INT64_C(1000000), point.size);
+  CGenericTouchInputHandler::GetInstance().UpdateTouchPointer(
+      point.kodiPointerNumber, point.x, point.y, point.lastEventTime * INT64_C(1000000),
+      point.size);
 }

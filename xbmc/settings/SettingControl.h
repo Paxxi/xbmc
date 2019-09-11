@@ -30,7 +30,7 @@ class CSettingControlCreator : public ISettingControlCreator
 {
 public:
   // implementation of ISettingControlCreator
-  std::shared_ptr<ISettingControl> CreateControl(const std::string &controlType) const override;
+  std::shared_ptr<ISettingControl> CreateControl(const std::string& controlType) const override;
 
 protected:
   CSettingControlCreator() = default;
@@ -40,15 +40,12 @@ protected:
 class CSettingControlCheckmark : public ISettingControl
 {
 public:
-  CSettingControlCheckmark()
-  {
-    m_format = "boolean";
-  }
+  CSettingControlCheckmark() { m_format = "boolean"; }
   ~CSettingControlCheckmark() override = default;
 
   // implementation of ISettingControl
   std::string GetType() const override { return "toggle"; }
-  bool SetFormat(const std::string &format) override;
+  bool SetFormat(const std::string& format) override;
 };
 
 class CSettingControlFormattedRange : public ISettingControl
@@ -56,12 +53,12 @@ class CSettingControlFormattedRange : public ISettingControl
 public:
   ~CSettingControlFormattedRange() override = default;
 
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
 
   int GetFormatLabel() const { return m_formatLabel; }
   void SetFormatLabel(int formatLabel) { m_formatLabel = formatLabel; }
   const std::string& GetFormatString() const { return m_formatString; }
-  void SetFormatString(const std::string &formatString) { m_formatString = formatString; }
+  void SetFormatString(const std::string& formatString) { m_formatString = formatString; }
   int GetMinimumLabel() const { return m_minimumLabel; }
   void SetMinimumLabel(int minimumLabel) { m_minimumLabel = minimumLabel; }
 
@@ -83,22 +80,19 @@ public:
   std::string GetType() const override { return "spinner"; }
 
   // specialization of CSettingControlFormattedRange
-  bool SetFormat(const std::string &format) override;
+  bool SetFormat(const std::string& format) override;
 };
 
 class CSettingControlEdit : public ISettingControl
 {
 public:
-  CSettingControlEdit()
-  {
-    m_delayed = true;
-  }
+  CSettingControlEdit() { m_delayed = true; }
   ~CSettingControlEdit() override = default;
 
   // implementation of ISettingControl
   std::string GetType() const override { return "edit"; }
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
-  bool SetFormat(const std::string &format) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
+  bool SetFormat(const std::string& format) override;
 
   bool IsHidden() const { return m_hidden; }
   void SetHidden(bool hidden) { m_hidden = hidden; }
@@ -121,8 +115,8 @@ public:
 
   // implementation of ISettingControl
   std::string GetType() const override { return "button"; }
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
-  bool SetFormat(const std::string &format) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
+  bool SetFormat(const std::string& format) override;
 
   int GetHeading() const { return m_heading; }
   void SetHeading(int heading) { m_heading = heading; }
@@ -132,9 +126,15 @@ public:
   bool ShowAddonDetails() const { return m_showAddonDetails; }
   void SetShowAddonDetails(bool showAddonDetails) { m_showAddonDetails = showAddonDetails; }
   bool ShowInstalledAddons() const { return m_showInstalledAddons; }
-  void SetShowInstalledAddons(bool showInstalledAddons) { m_showInstalledAddons = showInstalledAddons; }
+  void SetShowInstalledAddons(bool showInstalledAddons)
+  {
+    m_showInstalledAddons = showInstalledAddons;
+  }
   bool ShowInstallableAddons() const { return m_showInstallableAddons; }
-  void SetShowInstallableAddons(bool showInstallableAddons) { m_showInstallableAddons = showInstallableAddons; }
+  void SetShowInstallableAddons(bool showInstallableAddons)
+  {
+    m_showInstallableAddons = showInstallableAddons;
+  }
   bool ShowMoreAddons() const { return !m_showInstallableAddons && m_showMoreAddons; }
   void SetShowMoreAddons(bool showMoreAddons) { m_showMoreAddons = showMoreAddons; }
 
@@ -179,8 +179,8 @@ public:
   std::string GetType() const override { return "list"; }
 
   // specialization of CSettingControlFormattedRange
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
-  bool SetFormat(const std::string &format) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
+  bool SetFormat(const std::string& format) override;
 
   int GetHeading() const { return m_heading; }
   void SetHeading(int heading) { m_heading = heading; }
@@ -200,7 +200,12 @@ protected:
 };
 
 class CSettingControlSlider;
-using SettingControlSliderFormatter = std::string (*)(std::shared_ptr<const CSettingControlSlider> control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
+using SettingControlSliderFormatter =
+    std::string (*)(std::shared_ptr<const CSettingControlSlider> control,
+                    const CVariant& value,
+                    const CVariant& minimum,
+                    const CVariant& step,
+                    const CVariant& maximum);
 
 class CSettingControlSlider : public ISettingControl
 {
@@ -210,8 +215,8 @@ public:
 
   // implementation of ISettingControl
   std::string GetType() const override { return "slider"; }
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
-  bool SetFormat(const std::string &format) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
+  bool SetFormat(const std::string& format) override;
 
   int GetHeading() const { return m_heading; }
   void SetHeading(int heading) { m_heading = heading; }
@@ -220,7 +225,7 @@ public:
   int GetFormatLabel() const { return m_formatLabel; }
   void SetFormatLabel(int formatLabel) { m_formatLabel = formatLabel; }
   const std::string& GetFormatString() const { return m_formatString; }
-  void SetFormatString(const std::string &formatString) { m_formatString = formatString; }
+  void SetFormatString(const std::string& formatString) { m_formatString = formatString; }
 
   SettingControlSliderFormatter GetFormatter() const { return m_formatter; }
   void SetFormatter(SettingControlSliderFormatter formatter) { m_formatter = formatter; }
@@ -241,15 +246,15 @@ public:
 
   // implementation of ISettingControl
   std::string GetType() const override { return "range"; }
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
-  bool SetFormat(const std::string &format) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
+  bool SetFormat(const std::string& format) override;
 
   int GetFormatLabel() const { return m_formatLabel; }
   void SetFormatLabel(int formatLabel) { m_formatLabel = formatLabel; }
   int GetValueFormatLabel() const { return m_valueFormatLabel; }
   void SetValueFormatLabel(int valueFormatLabel) { m_valueFormatLabel = valueFormatLabel; }
   const std::string& GetValueFormat() const { return m_valueFormat; }
-  void SetValueFormat(const std::string &valueFormat) { m_valueFormat = valueFormat; }
+  void SetValueFormat(const std::string& valueFormat) { m_valueFormat = valueFormat; }
 
 protected:
   int m_formatLabel = 21469;
@@ -265,7 +270,7 @@ public:
 
   // implementation of ISettingControl
   std::string GetType() const override { return "title"; }
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
 
   bool IsSeparatorHidden() const { return m_separatorHidden; }
   void SetSeparatorHidden(bool hidden) { m_separatorHidden = hidden; }

@@ -15,21 +15,22 @@
 namespace XFILE
 {
 
-  CBlurayFile::CBlurayFile(void)
-    : COverrideFile(false)
-  { }
+CBlurayFile::CBlurayFile(void)
+  : COverrideFile(false)
+{
+}
 
-  CBlurayFile::~CBlurayFile(void) = default;
+CBlurayFile::~CBlurayFile(void) = default;
 
-  std::string CBlurayFile::TranslatePath(const CURL& url)
-  {
-    assert(url.IsProtocol("bluray"));
+std::string CBlurayFile::TranslatePath(const CURL& url)
+{
+  assert(url.IsProtocol("bluray"));
 
-    std::string host = url.GetHostName();
-    std::string filename = url.GetFileName();
-    if (host.empty() || filename.empty())
-      return "";
+  std::string host = url.GetHostName();
+  std::string filename = url.GetFileName();
+  if (host.empty() || filename.empty())
+    return "";
 
-    return host.append(filename);
-  }
+  return host.append(filename);
+}
 } /* namespace XFILE */

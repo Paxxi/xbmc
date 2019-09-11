@@ -22,8 +22,8 @@
 
 using namespace PVR;
 
-CDatabaseManager::CDatabaseManager() :
-  m_bIsUpgrading(false)
+CDatabaseManager::CDatabaseManager()
+  : m_bIsUpgrading(false)
 {
   // Initialize the addon database (must be before the addon manager is init'd)
   CAddonDatabase db;
@@ -40,24 +40,46 @@ void CDatabaseManager::Initialize()
 
   CLog::Log(LOGDEBUG, "%s, updating databases...", __FUNCTION__);
 
-  const std::shared_ptr<CAdvancedSettings> advancedSettings = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
+  const std::shared_ptr<CAdvancedSettings> advancedSettings =
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
 
   // NOTE: Order here is important. In particular, CTextureDatabase has to be updated
   //       before CVideoDatabase.
-  { CAddonDatabase db; UpdateDatabase(db); }
-  { CViewDatabase db; UpdateDatabase(db); }
-  { CTextureDatabase db; UpdateDatabase(db); }
-  { CMusicDatabase db; UpdateDatabase(db, &advancedSettings->m_databaseMusic); }
-  { CVideoDatabase db; UpdateDatabase(db, &advancedSettings->m_databaseVideo); }
-  { CPVRDatabase db; UpdateDatabase(db, &advancedSettings->m_databaseTV); }
-  { CPVREpgDatabase db; UpdateDatabase(db, &advancedSettings->m_databaseEpg); }
+  {
+    CAddonDatabase db;
+    UpdateDatabase(db);
+  }
+  {
+    CViewDatabase db;
+    UpdateDatabase(db);
+  }
+  {
+    CTextureDatabase db;
+    UpdateDatabase(db);
+  }
+  {
+    CMusicDatabase db;
+    UpdateDatabase(db, &advancedSettings->m_databaseMusic);
+  }
+  {
+    CVideoDatabase db;
+    UpdateDatabase(db, &advancedSettings->m_databaseVideo);
+  }
+  {
+    CPVRDatabase db;
+    UpdateDatabase(db, &advancedSettings->m_databaseTV);
+  }
+  {
+    CPVREpgDatabase db;
+    UpdateDatabase(db, &advancedSettings->m_databaseEpg);
+  }
 
   CLog::Log(LOGDEBUG, "%s, updating databases... DONE", __FUNCTION__);
 
   m_bIsUpgrading = false;
 }
 
-bool CDatabaseManager::CanOpen(const std::string &name)
+bool CDatabaseManager::CanOpen(const std::string& name)
 {
   CSingleLock lock(m_section);
   std::map<std::string, DB_STATUS>::const_iterator i = m_dbStatus.find(name);
@@ -66,7 +88,7 @@ bool CDatabaseManager::CanOpen(const std::string &name)
   return false; // db isn't even attempted to update yet
 }
 
-void CDatabaseManager::UpdateDatabase(CDatabase &db, DatabaseSettings *settings)
+void CDatabaseManager::UpdateDatabase(CDatabase& db, DatabaseSettings* settings)
 {
   std::string name = db.GetBaseDBName();
   UpdateStatus(name, DB_UPDATING);
@@ -76,7 +98,7 @@ void CDatabaseManager::UpdateDatabase(CDatabase &db, DatabaseSettings *settings)
     UpdateStatus(name, DB_FAILED);
 }
 
-bool CDatabaseManager::Update(CDatabase &db, const DatabaseSettings &settings)
+bool CDatabaseManager::Update(CDatabase& db, const DatabaseSettings& settings)
 {
   DatabaseSettings dbSettings = settings;
   db.InitSettings(dbSettings);
@@ -96,7 +118,8 @@ bool CDatabaseManager::Update(CDatabase &db, const DatabaseSettings &settings)
       // Database exists, take a copy for our current version (if needed) and reopen that one
       if (version < db.GetSchemaVersion())
       {
-        CLog::Log(LOGNOTICE, "Old database found - updating from version %i to %i", version, db.GetSchemaVersion());
+        CLog::Log(LOGNOTICE, "Old database found - updating from version %i to %i", version,
+                  db.GetSchemaVersion());
         m_bIsUpgrading = true;
 
         bool copy_fail = false;
@@ -107,7 +130,8 @@ bool CDatabaseManager::Update(CDatabase &db, const DatabaseSettings &settings)
         }
         catch (...)
         {
-          CLog::Log(LOGERROR, "Unable to copy old database %s to new version %s", dbName.c_str(), latestDb.c_str());
+          CLog::Log(LOGERROR, "Unable to copy old database %s to new version %s", dbName.c_str(),
+                    latestDb.c_str());
           copy_fail = true;
         }
 
@@ -144,19 +168,21 @@ bool CDatabaseManager::Update(CDatabase &db, const DatabaseSettings &settings)
   return false;
 }
 
-bool CDatabaseManager::UpdateVersion(CDatabase &db, const std::string &dbName)
+bool CDatabaseManager::UpdateVersion(CDatabase& db, const std::string& dbName)
 {
   int version = db.GetDBVersion();
   bool bReturn = false;
 
   if (version < db.GetMinSchemaVersion())
   {
-    CLog::Log(LOGERROR, "Can't update database %s from version %i - it's too old", dbName.c_str(), version);
+    CLog::Log(LOGERROR, "Can't update database %s from version %i - it's too old", dbName.c_str(),
+              version);
     return false;
   }
   else if (version < db.GetSchemaVersion())
   {
-    CLog::Log(LOGNOTICE, "Attempting to update the database %s from version %i to %i", dbName.c_str(), version, db.GetSchemaVersion());
+    CLog::Log(LOGNOTICE, "Attempting to update the database %s from version %i to %i",
+              dbName.c_str(), version, db.GetSchemaVersion());
     bool success = true;
     db.BeginTransaction();
     try
@@ -169,12 +195,14 @@ bool CDatabaseManager::UpdateVersion(CDatabase &db, const std::string &dbName)
     }
     catch (...)
     {
-      CLog::Log(LOGERROR, "Exception updating database %s from version %i to %i", dbName.c_str(), version, db.GetSchemaVersion());
+      CLog::Log(LOGERROR, "Exception updating database %s from version %i to %i", dbName.c_str(),
+                version, db.GetSchemaVersion());
       success = false;
     }
     if (!success)
     {
-      CLog::Log(LOGERROR, "Error updating database %s from version %i to %i", dbName.c_str(), version, db.GetSchemaVersion());
+      CLog::Log(LOGERROR, "Error updating database %s from version %i to %i", dbName.c_str(),
+                version, db.GetSchemaVersion());
       db.RollbackTransaction();
       return false;
     }
@@ -184,7 +212,9 @@ bool CDatabaseManager::UpdateVersion(CDatabase &db, const std::string &dbName)
   else if (version > db.GetSchemaVersion())
   {
     bReturn = false;
-    CLog::Log(LOGERROR, "Can't open the database %s as it is a NEWER version than what we were expecting?", dbName.c_str());
+    CLog::Log(LOGERROR,
+              "Can't open the database %s as it is a NEWER version than what we were expecting?",
+              dbName.c_str());
   }
   else
   {
@@ -195,7 +225,7 @@ bool CDatabaseManager::UpdateVersion(CDatabase &db, const std::string &dbName)
   return bReturn;
 }
 
-void CDatabaseManager::UpdateStatus(const std::string &name, DB_STATUS status)
+void CDatabaseManager::UpdateStatus(const std::string& name, DB_STATUS status)
 {
   CSingleLock lock(m_section);
   m_dbStatus[name] = status;

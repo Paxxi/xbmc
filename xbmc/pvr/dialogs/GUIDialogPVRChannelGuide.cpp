@@ -24,7 +24,7 @@ CGUIDialogPVRChannelGuide::CGUIDialogPVRChannelGuide()
 {
 }
 
-void CGUIDialogPVRChannelGuide::Open(const CPVRChannelPtr &channel)
+void CGUIDialogPVRChannelGuide::Open(const CPVRChannelPtr& channel)
 {
   m_channel = channel;
   CGUIDialogPVRItemsViewBase::Open();

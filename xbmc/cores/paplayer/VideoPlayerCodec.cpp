@@ -53,20 +53,20 @@ AEAudioFormat VideoPlayerCodec::GetFormat()
   return format;
 }
 
-void VideoPlayerCodec::SetContentType(const std::string &strContent)
+void VideoPlayerCodec::SetContentType(const std::string& strContent)
 {
   m_strContentType = strContent;
   StringUtils::ToLower(m_strContentType);
 }
 
-void  VideoPlayerCodec::SetPassthroughStreamType(CAEStreamInfo::DataType streamType)
+void VideoPlayerCodec::SetPassthroughStreamType(CAEStreamInfo::DataType streamType)
 {
   m_srcFormat.m_streamInfo.m_type = streamType;
 }
 
-bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
+bool VideoPlayerCodec::Init(const CFileItem& file, unsigned int filecache)
 {
-  const std::string &strFile = file.GetPath();
+  const std::string& strFile = file.GetPath();
 
   // take precaution if Init()ialized earlier
   if (m_bInited)
@@ -84,7 +84,7 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   std::string strFileToOpen = strFile;
 
   CURL urlFile(strFile);
-  if (urlFile.IsProtocol("shout") )
+  if (urlFile.IsProtocol("shout"))
     strFileToOpen.replace(0, 8, "http://");
 
   CFileItem fileitem(file);
@@ -93,7 +93,8 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   m_pInputStream = CDVDFactoryInputStream::CreateInputStream(NULL, fileitem);
   if (!m_pInputStream)
   {
-    CLog::Log(LOGERROR, "%s: Error creating input stream for %s", __FUNCTION__, strFileToOpen.c_str());
+    CLog::Log(LOGERROR, "%s: Error creating input stream for %s", __FUNCTION__,
+              strFileToOpen.c_str());
     return false;
   }
 
@@ -122,7 +123,7 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
       return false;
     }
   }
-  catch(...)
+  catch (...)
   {
     CLog::Log(LOGERROR, "%s: Exception thrown when opening demuxer", __FUNCTION__);
     if (m_pDemuxer)
@@ -176,13 +177,11 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   //  Extract ReplayGain info
   // tagLoaderTagLib.Load will try to determine tag type by file extension, so set fallback by contentType
   std::string strFallbackFileExtension = "";
-  if (m_strContentType == "audio/aacp" ||
-      m_strContentType == "audio/aac")
+  if (m_strContentType == "audio/aacp" || m_strContentType == "audio/aac")
     strFallbackFileExtension = "m4a";
   else if (m_strContentType == "audio/x-ms-wma")
     strFallbackFileExtension = "wma";
-  else if (m_strContentType == "audio/x-ape" ||
-           m_strContentType == "audio/ape")
+  else if (m_strContentType == "audio/x-ape" || m_strContentType == "audio/ape")
     strFallbackFileExtension = "ape";
   CTagLoaderTagLib tagLoaderTagLib;
   tagLoaderTagLib.Load(strFile, m_tag, strFallbackFileExtension);
@@ -190,7 +189,7 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   // we have to decode initial data in order to get channels/samplerate
   // for sanity - we read no more than 10 packets
   int nErrors = 0;
-  for (int nPacket=0; nPacket < 10 && (m_channels == 0 || m_format.m_sampleRate == 0); nPacket++)
+  for (int nPacket = 0; nPacket < 10 && (m_channels == 0 || m_format.m_sampleRate == 0); nPacket++)
   {
     unsigned char dummy[256];
     int nSize = 256;
@@ -240,7 +239,7 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
   m_bitRate = m_pAudioCodec->GetBitRate();
   if (!m_bitRate && m_TotalTime)
   {
-    m_bitRate = (int)(((m_pInputStream->GetLength()*1000) / m_TotalTime) * 8);
+    m_bitRate = (int)(((m_pInputStream->GetLength() * 1000) / m_TotalTime) * 8);
   }
   m_CodecName = m_pDemuxer->GetStreamCodecName(demuxerId, m_nAudioStream);
 
@@ -265,12 +264,7 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
     srcConfig.bits_per_sample = CAEUtil::DataFormatToUsedBits(m_srcFormat.m_dataFormat);
     srcConfig.dither_bits = CAEUtil::DataFormatToDitherBits(m_srcFormat.m_dataFormat);
 
-    m_pResampler->Init(dstConfig, srcConfig,
-                       false,
-                       false,
-                       M_SQRT1_2,
-                       NULL,
-                       AE_QUALITY_UNKNOWN,
+    m_pResampler->Init(dstConfig, srcConfig, false, false, M_SQRT1_2, NULL, AE_QUALITY_UNKNOWN,
                        false);
 
     m_planes = AE_IS_PLANAR(m_srcFormat.m_dataFormat) ? m_channels : 1;
@@ -333,20 +327,20 @@ bool VideoPlayerCodec::Seek(int64_t iSeekTime)
   return ret;
 }
 
-int VideoPlayerCodec::ReadPCM(unsigned char *pBuffer, int size, int *actualsize)
+int VideoPlayerCodec::ReadPCM(unsigned char* pBuffer, int size, int* actualsize)
 {
   if (m_nDecodedLen > 0)
   {
-    int nLen = (size<m_nDecodedLen)?size:m_nDecodedLen;
+    int nLen = (size < m_nDecodedLen) ? size : m_nDecodedLen;
     *actualsize = nLen;
     if (m_needConvert)
     {
-      int samples = *actualsize / (m_bitsPerSample>>3);
+      int samples = *actualsize / (m_bitsPerSample >> 3);
       int frames = samples / m_channels;
       m_pResampler->Resample(&pBuffer, frames, m_audioFrame.data, frames, 1.0);
-      for (int i=0; i<m_planes; i++)
+      for (int i = 0; i < m_planes; i++)
       {
-        m_audioFrame.data[i] += frames*m_srcFormat.m_frameSize/m_planes;
+        m_audioFrame.data[i] += frames * m_srcFormat.m_frameSize / m_planes;
       }
     }
     else
@@ -392,19 +386,19 @@ int VideoPlayerCodec::ReadPCM(unsigned char *pBuffer, int size, int *actualsize)
   m_nDecodedLen = bytes;
   // scale decoded bytes to destination format
   if (m_needConvert)
-    m_nDecodedLen *= (m_bitsPerSample>>3) / (m_srcFormat.m_frameSize / m_channels);
+    m_nDecodedLen *= (m_bitsPerSample >> 3) / (m_srcFormat.m_frameSize / m_channels);
 
   *actualsize = (m_nDecodedLen <= size) ? m_nDecodedLen : size;
   if (*actualsize > 0)
   {
     if (m_needConvert)
     {
-      int samples = *actualsize / (m_bitsPerSample>>3);
+      int samples = *actualsize / (m_bitsPerSample >> 3);
       int frames = samples / m_channels;
       m_pResampler->Resample(&pBuffer, frames, m_audioFrame.data, frames, 1.0);
-      for (int i=0; i<m_planes; i++)
+      for (int i = 0; i < m_planes; i++)
       {
-        m_audioFrame.data[i] += frames*m_srcFormat.m_frameSize/m_planes;
+        m_audioFrame.data[i] += frames * m_srcFormat.m_frameSize / m_planes;
       }
     }
     else
@@ -418,7 +412,7 @@ int VideoPlayerCodec::ReadPCM(unsigned char *pBuffer, int size, int *actualsize)
   return READ_SUCCESS;
 }
 
-int VideoPlayerCodec::ReadRaw(uint8_t **pBuffer, int *bufferSize)
+int VideoPlayerCodec::ReadRaw(uint8_t** pBuffer, int* bufferSize)
 {
   DemuxPacket* pPacket;
 
@@ -478,20 +472,21 @@ bool VideoPlayerCodec::NeedConvert(AEDataFormat fmt)
   if (fmt == AE_FMT_RAW)
     return false;
 
-  switch(fmt)
+  switch (fmt)
   {
-    case AE_FMT_U8:
-    case AE_FMT_S16NE:
-    case AE_FMT_S32NE:
-    case AE_FMT_FLOAT:
-    case AE_FMT_DOUBLE:
-      return false;
-    default:
-      return true;
+  case AE_FMT_U8:
+  case AE_FMT_S16NE:
+  case AE_FMT_S32NE:
+  case AE_FMT_FLOAT:
+  case AE_FMT_DOUBLE:
+    return false;
+  default:
+    return true;
   }
 }
 
-CAEStreamInfo::DataType VideoPlayerCodec::GetPassthroughStreamType(AVCodecID codecId, int samplerate)
+CAEStreamInfo::DataType VideoPlayerCodec::GetPassthroughStreamType(AVCodecID codecId,
+                                                                   int samplerate)
 {
   AEAudioFormat format;
   format.m_dataFormat = AE_FMT_RAW;
@@ -499,28 +494,28 @@ CAEStreamInfo::DataType VideoPlayerCodec::GetPassthroughStreamType(AVCodecID cod
   format.m_streamInfo.m_type = CAEStreamInfo::DataType::STREAM_TYPE_NULL;
   switch (codecId)
   {
-    case AV_CODEC_ID_AC3:
-      format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_AC3;
-      format.m_streamInfo.m_sampleRate = samplerate;
-      break;
+  case AV_CODEC_ID_AC3:
+    format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_AC3;
+    format.m_streamInfo.m_sampleRate = samplerate;
+    break;
 
-    case AV_CODEC_ID_EAC3:
-      format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_EAC3;
-      format.m_streamInfo.m_sampleRate = samplerate;
-      break;
+  case AV_CODEC_ID_EAC3:
+    format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_EAC3;
+    format.m_streamInfo.m_sampleRate = samplerate;
+    break;
 
-    case AV_CODEC_ID_DTS:
-      format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_DTSHD;
-      format.m_streamInfo.m_sampleRate = samplerate;
-      break;
+  case AV_CODEC_ID_DTS:
+    format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_DTSHD;
+    format.m_streamInfo.m_sampleRate = samplerate;
+    break;
 
-    case AV_CODEC_ID_TRUEHD:
-      format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_TRUEHD;
-      format.m_streamInfo.m_sampleRate = samplerate;
-      break;
+  case AV_CODEC_ID_TRUEHD:
+    format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_TRUEHD;
+    format.m_streamInfo.m_sampleRate = samplerate;
+    break;
 
-    default:
-      format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_NULL;
+  default:
+    format.m_streamInfo.m_type = CAEStreamInfo::STREAM_TYPE_NULL;
   }
 
   bool supports = CServiceBroker::GetActiveAE()->SupportsRaw(format);

@@ -51,12 +51,14 @@ class CWinEventsWaylandThread : CThread
 
 public:
   CWinEventsWaylandThread(wayland::display_t& display)
-  : CThread("Wayland message pump"), m_display{display}
+    : CThread("Wayland message pump")
+    , m_display{display}
   {
     std::array<int, 2> fds;
     if (pipe(fds.data()) < 0)
     {
-      throw std::system_error(errno, std::generic_category(), "Error creating pipe for Wayland message pump cancellation");
+      throw std::system_error(errno, std::generic_category(),
+                              "Error creating pipe for Wayland message pump cancellation");
     }
     m_pipeRead.attach(fds[0]);
     m_pipeWrite.attach(fds[1]);
@@ -102,10 +104,7 @@ public:
     m_roundtripQueueEvent.Wait();
   }
 
-  wayland::display_t& GetDisplay()
-  {
-    return m_display;
-  }
+  wayland::display_t& GetDisplay() { return m_display; }
 
 private:
   void InterruptPoll()
@@ -152,16 +151,19 @@ private:
           }
           else
           {
-            throw std::system_error(errno, std::generic_category(), "Error polling on Wayland socket");
+            throw std::system_error(errno, std::generic_category(),
+                                    "Error polling on Wayland socket");
           }
         }
 
-        if (cancelPoll.revents & POLLERR || cancelPoll.revents & POLLHUP || cancelPoll.revents & POLLNVAL)
+        if (cancelPoll.revents & POLLERR || cancelPoll.revents & POLLHUP ||
+            cancelPoll.revents & POLLNVAL)
         {
           throw std::runtime_error("poll() signalled error condition on poll interruption socket");
         }
 
-        if (waylandPoll.revents & POLLERR || waylandPoll.revents & POLLHUP || waylandPoll.revents & POLLNVAL)
+        if (waylandPoll.revents & POLLERR || waylandPoll.revents & POLLHUP ||
+            waylandPoll.revents & POLLNVAL)
         {
           throw std::runtime_error("poll() signalled error condition on Wayland socket");
         }
@@ -207,7 +209,7 @@ private:
 
 std::unique_ptr<CWinEventsWaylandThread> g_WlMessagePump{nullptr};
 
-}
+} // namespace
 
 void CWinEventsWayland::SetDisplay(wayland::display_t* display)
 {

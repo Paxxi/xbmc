@@ -11,10 +11,10 @@
 extern "C"
 {
 
-struct AddonGlobalInterface;
+  struct AddonGlobalInterface;
 
-namespace ADDON
-{
+  namespace ADDON
+  {
 
   /*!
    * @brief Global gui Add-on to Kodi callback functions
@@ -43,11 +43,14 @@ namespace ADDON
     static void set_visible(void* kodiBase, void* handle, bool visible);
     static void set_enabled(void* kodiBase, void* handle, bool enabled);
 
-    static void set_text(void* kodiBase, void* handle, const char *text);
+    static void set_text(void* kodiBase, void* handle, const char* text);
     static void reset(void* kodiBase, void* handle);
     static void set_type(void* kodiBase, void* handle, int type);
 
-    static void add_string_label(void* kodiBase, void* handle, const char* label, const char* value);
+    static void add_string_label(void* kodiBase,
+                                 void* handle,
+                                 const char* label,
+                                 const char* value);
     static void add_int_label(void* kodiBase, void* handle, const char* label, int value);
 
     static void set_string_value(void* kodiBase, void* handle, const char* value);
@@ -64,5 +67,5 @@ namespace ADDON
     //@}
   };
 
-} /* namespace ADDON */
+  } /* namespace ADDON */
 } /* extern "C" */

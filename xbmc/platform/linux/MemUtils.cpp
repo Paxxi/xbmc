@@ -65,5 +65,5 @@ void GetMemoryStatus(MemoryStatus* buffer)
   buffer->availPhys = (free + cached + reclaimable + buffers) * 1024;
 }
 
-}
-}
+} // namespace MEMORY
+} // namespace KODI

@@ -15,10 +15,10 @@ class CApplication;
 class CAppInboundProtocol
 {
 public:
-  CAppInboundProtocol(CApplication &app);
-  bool OnEvent(XBMC_Event &event);
+  CAppInboundProtocol(CApplication& app);
+  bool OnEvent(XBMC_Event& event);
   void SetRenderGUI(bool renderGUI);
 
 protected:
-  CApplication &m_pApp;
+  CApplication& m_pApp;
 };

@@ -10,7 +10,8 @@
 
 CVideoLibraryProgressJob::CVideoLibraryProgressJob(CGUIDialogProgressBarHandle* progressBar)
   : CProgressJob(progressBar)
-{ }
+{
+}
 
 CVideoLibraryProgressJob::~CVideoLibraryProgressJob() = default;
 

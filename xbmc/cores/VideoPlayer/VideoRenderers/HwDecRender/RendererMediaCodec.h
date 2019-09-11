@@ -17,11 +17,11 @@ public:
   virtual ~CRendererMediaCodec();
 
   // Registration
-  static CBaseRenderer* Create(CVideoBuffer *buffer);
+  static CBaseRenderer* Create(CVideoBuffer* buffer);
   static bool Register();
 
   // Player functions
-  virtual void AddVideoPicture(const VideoPicture &picture, int index) override;
+  virtual void AddVideoPicture(const VideoPicture& picture, int index) override;
   virtual void ReleaseBuffer(int idx) override;
 
   // Feature support

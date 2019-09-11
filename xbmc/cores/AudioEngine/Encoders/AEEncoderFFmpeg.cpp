@@ -10,17 +10,19 @@
 #define DTS_ENCODE_BITRATE 1411200
 
 #include "cores/AudioEngine/Encoders/AEEncoderFFmpeg.h"
-#include "cores/AudioEngine/Utils/AEUtil.h"
+
 #include "ServiceBroker.h"
-#include "utils/log.h"
+#include "cores/AudioEngine/Utils/AEUtil.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include <string.h>
-#include <cassert>
+#include "utils/log.h"
 
-CAEEncoderFFmpeg::CAEEncoderFFmpeg():
-  m_CodecCtx      (NULL ),
-  m_SwrCtx        (NULL )
+#include <cassert>
+#include <string.h>
+
+CAEEncoderFFmpeg::CAEEncoderFFmpeg()
+  : m_CodecCtx(NULL)
+  , m_SwrCtx(NULL)
 {
 }
 
@@ -36,10 +38,8 @@ bool CAEEncoderFFmpeg::IsCompatible(const AEAudioFormat& format)
   if (!m_CodecCtx)
     return false;
 
-  bool match = (
-    format.m_dataFormat == m_CurrentFormat.m_dataFormat &&
-    format.m_sampleRate == m_CurrentFormat.m_sampleRate
-  );
+  bool match = (format.m_dataFormat == m_CurrentFormat.m_dataFormat &&
+                format.m_sampleRate == m_CurrentFormat.m_sampleRate);
 
   if (match)
   {
@@ -55,35 +55,54 @@ unsigned int CAEEncoderFFmpeg::BuildChannelLayout(const int64_t ffmap, CAEChanne
 {
   /* build the channel layout and count the channels */
   layout.Reset();
-  if (ffmap & AV_CH_FRONT_LEFT           ) layout += AE_CH_FL  ;
-  if (ffmap & AV_CH_FRONT_RIGHT          ) layout += AE_CH_FR  ;
-  if (ffmap & AV_CH_FRONT_CENTER         ) layout += AE_CH_FC  ;
-  if (ffmap & AV_CH_LOW_FREQUENCY        ) layout += AE_CH_LFE ;
-  if (ffmap & AV_CH_BACK_LEFT            ) layout += AE_CH_BL  ;
-  if (ffmap & AV_CH_BACK_RIGHT           ) layout += AE_CH_BR  ;
-  if (ffmap & AV_CH_FRONT_LEFT_OF_CENTER ) layout += AE_CH_FLOC;
-  if (ffmap & AV_CH_FRONT_RIGHT_OF_CENTER) layout += AE_CH_FROC;
-  if (ffmap & AV_CH_BACK_CENTER          ) layout += AE_CH_BC  ;
-  if (ffmap & AV_CH_SIDE_LEFT            ) layout += AE_CH_SL  ;
-  if (ffmap & AV_CH_SIDE_RIGHT           ) layout += AE_CH_SR  ;
-  if (ffmap & AV_CH_TOP_CENTER           ) layout += AE_CH_TC  ;
-  if (ffmap & AV_CH_TOP_FRONT_LEFT       ) layout += AE_CH_TFL ;
-  if (ffmap & AV_CH_TOP_FRONT_CENTER     ) layout += AE_CH_TFC ;
-  if (ffmap & AV_CH_TOP_FRONT_RIGHT      ) layout += AE_CH_TFR ;
-  if (ffmap & AV_CH_TOP_BACK_LEFT        ) layout += AE_CH_TBL ;
-  if (ffmap & AV_CH_TOP_BACK_CENTER      ) layout += AE_CH_TBC ;
-  if (ffmap & AV_CH_TOP_BACK_RIGHT       ) layout += AE_CH_TBR ;
+  if (ffmap & AV_CH_FRONT_LEFT)
+    layout += AE_CH_FL;
+  if (ffmap & AV_CH_FRONT_RIGHT)
+    layout += AE_CH_FR;
+  if (ffmap & AV_CH_FRONT_CENTER)
+    layout += AE_CH_FC;
+  if (ffmap & AV_CH_LOW_FREQUENCY)
+    layout += AE_CH_LFE;
+  if (ffmap & AV_CH_BACK_LEFT)
+    layout += AE_CH_BL;
+  if (ffmap & AV_CH_BACK_RIGHT)
+    layout += AE_CH_BR;
+  if (ffmap & AV_CH_FRONT_LEFT_OF_CENTER)
+    layout += AE_CH_FLOC;
+  if (ffmap & AV_CH_FRONT_RIGHT_OF_CENTER)
+    layout += AE_CH_FROC;
+  if (ffmap & AV_CH_BACK_CENTER)
+    layout += AE_CH_BC;
+  if (ffmap & AV_CH_SIDE_LEFT)
+    layout += AE_CH_SL;
+  if (ffmap & AV_CH_SIDE_RIGHT)
+    layout += AE_CH_SR;
+  if (ffmap & AV_CH_TOP_CENTER)
+    layout += AE_CH_TC;
+  if (ffmap & AV_CH_TOP_FRONT_LEFT)
+    layout += AE_CH_TFL;
+  if (ffmap & AV_CH_TOP_FRONT_CENTER)
+    layout += AE_CH_TFC;
+  if (ffmap & AV_CH_TOP_FRONT_RIGHT)
+    layout += AE_CH_TFR;
+  if (ffmap & AV_CH_TOP_BACK_LEFT)
+    layout += AE_CH_TBL;
+  if (ffmap & AV_CH_TOP_BACK_CENTER)
+    layout += AE_CH_TBC;
+  if (ffmap & AV_CH_TOP_BACK_RIGHT)
+    layout += AE_CH_TBR;
 
   return layout.Count();
 }
 
-bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input)
+bool CAEEncoderFFmpeg::Initialize(AEAudioFormat& format, bool allow_planar_input)
 {
   Reset();
 
-  bool ac3 = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_AUDIOOUTPUT_AC3PASSTHROUGH);
+  bool ac3 = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+      CSettings::SETTING_AUDIOOUTPUT_AC3PASSTHROUGH);
 
-  AVCodec *codec = NULL;
+  AVCodec* codec = NULL;
 
   /* fallback to ac3 if we support it, we might not have DTS support */
   if (!codec && ac3)
@@ -109,7 +128,7 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
   /* select a suitable data format */
   if (codec->sample_fmts)
   {
-    bool hasFloat  = false;
+    bool hasFloat = false;
     bool hasDouble = false;
     bool hasS32 = false;
     bool hasS16 = false;
@@ -117,23 +136,36 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
     bool hasFloatP = false;
     bool hasUnknownFormat = false;
 
-    for(int i = 0; codec->sample_fmts[i] != AV_SAMPLE_FMT_NONE; ++i)
+    for (int i = 0; codec->sample_fmts[i] != AV_SAMPLE_FMT_NONE; ++i)
     {
       switch (codec->sample_fmts[i])
       {
-        case AV_SAMPLE_FMT_FLT: hasFloat  = true; break;
-        case AV_SAMPLE_FMT_DBL: hasDouble = true; break;
-        case AV_SAMPLE_FMT_S32: hasS32    = true; break;
-        case AV_SAMPLE_FMT_S16: hasS16    = true; break;
-        case AV_SAMPLE_FMT_U8 : hasU8     = true; break;
-        case AV_SAMPLE_FMT_FLTP:
-          if (allow_planar_input)
-            hasFloatP  = true;
-          else
-            hasUnknownFormat = true;
-          break;
-        case AV_SAMPLE_FMT_NONE: return false;
-        default: hasUnknownFormat = true; break;
+      case AV_SAMPLE_FMT_FLT:
+        hasFloat = true;
+        break;
+      case AV_SAMPLE_FMT_DBL:
+        hasDouble = true;
+        break;
+      case AV_SAMPLE_FMT_S32:
+        hasS32 = true;
+        break;
+      case AV_SAMPLE_FMT_S16:
+        hasS16 = true;
+        break;
+      case AV_SAMPLE_FMT_U8:
+        hasU8 = true;
+        break;
+      case AV_SAMPLE_FMT_FLTP:
+        if (allow_planar_input)
+          hasFloatP = true;
+        else
+          hasUnknownFormat = true;
+        break;
+      case AV_SAMPLE_FMT_NONE:
+        return false;
+      default:
+        hasUnknownFormat = true;
+        break;
       }
     }
 
@@ -172,11 +204,15 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
       m_CodecCtx->sample_fmt = codec->sample_fmts[0];
       format.m_dataFormat = AE_FMT_FLOAT;
       m_NeedConversion = true;
-      CLog::Log(LOGNOTICE, "CAEEncoderFFmpeg::Initialize - Unknown audio format, it will be resampled.");
+      CLog::Log(LOGNOTICE,
+                "CAEEncoderFFmpeg::Initialize - Unknown audio format, it will be resampled.");
     }
     else
     {
-      CLog::Log(LOGERROR, "CAEEncoderFFmpeg::Initialize - Unable to find a suitable data format for the codec (%s)", m_CodecName.c_str());
+      CLog::Log(
+          LOGERROR,
+          "CAEEncoderFFmpeg::Initialize - Unable to find a suitable data format for the codec (%s)",
+          m_CodecName.c_str());
       avcodec_free_context(&m_CodecCtx);
       return false;
     }
@@ -197,15 +233,14 @@ bool CAEEncoderFFmpeg::Initialize(AEAudioFormat &format, bool allow_planar_input
 
   m_CurrentFormat = format;
   m_NeededFrames = format.m_frames;
-  m_OutputRatio   = (double)m_NeededFrames / m_OutputSize;
+  m_OutputRatio = (double)m_NeededFrames / m_OutputSize;
   m_SampleRateMul = 1.0 / (double)m_CodecCtx->sample_rate;
 
   if (m_NeedConversion)
   {
-    m_SwrCtx = swr_alloc_set_opts(NULL,
-                      m_CodecCtx->channel_layout, m_CodecCtx->sample_fmt, m_CodecCtx->sample_rate,
-                      m_CodecCtx->channel_layout, AV_SAMPLE_FMT_FLT, m_CodecCtx->sample_rate,
-                      0, NULL);
+    m_SwrCtx = swr_alloc_set_opts(NULL, m_CodecCtx->channel_layout, m_CodecCtx->sample_fmt,
+                                  m_CodecCtx->sample_rate, m_CodecCtx->channel_layout,
+                                  AV_SAMPLE_FMT_FLT, m_CodecCtx->sample_rate, 0, NULL);
     if (!m_SwrCtx || swr_init(m_SwrCtx) < 0)
     {
       CLog::Log(LOGERROR, "CAEEncoderFFmpeg::Initialize - Failed to initialise resampler.");
@@ -238,10 +273,10 @@ unsigned int CAEEncoderFFmpeg::GetFrames()
   return m_NeededFrames;
 }
 
-int CAEEncoderFFmpeg::Encode(uint8_t *in, int in_size, uint8_t *out, int out_size)
+int CAEEncoderFFmpeg::Encode(uint8_t* in, int in_size, uint8_t* out, int out_size)
 {
   int got_output;
-  AVFrame *frame;
+  AVFrame* frame;
 
   if (!m_CodecCtx)
     return 0;
@@ -258,8 +293,7 @@ int CAEEncoderFFmpeg::Encode(uint8_t *in, int in_size, uint8_t *out, int out_siz
   frame->format = m_CodecCtx->sample_fmt;
   frame->channel_layout = m_CodecCtx->channel_layout;
 
-  avcodec_fill_audio_frame(frame, m_CodecCtx->channels, m_CodecCtx->sample_fmt,
-                    in, in_size, 0);
+  avcodec_fill_audio_frame(frame, m_CodecCtx->channels, m_CodecCtx->sample_fmt, in, in_size, 0);
 
   /* initialize the output packet */
   av_init_packet(&m_Pkt);
@@ -288,7 +322,7 @@ int CAEEncoderFFmpeg::Encode(uint8_t *in, int in_size, uint8_t *out, int out_siz
 }
 
 
-int CAEEncoderFFmpeg::GetData(uint8_t **data)
+int CAEEncoderFFmpeg::GetData(uint8_t** data)
 {
   int size;
   *data = m_Buffer;
@@ -308,4 +342,3 @@ double CAEEncoderFFmpeg::GetDelay(unsigned int bufferSize)
 
   return ((double)frames + ((double)bufferSize * m_OutputRatio)) * m_SampleRateMul;
 }
-

@@ -21,20 +21,14 @@
 /* Controls the way the window appears and behaves. */
 enum WINDOW_STATE
 {
-  WINDOW_STATE_FULLSCREEN = 1,    // Exclusive fullscreen
+  WINDOW_STATE_FULLSCREEN = 1, // Exclusive fullscreen
   WINDOW_STATE_FULLSCREEN_WINDOW, // Non-exclusive fullscreen window
-  WINDOW_STATE_WINDOWED,          //Movable window with border
-  WINDOW_STATE_BORDERLESS         //Non-movable window with no border
+  WINDOW_STATE_WINDOWED, //Movable window with border
+  WINDOW_STATE_BORDERLESS //Non-movable window with no border
 };
 
-static const char* window_state_names[] =
-{
-  "unknown",
-  "true fullscreen",
-  "windowed fullscreen",
-  "windowed",
-  "borderless"
-};
+static const char* window_state_names[] = {"unknown", "true fullscreen", "windowed fullscreen",
+                                           "windowed", "borderless"};
 
 /* WINDOW_STATE restricted to fullscreen modes. */
 enum WINDOW_FULLSCREEN_STATE
@@ -53,11 +47,11 @@ enum WINDOW_WINDOW_STATE
 struct MONITOR_DETAILS
 {
   // Windows desktop info
-  int       ScreenWidth;
-  int       ScreenHeight;
-  float     RefreshRate;
-  int       Bpp;
-  bool      Interlaced;
+  int ScreenWidth;
+  int ScreenHeight;
+  float RefreshRate;
+  int Bpp;
+  bool Interlaced;
 };
 
 class CWinSystemWin10 : public CWinSystemBase
@@ -74,7 +68,10 @@ public:
   void UpdateResolutions() override;
   void NotifyAppFocusChange(bool bGaining) override;
   void ShowOSMouse(bool show) override;
-  bool HasInertialGestures() override { return true; }//if win32 has touchscreen - it uses the win32 gesture api for inertial scrolling
+  bool HasInertialGestures() override
+  {
+    return true;
+  } //if win32 has touchscreen - it uses the win32 gesture api for inertial scrolling
   bool Minimize() override;
   bool Restore() override;
   bool Hide() override;
@@ -83,7 +80,7 @@ public:
   bool UseLimitedColor() override;
 
   // videosync
-  std::unique_ptr<CVideoSync> GetVideoSync(void *clock) override;
+  std::unique_ptr<CVideoSync> GetVideoSync(void* clock) override;
 
   bool WindowedMode() const { return m_state != WINDOW_STATE_FULLSCREEN; }
   bool SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays) override;
@@ -110,8 +107,8 @@ protected:
   virtual bool IsStereoEnabled() = 0;
   virtual void AdjustWindow();
 
-  virtual void Register(IDispResource *resource);
-  virtual void Unregister(IDispResource *resource);
+  virtual void Register(IDispResource* resource);
+  virtual void Unregister(IDispResource* resource);
 
   bool ChangeResolution(const RESOLUTION_INFO& res, bool forceChange = false);
   const MONITOR_DETAILS* GetDefaultMonitor() const;
@@ -122,7 +119,7 @@ protected:
   \brief Adds a resolution to the list of resolutions if we don't already have it
   \param res resolution to add.
   */
-  static bool AddResolution(const RESOLUTION_INFO &res);
+  static bool AddResolution(const RESOLUTION_INFO& res);
 
   void OnDisplayLost();
   void OnDisplayReset();
@@ -138,9 +135,9 @@ protected:
   bool m_delayDispReset;
   XbmcThreads::EndTime m_dispResetTimer;
 
-  WINDOW_STATE m_state;                       // the state of the window
-  WINDOW_FULLSCREEN_STATE m_fullscreenState;  // the state of the window when in fullscreen
-  WINDOW_WINDOW_STATE m_windowState;          // the state of the window when in windowed
+  WINDOW_STATE m_state; // the state of the window
+  WINDOW_FULLSCREEN_STATE m_fullscreenState; // the state of the window when in fullscreen
+  WINDOW_WINDOW_STATE m_windowState; // the state of the window when in windowed
   bool m_inFocus;
   bool m_bMinimized;
   bool m_bFirstResChange = true;
@@ -149,4 +146,3 @@ protected:
 };
 
 #pragma pack(pop)
-

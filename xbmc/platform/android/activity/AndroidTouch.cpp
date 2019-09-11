@@ -13,9 +13,11 @@
 
 #include "platform/android/activity/XBMCApp.h"
 
-CAndroidTouch::CAndroidTouch() : m_dpi(160)
+CAndroidTouch::CAndroidTouch()
+  : m_dpi(160)
 {
-  CGenericTouchInputHandler::GetInstance().RegisterHandler(&CGenericTouchActionHandler::GetInstance());
+  CGenericTouchInputHandler::GetInstance().RegisterHandler(
+      &CGenericTouchActionHandler::GetInstance());
 }
 
 CAndroidTouch::~CAndroidTouch()
@@ -45,24 +47,24 @@ bool CAndroidTouch::onTouchEvent(AInputEvent* event)
   TouchInput touchEvent = TouchInputAbort;
   switch (touchAction)
   {
-    case AMOTION_EVENT_ACTION_DOWN:
-    case AMOTION_EVENT_ACTION_POINTER_DOWN:
-      touchEvent = TouchInputDown;
-      break;
+  case AMOTION_EVENT_ACTION_DOWN:
+  case AMOTION_EVENT_ACTION_POINTER_DOWN:
+    touchEvent = TouchInputDown;
+    break;
 
-    case AMOTION_EVENT_ACTION_UP:
-    case AMOTION_EVENT_ACTION_POINTER_UP:
-      touchEvent = TouchInputUp;
-      break;
+  case AMOTION_EVENT_ACTION_UP:
+  case AMOTION_EVENT_ACTION_POINTER_UP:
+    touchEvent = TouchInputUp;
+    break;
 
-    case AMOTION_EVENT_ACTION_MOVE:
-      touchEvent = TouchInputMove;
-      break;
+  case AMOTION_EVENT_ACTION_MOVE:
+    touchEvent = TouchInputMove;
+    break;
 
-    case AMOTION_EVENT_ACTION_OUTSIDE:
-    case AMOTION_EVENT_ACTION_CANCEL:
-    default:
-      break;
+  case AMOTION_EVENT_ACTION_OUTSIDE:
+  case AMOTION_EVENT_ACTION_CANCEL:
+  default:
+    break;
   }
 
   float x = AMotionEvent_getX(event, touchPointer);
@@ -71,11 +73,13 @@ bool CAndroidTouch::onTouchEvent(AInputEvent* event)
 
   // first update all touch pointers
   for (unsigned int pointer = 0; pointer < numPointers; pointer++)
-    CGenericTouchInputHandler::GetInstance().UpdateTouchPointer(pointer, AMotionEvent_getX(event, pointer), AMotionEvent_getY(event, pointer),
-    AMotionEvent_getEventTime(event));
+    CGenericTouchInputHandler::GetInstance().UpdateTouchPointer(
+        pointer, AMotionEvent_getX(event, pointer), AMotionEvent_getY(event, pointer),
+        AMotionEvent_getEventTime(event));
 
   // now send the event
-  return CGenericTouchInputHandler::GetInstance().HandleTouchInput(touchEvent, x, y, time, touchPointer);
+  return CGenericTouchInputHandler::GetInstance().HandleTouchInput(touchEvent, x, y, time,
+                                                                   touchPointer);
 }
 
 void CAndroidTouch::setDPI(uint32_t dpi)

@@ -25,11 +25,11 @@ class CGUIPassword : public ISettingCallback
 public:
   CGUIPassword(void);
   ~CGUIPassword(void) override;
-  bool IsItemUnlocked(CFileItem* pItem, const std::string &strType);
-  bool IsItemUnlocked(CMediaSource* pItem, const std::string &strType);
+  bool IsItemUnlocked(CFileItem* pItem, const std::string& strType);
+  bool IsItemUnlocked(CMediaSource* pItem, const std::string& strType);
   bool CheckLock(LockType btnType, const std::string& strPassword, int iHeading);
   bool CheckLock(LockType btnType, const std::string& strPassword, int iHeading, bool& bCanceled);
-  bool IsProfileLockUnlocked(int iProfile=-1);
+  bool IsProfileLockUnlocked(int iProfile = -1);
   bool IsProfileLockUnlocked(int iProfile, bool& bCanceled, bool prompt = true);
   bool IsMasterLockUnlocked(bool bPromptUser);
   bool IsMasterLockUnlocked(bool bPromptUser, bool& bCanceled);
@@ -44,7 +44,7 @@ public:
    */
   bool CheckSettingLevelLock(const SettingLevel& level, bool enforce = false);
   bool CheckMenuLock(int iWindowID);
-  bool SetMasterLockMode(bool bDetails=true);
+  bool SetMasterLockMode(bool bDetails = true);
   bool LockSource(const std::string& strType, const std::string& strName, bool bState);
   void LockSources(bool lock);
   void RemoveSourceLocks();
@@ -56,9 +56,9 @@ public:
   int iMasterLockRetriesLeft;
 
 private:
-  int VerifyPassword(LockType btnType, const std::string& strPassword, const std::string& strHeading);
+  int VerifyPassword(LockType btnType,
+                     const std::string& strPassword,
+                     const std::string& strHeading);
 };
 
 extern CGUIPassword g_passwordManager;
-
-

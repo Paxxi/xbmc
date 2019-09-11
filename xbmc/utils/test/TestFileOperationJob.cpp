@@ -16,7 +16,7 @@
 
 TEST(TestFileOperationJob, ActionCopy)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destfile;
   CFileItemList items;
   CFileOperationJob job;
@@ -50,7 +50,7 @@ TEST(TestFileOperationJob, ActionCopy)
 
 TEST(TestFileOperationJob, ActionMove)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destfile;
   CFileItemList items;
   CFileOperationJob job;
@@ -84,7 +84,7 @@ TEST(TestFileOperationJob, ActionMove)
 
 TEST(TestFileOperationJob, ActionDelete)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destfile;
   CFileItemList items;
   CFileOperationJob job;
@@ -134,7 +134,7 @@ TEST(TestFileOperationJob, ActionDelete)
 
 TEST(TestFileOperationJob, ActionReplace)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destfile;
   CFileItemList items;
   CFileOperationJob job;
@@ -174,7 +174,7 @@ TEST(TestFileOperationJob, ActionReplace)
 
 TEST(TestFileOperationJob, ActionCreateFolder)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destpath;
   CFileItemList items;
   CFileOperationJob job;
@@ -182,8 +182,7 @@ TEST(TestFileOperationJob, ActionCreateFolder)
   ASSERT_NE(nullptr, (tmpfile = XBMC_CREATETEMPFILE("")));
   tmpfilepath = XBMC_TEMPFILEPATH(tmpfile);
 
-  std::string tmpfiledirectory =
-    CXBMCTestUtils::Instance().TempFileDirectory(tmpfile);
+  std::string tmpfiledirectory = CXBMCTestUtils::Instance().TempFileDirectory(tmpfile);
 
   tmpfile->Close();
 
@@ -210,7 +209,7 @@ TEST(TestFileOperationJob, ActionCreateFolder)
 // This test will fail until ActionDeleteFolder has a proper implementation
 TEST(TestFileOperationJob, ActionDeleteFolder)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destpath;
   CFileItemList items;
   CFileOperationJob job;
@@ -218,8 +217,7 @@ TEST(TestFileOperationJob, ActionDeleteFolder)
   ASSERT_NE(nullptr, (tmpfile = XBMC_CREATETEMPFILE("")));
   tmpfilepath = XBMC_TEMPFILEPATH(tmpfile);
 
-  std::string tmpfiledirectory =
-    CXBMCTestUtils::Instance().TempFileDirectory(tmpfile);
+  std::string tmpfiledirectory = CXBMCTestUtils::Instance().TempFileDirectory(tmpfile);
 
   tmpfile->Close();
 
@@ -250,7 +248,7 @@ TEST(TestFileOperationJob, ActionDeleteFolder)
 
 TEST(TestFileOperationJob, GetFunctions)
 {
-  XFILE::CFile *tmpfile;
+  XFILE::CFile* tmpfile;
   std::string tmpfilepath, destfile;
   CFileItemList items;
   CFileOperationJob job;

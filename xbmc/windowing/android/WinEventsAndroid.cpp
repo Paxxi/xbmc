@@ -17,7 +17,8 @@
 #include "utils/log.h"
 
 #define ALMOST_ZERO 0.125f
-enum {
+enum
+{
   EVENT_STATE_TEST,
   EVENT_STATE_HOLD,
   EVENT_STATE_REPEAT
@@ -25,7 +26,7 @@ enum {
 
 /************************************************************************/
 /************************************************************************/
-static bool different_event(XBMC_Event &curEvent, XBMC_Event &newEvent)
+static bool different_event(XBMC_Event& curEvent, XBMC_Event& newEvent)
 {
   // different type
   if (curEvent.type != newEvent.type)
@@ -37,7 +38,7 @@ static bool different_event(XBMC_Event &curEvent, XBMC_Event &newEvent)
 /************************************************************************/
 /************************************************************************/
 CWinEventsAndroid::CWinEventsAndroid()
-: CThread("CWinEventsAndroid")
+  : CThread("CWinEventsAndroid")
 {
   CLog::Log(LOGDEBUG, "CWinEventsAndroid::CWinEventsAndroid");
   Create();
@@ -49,14 +50,14 @@ CWinEventsAndroid::~CWinEventsAndroid()
   StopThread(true);
 }
 
-void CWinEventsAndroid::MessagePush(XBMC_Event *newEvent)
+void CWinEventsAndroid::MessagePush(XBMC_Event* newEvent)
 {
   CSingleLock lock(m_eventsCond);
 
   m_events.push_back(*newEvent);
 }
 
-void CWinEventsAndroid::MessagePushRepeat(XBMC_Event *repeatEvent)
+void CWinEventsAndroid::MessagePushRepeat(XBMC_Event* repeatEvent)
 {
   CSingleLock lock(m_eventsCond);
 
@@ -127,62 +128,63 @@ void CWinEventsAndroid::Process()
 
     CSingleLock lock(m_lasteventCond);
 
-    switch(state)
+    switch (state)
     {
-      default:
-      case EVENT_STATE_TEST:
-        // non-active event, eat it
-        if (!m_lastevent.empty())
-          m_lastevent.pop();
-        break;
+    default:
+    case EVENT_STATE_TEST:
+      // non-active event, eat it
+      if (!m_lastevent.empty())
+        m_lastevent.pop();
+      break;
 
-      case EVENT_STATE_HOLD:
-        repeatDuration += timeout;
-        if (!m_lastevent.empty())
+    case EVENT_STATE_HOLD:
+      repeatDuration += timeout;
+      if (!m_lastevent.empty())
+      {
+        if (different_event(cur_event, m_lastevent.front()))
         {
-          if (different_event(cur_event, m_lastevent.front()))
-          {
-            // different event, cycle back to test
-            state = EVENT_STATE_TEST;
-            break;
-          }
-
-          // same event, eat it
-          m_lastevent.pop();
+          // different event, cycle back to test
+          state = EVENT_STATE_TEST;
+          break;
         }
 
-        if (repeatDuration >= holdTimeout)
-        {
-          CLog::Log(LOGDEBUG, "hold  ->repeat, size(%d), repeatDuration(%d)", m_lastevent.size(), repeatDuration);
-          state = EVENT_STATE_REPEAT;
-        }
-        break;
+        // same event, eat it
+        m_lastevent.pop();
+      }
 
-      case EVENT_STATE_REPEAT:
-        repeatDuration += timeout;
-        if (!m_lastevent.empty())
-        {
-          if (different_event(cur_event, m_lastevent.front()))
-          {
-            // different event, cycle back to test
-            state = EVENT_STATE_TEST;
-            break;
-          }
+      if (repeatDuration >= holdTimeout)
+      {
+        CLog::Log(LOGDEBUG, "hold  ->repeat, size(%d), repeatDuration(%d)", m_lastevent.size(),
+                  repeatDuration);
+        state = EVENT_STATE_REPEAT;
+      }
+      break;
 
-          // same event, eat it
-          m_lastevent.pop();
+    case EVENT_STATE_REPEAT:
+      repeatDuration += timeout;
+      if (!m_lastevent.empty())
+      {
+        if (different_event(cur_event, m_lastevent.front()))
+        {
+          // different event, cycle back to test
+          state = EVENT_STATE_TEST;
+          break;
         }
 
-        if (repeatDuration >= holdTimeout)
-        {
-          // this is a repeat, push it
-          MessagePushRepeat(&cur_event);
-          // assuming holdTimeout > repeatTimeout,
-          // just subtract the repeatTimeout
-          // to get the next cycle time
-          repeatDuration -= repeatTimeout;
-        }
-        break;
+        // same event, eat it
+        m_lastevent.pop();
+      }
+
+      if (repeatDuration >= holdTimeout)
+      {
+        // this is a repeat, push it
+        MessagePushRepeat(&cur_event);
+        // assuming holdTimeout > repeatTimeout,
+        // just subtract the repeatTimeout
+        // to get the next cycle time
+        repeatDuration -= repeatTimeout;
+      }
+      break;
     }
   }
 }

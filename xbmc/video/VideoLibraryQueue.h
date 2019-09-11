@@ -62,7 +62,9 @@ public:
    \param[in] asynchronous Run the clean job asynchronously. Defaults to true
    \param[in] progressBar Progress bar to update in GUI. Defaults to NULL (no progress bar to update)
    */
-  void CleanLibrary(const std::set<int>& paths = std::set<int>(), bool asynchronous = true, CGUIDialogProgressBarHandle* progressBar = NULL);
+  void CleanLibrary(const std::set<int>& paths = std::set<int>(),
+                    bool asynchronous = true,
+                    CGUIDialogProgressBarHandle* progressBar = NULL);
 
   /*!
   \brief Executes a library cleaning with a modal dialog.
@@ -80,7 +82,11 @@ public:
    \param[in] refreshAll Whether to refresh all sub-items (in case of a tvshow)
    \param[in] searchTitle Title to use for the search (instead of determining it from the item's filename/path)
    */
-  void RefreshItem(CFileItemPtr item, bool ignoreNfo = false, bool forceRefresh = true, bool refreshAll = false, const std::string& searchTitle = "");
+  void RefreshItem(CFileItemPtr item,
+                   bool ignoreNfo = false,
+                   bool forceRefresh = true,
+                   bool refreshAll = false,
+                   const std::string& searchTitle = "");
 
   /*!
    \brief Refreshes the details of the given item with a modal dialog.
@@ -98,7 +104,7 @@ public:
    \param[in] item Item to update watched status for
    \param[in] watched New watched status
    */
-  void MarkAsWatched(const CFileItemPtr &item, bool watched);
+  void MarkAsWatched(const CFileItemPtr& item, bool watched);
 
   /*!
    \brief Queue a reset resume point job.
@@ -112,14 +118,14 @@ public:
 
    \param[in] job Video library job to be queued.
    */
-  void AddJob(CVideoLibraryJob *job);
+  void AddJob(CVideoLibraryJob* job);
 
   /*!
    \brief Cancels the given job and removes it from the queue.
 
    \param[in] job Video library job to be canceled and removed from the queue.
    */
-  void CancelJob(CVideoLibraryJob *job);
+  void CancelJob(CVideoLibraryJob* job);
 
   /*!
    \brief Cancels all running and queued jobs.
@@ -133,7 +139,7 @@ public:
 
 protected:
   // implementation of IJobCallback
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
 
   /*!
    \brief Notifies all to refresh the current listings.

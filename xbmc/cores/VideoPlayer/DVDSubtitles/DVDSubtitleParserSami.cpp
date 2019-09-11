@@ -16,10 +16,10 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
-CDVDSubtitleParserSami::CDVDSubtitleParserSami(std::unique_ptr<CDVDSubtitleStream> && pStream, const std::string& filename)
-    : CDVDSubtitleParserText(std::move(pStream), filename)
+CDVDSubtitleParserSami::CDVDSubtitleParserSami(std::unique_ptr<CDVDSubtitleStream>&& pStream,
+                                               const std::string& filename)
+  : CDVDSubtitleParserText(std::move(pStream), filename)
 {
-
 }
 
 CDVDSubtitleParserSami::~CDVDSubtitleParserSami()
@@ -27,7 +27,7 @@ CDVDSubtitleParserSami::~CDVDSubtitleParserSami()
   Dispose();
 }
 
-bool CDVDSubtitleParserSami::Open(CDVDStreamInfo &hints)
+bool CDVDSubtitleParserSami::Open(CDVDStreamInfo& hints)
 {
   if (!CDVDSubtitleParserText::Open())
     return false;
@@ -58,7 +58,7 @@ bool CDVDSubtitleParserSami::Open(CDVDStreamInfo &hints)
       }
     }
   }
-  const char *lang = NULL;
+  const char* lang = NULL;
   if (!strClassID.empty())
     lang = strClassID.c_str();
 
@@ -73,26 +73,26 @@ bool CDVDSubtitleParserSami::Open(CDVDStreamInfo &hints)
     if (pos > -1)
     {
       std::string start = reg.GetMatch(1);
-      if(pOverlay)
+      if (pOverlay)
       {
         TagConv.ConvertLine(pOverlay, text, pos, lang);
-        pOverlay->iPTSStopTime  = (double)atoi(start.c_str()) * DVD_TIME_BASE / 1000;
+        pOverlay->iPTSStopTime = (double)atoi(start.c_str()) * DVD_TIME_BASE / 1000;
         pOverlay->Release();
         TagConv.CloseTag(pOverlay);
       }
 
       pOverlay = new CDVDOverlayText();
-      pOverlay->Acquire(); // increase ref count with one so that we can hold a handle to this overlay
+      pOverlay
+          ->Acquire(); // increase ref count with one so that we can hold a handle to this overlay
 
       pOverlay->iPTSStartTime = (double)atoi(start.c_str()) * DVD_TIME_BASE / 1000;
-      pOverlay->iPTSStopTime  = DVD_NOPTS_VALUE;
+      pOverlay->iPTSStopTime = DVD_NOPTS_VALUE;
       m_collection.Add(pOverlay);
       text += pos + reg.GetFindLen();
     }
-    if(pOverlay)
+    if (pOverlay)
       TagConv.ConvertLine(pOverlay, text, strlen(text), lang);
   }
   m_collection.Sort();
   return true;
 }
-

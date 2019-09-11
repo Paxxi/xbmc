@@ -15,5 +15,5 @@ class IActionListener
 public:
   virtual ~IActionListener() = default;
 
-  virtual bool OnAction(const CAction &action) = 0;
+  virtual bool OnAction(const CAction& action) = 0;
 };

@@ -44,12 +44,9 @@ TEST(TestDirectory, General)
 
 TEST(TestDirectory, CreateRecursive)
 {
-  auto path1 = URIUtils::AddFileToFolder(
-    CSpecialProtocol::TranslatePath("special://temp/"),
-    "level1");
-  auto path2 = URIUtils::AddFileToFolder(path1,
-    "level2",
-    "level3");
+  auto path1 =
+      URIUtils::AddFileToFolder(CSpecialProtocol::TranslatePath("special://temp/"), "level1");
+  auto path2 = URIUtils::AddFileToFolder(path1, "level2", "level3");
 
   EXPECT_TRUE(XFILE::CDirectory::Create(path2));
   EXPECT_TRUE(XFILE::CDirectory::RemoveRecursive(path1));

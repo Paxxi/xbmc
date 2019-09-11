@@ -78,7 +78,7 @@ ByteVector TagLibVFSStream::readBlock(TagLib::ulong length)
  * for a ByteVector.  And even this function is significantly slower than
  * doing output with a char[].
  */
-void TagLibVFSStream::writeBlock(const ByteVector &data)
+void TagLibVFSStream::writeBlock(const ByteVector& data)
 {
   m_file.Write(data.data(), data.size());
 }
@@ -90,7 +90,7 @@ void TagLibVFSStream::writeBlock(const ByteVector &data)
  * \note This method is slow since it requires rewriting all of the file
  * after the insertion point.
  */
-void TagLibVFSStream::insert(const ByteVector &data, TagLib::ulong start, TagLib::ulong replace)
+void TagLibVFSStream::insert(const ByteVector& data, TagLib::ulong start, TagLib::ulong replace)
 {
   if (data.size() == replace)
   {
@@ -191,19 +191,19 @@ void TagLibVFSStream::removeBlock(TagLib::ulong start, TagLib::ulong length)
 
   TagLib::ulong bytesRead = 1;
 
-  while(bytesRead != 0)
+  while (bytesRead != 0)
   {
     seek(readPosition);
     ssize_t read = m_file.Read(buffer.data(), bufferLength);
     if (read < 0)
-      return;// explicit error
+      return; // explicit error
 
     bytesRead = static_cast<TagLib::ulong>(read);
     readPosition += bytesRead;
 
     // Check to see if we just read the last block.  We need to call clear()
     // if we did so that the last write succeeds.
-    if(bytesRead < bufferLength)
+    if (bytesRead < bufferLength)
       clear();
 
     seek(writePosition);
@@ -271,17 +271,17 @@ void TagLibVFSStream::seek(long offset, Position p)
     }
   }
 
-  switch(p)
+  switch (p)
   {
-    case Beginning:
-      m_file.Seek(offset, SEEK_SET);
-      break;
-    case Current:
-      m_file.Seek(offset, SEEK_CUR);
-      break;
-    case End:
-      m_file.Seek(offset, SEEK_END);
-      break;
+  case Beginning:
+    m_file.Seek(offset, SEEK_SET);
+    break;
+  case Current:
+    m_file.Seek(offset, SEEK_CUR);
+    break;
+  case End:
+    m_file.Seek(offset, SEEK_END);
+    break;
   }
 }
 
@@ -298,7 +298,7 @@ void TagLibVFSStream::clear()
 long TagLibVFSStream::tell() const
 {
   int64_t pos = m_file.GetPosition();
-  if(pos > LONG_MAX)
+  if (pos > LONG_MAX)
     return -1;
   else
     return (long)pos;

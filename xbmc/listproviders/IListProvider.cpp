@@ -13,12 +13,12 @@
 #include "StaticProvider.h"
 #include "utils/XBMCTinyXML.h"
 
-IListProvider *IListProvider::Create(const TiXmlNode *node, int parentID)
+IListProvider* IListProvider::Create(const TiXmlNode* node, int parentID)
 {
-  const TiXmlNode *root = node->FirstChild("content");
+  const TiXmlNode* root = node->FirstChild("content");
   if (root)
   {
-    const TiXmlNode *next = root->NextSibling("content");
+    const TiXmlNode* next = root->NextSibling("content");
     if (next)
       return new CMultiProvider(root, parentID);
 
@@ -27,9 +27,9 @@ IListProvider *IListProvider::Create(const TiXmlNode *node, int parentID)
   return NULL;
 }
 
-IListProvider *IListProvider::CreateSingle(const TiXmlNode *content, int parentID)
+IListProvider* IListProvider::CreateSingle(const TiXmlNode* content, int parentID)
 {
-  const TiXmlElement *item = content->FirstChildElement("item");
+  const TiXmlElement* item = content->FirstChildElement("item");
   if (item)
     return new CStaticListProvider(content->ToElement(), parentID);
 

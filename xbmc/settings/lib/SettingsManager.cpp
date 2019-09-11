@@ -21,7 +21,9 @@
 const uint32_t CSettingsManager::Version = 2;
 const uint32_t CSettingsManager::MinimumSupportedVersion = 0;
 
-bool ParseSettingIdentifier(const std::string& settingId, std::string& categoryTag, std::string& settingTag)
+bool ParseSettingIdentifier(const std::string& settingId,
+                            std::string& categoryTag,
+                            std::string& settingTag)
 {
   static const std::string Separator = ".";
 
@@ -69,7 +71,7 @@ uint32_t CSettingsManager::ParseVersion(const TiXmlElement* root) const
   return version;
 }
 
-bool CSettingsManager::Initialize(const TiXmlElement *root)
+bool CSettingsManager::Initialize(const TiXmlElement* root)
 {
   CExclusiveLock lock(m_critical);
   CExclusiveLock settingsLock(m_settingsCritical);
@@ -78,7 +80,9 @@ bool CSettingsManager::Initialize(const TiXmlElement *root)
 
   if (!StringUtils::EqualsNoCase(root->ValueStr(), SETTING_XML_ROOT))
   {
-    CLog::Log(LOGERROR, "CSettingsManager: error reading settings definition: doesn't contain <settings> tag");
+    CLog::Log(
+        LOGERROR,
+        "CSettingsManager: error reading settings definition: doesn't contain <settings> tag");
     return false;
   }
 
@@ -87,14 +91,20 @@ bool CSettingsManager::Initialize(const TiXmlElement *root)
   if (version == 0)
     CLog::Log(LOGWARNING, "CSettingsManager: missing %s attribute", SETTING_XML_ROOT_VERSION);
 
-  if (MinimumSupportedVersion >= version+1)
+  if (MinimumSupportedVersion >= version + 1)
   {
-    CLog::Log(LOGERROR, "CSettingsManager: unable to read setting definitions from version %u (minimum version: %u)", version, MinimumSupportedVersion);
+    CLog::Log(LOGERROR,
+              "CSettingsManager: unable to read setting definitions from version %u (minimum "
+              "version: %u)",
+              version, MinimumSupportedVersion);
     return false;
   }
   if (version > Version)
   {
-    CLog::Log(LOGERROR, "CSettingsManager: unable to read setting definitions from version %u (current version: %u)", version, Version);
+    CLog::Log(LOGERROR,
+              "CSettingsManager: unable to read setting definitions from version %u (current "
+              "version: %u)",
+              version, Version);
     return false;
   }
 
@@ -126,7 +136,10 @@ bool CSettingsManager::Initialize(const TiXmlElement *root)
   return true;
 }
 
-bool CSettingsManager::Load(const TiXmlElement *root, bool &updated, bool triggerEvents /* = true */, std::map<std::string, SettingPtr> *loadedSettings /* = nullptr */)
+bool CSettingsManager::Load(const TiXmlElement* root,
+                            bool& updated,
+                            bool triggerEvents /* = true */,
+                            std::map<std::string, SettingPtr>* loadedSettings /* = nullptr */)
 {
   CSharedLock lock(m_critical);
   CExclusiveLock settingsLock(m_settingsCritical);
@@ -141,14 +154,20 @@ bool CSettingsManager::Load(const TiXmlElement *root, bool &updated, bool trigge
   if (version == 0)
     CLog::Log(LOGWARNING, "CSettingsManager: missing %s attribute", SETTING_XML_ROOT_VERSION);
 
-  if (MinimumSupportedVersion >= version+1)
+  if (MinimumSupportedVersion >= version + 1)
   {
-    CLog::Log(LOGERROR, "CSettingsManager: unable to read setting values from version %u (minimum version: %u)", version, MinimumSupportedVersion);
+    CLog::Log(
+        LOGERROR,
+        "CSettingsManager: unable to read setting values from version %u (minimum version: %u)",
+        version, MinimumSupportedVersion);
     return false;
   }
   if (version > Version)
   {
-    CLog::Log(LOGERROR, "CSettingsManager: unable to read setting values from version %u (current version: %u)", version, Version);
+    CLog::Log(
+        LOGERROR,
+        "CSettingsManager: unable to read setting values from version %u (current version: %u)",
+        version, Version);
     return false;
   }
 
@@ -166,7 +185,7 @@ bool CSettingsManager::Load(const TiXmlElement *root, bool &updated, bool trigge
   return ret;
 }
 
-bool CSettingsManager::Save(TiXmlNode *root) const
+bool CSettingsManager::Save(TiXmlNode* root) const
 {
   CSharedLock lock(m_critical);
   CSharedLock settingsLock(m_settingsCritical);
@@ -235,13 +254,15 @@ void CSettingsManager::Clear()
   m_initialized = false;
 }
 
-bool CSettingsManager::LoadSetting(const TiXmlNode *node, const std::string &settingId)
+bool CSettingsManager::LoadSetting(const TiXmlNode* node, const std::string& settingId)
 {
   bool updated = false;
   return LoadSetting(node, settingId, updated);
 }
 
-bool CSettingsManager::LoadSetting(const TiXmlNode *node, const std::string &settingId, bool &updated)
+bool CSettingsManager::LoadSetting(const TiXmlNode* node,
+                                   const std::string& settingId,
+                                   bool& updated)
 {
   updated = false;
 
@@ -317,8 +338,10 @@ void CSettingsManager::AddSection(SettingSectionPtr section)
   }
 }
 
-bool CSettingsManager::AddSetting(std::shared_ptr<CSetting> setting, std::shared_ptr<CSettingSection> section,
-  std::shared_ptr<CSettingCategory> category, std::shared_ptr<CSettingGroup> group)
+bool CSettingsManager::AddSetting(std::shared_ptr<CSetting> setting,
+                                  std::shared_ptr<CSettingSection> section,
+                                  std::shared_ptr<CSettingCategory> category,
+                                  std::shared_ptr<CSettingGroup> group)
 {
   if (setting == nullptr || section == nullptr || category == nullptr || group == nullptr)
     return false;
@@ -371,7 +394,8 @@ bool CSettingsManager::AddSetting(std::shared_ptr<CSetting> setting, std::shared
   return true;
 }
 
-void CSettingsManager::RegisterCallback(ISettingCallback *callback, const std::set<std::string> &settingList)
+void CSettingsManager::RegisterCallback(ISettingCallback* callback,
+                                        const std::set<std::string>& settingList)
 {
   CExclusiveLock lock(m_settingsCritical);
   if (callback == nullptr)
@@ -385,7 +409,7 @@ void CSettingsManager::RegisterCallback(ISettingCallback *callback, const std::s
       if (m_initialized)
         continue;
 
-      Setting tmpSetting = { nullptr };
+      Setting tmpSetting = {nullptr};
       std::pair<SettingMap::iterator, bool> tmpIt = InsertSetting(setting, tmpSetting);
       itSetting = tmpIt.first;
     }
@@ -394,14 +418,15 @@ void CSettingsManager::RegisterCallback(ISettingCallback *callback, const std::s
   }
 }
 
-void CSettingsManager::UnregisterCallback(ISettingCallback *callback)
+void CSettingsManager::UnregisterCallback(ISettingCallback* callback)
 {
   CExclusiveLock lock(m_settingsCritical);
   for (auto& setting : m_settings)
     setting.second.callbacks.erase(callback);
 }
 
-void CSettingsManager::RegisterSettingType(const std::string &settingType, ISettingCreator *settingCreator)
+void CSettingsManager::RegisterSettingType(const std::string& settingType,
+                                           ISettingCreator* settingCreator)
 {
   CExclusiveLock lock(m_critical);
   if (settingType.empty() || settingCreator == nullptr)
@@ -412,7 +437,8 @@ void CSettingsManager::RegisterSettingType(const std::string &settingType, ISett
     m_settingCreators.insert(std::make_pair(settingType, settingCreator));
 }
 
-void CSettingsManager::RegisterSettingControl(const std::string &controlType, ISettingControlCreator *settingControlCreator)
+void CSettingsManager::RegisterSettingControl(const std::string& controlType,
+                                              ISettingControlCreator* settingControlCreator)
 {
   if (controlType.empty() || settingControlCreator == nullptr)
     return;
@@ -423,13 +449,15 @@ void CSettingsManager::RegisterSettingControl(const std::string &controlType, IS
     m_settingControlCreators.insert(std::make_pair(controlType, settingControlCreator));
 }
 
-void CSettingsManager::RegisterSettingsHandler(ISettingsHandler *settingsHandler, bool bFront /* = false */)
+void CSettingsManager::RegisterSettingsHandler(ISettingsHandler* settingsHandler,
+                                               bool bFront /* = false */)
 {
   if (settingsHandler == nullptr)
     return;
 
   CExclusiveLock lock(m_critical);
-  if (find(m_settingsHandlers.begin(), m_settingsHandlers.end(), settingsHandler) == m_settingsHandlers.end())
+  if (find(m_settingsHandlers.begin(), m_settingsHandlers.end(), settingsHandler) ==
+      m_settingsHandlers.end())
   {
     if (bFront)
       m_settingsHandlers.insert(m_settingsHandlers.begin(), settingsHandler);
@@ -438,7 +466,7 @@ void CSettingsManager::RegisterSettingsHandler(ISettingsHandler *settingsHandler
   }
 }
 
-void CSettingsManager::UnregisterSettingsHandler(ISettingsHandler *settingsHandler)
+void CSettingsManager::UnregisterSettingsHandler(ISettingsHandler* settingsHandler)
 {
   if (settingsHandler == nullptr)
     return;
@@ -449,7 +477,7 @@ void CSettingsManager::UnregisterSettingsHandler(ISettingsHandler *settingsHandl
     m_settingsHandlers.erase(it);
 }
 
-void CSettingsManager::RegisterSubSettings(ISubSettings *subSettings)
+void CSettingsManager::RegisterSubSettings(ISubSettings* subSettings)
 {
   CExclusiveLock lock(m_critical);
   if (subSettings == nullptr)
@@ -458,7 +486,7 @@ void CSettingsManager::RegisterSubSettings(ISubSettings *subSettings)
   m_subSettings.insert(subSettings);
 }
 
-void CSettingsManager::UnregisterSubSettings(ISubSettings *subSettings)
+void CSettingsManager::UnregisterSubSettings(ISubSettings* subSettings)
 {
   CExclusiveLock lock(m_critical);
   if (subSettings == nullptr)
@@ -467,23 +495,27 @@ void CSettingsManager::UnregisterSubSettings(ISubSettings *subSettings)
   m_subSettings.erase(subSettings);
 }
 
-void CSettingsManager::RegisterSettingOptionsFiller(const std::string &identifier, IntegerSettingOptionsFiller optionsFiller)
+void CSettingsManager::RegisterSettingOptionsFiller(const std::string& identifier,
+                                                    IntegerSettingOptionsFiller optionsFiller)
 {
   if (identifier.empty() || optionsFiller == nullptr)
     return;
 
-  RegisterSettingOptionsFiller(identifier, reinterpret_cast<void*>(optionsFiller), SettingOptionsFillerType::Integer);
+  RegisterSettingOptionsFiller(identifier, reinterpret_cast<void*>(optionsFiller),
+                               SettingOptionsFillerType::Integer);
 }
 
-void CSettingsManager::RegisterSettingOptionsFiller(const std::string &identifier, StringSettingOptionsFiller optionsFiller)
+void CSettingsManager::RegisterSettingOptionsFiller(const std::string& identifier,
+                                                    StringSettingOptionsFiller optionsFiller)
 {
   if (identifier.empty() || optionsFiller == nullptr)
     return;
 
-  RegisterSettingOptionsFiller(identifier, reinterpret_cast<void*>(optionsFiller), SettingOptionsFillerType::String);
+  RegisterSettingOptionsFiller(identifier, reinterpret_cast<void*>(optionsFiller),
+                               SettingOptionsFillerType::String);
 }
 
-void CSettingsManager::UnregisterSettingOptionsFiller(const std::string &identifier)
+void CSettingsManager::UnregisterSettingOptionsFiller(const std::string& identifier)
 {
   CExclusiveLock lock(m_critical);
   m_optionsFillers.erase(identifier);
@@ -516,30 +548,30 @@ void* CSettingsManager::GetSettingOptionsFiller(SettingConstPtr setting)
   // make sure the option filler's type matches the setting's type
   switch (fillerIt->second.type)
   {
-    case SettingOptionsFillerType::Integer:
-    {
-      if (setting->GetType() != SettingType::Integer)
-        return nullptr;
-
-      break;
-    }
-
-    case SettingOptionsFillerType::String:
-    {
-      if (setting->GetType() != SettingType::String)
-        return nullptr;
-
-      break;
-    }
-
-    default:
+  case SettingOptionsFillerType::Integer:
+  {
+    if (setting->GetType() != SettingType::Integer)
       return nullptr;
+
+    break;
+  }
+
+  case SettingOptionsFillerType::String:
+  {
+    if (setting->GetType() != SettingType::String)
+      return nullptr;
+
+    break;
+  }
+
+  default:
+    return nullptr;
   }
 
   return fillerIt->second.filler;
 }
 
-SettingPtr CSettingsManager::GetSetting(const std::string &id) const
+SettingPtr CSettingsManager::GetSetting(const std::string& id) const
 {
   CSharedLock lock(m_settingsCritical);
   if (id.empty())
@@ -575,11 +607,12 @@ SettingSectionPtr CSettingsManager::GetSection(std::string section) const
   if (sectionIt != m_sections.end())
     return sectionIt->second;
 
-  CLog::Log(LOGDEBUG, "CSettingsManager: requested setting section (%s) was not found.", section.c_str());
+  CLog::Log(LOGDEBUG, "CSettingsManager: requested setting section (%s) was not found.",
+            section.c_str());
   return nullptr;
 }
 
-SettingDependencyMap CSettingsManager::GetDependencies(const std::string &id) const
+SettingDependencyMap CSettingsManager::GetDependencies(const std::string& id) const
 {
   CSharedLock lock(m_settingsCritical);
   auto setting = FindSetting(id);
@@ -597,7 +630,7 @@ SettingDependencyMap CSettingsManager::GetDependencies(SettingConstPtr setting) 
   return GetDependencies(setting->GetId());
 }
 
-bool CSettingsManager::GetBool(const std::string &id) const
+bool CSettingsManager::GetBool(const std::string& id) const
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -607,7 +640,7 @@ bool CSettingsManager::GetBool(const std::string &id) const
   return std::static_pointer_cast<CSettingBool>(setting)->GetValue();
 }
 
-bool CSettingsManager::SetBool(const std::string &id, bool value)
+bool CSettingsManager::SetBool(const std::string& id, bool value)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -617,7 +650,7 @@ bool CSettingsManager::SetBool(const std::string &id, bool value)
   return std::static_pointer_cast<CSettingBool>(setting)->SetValue(value);
 }
 
-bool CSettingsManager::ToggleBool(const std::string &id)
+bool CSettingsManager::ToggleBool(const std::string& id)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -627,7 +660,7 @@ bool CSettingsManager::ToggleBool(const std::string &id)
   return SetBool(id, !std::static_pointer_cast<CSettingBool>(setting)->GetValue());
 }
 
-int CSettingsManager::GetInt(const std::string &id) const
+int CSettingsManager::GetInt(const std::string& id) const
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -637,7 +670,7 @@ int CSettingsManager::GetInt(const std::string &id) const
   return std::static_pointer_cast<CSettingInt>(setting)->GetValue();
 }
 
-bool CSettingsManager::SetInt(const std::string &id, int value)
+bool CSettingsManager::SetInt(const std::string& id, int value)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -647,7 +680,7 @@ bool CSettingsManager::SetInt(const std::string &id, int value)
   return std::static_pointer_cast<CSettingInt>(setting)->SetValue(value);
 }
 
-double CSettingsManager::GetNumber(const std::string &id) const
+double CSettingsManager::GetNumber(const std::string& id) const
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -657,7 +690,7 @@ double CSettingsManager::GetNumber(const std::string &id) const
   return std::static_pointer_cast<CSettingNumber>(setting)->GetValue();
 }
 
-bool CSettingsManager::SetNumber(const std::string &id, double value)
+bool CSettingsManager::SetNumber(const std::string& id, double value)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -667,7 +700,7 @@ bool CSettingsManager::SetNumber(const std::string &id, double value)
   return std::static_pointer_cast<CSettingNumber>(setting)->SetValue(value);
 }
 
-std::string CSettingsManager::GetString(const std::string &id) const
+std::string CSettingsManager::GetString(const std::string& id) const
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -677,7 +710,7 @@ std::string CSettingsManager::GetString(const std::string &id) const
   return std::static_pointer_cast<CSettingString>(setting)->GetValue();
 }
 
-bool CSettingsManager::SetString(const std::string &id, const std::string &value)
+bool CSettingsManager::SetString(const std::string& id, const std::string& value)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -687,17 +720,18 @@ bool CSettingsManager::SetString(const std::string &id, const std::string &value
   return std::static_pointer_cast<CSettingString>(setting)->SetValue(value);
 }
 
-std::vector< std::shared_ptr<CSetting> > CSettingsManager::GetList(const std::string &id) const
+std::vector<std::shared_ptr<CSetting>> CSettingsManager::GetList(const std::string& id) const
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
   if (setting == nullptr || setting->GetType() != SettingType::List)
-    return std::vector< std::shared_ptr<CSetting> >();
+    return std::vector<std::shared_ptr<CSetting>>();
 
   return std::static_pointer_cast<CSettingList>(setting)->GetValue();
 }
 
-bool CSettingsManager::SetList(const std::string &id, const std::vector< std::shared_ptr<CSetting> > &value)
+bool CSettingsManager::SetList(const std::string& id,
+                               const std::vector<std::shared_ptr<CSetting>>& value)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -707,7 +741,7 @@ bool CSettingsManager::SetList(const std::string &id, const std::vector< std::sh
   return std::static_pointer_cast<CSettingList>(setting)->SetValue(value);
 }
 
-bool CSettingsManager::FindIntInList(const std::string &id, int value) const
+bool CSettingsManager::FindIntInList(const std::string& id, int value) const
 {
   CSharedLock lock(m_settingsCritical);
   std::shared_ptr<CSettingList> setting(std::dynamic_pointer_cast<CSettingList>(GetSetting(id)));
@@ -715,7 +749,7 @@ bool CSettingsManager::FindIntInList(const std::string &id, int value) const
   return setting && setting->FindIntInList(value);
 }
 
-bool CSettingsManager::SetDefault(const std::string &id)
+bool CSettingsManager::SetDefault(const std::string& id)
 {
   CSharedLock lock(m_settingsCritical);
   SettingPtr setting = GetSetting(id);
@@ -733,7 +767,7 @@ void CSettingsManager::SetDefaults()
     setting.second.setting->Reset();
 }
 
-void CSettingsManager::AddCondition(const std::string &condition)
+void CSettingsManager::AddCondition(const std::string& condition)
 {
   CExclusiveLock lock(m_critical);
   if (condition.empty())
@@ -742,7 +776,9 @@ void CSettingsManager::AddCondition(const std::string &condition)
   m_conditions.AddCondition(condition);
 }
 
-void CSettingsManager::AddDynamicCondition(const std::string &identifier, SettingConditionCheck condition, void *data /*= nullptr*/)
+void CSettingsManager::AddDynamicCondition(const std::string& identifier,
+                                           SettingConditionCheck condition,
+                                           void* data /*= nullptr*/)
 {
   CExclusiveLock lock(m_critical);
   if (identifier.empty() || condition == nullptr)
@@ -751,7 +787,7 @@ void CSettingsManager::AddDynamicCondition(const std::string &identifier, Settin
   m_conditions.AddDynamicCondition(identifier, condition, data);
 }
 
-void CSettingsManager::RemoveDynamicCondition(const std::string &identifier)
+void CSettingsManager::RemoveDynamicCondition(const std::string& identifier)
 {
   CExclusiveLock lock(m_critical);
   if (identifier.empty())
@@ -760,7 +796,7 @@ void CSettingsManager::RemoveDynamicCondition(const std::string &identifier)
   m_conditions.RemoveDynamicCondition(identifier);
 }
 
-bool CSettingsManager::Serialize(TiXmlNode *parent) const
+bool CSettingsManager::Serialize(TiXmlNode* parent) const
 {
   if (parent == nullptr)
     return false;
@@ -785,7 +821,8 @@ bool CSettingsManager::Serialize(TiXmlNode *parent) const
 
     if (parent->InsertEndChild(settingElement) == nullptr)
     {
-      CLog::Log(LOGWARNING, "CSetting: unable to write <" SETTING_XML_ELM_SETTING " id=\"%s\"> tag", setting.second.setting->GetId().c_str());
+      CLog::Log(LOGWARNING, "CSetting: unable to write <" SETTING_XML_ELM_SETTING " id=\"%s\"> tag",
+                setting.second.setting->GetId().c_str());
       continue;
     }
   }
@@ -793,7 +830,10 @@ bool CSettingsManager::Serialize(TiXmlNode *parent) const
   return true;
 }
 
-bool CSettingsManager::Deserialize(const TiXmlNode *node, bool &updated, std::map<std::string, SettingPtr> *loadedSettings /* = nullptr */)
+bool CSettingsManager::Deserialize(
+    const TiXmlNode* node,
+    bool& updated,
+    std::map<std::string, SettingPtr>* loadedSettings /* = nullptr */)
 {
   updated = false;
 
@@ -888,7 +928,9 @@ void CSettingsManager::OnSettingAction(std::shared_ptr<const CSetting> setting)
     callback->OnSettingAction(setting);
 }
 
-bool CSettingsManager::OnSettingUpdate(SettingPtr setting, const char *oldSettingId, const TiXmlNode *oldSettingNode)
+bool CSettingsManager::OnSettingUpdate(SettingPtr setting,
+                                       const char* oldSettingId,
+                                       const TiXmlNode* oldSettingNode)
 {
   CSharedLock lock(m_settingsCritical);
   if (setting == nullptr)
@@ -909,7 +951,8 @@ bool CSettingsManager::OnSettingUpdate(SettingPtr setting, const char *oldSettin
   return ret;
 }
 
-void CSettingsManager::OnSettingPropertyChanged(std::shared_ptr<const CSetting> setting, const char *propertyName)
+void CSettingsManager::OnSettingPropertyChanged(std::shared_ptr<const CSetting> setting,
+                                                const char* propertyName)
 {
   CSharedLock lock(m_settingsCritical);
   if (!m_loaded || setting == nullptr)
@@ -941,7 +984,9 @@ void CSettingsManager::OnSettingPropertyChanged(std::shared_ptr<const CSetting> 
   }
 }
 
-SettingPtr CSettingsManager::CreateSetting(const std::string &settingType, const std::string &settingId, CSettingsManager *settingsManager /* = nullptr */) const
+SettingPtr CSettingsManager::CreateSetting(const std::string& settingType,
+                                           const std::string& settingId,
+                                           CSettingsManager* settingsManager /* = nullptr */) const
 {
   if (StringUtils::EqualsNoCase(settingType, "boolean"))
     return std::make_shared<CSettingBool>(settingId, const_cast<CSettingsManager*>(this));
@@ -955,25 +1000,28 @@ SettingPtr CSettingsManager::CreateSetting(const std::string &settingType, const
     return std::make_shared<CSettingAction>(settingId, const_cast<CSettingsManager*>(this));
   else if (StringUtils::EqualsNoCase(settingType, "reference"))
     return std::make_shared<CSettingReference>(settingId, const_cast<CSettingsManager*>(this));
-  else if (settingType.size() > 6 &&
-           StringUtils::StartsWith(settingType, "list[") &&
+  else if (settingType.size() > 6 && StringUtils::StartsWith(settingType, "list[") &&
            StringUtils::EndsWith(settingType, "]"))
   {
     std::string elementType = StringUtils::Mid(settingType, 5, settingType.size() - 6);
-    SettingPtr elementSetting = CreateSetting(elementType, settingId + ".definition", const_cast<CSettingsManager*>(this));
+    SettingPtr elementSetting =
+        CreateSetting(elementType, settingId + ".definition", const_cast<CSettingsManager*>(this));
     if (elementSetting != nullptr)
-      return std::make_shared<CSettingList>(settingId, elementSetting, const_cast<CSettingsManager*>(this));
+      return std::make_shared<CSettingList>(settingId, elementSetting,
+                                            const_cast<CSettingsManager*>(this));
   }
 
   CSharedLock lock(m_critical);
   auto creator = m_settingCreators.find(settingType);
   if (creator != m_settingCreators.end())
-    return creator->second->CreateSetting(settingType, settingId, const_cast<CSettingsManager*>(this));
+    return creator->second->CreateSetting(settingType, settingId,
+                                          const_cast<CSettingsManager*>(this));
 
   return nullptr;
 }
 
-std::shared_ptr<ISettingControl> CSettingsManager::CreateControl(const std::string &controlType) const
+std::shared_ptr<ISettingControl> CSettingsManager::CreateControl(
+    const std::string& controlType) const
 {
   if (controlType.empty())
     return nullptr;
@@ -1038,7 +1086,7 @@ void CSettingsManager::OnSettingsCleared()
     settingsHandler->OnSettingsCleared();
 }
 
-bool CSettingsManager::Load(const TiXmlNode *settings)
+bool CSettingsManager::Load(const TiXmlNode* settings)
 {
   bool ok = true;
   CSharedLock lock(m_critical);
@@ -1048,7 +1096,7 @@ bool CSettingsManager::Load(const TiXmlNode *settings)
   return ok;
 }
 
-bool CSettingsManager::LoadSetting(const TiXmlNode *node, SettingPtr setting, bool &updated)
+bool CSettingsManager::LoadSetting(const TiXmlNode* node, SettingPtr setting, bool& updated)
 {
   updated = false;
 
@@ -1092,11 +1140,15 @@ bool CSettingsManager::LoadSetting(const TiXmlNode *node, SettingPtr setting, bo
 
   // check if the default="true" attribute is set for the value
   auto isDefaultAttribute = settingElement->Attribute(SETTING_XML_ELM_DEFAULT);
-  bool isDefault = isDefaultAttribute != nullptr && StringUtils::EqualsNoCase(isDefaultAttribute, "true");
+  bool isDefault =
+      isDefaultAttribute != nullptr && StringUtils::EqualsNoCase(isDefaultAttribute, "true");
 
-  if (!setting->FromString(settingElement->FirstChild() != nullptr ? settingElement->FirstChild()->ValueStr() : StringUtils::Empty))
+  if (!setting->FromString(settingElement->FirstChild() != nullptr
+                               ? settingElement->FirstChild()->ValueStr()
+                               : StringUtils::Empty))
   {
-    CLog::Log(LOGWARNING, "CSettingsManager: unable to read value of setting \"%s\"", settingId.c_str());
+    CLog::Log(LOGWARNING, "CSettingsManager: unable to read value of setting \"%s\"",
+              settingId.c_str());
     return false;
   }
 
@@ -1113,14 +1165,16 @@ bool CSettingsManager::LoadSetting(const TiXmlNode *node, SettingPtr setting, bo
   return true;
 }
 
-bool CSettingsManager::UpdateSetting(const TiXmlNode *node, SettingPtr setting, const CSettingUpdate& update)
+bool CSettingsManager::UpdateSetting(const TiXmlNode* node,
+                                     SettingPtr setting,
+                                     const CSettingUpdate& update)
 {
   if (node == nullptr || setting == nullptr || update.GetType() == SettingUpdateType::Unknown)
     return false;
 
   bool updated = false;
-  const char *oldSetting = nullptr;
-  const TiXmlNode *oldSettingNode = nullptr;
+  const char* oldSetting = nullptr;
+  const TiXmlNode* oldSettingNode = nullptr;
   if (update.GetType() == SettingUpdateType::Rename)
   {
     if (update.GetValue().empty())
@@ -1143,22 +1197,28 @@ bool CSettingsManager::UpdateSetting(const TiXmlNode *node, SettingPtr setting, 
     if (oldSettingNode == nullptr)
       return false;
 
-    if (setting->FromString(oldSettingNode->FirstChild() != nullptr ? oldSettingNode->FirstChild()->ValueStr() : StringUtils::Empty))
+    if (setting->FromString(oldSettingNode->FirstChild() != nullptr
+                                ? oldSettingNode->FirstChild()->ValueStr()
+                                : StringUtils::Empty))
       updated = true;
     else
-      CLog::Log(LOGWARNING, "CSetting: unable to update \"%s\" through automatically renaming from \"%s\"", setting->GetId().c_str(), oldSetting);
+      CLog::Log(LOGWARNING,
+                "CSetting: unable to update \"%s\" through automatically renaming from \"%s\"",
+                setting->GetId().c_str(), oldSetting);
   }
 
   updated |= OnSettingUpdate(setting, oldSetting, oldSettingNode);
   return updated;
 }
 
-void CSettingsManager::UpdateSettingByDependency(const std::string &settingId, const CSettingDependency &dependency)
+void CSettingsManager::UpdateSettingByDependency(const std::string& settingId,
+                                                 const CSettingDependency& dependency)
 {
   UpdateSettingByDependency(settingId, dependency.GetType());
 }
 
-void CSettingsManager::UpdateSettingByDependency(const std::string &settingId, SettingDependencyType dependencyType)
+void CSettingsManager::UpdateSettingByDependency(const std::string& settingId,
+                                                 SettingDependencyType dependencyType)
 {
   SettingPtr setting = GetSetting(settingId);
   if (setting == nullptr)
@@ -1166,41 +1226,41 @@ void CSettingsManager::UpdateSettingByDependency(const std::string &settingId, S
 
   switch (dependencyType)
   {
-    case SettingDependencyType::Enable:
-      // just trigger the property changed callback and a call to
-      // CSetting::IsEnabled() will automatically determine the new
-      // enabled state
-      OnSettingPropertyChanged(setting, "enabled");
-      break;
+  case SettingDependencyType::Enable:
+    // just trigger the property changed callback and a call to
+    // CSetting::IsEnabled() will automatically determine the new
+    // enabled state
+    OnSettingPropertyChanged(setting, "enabled");
+    break;
 
-    case SettingDependencyType::Update:
+  case SettingDependencyType::Update:
+  {
+    SettingType type = setting->GetType();
+    if (type == SettingType::Integer)
     {
-      SettingType type = setting->GetType();
-      if (type == SettingType::Integer)
-      {
-        auto settingInt = std::static_pointer_cast<CSettingInt>(setting);
-        if (settingInt->GetOptionsType() == SettingOptionsType::Dynamic)
-          settingInt->UpdateDynamicOptions();
-      }
-      else if (type == SettingType::String)
-      {
-        auto settingString = std::static_pointer_cast<CSettingString>(setting);
-        if (settingString->GetOptionsType() == SettingOptionsType::Dynamic)
-          settingString->UpdateDynamicOptions();
-      }
-      break;
+      auto settingInt = std::static_pointer_cast<CSettingInt>(setting);
+      if (settingInt->GetOptionsType() == SettingOptionsType::Dynamic)
+        settingInt->UpdateDynamicOptions();
     }
+    else if (type == SettingType::String)
+    {
+      auto settingString = std::static_pointer_cast<CSettingString>(setting);
+      if (settingString->GetOptionsType() == SettingOptionsType::Dynamic)
+        settingString->UpdateDynamicOptions();
+    }
+    break;
+  }
 
-    case SettingDependencyType::Visible:
-      // just trigger the property changed callback and a call to
-      // CSetting::IsVisible() will automatically determine the new
-      // visible state
-      OnSettingPropertyChanged(setting, "visible");
-      break;
+  case SettingDependencyType::Visible:
+    // just trigger the property changed callback and a call to
+    // CSetting::IsVisible() will automatically determine the new
+    // visible state
+    OnSettingPropertyChanged(setting, "visible");
+    break;
 
-    case SettingDependencyType::Unknown:
-    default:
-      break;
+  case SettingDependencyType::Unknown:
+  default:
+    break;
   }
 }
 
@@ -1211,7 +1271,7 @@ void CSettingsManager::AddSetting(std::shared_ptr<CSetting> setting)
   auto addedSetting = FindSetting(setting->GetId());
   if (addedSetting == m_settings.end())
   {
-    Setting tmpSetting = { nullptr };
+    Setting tmpSetting = {nullptr};
     auto tmpIt = InsertSetting(setting->GetId(), tmpSetting);
     addedSetting = tmpIt.first;
   }
@@ -1242,11 +1302,13 @@ void CSettingsManager::ResolveReferenceSettings(std::shared_ptr<CSettingSection>
 
       for (const auto& referenceSetting : referenceSettings)
       {
-        auto referencedSettingId = std::static_pointer_cast<const CSettingReference>(referenceSetting)->GetReferencedId();
+        auto referencedSettingId =
+            std::static_pointer_cast<const CSettingReference>(referenceSetting)->GetReferencedId();
         SettingPtr referencedSetting = nullptr;
         auto itReferencedSetting = FindSetting(referencedSettingId);
         if (itReferencedSetting == m_settings.end())
-          CLog::Log(LOGWARNING, "CSettingsManager: missing referenced setting \"%s\"", referencedSettingId.c_str());
+          CLog::Log(LOGWARNING, "CSettingsManager: missing referenced setting \"%s\"",
+                    referencedSettingId.c_str());
         else
         {
           referencedSetting = itReferencedSetting->second.setting;
@@ -1264,30 +1326,34 @@ void CSettingsManager::ResolveReferenceSettings(std::shared_ptr<CSettingSection>
 void CSettingsManager::CleanupIncompleteSettings()
 {
   // remove any empty and reference settings
-  for (auto setting = m_settings.begin(); setting != m_settings.end(); )
+  for (auto setting = m_settings.begin(); setting != m_settings.end();)
   {
     auto tmpIterator = setting++;
     if (tmpIterator->second.setting == nullptr)
     {
-      CLog::Log(LOGWARNING, "CSettingsManager: removing empty setting \"%s\"", tmpIterator->first.c_str());
+      CLog::Log(LOGWARNING, "CSettingsManager: removing empty setting \"%s\"",
+                tmpIterator->first.c_str());
       m_settings.erase(tmpIterator);
     }
     else if (tmpIterator->second.setting->GetType() == SettingType::Reference)
     {
-      CLog::Log(LOGWARNING, "CSettingsManager: removing missing reference setting \"%s\"", tmpIterator->first.c_str());
+      CLog::Log(LOGWARNING, "CSettingsManager: removing missing reference setting \"%s\"",
+                tmpIterator->first.c_str());
       m_settings.erase(tmpIterator);
     }
   }
 }
 
-void CSettingsManager::RegisterSettingOptionsFiller(const std::string &identifier, void *filler, SettingOptionsFillerType type)
+void CSettingsManager::RegisterSettingOptionsFiller(const std::string& identifier,
+                                                    void* filler,
+                                                    SettingOptionsFillerType type)
 {
   CExclusiveLock lock(m_critical);
   auto it = m_optionsFillers.find(identifier);
   if (it != m_optionsFillers.end())
     return;
 
-  SettingOptionsFiller optionsFiller = { filler, type };
+  SettingOptionsFiller optionsFiller = {filler, type};
   m_optionsFillers.insert(make_pair(identifier, optionsFiller));
 }
 
@@ -1341,7 +1407,8 @@ void CSettingsManager::ResolveSettingDependencies(const Setting& setting)
   }
 }
 
-CSettingsManager::SettingMap::const_iterator CSettingsManager::FindSetting(std::string settingId) const
+CSettingsManager::SettingMap::const_iterator CSettingsManager::FindSetting(
+    std::string settingId) const
 {
   StringUtils::ToLower(settingId);
   return m_settings.find(settingId);
@@ -1353,7 +1420,8 @@ CSettingsManager::SettingMap::iterator CSettingsManager::FindSetting(std::string
   return m_settings.find(settingId);
 }
 
-std::pair<CSettingsManager::SettingMap::iterator, bool> CSettingsManager::InsertSetting(std::string settingId, const Setting& setting)
+std::pair<CSettingsManager::SettingMap::iterator, bool> CSettingsManager::InsertSetting(
+    std::string settingId, const Setting& setting)
 {
   StringUtils::ToLower(settingId);
   return m_settings.insert(std::make_pair(settingId, setting));

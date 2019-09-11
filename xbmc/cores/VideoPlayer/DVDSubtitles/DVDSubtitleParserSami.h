@@ -18,7 +18,7 @@ class CRegExp;
 class CDVDSubtitleParserSami : public CDVDSubtitleParserText
 {
 public:
-  CDVDSubtitleParserSami(std::unique_ptr<CDVDSubtitleStream> && pStream, const std::string& strFile);
+  CDVDSubtitleParserSami(std::unique_ptr<CDVDSubtitleStream>&& pStream, const std::string& strFile);
   ~CDVDSubtitleParserSami() override;
-  bool Open(CDVDStreamInfo &hints) override;
+  bool Open(CDVDStreamInfo& hints) override;
 };

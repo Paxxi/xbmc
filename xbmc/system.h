@@ -8,5 +8,18 @@
 
 #pragma once
 
-#define SAFE_DELETE(p)       do { delete (p);     (p)=NULL; } while (0)
-#define SAFE_RELEASE(p)      do { if(p) { (p)->Release(); (p)=NULL; } } while (0)
+#define SAFE_DELETE(p) \
+  do \
+  { \
+    delete (p); \
+    (p) = NULL; \
+  } while (0)
+#define SAFE_RELEASE(p) \
+  do \
+  { \
+    if (p) \
+    { \
+      (p)->Release(); \
+      (p) = NULL; \
+    } \
+  } while (0)

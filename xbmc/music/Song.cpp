@@ -43,7 +43,9 @@ CSong::CSong(CFileItem& item)
     m_albumArtist = tag.GetMusicBrainzAlbumArtistHints();
   else
     // Split album artist names further using multiple possible delimiters, over single separator applied in Tag loader
-    m_albumArtist = StringUtils::SplitMulti(m_albumArtist, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicArtistSeparators);
+    m_albumArtist = StringUtils::SplitMulti(
+        m_albumArtist,
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicArtistSeparators);
   for (auto artistname : m_albumArtist)
     StringUtils::Trim(artistname);
   m_strAlbumArtistSort = tag.GetAlbumArtistSort();
@@ -79,26 +81,30 @@ CSong::CSong()
   Clear();
 }
 
-void CSong::SetArtistCredits(const std::vector<std::string>& names, const std::vector<std::string>& hints,
-  const std::vector<std::string>& mbids)
+void CSong::SetArtistCredits(const std::vector<std::string>& names,
+                             const std::vector<std::string>& hints,
+                             const std::vector<std::string>& mbids)
 {
   artistCredits.clear();
   std::vector<std::string> artistHints = hints;
   //Split the artist sort string to try and get sort names for individual artists
-  std::vector<std::string> artistSort = StringUtils::Split(strArtistSort, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator);
+  std::vector<std::string> artistSort = StringUtils::Split(
+      strArtistSort,
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator);
 
   if (!mbids.empty())
   { // Have musicbrainz artist info, so use it
 
     // Vector of possible separators in the order least likely to be part of artist name
-    const std::vector<std::string> separators{ " feat. ", " ft. ", " Feat. "," Ft. ", ";", ":", "|", "#", "/", " with ", ",", "&" };
+    const std::vector<std::string> separators{" feat. ", " ft. ", " Feat. ", " Ft. ",  ";", ":",
+                                              "|",       "#",     "/",       " with ", ",", "&"};
 
     // Establish tag consistency - do the number of musicbrainz ids and number of names in hints or artist match
     if (mbids.size() != artistHints.size() && mbids.size() != names.size())
     {
       // Tags mis-match - report it and then try to fix
-      CLog::Log(LOGDEBUG, "Mis-match in song file tags: %i mbid %i names %s %s",
-        (int)mbids.size(), (int)names.size(), strTitle.c_str(), strArtistDesc.c_str());
+      CLog::Log(LOGDEBUG, "Mis-match in song file tags: %i mbid %i names %s %s", (int)mbids.size(),
+                (int)names.size(), strTitle.c_str(), strArtistDesc.c_str());
       /*
         Most likely we have no hints and a single artist name like "Artist1 feat. Artist2"
         or "Composer; Conductor, Orchestra, Soloist" or "Artist1/Artist2" where the
@@ -110,8 +116,7 @@ void CSong::SetArtistCredits(const std::vector<std::string>& names, const std::v
         musicbrainz id so ignore them but raise warning.
       */
       // Do hints exist yet mis-match
-      if (artistHints.size() > 0 &&
-        artistHints.size() != mbids.size())
+      if (artistHints.size() > 0 && artistHints.size() != mbids.size())
       {
         if (names.size() == mbids.size())
           // Artist name count matches, use that as hints
@@ -143,7 +148,7 @@ void CSong::SetArtistCredits(const std::vector<std::string>& names, const std::v
     // Try to get number of artist sort names and musicbrainz ids to match. Split sort names
     // further using multiple possible delimiters, over single separator applied in Tag loader
     if (artistSort.size() != mbids.size())
-      artistSort = StringUtils::SplitMulti(artistSort, { ";", ":", "|", "#" });
+      artistSort = StringUtils::SplitMulti(artistSort, {";", ":", "|", "#"});
 
     for (size_t i = 0; i < mbids.size(); i++)
     {
@@ -163,7 +168,8 @@ void CSong::SetArtistCredits(const std::vector<std::string>& names, const std::v
       // Use artist sort name providing we have as many as we have mbid,
       // otherwise something is wrong with them so ignore and leave blank
       if (artistSort.size() == mbids.size())
-        artistCredits.emplace_back(StringUtils::Trim(artistName), StringUtils::Trim(artistSort[i]), artistId);
+        artistCredits.emplace_back(StringUtils::Trim(artistName), StringUtils::Trim(artistSort[i]),
+                                   artistId);
       else
         artistCredits.emplace_back(StringUtils::Trim(artistName), "", artistId);
     }
@@ -177,11 +183,13 @@ void CSong::SetArtistCredits(const std::vector<std::string>& names, const std::v
       artists = artistHints;
     else
       // Split artist names further using multiple possible delimiters, over single separator applied in Tag loader
-      artists = StringUtils::SplitMulti(artists, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicArtistSeparators);
+      artists = StringUtils::SplitMulti(
+          artists,
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicArtistSeparators);
 
     if (artistSort.size() != artists.size())
       // Split artist sort names further using multiple possible delimiters, over single separator applied in Tag loader
-      artistSort = StringUtils::SplitMulti(artistSort, { ";", ":", "|", "#" });
+      artistSort = StringUtils::SplitMulti(artistSort, {";", ":", "|", "#"});
 
     for (size_t i = 0; i < artists.size(); i++)
     {
@@ -192,7 +200,6 @@ void CSong::SetArtistCredits(const std::vector<std::string>& names, const std::v
         artistCredits.back().SetSortName(StringUtils::Trim(artistSort[i]));
     }
   }
-
 }
 
 void CSong::MergeScrapedSong(const CSong& source, bool override)
@@ -205,7 +212,8 @@ void CSong::MergeScrapedSong(const CSong& source, bool override)
   if (override)
   {
     artistCredits = source.artistCredits; // Replace artists and store mbid returned by scraper
-    strArtistDesc.clear();  // @todo: set artist display string e.g. "artist1 feat. artist2" when scraped
+    strArtistDesc
+        .clear(); // @todo: set artist display string e.g. "artist1 feat. artist2" when scraped
   }
 }
 
@@ -214,7 +222,8 @@ void CSong::Serialize(CVariant& value) const
   value["filename"] = strFileName;
   value["title"] = strTitle;
   value["artist"] = GetArtist();
-  value["artistsort"] = GetArtistSort();  // a string for the song not vector of values for each artist
+  value["artistsort"] =
+      GetArtistSort(); // a string for the song not vector of values for each artist
   value["album"] = strAlbum;
   value["albumartist"] = GetAlbumArtist();
   value["genre"] = genre;
@@ -277,7 +286,9 @@ const std::vector<std::string> CSong::GetArtist() const
   //This is a temporary fix, in the longer term other areas should query the song_artist table and populate
   //artist credits. Note that splitting the string may not give the same artists as held in the song_artist table
   if (songartists.empty() && !strArtistDesc.empty())
-    songartists = StringUtils::Split(strArtistDesc, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator);
+    songartists = StringUtils::Split(
+        strArtistDesc,
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator);
   return songartists;
 }
 
@@ -288,7 +299,7 @@ const std::string CSong::GetArtistSort() const
   if (!strArtistSort.empty())
     return strArtistSort;
   std::vector<std::string> artistvector;
-  for (auto artistcredit: artistCredits)
+  for (auto artistcredit : artistCredits)
     if (!artistcredit.GetSortName().empty())
       artistvector.emplace_back(artistcredit.GetSortName());
   std::string artistString;
@@ -319,7 +330,9 @@ const std::string CSong::GetArtistString() const
     artistvector.push_back(i.GetArtist());
   std::string artistString;
   if (!artistvector.empty())
-    artistString = StringUtils::Join(artistvector, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator);
+    artistString = StringUtils::Join(
+        artistvector,
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator);
   return artistString;
 }
 
@@ -339,13 +352,14 @@ void CSong::AppendArtistRole(const CMusicRole& musicRole)
 
 bool CSong::HasArt() const
 {
-  if (!strThumb.empty()) return true;
-  if (!embeddedArt.Empty()) return true;
+  if (!strThumb.empty())
+    return true;
+  if (!embeddedArt.Empty())
+    return true;
   return false;
 }
 
-bool CSong::ArtMatches(const CSong &right) const
+bool CSong::ArtMatches(const CSong& right) const
 {
-  return (right.strThumb == strThumb &&
-          embeddedArt.Matches(right.embeddedArt));
+  return (right.strThumb == strThumb && embeddedArt.Matches(right.embeddedArt));
 }

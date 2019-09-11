@@ -18,19 +18,19 @@ class CDarwinStorageProvider : public IStorageProvider
 {
 public:
   CDarwinStorageProvider();
-  virtual ~CDarwinStorageProvider() { }
+  virtual ~CDarwinStorageProvider() {}
 
-  virtual void Initialize() { }
-  virtual void Stop() { }
+  virtual void Initialize() {}
+  virtual void Stop() {}
 
-  virtual void GetLocalDrives(VECSOURCES &localDrives);
-  virtual void GetRemovableDrives(VECSOURCES &removableDrives);
+  virtual void GetLocalDrives(VECSOURCES& localDrives);
+  virtual void GetRemovableDrives(VECSOURCES& removableDrives);
 
   virtual std::vector<std::string> GetDiskUsage(void);
 
   virtual bool Eject(const std::string& mountpath);
 
-  virtual bool PumpDriveChangeEvents(IStorageEventsCallback *callback);
+  virtual bool PumpDriveChangeEvents(IStorageEventsCallback* callback);
 
   static void VolumeMountNotification(const char* label, const char* mountpoint);
   static void VolumeUnmountNotification(const char* label, const char* mountpoint);

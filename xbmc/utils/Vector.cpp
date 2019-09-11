@@ -10,7 +10,7 @@
 
 #include <math.h>
 
-CVector& CVector::operator+=(const CVector &other)
+CVector& CVector::operator+=(const CVector& other)
 {
   x += other.x;
   y += other.y;
@@ -18,7 +18,7 @@ CVector& CVector::operator+=(const CVector &other)
   return *this;
 }
 
-CVector& CVector::operator-=(const CVector &other)
+CVector& CVector::operator-=(const CVector& other)
 {
   x -= other.x;
   y -= other.y;

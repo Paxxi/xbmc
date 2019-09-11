@@ -41,10 +41,19 @@ public:
    * \param class_ class of the surface, which should match the name of the
    *               .desktop file of the application
    */
-  CShellSurfaceXdgShellUnstableV6(IShellSurfaceHandler& handler, wayland::display_t& display, wayland::zxdg_shell_v6_t const& shell, wayland::surface_t const& surface, std::string const& title, std::string const& class_);
+  CShellSurfaceXdgShellUnstableV6(IShellSurfaceHandler& handler,
+                                  wayland::display_t& display,
+                                  wayland::zxdg_shell_v6_t const& shell,
+                                  wayland::surface_t const& surface,
+                                  std::string const& title,
+                                  std::string const& class_);
   virtual ~CShellSurfaceXdgShellUnstableV6() noexcept;
 
-  static CShellSurfaceXdgShellUnstableV6* TryCreate(IShellSurfaceHandler& handler, CConnection& connection, wayland::surface_t const& surface, std::string const& title, std::string const& class_);
+  static CShellSurfaceXdgShellUnstableV6* TryCreate(IShellSurfaceHandler& handler,
+                                                    CConnection& connection,
+                                                    wayland::surface_t const& surface,
+                                                    std::string const& title,
+                                                    std::string const& class_);
 
   void Initialize() override;
 
@@ -57,8 +66,12 @@ public:
   void AckConfigure(std::uint32_t serial) override;
 
   void StartMove(const wayland::seat_t& seat, std::uint32_t serial) override;
-  void StartResize(const wayland::seat_t& seat, std::uint32_t serial, wayland::shell_surface_resize edge) override;
-  void ShowShellContextMenu(const wayland::seat_t& seat, std::uint32_t serial, CPointInt position) override;
+  void StartResize(const wayland::seat_t& seat,
+                   std::uint32_t serial,
+                   wayland::shell_surface_resize edge) override;
+  void ShowShellContextMenu(const wayland::seat_t& seat,
+                            std::uint32_t serial,
+                            CPointInt position) override;
 
 private:
   IShellSurfaceHandler& m_handler;
@@ -72,6 +85,6 @@ private:
   StateBitset m_configuredState;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

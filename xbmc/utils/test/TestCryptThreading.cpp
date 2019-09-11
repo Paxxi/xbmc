@@ -19,8 +19,8 @@
 
 TEST(TestCryptThreadingInitializer, General)
 {
-  std::cout << "g_cryptThreadingInitializer address: " <<
-    testing::PrintToString(&g_cryptThreadingInitializer) << "\n";
+  std::cout << "g_cryptThreadingInitializer address: "
+            << testing::PrintToString(&g_cryptThreadingInitializer) << "\n";
 }
 
 #define PVTID_NUM_THREADS 10
@@ -40,7 +40,8 @@ TEST(TestCryptThreadingInitializer, ProducesValidThreadIds)
     testThreads[i] = std::thread([&gatheredIds, &gatheredIdsMutex, &threadsWaiting, &gate]() {
       threadsWaiting++;
 
-      while (!gate);
+      while (!gate)
+        ;
 
       unsigned long myTid = g_cryptThreadingInitializer.GetCurrentCryptThreadId();
 
@@ -48,7 +49,7 @@ TEST(TestCryptThreadingInitializer, ProducesValidThreadIds)
         CSingleLock gatheredIdsLock(gatheredIdsMutex);
         gatheredIds.push_back(myTid);
       }
-    });        
+    });
   }
 
   gate = true;
@@ -61,7 +62,8 @@ TEST(TestCryptThreadingInitializer, ProducesValidThreadIds)
   // Verify that all of the thread id's are unique, and that there are 10 of them, and that none
   // of them is zero
   std::set<unsigned long> checkIds;
-  for (std::vector<unsigned long>::const_iterator i = gatheredIds.begin(); i != gatheredIds.end(); ++i)
+  for (std::vector<unsigned long>::const_iterator i = gatheredIds.begin(); i != gatheredIds.end();
+       ++i)
   {
     unsigned long curId = *i;
     // Thread ID isn't zero (since the sequence is pre-incremented and starts at 0)

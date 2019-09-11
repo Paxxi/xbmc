@@ -12,10 +12,10 @@
 #include <string>
 #include <vector>
 
-#define FLAG_BOLD   0
+#define FLAG_BOLD 0
 #define FLAG_ITALIC 1
-#define FLAG_COLOR  2
-#define FLAG_LANGUAGE   3
+#define FLAG_COLOR 2
+#define FLAG_LANGUAGE 3
 
 class CDVDOverlayText;
 class CDVDSubtitleStream;
@@ -50,8 +50,7 @@ public:
   std::vector<SLangclass> m_Langclass;
 
 private:
-  CRegExp *m_tags;
-  CRegExp *m_tagOptions;
+  CRegExp* m_tags;
+  CRegExp* m_tagOptions;
   bool m_flag[4];
 };
-

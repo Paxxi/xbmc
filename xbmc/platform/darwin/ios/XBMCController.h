@@ -25,8 +25,8 @@ typedef enum
 
 @interface XBMCController : UIViewController <UIGestureRecognizerDelegate, UIKeyInput>
 {
-  UIWindow *m_window;
-  IOSEAGLView  *m_glView;
+  UIWindow* m_window;
+  IOSEAGLView* m_glView;
   int m_screensaverTimeout;
 
   /* Touch handling */
@@ -34,57 +34,57 @@ typedef enum
   CGPoint lastGesturePoint;
   CGFloat screenScale;
   bool touchBeginSignaled;
-  int  m_screenIdx;
+  int m_screenIdx;
 
   UIInterfaceOrientation orientation;
 
   bool m_isPlayingBeforeInactive;
   UIBackgroundTaskIdentifier m_bgTask;
-  NSTimer *m_networkAutoSuspendTimer;
+  NSTimer* m_networkAutoSuspendTimer;
   IOSPlaybackState m_playbackState;
-  NSDictionary *nowPlayingInfo;
+  NSDictionary* nowPlayingInfo;
   bool nativeKeyboardActive;
 }
-@property (readonly, nonatomic, getter=isAnimating) BOOL animating;
+@property(readonly, nonatomic, getter=isAnimating) BOOL animating;
 @property CGPoint lastGesturePoint;
 @property CGFloat screenScale;
 @property bool touchBeginSignaled;
-@property int  m_screenIdx;
+@property int m_screenIdx;
 @property CGSize screensize;
 @property(nonatomic, strong) NSTimer* m_networkAutoSuspendTimer;
 @property(nonatomic, strong) NSDictionary* nowPlayingInfo;
 @property bool nativeKeyboardActive;
 
 // message from which our instance is obtained
-- (void) pauseAnimation;
-- (void) resumeAnimation;
-- (void) startAnimation;
-- (void) stopAnimation;
-- (void) enterBackground;
-- (void) enterForeground;
-- (void) becomeInactive;
-- (void) setIOSNowPlayingInfo:(NSDictionary *)info;
-- (void) sendKey: (XBMCKey) key;
-- (void) observeDefaultCenterStuff: (NSNotification *) notification;
-- (void) setFramebuffer;
-- (bool) presentFramebuffer;
-- (CGSize) getScreenSize;
-- (UIInterfaceOrientation) getOrientation;
-- (void) createGestureRecognizers;
-- (void) activateKeyboard:(UIView *)view;
-- (void) deactivateKeyboard:(UIView *)view;
-- (void) nativeKeyboardActive: (bool)active;
+- (void)pauseAnimation;
+- (void)resumeAnimation;
+- (void)startAnimation;
+- (void)stopAnimation;
+- (void)enterBackground;
+- (void)enterForeground;
+- (void)becomeInactive;
+- (void)setIOSNowPlayingInfo:(NSDictionary*)info;
+- (void)sendKey:(XBMCKey)key;
+- (void)observeDefaultCenterStuff:(NSNotification*)notification;
+- (void)setFramebuffer;
+- (bool)presentFramebuffer;
+- (CGSize)getScreenSize;
+- (UIInterfaceOrientation)getOrientation;
+- (void)createGestureRecognizers;
+- (void)activateKeyboard:(UIView*)view;
+- (void)deactivateKeyboard:(UIView*)view;
+- (void)nativeKeyboardActive:(bool)active;
 
-- (void) disableNetworkAutoSuspend;
-- (void) enableNetworkAutoSuspend:(id)obj;
-- (void) disableSystemSleep;
-- (void) enableSystemSleep;
-- (void) disableScreenSaver;
-- (void) enableScreenSaver;
-- (bool) changeScreen: (unsigned int)screenIdx withMode:(UIScreenMode *)mode;
-- (void) activateScreen: (UIScreen *)screen withOrientation:(UIInterfaceOrientation)newOrientation;
-- (id)   initWithFrame:(CGRect)frame withScreen:(UIScreen *)screen;
+- (void)disableNetworkAutoSuspend;
+- (void)enableNetworkAutoSuspend:(id)obj;
+- (void)disableSystemSleep;
+- (void)enableSystemSleep;
+- (void)disableScreenSaver;
+- (void)enableScreenSaver;
+- (bool)changeScreen:(unsigned int)screenIdx withMode:(UIScreenMode*)mode;
+- (void)activateScreen:(UIScreen*)screen withOrientation:(UIInterfaceOrientation)newOrientation;
+- (id)initWithFrame:(CGRect)frame withScreen:(UIScreen*)screen;
 - (CVEAGLContext)getEAGLContextObj;
 @end
 
-extern XBMCController *g_xbmcController;
+extern XBMCController* g_xbmcController;

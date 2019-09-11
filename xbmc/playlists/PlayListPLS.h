@@ -15,8 +15,7 @@
 
 namespace PLAYLIST
 {
-class CPlayListPLS :
-      public CPlayList
+class CPlayListPLS : public CPlayList
 {
 public:
   CPlayListPLS(void);
@@ -29,16 +28,17 @@ public:
 class CPlayListASX : public CPlayList
 {
 public:
-  bool LoadData(std::istream &stream) override;
+  bool LoadData(std::istream& stream) override;
+
 protected:
-  bool LoadAsxIniInfo(std::istream &stream);
+  bool LoadAsxIniInfo(std::istream& stream);
 };
 
 class CPlayListRAM : public CPlayList
 {
 public:
-  bool LoadData(std::istream &stream) override;
+  bool LoadData(std::istream& stream) override;
 };
 
 
-}
+} // namespace PLAYLIST

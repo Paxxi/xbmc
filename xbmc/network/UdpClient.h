@@ -29,7 +29,6 @@ public:
   ~CUdpClient(void) override;
 
 protected:
-
   bool Create();
   void Destroy();
 
@@ -41,10 +40,12 @@ protected:
   bool Send(struct sockaddr_in aAddress, const std::string& aMessage);
   bool Send(struct sockaddr_in aAddress, unsigned char* pMessage, DWORD dwSize);
 
-  virtual void OnMessage(struct sockaddr_in& aRemoteAddress, const std::string& aMessage, unsigned char* pMessage, DWORD dwMessageLength){};
+  virtual void OnMessage(struct sockaddr_in& aRemoteAddress,
+                         const std::string& aMessage,
+                         unsigned char* pMessage,
+                         DWORD dwMessageLength){};
 
 protected:
-
   struct UdpCommand
   {
     struct sockaddr_in address;
@@ -58,7 +59,7 @@ protected:
   SOCKET client_socket;
 
   std::vector<UdpCommand> commands;
-  typedef std::vector<UdpCommand> ::iterator COMMANDITERATOR;
+  typedef std::vector<UdpCommand>::iterator COMMANDITERATOR;
 
   CCriticalSection critical_section;
 };

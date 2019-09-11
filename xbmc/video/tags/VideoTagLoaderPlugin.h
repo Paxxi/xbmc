@@ -29,13 +29,12 @@ public:
 
   //! \brief Load "tag" from plugin.
   //! \param tag Tag to load info into
-  CInfoScanner::INFO_TYPE Load(CVideoInfoTag& tag, bool prioritise,
+  CInfoScanner::INFO_TYPE Load(CVideoInfoTag& tag,
+                               bool prioritise,
                                std::vector<EmbeddedArt>* = nullptr) override;
 
-  inline std::unique_ptr<std::map<std::string, std::string>>& GetArt()
-  {
-    return m_art;
-  }
+  inline std::unique_ptr<std::map<std::string, std::string>>& GetArt() { return m_art; }
+
 protected:
   std::unique_ptr<CVideoInfoTag> m_tag;
   std::unique_ptr<std::map<std::string, std::string>> m_art;

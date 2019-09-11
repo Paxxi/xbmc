@@ -29,15 +29,15 @@
 
 #include <utility>
 
-#define CONTROL_FIELD           15
-#define CONTROL_OPERATOR        16
-#define CONTROL_VALUE           17
-#define CONTROL_OK              18
-#define CONTROL_CANCEL          19
-#define CONTROL_BROWSE          20
+#define CONTROL_FIELD 15
+#define CONTROL_OPERATOR 16
+#define CONTROL_VALUE 17
+#define CONTROL_OK 18
+#define CONTROL_CANCEL 19
+#define CONTROL_BROWSE 20
 
 CGUIDialogSmartPlaylistRule::CGUIDialogSmartPlaylistRule(void)
-    : CGUIDialog(WINDOW_DIALOG_SMART_PLAYLIST_RULE, "SmartPlaylistRule.xml")
+  : CGUIDialog(WINDOW_DIALOG_SMART_PLAYLIST_RULE, "SmartPlaylistRule.xml")
 {
   m_cancelled = false;
   m_loadType = KEEP_IN_MEMORY;
@@ -53,30 +53,30 @@ bool CGUIDialogSmartPlaylistRule::OnBack(int actionID)
 
 bool CGUIDialogSmartPlaylistRule::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+    if (iControl == CONTROL_OK)
+      OnOK();
+    else if (iControl == CONTROL_CANCEL)
+      OnCancel();
+    else if (iControl == CONTROL_VALUE)
     {
-      int iControl = message.GetSenderId();
-      if (iControl == CONTROL_OK)
-        OnOK();
-      else if (iControl == CONTROL_CANCEL)
-        OnCancel();
-      else if (iControl == CONTROL_VALUE)
-      {
-        std::string parameter;
-        OnEditChanged(iControl, parameter);
-        m_rule.SetParameter(parameter);
-      }
-      else if (iControl == CONTROL_OPERATOR)
-        OnOperator();
-      else if (iControl == CONTROL_FIELD)
-        OnField();
-      else if (iControl == CONTROL_BROWSE)
-        OnBrowse();
-      return true;
+      std::string parameter;
+      OnEditChanged(iControl, parameter);
+      m_rule.SetParameter(parameter);
     }
-    break;
+    else if (iControl == CONTROL_OPERATOR)
+      OnOperator();
+    else if (iControl == CONTROL_FIELD)
+      OnField();
+    else if (iControl == CONTROL_BROWSE)
+      OnBrowse();
+    return true;
+  }
+  break;
 
   case GUI_MSG_VALIDITY_CHANGED:
     CONTROL_ENABLE_ON_CONDITION(CONTROL_OK, message.GetParam1());
@@ -131,30 +131,22 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
   int iLabel = 0;
   if (m_rule.m_field == FieldGenre)
   {
-    if (m_type == "tvshows" ||
-        m_type == "episodes" ||
-        m_type == "movies")
+    if (m_type == "tvshows" || m_type == "episodes" || m_type == "movies")
       videodatabase.GetGenresNav(basePath + "genres/", items, type);
-    else if (m_type == "songs" ||
-             m_type == "albums" ||
-             m_type == "artists" ||
-             m_type == "mixed")
-      database.GetGenresNav("musicdb://genres/",items);
-    if (m_type == "musicvideos" ||
-        m_type == "mixed")
+    else if (m_type == "songs" || m_type == "albums" || m_type == "artists" || m_type == "mixed")
+      database.GetGenresNav("musicdb://genres/", items);
+    if (m_type == "musicvideos" || m_type == "mixed")
     {
       CFileItemList items2;
-      videodatabase.GetGenresNav("videodb://musicvideos/genres/",items2,VIDEODB_CONTENT_MUSICVIDEOS);
+      videodatabase.GetGenresNav("videodb://musicvideos/genres/", items2,
+                                 VIDEODB_CONTENT_MUSICVIDEOS);
       items.Append(items2);
     }
     iLabel = 515;
   }
   else if (m_rule.m_field == FieldSource)
   {
-    if (m_type == "songs" ||
-      m_type == "albums" ||
-      m_type == "artists" ||
-      m_type == "mixed")
+    if (m_type == "songs" || m_type == "albums" || m_type == "artists" || m_type == "mixed")
     {
       database.GetSourcesNav("musicdb://sources/", items);
       iLabel = 39030;
@@ -177,8 +169,7 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
   {
     if (CSmartPlaylist::IsMusicType(m_type))
       database.GetArtistsNav("musicdb://artists/", items, m_rule.m_field == FieldAlbumArtist, -1);
-    if (m_type == "musicvideos" ||
-        m_type == "mixed")
+    if (m_type == "musicvideos" || m_type == "mixed")
     {
       CFileItemList items2;
       videodatabase.GetMusicVideoArtistsByName("", items2);
@@ -190,8 +181,7 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
   {
     if (CSmartPlaylist::IsMusicType(m_type))
       database.GetAlbumsNav("musicdb://albums/", items);
-    if (m_type == "musicvideos" ||
-        m_type == "mixed")
+    if (m_type == "musicvideos" || m_type == "mixed")
     {
       CFileItemList items2;
       videodatabase.GetMusicVideoAlbumsByName("", items2);
@@ -201,7 +191,7 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
   }
   else if (m_rule.m_field == FieldActor)
   {
-    videodatabase.GetActorsNav(basePath + "actors/",items,type);
+    videodatabase.GetActorsNav(basePath + "actors/", items, type);
     iLabel = 20337;
   }
   else if (m_rule.m_field == FieldYear)
@@ -232,7 +222,7 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
     iLabel = 20417;
   }
   else if (m_rule.m_field == FieldTvShowTitle ||
-          (m_type == "tvshows" && m_rule.m_field == FieldTitle))
+           (m_type == "tvshows" && m_rule.m_field == FieldTitle))
   {
     videodatabase.GetTvShowsNav(basePath + "titles/", items);
     iLabel = 20343;
@@ -272,11 +262,13 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
     //       think there's any decent way to deal with this, as the infinite loop may be an arbitrary
     //       number of playlists deep, eg playlist1 -> playlist2 -> playlist3 ... -> playlistn -> playlist1
     if (CSmartPlaylist::IsVideoType(m_type))
-      XFILE::CDirectory::GetDirectory("special://videoplaylists/", items, ".xsp", XFILE::DIR_FLAG_NO_FILE_DIRS);
+      XFILE::CDirectory::GetDirectory("special://videoplaylists/", items, ".xsp",
+                                      XFILE::DIR_FLAG_NO_FILE_DIRS);
     if (CSmartPlaylist::IsMusicType(m_type))
     {
       CFileItemList items2;
-      XFILE::CDirectory::GetDirectory("special://musicplaylists/", items2, ".xsp", XFILE::DIR_FLAG_NO_FILE_DIRS);
+      XFILE::CDirectory::GetDirectory("special://musicplaylists/", items2, ".xsp",
+                                      XFILE::DIR_FLAG_NO_FILE_DIRS);
       items.Append(items2);
     }
 
@@ -287,9 +279,9 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
       // don't list unloadable smartplaylists or any referenceable smartplaylists
       // which do not match the type of the current smartplaylist
       if (!playlist.Load(item->GetPath()) ||
-         (m_rule.m_field == FieldPlaylist &&
-         (!CSmartPlaylist::CheckTypeCompatibility(m_type, playlist.GetType()) ||
-         (!playlist.GetGroup().empty() || playlist.IsGroupMixed()))))
+          (m_rule.m_field == FieldPlaylist &&
+           (!CSmartPlaylist::CheckTypeCompatibility(m_type, playlist.GetType()) ||
+            (!playlist.GetGroup().empty() || playlist.IsGroupMixed()))))
       {
         items.Remove(i);
         i -= 1;
@@ -309,7 +301,7 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
     if (CSmartPlaylist::IsVideoType(m_type))
     {
       VECSOURCES sources2 = *CMediaSourceSettings::GetInstance().GetSources("video");
-      sources.insert(sources.end(),sources2.begin(),sources2.end());
+      sources.insert(sources.end(), sources2.begin(), sources2.end());
     }
     g_mediaManager.GetLocalDrives(sources);
 
@@ -331,8 +323,7 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
   else if (m_rule.m_field == FieldTag)
   {
     VIDEODB_CONTENT_TYPE type = VIDEODB_CONTENT_MOVIES;
-    if (m_type == "tvshows" ||
-        m_type == "episodes")
+    if (m_type == "tvshows" || m_type == "episodes")
       type = VIDEODB_CONTENT_TVSHOWS;
     else if (m_type == "musicvideos")
       type = VIDEODB_CONTENT_MUSICVIDEOS;
@@ -348,14 +339,22 @@ void CGUIDialogSmartPlaylistRule::OnBrowse()
   }
 
   // sort the items
-  items.Sort(SortByLabel, SortOrderAscending, CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_FILELISTS_IGNORETHEWHENSORTING) ? SortAttributeIgnoreArticle : SortAttributeNone);
+  items.Sort(SortByLabel, SortOrderAscending,
+             CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                 CSettings::SETTING_FILELISTS_IGNORETHEWHENSORTING)
+                 ? SortAttributeIgnoreArticle
+                 : SortAttributeNone);
 
-  CGUIDialogSelect* pDialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* pDialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
   pDialog->Reset();
   pDialog->SetItems(items);
-  std::string strHeading = StringUtils::Format(g_localizeStrings.Get(13401).c_str(), g_localizeStrings.Get(iLabel).c_str());
+  std::string strHeading = StringUtils::Format(g_localizeStrings.Get(13401).c_str(),
+                                               g_localizeStrings.Get(iLabel).c_str());
   pDialog->SetHeading(CVariant{std::move(strHeading)});
-  pDialog->SetMultiSelection(m_rule.m_field != FieldPlaylist && m_rule.m_field != FieldVirtualFolder);
+  pDialog->SetMultiSelection(m_rule.m_field != FieldPlaylist &&
+                             m_rule.m_field != FieldVirtualFolder);
 
   if (!m_rule.m_parameter.empty())
     pDialog->SetSelected(m_rule.m_parameter);
@@ -377,9 +376,10 @@ std::pair<std::string, int> OperatorLabel(CDatabaseQueryRule::SEARCH_OPERATOR op
   return std::make_pair(CSmartPlaylistRule::GetLocalizedOperator(op), op);
 }
 
-std::vector<std::pair<std::string, int>> CGUIDialogSmartPlaylistRule::GetValidOperators(const CSmartPlaylistRule& rule)
+std::vector<std::pair<std::string, int>> CGUIDialogSmartPlaylistRule::GetValidOperators(
+    const CSmartPlaylistRule& rule)
 {
-  std::vector< std::pair<std::string, int> > labels;
+  std::vector<std::pair<std::string, int>> labels;
   switch (rule.GetFieldType(rule.m_field))
   {
   case CDatabaseQueryRule::TEXT_FIELD:
@@ -439,7 +439,9 @@ void CGUIDialogSmartPlaylistRule::OnCancel()
 void CGUIDialogSmartPlaylistRule::OnField()
 {
   const auto fields = CSmartPlaylistRule::GetFields(m_type);
-  CGUIDialogSelect* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
   dialog->Reset();
   dialog->SetHeading(CVariant{20427});
   int selected = -1;
@@ -459,7 +461,7 @@ void CGUIDialogSmartPlaylistRule::OnField()
 
   m_rule.m_field = fields[newSelected];
   // check if operator is still valid. if not, reset to first valid one
-  std::vector< std::pair<std::string, int> > validOperators = GetValidOperators(m_rule);
+  std::vector<std::pair<std::string, int>> validOperators = GetValidOperators(m_rule);
   bool isValid = false;
   for (auto op : validOperators)
     if (std::get<0>(op) == std::get<0>(OperatorLabel(m_rule.m_operator)))
@@ -474,9 +476,11 @@ void CGUIDialogSmartPlaylistRule::OnField()
 void CGUIDialogSmartPlaylistRule::OnOperator()
 {
   const auto labels = GetValidOperators(m_rule);
-  CGUIDialogSelect* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
   dialog->Reset();
-  dialog->SetHeading(CVariant{ 16023 });
+  dialog->SetHeading(CVariant{16023});
   for (auto label : labels)
     dialog->Add(std::get<0>(label));
   dialog->SetSelected(CSmartPlaylistRule::GetLocalizedOperator(m_rule.m_operator));
@@ -539,7 +543,7 @@ void CGUIDialogSmartPlaylistRule::OnInitWindow()
 
   UpdateButtons();
 
-  CGUIEditControl *editControl = dynamic_cast<CGUIEditControl*>(GetControl(CONTROL_VALUE));
+  CGUIEditControl* editControl = dynamic_cast<CGUIEditControl*>(GetControl(CONTROL_VALUE));
   if (editControl != NULL)
     editControl->SetInputValidation(CSmartPlaylistRule::Validate, &m_rule);
 }
@@ -554,10 +558,13 @@ void CGUIDialogSmartPlaylistRule::OnDeinitWindow(int nextWindowID)
   SendMessage(GUI_MSG_LABEL_RESET, CONTROL_OPERATOR);
 }
 
-bool CGUIDialogSmartPlaylistRule::EditRule(CSmartPlaylistRule &rule, const std::string& type)
+bool CGUIDialogSmartPlaylistRule::EditRule(CSmartPlaylistRule& rule, const std::string& type)
 {
-  CGUIDialogSmartPlaylistRule *editor = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSmartPlaylistRule>(WINDOW_DIALOG_SMART_PLAYLIST_RULE);
-  if (!editor) return false;
+  CGUIDialogSmartPlaylistRule* editor =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSmartPlaylistRule>(
+          WINDOW_DIALOG_SMART_PLAYLIST_RULE);
+  if (!editor)
+    return false;
 
   editor->m_rule = rule;
   editor->m_type = type;
@@ -565,4 +572,3 @@ bool CGUIDialogSmartPlaylistRule::EditRule(CSmartPlaylistRule &rule, const std::
   rule = editor->m_rule;
   return !editor->m_cancelled;
 }
-

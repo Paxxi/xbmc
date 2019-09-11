@@ -55,8 +55,7 @@ TEST(TestXMLUtils, GetFloat)
 
   a.Parse(std::string("<root><node>1000.1f</node></root>"));
   EXPECT_TRUE(XMLUtils::GetFloat(a.RootElement(), "node", val));
-  EXPECT_TRUE(XMLUtils::GetFloat(a.RootElement(), "node", val, 1000.0f,
-                                 1000.2f));
+  EXPECT_TRUE(XMLUtils::GetFloat(a.RootElement(), "node", val, 1000.0f, 1000.2f));
   ref = 1000.1f;
   EXPECT_EQ(ref, val);
 }
@@ -118,12 +117,12 @@ TEST(TestXMLUtils, GetAdditiveString)
   std::string ref, val;
 
   a.Parse(std::string("<root>\n"
-          "  <node>some string1</node>\n"
-          "  <node>some string2</node>\n"
-          "  <node>some string3</node>\n"
-          "  <node>some string4</node>\n"
-          "  <node>some string5</node>\n"
-          "</root>\n"));
+                      "  <node>some string1</node>\n"
+                      "  <node>some string2</node>\n"
+                      "  <node>some string3</node>\n"
+                      "  <node>some string4</node>\n"
+                      "  <node>some string5</node>\n"
+                      "</root>\n"));
   EXPECT_TRUE(XMLUtils::GetAdditiveString(a.RootElement(), "node", ",", val));
 
   ref = "some string1,some string2,some string3,some string4,some string5";
@@ -131,12 +130,12 @@ TEST(TestXMLUtils, GetAdditiveString)
 
   val.clear();
   b.Parse(std::string("<root>\n"
-          "  <node>some string1</node>\n"
-          "  <node>some string2</node>\n"
-          "  <node clear=\"true\">some string3</node>\n"
-          "  <node>some string4</node>\n"
-          "  <node>some string5</node>\n"
-          "</root>\n"));
+                      "  <node>some string1</node>\n"
+                      "  <node>some string2</node>\n"
+                      "  <node clear=\"true\">some string3</node>\n"
+                      "  <node>some string4</node>\n"
+                      "  <node>some string5</node>\n"
+                      "</root>\n"));
   EXPECT_TRUE(XMLUtils::GetAdditiveString(b.RootElement(), "node", ",", val));
 
   ref = "some string3,some string4,some string5";
@@ -149,12 +148,12 @@ TEST(TestXMLUtils, GetStringArray)
   std::vector<std::string> strarray;
 
   a.Parse(std::string("<root>\n"
-          "  <node>some string1</node>\n"
-          "  <node>some string2</node>\n"
-          "  <node>some string3</node>\n"
-          "  <node>some string4</node>\n"
-          "  <node>some string5</node>\n"
-          "</root>\n"));
+                      "  <node>some string1</node>\n"
+                      "  <node>some string2</node>\n"
+                      "  <node>some string3</node>\n"
+                      "  <node>some string4</node>\n"
+                      "  <node>some string5</node>\n"
+                      "</root>\n"));
   EXPECT_TRUE(XMLUtils::GetStringArray(a.RootElement(), "node", strarray));
 
   EXPECT_STREQ("some string1", strarray.at(0).c_str());
@@ -225,7 +224,7 @@ TEST(TestXMLUtils, SetAdditiveString)
 
   a.Parse(std::string("<root></root>"));
   XMLUtils::SetAdditiveString(a.RootElement(), "node", ",",
-    "some string1,some string2,some string3,some string4,some string5");
+                              "some string1,some string2,some string3,some string4,some string5");
   EXPECT_TRUE(XMLUtils::GetAdditiveString(a.RootElement(), "node", ",", val));
 
   ref = "some string1,some string2,some string3,some string4,some string5";

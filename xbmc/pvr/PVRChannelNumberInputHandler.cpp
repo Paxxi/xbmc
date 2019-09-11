@@ -22,14 +22,18 @@ namespace PVR
 {
 
 CPVRChannelNumberInputHandler::CPVRChannelNumberInputHandler()
-: CPVRChannelNumberInputHandler(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_iPVRNumericChannelSwitchTimeout, CHANNEL_NUMBER_INPUT_MAX_DIGITS)
+  : CPVRChannelNumberInputHandler(CServiceBroker::GetSettingsComponent()
+                                      ->GetAdvancedSettings()
+                                      ->m_iPVRNumericChannelSwitchTimeout,
+                                  CHANNEL_NUMBER_INPUT_MAX_DIGITS)
 {
 }
 
-CPVRChannelNumberInputHandler::CPVRChannelNumberInputHandler(int iDelay, int iMaxDigits /* = CHANNEL_NUMBER_INPUT_MAX_DIGITS */)
-: m_iDelay(iDelay),
-  m_iMaxDigits(iMaxDigits),
-  m_timer(this)
+CPVRChannelNumberInputHandler::CPVRChannelNumberInputHandler(
+    int iDelay, int iMaxDigits /* = CHANNEL_NUMBER_INPUT_MAX_DIGITS */)
+  : m_iDelay(iDelay)
+  , m_iMaxDigits(iMaxDigits)
+  , m_timer(this)
 {
 }
 

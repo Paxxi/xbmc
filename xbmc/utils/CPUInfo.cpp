@@ -6,19 +6,20 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <cstdlib>
-
 #include "CPUInfo.h"
-#include "utils/log.h"
+
 #include "utils/SysfsUtils.h"
 #include "utils/Temperature.h"
-#include <string>
+#include "utils/log.h"
+
+#include <cstdlib>
 #include <string.h>
+#include <string>
 
 #if defined(TARGET_DARWIN)
-#include <sys/types.h>
 #include <sys/sysctl.h>
-#if defined(__ppc__) || defined (TARGET_DARWIN_EMBEDDED)
+#include <sys/types.h>
+#if defined(__ppc__) || defined(TARGET_DARWIN_EMBEDDED)
 #include <mach-o/arch.h>
 #endif // defined(__ppc__) || defined (TARGET_DARWIN_EMBEDDED)
 #ifdef TARGET_DARWIN_OSX
@@ -28,17 +29,17 @@
 #endif
 
 #if defined(TARGET_FREEBSD)
-#include <sys/types.h>
-#include <sys/sysctl.h>
 #include <sys/resource.h>
+#include <sys/sysctl.h>
+#include <sys/types.h>
 #endif
 
 #if defined(TARGET_LINUX) && defined(HAS_NEON) && !defined(TARGET_ANDROID)
-#include <fcntl.h>
-#include <unistd.h>
-#include <elf.h>
-#include <linux/auxvec.h>
 #include <asm/hwcap.h>
+#include <elf.h>
+#include <fcntl.h>
+#include <linux/auxvec.h>
+#include <unistd.h>
 #endif
 
 #if defined(TARGET_ANDROID)
@@ -47,10 +48,12 @@
 
 #ifdef TARGET_WINDOWS
 #include "platform/win32/CharsetConverter.h"
+
 #include <algorithm>
-#include <intrin.h>
+
 #include <Pdh.h>
 #include <PdhMsg.h>
+#include <intrin.h>
 
 #ifdef TARGET_WINDOWS_DESKTOP
 #pragma comment(lib, "Pdh.lib")
@@ -67,21 +70,21 @@
 
 // Standard Features
 // Bitmasks for the values returned by a call to cpuid with eax=0x00000001
-#define CPUID_00000001_ECX_SSE3  (1<<0)
-#define CPUID_00000001_ECX_SSSE3 (1<<9)
-#define CPUID_00000001_ECX_SSE4  (1<<19)
-#define CPUID_00000001_ECX_SSE42 (1<<20)
+#define CPUID_00000001_ECX_SSE3 (1 << 0)
+#define CPUID_00000001_ECX_SSSE3 (1 << 9)
+#define CPUID_00000001_ECX_SSE4 (1 << 19)
+#define CPUID_00000001_ECX_SSE42 (1 << 20)
 
-#define CPUID_00000001_EDX_MMX   (1<<23)
-#define CPUID_00000001_EDX_SSE   (1<<25)
-#define CPUID_00000001_EDX_SSE2  (1<<26)
+#define CPUID_00000001_EDX_MMX (1 << 23)
+#define CPUID_00000001_EDX_SSE (1 << 25)
+#define CPUID_00000001_EDX_SSE2 (1 << 26)
 
 // Extended Features
 // Bitmasks for the values returned by a call to cpuid with eax=0x80000001
-#define CPUID_80000001_EDX_MMX2     (1<<22)
-#define CPUID_80000001_EDX_MMX      (1<<23)
-#define CPUID_80000001_EDX_3DNOWEXT (1<<30)
-#define CPUID_80000001_EDX_3DNOW    (1<<31)
+#define CPUID_80000001_EDX_MMX2 (1 << 22)
+#define CPUID_80000001_EDX_MMX (1 << 23)
+#define CPUID_80000001_EDX_3DNOWEXT (1 << 30)
+#define CPUID_80000001_EDX_3DNOW (1 << 31)
 
 
 // Help with the __cpuid intrinsic of MSVC
@@ -123,11 +126,11 @@ CCPUInfo::CCPUInfo(void)
 
   // The number of cores.
   if (sysctlbyname("hw.activecpu", &m_cpuCount, &len, NULL, 0) == -1)
-      m_cpuCount = 1;
+    m_cpuCount = 1;
 
-  // The model.
-#if defined(__ppc__) || defined (TARGET_DARWIN_EMBEDDED)
-  const NXArchInfo *info = NXGetLocalArchInfo();
+    // The model.
+#if defined(__ppc__) || defined(TARGET_DARWIN_EMBEDDED)
+  const NXArchInfo* info = NXGetLocalArchInfo();
   if (info != NULL)
     m_cpuModel = info->description;
 #else
@@ -144,7 +147,7 @@ CCPUInfo::CCPUInfo(void)
 
 #endif
   // Go through each core.
-  for (int i=0; i<m_cpuCount; i++)
+  for (int i = 0; i < m_cpuCount; i++)
   {
     CoreInfo core;
     core.m_id = i;
@@ -163,13 +166,15 @@ CCPUInfo::CCPUInfo(void)
 
   HKEY hKeyCpuRoot;
 
-  if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor", 0, KEY_READ, &hKeyCpuRoot) == ERROR_SUCCESS)
+  if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor", 0,
+                    KEY_READ, &hKeyCpuRoot) == ERROR_SUCCESS)
   {
     DWORD num = 0;
     std::vector<CoreInfo> cpuCores;
     wchar_t subKeyName[200]; // more than enough
     DWORD subKeyNameLen = sizeof(subKeyName) / sizeof(wchar_t);
-    while (RegEnumKeyExW(hKeyCpuRoot, num++, subKeyName, &subKeyNameLen, nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS)
+    while (RegEnumKeyExW(hKeyCpuRoot, num++, subKeyName, &subKeyNameLen, nullptr, nullptr, nullptr,
+                         nullptr) == ERROR_SUCCESS)
     {
       HKEY hCpuKey;
       if (RegOpenKeyExW(hKeyCpuRoot, subKeyName, 0, KEY_QUERY_VALUE, &hCpuKey) == ERROR_SUCCESS)
@@ -180,24 +185,29 @@ CCPUInfo::CCPUInfo(void)
         wchar_t buf[300]; // more than enough
         DWORD bufSize = sizeof(buf);
         DWORD valType;
-        if (RegQueryValueExW(hCpuKey, L"ProcessorNameString", nullptr, &valType, LPBYTE(buf), &bufSize) == ERROR_SUCCESS &&
+        if (RegQueryValueExW(hCpuKey, L"ProcessorNameString", nullptr, &valType, LPBYTE(buf),
+                             &bufSize) == ERROR_SUCCESS &&
             valType == REG_SZ)
         {
           cpuCore.m_strModel = FromW(buf, bufSize / sizeof(wchar_t));
-          cpuCore.m_strModel = cpuCore.m_strModel.substr(0, cpuCore.m_strModel.find(char(0))); // remove extra null terminations
+          cpuCore.m_strModel = cpuCore.m_strModel.substr(
+              0, cpuCore.m_strModel.find(char(0))); // remove extra null terminations
           StringUtils::RemoveDuplicatedSpacesAndTabs(cpuCore.m_strModel);
           StringUtils::Trim(cpuCore.m_strModel);
         }
         bufSize = sizeof(buf);
-        if (RegQueryValueExW(hCpuKey, L"VendorIdentifier", nullptr, &valType, LPBYTE(buf), &bufSize) == ERROR_SUCCESS &&
+        if (RegQueryValueExW(hCpuKey, L"VendorIdentifier", nullptr, &valType, LPBYTE(buf),
+                             &bufSize) == ERROR_SUCCESS &&
             valType == REG_SZ)
         {
           cpuCore.m_strVendor = FromW(buf, bufSize / sizeof(wchar_t));
-          cpuCore.m_strVendor = cpuCore.m_strVendor.substr(0, cpuCore.m_strVendor.find(char(0))); // remove extra null terminations
+          cpuCore.m_strVendor = cpuCore.m_strVendor.substr(
+              0, cpuCore.m_strVendor.find(char(0))); // remove extra null terminations
         }
         DWORD mhzVal;
         bufSize = sizeof(mhzVal);
-        if (RegQueryValueExW(hCpuKey, L"~MHz", nullptr, &valType, LPBYTE(&mhzVal), &bufSize) == ERROR_SUCCESS &&
+        if (RegQueryValueExW(hCpuKey, L"~MHz", nullptr, &valType, LPBYTE(&mhzVal), &bufSize) ==
+                ERROR_SUCCESS &&
             valType == REG_DWORD)
           cpuCore.m_fSpeed = double(mhzVal);
 
@@ -226,7 +236,8 @@ CCPUInfo::CCPUInfo(void)
 
   if (PdhOpenQueryW(nullptr, 0, &m_cpuQueryFreq) == ERROR_SUCCESS)
   {
-    if (PdhAddEnglishCounterW(m_cpuQueryFreq, L"\\Processor Information(0,0)\\Processor Frequency", 0, &m_cpuFreqCounter) != ERROR_SUCCESS)
+    if (PdhAddEnglishCounterW(m_cpuQueryFreq, L"\\Processor Information(0,0)\\Processor Frequency",
+                              0, &m_cpuFreqCounter) != ERROR_SUCCESS)
       m_cpuFreqCounter = nullptr;
   }
   else
@@ -236,7 +247,9 @@ CCPUInfo::CCPUInfo(void)
   {
     for (size_t i = 0; i < m_cores.size(); i++)
     {
-      if (PdhAddEnglishCounterW(m_cpuQueryLoad, StringUtils::Format(L"\\Processor(%d)\\%% Idle Time", int(i)).c_str(), 0, &m_cores[i].m_coreCounter) != ERROR_SUCCESS)
+      if (PdhAddEnglishCounterW(
+              m_cpuQueryLoad, StringUtils::Format(L"\\Processor(%d)\\%% Idle Time", int(i)).c_str(),
+              0, &m_cores[i].m_coreCounter) != ERROR_SUCCESS)
         m_cores[i].m_coreCounter = nullptr;
     }
   }
@@ -276,9 +289,9 @@ CCPUInfo::CCPUInfo(void)
   if (m_fProcTemperature == NULL)
     m_fProcTemperature = fopen("/sys/class/hwmon/hwmon0/temp1_input", "r");
   if (m_fProcTemperature == NULL)
-    m_fProcTemperature = fopen("/sys/class/thermal/thermal_zone0/temp", "r");  // On Raspberry PIs
+    m_fProcTemperature = fopen("/sys/class/thermal/thermal_zone0/temp", "r"); // On Raspberry PIs
 
-  m_fCPUFreq = fopen ("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq", "r");
+  m_fCPUFreq = fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq", "r");
   if (!m_fCPUFreq)
   {
     m_cpuInfoForFreq = true;
@@ -297,89 +310,89 @@ CCPUInfo::CCPUInfo(void)
     int nCurrId = 0;
     while (fgets(buffer, sizeof(buffer), fCPUInfo))
     {
-      if (strncmp(buffer, "processor", strlen("processor"))==0)
+      if (strncmp(buffer, "processor", strlen("processor")) == 0)
       {
-        char *needle = strstr(buffer, ":");
+        char* needle = strstr(buffer, ":");
         if (needle)
         {
           CoreInfo core;
-          core.m_id = atoi(needle+2);
+          core.m_id = atoi(needle + 2);
           nCurrId = core.m_id;
           m_cores[core.m_id] = core;
         }
         m_cpuCount++;
       }
-      else if (strncmp(buffer, "vendor_id", strlen("vendor_id"))==0)
+      else if (strncmp(buffer, "vendor_id", strlen("vendor_id")) == 0)
       {
-        char *needle = strstr(buffer, ":");
-        if (needle && strlen(needle)>3)
+        char* needle = strstr(buffer, ":");
+        if (needle && strlen(needle) > 3)
         {
-          needle+=2;
+          needle += 2;
           m_cores[nCurrId].m_strVendor = needle;
           StringUtils::Trim(m_cores[nCurrId].m_strVendor);
         }
       }
-      else if (strncmp(buffer, "Processor", strlen("Processor"))==0)
+      else if (strncmp(buffer, "Processor", strlen("Processor")) == 0)
       {
-        char *needle = strstr(buffer, ":");
-        if (needle && strlen(needle)>3)
+        char* needle = strstr(buffer, ":");
+        if (needle && strlen(needle) > 3)
         {
-          needle+=2;
+          needle += 2;
           m_cpuModel = needle;
           m_cores[nCurrId].m_strModel = m_cpuModel;
           StringUtils::Trim(m_cores[nCurrId].m_strModel);
         }
       }
-      else if (strncmp(buffer, "BogoMIPS", strlen("BogoMIPS"))==0)
+      else if (strncmp(buffer, "BogoMIPS", strlen("BogoMIPS")) == 0)
       {
-        char *needle = strstr(buffer, ":");
-        if (needle && strlen(needle)>3)
+        char* needle = strstr(buffer, ":");
+        if (needle && strlen(needle) > 3)
         {
-          needle+=2;
+          needle += 2;
           m_cpuBogoMips = needle;
           m_cores[nCurrId].m_strBogoMips = m_cpuBogoMips;
           StringUtils::Trim(m_cores[nCurrId].m_strBogoMips);
         }
       }
-      else if (strncmp(buffer, "Hardware", strlen("Hardware"))==0)
+      else if (strncmp(buffer, "Hardware", strlen("Hardware")) == 0)
       {
-        char *needle = strstr(buffer, ":");
-        if (needle && strlen(needle)>3)
+        char* needle = strstr(buffer, ":");
+        if (needle && strlen(needle) > 3)
         {
-          needle+=2;
+          needle += 2;
           m_cpuHardware = needle;
           m_cores[nCurrId].m_strHardware = m_cpuHardware;
           StringUtils::Trim(m_cores[nCurrId].m_strHardware);
         }
       }
-      else if (strncmp(buffer, "Revision", strlen("Revision"))==0)
+      else if (strncmp(buffer, "Revision", strlen("Revision")) == 0)
       {
-        char *needle = strstr(buffer, ":");
-        if (needle && strlen(needle)>3)
+        char* needle = strstr(buffer, ":");
+        if (needle && strlen(needle) > 3)
         {
-          needle+=2;
+          needle += 2;
           m_cpuRevision = needle;
           m_cores[nCurrId].m_strRevision = m_cpuRevision;
           StringUtils::Trim(m_cores[nCurrId].m_strRevision);
         }
       }
-      else if (strncmp(buffer, "Serial", strlen("Serial"))==0)
+      else if (strncmp(buffer, "Serial", strlen("Serial")) == 0)
       {
-        char *needle = strstr(buffer, ":");
-        if (needle && strlen(needle)>3)
+        char* needle = strstr(buffer, ":");
+        if (needle && strlen(needle) > 3)
         {
-          needle+=2;
+          needle += 2;
           m_cpuSerial = needle;
           m_cores[nCurrId].m_strSerial = m_cpuSerial;
           StringUtils::Trim(m_cores[nCurrId].m_strSerial);
         }
       }
-      else if (strncmp(buffer, "model name", strlen("model name"))==0)
+      else if (strncmp(buffer, "model name", strlen("model name")) == 0)
       {
-        char *needle = strstr(buffer, ":");
-        if (needle && strlen(needle)>3)
+        char* needle = strstr(buffer, ":");
+        if (needle && strlen(needle) > 3)
         {
-          needle+=2;
+          needle += 2;
           m_cpuModel = needle;
           m_cores[nCurrId].m_strModel = m_cpuModel;
           StringUtils::Trim(m_cores[nCurrId].m_strModel);
@@ -390,8 +403,7 @@ CCPUInfo::CCPUInfo(void)
         char* needle = strchr(buffer, ':');
         if (needle)
         {
-          char* tok = NULL,
-              * save;
+          char *tok = NULL, *save;
           needle++;
           tok = strtok_r(needle, " ", &save);
           while (tok)
@@ -487,7 +499,6 @@ CCPUInfo::CCPUInfo(void)
 
   if (HasNeon())
     m_cpuFeatures |= CPU_FEATURE_NEON;
-
 }
 
 CCPUInfo::~CCPUInfo()
@@ -537,9 +548,11 @@ int CCPUInfo::getUsedPercentage()
   idleTicks -= m_idleTicks;
   ioTicks -= m_ioTicks;
 
-  if(userTicks + niceTicks + systemTicks + idleTicks + ioTicks == 0)
+  if (userTicks + niceTicks + systemTicks + idleTicks + ioTicks == 0)
     return m_lastUsedPercentage;
-  result = static_cast<int>(double(userTicks + niceTicks + systemTicks) * 100.0 / double(userTicks + niceTicks + systemTicks + idleTicks + ioTicks) + 0.5);
+  result = static_cast<int>(double(userTicks + niceTicks + systemTicks) * 100.0 /
+                                double(userTicks + niceTicks + systemTicks + idleTicks + ioTicks) +
+                            0.5);
 
   m_userTicks += userTicks;
   m_niceTicks += niceTicks;
@@ -600,20 +613,21 @@ float CCPUInfo::getCPUFrequency()
   {
     rewind(m_fCPUFreq);
     fflush(m_fCPUFreq);
-    float mhz, avg=0.0;
-    int n, cpus=0;
-    while(EOF!=(n=fscanf(m_fCPUFreq," MHz : %f ", &mhz)))
+    float mhz, avg = 0.0;
+    int n, cpus = 0;
+    while (EOF != (n = fscanf(m_fCPUFreq, " MHz : %f ", &mhz)))
     {
-      if (n>0) {
+      if (n > 0)
+      {
         cpus++;
         avg += mhz;
       }
-      if (!fscanf(m_fCPUFreq,"%*s"))
+      if (!fscanf(m_fCPUFreq, "%*s"))
         break;
     }
 
     if (cpus > 0)
-      value = avg/cpus;
+      value = avg / cpus;
   }
   return value;
 #endif
@@ -621,17 +635,17 @@ float CCPUInfo::getCPUFrequency()
 
 bool CCPUInfo::getTemperature(CTemperature& temperature)
 {
-  int         value = 0;
-  char        scale = 0;
+  int value = 0;
+  char scale = 0;
 
 #ifdef TARGET_POSIX
 #if defined(TARGET_DARWIN_OSX)
   value = SMCGetTemperature(SMC_KEY_CPU_TEMP);
   scale = 'c';
 #else
-  int         ret   = 0;
-  FILE        *p    = NULL;
-  std::string  cmd   = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_cpuTempCmd;
+  int ret = 0;
+  FILE* p = NULL;
+  std::string cmd = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_cpuTempCmd;
 
   temperature.SetValid(false);
 
@@ -640,7 +654,7 @@ bool CCPUInfo::getTemperature(CTemperature& temperature)
 
   if (!cmd.empty())
   {
-    p = popen (cmd.c_str(), "r");
+    p = popen(cmd.c_str(), "r");
     if (p)
     {
       ret = fscanf(p, "%d %c", &value, &scale);
@@ -690,7 +704,7 @@ bool CCPUInfo::HasCoreId(int nCoreId) const
   return false;
 }
 
-const CoreInfo &CCPUInfo::GetCoreInfo(int nCoreId)
+const CoreInfo& CCPUInfo::GetCoreInfo(int nCoreId)
 {
   std::map<int, CoreInfo>::iterator iter = m_cores.find(nCoreId);
   if (iter != m_cores.end())
@@ -700,13 +714,16 @@ const CoreInfo &CCPUInfo::GetCoreInfo(int nCoreId)
   return dummy;
 }
 
-bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
-    unsigned long long& system, unsigned long long& idle, unsigned long long& io)
+bool CCPUInfo::readProcStat(unsigned long long& user,
+                            unsigned long long& nice,
+                            unsigned long long& system,
+                            unsigned long long& idle,
+                            unsigned long long& io)
 {
 #if defined(TARGET_WINDOWS)
   nice = 0;
   io = 0;
-#if defined (TARGET_WINDOWS_DESKTOP)
+#if defined(TARGET_WINDOWS_DESKTOP)
   FILETIME idleTime;
   FILETIME kernelTime;
   FILETIME userTime;
@@ -725,18 +742,20 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
       CoreInfo& curCore = it->second; // simplify usage
       PDH_RAW_COUNTER cnt;
       DWORD cntType;
-      if (curCore.m_coreCounter && PdhGetRawCounterValue(curCore.m_coreCounter, &cntType, &cnt) == ERROR_SUCCESS &&
+      if (curCore.m_coreCounter &&
+          PdhGetRawCounterValue(curCore.m_coreCounter, &cntType, &cnt) == ERROR_SUCCESS &&
           (cnt.CStatus == PDH_CSTATUS_VALID_DATA || cnt.CStatus == PDH_CSTATUS_NEW_DATA))
       {
-        const LONGLONG coreTotal = cnt.SecondValue,
-                       coreIdle  = cnt.FirstValue;
+        const LONGLONG coreTotal = cnt.SecondValue, coreIdle = cnt.FirstValue;
         const LONGLONG deltaTotal = coreTotal - curCore.m_total,
-                       deltaIdle  = coreIdle - curCore.m_idle;
+                       deltaIdle = coreIdle - curCore.m_idle;
         const double load = (double(deltaTotal - deltaIdle) * 100.0) / double(deltaTotal);
 
         // win32 has some problems with calculation of load if load close to zero
         curCore.m_fPct = (load < 0) ? 0 : load;
-        if (load >= 0 || deltaTotal > 5 * 10 * 1000 * 1000) // do not update (smooth) values for 5 seconds on negative loads
+        if (load >= 0 ||
+            deltaTotal > 5 * 10 * 1000 *
+                             1000) // do not update (smooth) values for 5 seconds on negative loads
         {
           curCore.m_total = coreTotal;
           curCore.m_idle = coreIdle;
@@ -751,9 +770,11 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
       it->second.m_fPct = double(m_lastUsedPercentage); // use CPU average as fallback
 #endif // TARGET_WINDOWS_DESKTOP
 #if defined(TARGET_WINDOWS_STORE)
-  if (winrt::Windows::Foundation::Metadata::ApiInformation::IsTypePresent(L"Windows.System.Diagnostics.SystemDiagnosticInfo"))
+  if (winrt::Windows::Foundation::Metadata::ApiInformation::IsTypePresent(
+          L"Windows.System.Diagnostics.SystemDiagnosticInfo"))
   {
-    auto diagnostic = winrt::Windows::System::Diagnostics::SystemDiagnosticInfo::GetForCurrentSystem();
+    auto diagnostic =
+        winrt::Windows::System::Diagnostics::SystemDiagnosticInfo::GetForCurrentSystem();
     auto usage = diagnostic.CpuUsage();
     auto report = usage.GetReport();
 
@@ -766,7 +787,7 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
     return false;
 #endif // TARGET_WINDOWS_STORE
 #elif defined(TARGET_FREEBSD)
-  long *cptimes;
+  long* cptimes;
   size_t len;
   int i;
 
@@ -791,11 +812,11 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
     long coreUser, coreNice, coreSystem, coreIdle, coreIO;
     double total;
 
-    coreUser   = cptimes[i * CPUSTATES + CP_USER];
-    coreNice   = cptimes[i * CPUSTATES + CP_NICE];
+    coreUser = cptimes[i * CPUSTATES + CP_USER];
+    coreNice = cptimes[i * CPUSTATES + CP_NICE];
     coreSystem = cptimes[i * CPUSTATES + CP_SYS];
-    coreIO     = cptimes[i * CPUSTATES + CP_INTR];
-    coreIdle   = cptimes[i * CPUSTATES + CP_IDLE];
+    coreIO = cptimes[i * CPUSTATES + CP_INTR];
+    coreIdle = cptimes[i * CPUSTATES + CP_IDLE];
 
     std::map<int, CoreInfo>::iterator iter = m_cores.find(i);
     if (iter != m_cores.end())
@@ -807,7 +828,7 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
       coreIO -= iter->second.m_io;
 
       total = (double)(coreUser + coreNice + coreSystem + coreIdle + coreIO);
-      if(total != 0.0f)
+      if (total != 0.0f)
         iter->second.m_fPct = ((double)(coreUser + coreNice + coreSystem) * 100.0) / total;
 
       iter->second.m_user += coreUser;
@@ -816,11 +837,11 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
       iter->second.m_idle += coreIdle;
       iter->second.m_io += coreIO;
 
-      user   += coreUser;
-      nice   += coreNice;
+      user += coreUser;
+      nice += coreNice;
       system += coreSystem;
-      idle   += coreIdle;
-      io     += coreIO;
+      idle += coreIdle;
+      io += coreIO;
     }
   }
   free(cptimes);
@@ -850,8 +871,9 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
   while (fgets(buf, sizeof(buf), m_fProcStat) && num >= 4)
   {
     unsigned long long coreUser, coreNice, coreSystem, coreIdle, coreIO;
-    int nCpu=0;
-    num = sscanf(buf, "cpu%d %llu %llu %llu %llu %llu %*s\n", &nCpu, &coreUser, &coreNice, &coreSystem, &coreIdle, &coreIO);
+    int nCpu = 0;
+    num = sscanf(buf, "cpu%d %llu %llu %llu %llu %llu %*s\n", &nCpu, &coreUser, &coreNice,
+                 &coreSystem, &coreIdle, &coreIO);
     if (num < 6)
       coreIO = 0;
 
@@ -865,7 +887,7 @@ bool CCPUInfo::readProcStat(unsigned long long& user, unsigned long long& nice,
       coreIO -= iter->second.m_io;
 
       double total = (double)(coreUser + coreNice + coreSystem + coreIdle + coreIO);
-      if(total == 0.0f)
+      if (total == 0.0f)
         iter->second.m_fPct = 0.0f;
       else
         iter->second.m_fPct = ((double)(coreUser + coreNice + coreSystem) * 100.0) / total;
@@ -950,40 +972,40 @@ void CCPUInfo::ReadCPUFeatures()
   }
 #endif // ! _M_ARM
 #elif defined(TARGET_DARWIN)
-  #if defined(__ppc__)
-    m_cpuFeatures |= CPU_FEATURE_ALTIVEC;
-  #elif defined(TARGET_DARWIN_EMBEDDED)
-  #else
-    size_t len = 512 - 1; // '-1' for trailing space
-    char buffer[512] ={0};
+#if defined(__ppc__)
+  m_cpuFeatures |= CPU_FEATURE_ALTIVEC;
+#elif defined(TARGET_DARWIN_EMBEDDED)
+#else
+  size_t len = 512 - 1; // '-1' for trailing space
+  char buffer[512] = {0};
 
-    if (sysctlbyname("machdep.cpu.features", &buffer, &len, NULL, 0) == 0)
-    {
-      strcat(buffer, " ");
-      if (strstr(buffer,"MMX "))
-        m_cpuFeatures |= CPU_FEATURE_MMX;
-      if (strstr(buffer,"MMXEXT "))
-        m_cpuFeatures |= CPU_FEATURE_MMX2;
-      if (strstr(buffer,"SSE "))
-        m_cpuFeatures |= CPU_FEATURE_SSE;
-      if (strstr(buffer,"SSE2 "))
-        m_cpuFeatures |= CPU_FEATURE_SSE2;
-      if (strstr(buffer,"SSE3 "))
-        m_cpuFeatures |= CPU_FEATURE_SSE3;
-      if (strstr(buffer,"SSSE3 "))
-        m_cpuFeatures |= CPU_FEATURE_SSSE3;
-      if (strstr(buffer,"SSE4.1 "))
-        m_cpuFeatures |= CPU_FEATURE_SSE4;
-      if (strstr(buffer,"SSE4.2 "))
-        m_cpuFeatures |= CPU_FEATURE_SSE42;
-      if (strstr(buffer,"3DNOW "))
-        m_cpuFeatures |= CPU_FEATURE_3DNOW;
-      if (strstr(buffer,"3DNOWEXT "))
-       m_cpuFeatures |= CPU_FEATURE_3DNOWEXT;
-    }
-    else
+  if (sysctlbyname("machdep.cpu.features", &buffer, &len, NULL, 0) == 0)
+  {
+    strcat(buffer, " ");
+    if (strstr(buffer, "MMX "))
       m_cpuFeatures |= CPU_FEATURE_MMX;
-  #endif
+    if (strstr(buffer, "MMXEXT "))
+      m_cpuFeatures |= CPU_FEATURE_MMX2;
+    if (strstr(buffer, "SSE "))
+      m_cpuFeatures |= CPU_FEATURE_SSE;
+    if (strstr(buffer, "SSE2 "))
+      m_cpuFeatures |= CPU_FEATURE_SSE2;
+    if (strstr(buffer, "SSE3 "))
+      m_cpuFeatures |= CPU_FEATURE_SSE3;
+    if (strstr(buffer, "SSSE3 "))
+      m_cpuFeatures |= CPU_FEATURE_SSSE3;
+    if (strstr(buffer, "SSE4.1 "))
+      m_cpuFeatures |= CPU_FEATURE_SSE4;
+    if (strstr(buffer, "SSE4.2 "))
+      m_cpuFeatures |= CPU_FEATURE_SSE42;
+    if (strstr(buffer, "3DNOW "))
+      m_cpuFeatures |= CPU_FEATURE_3DNOW;
+    if (strstr(buffer, "3DNOWEXT "))
+      m_cpuFeatures |= CPU_FEATURE_3DNOWEXT;
+  }
+  else
+    m_cpuFeatures |= CPU_FEATURE_MMX;
+#endif
 #elif defined(LINUX)
 // empty on purpose, the implementation is in the constructor
 #elif !defined(__powerpc__) && !defined(__ppc__) && !defined(__arm__) && !defined(__aarch64__)
@@ -996,7 +1018,7 @@ void CCPUInfo::ReadCPUFeatures()
 bool CCPUInfo::HasNeon()
 {
   static int has_neon = -1;
-#if defined (TARGET_ANDROID)
+#if defined(TARGET_ANDROID)
   if (has_neon == -1)
     has_neon = (CAndroidFeatures::HasNeon()) ? 1 : 0;
 

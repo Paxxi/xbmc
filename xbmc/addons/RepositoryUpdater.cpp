@@ -34,10 +34,10 @@
 namespace ADDON
 {
 
-CRepositoryUpdater::CRepositoryUpdater(CAddonMgr& addonMgr) :
-  m_timer(this),
-  m_doneEvent(true),
-  m_addonMgr(addonMgr)
+CRepositoryUpdater::CRepositoryUpdater(CAddonMgr& addonMgr)
+  : m_timer(this)
+  , m_doneEvent(true)
+  , m_addonMgr(addonMgr)
 {
   // Register settings
   std::set<std::string> settingSet;
@@ -79,25 +79,27 @@ void CRepositoryUpdater::OnJobComplete(unsigned int jobID, bool success, CJob* j
 
     VECADDONS updates = m_addonMgr.GetAvailableUpdates();
 
-    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_ADDONS_AUTOUPDATES) == AUTO_UPDATES_NOTIFY)
+    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+            CSettings::SETTING_ADDONS_AUTOUPDATES) == AUTO_UPDATES_NOTIFY)
     {
       if (!updates.empty())
       {
         if (updates.size() == 1)
-          CGUIDialogKaiToast::QueueNotification(
-              updates[0]->Icon(), updates[0]->Name(), g_localizeStrings.Get(24068),
-              TOAST_DISPLAY_TIME, false, TOAST_DISPLAY_TIME);
+          CGUIDialogKaiToast::QueueNotification(updates[0]->Icon(), updates[0]->Name(),
+                                                g_localizeStrings.Get(24068), TOAST_DISPLAY_TIME,
+                                                false, TOAST_DISPLAY_TIME);
         else
-          CGUIDialogKaiToast::QueueNotification(
-              "", g_localizeStrings.Get(24001), g_localizeStrings.Get(24061),
-              TOAST_DISPLAY_TIME, false, TOAST_DISPLAY_TIME);
+          CGUIDialogKaiToast::QueueNotification("", g_localizeStrings.Get(24001),
+                                                g_localizeStrings.Get(24061), TOAST_DISPLAY_TIME,
+                                                false, TOAST_DISPLAY_TIME);
 
-        for (const auto &addon : updates)
+        for (const auto& addon : updates)
           CServiceBroker::GetEventLog().Add(EventPtr(new CAddonManagementEvent(addon, 24068)));
       }
     }
 
-    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_ADDONS_AUTOUPDATES) == AUTO_UPDATES_ON)
+    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+            CSettings::SETTING_ADDONS_AUTOUPDATES) == AUTO_UPDATES_ON)
     {
       CAddonInstaller::GetInstance().InstallUpdates();
     }
@@ -125,7 +127,9 @@ bool CRepositoryUpdater::CheckForUpdates(bool showProgress)
 
 static void SetProgressIndicator(CRepositoryUpdateJob* job)
 {
-  auto dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogExtendedProgressBar>(WINDOW_DIALOG_EXT_PROGRESS);
+  auto dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogExtendedProgressBar>(
+          WINDOW_DIALOG_EXT_PROGRESS);
   if (dialog)
     job->SetProgressIndicators(dialog->GetHandle(g_localizeStrings.Get(24092)), nullptr);
 }
@@ -133,8 +137,9 @@ static void SetProgressIndicator(CRepositoryUpdateJob* job)
 void CRepositoryUpdater::CheckForUpdates(const ADDON::RepositoryPtr& repo, bool showProgress)
 {
   CSingleLock lock(m_criticalSection);
-  auto job = std::find_if(m_jobs.begin(), m_jobs.end(),
-      [&](CRepositoryUpdateJob* job){ return job->GetAddon()->ID() == repo->ID(); });
+  auto job = std::find_if(m_jobs.begin(), m_jobs.end(), [&](CRepositoryUpdateJob* job) {
+    return job->GetAddon()->ID() == repo->ID();
+  });
 
   if (job == m_jobs.end())
   {
@@ -164,12 +169,12 @@ void CRepositoryUpdater::OnTimeout()
       CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow() == WINDOW_FULLSCREEN_GAME ||
       CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow() == WINDOW_SLIDESHOW)
   {
-    CLog::Log(LOGDEBUG,"CRepositoryUpdater: busy playing. postponing scheduled update");
+    CLog::Log(LOGDEBUG, "CRepositoryUpdater: busy playing. postponing scheduled update");
     m_timer.RestartAsync(2 * 60 * 1000);
     return;
   }
 
-  CLog::Log(LOGDEBUG,"CRepositoryUpdater: running scheduled update");
+  CLog::Log(LOGDEBUG, "CRepositoryUpdater: running scheduled update");
   CheckForUpdates();
 }
 
@@ -189,13 +194,12 @@ CDateTime CRepositoryUpdater::LastUpdated() const
   db.Open();
   std::vector<CDateTime> updateTimes;
   std::transform(repos.begin(), repos.end(), std::back_inserter(updateTimes),
-    [&](const AddonPtr& repo)
-    {
-      auto lastCheck = db.LastChecked(repo->ID());
-      if (lastCheck.first.IsValid() && lastCheck.second == repo->Version())
-        return lastCheck.first;
-      return CDateTime();
-    });
+                 [&](const AddonPtr& repo) {
+                   auto lastCheck = db.LastChecked(repo->ID());
+                   if (lastCheck.first.IsValid() && lastCheck.second == repo->Version())
+                     return lastCheck.first;
+                   return CDateTime();
+                 });
 
   return *std::min_element(updateTimes.begin(), updateTimes.end());
 }
@@ -207,7 +211,8 @@ void CRepositoryUpdater::ScheduleUpdate()
   CSingleLock lock(m_criticalSection);
   m_timer.Stop(true);
 
-  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_ADDONS_AUTOUPDATES) == AUTO_UPDATES_NEVER)
+  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+          CSettings::SETTING_ADDONS_AUTOUPDATES) == AUTO_UPDATES_NEVER)
     return;
 
   if (!m_addonMgr.HasAddons(ADDON_REPOSITORY))
@@ -217,10 +222,10 @@ void CRepositoryUpdater::ScheduleUpdate()
   auto next = std::max(CDateTime::GetCurrentDateTime(), prev + interval);
   int delta = std::max(1, (next - CDateTime::GetCurrentDateTime()).GetSecondsTotal() * 1000);
 
-  CLog::Log(LOGDEBUG,"CRepositoryUpdater: previous update at %s, next at %s",
-      prev.GetAsLocalizedDateTime().c_str(), next.GetAsLocalizedDateTime().c_str());
+  CLog::Log(LOGDEBUG, "CRepositoryUpdater: previous update at %s, next at %s",
+            prev.GetAsLocalizedDateTime().c_str(), next.GetAsLocalizedDateTime().c_str());
 
   if (!m_timer.Start(delta))
-    CLog::Log(LOGERROR,"CRepositoryUpdater: failed to start timer");
+    CLog::Log(LOGERROR, "CRepositoryUpdater: failed to start timer");
 }
-}
+} // namespace ADDON

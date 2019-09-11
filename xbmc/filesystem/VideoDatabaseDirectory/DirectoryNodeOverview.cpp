@@ -20,19 +20,18 @@
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 
 Node OverviewChildren[] = {
-                            { NODE_TYPE_MOVIES_OVERVIEW,            "movies",                   342 },
-                            { NODE_TYPE_TVSHOWS_OVERVIEW,           "tvshows",                  20343 },
-                            { NODE_TYPE_MUSICVIDEOS_OVERVIEW,       "musicvideos",              20389 },
-                            { NODE_TYPE_RECENTLY_ADDED_MOVIES,      "recentlyaddedmovies",      20386 },
-                            { NODE_TYPE_RECENTLY_ADDED_EPISODES,    "recentlyaddedepisodes",    20387 },
-                            { NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS, "recentlyaddedmusicvideos", 20390 },
-                            { NODE_TYPE_INPROGRESS_TVSHOWS,         "inprogresstvshows",        626 },
-                          };
+    {NODE_TYPE_MOVIES_OVERVIEW, "movies", 342},
+    {NODE_TYPE_TVSHOWS_OVERVIEW, "tvshows", 20343},
+    {NODE_TYPE_MUSICVIDEOS_OVERVIEW, "musicvideos", 20389},
+    {NODE_TYPE_RECENTLY_ADDED_MOVIES, "recentlyaddedmovies", 20386},
+    {NODE_TYPE_RECENTLY_ADDED_EPISODES, "recentlyaddedepisodes", 20387},
+    {NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS, "recentlyaddedmusicvideos", 20390},
+    {NODE_TYPE_INPROGRESS_TVSHOWS, "inprogresstvshows", 626},
+};
 
 CDirectoryNodeOverview::CDirectoryNodeOverview(const std::string& strName, CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_OVERVIEW, strName, pParent)
 {
-
 }
 
 NODE_TYPE CDirectoryNodeOverview::GetChildType() const
@@ -59,38 +58,42 @@ bool CDirectoryNodeOverview::GetContent(CFileItemList& items) const
   bool hasMovies = database.HasContent(VIDEODB_CONTENT_MOVIES);
   bool hasTvShows = database.HasContent(VIDEODB_CONTENT_TVSHOWS);
   bool hasMusicVideos = database.HasContent(VIDEODB_CONTENT_MUSICVIDEOS);
-  std::vector<std::pair<const char*, int> > vec;
+  std::vector<std::pair<const char*, int>> vec;
   if (hasMovies)
   {
-    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYVIDEOS_FLATTEN))
+    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+            CSettings::SETTING_MYVIDEOS_FLATTEN))
       vec.push_back(std::make_pair("movies/titles", 342));
     else
-      vec.push_back(std::make_pair("movies", 342));   // Movies
+      vec.push_back(std::make_pair("movies", 342)); // Movies
   }
   if (hasTvShows)
   {
-    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYVIDEOS_FLATTEN))
+    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+            CSettings::SETTING_MYVIDEOS_FLATTEN))
       vec.push_back(std::make_pair("tvshows/titles", 20343));
     else
       vec.push_back(std::make_pair("tvshows", 20343)); // TV Shows
   }
   if (hasMusicVideos)
   {
-    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYVIDEOS_FLATTEN))
+    if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+            CSettings::SETTING_MYVIDEOS_FLATTEN))
       vec.push_back(std::make_pair("musicvideos/titles", 20389));
     else
       vec.push_back(std::make_pair("musicvideos", 20389)); // Music Videos
   }
   {
     if (hasMovies)
-      vec.push_back(std::make_pair("recentlyaddedmovies", 20386));  // Recently Added Movies
+      vec.push_back(std::make_pair("recentlyaddedmovies", 20386)); // Recently Added Movies
     if (hasTvShows)
     {
       vec.push_back(std::make_pair("recentlyaddedepisodes", 20387)); // Recently Added Episodes
       vec.push_back(std::make_pair("inprogresstvshows", 626)); // InProgress TvShows
     }
     if (hasMusicVideos)
-      vec.push_back(std::make_pair("recentlyaddedmusicvideos", 20390)); // Recently Added Music Videos
+      vec.push_back(
+          std::make_pair("recentlyaddedmusicvideos", 20390)); // Recently Added Music Videos
   }
   std::string path = BuildPath();
   for (unsigned int i = 0; i < vec.size(); ++i)

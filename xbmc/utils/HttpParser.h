@@ -42,57 +42,58 @@
 class HttpParser
 {
 public:
-    ~HttpParser();
+  ~HttpParser();
 
-    enum status_t {
-        Done,
-        Error,
-        Incomplete
-    };
+  enum status_t
+  {
+    Done,
+    Error,
+    Incomplete
+  };
 
-    status_t addBytes( const char* bytes, unsigned len );
+  status_t addBytes(const char* bytes, unsigned len);
 
-    const char* getMethod() const;
-    const char* getUri() const;
-    const char* getQueryString() const;
-    const char* getBody() const;
-    // key should be in lower case when looking up.
-    const char* getValue( const char* key ) const;
-    unsigned getContentLength() const;
+  const char* getMethod() const;
+  const char* getUri() const;
+  const char* getQueryString() const;
+  const char* getBody() const;
+  // key should be in lower case when looking up.
+  const char* getValue(const char* key) const;
+  unsigned getContentLength() const;
 
 private:
-    void parseHeader();
-    bool parseRequestLine();
+  void parseHeader();
+  bool parseRequestLine();
 
-    std::string _data;
-    unsigned _headerStart = 0;
-    unsigned _parsedTo =  0 ;
-    int _state =  0 ;
-    unsigned _keyIndex = 0;
-    unsigned _valueIndex = 0;
-    unsigned _contentLength = 0;
-    unsigned _contentStart = 0;
-    unsigned _uriIndex = 0;
+  std::string _data;
+  unsigned _headerStart = 0;
+  unsigned _parsedTo = 0;
+  int _state = 0;
+  unsigned _keyIndex = 0;
+  unsigned _valueIndex = 0;
+  unsigned _contentLength = 0;
+  unsigned _contentStart = 0;
+  unsigned _uriIndex = 0;
 
-    typedef std::vector<unsigned> IntArray;
-    IntArray _keys;
+  typedef std::vector<unsigned> IntArray;
+  IntArray _keys;
 
-    enum State {
-        p_request_line=0,
-        p_request_line_cr=1,
-        p_request_line_crlf=2,
-        p_request_line_crlfcr=3,
-        p_key=4,
-        p_key_colon=5,
-        p_key_colon_sp=6,
-        p_value=7,
-        p_value_cr=8,
-        p_value_crlf=9,
-        p_value_crlfcr=10,
-        p_content=11, // here we are done parsing the header.
-        p_error=12 // here an error has occurred and the parse failed.
-    };
+  enum State
+  {
+    p_request_line = 0,
+    p_request_line_cr = 1,
+    p_request_line_crlf = 2,
+    p_request_line_crlfcr = 3,
+    p_key = 4,
+    p_key_colon = 5,
+    p_key_colon_sp = 6,
+    p_value = 7,
+    p_value_cr = 8,
+    p_value_crlf = 9,
+    p_value_crlfcr = 10,
+    p_content = 11, // here we are done parsing the header.
+    p_error = 12 // here an error has occurred and the parse failed.
+  };
 
-    status_t _status =  Incomplete ;
+  status_t _status = Incomplete;
 };
-

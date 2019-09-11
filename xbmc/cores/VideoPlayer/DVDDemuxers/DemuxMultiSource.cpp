@@ -39,7 +39,6 @@ void CDemuxMultiSource::Dispose()
   m_demuxerMap.clear();
   m_DemuxerToInputStreamMap.clear();
   m_pInput = NULL;
-
 }
 
 void CDemuxMultiSource::EnableStream(int64_t demuxerId, int id, bool enable)
@@ -185,9 +184,9 @@ DemuxPacket* CDemuxMultiSource::Read()
       if (input->second->IsEOF())
       {
         CLog::Log(LOGDEBUG, "%s - Demuxer for file %s is at eof, removed it from the queue",
-          __FUNCTION__, CURL::GetRedacted(currentDemuxer->GetFileName()).c_str());
+                  __FUNCTION__, CURL::GetRedacted(currentDemuxer->GetFileName()).c_str());
       }
-      else    //maybe add an error counter?
+      else //maybe add an error counter?
         m_demuxerQueue.push(std::make_pair(-1.0, currentDemuxer));
     }
   }

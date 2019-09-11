@@ -25,7 +25,9 @@ protected:
 
   // overrides of CPythonInvoker
   void onAbort() override;
-  void onError(const std::string& exceptionType = "", const std::string& exceptionValue = "", const std::string& exceptionTraceback = "") override;
+  void onError(const std::string& exceptionType = "",
+               const std::string& exceptionValue = "",
+               const std::string& exceptionTraceback = "") override;
 
   HTTPPythonRequest* m_request;
   bool m_internalError;

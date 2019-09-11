@@ -36,7 +36,7 @@ bool CPlayListURL::Load(const std::string& strFileName)
   URIUtils::GetParentPath(strFileName, m_strBasePath);
 
   CFile file;
-  if (!file.Open(strFileName) )
+  if (!file.Open(strFileName))
   {
     file.Close();
     return false;
@@ -49,9 +49,9 @@ bool CPlayListURL::Load(const std::string& strFileName)
 
     if (StringUtils::StartsWith(strLine, "[InternetShortcut]"))
     {
-      if (file.ReadString(szLine,1024))
+      if (file.ReadString(szLine, 1024))
       {
-        strLine  = szLine;
+        strLine = szLine;
         StringUtils::RemoveCRLF(strLine);
         if (StringUtils::StartsWith(strLine, "URL="))
         {
@@ -65,4 +65,3 @@ bool CPlayListURL::Load(const std::string& strFileName)
   file.Close();
   return true;
 }
-

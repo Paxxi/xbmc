@@ -50,7 +50,8 @@ static float currentRefreshRate()
       return preferredRate;
     }
     CJNIView view(window.getDecorView());
-    if (view) {
+    if (view)
+    {
       CJNIDisplay display(view.getDisplay());
       if (display)
       {
@@ -79,38 +80,43 @@ static void fetchDisplayModes()
     CJNIDisplayMode m = display.getMode();
     if (m)
     {
-      if (m.getPhysicalWidth() > m.getPhysicalHeight())   // Assume unusable if portrait is returned
+      if (m.getPhysicalWidth() > m.getPhysicalHeight()) // Assume unusable if portrait is returned
       {
         s_hasModeApi = true;
 
-        CLog::Log(LOGDEBUG, "CAndroidUtils: current mode: %d: %dx%d@%f", m.getModeId(), m.getPhysicalWidth(), m.getPhysicalHeight(), m.getRefreshRate());
+        CLog::Log(LOGDEBUG, "CAndroidUtils: current mode: %d: %dx%d@%f", m.getModeId(),
+                  m.getPhysicalWidth(), m.getPhysicalHeight(), m.getRefreshRate());
         s_res_cur_displayMode.strId = StringUtils::Format("%d", m.getModeId());
         s_res_cur_displayMode.iWidth = s_res_cur_displayMode.iScreenWidth = m.getPhysicalWidth();
         s_res_cur_displayMode.iHeight = s_res_cur_displayMode.iScreenHeight = m.getPhysicalHeight();
         s_res_cur_displayMode.fRefreshRate = m.getRefreshRate();
-        s_res_cur_displayMode.dwFlags= D3DPRESENTFLAG_PROGRESSIVE;
-        s_res_cur_displayMode.bFullScreen   = true;
-        s_res_cur_displayMode.iSubtitles    = (int)(0.965 * s_res_cur_displayMode.iHeight);
-        s_res_cur_displayMode.fPixelRatio   = 1.0f;
-        s_res_cur_displayMode.strMode       = StringUtils::Format("%dx%d @ %.6f%s - Full Screen", s_res_cur_displayMode.iScreenWidth, s_res_cur_displayMode.iScreenHeight, s_res_cur_displayMode.fRefreshRate,
-                                                                  s_res_cur_displayMode.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
+        s_res_cur_displayMode.dwFlags = D3DPRESENTFLAG_PROGRESSIVE;
+        s_res_cur_displayMode.bFullScreen = true;
+        s_res_cur_displayMode.iSubtitles = (int)(0.965 * s_res_cur_displayMode.iHeight);
+        s_res_cur_displayMode.fPixelRatio = 1.0f;
+        s_res_cur_displayMode.strMode = StringUtils::Format(
+            "%dx%d @ %.6f%s - Full Screen", s_res_cur_displayMode.iScreenWidth,
+            s_res_cur_displayMode.iScreenHeight, s_res_cur_displayMode.fRefreshRate,
+            s_res_cur_displayMode.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
 
         std::vector<CJNIDisplayMode> modes = display.getSupportedModes();
         for (auto m : modes)
         {
-          CLog::Log(LOGDEBUG, "CAndroidUtils: available mode: %d: %dx%d@%f", m.getModeId(), m.getPhysicalWidth(), m.getPhysicalHeight(), m.getRefreshRate());
+          CLog::Log(LOGDEBUG, "CAndroidUtils: available mode: %d: %dx%d@%f", m.getModeId(),
+                    m.getPhysicalWidth(), m.getPhysicalHeight(), m.getRefreshRate());
 
           RESOLUTION_INFO res;
           res.strId = StringUtils::Format("%d", m.getModeId());
           res.iWidth = res.iScreenWidth = m.getPhysicalWidth();
           res.iHeight = res.iScreenHeight = m.getPhysicalHeight();
           res.fRefreshRate = m.getRefreshRate();
-          res.dwFlags= D3DPRESENTFLAG_PROGRESSIVE;
-          res.bFullScreen   = true;
-          res.iSubtitles    = (int)(0.965 * res.iHeight);
-          res.fPixelRatio   = 1.0f;
-          res.strMode       = StringUtils::Format("%dx%d @ %.6f%s - Full Screen", res.iScreenWidth, res.iScreenHeight, res.fRefreshRate,
-                                                  res.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
+          res.dwFlags = D3DPRESENTFLAG_PROGRESSIVE;
+          res.bFullScreen = true;
+          res.iSubtitles = (int)(0.965 * res.iHeight);
+          res.fPixelRatio = 1.0f;
+          res.strMode = StringUtils::Format("%dx%d @ %.6f%s - Full Screen", res.iScreenWidth,
+                                            res.iScreenHeight, res.fRefreshRate,
+                                            res.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
 
           s_res_displayModes.push_back(res);
         }
@@ -151,43 +157,44 @@ CAndroidUtils::CAndroidUtils()
         m_width = StringUtils::IsInteger(aSize[0]) ? atoi(aSize[0].c_str()) : 0;
         m_height = StringUtils::IsInteger(aSize[1]) ? atoi(aSize[1].c_str()) : 0;
       }
-      CLog::Log(LOGDEBUG, "CAndroidUtils: display-size: %s(%dx%d)", displaySize.c_str(), m_width, m_height);
+      CLog::Log(LOGDEBUG, "CAndroidUtils: display-size: %s(%dx%d)", displaySize.c_str(), m_width,
+                m_height);
     }
   }
 
   CLog::Log(LOGDEBUG, "CAndroidUtils: maximum/current resolution: %dx%d", m_width, m_height);
-  int limit = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CAndroidUtils::SETTING_LIMITGUI);
+  int limit = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+      CAndroidUtils::SETTING_LIMITGUI);
   switch (limit)
   {
-    case 0: // auto
-      m_width = 0;
-      m_height = 0;
-      break;
+  case 0: // auto
+    m_width = 0;
+    m_height = 0;
+    break;
 
-    case 9999:  // unlimited
-      break;
+  case 9999: // unlimited
+    break;
 
-    case 720:
-      if (m_height > 720)
-      {
-        m_width = 1280;
-        m_height = 720;
-      }
-      break;
+  case 720:
+    if (m_height > 720)
+    {
+      m_width = 1280;
+      m_height = 720;
+    }
+    break;
 
-    case 1080:
-      if (m_height > 1080)
-      {
-        m_width = 1920;
-        m_height = 1080;
-      }
-      break;
+  case 1080:
+    if (m_height > 1080)
+    {
+      m_width = 1920;
+      m_height = 1080;
+    }
+    break;
   }
   CLog::Log(LOGDEBUG, "CAndroidUtils: selected resolution: %dx%d", m_width, m_height);
 
-  CServiceBroker::GetSettingsComponent()->GetSettings()->GetSettingsManager()->RegisterCallback(this, {
-    CAndroidUtils::SETTING_LIMITGUI
-  });
+  CServiceBroker::GetSettingsComponent()->GetSettings()->GetSettingsManager()->RegisterCallback(
+      this, {CAndroidUtils::SETTING_LIMITGUI});
 }
 
 CAndroidUtils::~CAndroidUtils()
@@ -204,9 +211,9 @@ bool CAndroidUtils::GetNativeResolution(RESOLUTION_INFO* res) const
   {
     ANativeWindow_acquire(nativeWindow);
     m_width = ANativeWindow_getWidth(nativeWindow);
-    m_height= ANativeWindow_getHeight(nativeWindow);
+    m_height = ANativeWindow_getHeight(nativeWindow);
     ANativeWindow_release(nativeWindow);
-    CLog::Log(LOGNOTICE,"CAndroidUtils: window resolution: %dx%d", m_width, m_height);
+    CLog::Log(LOGNOTICE, "CAndroidUtils: window resolution: %dx%d", m_width, m_height);
   }
 
   if (s_hasModeApi)
@@ -219,24 +226,27 @@ bool CAndroidUtils::GetNativeResolution(RESOLUTION_INFO* res) const
   {
     res->strId = "-1";
     res->fRefreshRate = currentRefreshRate();
-    res->dwFlags= D3DPRESENTFLAG_PROGRESSIVE;
-    res->bFullScreen   = true;
+    res->dwFlags = D3DPRESENTFLAG_PROGRESSIVE;
+    res->bFullScreen = true;
     res->iWidth = m_width;
     res->iHeight = m_height;
-    res->fPixelRatio   = 1.0f;
-    res->iScreenWidth  = res->iWidth;
+    res->fPixelRatio = 1.0f;
+    res->iScreenWidth = res->iWidth;
     res->iScreenHeight = res->iHeight;
   }
-  res->iSubtitles    = (int)(0.965 * res->iHeight);
-  res->strMode       = StringUtils::Format("%dx%d @ %.6f%s - Full Screen", res->iScreenWidth, res->iScreenHeight, res->fRefreshRate,
-                                           res->dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
-  CLog::Log(LOGNOTICE,"CAndroidUtils: Current resolution: %dx%d %s\n", res->iWidth, res->iHeight, res->strMode.c_str());
+  res->iSubtitles = (int)(0.965 * res->iHeight);
+  res->strMode =
+      StringUtils::Format("%dx%d @ %.6f%s - Full Screen", res->iScreenWidth, res->iScreenHeight,
+                          res->fRefreshRate, res->dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
+  CLog::Log(LOGNOTICE, "CAndroidUtils: Current resolution: %dx%d %s\n", res->iWidth, res->iHeight,
+            res->strMode.c_str());
   return true;
 }
 
 bool CAndroidUtils::SetNativeResolution(const RESOLUTION_INFO& res)
 {
-  CLog::Log(LOGNOTICE, "CAndroidUtils: SetNativeResolution: %s: %dx%d %dx%d@%f", res.strId.c_str(), res.iWidth, res.iHeight, res.iScreenWidth, res.iScreenHeight, res.fRefreshRate);
+  CLog::Log(LOGNOTICE, "CAndroidUtils: SetNativeResolution: %s: %dx%d %dx%d@%f", res.strId.c_str(),
+            res.iWidth, res.iHeight, res.iScreenWidth, res.iScreenHeight, res.fRefreshRate);
 
   if (s_hasModeApi)
   {
@@ -259,7 +269,7 @@ bool CAndroidUtils::ProbeResolutions(std::vector<RESOLUTION_INFO>& resolutions)
 
   if (s_hasModeApi)
   {
-    for(RESOLUTION_INFO res : s_res_displayModes)
+    for (RESOLUTION_INFO res : s_res_displayModes)
     {
       if (m_width && m_height)
       {
@@ -295,8 +305,9 @@ bool CAndroidUtils::ProbeResolutions(std::vector<RESOLUTION_INFO>& resolutions)
           if (refreshRates[i] < 20.0 || refreshRates[i] > 70.0)
             continue;
           cur_res.fRefreshRate = refreshRates[i];
-          cur_res.strMode      = StringUtils::Format("%dx%d @ %.6f%s - Full Screen", cur_res.iScreenWidth, cur_res.iScreenHeight, cur_res.fRefreshRate,
-                                                 cur_res.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
+          cur_res.strMode = StringUtils::Format(
+              "%dx%d @ %.6f%s - Full Screen", cur_res.iScreenWidth, cur_res.iScreenHeight,
+              cur_res.fRefreshRate, cur_res.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
           resolutions.push_back(cur_res);
         }
       }
@@ -336,9 +347,9 @@ bool CAndroidUtils::IsHDRDisplay()
   return ret;
 }
 
-void  CAndroidUtils::OnSettingChanged(std::shared_ptr<const CSetting> setting)
+void CAndroidUtils::OnSettingChanged(std::shared_ptr<const CSetting> setting)
 {
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
   /* Calibration (overscan / subtitles) are based on GUI size -> reset required */
   if (settingId == CAndroidUtils::SETTING_LIMITGUI)
     CDisplaySettings::GetInstance().ClearCalibrations();

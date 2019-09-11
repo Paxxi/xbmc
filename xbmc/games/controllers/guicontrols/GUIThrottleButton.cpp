@@ -18,8 +18,8 @@ using namespace GAME;
 CGUIThrottleButton::CGUIThrottleButton(const CGUIButtonControl& buttonTemplate,
                                        IConfigurationWizard* wizard,
                                        const CControllerFeature& feature,
-                                       unsigned int index) :
-  CGUIFeatureButton(buttonTemplate, wizard, feature, index)
+                                       unsigned int index)
+  : CGUIFeatureButton(buttonTemplate, wizard, feature, index)
 {
   Reset();
 }
@@ -35,16 +35,16 @@ bool CGUIThrottleButton::PromptForInput(CEvent& waitEvent)
   std::string strWarn;
   switch (m_state)
   {
-    case STATE::THROTTLE_UP:
-      strPrompt = g_localizeStrings.Get(35092); // "Move %s up"
-      strWarn   = g_localizeStrings.Get(35093); // "Move %s up (%d)"
-      break;
-    case STATE::THROTTLE_DOWN:
-      strPrompt = g_localizeStrings.Get(35094); // "Move %s down"
-      strWarn   = g_localizeStrings.Get(35095); // "Move %s down (%d)"
-      break;
-    default:
-      break;
+  case STATE::THROTTLE_UP:
+    strPrompt = g_localizeStrings.Get(35092); // "Move %s up"
+    strWarn = g_localizeStrings.Get(35093); // "Move %s up (%d)"
+    break;
+  case STATE::THROTTLE_DOWN:
+    strPrompt = g_localizeStrings.Get(35094); // "Move %s down"
+    strWarn = g_localizeStrings.Get(35095); // "Move %s down (%d)"
+    break;
+  default:
+    break;
   }
 
   if (!strPrompt.empty())
@@ -71,10 +71,12 @@ JOYSTICK::THROTTLE_DIRECTION CGUIThrottleButton::GetThrottleDirection(void) cons
 
   switch (m_state)
   {
-    case STATE::THROTTLE_UP:    return THROTTLE_DIRECTION::UP;
-    case STATE::THROTTLE_DOWN:  return THROTTLE_DIRECTION::DOWN;
-    default:
-      break;
+  case STATE::THROTTLE_UP:
+    return THROTTLE_DIRECTION::UP;
+  case STATE::THROTTLE_DOWN:
+    return THROTTLE_DIRECTION::DOWN;
+  default:
+    break;
   }
 
   return THROTTLE_DIRECTION::NONE;

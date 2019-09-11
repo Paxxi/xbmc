@@ -46,14 +46,29 @@ protected:
 
   bool SupportsAudioFeature(int feature);
 
-  void AddAudioStreams(std::shared_ptr<CSettingGroup> group, const std::string &settingId);
+  void AddAudioStreams(std::shared_ptr<CSettingGroup> group, const std::string& settingId);
 
-  static bool IsPlayingPassthrough(const std::string &condition, const std::string &value, std::shared_ptr<const CSetting> setting, void *data);
+  static bool IsPlayingPassthrough(const std::string& condition,
+                                   const std::string& value,
+                                   std::shared_ptr<const CSetting> setting,
+                                   void* data);
 
-  static void AudioStreamsOptionFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
+  static void AudioStreamsOptionFiller(std::shared_ptr<const CSetting> setting,
+                                       std::vector<IntegerSettingOption>& list,
+                                       int& current,
+                                       void* data);
 
-  static std::string SettingFormatterDelay(std::shared_ptr<const CSettingControlSlider> control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
-  static std::string SettingFormatterPercentAsDecibel(std::shared_ptr<const CSettingControlSlider> control, const CVariant &value, const CVariant &minimum, const CVariant &step, const CVariant &maximum);
+  static std::string SettingFormatterDelay(std::shared_ptr<const CSettingControlSlider> control,
+                                           const CVariant& value,
+                                           const CVariant& minimum,
+                                           const CVariant& step,
+                                           const CVariant& maximum);
+  static std::string SettingFormatterPercentAsDecibel(
+      std::shared_ptr<const CSettingControlSlider> control,
+      const CVariant& value,
+      const CVariant& minimum,
+      const CVariant& step,
+      const CVariant& maximum);
 
   float m_volume;
   int m_audioStream;
@@ -61,6 +76,7 @@ protected:
 
   typedef std::vector<int> Features;
   Features m_audioCaps;
+
 private:
   static std::string FormatFlags(StreamFlags flags);
 };

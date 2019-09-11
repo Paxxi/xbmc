@@ -55,20 +55,23 @@ public:
   void GetViewPort(CRect& viewPort) override;
 
   bool ScissorsCanEffectClipping() override;
-  CRect ClipRectToScissorRect(const CRect &rect) override;
+  CRect ClipRectToScissorRect(const CRect& rect) override;
   void SetScissors(const CRect& rect) override;
   void ResetScissors() override;
 
   void CaptureStateBlock() override;
   void ApplyStateBlock() override;
 
-  void SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor = 0.0f) override;
+  void SetCameraPosition(const CPoint& camera,
+                         int screenWidth,
+                         int screenHeight,
+                         float stereoFactor = 0.0f) override;
 
   bool SupportsStereo(RENDER_STEREO_MODE mode) const override;
 
-  void Project(float &x, float &y, float &z) override;
+  void Project(float& x, float& y, float& z) override;
 
-  std::string GetShaderPath(const std::string &filename) override { return "GLES/2.0/"; }
+  std::string GetShaderPath(const std::string& filename) override { return "GLES/2.0/"; }
 
   void InitialiseShaders();
   void ReleaseShaders();
@@ -101,6 +104,5 @@ protected:
   std::array<std::unique_ptr<CGLESShader>, SM_MAX> m_pShader;
   ESHADERMETHOD m_method = SM_DEFAULT;
 
-  GLint      m_viewPort[4];
+  GLint m_viewPort[4];
 };
-

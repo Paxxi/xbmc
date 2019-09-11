@@ -6,6 +6,7 @@
  *  See LICENSES/README.md for more information.
  */
 #include "RenderSystemDX.h"
+
 #include "Application.h"
 #if defined(TARGET_WINDOWS_DESKTOP)
 #include "cores/RetroPlayer/process/windows/RPProcessInfoWin.h"
@@ -19,8 +20,8 @@
 #include "cores/VideoPlayer/Process/windows/ProcessInfoWin.h"
 #endif
 #include "cores/VideoPlayer/VideoRenderers/RenderFactory.h"
-#include "cores/VideoPlayer/VideoRenderers/WinRenderer.h"
 #include "cores/VideoPlayer/VideoRenderers/RenderManager.h"
+#include "cores/VideoPlayer/VideoRenderers/WinRenderer.h"
 #include "guilib/D3DResource.h"
 #include "guilib/GUIShaderDX.h"
 #include "guilib/GUITextureD3D.h"
@@ -31,7 +32,8 @@
 
 #include <DirectXPackedVector.h>
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/pixfmt.h>
 }
 
@@ -40,7 +42,8 @@ using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
 
-CRenderSystemDX::CRenderSystemDX() : CRenderSystemBase()
+CRenderSystemDX::CRenderSystemDX()
+  : CRenderSystemBase()
   , m_interlaced(false)
 {
   m_bVSync = true;
@@ -83,14 +86,15 @@ bool CRenderSystemDX::InitRenderSystem()
 
   auto outputSize = m_deviceResources->GetOutputSize();
   // set camera to center of screen
-  CPoint camPoint = { outputSize.Width * 0.5f, outputSize.Height * 0.5f };
+  CPoint camPoint = {outputSize.Width * 0.5f, outputSize.Height * 0.5f};
   SetCameraPosition(camPoint, outputSize.Width, outputSize.Height);
 
-  DXGI_ADAPTER_DESC AIdentifier = { 0 };
+  DXGI_ADAPTER_DESC AIdentifier = {0};
   m_deviceResources->GetAdapterDesc(&AIdentifier);
   m_RenderRenderer = KODI::PLATFORM::WINDOWS::FromW(AIdentifier.Description);
   uint32_t version = 0;
-  for (uint32_t decimal = m_deviceResources->GetDeviceFeatureLevel() >> 8, round = 0; decimal > 0; decimal >>= 4, ++round)
+  for (uint32_t decimal = m_deviceResources->GetDeviceFeatureLevel() >> 8, round = 0; decimal > 0;
+       decimal >>= 4, ++round)
     version += (decimal % 16) * std::pow(10, round);
   m_RenderVersion = StringUtils::Format("%.1f", static_cast<float>(version) / 10.0f);
 
@@ -105,7 +109,7 @@ void CRenderSystemDX::OnResize()
   auto outputSize = m_deviceResources->GetOutputSize();
 
   // set camera to center of screen
-  CPoint camPoint = { outputSize.Width * 0.5f, outputSize.Height * 0.5f };
+  CPoint camPoint = {outputSize.Width * 0.5f, outputSize.Height * 0.5f};
   SetCameraPosition(camPoint, outputSize.Width, outputSize.Height);
 
   CheckInterlacedStereoView();
@@ -143,23 +147,23 @@ void CRenderSystemDX::CheckInterlacedStereoView()
 {
   RENDER_STEREO_MODE stereoMode = CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode();
 
-  if ( m_rightEyeTex.Get()
-    && RENDER_STEREO_MODE_INTERLACED    != stereoMode
-    && RENDER_STEREO_MODE_CHECKERBOARD  != stereoMode)
+  if (m_rightEyeTex.Get() && RENDER_STEREO_MODE_INTERLACED != stereoMode &&
+      RENDER_STEREO_MODE_CHECKERBOARD != stereoMode)
   {
     m_rightEyeTex.Release();
   }
 
-  if ( !m_rightEyeTex.Get()
-    && ( RENDER_STEREO_MODE_INTERLACED   == stereoMode
-      || RENDER_STEREO_MODE_CHECKERBOARD == stereoMode))
+  if (!m_rightEyeTex.Get() && (RENDER_STEREO_MODE_INTERLACED == stereoMode ||
+                               RENDER_STEREO_MODE_CHECKERBOARD == stereoMode))
   {
     const auto outputSize = m_deviceResources->GetOutputSize();
     DXGI_FORMAT texFormat = m_deviceResources->GetBackBuffer().GetFormat();
-    if (!m_rightEyeTex.Create(outputSize.Width, outputSize.Height, 1, D3D11_USAGE_DEFAULT, texFormat))
+    if (!m_rightEyeTex.Create(outputSize.Width, outputSize.Height, 1, D3D11_USAGE_DEFAULT,
+                              texFormat))
     {
       CLog::Log(LOGERROR, "%s - Failed to create right eye buffer.", __FUNCTION__);
-      CServiceBroker::GetWinSystem()->GetGfxContext().SetStereoMode(RENDER_STEREO_MODE_SPLIT_HORIZONTAL); // try fallback to split horizontal
+      CServiceBroker::GetWinSystem()->GetGfxContext().SetStereoMode(
+          RENDER_STEREO_MODE_SPLIT_HORIZONTAL); // try fallback to split horizontal
     }
     else
       m_deviceResources->Unregister(&m_rightEyeTex); // we will handle its health
@@ -203,7 +207,7 @@ bool CRenderSystemDX::CreateStates()
 
   // Create the depth stencil state.
   HRESULT hr = m_pD3DDev->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
-  if(FAILED(hr))
+  if (FAILED(hr))
     return false;
 
   // Set the depth stencil state.
@@ -211,7 +215,7 @@ bool CRenderSystemDX::CreateStates()
 
   D3D11_RASTERIZER_DESC rasterizerState;
   rasterizerState.CullMode = D3D11_CULL_NONE;
-  rasterizerState.FillMode = D3D11_FILL_SOLID;// DEBUG - D3D11_FILL_WIREFRAME
+  rasterizerState.FillMode = D3D11_FILL_SOLID; // DEBUG - D3D11_FILL_WIREFRAME
   rasterizerState.FrontCounterClockwise = false;
   rasterizerState.DepthBias = 0;
   rasterizerState.DepthBiasClamp = 0.0f;
@@ -230,7 +234,7 @@ bool CRenderSystemDX::CreateStates()
 
   m_pContext->RSSetState(m_RSScissorDisable.Get()); // by default
 
-  D3D11_BLEND_DESC blendState = { 0 };
+  D3D11_BLEND_DESC blendState = {0};
   ZeroMemory(&blendState, sizeof(D3D11_BLEND_DESC));
   blendState.RenderTarget[0].BlendEnable = true;
   blendState.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // D3D11_BLEND_SRC_ALPHA;
@@ -258,21 +262,21 @@ void CRenderSystemDX::PresentRender(bool rendered, bool videoLayer)
   if (!m_bRenderCreated)
     return;
 
-  if ( rendered
-    && ( m_stereoMode == RENDER_STEREO_MODE_INTERLACED
-      || m_stereoMode == RENDER_STEREO_MODE_CHECKERBOARD))
+  if (rendered && (m_stereoMode == RENDER_STEREO_MODE_INTERLACED ||
+                   m_stereoMode == RENDER_STEREO_MODE_CHECKERBOARD))
   {
     auto m_pContext = m_deviceResources->GetD3DContext();
 
     // all views prepared, let's merge them before present
-    m_pContext->OMSetRenderTargets(1, m_deviceResources->GetBackBuffer().GetAddressOfRTV(), m_deviceResources->GetDSV());
+    m_pContext->OMSetRenderTargets(1, m_deviceResources->GetBackBuffer().GetAddressOfRTV(),
+                                   m_deviceResources->GetDSV());
 
     auto outputSize = m_deviceResources->GetOutputSize();
-    CRect destRect = { 0.0f, 0.0f, float(outputSize.Width), float(outputSize.Height) };
+    CRect destRect = {0.0f, 0.0f, float(outputSize.Width), float(outputSize.Height)};
 
     SHADER_METHOD method = RENDER_STEREO_MODE_INTERLACED == m_stereoMode
-                           ? SHADER_METHOD_RENDER_STEREO_INTERLACED_RIGHT
-                           : SHADER_METHOD_RENDER_STEREO_CHECKERBOARD_RIGHT;
+                               ? SHADER_METHOD_RENDER_STEREO_INTERLACED_RIGHT
+                               : SHADER_METHOD_RENDER_STEREO_CHECKERBOARD_RIGHT;
     SetAlphaBlendEnable(true);
     CD3DTexture::DrawQuad(destRect, 0, &m_rightEyeTex, nullptr, method);
     CD3DHelper::PSClearShaderResources(m_pContext);
@@ -334,8 +338,7 @@ bool CRenderSystemDX::ClearBuffers(UTILS::Color color)
   CD3DHelper::XMStoreColor(fColor, color);
   ID3D11RenderTargetView* pRTView = m_deviceResources->GetBackBuffer().GetRenderTarget();
 
-  if ( m_stereoMode != RENDER_STEREO_MODE_OFF
-    && m_stereoMode != RENDER_STEREO_MODE_MONO)
+  if (m_stereoMode != RENDER_STEREO_MODE_OFF && m_stereoMode != RENDER_STEREO_MODE_MONO)
   {
     // if stereo anaglyph/tab/sbs, data was cleared when left view was rendered
     if (m_stereoView == RENDER_STEREO_VIEW_RIGHT)
@@ -344,15 +347,15 @@ bool CRenderSystemDX::ClearBuffers(UTILS::Color color)
       m_deviceResources->FinishCommandList();
 
       // do not clear RT for anaglyph modes
-      if ( m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_GREEN_MAGENTA
-        || m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_RED_CYAN
-        || m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_YELLOW_BLUE)
+      if (m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_GREEN_MAGENTA ||
+          m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_RED_CYAN ||
+          m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_YELLOW_BLUE)
       {
         pRTView = nullptr;
       }
       // for interlaced/checkerboard clear view for right texture
-      else if (m_stereoMode == RENDER_STEREO_MODE_INTERLACED
-            || m_stereoMode == RENDER_STEREO_MODE_CHECKERBOARD)
+      else if (m_stereoMode == RENDER_STEREO_MODE_INTERLACED ||
+               m_stereoMode == RENDER_STEREO_MODE_CHECKERBOARD)
       {
         pRTView = m_rightEyeTex.GetRenderTarget();
       }
@@ -363,9 +366,8 @@ bool CRenderSystemDX::ClearBuffers(UTILS::Color color)
     return true;
 
   auto outputSize = m_deviceResources->GetOutputSize();
-  CRect clRect(0.0f, 0.0f,
-    static_cast<float>(outputSize.Width),
-    static_cast<float>(outputSize.Height));
+  CRect clRect(0.0f, 0.0f, static_cast<float>(outputSize.Width),
+               static_cast<float>(outputSize.Height));
 
   // Unlike Direct3D 9, D3D11 ClearRenderTargetView always clears full extent of the resource view.
   // Viewport and scissor settings are not applied. So clear RT by drawing full sized rect with clear color
@@ -402,13 +404,17 @@ void CRenderSystemDX::ApplyStateBlock()
 
   m_pContext->RSSetState(m_ScissorsEnabled ? m_RSScissorEnable.Get() : m_RSScissorDisable.Get());
   m_pContext->OMSetDepthStencilState(m_depthStencilState.Get(), 0);
-  float factors[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-  m_pContext->OMSetBlendState(m_BlendEnabled ? m_BlendEnableState.Get() : m_BlendDisableState.Get(), factors, 0xFFFFFFFF);
+  float factors[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+  m_pContext->OMSetBlendState(m_BlendEnabled ? m_BlendEnableState.Get() : m_BlendDisableState.Get(),
+                              factors, 0xFFFFFFFF);
 
   m_pGUIShader->ApplyStateBlock();
 }
 
-void CRenderSystemDX::SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor)
+void CRenderSystemDX::SetCameraPosition(const CPoint& camera,
+                                        int screenWidth,
+                                        int screenHeight,
+                                        float stereoFactor)
 {
   if (!m_bRenderCreated)
     return;
@@ -417,7 +423,7 @@ void CRenderSystemDX::SetCameraPosition(const CPoint &camera, int screenWidth, i
   float w = m_viewPort.Width * 0.5f;
   float h = m_viewPort.Height * 0.5f;
 
-  XMFLOAT2 offset = XMFLOAT2(camera.x - screenWidth*0.5f, camera.y - screenHeight*0.5f);
+  XMFLOAT2 offset = XMFLOAT2(camera.x - screenWidth * 0.5f, camera.y - screenHeight * 0.5f);
 
   // world view.  Until this is moved onto the GPU (via a vertex shader for instance), we set it to the identity here.
   m_pGUIShader->SetWorld(XMMatrixIdentity());
@@ -429,10 +435,12 @@ void CRenderSystemDX::SetCameraPosition(const CPoint &camera, int screenWidth, i
   m_pGUIShader->SetView(XMMatrixMultiply(translate, flipY));
 
   // projection onto screen space
-  m_pGUIShader->SetProjection(XMMatrixPerspectiveOffCenterLH((-w - offset.x)*0.5f, (w - offset.x)*0.5f, (-h + offset.y)*0.5f, (h + offset.y)*0.5f, h, 100 * h));
+  m_pGUIShader->SetProjection(
+      XMMatrixPerspectiveOffCenterLH((-w - offset.x) * 0.5f, (w - offset.x) * 0.5f,
+                                     (-h + offset.y) * 0.5f, (h + offset.y) * 0.5f, h, 100 * h));
 }
 
-void CRenderSystemDX::Project(float &x, float &y, float &z)
+void CRenderSystemDX::Project(float& x, float& y, float& z)
 {
   if (!m_bRenderCreated)
     return;
@@ -443,7 +451,8 @@ void CRenderSystemDX::Project(float &x, float &y, float &z)
 CRect CRenderSystemDX::GetBackBufferRect()
 {
   auto outputSize = m_deviceResources->GetOutputSize();
-  return CRect(0.f, 0.f, static_cast<float>(outputSize.Width), static_cast<float>(outputSize.Height));
+  return CRect(0.f, 0.f, static_cast<float>(outputSize.Width),
+               static_cast<float>(outputSize.Height));
 }
 
 void CRenderSystemDX::GetViewPort(CRect& viewPort)
@@ -462,12 +471,12 @@ void CRenderSystemDX::SetViewPort(const CRect& viewPort)
   if (!m_bRenderCreated)
     return;
 
-  m_viewPort.MinDepth   = 0.0f;
-  m_viewPort.MaxDepth   = 1.0f;
-  m_viewPort.TopLeftX   = viewPort.x1;
-  m_viewPort.TopLeftY   = viewPort.y1;
-  m_viewPort.Width      = viewPort.x2 - viewPort.x1;
-  m_viewPort.Height     = viewPort.y2 - viewPort.y1;
+  m_viewPort.MinDepth = 0.0f;
+  m_viewPort.MaxDepth = 1.0f;
+  m_viewPort.TopLeftX = viewPort.x1;
+  m_viewPort.TopLeftY = viewPort.y1;
+  m_viewPort.Width = viewPort.x2 - viewPort.x1;
+  m_viewPort.Height = viewPort.y2 - viewPort.y1;
 
   m_deviceResources->SetViewPort(m_viewPort);
   m_pGUIShader->SetViewPort(m_viewPort);
@@ -490,7 +499,7 @@ bool CRenderSystemDX::ScissorsCanEffectClipping()
   return m_pGUIShader != nullptr && m_pGUIShader->HardwareClipIsPossible();
 }
 
-CRect CRenderSystemDX::ClipRectToScissorRect(const CRect &rect)
+CRect CRenderSystemDX::ClipRectToScissorRect(const CRect& rect)
 {
   if (!m_bRenderCreated)
     return CRect();
@@ -500,10 +509,8 @@ CRect CRenderSystemDX::ClipRectToScissorRect(const CRect &rect)
   float yFactor = m_pGUIShader->GetClipYFactor();
   float yOffset = m_pGUIShader->GetClipYOffset();
 
-  return CRect(rect.x1 * xFactor + xOffset,
-               rect.y1 * yFactor + yOffset,
-               rect.x2 * xFactor + xOffset,
-               rect.y2 * yFactor + yOffset);
+  return CRect(rect.x1 * xFactor + xOffset, rect.y1 * yFactor + yOffset,
+               rect.x2 * xFactor + xOffset, rect.y2 * yFactor + yOffset);
 }
 
 void CRenderSystemDX::SetScissors(const CRect& rect)
@@ -514,10 +521,8 @@ void CRenderSystemDX::SetScissors(const CRect& rect)
   auto m_pContext = m_deviceResources->GetD3DContext();
 
   m_scissor = rect;
-  CD3D11_RECT scissor(MathUtils::round_int(rect.x1)
-                    , MathUtils::round_int(rect.y1)
-                    , MathUtils::round_int(rect.x2)
-                    , MathUtils::round_int(rect.y2));
+  CD3D11_RECT scissor(MathUtils::round_int(rect.x1), MathUtils::round_int(rect.y1),
+                      MathUtils::round_int(rect.x2), MathUtils::round_int(rect.y2));
 
   m_pContext->RSSetScissorRects(1, &scissor);
   m_pContext->RSSetState(m_RSScissorEnable.Get());
@@ -532,9 +537,8 @@ void CRenderSystemDX::ResetScissors()
   auto m_pContext = m_deviceResources->GetD3DContext();
   auto outputSize = m_deviceResources->GetOutputSize();
 
-  m_scissor.SetRect(0.0f, 0.0f,
-    static_cast<float>(outputSize.Width),
-    static_cast<float>(outputSize.Height));
+  m_scissor.SetRect(0.0f, 0.0f, static_cast<float>(outputSize.Width),
+                    static_cast<float>(outputSize.Height));
 
   m_pContext->RSSetState(m_RSScissorDisable.Get());
   m_ScissorsEnabled = false;
@@ -560,18 +564,18 @@ void CRenderSystemDX::SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW 
   auto m_pContext = m_deviceResources->GetD3DContext();
 
   UINT writeMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-  if(m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_RED_CYAN)
+  if (m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_RED_CYAN)
   {
-    if(m_stereoView == RENDER_STEREO_VIEW_LEFT)
+    if (m_stereoView == RENDER_STEREO_VIEW_LEFT)
       writeMask = D3D11_COLOR_WRITE_ENABLE_RED;
-    else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+    else if (m_stereoView == RENDER_STEREO_VIEW_RIGHT)
       writeMask = D3D11_COLOR_WRITE_ENABLE_BLUE | D3D11_COLOR_WRITE_ENABLE_GREEN;
   }
-  if(m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_GREEN_MAGENTA)
+  if (m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_GREEN_MAGENTA)
   {
-    if(m_stereoView == RENDER_STEREO_VIEW_LEFT)
+    if (m_stereoView == RENDER_STEREO_VIEW_LEFT)
       writeMask = D3D11_COLOR_WRITE_ENABLE_GREEN;
-    else if(m_stereoView == RENDER_STEREO_VIEW_RIGHT)
+    else if (m_stereoView == RENDER_STEREO_VIEW_RIGHT)
       writeMask = D3D11_COLOR_WRITE_ENABLE_BLUE | D3D11_COLOR_WRITE_ENABLE_RED;
   }
   if (m_stereoMode == RENDER_STEREO_MODE_ANAGLYPH_YELLOW_BLUE)
@@ -581,19 +585,21 @@ void CRenderSystemDX::SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW 
     else if (m_stereoView == RENDER_STEREO_VIEW_RIGHT)
       writeMask = D3D11_COLOR_WRITE_ENABLE_BLUE;
   }
-  if ( RENDER_STEREO_MODE_INTERLACED    == m_stereoMode
-    || RENDER_STEREO_MODE_CHECKERBOARD  == m_stereoMode)
+  if (RENDER_STEREO_MODE_INTERLACED == m_stereoMode ||
+      RENDER_STEREO_MODE_CHECKERBOARD == m_stereoMode)
   {
     if (m_stereoView == RENDER_STEREO_VIEW_RIGHT)
     {
-      m_pContext->OMSetRenderTargets(1, m_rightEyeTex.GetAddressOfRTV(), m_deviceResources->GetDSV());
+      m_pContext->OMSetRenderTargets(1, m_rightEyeTex.GetAddressOfRTV(),
+                                     m_deviceResources->GetDSV());
     }
   }
   else if (RENDER_STEREO_MODE_HARDWAREBASED == m_stereoMode)
   {
     m_deviceResources->SetStereoIdx(m_stereoView == RENDER_STEREO_VIEW_RIGHT ? 1 : 0);
 
-    m_pContext->OMSetRenderTargets(1, m_deviceResources->GetBackBuffer().GetAddressOfRTV(), m_deviceResources->GetDSV());
+    m_pContext->OMSetRenderTargets(1, m_deviceResources->GetBackBuffer().GetAddressOfRTV(),
+                                   m_deviceResources->GetDSV());
   }
 
   auto m_pD3DDev = m_deviceResources->GetD3DDevice();
@@ -612,8 +618,10 @@ void CRenderSystemDX::SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW 
     desc.RenderTarget[0].BlendEnable = false;
     m_pD3DDev->CreateBlendState(&desc, &m_BlendDisableState);
 
-    float blendFactors[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-    m_pContext->OMSetBlendState(m_BlendEnabled ? m_BlendEnableState.Get() : m_BlendDisableState.Get(), blendFactors, 0xFFFFFFFF);
+    float blendFactors[] = {0.0f, 0.0f, 0.0f, 0.0f};
+    m_pContext->OMSetBlendState(m_BlendEnabled ? m_BlendEnableState.Get()
+                                               : m_BlendDisableState.Get(),
+                                blendFactors, 0xFFFFFFFF);
   }
 }
 
@@ -621,16 +629,16 @@ bool CRenderSystemDX::SupportsStereo(RENDER_STEREO_MODE mode) const
 {
   switch (mode)
   {
-    case RENDER_STEREO_MODE_ANAGLYPH_RED_CYAN:
-    case RENDER_STEREO_MODE_ANAGLYPH_GREEN_MAGENTA:
-    case RENDER_STEREO_MODE_ANAGLYPH_YELLOW_BLUE:
-    case RENDER_STEREO_MODE_INTERLACED:
-    case RENDER_STEREO_MODE_CHECKERBOARD:
-      return true;
-    case RENDER_STEREO_MODE_HARDWAREBASED:
-      return m_deviceResources->IsStereoAvailable();
-    default:
-      return CRenderSystemBase::SupportsStereo(mode);
+  case RENDER_STEREO_MODE_ANAGLYPH_RED_CYAN:
+  case RENDER_STEREO_MODE_ANAGLYPH_GREEN_MAGENTA:
+  case RENDER_STEREO_MODE_ANAGLYPH_YELLOW_BLUE:
+  case RENDER_STEREO_MODE_INTERLACED:
+  case RENDER_STEREO_MODE_CHECKERBOARD:
+    return true;
+  case RENDER_STEREO_MODE_HARDWAREBASED:
+    return m_deviceResources->IsStereoAvailable();
+  default:
+    return CRenderSystemBase::SupportsStereo(mode);
   }
 }
 
@@ -664,7 +672,8 @@ void CRenderSystemDX::SetAlphaBlendEnable(bool enable)
   if (!m_bRenderCreated)
     return;
 
-  m_deviceResources->GetD3DContext()->OMSetBlendState(enable ? m_BlendEnableState.Get() : m_BlendDisableState.Get(), nullptr, 0xFFFFFFFF);
+  m_deviceResources->GetD3DContext()->OMSetBlendState(
+      enable ? m_BlendEnableState.Get() : m_BlendDisableState.Get(), nullptr, 0xFFFFFFFF);
   m_BlendEnabled = enable;
 }
 

@@ -18,44 +18,55 @@
 #include <VersionHelpers.h>
 #include <dbghelp.h>
 
-typedef BOOL (WINAPI *MINIDUMPWRITEDUMP)(HANDLE hProcess, DWORD dwPid, HANDLE hFile, MINIDUMP_TYPE DumpType,
+typedef BOOL(WINAPI* MINIDUMPWRITEDUMP)(HANDLE hProcess,
+                                        DWORD dwPid,
+                                        HANDLE hFile,
+                                        MINIDUMP_TYPE DumpType,
                                         const PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
                                         const PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
                                         const PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
 
 // StackWalk64()
-typedef BOOL (__stdcall *tSW)(
-  DWORD MachineType,
-  HANDLE hProcess,
-  HANDLE hThread,
-  LPSTACKFRAME64 StackFrame,
-  PVOID ContextRecord,
-  PREAD_PROCESS_MEMORY_ROUTINE64 ReadMemoryRoutine,
-  PFUNCTION_TABLE_ACCESS_ROUTINE64 FunctionTableAccessRoutine,
-  PGET_MODULE_BASE_ROUTINE64 GetModuleBaseRoutine,
-  PTRANSLATE_ADDRESS_ROUTINE64 TranslateAddress );
+typedef BOOL(__stdcall* tSW)(DWORD MachineType,
+                             HANDLE hProcess,
+                             HANDLE hThread,
+                             LPSTACKFRAME64 StackFrame,
+                             PVOID ContextRecord,
+                             PREAD_PROCESS_MEMORY_ROUTINE64 ReadMemoryRoutine,
+                             PFUNCTION_TABLE_ACCESS_ROUTINE64 FunctionTableAccessRoutine,
+                             PGET_MODULE_BASE_ROUTINE64 GetModuleBaseRoutine,
+                             PTRANSLATE_ADDRESS_ROUTINE64 TranslateAddress);
 
 // SymInitialize()
-typedef BOOL (__stdcall *tSI)( IN HANDLE hProcess, IN PSTR UserSearchPath, IN BOOL fInvadeProcess );
+typedef BOOL(__stdcall* tSI)(IN HANDLE hProcess, IN PSTR UserSearchPath, IN BOOL fInvadeProcess);
 // SymCleanup()
-typedef BOOL (__stdcall *tSC)( IN HANDLE hProcess );
+typedef BOOL(__stdcall* tSC)(IN HANDLE hProcess);
 // SymGetSymFromAddr64()
-typedef BOOL (__stdcall *tSGSFA)( IN HANDLE hProcess, IN DWORD64 dwAddr, OUT PDWORD64 pdwDisplacement, OUT PIMAGEHLP_SYMBOL64 Symbol );
+typedef BOOL(__stdcall* tSGSFA)(IN HANDLE hProcess,
+                                IN DWORD64 dwAddr,
+                                OUT PDWORD64 pdwDisplacement,
+                                OUT PIMAGEHLP_SYMBOL64 Symbol);
 // UnDecorateSymbolName()
-typedef DWORD (__stdcall WINAPI *tUDSN)( PCSTR DecoratedName, PSTR UnDecoratedName, DWORD UndecoratedLength, DWORD Flags );
+typedef DWORD(__stdcall WINAPI* tUDSN)(PCSTR DecoratedName,
+                                       PSTR UnDecoratedName,
+                                       DWORD UndecoratedLength,
+                                       DWORD Flags);
 // SymGetLineFromAddr64()
-typedef BOOL (__stdcall *tSGLFA)( IN HANDLE hProcess, IN DWORD64 dwAddr, OUT PDWORD pdwDisplacement, OUT PIMAGEHLP_LINE64 Line );
+typedef BOOL(__stdcall* tSGLFA)(IN HANDLE hProcess,
+                                IN DWORD64 dwAddr,
+                                OUT PDWORD pdwDisplacement,
+                                OUT PIMAGEHLP_LINE64 Line);
 // SymGetModuleBase64()
-typedef DWORD64 (__stdcall *tSGMB)( IN HANDLE hProcess, IN DWORD64 dwAddr );
+typedef DWORD64(__stdcall* tSGMB)(IN HANDLE hProcess, IN DWORD64 dwAddr);
 // SymFunctionTableAccess64()
-typedef PVOID (__stdcall *tSFTA)( HANDLE hProcess, DWORD64 AddrBase );
+typedef PVOID(__stdcall* tSFTA)(HANDLE hProcess, DWORD64 AddrBase);
 // SymGetOptions()
-typedef DWORD (__stdcall *tSGO)( VOID );
+typedef DWORD(__stdcall* tSGO)(VOID);
 // SymSetOptions()
-typedef DWORD (__stdcall *tSSO)( IN DWORD SymOptions );
+typedef DWORD(__stdcall* tSSO)(IN DWORD SymOptions);
 
 // GetCurrentPackageFullName
-typedef LONG (__stdcall *GCPFN)(UINT32*, PWSTR);
+typedef LONG(__stdcall* GCPFN)(UINT32*, PWSTR);
 
 std::string win32_exception::mVersion;
 
@@ -68,12 +79,13 @@ bool win32_exception::write_minidump(EXCEPTION_POINTERS* pEp)
   SYSTEMTIME stLocalTime;
   GetLocalTime(&stLocalTime);
 
-  dumpFileName = StringUtils::Format("kodi_crashlog-%s-%04d%02d%02d-%02d%02d%02d.dmp",
-                      mVersion.c_str(),
-                      stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,
-                      stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond);
+  dumpFileName =
+      StringUtils::Format("kodi_crashlog-%s-%04d%02d%02d-%02d%02d%02d.dmp", mVersion.c_str(),
+                          stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,
+                          stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond);
 
-  dumpFileName = CWIN32Util::SmbToUnc(URIUtils::AddFileToFolder(CWIN32Util::GetProfilePath(), CUtil::MakeLegalFileName(dumpFileName)));
+  dumpFileName = CWIN32Util::SmbToUnc(URIUtils::AddFileToFolder(
+      CWIN32Util::GetProfilePath(), CUtil::MakeLegalFileName(dumpFileName)));
 
   dumpFileNameW = KODI::PLATFORM::WINDOWS::ToW(dumpFileName);
   HANDLE hDumpFile = CreateFileW(dumpFileNameW.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
@@ -105,8 +117,9 @@ bool win32_exception::write_minidump(EXCEPTION_POINTERS* pEp)
   // Call the minidump api with normal dumping
   // We can get more detail information by using other minidump types but the dump file will be
   // extremely large.
-  BOOL bMiniDumpSuccessful = pDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &mdei, 0, NULL);
-  if( !bMiniDumpSuccessful )
+  BOOL bMiniDumpSuccessful =
+      pDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &mdei, 0, NULL);
+  if (!bMiniDumpSuccessful)
   {
     goto cleanup;
   }
@@ -130,7 +143,7 @@ cleanup:
 */
 bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
 {
-  #define STACKWALK_MAX_NAMELEN 1024
+#define STACKWALK_MAX_NAMELEN 1024
 
   std::string dumpFileName, strOutput;
   std::wstring dumpFileNameW;
@@ -139,7 +152,7 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
   SYSTEMTIME stLocalTime;
   GetLocalTime(&stLocalTime);
   bool returncode = false;
-  STACKFRAME64 frame = { 0 };
+  STACKFRAME64 frame = {0};
   HANDLE hCurProc = GetCurrentProcess();
   IMAGEHLP_SYMBOL64* pSym = NULL;
   HANDLE hDumpFile = INVALID_HANDLE_VALUE;
@@ -151,27 +164,28 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
     goto cleanup;
   }
 
-  tSI pSI       = (tSI) GetProcAddress(hDbgHelpDll, "SymInitialize" );
-  tSGO pSGO     = (tSGO) GetProcAddress(hDbgHelpDll, "SymGetOptions" );
-  tSSO pSSO     = (tSSO) GetProcAddress(hDbgHelpDll, "SymSetOptions" );
-  pSC           = (tSC) GetProcAddress(hDbgHelpDll, "SymCleanup" );
-  tSW pSW       = (tSW) GetProcAddress(hDbgHelpDll, "StackWalk64" );
-  tSGSFA pSGSFA = (tSGSFA) GetProcAddress(hDbgHelpDll, "SymGetSymFromAddr64" );
-  tUDSN pUDSN   = (tUDSN) GetProcAddress(hDbgHelpDll, "UnDecorateSymbolName" );
-  tSGLFA pSGLFA = (tSGLFA) GetProcAddress(hDbgHelpDll, "SymGetLineFromAddr64" );
-  tSFTA pSFTA   = (tSFTA) GetProcAddress(hDbgHelpDll, "SymFunctionTableAccess64" );
-  tSGMB pSGMB   = (tSGMB) GetProcAddress(hDbgHelpDll, "SymGetModuleBase64" );
+  tSI pSI = (tSI)GetProcAddress(hDbgHelpDll, "SymInitialize");
+  tSGO pSGO = (tSGO)GetProcAddress(hDbgHelpDll, "SymGetOptions");
+  tSSO pSSO = (tSSO)GetProcAddress(hDbgHelpDll, "SymSetOptions");
+  pSC = (tSC)GetProcAddress(hDbgHelpDll, "SymCleanup");
+  tSW pSW = (tSW)GetProcAddress(hDbgHelpDll, "StackWalk64");
+  tSGSFA pSGSFA = (tSGSFA)GetProcAddress(hDbgHelpDll, "SymGetSymFromAddr64");
+  tUDSN pUDSN = (tUDSN)GetProcAddress(hDbgHelpDll, "UnDecorateSymbolName");
+  tSGLFA pSGLFA = (tSGLFA)GetProcAddress(hDbgHelpDll, "SymGetLineFromAddr64");
+  tSFTA pSFTA = (tSFTA)GetProcAddress(hDbgHelpDll, "SymFunctionTableAccess64");
+  tSGMB pSGMB = (tSGMB)GetProcAddress(hDbgHelpDll, "SymGetModuleBase64");
 
-  if(pSI == NULL || pSGO == NULL || pSSO == NULL || pSC == NULL || pSW == NULL || pSGSFA == NULL || pUDSN == NULL || pSGLFA == NULL ||
-     pSFTA == NULL || pSGMB == NULL)
+  if (pSI == NULL || pSGO == NULL || pSSO == NULL || pSC == NULL || pSW == NULL || pSGSFA == NULL ||
+      pUDSN == NULL || pSGLFA == NULL || pSFTA == NULL || pSGMB == NULL)
     goto cleanup;
 
-  dumpFileName = StringUtils::Format("kodi_stacktrace-%s-%04d%02d%02d-%02d%02d%02d.txt",
-                                      mVersion.c_str(),
-                                      stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,
-                                      stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond);
+  dumpFileName =
+      StringUtils::Format("kodi_stacktrace-%s-%04d%02d%02d-%02d%02d%02d.txt", mVersion.c_str(),
+                          stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,
+                          stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond);
 
-  dumpFileName = CWIN32Util::SmbToUnc(URIUtils::AddFileToFolder(CWIN32Util::GetProfilePath(), CUtil::MakeLegalFileName(dumpFileName)));
+  dumpFileName = CWIN32Util::SmbToUnc(URIUtils::AddFileToFolder(
+      CWIN32Util::GetProfilePath(), CUtil::MakeLegalFileName(dumpFileName)));
 
   dumpFileNameW = KODI::PLATFORM::WINDOWS::ToW(dumpFileName);
   hDumpFile = CreateFileW(dumpFileNameW.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
@@ -188,14 +202,16 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
 #if defined(_X86_)
   frame.AddrPC.Offset = pEp->ContextRecord->Eip; // Current location in program
   frame.AddrStack.Offset = pEp->ContextRecord->Esp; // Stack pointers current value
-  frame.AddrFrame.Offset = pEp->ContextRecord->Ebp; // Value of register used to access local function variables.
+  frame.AddrFrame.Offset =
+      pEp->ContextRecord->Ebp; // Value of register used to access local function variables.
 #else
   frame.AddrPC.Offset = pEp->ContextRecord->Rip; // Current location in program
   frame.AddrStack.Offset = pEp->ContextRecord->Rsp; // Stack pointers current value
-  frame.AddrFrame.Offset = pEp->ContextRecord->Rbp; // Value of register used to access local function variables.
+  frame.AddrFrame.Offset =
+      pEp->ContextRecord->Rbp; // Value of register used to access local function variables.
 #endif
 
-  if(pSI(hCurProc, NULL, TRUE) == FALSE)
+  if (pSI(hCurProc, NULL, TRUE) == FALSE)
     goto cleanup;
 
   DWORD symOptions = pSGO();
@@ -205,7 +221,7 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
   symOptions &= ~SYMOPT_DEFERRED_LOADS;
   symOptions = pSSO(symOptions);
 
-  pSym = (IMAGEHLP_SYMBOL64 *) malloc(sizeof(IMAGEHLP_SYMBOL64) + STACKWALK_MAX_NAMELEN);
+  pSym = (IMAGEHLP_SYMBOL64*)malloc(sizeof(IMAGEHLP_SYMBOL64) + STACKWALK_MAX_NAMELEN);
   if (!pSym)
     goto cleanup;
   memset(pSym, 0, sizeof(IMAGEHLP_SYMBOL64) + STACKWALK_MAX_NAMELEN);
@@ -219,25 +235,27 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
   IMAGEHLP_MODULE64 Module;
   memset(&Module, 0, sizeof(Module));
   Module.SizeOfStruct = sizeof(Module);
-  int seq=0;
+  int seq = 0;
 
-  strOutput = StringUtils::Format("Thread %d (process %d)\r\n", GetCurrentThreadId(), GetCurrentProcessId());
+  strOutput = StringUtils::Format("Thread %d (process %d)\r\n", GetCurrentThreadId(),
+                                  GetCurrentProcessId());
   WriteFile(hDumpFile, strOutput.c_str(), strOutput.size(), &dwBytes, NULL);
 
-  while(pSW(IMAGE_FILE_MACHINE_I386, hCurProc, GetCurrentThread(), &frame, pEp->ContextRecord, NULL, pSFTA, pSGMB, NULL))
+  while (pSW(IMAGE_FILE_MACHINE_I386, hCurProc, GetCurrentThread(), &frame, pEp->ContextRecord,
+             NULL, pSFTA, pSGMB, NULL))
   {
-    if(frame.AddrPC.Offset != 0)
+    if (frame.AddrPC.Offset != 0)
     {
-      DWORD64 symoffset=0;
-      DWORD   lineoffset=0;
+      DWORD64 symoffset = 0;
+      DWORD lineoffset = 0;
       strOutput = StringUtils::Format("#%2d", seq++);
 
-      if(pSGSFA(hCurProc, frame.AddrPC.Offset, &symoffset, pSym))
+      if (pSGSFA(hCurProc, frame.AddrPC.Offset, &symoffset, pSym))
       {
-        if(pUDSN(pSym->Name, cTemp, STACKWALK_MAX_NAMELEN, UNDNAME_COMPLETE)>0)
+        if (pUDSN(pSym->Name, cTemp, STACKWALK_MAX_NAMELEN, UNDNAME_COMPLETE) > 0)
           strOutput.append(StringUtils::Format(" %s", cTemp));
       }
-      if(pSGLFA(hCurProc, frame.AddrPC.Offset, &lineoffset, &Line))
+      if (pSGLFA(hCurProc, frame.AddrPC.Offset, &lineoffset, &Line))
         strOutput.append(StringUtils::Format(" at %s:%d", Line.FileName, Line.LineNumber));
 
       strOutput.append("\r\n");
@@ -248,12 +266,12 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
 
 cleanup:
   if (pSym)
-    free( pSym );
+    free(pSym);
 
   if (hDumpFile != INVALID_HANDLE_VALUE)
     CloseHandle(hDumpFile);
 
-  if(pSC)
+  if (pSC)
     pSC(hCurProc);
 
   if (hDbgHelpDll)

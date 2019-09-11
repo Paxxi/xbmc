@@ -22,12 +22,12 @@
 #include "utils/StringUtils.h"
 
 #define CONTROL_BTNVIEWASICONS 2
-#define CONTROL_BTNSORTBY      3
-#define CONTROL_BTNSORTASC     4
-#define CONTROL_LABELFILES    12
+#define CONTROL_BTNSORTBY 3
+#define CONTROL_BTNSORTASC 4
+#define CONTROL_LABELFILES 12
 
 CGUIWindowPrograms::CGUIWindowPrograms(void)
-    : CGUIMediaWindow(WINDOW_PROGRAMS, "MyPrograms.xml")
+  : CGUIMediaWindow(WINDOW_PROGRAMS, "MyPrograms.xml")
 {
   m_thumbLoader.SetObserver(this);
   m_dlgProgress = NULL;
@@ -39,59 +39,60 @@ CGUIWindowPrograms::~CGUIWindowPrograms(void) = default;
 
 bool CGUIWindowPrograms::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_DEINIT:
-    {
-      if (m_thumbLoader.IsLoading())
-        m_thumbLoader.StopThread();
-    }
-    break;
+  {
+    if (m_thumbLoader.IsLoading())
+      m_thumbLoader.StopThread();
+  }
+  break;
 
   case GUI_MSG_WINDOW_INIT:
-    {
-      m_dlgProgress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
+  {
+    m_dlgProgress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(
+        WINDOW_DIALOG_PROGRESS);
 
-      // is this the first time accessing this window?
-      if (m_vecItems->GetPath() == "?" && message.GetStringParam().empty())
-        message.SetStringParam(CMediaSourceSettings::GetInstance().GetDefaultSource("programs"));
+    // is this the first time accessing this window?
+    if (m_vecItems->GetPath() == "?" && message.GetStringParam().empty())
+      message.SetStringParam(CMediaSourceSettings::GetInstance().GetDefaultSource("programs"));
 
-      return CGUIMediaWindow::OnMessage(message);
-    }
+    return CGUIMediaWindow::OnMessage(message);
+  }
   break;
 
   case GUI_MSG_CLICKED:
+  {
+    if (m_viewControl.HasControl(message.GetSenderId())) // list/thumb control
     {
-      if (m_viewControl.HasControl(message.GetSenderId()))  // list/thumb control
+      int iAction = message.GetParam1();
+      int iItem = m_viewControl.GetSelectedItem();
+      if (iAction == ACTION_PLAYER_PLAY)
       {
-        int iAction = message.GetParam1();
-        int iItem = m_viewControl.GetSelectedItem();
-        if (iAction == ACTION_PLAYER_PLAY)
-        {
-          OnPlayMedia(iItem);
-          return true;
-        }
-        else if (iAction == ACTION_SHOW_INFO)
-        {
-          OnItemInfo(iItem);
-          return true;
-        }
+        OnPlayMedia(iItem);
+        return true;
+      }
+      else if (iAction == ACTION_SHOW_INFO)
+      {
+        OnItemInfo(iItem);
+        return true;
       }
     }
-    break;
+  }
+  break;
   }
 
   return CGUIMediaWindow::OnMessage(message);
 }
 
-void CGUIWindowPrograms::GetContextButtons(int itemNumber, CContextButtons &buttons)
+void CGUIWindowPrograms::GetContextButtons(int itemNumber, CContextButtons& buttons)
 {
   if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
     return;
   CFileItemPtr item = m_vecItems->Get(itemNumber);
   if (item)
   {
-    if ( m_vecItems->IsVirtualDirectoryRoot() || m_vecItems->GetPath() == "sources://programs/" )
+    if (m_vecItems->IsVirtualDirectoryRoot() || m_vecItems->GetPath() == "sources://programs/")
     {
       CGUIDialogContextMenu::GetContextButtons("programs", item, buttons);
     }
@@ -101,7 +102,9 @@ void CGUIWindowPrograms::GetContextButtons(int itemNumber, CContextButtons &butt
 
 bool CGUIWindowPrograms::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
-  CFileItemPtr item = (itemNumber >= 0 && itemNumber < m_vecItems->Size()) ? m_vecItems->Get(itemNumber) : CFileItemPtr();
+  CFileItemPtr item = (itemNumber >= 0 && itemNumber < m_vecItems->Size())
+                          ? m_vecItems->Get(itemNumber)
+                          : CFileItemPtr();
 
   if (CGUIDialogContextMenu::OnContextButton("programs", item, button))
   {
@@ -116,7 +119,7 @@ bool CGUIWindowPrograms::OnAddMediaSource()
   return CGUIDialogMediaSource::ShowAndAddMediaSource("programs");
 }
 
-bool CGUIWindowPrograms::Update(const std::string &strDirectory, bool updateFilterPath /* = true */)
+bool CGUIWindowPrograms::Update(const std::string& strDirectory, bool updateFilterPath /* = true */)
 {
   if (m_thumbLoader.IsLoading())
     m_thumbLoader.StopThread();
@@ -130,7 +133,8 @@ bool CGUIWindowPrograms::Update(const std::string &strDirectory, bool updateFilt
 
 bool CGUIWindowPrograms::OnPlayMedia(int iItem, const std::string&)
 {
-  if ( iItem < 0 || iItem >= m_vecItems->Size() ) return false;
+  if (iItem < 0 || iItem >= m_vecItems->Size())
+    return false;
   CFileItemPtr pItem = m_vecItems->Get(iItem);
 
 #ifdef HAS_DVD_DRIVE
@@ -138,14 +142,16 @@ bool CGUIWindowPrograms::OnPlayMedia(int iItem, const std::string&)
     return MEDIA_DETECT::CAutorun::PlayDiscAskResume(m_vecItems->Get(iItem)->GetPath());
 #endif
 
-  if (pItem->m_bIsFolder) return false;
+  if (pItem->m_bIsFolder)
+    return false;
 
   return false;
 }
 
-std::string CGUIWindowPrograms::GetStartFolder(const std::string &dir)
+std::string CGUIWindowPrograms::GetStartFolder(const std::string& dir)
 {
-  std::string lower(dir); StringUtils::ToLower(lower);
+  std::string lower(dir);
+  StringUtils::ToLower(lower);
   if (lower == "plugins" || lower == "addons")
     return "addons://sources/executable/";
   else if (lower == "androidapps")
@@ -161,7 +167,7 @@ std::string CGUIWindowPrograms::GetStartFolder(const std::string &dir)
     if (iIndex < (int)shares.size() && shares[iIndex].m_iHasLock == 2)
     {
       CFileItem item(shares[iIndex]);
-      if (!g_passwordManager.IsItemUnlocked(&item,"programs"))
+      if (!g_passwordManager.IsItemUnlocked(&item, "programs"))
         return "";
     }
     if (bIsSourceName)

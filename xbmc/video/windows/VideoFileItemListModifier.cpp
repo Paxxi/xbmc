@@ -20,7 +20,7 @@
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 
-bool CVideoFileItemListModifier::CanModify(const CFileItemList &items) const
+bool CVideoFileItemListModifier::CanModify(const CFileItemList& items) const
 {
   if (items.IsVideoDb())
     return true;
@@ -28,7 +28,7 @@ bool CVideoFileItemListModifier::CanModify(const CFileItemList &items) const
   return false;
 }
 
-bool CVideoFileItemListModifier::Modify(CFileItemList &items) const
+bool CVideoFileItemListModifier::Modify(CFileItemList& items) const
 {
   AddQueuingFolder(items);
   return true;
@@ -46,7 +46,8 @@ void CVideoFileItemListModifier::AddQueuingFolder(CFileItemList& items)
   CFileItemPtr pItem;
 
   // always show "all" items by default
-  if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_VIDEOLIBRARY_SHOWALLITEMS))
+  if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+          CSettings::SETTING_VIDEOLIBRARY_SHOWALLITEMS))
     return;
 
   // no need for "all" item when only one item
@@ -65,7 +66,7 @@ void CVideoFileItemListModifier::AddQueuingFolder(CFileItemList& items)
   case NODE_TYPE_SEASONS:
   {
     std::string strLabel = g_localizeStrings.Get(20366);
-    pItem.reset(new CFileItem(strLabel));  // "All Seasons"
+    pItem.reset(new CFileItem(strLabel)); // "All Seasons"
     videoUrl.AppendPath("-1/");
     pItem->SetPath(videoUrl.ToString());
     // set the number of watched and unwatched items accordingly
@@ -78,7 +79,8 @@ void CVideoFileItemListModifier::AddQueuingFolder(CFileItemList& items)
       unwatched += static_cast<int>(item->GetProperty("unwatchedepisodes").asInteger());
     }
     pItem->SetProperty("totalepisodes", watched + unwatched);
-    pItem->SetProperty("numepisodes", watched + unwatched); // will be changed later to reflect watchmode setting
+    pItem->SetProperty("numepisodes",
+                       watched + unwatched); // will be changed later to reflect watchmode setting
     pItem->SetProperty("watchedepisodes", watched);
     pItem->SetProperty("unwatchedepisodes", unwatched);
     if (items.Size() && items[0]->GetVideoInfoTag())
@@ -99,7 +101,7 @@ void CVideoFileItemListModifier::AddQueuingFolder(CFileItemList& items)
   }
   break;
   case NODE_TYPE_MUSICVIDEOS_ALBUM:
-    pItem.reset(new CFileItem(g_localizeStrings.Get(15102)));  // "All Albums"
+    pItem.reset(new CFileItem(g_localizeStrings.Get(15102))); // "All Albums"
     videoUrl.AppendPath("-1/");
     pItem->SetPath(videoUrl.ToString());
     break;
@@ -110,7 +112,11 @@ void CVideoFileItemListModifier::AddQueuingFolder(CFileItemList& items)
   if (pItem)
   {
     pItem->m_bIsFolder = true;
-    pItem->SetSpecialSort(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_bVideoLibraryAllItemsOnBottom ? SortSpecialOnBottom : SortSpecialOnTop);
+    pItem->SetSpecialSort(CServiceBroker::GetSettingsComponent()
+                                  ->GetAdvancedSettings()
+                                  ->m_bVideoLibraryAllItemsOnBottom
+                              ? SortSpecialOnBottom
+                              : SortSpecialOnTop);
     pItem->SetCanQueue(false);
     items.Add(pItem);
   }

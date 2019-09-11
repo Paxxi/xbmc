@@ -10,11 +10,11 @@
 
 #include "guilib/GUIDialog.h"
 
-class CGUIDialogSubMenu :
-      public CGUIDialog
+class CGUIDialogSubMenu : public CGUIDialog
 {
 public:
-  CGUIDialogSubMenu(int id = WINDOW_DIALOG_SUB_MENU, const std::string &xmlFile = "DialogSubMenu.xml");
+  CGUIDialogSubMenu(int id = WINDOW_DIALOG_SUB_MENU,
+                    const std::string& xmlFile = "DialogSubMenu.xml");
   ~CGUIDialogSubMenu(void) override;
-  bool OnMessage(CGUIMessage &message) override;
+  bool OnMessage(CGUIMessage& message) override;
 };

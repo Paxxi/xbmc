@@ -21,16 +21,16 @@ public:
   bool OnMessage(CGUIMessage& message) override;
   bool OnAction(const CAction& action) override;
   bool OnBack(int actionID) override;
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
   void OnInitWindow() override;
   void OnDeinitWindow(int nextWindowID) override;
 
 protected:
-  bool                m_bClose;           /* Close sendet, needed for fade out */
-  CBaseTexture*       m_pTxtTexture;      /* Texture info class to render to screen */
-  CRect               m_vertCoords;       /* Coordinates of teletext field on screen */
-  CTeletextDecoder    m_TextDecoder;      /* Decoding class for teletext code */
+  bool m_bClose; /* Close sendet, needed for fade out */
+  CBaseTexture* m_pTxtTexture; /* Texture info class to render to screen */
+  CRect m_vertCoords; /* Coordinates of teletext field on screen */
+  CTeletextDecoder m_TextDecoder; /* Decoding class for teletext code */
 
 private:
   void SetCoordinates();

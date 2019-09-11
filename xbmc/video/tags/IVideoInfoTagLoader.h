@@ -28,9 +28,11 @@ public:
   //! \param item The item to load info for
   //! \param info Scraper info
   //! \param llokInFolder True to look in folder holding file
-  IVideoInfoTagLoader(const CFileItem& item,
-                      ADDON::ScraperPtr info,
-                      bool lookInFolder) : m_item(item), m_info(info) {}
+  IVideoInfoTagLoader(const CFileItem& item, ADDON::ScraperPtr info, bool lookInFolder)
+    : m_item(item)
+    , m_info(info)
+  {
+  }
   virtual ~IVideoInfoTagLoader() = default;
 
   //! \brief Returns true if we have info to provide.
@@ -56,4 +58,4 @@ protected:
   CScraperUrl m_url; //!< URL for scraper
 };
 
-}
+} // namespace VIDEO

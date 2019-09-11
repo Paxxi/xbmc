@@ -28,26 +28,15 @@ class CScopeGuard
 {
 
 public:
-
   CScopeGuard(std::function<Deleter> del, Handle handle = invalid)
     : m_handle{handle}
-    , m_deleter{del}
-  { };
+    , m_deleter{del} {};
 
-  ~CScopeGuard() noexcept
-  {
-    reset();
-  }
+  ~CScopeGuard() noexcept { reset(); }
 
-  operator Handle() const
-  {
-    return m_handle;
-  }
+  operator Handle() const { return m_handle; }
 
-  operator bool() const
-  {
-    return m_handle != invalid;
-  }
+  operator bool() const { return m_handle != invalid; }
 
   /*! \brief  attach a new handle to this instance, if there's
               already a handle it will be closed.
@@ -86,11 +75,12 @@ public:
   //Disallow default construction and copying
   CScopeGuard() = delete;
   CScopeGuard(const CScopeGuard& rhs) = delete;
-  CScopeGuard& operator= (const CScopeGuard& rhs) = delete;
+  CScopeGuard& operator=(const CScopeGuard& rhs) = delete;
 
   //Allow moving
   CScopeGuard(CScopeGuard&& rhs)
-    : m_handle{std::move(rhs.m_handle)}, m_deleter{std::move(rhs.m_deleter)}
+    : m_handle{std::move(rhs.m_handle)}
+    , m_deleter{std::move(rhs.m_deleter)}
   {
     // Bring moved-from object into released state so destructor will not do anything
     rhs.release();
@@ -107,5 +97,5 @@ private:
   std::function<Deleter> m_deleter;
 };
 
-}
-}
+} // namespace UTILS
+} // namespace KODI

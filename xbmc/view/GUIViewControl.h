@@ -24,15 +24,15 @@ public:
 
   void Reset();
   void SetParentWindow(int window);
-  void AddView(const CGUIControl *control);
+  void AddView(const CGUIControl* control);
   void SetViewControlID(int control);
 
   void SetCurrentView(int viewMode, bool bRefresh = false);
 
-  void SetItems(CFileItemList &items);
+  void SetItems(CFileItemList& items);
 
   void SetSelectedItem(int item);
-  void SetSelectedItem(const std::string &itemPath);
+  void SetSelectedItem(const std::string& itemPath);
 
   int GetSelectedItem() const;
   std::string GetSelectedItemPath() const;
@@ -49,10 +49,10 @@ public:
   void Clear();
 
 protected:
-  int GetSelectedItem(const CGUIControl *control) const;
-  void UpdateContents(const CGUIControl *control, int currentItem) const;
+  int GetSelectedItem(const CGUIControl* control) const;
+  void UpdateContents(const CGUIControl* control, int currentItem) const;
   void UpdateView();
-  void UpdateViewAsControl(const std::string &viewLabel);
+  void UpdateViewAsControl(const std::string& viewLabel);
   void UpdateViewVisibility();
   int GetView(VIEW_TYPE type, int id) const;
 

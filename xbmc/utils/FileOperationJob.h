@@ -29,24 +29,26 @@ public:
   };
 
   CFileOperationJob();
-  CFileOperationJob(FileAction action, CFileItemList & items,
+  CFileOperationJob(FileAction action,
+                    CFileItemList& items,
                     const std::string& strDestFile,
                     bool displayProgress = false,
-                    int errorHeading = 0, int errorLine = 0);
+                    int errorHeading = 0,
+                    int errorLine = 0);
 
   static std::string GetActionString(FileAction action);
 
   // implementations of CJob
   bool DoWork() override;
   const char* GetType() const override { return m_displayProgress ? "filemanager" : ""; }
-  bool operator==(const CJob *job) const override;
+  bool operator==(const CJob* job) const override;
 
-  void SetFileOperation(FileAction action, CFileItemList &items, const std::string &strDestFile);
+  void SetFileOperation(FileAction action, CFileItemList& items, const std::string& strDestFile);
 
-  const std::string &GetAverageSpeed() const { return m_avgSpeed; }
-  const std::string &GetCurrentOperation() const { return m_currentOperation; }
-  const std::string &GetCurrentFile() const { return m_currentFile; }
-  const CFileItemList &GetItems() const { return m_items; }
+  const std::string& GetAverageSpeed() const { return m_avgSpeed; }
+  const std::string& GetCurrentOperation() const { return m_currentOperation; }
+  const std::string& GetCurrentFile() const { return m_currentFile; }
+  const CFileItemList& GetItems() const { return m_items; }
   FileAction GetAction() const { return m_action; }
   int GetHeading() const { return m_heading; }
   int GetLine() const { return m_line; }
@@ -55,11 +57,14 @@ private:
   class CFileOperation : public XFILE::IFileCallback
   {
   public:
-    CFileOperation(FileAction action, const std::string &strFileA, const std::string &strFileB, int64_t time);
+    CFileOperation(FileAction action,
+                   const std::string& strFileA,
+                   const std::string& strFileB,
+                   int64_t time);
 
     bool OnFileCallback(void* pContext, int ipercent, float avgSpeed) override;
 
-    bool ExecuteOperation(CFileOperationJob *base, double &current, double opWeight);
+    bool ExecuteOperation(CFileOperationJob* base, double& current, double opWeight);
 
   private:
     FileAction m_action;
@@ -69,11 +74,23 @@ private:
   friend class CFileOperation;
 
   typedef std::vector<CFileOperation> FileOperationList;
-  bool DoProcess(FileAction action, CFileItemList & items, const std::string& strDestFile, FileOperationList &fileOperations, double &totalTime);
-  bool DoProcessFolder(FileAction action, const std::string& strPath, const std::string& strDestFile, FileOperationList &fileOperations, double &totalTime);
-  bool DoProcessFile(FileAction action, const std::string& strFileA, const std::string& strFileB, FileOperationList &fileOperations, double &totalTime);
+  bool DoProcess(FileAction action,
+                 CFileItemList& items,
+                 const std::string& strDestFile,
+                 FileOperationList& fileOperations,
+                 double& totalTime);
+  bool DoProcessFolder(FileAction action,
+                       const std::string& strPath,
+                       const std::string& strDestFile,
+                       FileOperationList& fileOperations,
+                       double& totalTime);
+  bool DoProcessFile(FileAction action,
+                     const std::string& strFileA,
+                     const std::string& strFileB,
+                     FileOperationList& fileOperations,
+                     double& totalTime);
 
-  static inline bool CanBeRenamed(const std::string &strFileA, const std::string &strFileB);
+  static inline bool CanBeRenamed(const std::string& strFileA, const std::string& strFileB);
 
   FileAction m_action = ActionCopy;
   CFileItemList m_items;

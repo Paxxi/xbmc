@@ -38,43 +38,71 @@ CVideoSettings::CVideoSettings()
   m_VideoStream = -1;
 }
 
-bool CVideoSettings::operator!=(const CVideoSettings &right) const
+bool CVideoSettings::operator!=(const CVideoSettings& right) const
 {
-  if (m_InterlaceMethod != right.m_InterlaceMethod) return true;
-  if (m_ScalingMethod != right.m_ScalingMethod) return true;
-  if (m_ViewMode != right.m_ViewMode) return true;
-  if (m_CustomZoomAmount != right.m_CustomZoomAmount) return true;
-  if (m_CustomPixelRatio != right.m_CustomPixelRatio) return true;
-  if (m_CustomVerticalShift != right.m_CustomVerticalShift) return true;
-  if (m_CustomNonLinStretch != right.m_CustomNonLinStretch) return true;
-  if (m_AudioStream != right.m_AudioStream) return true;
-  if (m_SubtitleStream != right.m_SubtitleStream) return true;
-  if (m_SubtitleDelay != right.m_SubtitleDelay) return true;
-  if (m_SubtitleOn != right.m_SubtitleOn) return true;
-  if (m_Brightness != right.m_Brightness) return true;
-  if (m_Contrast != right.m_Contrast) return true;
-  if (m_Gamma != right.m_Gamma) return true;
-  if (m_Sharpness != right.m_Sharpness) return true;
-  if (m_NoiseReduction != right.m_NoiseReduction) return true;
-  if (m_PostProcess != right.m_PostProcess) return true;
-  if (m_VolumeAmplification != right.m_VolumeAmplification) return true;
-  if (m_AudioDelay != right.m_AudioDelay) return true;
-  if (m_ResumeTime != right.m_ResumeTime) return true;
-  if (m_StereoMode != right.m_StereoMode) return true;
-  if (m_StereoInvert != right.m_StereoInvert) return true;
-  if (m_VideoStream != right.m_VideoStream) return true;
-  if (m_ToneMapMethod != right.m_ToneMapMethod) return true;
-  if (m_ToneMapParam != right.m_ToneMapParam) return true;
-  if (m_Orientation != right.m_Orientation) return true;
-  if (m_CenterMixLevel != right.m_CenterMixLevel) return true;
+  if (m_InterlaceMethod != right.m_InterlaceMethod)
+    return true;
+  if (m_ScalingMethod != right.m_ScalingMethod)
+    return true;
+  if (m_ViewMode != right.m_ViewMode)
+    return true;
+  if (m_CustomZoomAmount != right.m_CustomZoomAmount)
+    return true;
+  if (m_CustomPixelRatio != right.m_CustomPixelRatio)
+    return true;
+  if (m_CustomVerticalShift != right.m_CustomVerticalShift)
+    return true;
+  if (m_CustomNonLinStretch != right.m_CustomNonLinStretch)
+    return true;
+  if (m_AudioStream != right.m_AudioStream)
+    return true;
+  if (m_SubtitleStream != right.m_SubtitleStream)
+    return true;
+  if (m_SubtitleDelay != right.m_SubtitleDelay)
+    return true;
+  if (m_SubtitleOn != right.m_SubtitleOn)
+    return true;
+  if (m_Brightness != right.m_Brightness)
+    return true;
+  if (m_Contrast != right.m_Contrast)
+    return true;
+  if (m_Gamma != right.m_Gamma)
+    return true;
+  if (m_Sharpness != right.m_Sharpness)
+    return true;
+  if (m_NoiseReduction != right.m_NoiseReduction)
+    return true;
+  if (m_PostProcess != right.m_PostProcess)
+    return true;
+  if (m_VolumeAmplification != right.m_VolumeAmplification)
+    return true;
+  if (m_AudioDelay != right.m_AudioDelay)
+    return true;
+  if (m_ResumeTime != right.m_ResumeTime)
+    return true;
+  if (m_StereoMode != right.m_StereoMode)
+    return true;
+  if (m_StereoInvert != right.m_StereoInvert)
+    return true;
+  if (m_VideoStream != right.m_VideoStream)
+    return true;
+  if (m_ToneMapMethod != right.m_ToneMapMethod)
+    return true;
+  if (m_ToneMapParam != right.m_ToneMapParam)
+    return true;
+  if (m_Orientation != right.m_Orientation)
+    return true;
+  if (m_CenterMixLevel != right.m_CenterMixLevel)
+    return true;
   return false;
 }
 
 //------------------------------------------------------------------------------
 // CVideoSettingsLocked
 //------------------------------------------------------------------------------
-CVideoSettingsLocked::CVideoSettingsLocked(CVideoSettings &vs, CCriticalSection &critSection) :
-  m_videoSettings(vs), m_critSection(critSection)
+CVideoSettingsLocked::CVideoSettingsLocked(CVideoSettings& vs, CCriticalSection& critSection)
+  : m_videoSettings(vs)
+  , m_critSection(critSection)
 {
 }
 

@@ -17,25 +17,28 @@
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 
-CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(std::shared_ptr<CDVDInputStream> pInputStream, bool fileinfo)
+CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(std::shared_ptr<CDVDInputStream> pInputStream,
+                                             bool fileinfo)
 {
   if (!pInputStream)
     return NULL;
 
   // Try to open the AirTunes demuxer
-  if (pInputStream->IsStreamType(DVDSTREAM_TYPE_FILE) && pInputStream->GetContent().compare("audio/x-xbmc-pcm") == 0 )
+  if (pInputStream->IsStreamType(DVDSTREAM_TYPE_FILE) &&
+      pInputStream->GetContent().compare("audio/x-xbmc-pcm") == 0)
   {
     // audio/x-xbmc-pcm this is the used codec for AirTunes
     // (apples audio only streaming)
     std::unique_ptr<CDVDDemuxBXA> demuxer(new CDVDDemuxBXA());
-    if(demuxer->Open(pInputStream))
+    if (demuxer->Open(pInputStream))
       return demuxer.release();
     else
       return NULL;
   }
 
   // Try to open CDDA demuxer
-  if (pInputStream->IsStreamType(DVDSTREAM_TYPE_FILE) && pInputStream->GetContent().compare("application/octet-stream") == 0)
+  if (pInputStream->IsStreamType(DVDSTREAM_TYPE_FILE) &&
+      pInputStream->GetContent().compare("application/octet-stream") == 0)
   {
     std::string filename = pInputStream->GetFileName();
     if (filename.substr(0, 7) == "cdda://")
@@ -54,7 +57,7 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(std::shared_ptr<CDVDInputStream> pI
   if (pInputStream->GetIDemux())
   {
     std::unique_ptr<CDVDDemuxClient> demuxer(new CDVDDemuxClient());
-    if(demuxer->Open(pInputStream))
+    if (demuxer->Open(pInputStream))
       return demuxer.release();
     else
       return nullptr;
@@ -85,9 +88,8 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(std::shared_ptr<CDVDInputStream> pI
   }
 
   std::unique_ptr<CDVDDemuxFFmpeg> demuxer(new CDVDDemuxFFmpeg());
-  if(demuxer->Open(pInputStream, streaminfo, fileinfo))
+  if (demuxer->Open(pInputStream, streaminfo, fileinfo))
     return demuxer.release();
   else
     return NULL;
 }
-

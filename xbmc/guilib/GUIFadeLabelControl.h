@@ -26,23 +26,33 @@
 class CGUIFadeLabelControl : public CGUIControl
 {
 public:
-  CGUIFadeLabelControl(int parentID, int controlID, float posX, float posY, float width, float height, const CLabelInfo& labelInfo, bool scrollOut, unsigned int timeToDelayAtEnd, bool resetOnLabelChange, bool randomized);
-  CGUIFadeLabelControl(const CGUIFadeLabelControl &from);
+  CGUIFadeLabelControl(int parentID,
+                       int controlID,
+                       float posX,
+                       float posY,
+                       float width,
+                       float height,
+                       const CLabelInfo& labelInfo,
+                       bool scrollOut,
+                       unsigned int timeToDelayAtEnd,
+                       bool resetOnLabelChange,
+                       bool randomized);
+  CGUIFadeLabelControl(const CGUIFadeLabelControl& from);
   ~CGUIFadeLabelControl(void) override;
-  CGUIFadeLabelControl *Clone() const override { return new CGUIFadeLabelControl(*this); };
+  CGUIFadeLabelControl* Clone() const override { return new CGUIFadeLabelControl(*this); };
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
   bool CanFocus() const override;
   bool OnMessage(CGUIMessage& message) override;
 
-  void SetInfo(const std::vector<KODI::GUILIB::GUIINFO::CGUIInfoLabel> &vecInfo);
+  void SetInfo(const std::vector<KODI::GUILIB::GUIINFO::CGUIInfoLabel>& vecInfo);
   void SetScrolling(bool scroll) { m_scroll = scroll; }
 
 protected:
   bool UpdateColors() override;
   std::string GetDescription() const override;
-  void AddLabel(const std::string &label);
+  void AddLabel(const std::string& label);
 
   /*! \brief retrieve the current label for display
 
@@ -60,9 +70,10 @@ protected:
 
   CLabelInfo m_label;
 
-  bool m_scroll;      // true if we scroll the text
-  bool m_scrollOut;   // true if we scroll the text all the way to the left before fading in the next label
-  bool m_shortText;   // true if the text we have is shorter than the width of the control
+  bool m_scroll; // true if we scroll the text
+  bool
+      m_scrollOut; // true if we scroll the text all the way to the left before fading in the next label
+  bool m_shortText; // true if the text we have is shorter than the width of the control
 
   CScrollInfo m_scrollInfo;
   CGUITextLayout m_textLayout;
@@ -72,4 +83,3 @@ protected:
   bool m_resetOnLabelChange;
   bool m_randomized;
 };
-

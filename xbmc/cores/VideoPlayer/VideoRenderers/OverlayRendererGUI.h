@@ -15,7 +15,7 @@
 
 enum SubtitleAlign
 {
-  SUBTITLE_ALIGN_MANUAL         = 0,
+  SUBTITLE_ALIGN_MANUAL = 0,
   SUBTITLE_ALIGN_BOTTOM_INSIDE,
   SUBTITLE_ALIGN_BOTTOM_OUTSIDE,
   SUBTITLE_ALIGN_TOP_INSIDE,
@@ -25,7 +25,8 @@ enum SubtitleAlign
 class CGUITextLayout;
 class CDVDOverlayText;
 
-namespace OVERLAY {
+namespace OVERLAY
+{
 
 class COverlayText : public COverlay
 {
@@ -35,19 +36,32 @@ public:
   ~COverlayText() override;
   void Render(SRenderState& state) override;
   using COverlay::PrepareRender;
-  void PrepareRender(const std::string &font, int color, int opacity, int height, int style, const std::string &fontcache,
-                     const std::string &fontbordercache, const UTILS::Color bgcolor, const CRect &rectView);
-  virtual CGUITextLayout* GetFontLayout(const std::string &font, int color, int opacity, int height, int style,
-                                        const std::string &fontcache, const std::string &fontbordercache);
+  void PrepareRender(const std::string& font,
+                     int color,
+                     int opacity,
+                     int height,
+                     int style,
+                     const std::string& fontcache,
+                     const std::string& fontbordercache,
+                     const UTILS::Color bgcolor,
+                     const CRect& rectView);
+  virtual CGUITextLayout* GetFontLayout(const std::string& font,
+                                        int color,
+                                        int opacity,
+                                        int height,
+                                        int style,
+                                        const std::string& fontcache,
+                                        const std::string& fontbordercache);
 
   CGUITextLayout* m_layout;
   std::string m_text;
   int m_subalign;
   UTILS::Color m_bordercolor = UTILS::COLOR::BLACK;
   UTILS::Color m_bgcolor = UTILS::COLOR::NONE;
+
 protected:
   // target Rect for subtitles (updated on PrepareRender)
   CRect m_rv = CRect(0, 0, 0, 0);
 };
 
-}
+} // namespace OVERLAY

@@ -23,7 +23,9 @@ public:
   explicit CPlayerSelectionRule(TiXmlElement* rule);
   virtual ~CPlayerSelectionRule();
 
-  void GetPlayers(const CFileItem& item, std::vector<std::string>&validPlayers, std::vector<std::string>&players);
+  void GetPlayers(const CFileItem& item,
+                  std::vector<std::string>& validPlayers,
+                  std::vector<std::string>& players);
 
 private:
   static int GetTristate(const char* szValue);
@@ -57,5 +59,5 @@ private:
 
   std::string m_playerName;
 
-  std::vector<CPlayerSelectionRule *> vecSubRules;
+  std::vector<CPlayerSelectionRule*> vecSubRules;
 };

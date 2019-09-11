@@ -17,7 +17,7 @@ struct AVFormatContext;
 struct AVIOContext;
 namespace XFILE
 {
-  class CFile;
+class CFile;
 }
 
 //! \brief Video tag loader using FFMPEG.
@@ -25,9 +25,7 @@ class CVideoTagLoaderFFmpeg : public VIDEO::IVideoInfoTagLoader
 {
 public:
   //! \brief Constructor.
-  CVideoTagLoaderFFmpeg(const CFileItem& item,
-                        const ADDON::ScraperPtr& info,
-                        bool lookInFolder);
+  CVideoTagLoaderFFmpeg(const CFileItem& item, const ADDON::ScraperPtr& info, bool lookInFolder);
 
   //! \brief Destructor.
   virtual ~CVideoTagLoaderFFmpeg();
@@ -37,7 +35,8 @@ public:
 
   //! \brief Load "tag" from nfo file.
   //! \brief tag Tag to load info into
-  CInfoScanner::INFO_TYPE Load(CVideoInfoTag& tag, bool,
+  CInfoScanner::INFO_TYPE Load(CVideoInfoTag& tag,
+                               bool,
                                std::vector<EmbeddedArt>* art = nullptr) override;
 
   ADDON::ScraperPtr GetScraperInfo() const { return m_info; }
@@ -59,4 +58,3 @@ protected:
   //! \brief Load tags from AVI file.
   CInfoScanner::INFO_TYPE LoadAVI(CVideoInfoTag& tag, std::vector<EmbeddedArt>* art);
 };
-

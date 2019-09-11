@@ -9,42 +9,43 @@
 #pragma once
 
 #include "DVDInputStream.h"
+
 #include <list>
 #include <memory>
 
 extern "C"
 {
-#include <libbluray/bluray.h>
+#include "DVDInputStreamFile.h"
+
 #include <libbluray/bluray-version.h>
+#include <libbluray/bluray.h>
 #include <libbluray/keys.h>
 #include <libbluray/overlay.h>
 #include <libbluray/player_settings.h>
-#include "DVDInputStreamFile.h"
 }
 
 #define MAX_PLAYLIST_ID 99999
 #define MAX_CLIP_ID 99999
 #define BD_EVENT_MENU_OVERLAY -1
-#define BD_EVENT_MENU_ERROR   -2
-#define BD_EVENT_ENC_ERROR    -3
+#define BD_EVENT_MENU_ERROR -2
+#define BD_EVENT_ENC_ERROR -3
 
-#define HDMV_PID_VIDEO            0x1011
-#define HDMV_PID_AUDIO_FIRST      0x1100
-#define HDMV_PID_AUDIO_LAST       0x111f
-#define HDMV_PID_PG_FIRST         0x1200
-#define HDMV_PID_PG_LAST          0x121f
-#define HDMV_PID_IG_FIRST         0x1400
-#define HDMV_PID_IG_LAST          0x141f
+#define HDMV_PID_VIDEO 0x1011
+#define HDMV_PID_AUDIO_FIRST 0x1100
+#define HDMV_PID_AUDIO_LAST 0x111f
+#define HDMV_PID_PG_FIRST 0x1200
+#define HDMV_PID_PG_LAST 0x121f
+#define HDMV_PID_IG_FIRST 0x1400
+#define HDMV_PID_IG_LAST 0x141f
 
 class CDVDOverlayImage;
 class IVideoPlayer;
 
-class CDVDInputStreamBluray
-  : public CDVDInputStream
-  , public CDVDInputStream::IDisplayTime
-  , public CDVDInputStream::IChapter
-  , public CDVDInputStream::IPosTime
-  , public CDVDInputStream::IMenus
+class CDVDInputStreamBluray : public CDVDInputStream,
+                              public CDVDInputStream::IDisplayTime,
+                              public CDVDInputStream::IChapter,
+                              public CDVDInputStream::IPosTime,
+                              public CDVDInputStream::IMenus
 {
 public:
   CDVDInputStreamBluray() = delete;
@@ -66,39 +67,39 @@ public:
   void ActivateButton() override { UserInput(BD_VK_ENTER); }
   void SelectButton(int iButton) override
   {
-    if(iButton < 10)
+    if (iButton < 10)
       UserInput((bd_vk_key_e)(BD_VK_0 + iButton));
   }
-  int  GetCurrentButton() override { return 0; }
-  int  GetTotalButtons() override { return 0; }
-  void OnUp() override  { UserInput(BD_VK_UP); }
-  void OnDown() override  { UserInput(BD_VK_DOWN); }
+  int GetCurrentButton() override { return 0; }
+  int GetTotalButtons() override { return 0; }
+  void OnUp() override { UserInput(BD_VK_UP); }
+  void OnDown() override { UserInput(BD_VK_DOWN); }
   void OnLeft() override { UserInput(BD_VK_LEFT); }
   void OnRight() override { UserInput(BD_VK_RIGHT); }
   void OnMenu() override;
   void OnBack() override
   {
-    if(IsInMenu())
+    if (IsInMenu())
       OnMenu();
   }
   void OnNext() override {}
   void OnPrevious() override {}
   bool HasMenu() override;
   bool IsInMenu() override;
-  bool OnMouseMove(const CPoint &point) override  { return MouseMove(point); }
-  bool OnMouseClick(const CPoint &point) override { return MouseClick(point); }
+  bool OnMouseMove(const CPoint& point) override { return MouseMove(point); }
+  bool OnMouseClick(const CPoint& point) override { return MouseClick(point); }
   void SkipStill() override;
-  bool GetState(std::string &xmlstate) override { return false; }
-  bool SetState(const std::string &xmlstate) override { return false; }
+  bool GetState(std::string& xmlstate) override { return false; }
+  bool SetState(const std::string& xmlstate) override { return false; }
 
 
   void UserInput(bd_vk_key_e vk);
-  bool MouseMove(const CPoint &point);
-  bool MouseClick(const CPoint &point);
+  bool MouseMove(const CPoint& point);
+  bool MouseClick(const CPoint& point);
 
   int GetChapter() override;
   int GetChapterCount() override;
-  void GetChapterName(std::string& name, int ch=-1) override {};
+  void GetChapterName(std::string& name, int ch = -1) override{};
   int64_t GetChapterPos(int ch) override;
   bool SeekChapter(int ch) override;
 
@@ -109,11 +110,11 @@ public:
   CDVDInputStream::IPosTime* GetIPosTime() override { return this; }
   bool PosTime(int ms) override;
 
-  void GetStreamInfo(int pid, std::string &language);
+  void GetStreamInfo(int pid, std::string& language);
 
-  void OverlayCallback(const BD_OVERLAY * const);
+  void OverlayCallback(const BD_OVERLAY* const);
 #ifdef HAVE_LIBBLURAY_BDJ
-  void OverlayCallbackARGB(const struct bd_argb_overlay_s * const);
+  void OverlayCallbackARGB(const struct bd_argb_overlay_s* const);
 #endif
 
   BLURAY_TITLE_INFO* GetTitleLongest();
@@ -127,7 +128,7 @@ protected:
   void OverlayFlush(int64_t pts);
   void OverlayClose();
   static void OverlayClear(SPlane& plane, int x, int y, int w, int h);
-  static void OverlayInit (SPlane& plane, int w, int h);
+  static void OverlayInit(SPlane& plane, int w, int h);
 
   IVideoPlayer* m_player = nullptr;
   BLURAY* m_bd = nullptr;
@@ -151,7 +152,8 @@ protected:
   };
 
   SPlane m_planes[2];
-  enum EHoldState {
+  enum EHoldState
+  {
     HOLD_NONE = 0,
     HOLD_HELD,
     HOLD_DATA,
@@ -164,10 +166,10 @@ protected:
   struct bd_argb_buffer_s m_argb;
 #endif
 
-  private:
-    bool OpenStream(CFileItem &item);
-    void SetupPlayerSettings();
-    void FreeTitleInfo();
-    std::unique_ptr<CDVDInputStreamFile> m_pstream = nullptr;
-    std::string m_rootPath;
+private:
+  bool OpenStream(CFileItem& item);
+  void SetupPlayerSettings();
+  void FreeTitleInfo();
+  std::unique_ptr<CDVDInputStreamFile> m_pstream = nullptr;
+  std::string m_rootPath;
 };

@@ -10,30 +10,32 @@
 
 #include "cores/AudioEngine/Interfaces/AEEncoder.h"
 
-extern "C" {
+extern "C"
+{
 #include <libswresample/swresample.h>
 }
 
 /* ffmpeg re-defines this, so undef it to squash the warning */
 #undef restrict
 
-class CAEEncoderFFmpeg: public IAEEncoder
+class CAEEncoderFFmpeg : public IAEEncoder
 {
 public:
   CAEEncoderFFmpeg();
   ~CAEEncoderFFmpeg() override;
 
   bool IsCompatible(const AEAudioFormat& format) override;
-  bool Initialize(AEAudioFormat &format, bool allow_planar_input = false) override;
+  bool Initialize(AEAudioFormat& format, bool allow_planar_input = false) override;
   void Reset() override;
 
   unsigned int GetBitRate() override;
   AVCodecID GetCodecID() override;
   unsigned int GetFrames() override;
 
-  int Encode(uint8_t *in, int in_size, uint8_t *out, int out_size) override;
-  int GetData(uint8_t **data) override;
+  int Encode(uint8_t* in, int in_size, uint8_t* out, int out_size) override;
+  int GetData(uint8_t** data) override;
   double GetDelay(unsigned int bufferSize) override;
+
 private:
   unsigned int BuildChannelLayout(const int64_t ffmap, CAEChannelInfo& layout);
 
@@ -41,8 +43,8 @@ private:
   AVCodecID m_CodecID;
   unsigned int m_BitRate = 0;
   AEAudioFormat m_CurrentFormat;
-  AVCodecContext *m_CodecCtx;
-  SwrContext *m_SwrCtx;
+  AVCodecContext* m_CodecCtx;
+  SwrContext* m_SwrCtx;
   CAEChannelInfo m_Layout;
   AVPacket m_Pkt;
   uint8_t m_Buffer[8 + AV_INPUT_BUFFER_MIN_SIZE];
@@ -50,7 +52,6 @@ private:
   int m_OutputSize = 0;
   double m_OutputRatio = 0.0;
   double m_SampleRateMul = 0.0;
-  unsigned int  m_NeededFrames = 0;
+  unsigned int m_NeededFrames = 0;
   bool m_NeedConversion = false;
 };
-

@@ -28,20 +28,23 @@
 using namespace PVR;
 
 CPVREpg::CPVREpg(int iEpgID, const std::string& strName, const std::string& strScraperName)
-: m_bChanged(false),
-  m_iEpgID(iEpgID),
-  m_strName(strName),
-  m_strScraperName(strScraperName),
-  m_channelData(new CPVREpgChannelData)
+  : m_bChanged(false)
+  , m_iEpgID(iEpgID)
+  , m_strName(strName)
+  , m_strScraperName(strScraperName)
+  , m_channelData(new CPVREpgChannelData)
 {
 }
 
-CPVREpg::CPVREpg(int iEpgID, const std::string& strName, const std::string& strScraperName, const std::shared_ptr<CPVREpgChannelData>& channelData)
-: m_bChanged(true),
-  m_iEpgID(iEpgID),
-  m_strName(strName),
-  m_strScraperName(strScraperName),
-  m_channelData(channelData)
+CPVREpg::CPVREpg(int iEpgID,
+                 const std::string& strName,
+                 const std::string& strScraperName,
+                 const std::shared_ptr<CPVREpgChannelData>& channelData)
+  : m_bChanged(true)
+  , m_iEpgID(iEpgID)
+  , m_strName(strName)
+  , m_strScraperName(strScraperName)
+  , m_channelData(channelData)
 {
 }
 
@@ -66,7 +69,9 @@ bool CPVREpg::HasValidEntries(void) const
   CSingleLock lock(m_critSection);
   return (m_iEpgID > 0 && /* valid EPG ID */
           !m_tags.empty() && /* contains at least 1 tag */
-          m_tags.rbegin()->second->EndAsUTC() >= CDateTime::GetCurrentDateTime().GetAsUTCDateTime()); /* the last end time hasn't passed yet */
+          m_tags.rbegin()->second->EndAsUTC() >=
+              CDateTime::GetCurrentDateTime()
+                  .GetAsUTCDateTime()); /* the last end time hasn't passed yet */
 }
 
 void CPVREpg::Clear(void)
@@ -81,7 +86,7 @@ void CPVREpg::Cleanup(int iPastDays)
   Cleanup(cleanupTime);
 }
 
-void CPVREpg::Cleanup(const CDateTime &time)
+void CPVREpg::Cleanup(const CDateTime& time)
 {
   CSingleLock lock(m_critSection);
   for (auto it = m_tags.begin(); it != m_tags.end();)
@@ -204,7 +209,7 @@ CPVREpgInfoTagPtr CPVREpg::GetTagByBroadcastId(unsigned int iUniqueBroadcastId) 
   if (iUniqueBroadcastId != EPG_TAG_INVALID_UID)
   {
     CSingleLock lock(m_critSection);
-    for (const auto &infoTag : m_tags)
+    for (const auto& infoTag : m_tags)
     {
       if (infoTag.second->UniqueBroadcastID() == iUniqueBroadcastId)
         return infoTag.second;
@@ -213,7 +218,9 @@ CPVREpgInfoTagPtr CPVREpg::GetTagByBroadcastId(unsigned int iUniqueBroadcastId) 
   return CPVREpgInfoTagPtr();
 }
 
-CPVREpgInfoTagPtr CPVREpg::GetTagBetween(const CDateTime &beginTime, const CDateTime &endTime, bool bUpdateFromClient /* = false */)
+CPVREpgInfoTagPtr CPVREpg::GetTagBetween(const CDateTime& beginTime,
+                                         const CDateTime& endTime,
+                                         bool bUpdateFromClient /* = false */)
 {
   CPVREpgInfoTagPtr tag;
 
@@ -235,21 +242,23 @@ CPVREpgInfoTagPtr CPVREpg::GetTagBetween(const CDateTime &beginTime, const CDate
     time_t e;
     endTime.GetAsTime(e);
 
-    const std::shared_ptr<CPVREpg> tmpEpg = std::make_shared<CPVREpg>(m_iEpgID, m_strName, m_strScraperName, m_channelData);
+    const std::shared_ptr<CPVREpg> tmpEpg =
+        std::make_shared<CPVREpg>(m_iEpgID, m_strName, m_strScraperName, m_channelData);
     if (tmpEpg->UpdateFromScraper(b, e, true))
       tag = tmpEpg->GetTagBetween(beginTime, endTime, false);
 
     if (tag)
     {
       m_tags.insert(std::make_pair(tag->StartAsUTC(), tag));
-      UpdateEntry(tag, CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_EPG_STOREEPGINDATABASE));
+      UpdateEntry(tag, CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                           CSettings::SETTING_EPG_STOREEPGINDATABASE));
     }
   }
 
   return tag;
 }
 
-void CPVREpg::AddEntry(const CPVREpgInfoTag &tag)
+void CPVREpg::AddEntry(const CPVREpgInfoTag& tag)
 {
   CPVREpgInfoTagPtr newTag;
 
@@ -307,7 +316,7 @@ bool CPVREpg::Load(const std::shared_ptr<CPVREpgDatabase>& database)
   return bReturn;
 }
 
-bool CPVREpg::UpdateEntries(const CPVREpg &epg, bool bStoreInDb /* = true */)
+bool CPVREpg::UpdateEntries(const CPVREpg& epg, bool bStoreInDb /* = true */)
 {
   CSingleLock lock(m_critSection);
   /* copy over tags */
@@ -328,16 +337,18 @@ bool CPVREpg::UpdateEntries(const CPVREpg &epg, bool bStoreInDb /* = true */)
   return true;
 }
 
-bool CPVREpg::UpdateEntry(const EPG_TAG *data, int iClientId)
+bool CPVREpg::UpdateEntry(const EPG_TAG* data, int iClientId)
 {
   if (!data)
     return false;
 
-  const std::shared_ptr<CPVREpgInfoTag> tag = std::make_shared<CPVREpgInfoTag>(*data, iClientId, m_channelData, m_iEpgID);
-  return UpdateEntry(tag, CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_EPG_STOREEPGINDATABASE));
+  const std::shared_ptr<CPVREpgInfoTag> tag =
+      std::make_shared<CPVREpgInfoTag>(*data, iClientId, m_channelData, m_iEpgID);
+  return UpdateEntry(tag, CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                              CSettings::SETTING_EPG_STOREEPGINDATABASE));
 }
 
-bool CPVREpg::UpdateEntry(const CPVREpgInfoTagPtr &tag, bool bUpdateDatabase)
+bool CPVREpg::UpdateEntry(const CPVREpgInfoTagPtr& tag, bool bUpdateDatabase)
 {
   CPVREpgInfoTagPtr infoTag;
 
@@ -366,7 +377,9 @@ bool CPVREpg::UpdateEntry(const CPVREpgInfoTagPtr &tag, bool bUpdateDatabase)
   return true;
 }
 
-bool CPVREpg::UpdateEntry(const CPVREpgInfoTagPtr &tag, EPG_EVENT_STATE newState, bool bUpdateDatabase)
+bool CPVREpg::UpdateEntry(const CPVREpgInfoTagPtr& tag,
+                          EPG_EVENT_STATE newState,
+                          bool bUpdateDatabase)
 {
   bool bRet = true;
   bool bNotify = true;
@@ -392,7 +405,8 @@ bool CPVREpg::UpdateEntry(const CPVREpgInfoTagPtr &tag, EPG_EVENT_STATE newState
     else
     {
       // Respect epg linger time.
-      int iPastDays = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_EPG_PAST_DAYSTODISPLAY);
+      int iPastDays = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+          CSettings::SETTING_EPG_PAST_DAYSTODISPLAY);
       const CDateTime cleanupTime(CDateTime::GetUTCDateTime() - CDateTimeSpan(iPastDays, 0, 0, 0));
       if (it->second->EndAsUTC() < cleanupTime)
       {
@@ -442,7 +456,9 @@ bool CPVREpg::Update(time_t start,
 
   /* enforce advanced settings update interval override for channels with no EPG data */
   if (m_tags.empty() && !bUpdate && ChannelID() > 0)
-    iUpdateTime = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_iEpgUpdateEmptyTagsInterval;
+    iUpdateTime = CServiceBroker::GetSettingsComponent()
+                      ->GetAdvancedSettings()
+                      ->m_iEpgUpdateEmptyTagsInterval;
 
   if (!bForceUpdate)
   {
@@ -521,8 +537,8 @@ bool CPVREpg::Persist(const std::shared_ptr<CPVREpgDatabase>& database)
 
     m_deletedTags.clear();
     m_changedTags.clear();
-    m_bChanged            = false;
-    m_bTagsChanged        = false;
+    m_bChanged = false;
+    m_bTagsChanged = false;
     m_bUpdateLastScanTime = false;
   }
 
@@ -613,7 +629,8 @@ bool CPVREpg::UpdateFromScraper(time_t start, time_t end, bool bForceUpdate)
       return true;
     }
 
-    const std::shared_ptr<CPVRClient> client = CServiceBroker::GetPVRManager().GetClient(m_channelData->ClientId());
+    const std::shared_ptr<CPVRClient> client =
+        CServiceBroker::GetPVRManager().GetClient(m_channelData->ClientId());
     if (client)
     {
       if (!client->GetClientCapabilities().SupportsEPG())
@@ -630,7 +647,8 @@ bool CPVREpg::UpdateFromScraper(time_t start, time_t end, bool bForceUpdate)
       {
         CLog::LogFC(LOGDEBUG, LOGEPG, "Updating EPG for channel '%s' from client '%i'",
                     m_channelData->ChannelName().c_str(), m_channelData->ClientId());
-        return (client->GetEPGForChannel(m_channelData->UniqueClientChannelId(), this, start, end) == PVR_ERROR_NO_ERROR);
+        return (client->GetEPGForChannel(m_channelData->UniqueClientChannelId(), this, start,
+                                         end) == PVR_ERROR_NO_ERROR);
       }
     }
     else
@@ -652,44 +670,44 @@ const std::string& CPVREpg::ConvertGenreIdToString(int iID, int iSubID)
   unsigned int iLabelId = 19499;
   switch (iID)
   {
-    case EPG_EVENT_CONTENTMASK_MOVIEDRAMA:
-      iLabelId = (iSubID <= 8) ? 19500 + iSubID : 19500;
-      break;
-    case EPG_EVENT_CONTENTMASK_NEWSCURRENTAFFAIRS:
-      iLabelId = (iSubID <= 4) ? 19516 + iSubID : 19516;
-      break;
-    case EPG_EVENT_CONTENTMASK_SHOW:
-      iLabelId = (iSubID <= 3) ? 19532 + iSubID : 19532;
-      break;
-    case EPG_EVENT_CONTENTMASK_SPORTS:
-      iLabelId = (iSubID <= 11) ? 19548 + iSubID : 19548;
-      break;
-    case EPG_EVENT_CONTENTMASK_CHILDRENYOUTH:
-      iLabelId = (iSubID <= 5) ? 19564 + iSubID : 19564;
-      break;
-    case EPG_EVENT_CONTENTMASK_MUSICBALLETDANCE:
-      iLabelId = (iSubID <= 6) ? 19580 + iSubID : 19580;
-      break;
-    case EPG_EVENT_CONTENTMASK_ARTSCULTURE:
-      iLabelId = (iSubID <= 11) ? 19596 + iSubID : 19596;
-      break;
-    case EPG_EVENT_CONTENTMASK_SOCIALPOLITICALECONOMICS:
-      iLabelId = (iSubID <= 3) ? 19612 + iSubID : 19612;
-      break;
-    case EPG_EVENT_CONTENTMASK_EDUCATIONALSCIENCE:
-      iLabelId = (iSubID <= 7) ? 19628 + iSubID : 19628;
-      break;
-    case EPG_EVENT_CONTENTMASK_LEISUREHOBBIES:
-      iLabelId = (iSubID <= 7) ? 19644 + iSubID : 19644;
-      break;
-    case EPG_EVENT_CONTENTMASK_SPECIAL:
-      iLabelId = (iSubID <= 3) ? 19660 + iSubID : 19660;
-      break;
-    case EPG_EVENT_CONTENTMASK_USERDEFINED:
-      iLabelId = (iSubID <= 8) ? 19676 + iSubID : 19676;
-      break;
-    default:
-      break;
+  case EPG_EVENT_CONTENTMASK_MOVIEDRAMA:
+    iLabelId = (iSubID <= 8) ? 19500 + iSubID : 19500;
+    break;
+  case EPG_EVENT_CONTENTMASK_NEWSCURRENTAFFAIRS:
+    iLabelId = (iSubID <= 4) ? 19516 + iSubID : 19516;
+    break;
+  case EPG_EVENT_CONTENTMASK_SHOW:
+    iLabelId = (iSubID <= 3) ? 19532 + iSubID : 19532;
+    break;
+  case EPG_EVENT_CONTENTMASK_SPORTS:
+    iLabelId = (iSubID <= 11) ? 19548 + iSubID : 19548;
+    break;
+  case EPG_EVENT_CONTENTMASK_CHILDRENYOUTH:
+    iLabelId = (iSubID <= 5) ? 19564 + iSubID : 19564;
+    break;
+  case EPG_EVENT_CONTENTMASK_MUSICBALLETDANCE:
+    iLabelId = (iSubID <= 6) ? 19580 + iSubID : 19580;
+    break;
+  case EPG_EVENT_CONTENTMASK_ARTSCULTURE:
+    iLabelId = (iSubID <= 11) ? 19596 + iSubID : 19596;
+    break;
+  case EPG_EVENT_CONTENTMASK_SOCIALPOLITICALECONOMICS:
+    iLabelId = (iSubID <= 3) ? 19612 + iSubID : 19612;
+    break;
+  case EPG_EVENT_CONTENTMASK_EDUCATIONALSCIENCE:
+    iLabelId = (iSubID <= 7) ? 19628 + iSubID : 19628;
+    break;
+  case EPG_EVENT_CONTENTMASK_LEISUREHOBBIES:
+    iLabelId = (iSubID <= 7) ? 19644 + iSubID : 19644;
+    break;
+  case EPG_EVENT_CONTENTMASK_SPECIAL:
+    iLabelId = (iSubID <= 3) ? 19660 + iSubID : 19660;
+    break;
+  case EPG_EVENT_CONTENTMASK_USERDEFINED:
+    iLabelId = (iSubID <= 8) ? 19676 + iSubID : 19676;
+    break;
+  default:
+    break;
   }
 
   return g_localizeStrings.Get(iLabelId);
@@ -699,9 +717,11 @@ bool CPVREpg::LoadFromClients(time_t start, time_t end, bool bForceUpdate)
 {
   bool bReturn = false;
 
-  const std::shared_ptr<CPVREpg> tmpEpg = std::make_shared<CPVREpg>(m_iEpgID, m_strName, m_strScraperName, m_channelData);
+  const std::shared_ptr<CPVREpg> tmpEpg =
+      std::make_shared<CPVREpg>(m_iEpgID, m_strName, m_strScraperName, m_channelData);
   if (tmpEpg->UpdateFromScraper(start, end, bForceUpdate))
-    bReturn = UpdateEntries(*tmpEpg, CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_EPG_STOREEPGINDATABASE));
+    bReturn = UpdateEntries(*tmpEpg, CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                                         CSettings::SETTING_EPG_STOREEPGINDATABASE));
 
   return bReturn;
 }
@@ -761,7 +781,8 @@ bool CPVREpg::IsValid(void) const
 {
   CSingleLock lock(m_critSection);
   if (ScraperName() == "client")
-    return m_channelData->ClientId() != -1 && m_channelData->UniqueClientChannelId() != PVR_CHANNEL_INVALID_UID;
+    return m_channelData->ClientId() != -1 &&
+           m_channelData->UniqueClientChannelId() != PVR_CHANNEL_INVALID_UID;
 
   return true;
 }

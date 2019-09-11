@@ -21,7 +21,7 @@ public:
 
   // implementation of CJob
   bool DoWork() override;
-  const char *GetType() const override { return "CVideoLibraryProgressJob"; }
+  const char* GetType() const override { return "CVideoLibraryProgressJob"; }
   bool operator==(const CJob* job) const override { return false; }
 
 protected:

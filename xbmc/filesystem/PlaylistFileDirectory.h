@@ -12,14 +12,14 @@
 
 namespace XFILE
 {
-  class CPlaylistFileDirectory : public IFileDirectory
-  {
-  public:
-    CPlaylistFileDirectory();
-    ~CPlaylistFileDirectory() override;
-    bool GetDirectory(const CURL& url, CFileItemList& items) override;
-    bool ContainsFiles(const CURL& url) override;
-    bool Remove(const CURL& url) override;
-    bool AllowAll() const override { return true; }
-  };
-}
+class CPlaylistFileDirectory : public IFileDirectory
+{
+public:
+  CPlaylistFileDirectory();
+  ~CPlaylistFileDirectory() override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool ContainsFiles(const CURL& url) override;
+  bool Remove(const CURL& url) override;
+  bool AllowAll() const override { return true; }
+};
+} // namespace XFILE

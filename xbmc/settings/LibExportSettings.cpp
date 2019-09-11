@@ -21,11 +21,11 @@ CLibExportSettings::CLibExportSettings()
   m_itemstoexport = ELIBEXPORT_ALBUMS + ELIBEXPORT_ALBUMARTISTS;
   m_overwrite = false;
   m_artwork = false;
-  m_unscraped  = false;
+  m_unscraped = false;
   m_skipnfo = false;
 }
 
-bool CLibExportSettings::operator!=(const CLibExportSettings &right) const
+bool CLibExportSettings::operator!=(const CLibExportSettings& right) const
 {
   if (m_exporttype != right.m_exporttype)
     return true;
@@ -54,8 +54,7 @@ bool CLibExportSettings::IsItemExported(ELIBEXPORTOPTIONS item) const
 bool CLibExportSettings::IsArtists() const
 {
   return (m_itemstoexport & ELIBEXPORT_ALBUMARTISTS) ||
-         (m_itemstoexport & ELIBEXPORT_SONGARTISTS) ||
-         (m_itemstoexport & ELIBEXPORT_OTHERARTISTS);
+         (m_itemstoexport & ELIBEXPORT_SONGARTISTS) || (m_itemstoexport & ELIBEXPORT_OTHERARTISTS);
 }
 
 std::vector<int> CLibExportSettings::GetExportItems() const

@@ -23,7 +23,7 @@ class CUDisks2Provider : public IStorageProvider
     bool m_isRemovable = false;
     std::vector<std::string> m_mediaCompatibility;
 
-    explicit Drive(const char *object);
+    explicit Drive(const char* object);
     ~Drive() = default;
 
     bool IsOptical();
@@ -34,7 +34,7 @@ class CUDisks2Provider : public IStorageProvider
   class Block
   {
   public:
-    Drive *m_drive = nullptr;
+    Drive* m_drive = nullptr;
     std::string m_object;
     std::string m_driveobject;
     std::string m_label;
@@ -42,7 +42,7 @@ class CUDisks2Provider : public IStorageProvider
     bool m_isSystem = false;
     u_int64_t m_size = 0;
 
-    explicit Block(const char *object);
+    explicit Block(const char* object);
     ~Block() = default;
 
     bool IsReady();
@@ -53,12 +53,12 @@ class CUDisks2Provider : public IStorageProvider
   class Filesystem
   {
   public:
-    Block *m_block = nullptr;
+    Block* m_block = nullptr;
     std::string m_object;
     std::string m_mountPoint;
     bool m_isMounted = false;
 
-    explicit Filesystem(const char *object);
+    explicit Filesystem(const char* object);
     ~Filesystem() = default;
 
     bool IsReady();
@@ -74,9 +74,9 @@ class CUDisks2Provider : public IStorageProvider
     std::string toString();
   };
 
-  typedef std::map<std::string, Drive *> DriveMap;
-  typedef std::map<std::string, Block *> BlockMap;
-  typedef std::map<std::string, Filesystem *> FilesystemMap;
+  typedef std::map<std::string, Drive*> DriveMap;
+  typedef std::map<std::string, Block*> BlockMap;
+  typedef std::map<std::string, Filesystem*> FilesystemMap;
 
 public:
   CUDisks2Provider();
@@ -84,22 +84,19 @@ public:
 
   void Initialize() override;
 
-  bool PumpDriveChangeEvents(IStorageEventsCallback *callback) override;
+  bool PumpDriveChangeEvents(IStorageEventsCallback* callback) override;
 
   static bool HasUDisks2();
 
-  bool Eject(const std::string &mountpath) override;
+  bool Eject(const std::string& mountpath) override;
 
   std::vector<std::string> GetDiskUsage() override;
 
-  void GetLocalDrives(VECSOURCES &localDrives) override
-  { GetDisks(localDrives, false); }
+  void GetLocalDrives(VECSOURCES& localDrives) override { GetDisks(localDrives, false); }
 
-  void GetRemovableDrives(VECSOURCES &removableDrives) override
-  { GetDisks(removableDrives, true); }
+  void GetRemovableDrives(VECSOURCES& removableDrives) override { GetDisks(removableDrives, true); }
 
-  void Stop() override
-  {}
+  void Stop() override {}
 
 private:
   CDBusConnection m_connection;
@@ -110,34 +107,36 @@ private:
 
   std::string m_daemonVersion;
 
-  void GetDisks(VECSOURCES &devices, bool enumerateRemovable);
+  void GetDisks(VECSOURCES& devices, bool enumerateRemovable);
 
-  void DriveAdded(Drive *drive);
+  void DriveAdded(Drive* drive);
   bool DriveRemoved(std::string object);
-  void BlockAdded(Block *block, bool isNew = true);
+  void BlockAdded(Block* block, bool isNew = true);
   bool BlockRemoved(std::string object);
-  void FilesystemAdded(Filesystem *fs, bool isNew = true);
-  bool FilesystemRemoved(const char *object, IStorageEventsCallback *callback);
+  void FilesystemAdded(Filesystem* fs, bool isNew = true);
+  bool FilesystemRemoved(const char* object, IStorageEventsCallback* callback);
 
-  bool HandleInterfacesRemoved(DBusMessage *msg, IStorageEventsCallback *callback);
-  void HandleInterfacesAdded(DBusMessage *msg);
-  bool HandlePropertiesChanged(DBusMessage *msg, IStorageEventsCallback *callback);
+  bool HandleInterfacesRemoved(DBusMessage* msg, IStorageEventsCallback* callback);
+  void HandleInterfacesAdded(DBusMessage* msg);
+  bool HandlePropertiesChanged(DBusMessage* msg, IStorageEventsCallback* callback);
 
-  bool DrivePropertiesChanged(const char *object, DBusMessageIter *propsIter);
-  bool BlockPropertiesChanged(const char *object, DBusMessageIter *propsIter);
-  bool FilesystemPropertiesChanged(const char *object, DBusMessageIter *propsIter, IStorageEventsCallback *callback);
+  bool DrivePropertiesChanged(const char* object, DBusMessageIter* propsIter);
+  bool BlockPropertiesChanged(const char* object, DBusMessageIter* propsIter);
+  bool FilesystemPropertiesChanged(const char* object,
+                                   DBusMessageIter* propsIter,
+                                   IStorageEventsCallback* callback);
 
-  bool RemoveInterface(const char *path, const char *iface, IStorageEventsCallback *callback);
+  bool RemoveInterface(const char* path, const char* iface, IStorageEventsCallback* callback);
 
   template<class Object, class Function>
-  void ParseProperties(Object *ref, DBusMessageIter *dictIter, Function f);
-  void ParseInterfaces(DBusMessageIter *dictIter);
-  void ParseDriveProperty(Drive *drive, const char *key, DBusMessageIter *varIter);
-  void ParseBlockProperty(Block *block, const char *key, DBusMessageIter *varIter);
-  void ParseFilesystemProperty(Filesystem *fs, const char *key, DBusMessageIter *varIter);
-  std::string ParseByteArray(DBusMessageIter *arrIter);
-  void HandleManagedObjects(DBusMessage *msg);
-  void ParseInterface(const char *object, const char *iface, DBusMessageIter *propsIter);
+  void ParseProperties(Object* ref, DBusMessageIter* dictIter, Function f);
+  void ParseInterfaces(DBusMessageIter* dictIter);
+  void ParseDriveProperty(Drive* drive, const char* key, DBusMessageIter* varIter);
+  void ParseBlockProperty(Block* block, const char* key, DBusMessageIter* varIter);
+  void ParseFilesystemProperty(Filesystem* fs, const char* key, DBusMessageIter* varIter);
+  std::string ParseByteArray(DBusMessageIter* arrIter);
+  void HandleManagedObjects(DBusMessage* msg);
+  void ParseInterface(const char* object, const char* iface, DBusMessageIter* propsIter);
 
-  static void AppendEmptyOptions(DBusMessageIter *argsIter);
+  static void AppendEmptyOptions(DBusMessageIter* argsIter);
 };

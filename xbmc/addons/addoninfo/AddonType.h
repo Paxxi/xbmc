@@ -76,7 +76,8 @@ class CAddonInfoBuilder;
 class CAddonType : public CAddonExtensions
 {
 public:
-  CAddonType(TYPE type = ADDON_UNKNOWN) : m_type(type) {};
+  CAddonType(TYPE type = ADDON_UNKNOWN)
+    : m_type(type){};
 
   TYPE Type() const { return m_type; }
   std::string LibPath() const;
@@ -84,18 +85,13 @@ public:
 
   bool ProvidesSubContent(const TYPE& content) const
   {
-    return content == ADDON_UNKNOWN ? false : m_type == content || m_providedSubContent.count(content) > 0;
+    return content == ADDON_UNKNOWN ? false
+                                    : m_type == content || m_providedSubContent.count(content) > 0;
   }
 
-  bool ProvidesSeveralSubContents() const
-  {
-    return m_providedSubContent.size() > 1;
-  }
+  bool ProvidesSeveralSubContents() const { return m_providedSubContent.size() > 1; }
 
-  size_t ProvidedSubContents() const
-  {
-    return m_providedSubContent.size();
-  }
+  size_t ProvidedSubContents() const { return m_providedSubContent.size(); }
 
 private:
   friend class CAddonInfoBuilder;

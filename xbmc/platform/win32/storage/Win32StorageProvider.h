@@ -26,37 +26,38 @@ enum Drive_Types
 class CWin32StorageProvider : public IStorageProvider
 {
 public:
-  virtual ~CWin32StorageProvider() { }
+  virtual ~CWin32StorageProvider() {}
 
   virtual void Initialize();
-  virtual void Stop() { }
+  virtual void Stop() {}
 
-  virtual void GetLocalDrives(VECSOURCES &localDrives);
-  virtual void GetRemovableDrives(VECSOURCES &removableDrives);
+  virtual void GetLocalDrives(VECSOURCES& localDrives);
+  virtual void GetRemovableDrives(VECSOURCES& removableDrives);
   virtual std::string GetFirstOpticalDeviceFileName();
 
   virtual bool Eject(const std::string& mountpath);
 
   virtual std::vector<std::string> GetDiskUsage();
 
-  virtual bool PumpDriveChangeEvents(IStorageEventsCallback *callback);
+  virtual bool PumpDriveChangeEvents(IStorageEventsCallback* callback);
 
   static void SetEvent() { xbevent = true; }
   static bool xbevent;
 
 private:
-  static void GetDrivesByType(VECSOURCES &localDrives, Drive_Types eDriveType=ALL_DRIVES, bool bonlywithmedia=false);
+  static void GetDrivesByType(VECSOURCES& localDrives,
+                              Drive_Types eDriveType = ALL_DRIVES,
+                              bool bonlywithmedia = false);
   static DEVINST GetDrivesDevInstByDiskNumber(long DiskNumber);
 };
 
 class CDetectDisc : public CJob
 {
 public:
-  CDetectDisc(const std::string &strPath, const bool bautorun);
+  CDetectDisc(const std::string& strPath, const bool bautorun);
   bool DoWork();
 
 private:
-  std::string  m_strPath;
-  bool        m_bautorun;
+  std::string m_strPath;
+  bool m_bautorun;
 };
-

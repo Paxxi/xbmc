@@ -13,14 +13,14 @@
 class CFallbackPowerSyscall : public CPowerSyscallWithoutEvents
 {
 public:
-  bool Powerdown() override {return true; }
-  bool Suspend() override {return false; }
-  bool Hibernate() override {return false; }
-  bool Reboot() override {return true; }
+  bool Powerdown() override { return true; }
+  bool Suspend() override { return false; }
+  bool Hibernate() override { return false; }
+  bool Reboot() override { return true; }
 
-  bool CanPowerdown() override {return true; }
-  bool CanSuspend() override {return false; }
-  bool CanHibernate() override {return false; }
-  bool CanReboot() override {return true; }
-  int  BatteryLevel() override {return 0; }
+  bool CanPowerdown() override { return true; }
+  bool CanSuspend() override { return false; }
+  bool CanHibernate() override { return false; }
+  bool CanReboot() override { return true; }
+  int BatteryLevel() override { return 0; }
 };

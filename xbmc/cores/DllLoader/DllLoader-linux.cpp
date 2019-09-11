@@ -9,22 +9,22 @@
 #include "DllLoader.h"
 #include "DllLoaderContainer.h"
 
-CoffLoader::CoffLoader() :
-  hModule           (NULL ),
-  CoffFileHeader    (NULL ),
-  OptionHeader      (NULL ),
-  WindowsHeader     (NULL ),
-  Directory         (NULL ),
-  SectionHeader     (NULL ),
-  SymTable          (NULL ),
-  StringTable       (NULL ),
-  SectionData       (NULL ),
-  EntryAddress      (0    ),
-  NumberOfSymbols   (0    ),
-  SizeOfStringTable (0    ),
-  NumOfDirectories  (0    ),
-  NumOfSections     (0    ),
-  FileHeaderOffset  (0    )
+CoffLoader::CoffLoader()
+  : hModule(NULL)
+  , CoffFileHeader(NULL)
+  , OptionHeader(NULL)
+  , WindowsHeader(NULL)
+  , Directory(NULL)
+  , SectionHeader(NULL)
+  , SymTable(NULL)
+  , StringTable(NULL)
+  , SectionData(NULL)
+  , EntryAddress(0)
+  , NumberOfSymbols(0)
+  , SizeOfStringTable(0)
+  , NumOfDirectories(0)
+  , NumOfSections(0)
+  , FileHeaderOffset(0)
 {
 }
 
@@ -36,7 +36,9 @@ DllLoaderContainer::DllLoaderContainer()
 {
 }
 
-DllLoader* DllLoaderContainer::LoadModule(const char* sName, const char* sCurrentDir, bool bLoadSymbols)
+DllLoader* DllLoaderContainer::LoadModule(const char* sName,
+                                          const char* sCurrentDir,
+                                          bool bLoadSymbols)
 {
   return NULL;
 }
@@ -54,7 +56,7 @@ void DllLoaderContainer::ReleaseModule(DllLoader*& pDll)
 {
 }
 
-DllLoader::DllLoader(const char *dll, bool track, bool bSystemDll, bool bLoadSymbols, Export* exp)
+DllLoader::DllLoader(const char* dll, bool track, bool bSystemDll, bool bLoadSymbols, Export* exp)
 {
 }
 

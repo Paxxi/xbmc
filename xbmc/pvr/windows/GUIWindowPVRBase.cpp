@@ -54,10 +54,10 @@ public:
 
   bool HasFocus() const;
   CPVRChannelGroupPtr GetSelectedChannelGroup() const;
-  bool SelectChannelGroup(const CPVRChannelGroupPtr &newGroup);
+  bool SelectChannelGroup(const CPVRChannelGroupPtr& newGroup);
 
 private:
-  CGUIControl *m_control = nullptr;
+  CGUIControl* m_control = nullptr;
   std::vector<CPVRChannelGroupPtr> m_channelGroups;
 };
 
@@ -69,12 +69,14 @@ bool CGUIPVRChannelGroupsSelector::Initialize(CGUIWindow* parent, bool bRadio)
   if (control && control->IsContainer())
   {
     m_control = control;
-    m_channelGroups = CServiceBroker::GetPVRManager().ChannelGroups()->Get(bRadio)->GetMembers(true);
+    m_channelGroups =
+        CServiceBroker::GetPVRManager().ChannelGroups()->Get(bRadio)->GetMembers(true);
 
     CFileItemList channelGroupItems;
     CPVRGUIDirectory::GetChannelGroupsDirectory(bRadio, true, channelGroupItems);
 
-    CGUIMessage msg(GUI_MSG_LABEL_BIND, m_control->GetID(), CONTROL_LSTCHANNELGROUPS, 0, 0, &channelGroupItems);
+    CGUIMessage msg(GUI_MSG_LABEL_BIND, m_control->GetID(), CONTROL_LSTCHANNELGROUPS, 0, 0,
+                    &channelGroupItems);
     m_control->OnMessage(msg);
     return true;
   }
@@ -102,7 +104,7 @@ CPVRChannelGroupPtr CGUIPVRChannelGroupsSelector::GetSelectedChannelGroup() cons
   return CPVRChannelGroupPtr();
 }
 
-bool CGUIPVRChannelGroupsSelector::SelectChannelGroup(const CPVRChannelGroupPtr &newGroup)
+bool CGUIPVRChannelGroupsSelector::SelectChannelGroup(const CPVRChannelGroupPtr& newGroup)
 {
   if (m_control && newGroup)
   {
@@ -121,11 +123,11 @@ bool CGUIPVRChannelGroupsSelector::SelectChannelGroup(const CPVRChannelGroupPtr 
   return false;
 }
 
-CGUIWindowPVRBase::CGUIWindowPVRBase(bool bRadio, int id, const std::string &xmlFile) :
-  CGUIMediaWindow(id, xmlFile.c_str()),
-  m_bRadio(bRadio),
-  m_channelGroupsSelector(new CGUIPVRChannelGroupsSelector),
-  m_progressHandle(nullptr)
+CGUIWindowPVRBase::CGUIWindowPVRBase(bool bRadio, int id, const std::string& xmlFile)
+  : CGUIMediaWindow(id, xmlFile.c_str())
+  , m_bRadio(bRadio)
+  , m_channelGroupsSelector(new CGUIPVRChannelGroupsSelector)
+  , m_progressHandle(nullptr)
 {
   // prevent removable drives to appear in directory listing (base class default behavior).
   m_rootDir.AllowNonLocalSources(false);
@@ -140,7 +142,8 @@ CGUIWindowPVRBase::~CGUIWindowPVRBase(void)
 
 void CGUIWindowPVRBase::UpdateSelectedItemPath()
 {
-  CServiceBroker::GetPVRManager().GUIActions()->SetSelectedItemPath(m_bRadio, m_viewControl.GetSelectedItemPath());
+  CServiceBroker::GetPVRManager().GUIActions()->SetSelectedItemPath(
+      m_bRadio, m_viewControl.GetSelectedItemPath());
 }
 
 void CGUIWindowPVRBase::RegisterObservers(void)
@@ -162,7 +165,7 @@ void CGUIWindowPVRBase::UnregisterObservers(void)
   CServiceBroker::GetPVRManager().UnregisterObserver(this);
 };
 
-void CGUIWindowPVRBase::Notify(const Observable &obs, const ObservableMessage msg)
+void CGUIWindowPVRBase::Notify(const Observable& obs, const ObservableMessage msg)
 {
   if (msg == ObservableMessageManagerStopped)
     ClearData();
@@ -174,31 +177,34 @@ void CGUIWindowPVRBase::Notify(const Observable &obs, const ObservableMessage ms
   }
 }
 
-bool CGUIWindowPVRBase::OnAction(const CAction &action)
+bool CGUIWindowPVRBase::OnAction(const CAction& action)
 {
   switch (action.GetID())
   {
-    case ACTION_PREVIOUS_CHANNELGROUP:
-    case ACTION_NEXT_CHANNELGROUP:
+  case ACTION_PREVIOUS_CHANNELGROUP:
+  case ACTION_NEXT_CHANNELGROUP:
+  {
+    // switch to next or previous group
+    const std::shared_ptr<CPVRChannelGroup> channelGroup = GetChannelGroup();
+    if (channelGroup)
     {
-      // switch to next or previous group
-      const std::shared_ptr<CPVRChannelGroup> channelGroup = GetChannelGroup();
-      if (channelGroup)
-      {
-        const CPVRChannelGroups* groups = CServiceBroker::GetPVRManager().ChannelGroups()->Get(channelGroup->IsRadio());
-        SetChannelGroup(action.GetID() == ACTION_NEXT_CHANNELGROUP ? groups->GetNextGroup(*channelGroup) : groups->GetPreviousGroup(*channelGroup));
-      }
+      const CPVRChannelGroups* groups =
+          CServiceBroker::GetPVRManager().ChannelGroups()->Get(channelGroup->IsRadio());
+      SetChannelGroup(action.GetID() == ACTION_NEXT_CHANNELGROUP
+                          ? groups->GetNextGroup(*channelGroup)
+                          : groups->GetPreviousGroup(*channelGroup));
+    }
+    return true;
+  }
+  case ACTION_MOVE_RIGHT:
+  case ACTION_MOVE_LEFT:
+  {
+    if (m_channelGroupsSelector->HasFocus() && CGUIMediaWindow::OnAction(action))
+    {
+      SetChannelGroup(m_channelGroupsSelector->GetSelectedChannelGroup());
       return true;
     }
-    case ACTION_MOVE_RIGHT:
-    case ACTION_MOVE_LEFT:
-    {
-      if (m_channelGroupsSelector->HasFocus() && CGUIMediaWindow::OnAction(action))
-      {
-        SetChannelGroup(m_channelGroupsSelector->GetSelectedChannelGroup());
-        return true;
-      }
-    }
+  }
   }
 
   return CGUIMediaWindow::OnAction(action);
@@ -238,14 +244,16 @@ void CGUIWindowPVRBase::OnInitWindow(void)
     CGUIMediaWindow::OnInitWindow();
 
     // mark item as selected by channel path
-    m_viewControl.SetSelectedItem(CServiceBroker::GetPVRManager().GUIActions()->GetSelectedItemPath(m_bRadio));
+    m_viewControl.SetSelectedItem(
+        CServiceBroker::GetPVRManager().GUIActions()->GetSelectedItemPath(m_bRadio));
 
     // This has to be done after base class OnInitWindow to restore correct selection
     m_channelGroupsSelector->SelectChannelGroup(GetChannelGroup());
   }
   else
   {
-    CGUIWindow::OnInitWindow(); // do not call CGUIMediaWindow as it will do a Refresh which in no case works in this state (no channelgroup!)
+    CGUIWindow::
+        OnInitWindow(); // do not call CGUIMediaWindow as it will do a Refresh which in no case works in this state (no channelgroup!)
     ShowProgressDialog(g_localizeStrings.Get(19235), 0); // PVR manager is starting up
   }
 }
@@ -262,71 +270,71 @@ bool CGUIWindowPVRBase::OnMessage(CGUIMessage& message)
   bool bReturn = false;
   switch (message.GetMessage())
   {
-    case GUI_MSG_CLICKED:
+  case GUI_MSG_CLICKED:
+  {
+    switch (message.GetSenderId())
     {
-      switch (message.GetSenderId())
-      {
-        case CONTROL_BTNCHANNELGROUPS:
-          return OpenChannelGroupSelectionDialog();
+    case CONTROL_BTNCHANNELGROUPS:
+      return OpenChannelGroupSelectionDialog();
 
-        case CONTROL_LSTCHANNELGROUPS:
-        {
-          switch (message.GetParam1())
-          {
-            case ACTION_SELECT_ITEM:
-            case ACTION_MOUSE_LEFT_CLICK:
-            {
-              SetChannelGroup(m_channelGroupsSelector->GetSelectedChannelGroup());
-              bReturn = true;
-              break;
-            }
-          }
-        }
-      }
-      break;
-    }
-
-    case GUI_MSG_REFRESH_LIST:
+    case CONTROL_LSTCHANNELGROUPS:
     {
       switch (message.GetParam1())
       {
-        case ObservableMessageChannelGroupsLoaded:
-        {
-          // late init
-          InitChannelGroup();
-          m_channelGroupsSelector->Initialize(this, m_bRadio);
-          m_channelGroupsSelector->SelectChannelGroup(GetChannelGroup());
-          RegisterObservers();
-          HideProgressDialog();
-          Refresh(true);
-          m_viewControl.SetFocused();
-          break;
-        }
-      }
-      if (IsActive())
+      case ACTION_SELECT_ITEM:
+      case ACTION_MOUSE_LEFT_CLICK:
       {
-        // Only the active window must set the selected item path which is shared
-        // between all PVR windows, not the last notified window (observer).
-        UpdateSelectedItemPath();
+        SetChannelGroup(m_channelGroupsSelector->GetSelectedChannelGroup());
+        bReturn = true;
+        break;
       }
+      }
+    }
+    }
+    break;
+  }
+
+  case GUI_MSG_REFRESH_LIST:
+  {
+    switch (message.GetParam1())
+    {
+    case ObservableMessageChannelGroupsLoaded:
+    {
+      // late init
+      InitChannelGroup();
+      m_channelGroupsSelector->Initialize(this, m_bRadio);
+      m_channelGroupsSelector->SelectChannelGroup(GetChannelGroup());
+      RegisterObservers();
+      HideProgressDialog();
+      Refresh(true);
+      m_viewControl.SetFocused();
+      break;
+    }
+    }
+    if (IsActive())
+    {
+      // Only the active window must set the selected item path which is shared
+      // between all PVR windows, not the last notified window (observer).
+      UpdateSelectedItemPath();
+    }
+    bReturn = true;
+    break;
+  }
+
+  case GUI_MSG_NOTIFY_ALL:
+  {
+    switch (message.GetParam1())
+    {
+    case GUI_MSG_UPDATE_SOURCES:
+    {
+      // removable drive connected/disconnected. base class triggers a window
+      // content refresh, which makes no sense for pvr windows.
       bReturn = true;
       break;
     }
-
-    case GUI_MSG_NOTIFY_ALL:
-    {
-      switch (message.GetParam1())
-      {
-        case GUI_MSG_UPDATE_SOURCES:
-        {
-          // removable drive connected/disconnected. base class triggers a window
-          // content refresh, which makes no sense for pvr windows.
-          bReturn = true;
-          break;
-        }
-      }
-      break;
     }
+    break;
+  }
   }
 
   return bReturn || CGUIMediaWindow::OnMessage(message);
@@ -349,7 +357,9 @@ bool CGUIWindowPVRBase::CanBeActivated() const
   // check if there is at least one enabled PVR add-on
   if (!CServiceBroker::GetAddonMgr().HasAddons(ADDON::ADDON_PVRDLL))
   {
-    HELPERS::ShowOKDialogText(CVariant{19296}, CVariant{19272}); // No PVR add-on enabled, You need a tuner, backend software...
+    HELPERS::ShowOKDialogText(
+        CVariant{19296},
+        CVariant{19272}); // No PVR add-on enabled, You need a tuner, backend software...
     return false;
   }
 
@@ -358,7 +368,9 @@ bool CGUIWindowPVRBase::CanBeActivated() const
 
 bool CGUIWindowPVRBase::OpenChannelGroupSelectionDialog(void)
 {
-  CGUIDialogSelect *dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
   if (!dialog)
     return false;
 
@@ -382,7 +394,8 @@ bool CGUIWindowPVRBase::OpenChannelGroupSelectionDialog(void)
   if (!item)
     return false;
 
-  SetChannelGroup(CServiceBroker::GetPVRManager().ChannelGroups()->Get(m_bRadio)->GetByName(item->m_strTitle));
+  SetChannelGroup(
+      CServiceBroker::GetPVRManager().ChannelGroups()->Get(m_bRadio)->GetByName(item->m_strTitle));
 
   return true;
 }
@@ -396,11 +409,13 @@ bool CGUIWindowPVRBase::InitChannelGroup()
   }
   else
   {
-    group = CServiceBroker::GetPVRManager().ChannelGroups()->Get(m_bRadio)->GetGroupByPath(m_channelGroupPath);
+    group = CServiceBroker::GetPVRManager().ChannelGroups()->Get(m_bRadio)->GetGroupByPath(
+        m_channelGroupPath);
     if (group)
       CServiceBroker::GetPVRManager().SetPlayingGroup(group);
     else
-      CLog::LogF(LOGERROR, "Found no %s channel group with path '%s'!", m_bRadio ? "radio" : "TV", m_vecItems->GetPath().c_str());
+      CLog::LogF(LOGERROR, "Found no %s channel group with path '%s'!", m_bRadio ? "radio" : "TV",
+                 m_vecItems->GetPath().c_str());
   }
 
   if (group)
@@ -424,7 +439,7 @@ CPVRChannelGroupPtr CGUIWindowPVRBase::GetChannelGroup(void)
   return m_channelGroup;
 }
 
-void CGUIWindowPVRBase::SetChannelGroup(CPVRChannelGroupPtr &&group, bool bUpdate /* = true */)
+void CGUIWindowPVRBase::SetChannelGroup(CPVRChannelGroupPtr&& group, bool bUpdate /* = true */)
 {
   if (!group)
     return;
@@ -451,7 +466,7 @@ void CGUIWindowPVRBase::SetChannelGroup(CPVRChannelGroupPtr &&group, bool bUpdat
   }
 }
 
-bool CGUIWindowPVRBase::Update(const std::string &strDirectory, bool updateFilterPath /*= true*/)
+bool CGUIWindowPVRBase::Update(const std::string& strDirectory, bool updateFilterPath /*= true*/)
 {
   if (m_bUpdating)
   {
@@ -473,8 +488,7 @@ bool CGUIWindowPVRBase::Update(const std::string &strDirectory, bool updateFilte
 
   bool bReturn = CGUIMediaWindow::Update(strDirectory, updateFilterPath);
 
-  if (bReturn &&
-      iSelectedItem != -1) // something must have been selected
+  if (bReturn && iSelectedItem != -1) // something must have been selected
   {
     int iNewCount = m_vecItems->Size();
     if (iOldCount > iNewCount && // at least one item removed by Update()
@@ -498,23 +512,27 @@ void CGUIWindowPVRBase::UpdateButtons(void)
   const CPVRChannelGroupPtr channelGroup = GetChannelGroup();
   if (channelGroup)
   {
-    SET_CONTROL_LABEL(CONTROL_BTNCHANNELGROUPS, g_localizeStrings.Get(19141) + ": " + channelGroup->GroupName());
+    SET_CONTROL_LABEL(CONTROL_BTNCHANNELGROUPS,
+                      g_localizeStrings.Get(19141) + ": " + channelGroup->GroupName());
   }
 
   m_channelGroupsSelector->SelectChannelGroup(channelGroup);
 }
 
-void CGUIWindowPVRBase::ShowProgressDialog(const std::string &strText, int iProgress)
+void CGUIWindowPVRBase::ShowProgressDialog(const std::string& strText, int iProgress)
 {
   if (!m_progressHandle)
   {
-    CGUIDialogExtendedProgressBar *loadingProgressDialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogExtendedProgressBar>(WINDOW_DIALOG_EXT_PROGRESS);
+    CGUIDialogExtendedProgressBar* loadingProgressDialog =
+        CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogExtendedProgressBar>(
+            WINDOW_DIALOG_EXT_PROGRESS);
     if (!loadingProgressDialog)
     {
       CLog::LogF(LOGERROR, "Unable to get WINDOW_DIALOG_EXT_PROGRESS!");
       return;
     }
-    m_progressHandle = loadingProgressDialog->GetHandle(g_localizeStrings.Get(19235)); // PVR manager is starting up
+    m_progressHandle = loadingProgressDialog->GetHandle(
+        g_localizeStrings.Get(19235)); // PVR manager is starting up
   }
 
   m_progressHandle->SetPercentage(static_cast<float>(iProgress));

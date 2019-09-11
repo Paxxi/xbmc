@@ -40,10 +40,12 @@ public:
   float GetPlaySpeed();
   float GetPlayTempo();
   bool HasPlayer() const;
-  bool OpenFile(const CFileItem& item, const CPlayerOptions& options,
-                const CPlayerCoreFactory &factory,
-                const std::string &playerName, IPlayerCallback& callback);
-  void OpenNext(const CPlayerCoreFactory &factory);
+  bool OpenFile(const CFileItem& item,
+                const CPlayerOptions& options,
+                const CPlayerCoreFactory& factory,
+                const std::string& playerName,
+                IPlayerCallback& callback);
+  void OpenNext(const CPlayerCoreFactory& factory);
   void SetPlaySpeed(float speed);
   void SetTempo(float tempo);
   void FrameAdvance(int frames);
@@ -62,9 +64,15 @@ public:
   bool Supports(ESCALINGMETHOD method);
   bool Supports(ERENDERFEATURE feature);
   unsigned int RenderCaptureAlloc();
-  void RenderCapture(unsigned int captureId, unsigned int width, unsigned int height, int flags = 0);
+  void RenderCapture(unsigned int captureId,
+                     unsigned int width,
+                     unsigned int height,
+                     int flags = 0);
   void RenderCaptureRelease(unsigned int captureId);
-  bool RenderCaptureGetPixels(unsigned int captureId, unsigned int millis, uint8_t *buffer, unsigned int size);
+  bool RenderCaptureGetPixels(unsigned int captureId,
+                              unsigned int millis,
+                              uint8_t* buffer,
+                              unsigned int size);
   bool IsExternalPlaying();
   bool IsRemotePlaying();
 
@@ -73,23 +81,23 @@ public:
   bool CanPause();
   bool CanSeek();
   void DoAudioWork();
-  void GetAudioCapabilities(std::vector<int> &audioCaps);
+  void GetAudioCapabilities(std::vector<int>& audioCaps);
   int GetAudioStream();
   int GetAudioStreamCount();
-  void GetAudioStreamInfo(int index, AudioStreamInfo &info);
+  void GetAudioStreamInfo(int index, AudioStreamInfo& info);
   int GetCacheLevel() const;
   float GetCachePercentage() const;
   int GetChapterCount();
   int GetChapter();
-  void GetChapterName(std::string& strChapterName, int chapterIdx=-1);
-  int64_t GetChapterPos(int chapterIdx=-1);
+  void GetChapterName(std::string& strChapterName, int chapterIdx = -1);
+  int64_t GetChapterPos(int chapterIdx = -1);
   float GetPercentage() const;
   std::string GetPlayerState();
   int GetPreferredPlaylist() const;
   int GetSubtitle();
-  void GetSubtitleCapabilities(std::vector<int> &subCaps);
+  void GetSubtitleCapabilities(std::vector<int>& subCaps);
   int GetSubtitleCount();
-  void GetSubtitleStreamInfo(int index, SubtitleStreamInfo &info);
+  void GetSubtitleStreamInfo(int index, SubtitleStreamInfo& info);
   bool GetSubtitleVisible();
   std::shared_ptr<TextCacheStruct_t> GetTeletextCache();
   std::string GetRadioText(unsigned int line);
@@ -100,7 +108,7 @@ public:
   int64_t GetTotalTime() const;
   int GetVideoStream();
   int GetVideoStreamCount();
-  void GetVideoStreamInfo(int streamId, VideoStreamInfo &info);
+  void GetVideoStreamInfo(int streamId, VideoStreamInfo& info);
   int GetPrograms(std::vector<ProgramInfo>& programs);
   void SetProgram(int progId);
   int GetProgramsCount();
@@ -120,10 +128,10 @@ public:
   bool IsPlayingGame() const;
   bool IsPlayingRDS() const;
   void LoadPage(int p, int sp, unsigned char* buffer);
-  bool OnAction(const CAction &action);
+  bool OnAction(const CAction& action);
   void OnNothingToQueueNotify();
   void Pause();
-  bool QueueNextFile(const CFileItem &file);
+  bool QueueNextFile(const CFileItem& file);
   void Seek(bool bPlus = true, bool bLargeStep = false, bool bChapterOverride = false);
   int SeekChapter(int iChapter);
   void SeekPercentage(float fPercent = 0);
@@ -159,7 +167,9 @@ public:
 
 private:
   std::shared_ptr<IPlayer> GetInternal() const;
-  void CreatePlayer(const CPlayerCoreFactory &factory, const std::string &player, IPlayerCallback& callback);
+  void CreatePlayer(const CPlayerCoreFactory& factory,
+                    const std::string& player,
+                    IPlayerCallback& callback);
   void CloseFile(bool reopen = false);
 
   std::shared_ptr<IPlayer> m_pPlayer;
@@ -179,6 +189,6 @@ private:
     std::shared_ptr<CFileItem> pItem;
     CPlayerOptions options = {};
     std::string playerName;
-    IPlayerCallback *callback = nullptr;
+    IPlayerCallback* callback = nullptr;
   } m_nextItem;
 };

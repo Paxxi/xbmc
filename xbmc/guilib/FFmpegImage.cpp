@@ -6,31 +6,32 @@
  *  See LICENSES/README.md for more information.
  */
 #include "FFmpegImage.h"
-#include "utils/log.h"
+
 #include "cores/FFmpeg.h"
 #include "guilib/Texture.h"
+#include "utils/log.h"
 
 #include <algorithm>
 
 extern "C"
 {
-#include <libavformat/avformat.h>
-#include <libavutil/imgutils.h>
 #include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
-#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
 #include <libavutil/pixdesc.h>
+#include <libswscale/swscale.h>
 }
 
-Frame::Frame(const Frame& src) :
-  m_delay(src.m_delay),
-  m_imageSize(src.m_imageSize),
-  m_height(src.m_height),
-  m_width(src.m_width)
+Frame::Frame(const Frame& src)
+  : m_delay(src.m_delay)
+  , m_imageSize(src.m_imageSize)
+  , m_height(src.m_height)
+  , m_width(src.m_width)
 {
   if (src.m_pImage)
   {
-    m_pImage = (unsigned char*) av_malloc(m_imageSize);
+    m_pImage = (unsigned char*)av_malloc(m_imageSize);
     memcpy(m_pImage, src.m_pImage, m_imageSize);
   }
 }
@@ -68,10 +69,10 @@ struct ThumbDataManagement
 // and bufferSize -1 last data point
 static inline size_t Clamp(int64_t newPosition, size_t bufferSize)
 {
-  return std::min(std::max((int64_t) 0, newPosition), (int64_t) (bufferSize -1));
+  return std::min(std::max((int64_t)0, newPosition), (int64_t)(bufferSize - 1));
 }
 
-static int mem_file_read(void *h, uint8_t* buf, int size)
+static int mem_file_read(void* h, uint8_t* buf, int size)
 {
   if (size < 0)
     return -1;
@@ -87,7 +88,7 @@ static int mem_file_read(void *h, uint8_t* buf, int size)
   return static_cast<int>(tocopy);
 }
 
-static int64_t mem_file_seek(void *h, int64_t pos, int whence)
+static int64_t mem_file_seek(void* h, int64_t pos, int whence)
 {
   MemBuffer* mbuf = static_cast<MemBuffer*>(h);
   if (whence == AVSEEK_SIZE)
@@ -110,7 +111,8 @@ static int64_t mem_file_seek(void *h, int64_t pos, int whence)
   return mbuf->pos;
 }
 
-CFFmpegImage::CFFmpegImage(const std::string& strMimeType) : m_strMimeType(strMimeType)
+CFFmpegImage::CFFmpegImage(const std::string& strMimeType)
+  : m_strMimeType(strMimeType)
 {
   m_hasAlpha = false;
   m_pFrame = nullptr;
@@ -135,8 +137,10 @@ CFFmpegImage::~CFFmpegImage()
   m_buf.size = 0;
 }
 
-bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSize,
-                                      unsigned int width, unsigned int height)
+bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer,
+                                       unsigned int bufSize,
+                                       unsigned int width,
+                                       unsigned int height)
 {
 
   if (!Initialize(buffer, bufSize))
@@ -164,8 +168,7 @@ bool CFFmpegImage::Initialize(unsigned char* buffer, size_t bufSize)
   m_buf.size = bufSize;
   m_buf.pos = 0;
 
-  m_ioctx = avio_alloc_context(fbuffer, bufferSize, 0, &m_buf,
-    mem_file_read, NULL, mem_file_seek);
+  m_ioctx = avio_alloc_context(fbuffer, bufferSize, 0, &m_buf, mem_file_read, NULL, mem_file_seek);
 
   if (!m_ioctx)
   {
@@ -290,14 +293,17 @@ AVFrame* CFFmpegImage::ExtractFrame()
     return nullptr;
   }
   //we need milliseconds
-  frame->pkt_duration = av_rescale_q(frame->pkt_duration, m_fctx->streams[0]->time_base, AVRational{ 1, 1000 });
+  frame->pkt_duration =
+      av_rescale_q(frame->pkt_duration, m_fctx->streams[0]->time_base, AVRational{1, 1000});
   m_height = frame->height;
   m_width = frame->width;
   m_originalWidth = m_width;
   m_originalHeight = m_height;
 
-  const AVPixFmtDescriptor* pixDescriptor = av_pix_fmt_desc_get(static_cast<AVPixelFormat>(frame->format));
-  if (pixDescriptor && ((pixDescriptor->flags & (AV_PIX_FMT_FLAG_ALPHA | AV_PIX_FMT_FLAG_PAL)) != 0))
+  const AVPixFmtDescriptor* pixDescriptor =
+      av_pix_fmt_desc_get(static_cast<AVPixelFormat>(frame->format));
+  if (pixDescriptor &&
+      ((pixDescriptor->flags & (AV_PIX_FMT_FLAG_ALPHA | AV_PIX_FMT_FLAG_PAL)) != 0))
     m_hasAlpha = true;
 
   AVDictionary* dic = frame->metadata;
@@ -321,7 +327,8 @@ AVFrame* CFFmpegImage::ExtractFrame()
 
 AVPixelFormat CFFmpegImage::ConvertFormats(AVFrame* frame)
 {
-  switch (frame->format) {
+  switch (frame->format)
+  {
   case AV_PIX_FMT_YUVJ420P:
     return AV_PIX_FMT_YUV420P;
     break;
@@ -345,8 +352,11 @@ void CFFmpegImage::FreeIOCtx(AVIOContext** ioctx)
   av_freep(ioctx);
 }
 
-bool CFFmpegImage::Decode(unsigned char * const pixels, unsigned int width, unsigned int height,
-                          unsigned int pitch, unsigned int format)
+bool CFFmpegImage::Decode(unsigned char* const pixels,
+                          unsigned int width,
+                          unsigned int height,
+                          unsigned int pitch,
+                          unsigned int format)
 {
   if (m_width == 0 || m_height == 0 || format != XB_FMT_A8R8G8B8)
     return false;
@@ -366,7 +376,10 @@ bool CFFmpegImage::Decode(unsigned char * const pixels, unsigned int width, unsi
   return DecodeFrame(m_pFrame, width, height, pitch, pixels);
 }
 
-int CFFmpegImage::EncodeFFmpegFrame(AVCodecContext *avctx, AVPacket *pkt, int *got_packet, AVFrame *frame)
+int CFFmpegImage::EncodeFFmpegFrame(AVCodecContext* avctx,
+                                    AVPacket* pkt,
+                                    int* got_packet,
+                                    AVFrame* frame)
 {
   int ret;
 
@@ -386,7 +399,10 @@ int CFFmpegImage::EncodeFFmpegFrame(AVCodecContext *avctx, AVPacket *pkt, int *g
   return ret;
 }
 
-int CFFmpegImage::DecodeFFmpegFrame(AVCodecContext *avctx, AVFrame *frame, int *got_frame, AVPacket *pkt)
+int CFFmpegImage::DecodeFFmpegFrame(AVCodecContext* avctx,
+                                    AVFrame* frame,
+                                    int* got_frame,
+                                    AVPacket* pkt)
 {
   int ret;
 
@@ -405,12 +421,16 @@ int CFFmpegImage::DecodeFFmpegFrame(AVCodecContext *avctx, AVFrame *frame, int *
   if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
     return ret;
   if (ret >= 0) // static code analysers would complain
-   *got_frame = 1;
+    *got_frame = 1;
 
   return 0;
 }
 
-bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int height, unsigned int pitch, unsigned char * const pixels)
+bool CFFmpegImage::DecodeFrame(AVFrame* frame,
+                               unsigned int width,
+                               unsigned int height,
+                               unsigned int pitch,
+                               unsigned char* const pixels)
 {
   if (pixels == nullptr)
   {
@@ -426,7 +446,8 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
   }
 
   // we align on 16 as the input provided by the Texture also aligns the buffer size to 16
-  int size = av_image_fill_arrays(pictureRGB->data, pictureRGB->linesize, NULL, AV_PIX_FMT_RGB32, width, height, 16);
+  int size = av_image_fill_arrays(pictureRGB->data, pictureRGB->linesize, NULL, AV_PIX_FMT_RGB32,
+                                  width, height, 16);
   if (size < 0)
   {
     CLog::LogF(LOGERROR, "Could not allocate AVFrame member with %i x %i pixes", width, height);
@@ -436,9 +457,10 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
 
   bool needsCopy = false;
   int pixelsSize = pitch * height;
-  bool aligned = (((uintptr_t)(const void *)(pixels)) % (32) == 0);
+  bool aligned = (((uintptr_t)(const void*)(pixels)) % (32) == 0);
   if (!aligned)
-    CLog::Log(LOGDEBUG, "Alignment of external buffer is not suitable for ffmpeg intrinsics - please fix your malloc");
+    CLog::Log(LOGDEBUG, "Alignment of external buffer is not suitable for ffmpeg intrinsics - "
+                        "please fix your malloc");
 
   if (aligned && size == pixelsSize && (int)pitch == pictureRGB->linesize[0])
   {
@@ -481,21 +503,24 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
     nHeight = (unsigned int)(nWidth / ratio + 0.5f);
   }
 
-  struct SwsContext* context = sws_getContext(m_originalWidth, m_originalHeight, pixFormat,
-    nWidth, nHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
+  struct SwsContext* context =
+      sws_getContext(m_originalWidth, m_originalHeight, pixFormat, nWidth, nHeight,
+                     AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
 
   if (range == AVCOL_RANGE_JPEG)
   {
     int* inv_table = nullptr;
     int* table = nullptr;
     int srcRange, dstRange, brightness, contrast, saturation;
-    sws_getColorspaceDetails(context, &inv_table, &srcRange, &table, &dstRange, &brightness, &contrast, &saturation);
+    sws_getColorspaceDetails(context, &inv_table, &srcRange, &table, &dstRange, &brightness,
+                             &contrast, &saturation);
     srcRange = 1;
-    sws_setColorspaceDetails(context, inv_table, srcRange, table, dstRange, brightness, contrast, saturation);
+    sws_setColorspaceDetails(context, inv_table, srcRange, table, dstRange, brightness, contrast,
+                             saturation);
   }
 
-  sws_scale(context, frame->data, frame->linesize, 0, m_originalHeight,
-    pictureRGB->data, pictureRGB->linesize);
+  sws_scale(context, frame->data, frame->linesize, 0, m_originalHeight, pictureRGB->data,
+            pictureRGB->linesize);
   sws_freeContext(context);
 
   if (needsCopy)
@@ -507,7 +532,7 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
       av_frame_free(&pictureRGB);
       return false;
     }
-    const unsigned char *src = pictureRGB->data[0];
+    const unsigned char* src = pictureRGB->data[0];
     unsigned char* dst = pixels;
 
     for (unsigned int y = 0; y < nHeight; y++)
@@ -532,12 +557,14 @@ bool CFFmpegImage::DecodeFrame(AVFrame* frame, unsigned int width, unsigned int 
   return true;
 }
 
-bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned int width,
-                                             unsigned int height, unsigned int format,
-                                             unsigned int pitch,
-                                             const std::string& destFile,
-                                             unsigned char* &bufferout,
-                                             unsigned int &bufferoutSize)
+bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin,
+                                              unsigned int width,
+                                              unsigned int height,
+                                              unsigned int format,
+                                              unsigned int pitch,
+                                              const std::string& destFile,
+                                              unsigned char*& bufferout,
+                                              unsigned int& bufferoutSize)
 {
   // It seems XB_FMT_A8R8G8B8 mean RGBA and not ARGB
   if (format != XB_FMT_A8R8G8B8)
@@ -562,7 +589,8 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
   tdm.codec = avcodec_find_encoder(jpg_output ? AV_CODEC_ID_MJPEG : AV_CODEC_ID_PNG);
   if (!tdm.codec)
   {
-    CLog::Log(LOGERROR, "You are missing a working encoder for format: %s", jpg_output ? "JPEG" : "PNG");
+    CLog::Log(LOGERROR, "You are missing a working encoder for format: %s",
+              jpg_output ? "JPEG" : "PNG");
     return false;
   }
 
@@ -585,16 +613,17 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
 
   unsigned int internalBufOutSize = 0;
 
-  int size = av_image_get_buffer_size(tdm.avOutctx->pix_fmt, tdm.avOutctx->width, tdm.avOutctx->height, 16);
+  int size = av_image_get_buffer_size(tdm.avOutctx->pix_fmt, tdm.avOutctx->width,
+                                      tdm.avOutctx->height, 16);
   if (size < 0)
   {
     CLog::Log(LOGERROR, "Could not compute picture size for thumbnail: %s", destFile.c_str());
     CleanupLocalOutputBuffer();
     return false;
   }
-  internalBufOutSize = (unsigned int) size;
+  internalBufOutSize = (unsigned int)size;
 
-  tdm.intermediateBuffer = (uint8_t*) av_malloc(internalBufOutSize);
+  tdm.intermediateBuffer = (uint8_t*)av_malloc(internalBufOutSize);
   if (!tdm.intermediateBuffer)
   {
     CLog::Log(LOGERROR, "Could not allocate memory for thumbnail: %s", destFile.c_str());
@@ -626,18 +655,21 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
     return false;
   }
 
-  if (av_image_fill_arrays(tdm.frame_temporary->data, tdm.frame_temporary->linesize, tdm.intermediateBuffer, jpg_output ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_RGBA, width, height, 16) < 0)
+  if (av_image_fill_arrays(
+          tdm.frame_temporary->data, tdm.frame_temporary->linesize, tdm.intermediateBuffer,
+          jpg_output ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_RGBA, width, height, 16) < 0)
   {
     CLog::Log(LOGERROR, "Could not fill picture for thumbnail: %s", destFile.c_str());
     CleanupLocalOutputBuffer();
     return false;
   }
 
-  uint8_t* src[] = { bufferin, NULL, NULL, NULL };
-  int srcStride[] = { (int) pitch, 0, 0, 0};
+  uint8_t* src[] = {bufferin, NULL, NULL, NULL};
+  int srcStride[] = {(int)pitch, 0, 0, 0};
 
   //input size == output size which means only pix_fmt conversion
-  tdm.sws = sws_getContext(width, height, AV_PIX_FMT_RGB32, width, height, jpg_output ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_RGBA, 0, 0, 0, 0);
+  tdm.sws = sws_getContext(width, height, AV_PIX_FMT_RGB32, width, height,
+                           jpg_output ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_RGBA, 0, 0, 0, 0);
   if (!tdm.sws)
   {
     CLog::Log(LOGERROR, "Could not setup scaling context for thumbnail: %s", destFile.c_str());
@@ -652,23 +684,28 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
     int* table = nullptr;
     int srcRange, dstRange, brightness, contrast, saturation;
 
-    if (sws_getColorspaceDetails(tdm.sws, &inv_table, &srcRange, &table, &dstRange, &brightness, &contrast, &saturation) < 0)
+    if (sws_getColorspaceDetails(tdm.sws, &inv_table, &srcRange, &table, &dstRange, &brightness,
+                                 &contrast, &saturation) < 0)
     {
-      CLog::Log(LOGERROR, "SWS_SCALE failed to get ColorSpaceDetails for thumbnail: %s", destFile.c_str());
+      CLog::Log(LOGERROR, "SWS_SCALE failed to get ColorSpaceDetails for thumbnail: %s",
+                destFile.c_str());
       CleanupLocalOutputBuffer();
       return false;
     }
     dstRange = 1; // jpeg full range yuv420p output
     srcRange = 0; // full range RGB32 input
-    if (sws_setColorspaceDetails(tdm.sws, inv_table, srcRange, table, dstRange, brightness, contrast, saturation) < 0)
+    if (sws_setColorspaceDetails(tdm.sws, inv_table, srcRange, table, dstRange, brightness,
+                                 contrast, saturation) < 0)
     {
-      CLog::Log(LOGERROR, "SWS_SCALE failed to set ColorSpace Details for thumbnail: %s", destFile.c_str());
+      CLog::Log(LOGERROR, "SWS_SCALE failed to set ColorSpace Details for thumbnail: %s",
+                destFile.c_str());
       CleanupLocalOutputBuffer();
       return false;
     }
   }
 
-  if (sws_scale(tdm.sws, src, srcStride, 0, height, tdm.frame_temporary->data, tdm.frame_temporary->linesize) < 0)
+  if (sws_scale(tdm.sws, src, srcStride, 0, height, tdm.frame_temporary->data,
+                tdm.frame_temporary->linesize) < 0)
   {
     CLog::Log(LOGERROR, "SWS_SCALE failed for thumbnail: %s", destFile.c_str());
     CleanupLocalOutputBuffer();
@@ -704,7 +741,7 @@ bool CFFmpegImage::CreateThumbnailFromSurface(unsigned char* bufferin, unsigned 
   }
 
   bufferoutSize = avpkt.size;
-  m_outputBuffer = (uint8_t*) av_malloc(bufferoutSize);
+  m_outputBuffer = (uint8_t*)av_malloc(bufferoutSize);
   if (!m_outputBuffer)
   {
     CLog::Log(LOGERROR, "Could not generate allocate memory for thumbnail: %s", destFile.c_str());
@@ -741,7 +778,7 @@ std::shared_ptr<Frame> CFFmpegImage::ReadFrame()
   std::shared_ptr<Frame> frame(new Frame());
   frame->m_delay = (unsigned int)avframe->pkt_duration;
   frame->m_pitch = avframe->width * 4;
-  frame->m_pImage = (unsigned char*) av_malloc(avframe->height * frame->m_pitch);
+  frame->m_pImage = (unsigned char*)av_malloc(avframe->height * frame->m_pitch);
   DecodeFrame(avframe, avframe->width, avframe->height, frame->m_pitch, frame->m_pImage);
   av_frame_free(&avframe);
   return frame;

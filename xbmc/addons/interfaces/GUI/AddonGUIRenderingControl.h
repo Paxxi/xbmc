@@ -20,23 +20,25 @@ namespace GUI
 
 class CGUIAddonRenderingControl : public IRenderingCallback
 {
-friend class CAddonCallbacksGUI;
+  friend class CAddonCallbacksGUI;
+
 public:
-  explicit CGUIAddonRenderingControl(CGUIRenderingControl *pControl);
+  explicit CGUIAddonRenderingControl(CGUIRenderingControl* pControl);
   virtual ~CGUIAddonRenderingControl() = default;
-  bool Create(int x, int y, int w, int h, void *device) override;
+  bool Create(int x, int y, int w, int h, void* device) override;
   void Render() override;
   void Stop() override;
   bool IsDirty() override;
   virtual void Delete();
+
 protected:
-  bool (*CBCreate) (GUIHANDLE cbhdl, int x, int y, int w, int h, void *device);
+  bool (*CBCreate)(GUIHANDLE cbhdl, int x, int y, int w, int h, void* device);
   void (*CBRender)(GUIHANDLE cbhdl);
   void (*CBStop)(GUIHANDLE cbhdl);
   bool (*CBDirty)(GUIHANDLE cbhdl);
 
   GUIHANDLE m_clientHandle;
-  CGUIRenderingControl *m_pControl;
+  CGUIRenderingControl* m_pControl;
   int m_refCount;
 };
 

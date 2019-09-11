@@ -19,53 +19,59 @@
 #include "input/XBMC_keyboard.h"
 
 /* Event enumerations */
-typedef enum {
-       XBMC_NOEVENT = 0,        /* Unused (do not remove) */
-       XBMC_KEYDOWN,            /* Keys pressed */
-       XBMC_KEYUP,              /* Keys released */
-       XBMC_MOUSEMOTION,        /* Mouse moved */
-       XBMC_MOUSEBUTTONDOWN,    /* Mouse button pressed */
-       XBMC_MOUSEBUTTONUP,      /* Mouse button released */
-       XBMC_QUIT,               /* User-requested quit */
-       XBMC_VIDEORESIZE,        /* User resized video mode */
-       XBMC_VIDEOMOVE,          /* User moved the window */
-       XBMC_MODECHANGE,         /* Video mode must be changed */
-       XBMC_TOUCH,
-       XBMC_BUTTON,             /* Button (remote) pressed */
-       XBMC_SETFOCUS,
-       XBMC_USEREVENT,
+typedef enum
+{
+  XBMC_NOEVENT = 0, /* Unused (do not remove) */
+  XBMC_KEYDOWN, /* Keys pressed */
+  XBMC_KEYUP, /* Keys released */
+  XBMC_MOUSEMOTION, /* Mouse moved */
+  XBMC_MOUSEBUTTONDOWN, /* Mouse button pressed */
+  XBMC_MOUSEBUTTONUP, /* Mouse button released */
+  XBMC_QUIT, /* User-requested quit */
+  XBMC_VIDEORESIZE, /* User resized video mode */
+  XBMC_VIDEOMOVE, /* User moved the window */
+  XBMC_MODECHANGE, /* Video mode must be changed */
+  XBMC_TOUCH,
+  XBMC_BUTTON, /* Button (remote) pressed */
+  XBMC_SETFOCUS,
+  XBMC_USEREVENT,
 
-       XBMC_MAXEVENT = 256      /* XBMC_EventType is represented as uchar */
+  XBMC_MAXEVENT = 256 /* XBMC_EventType is represented as uchar */
 } XBMC_EventType;
 
 /* Keyboard event structure */
-typedef struct XBMC_KeyboardEvent {
-	XBMC_keysym keysym;
+typedef struct XBMC_KeyboardEvent
+{
+  XBMC_keysym keysym;
 } XBMC_KeyboardEvent;
 
 /* Mouse motion event structure */
-typedef struct XBMC_MouseMotionEvent {
-	uint16_t x, y;	/* The X/Y coordinates of the mouse */
+typedef struct XBMC_MouseMotionEvent
+{
+  uint16_t x, y; /* The X/Y coordinates of the mouse */
 } XBMC_MouseMotionEvent;
 
 /* Mouse button event structure */
-typedef struct XBMC_MouseButtonEvent {
-	unsigned char button;	/* The mouse button index */
-	uint16_t x, y;	/* The X/Y coordinates of the mouse at press time */
+typedef struct XBMC_MouseButtonEvent
+{
+  unsigned char button; /* The mouse button index */
+  uint16_t x, y; /* The X/Y coordinates of the mouse at press time */
 } XBMC_MouseButtonEvent;
 
 /* The "window resized" event
    When you get this event, you are responsible for setting a new video
    mode with the new width and height.
  */
-typedef struct XBMC_ResizeEvent {
-	int w;		/* New width */
-	int h;		/* New height */
+typedef struct XBMC_ResizeEvent
+{
+  int w; /* New width */
+  int h; /* New height */
 } XBMC_ResizeEvent;
 
-typedef struct XBMC_MoveEvent {
-	int x;		/* New x position */
-	int y;		/* New y position */
+typedef struct XBMC_MoveEvent
+{
+  int x; /* New x position */
+  int y; /* New y position */
 } XBMC_MoveEvent;
 
 struct XBMC_ModeChangeEvent
@@ -74,33 +80,38 @@ struct XBMC_ModeChangeEvent
 };
 
 /* The "quit requested" event */
-typedef struct XBMC_QuitEvent {
+typedef struct XBMC_QuitEvent
+{
 } XBMC_QuitEvent;
 
 /* A user-defined event type */
-typedef struct XBMC_UserEvent {
-	int code;	/* User defined event code */
-	void *data1;	/* User defined data pointer */
-	void *data2;	/* User defined data pointer */
+typedef struct XBMC_UserEvent
+{
+  int code; /* User defined event code */
+  void* data1; /* User defined data pointer */
+  void* data2; /* User defined data pointer */
 } XBMC_UserEvent;
 
 /* Multimedia keys on keyboards / remotes are mapped to APPCOMMAND events */
-typedef struct XBMC_AppCommandEvent {
+typedef struct XBMC_AppCommandEvent
+{
   unsigned int action; /* One of ACTION_... */
 } XBMC_AppCommandEvent;
 
 /* Mouse motion event structure */
-typedef struct XBMC_TouchEvent {
-  int action;           /* action ID */
-  float x, y;           /* The X/Y coordinates of the mouse */
-  float x2, y2;         /* Additional X/Y coordinates */
-  float x3, y3;         /* Additional X/Y coordinates */
-  int pointers;         /* number of touch pointers */
+typedef struct XBMC_TouchEvent
+{
+  int action; /* action ID */
+  float x, y; /* The X/Y coordinates of the mouse */
+  float x2, y2; /* Additional X/Y coordinates */
+  float x3, y3; /* Additional X/Y coordinates */
+  int pointers; /* number of touch pointers */
 } XBMC_TouchEvent;
 
-typedef struct XBMC_SetFocusEvent {
-	int x;		/* x position */
-	int y;		/* y position */
+typedef struct XBMC_SetFocusEvent
+{
+  int x; /* x position */
+  int y; /* y position */
 } XBMC_SetFocusEvent;
 
 /* Button event structure */
@@ -111,10 +122,10 @@ typedef struct XBMC_ButtonEvent
 } XBMC_ButtonEvent;
 
 /* General event structure */
-typedef struct XBMC_Event {
+typedef struct XBMC_Event
+{
   uint8_t type;
-  union
-  {
+  union {
     XBMC_KeyboardEvent key;
     XBMC_MouseMotionEvent motion;
     XBMC_MouseButtonEvent button;
@@ -129,4 +140,3 @@ typedef struct XBMC_Event {
     XBMC_SetFocusEvent focus;
   };
 } XBMC_Event;
-

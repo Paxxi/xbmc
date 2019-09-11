@@ -24,14 +24,16 @@ public:
   public:
     std::string m_strDllName;
     long m_lReferenceCount;
-    LibraryLoader *m_pDll;
+    LibraryLoader* m_pDll;
     unsigned int m_unloadDelayStartTick;
     bool m_bDelayUnload;
   };
   CSectionLoader(void);
   virtual ~CSectionLoader(void);
 
-  static LibraryLoader* LoadDLL(const std::string& strSection, bool bDelayUnload=true, bool bLoadSymbols=false);
+  static LibraryLoader* LoadDLL(const std::string& strSection,
+                                bool bDelayUnload = true,
+                                bool bLoadSymbols = false);
   static void UnloadDLL(const std::string& strSection);
   static void UnloadDelayed();
   void UnloadAll();
@@ -39,8 +41,6 @@ public:
 protected:
   std::vector<CDll> m_vecLoadedDLLs;
   CCriticalSection m_critSection;
-
 };
 
-extern  CSectionLoader g_sectionLoader;
-
+extern CSectionLoader g_sectionLoader;

@@ -33,12 +33,35 @@ class CSeat;
 class IRawInputHandlerKeyboard
 {
 public:
-  virtual void OnKeyboardKeymap(CSeat* seat, wayland::keyboard_keymap_format format, std::string const& keymap) {}
-  virtual void OnKeyboardEnter(CSeat* seat, std::uint32_t serial, wayland::surface_t surface, wayland::array_t keys) {}
+  virtual void OnKeyboardKeymap(CSeat* seat,
+                                wayland::keyboard_keymap_format format,
+                                std::string const& keymap)
+  {
+  }
+  virtual void OnKeyboardEnter(CSeat* seat,
+                               std::uint32_t serial,
+                               wayland::surface_t surface,
+                               wayland::array_t keys)
+  {
+  }
   virtual void OnKeyboardLeave(CSeat* seat, std::uint32_t serial, wayland::surface_t surface) {}
-  virtual void OnKeyboardKey(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::uint32_t key, wayland::keyboard_key_state state) {}
-  virtual void OnKeyboardModifiers(CSeat* seat, std::uint32_t serial, std::uint32_t modsDepressed, std::uint32_t modsLatched, std::uint32_t modsLocked, std::uint32_t group) {}
+  virtual void OnKeyboardKey(CSeat* seat,
+                             std::uint32_t serial,
+                             std::uint32_t time,
+                             std::uint32_t key,
+                             wayland::keyboard_key_state state)
+  {
+  }
+  virtual void OnKeyboardModifiers(CSeat* seat,
+                                   std::uint32_t serial,
+                                   std::uint32_t modsDepressed,
+                                   std::uint32_t modsLatched,
+                                   std::uint32_t modsLocked,
+                                   std::uint32_t group)
+  {
+  }
   virtual void OnKeyboardRepeatInfo(CSeat* seat, std::int32_t rate, std::int32_t delay) {}
+
 protected:
   ~IRawInputHandlerKeyboard() {}
 };
@@ -51,11 +74,29 @@ protected:
 class IRawInputHandlerPointer
 {
 public:
-  virtual void OnPointerEnter(CSeat* seat, std::uint32_t serial, wayland::surface_t surface, double surfaceX, double surfaceY) {}
+  virtual void OnPointerEnter(CSeat* seat,
+                              std::uint32_t serial,
+                              wayland::surface_t surface,
+                              double surfaceX,
+                              double surfaceY)
+  {
+  }
   virtual void OnPointerLeave(CSeat* seat, std::uint32_t serial, wayland::surface_t surface) {}
   virtual void OnPointerMotion(CSeat* seat, std::uint32_t time, double surfaceX, double surfaceY) {}
-  virtual void OnPointerButton(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::uint32_t button, wayland::pointer_button_state state) {}
-  virtual void OnPointerAxis(CSeat* seat, std::uint32_t time, wayland::pointer_axis axis, double value) {}
+  virtual void OnPointerButton(CSeat* seat,
+                               std::uint32_t serial,
+                               std::uint32_t time,
+                               std::uint32_t button,
+                               wayland::pointer_button_state state)
+  {
+  }
+  virtual void OnPointerAxis(CSeat* seat,
+                             std::uint32_t time,
+                             wayland::pointer_axis axis,
+                             double value)
+  {
+  }
+
 protected:
   ~IRawInputHandlerPointer() {}
 };
@@ -68,13 +109,24 @@ protected:
 class IRawInputHandlerTouch
 {
 public:
-  virtual void OnTouchDown(CSeat* seat, std::uint32_t serial, std::uint32_t time, wayland::surface_t surface, std::int32_t id, double x, double y) {}
+  virtual void OnTouchDown(CSeat* seat,
+                           std::uint32_t serial,
+                           std::uint32_t time,
+                           wayland::surface_t surface,
+                           std::int32_t id,
+                           double x,
+                           double y)
+  {
+  }
   virtual void OnTouchUp(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::int32_t id) {}
-  virtual void OnTouchMotion(CSeat* seat, std::uint32_t time, std::int32_t id, double x, double y) {}
+  virtual void OnTouchMotion(CSeat* seat, std::uint32_t time, std::int32_t id, double x, double y)
+  {
+  }
   virtual void OnTouchCancel(CSeat* seat) {}
   virtual void OnTouchShape(CSeat* seat, std::int32_t id, double major, double minor) {}
+
 protected:
-  ~IRawInputHandlerTouch() {};
+  ~IRawInputHandlerTouch(){};
 };
 
 /**
@@ -107,30 +159,12 @@ public:
   void AddRawInputHandlerTouch(IRawInputHandlerTouch* rawTouchHandler);
   void RemoveRawInputHandlerTouch(IRawInputHandlerTouch* rawTouchHandler);
 
-  std::uint32_t GetGlobalName() const
-  {
-    return m_globalName;
-  }
-  std::string const& GetName() const
-  {
-    return m_name;
-  }
-  bool HasPointerCapability() const
-  {
-    return !!m_pointer;
-  }
-  bool HasKeyboardCapability() const
-  {
-    return !!m_keyboard;
-  }
-  bool HasTouchCapability() const
-  {
-    return !!m_touch;
-  }
-  std::string GetSelectionText() const
-  {
-    return m_selection.GetSelectionText();
-  }
+  std::uint32_t GetGlobalName() const { return m_globalName; }
+  std::string const& GetName() const { return m_name; }
+  bool HasPointerCapability() const { return !!m_pointer; }
+  bool HasKeyboardCapability() const { return !!m_keyboard; }
+  bool HasTouchCapability() const { return !!m_touch; }
+  std::string GetSelectionText() const { return m_selection.GetSelectionText(); }
   /**
    * Get the wl_seat underlying this seat
    *
@@ -138,10 +172,7 @@ public:
    * starting a move operation with shell interfaces.
    * It may not be used to derive further wl_pointer etc. instances.
    */
-  wayland::seat_t const& GetWlSeat()
-  {
-    return m_seat;
-  }
+  wayland::seat_t const& GetWlSeat() { return m_seat; }
 
   /**
    * Set the cursor of the pointer of this seat
@@ -149,7 +180,10 @@ public:
    * Parameters are identical wo wl_pointer.set_cursor().
    * If the seat does not currently have the pointer capability, this is a no-op.
    */
-  void SetCursor(std::uint32_t serial, wayland::surface_t const& surface, std::int32_t hotspotX, std::int32_t hotspotY);
+  void SetCursor(std::uint32_t serial,
+                 wayland::surface_t const& surface,
+                 std::int32_t hotspotX,
+                 std::int32_t hotspotY);
 
 private:
   CSeat(CSeat const& other) = delete;
@@ -175,6 +209,6 @@ private:
   CSeatSelection m_selection;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

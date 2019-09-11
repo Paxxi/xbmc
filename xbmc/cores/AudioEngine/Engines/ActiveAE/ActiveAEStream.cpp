@@ -16,7 +16,7 @@
 
 using namespace ActiveAE;
 
-CActiveAEStream::CActiveAEStream(AEAudioFormat *format, unsigned int streamid, CActiveAE *ae)
+CActiveAEStream::CActiveAEStream(AEAudioFormat* format, unsigned int streamid, CActiveAE* ae)
 {
   m_activeAE = ae;
   m_format = *format;
@@ -56,7 +56,7 @@ CActiveAEStream::CActiveAEStream(AEAudioFormat *format, unsigned int streamid, C
 
 CActiveAEStream::~CActiveAEStream()
 {
-  delete [] m_leftoverBuffer;
+  delete[] m_leftoverBuffer;
   delete m_remapper;
   delete m_remapBuffer;
 }
@@ -84,18 +84,18 @@ void CActiveAEStream::InitRemapper()
   // check if input format follows ffmpeg channel mask
   bool needRemap = false;
   unsigned int avLast, avCur = 0;
-  for(unsigned int i=0; i<m_format.m_channelLayout.Count(); i++)
+  for (unsigned int i = 0; i < m_format.m_channelLayout.Count(); i++)
   {
     avLast = avCur;
     avCur = CAEUtil::GetAVChannel(m_format.m_channelLayout[i]);
-    if(avCur < avLast)
+    if (avCur < avLast)
     {
       needRemap = true;
       break;
     }
   }
 
-  if(needRemap)
+  if (needRemap)
   {
     CLog::Log(LOGDEBUG, "CActiveAEStream::%s - initialize remapper", __FUNCTION__);
 
@@ -107,9 +107,9 @@ void CActiveAEStream::InitRemapper()
     CAEChannelInfo ffmpegLayout;
     ffmpegLayout.Reset();
     int idx = 0;
-    for(unsigned int i=0; i<m_format.m_channelLayout.Count(); i++)
+    for (unsigned int i = 0; i < m_format.m_channelLayout.Count(); i++)
     {
-      for(unsigned int j=0; j<m_format.m_channelLayout.Count(); j++)
+      for (unsigned int j = 0; j < m_format.m_channelLayout.Count(); j++)
       {
         idx = CAEUtil::GetAVChannelIndex(m_format.m_channelLayout[j], avLayout);
         if (idx == (int)i)
@@ -123,9 +123,9 @@ void CActiveAEStream::InitRemapper()
     // build remap layout we can pass to resampler as destination layout
     CAEChannelInfo remapLayout;
     remapLayout.Reset();
-    for(unsigned int i=0; i<m_format.m_channelLayout.Count(); i++)
+    for (unsigned int i = 0; i < m_format.m_channelLayout.Count(); i++)
     {
-      for(unsigned int j=0; j<m_format.m_channelLayout.Count(); j++)
+      for (unsigned int j = 0; j < m_format.m_channelLayout.Count(); j++)
       {
         idx = CAEUtil::GetAVChannelIndex(m_format.m_channelLayout[j], avLayout);
         if (idx == (int)i)
@@ -152,26 +152,23 @@ void CActiveAEStream::InitRemapper()
     srcConfig.bits_per_sample = CAEUtil::DataFormatToUsedBits(m_format.m_dataFormat);
     srcConfig.dither_bits = CAEUtil::DataFormatToDitherBits(m_format.m_dataFormat);
 
-    m_remapper->Init(dstConfig, srcConfig,
-                     false,
-                     false,
-                     M_SQRT1_2,
-                     &remapLayout,
+    m_remapper->Init(dstConfig, srcConfig, false, false, M_SQRT1_2, &remapLayout,
                      AE_QUALITY_LOW, // not used for remapping
                      false);
 
     // extra sound packet, we can't resample to the same buffer
-    m_remapBuffer = new CSoundPacket(m_inputBuffers->m_allSamples[0]->pkt->config, m_inputBuffers->m_allSamples[0]->pkt->max_nb_samples);
+    m_remapBuffer = new CSoundPacket(m_inputBuffers->m_allSamples[0]->pkt->config,
+                                     m_inputBuffers->m_allSamples[0]->pkt->max_nb_samples);
   }
 }
 
 void CActiveAEStream::RemapBuffer()
 {
-  if(m_remapper)
+  if (m_remapper)
   {
-    int samples = m_remapper->Resample(m_remapBuffer->data, m_remapBuffer->max_nb_samples,
-                                       m_currentBuffer->pkt->data, m_currentBuffer->pkt->nb_samples,
-                                       1.0);
+    int samples =
+        m_remapper->Resample(m_remapBuffer->data, m_remapBuffer->max_nb_samples,
+                             m_currentBuffer->pkt->data, m_currentBuffer->pkt->nb_samples, 1.0);
 
     if (samples != m_currentBuffer->pkt->nb_samples)
     {
@@ -179,7 +176,7 @@ void CActiveAEStream::RemapBuffer()
     }
 
     // swap sound packets
-    CSoundPacket *tmp = m_currentBuffer->pkt;
+    CSoundPacket* tmp = m_currentBuffer->pkt;
     m_currentBuffer->pkt = m_remapBuffer;
     m_remapBuffer = tmp;
   }
@@ -231,12 +228,15 @@ unsigned int CActiveAEStream::GetSpace()
     return m_streamFreeBuffers * m_streamSpace;
 }
 
-unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int offset, unsigned int frames, ExtData *extData)
+unsigned int CActiveAEStream::AddData(const uint8_t* const* data,
+                                      unsigned int offset,
+                                      unsigned int frames,
+                                      ExtData* extData)
 {
-  Message *msg;
+  Message* msg;
   unsigned int copied = 0;
   int sourceFrames = frames;
-  const uint8_t* const *buf = data;
+  const uint8_t* const* buf = data;
   double pts = 0;
 
   if (extData)
@@ -246,21 +246,19 @@ unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int o
 
   m_streamIsFlushed = false;
 
-  while(copied < frames)
+  while (copied < frames)
   {
     sourceFrames = frames - copied;
 
     if (m_currentBuffer)
     {
-      int start = m_currentBuffer->pkt->nb_samples *
-                  m_currentBuffer->pkt->bytes_per_sample *
-                  m_currentBuffer->pkt->config.channels /
-                  m_currentBuffer->pkt->planes;
+      int start = m_currentBuffer->pkt->nb_samples * m_currentBuffer->pkt->bytes_per_sample *
+                  m_currentBuffer->pkt->config.channels / m_currentBuffer->pkt->planes;
 
       int freeSpace = m_currentBuffer->pkt->max_nb_samples - m_currentBuffer->pkt->nb_samples;
       int minFrames = std::min(freeSpace, sourceFrames);
       int planes = m_currentBuffer->pkt->planes;
-      int bufOffset = (offset + copied)*m_format.m_frameSize/planes;
+      int bufOffset = (offset + copied) * m_format.m_frameSize / planes;
 
       if (!copied)
       {
@@ -273,7 +271,10 @@ unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int o
             {
               diff += 1000;
               diff = std::min(diff, 6000);
-              CLog::Log(LOGNOTICE, "CActiveAEStream::AddData - messy timestamps, increasing interval for measuring average error to %d ms", diff);
+              CLog::Log(LOGNOTICE,
+                        "CActiveAEStream::AddData - messy timestamps, increasing interval for "
+                        "measuring average error to %d ms",
+                        diff);
               m_errorInterval = diff;
             }
           }
@@ -284,9 +285,10 @@ unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int o
         m_currentBuffer->pkt_start_offset = m_currentBuffer->pkt->nb_samples;
       }
 
-      for (int i=0; i<planes; i++)
+      for (int i = 0; i < planes; i++)
       {
-        memcpy(m_currentBuffer->pkt->data[i]+start, buf[i]+bufOffset, minFrames*m_format.m_frameSize/planes);
+        memcpy(m_currentBuffer->pkt->data[i] + start, buf[i] + bufOffset,
+               minFrames * m_format.m_frameSize / planes);
       }
       copied += minFrames;
 
@@ -309,13 +311,15 @@ unsigned int CActiveAEStream::AddData(const uint8_t* const *data, unsigned int o
         }
       }
 
-      if (m_currentBuffer->pkt->nb_samples == m_currentBuffer->pkt->max_nb_samples || rawPktComplete)
+      if (m_currentBuffer->pkt->nb_samples == m_currentBuffer->pkt->max_nb_samples ||
+          rawPktComplete)
       {
         MsgStreamSample msgData;
         msgData.buffer = m_currentBuffer;
         msgData.stream = this;
         RemapBuffer();
-        m_streamPort->SendOutMessage(CActiveAEDataProtocol::STREAMSAMPLE, &msgData, sizeof(MsgStreamSample));
+        m_streamPort->SendOutMessage(CActiveAEDataProtocol::STREAMSAMPLE, &msgData,
+                                     sizeof(MsgStreamSample));
         m_currentBuffer = nullptr;
       }
       continue;
@@ -392,16 +396,15 @@ void CActiveAEStream::Resume()
 
 void CActiveAEStream::Drain(bool wait)
 {
-  Message *msg;
-  CActiveAEStream *stream = this;
+  Message* msg;
+  CActiveAEStream* stream = this;
 
   m_streamDraining = true;
   m_streamDrained = false;
 
-  Message *reply;
-  if (m_streamPort->SendOutMessageSync(CActiveAEDataProtocol::DRAINSTREAM,
-                                       &reply,2000,
-                                       &stream, sizeof(CActiveAEStream*)))
+  Message* reply;
+  if (m_streamPort->SendOutMessageSync(CActiveAEDataProtocol::DRAINSTREAM, &reply, 2000, &stream,
+                                       sizeof(CActiveAEStream*)))
   {
     bool success = reply->signal == CActiveAEDataProtocol::ACC ? true : false;
     reply->Release();
@@ -417,7 +420,8 @@ void CActiveAEStream::Drain(bool wait)
     msgData.buffer = m_currentBuffer;
     msgData.stream = this;
     RemapBuffer();
-    m_streamPort->SendOutMessage(CActiveAEDataProtocol::STREAMSAMPLE, &msgData, sizeof(MsgStreamSample));
+    m_streamPort->SendOutMessage(CActiveAEDataProtocol::STREAMSAMPLE, &msgData,
+                                 sizeof(MsgStreamSample));
     m_currentBuffer = NULL;
   }
 
@@ -490,7 +494,7 @@ float CActiveAEStream::GetReplayGain()
 
 void CActiveAEStream::SetReplayGain(float factor)
 {
-  m_streamRgain = std::max( 0.0f, factor);
+  m_streamRgain = std::max(0.0f, factor);
   m_activeAE->SetStreamReplaygain(this, m_streamRgain);
 }
 
@@ -501,7 +505,7 @@ float CActiveAEStream::GetVolume()
 
 void CActiveAEStream::SetVolume(float volume)
 {
-  m_streamVolume = std::max( 0.0f, std::min(1.0f, volume));
+  m_streamVolume = std::max(0.0f, std::min(1.0f, volume));
   m_activeAE->SetStreamVolume(this, m_streamVolume);
 }
 
@@ -524,7 +528,9 @@ void CActiveAEStream::SetResampleMode(int mode)
   m_streamResampleMode = mode;
 }
 
-void CActiveAEStream::SetFFmpegInfo(int profile, enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type)
+void CActiveAEStream::SetFFmpegInfo(int profile,
+                                    enum AVMatrixEncoding matrix_encoding,
+                                    enum AVAudioServiceType audio_service_type)
 {
   m_activeAE->SetStreamFFmpegInfo(this, profile, matrix_encoding, audio_service_type);
 }
@@ -572,7 +578,7 @@ void CActiveAEStream::UnRegisterAudioCallback()
 {
 }
 
-void CActiveAEStream::RegisterSlave(IAEStream *slave)
+void CActiveAEStream::RegisterSlave(IAEStream* slave)
 {
   CSingleLock lock(m_streamLock);
   m_streamSlave = slave;
@@ -582,7 +588,9 @@ void CActiveAEStream::RegisterSlave(IAEStream *slave)
 // CActiveAEStreamBuffers
 //------------------------------------------------------------------------------
 
-CActiveAEStreamBuffers::CActiveAEStreamBuffers(const AEAudioFormat& inputFormat, const AEAudioFormat& outputFormat, AEQuality quality)
+CActiveAEStreamBuffers::CActiveAEStreamBuffers(const AEAudioFormat& inputFormat,
+                                               const AEAudioFormat& outputFormat,
+                                               AEQuality quality)
 {
   m_inputFormat = inputFormat;
   m_resampleBuffers = new CActiveAEBufferPoolResample(inputFormat, outputFormat, quality);
@@ -615,7 +623,9 @@ bool CActiveAEStreamBuffers::Create(unsigned int totaltime, bool remap, bool upm
   return true;
 }
 
-void CActiveAEStreamBuffers::SetExtraData(int profile, enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type)
+void CActiveAEStreamBuffers::SetExtraData(int profile,
+                                          enum AVMatrixEncoding matrix_encoding,
+                                          enum AVAudioServiceType audio_service_type)
 {
   /*! @todo Implement set dsp config with new AudioDSP buffer implementation */
 }
@@ -623,7 +633,7 @@ void CActiveAEStreamBuffers::SetExtraData(int profile, enum AVMatrixEncoding mat
 bool CActiveAEStreamBuffers::ProcessBuffers()
 {
   bool busy = false;
-  CSampleBuffer *buf;
+  CSampleBuffer* buf;
 
   while (!m_inputSamples.empty())
   {
@@ -656,7 +666,9 @@ bool CActiveAEStreamBuffers::ProcessBuffers()
   return busy;
 }
 
-void CActiveAEStreamBuffers::ConfigureResampler(bool normalizelevels, bool stereoupmix, AEQuality quality)
+void CActiveAEStreamBuffers::ConfigureResampler(bool normalizelevels,
+                                                bool stereoupmix,
+                                                AEQuality quality)
 {
   m_resampleBuffers->ConfigureResampler(normalizelevels, stereoupmix, quality);
 }
@@ -665,7 +677,7 @@ float CActiveAEStreamBuffers::GetDelay()
 {
   float delay = 0;
 
-  for (auto &buf : m_inputSamples)
+  for (auto& buf : m_inputSamples)
   {
     delay += (float)buf->pkt->nb_samples / buf->pkt->config.sample_rate;
   }
@@ -673,7 +685,7 @@ float CActiveAEStreamBuffers::GetDelay()
   delay += m_resampleBuffers->GetDelay();
   delay += m_atempoBuffers->GetDelay();
 
-  for (auto &buf : m_outputSamples)
+  for (auto& buf : m_outputSamples)
   {
     delay += (float)buf->pkt->nb_samples / buf->pkt->config.sample_rate;
   }
@@ -706,12 +718,9 @@ void CActiveAEStreamBuffers::SetDrain(bool drain)
 
 bool CActiveAEStreamBuffers::IsDrained()
 {
-  if (m_resampleBuffers->m_inputSamples.empty() &&
-      m_resampleBuffers->m_outputSamples.empty() &&
-      m_atempoBuffers->m_inputSamples.empty() &&
-      m_atempoBuffers->m_outputSamples.empty() &&
-      m_inputSamples.empty() &&
-      m_outputSamples.empty())
+  if (m_resampleBuffers->m_inputSamples.empty() && m_resampleBuffers->m_outputSamples.empty() &&
+      m_atempoBuffers->m_inputSamples.empty() && m_atempoBuffers->m_outputSamples.empty() &&
+      m_inputSamples.empty() && m_outputSamples.empty())
     return true;
   else
     return false;
@@ -727,7 +736,7 @@ void CActiveAEStreamBuffers::SetRR(double rr, double atempoThreshold)
   else
   {
     m_resampleBuffers->SetRR(1.0);
-    m_atempoBuffers->SetTempo(1.0/rr);
+    m_atempoBuffers->SetTempo(1.0 / rr);
   }
 }
 
@@ -756,14 +765,14 @@ void CActiveAEStreamBuffers::ForceResampler(bool force)
 
 CActiveAEBufferPool* CActiveAEStreamBuffers::GetResampleBuffers()
 {
-  CActiveAEBufferPool *ret = m_resampleBuffers;
+  CActiveAEBufferPool* ret = m_resampleBuffers;
   m_resampleBuffers = nullptr;
   return ret;
 }
 
 CActiveAEBufferPool* CActiveAEStreamBuffers::GetAtempoBuffers()
 {
-  CActiveAEBufferPool *ret = m_atempoBuffers;
+  CActiveAEBufferPool* ret = m_atempoBuffers;
   m_atempoBuffers = nullptr;
   return ret;
 }

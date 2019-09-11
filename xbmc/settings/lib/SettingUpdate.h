@@ -12,7 +12,8 @@
 
 class TiXmlNode;
 
-enum class SettingUpdateType {
+enum class SettingUpdateType
+{
   Unknown = 0,
   Rename,
   Change
@@ -29,13 +30,13 @@ public:
     return m_type < rhs.m_type && m_value < rhs.m_value;
   }
 
-  virtual bool Deserialize(const TiXmlNode *node);
+  virtual bool Deserialize(const TiXmlNode* node);
 
   SettingUpdateType GetType() const { return m_type; }
   const std::string& GetValue() const { return m_value; }
 
 private:
-  bool setType(const std::string &type);
+  bool setType(const std::string& type);
 
   SettingUpdateType m_type = SettingUpdateType::Unknown;
   std::string m_value;

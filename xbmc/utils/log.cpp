@@ -7,6 +7,7 @@
  */
 
 #include "log.h"
+
 #include "CompileInfo.h"
 #include "ServiceBroker.h"
 #include "settings/AdvancedSettings.h"
@@ -25,12 +26,13 @@ typedef class CWin32InterfaceForCLog PlatformInterfaceForCLog;
 #endif
 
 
-static const char* const levelNames[] =
-{"DEBUG", "INFO", "NOTICE", "WARNING", "ERROR", "SEVERE", "FATAL", "NONE"};
+static const char* const levelNames[] = {"DEBUG", "INFO",   "NOTICE", "WARNING",
+                                         "ERROR", "SEVERE", "FATAL",  "NONE"};
 
 // add 1 to level number to get index of name
-static const char* const logLevelNames[] =
-{ "LOG_LEVEL_NONE" /*-1*/, "LOG_LEVEL_NORMAL" /*0*/, "LOG_LEVEL_DEBUG" /*1*/, "LOG_LEVEL_DEBUG_FREEMEM" /*2*/ };
+static const char* const logLevelNames[] = {"LOG_LEVEL_NONE" /*-1*/, "LOG_LEVEL_NORMAL" /*0*/,
+                                            "LOG_LEVEL_DEBUG" /*1*/,
+                                            "LOG_LEVEL_DEBUG_FREEMEM" /*2*/};
 
 namespace
 {
@@ -39,16 +41,16 @@ class CLogGlobals
 public:
   ~CLogGlobals() = default;
   PlatformInterfaceForCLog m_platform;
-  int         m_repeatCount = 0;
-  int         m_repeatLogLevel = -1;
+  int m_repeatCount = 0;
+  int m_repeatLogLevel = -1;
   std::string m_repeatLine;
-  int         m_logLevel = LOG_LEVEL_DEBUG;
-  int         m_extraLogLevels = 0;
+  int m_logLevel = LOG_LEVEL_DEBUG;
+  int m_extraLogLevels = 0;
   CCriticalSection critSec;
 };
 
 static CLogGlobals g_logState;
-}
+} // namespace
 
 CLog::CLog() = default;
 
@@ -75,8 +77,8 @@ void CLog::LogString(int logLevel, std::string&& logString)
     }
     else if (g_logState.m_repeatCount)
     {
-      std::string strData2 = StringUtils::Format("Previous line repeats %d times.",
-                                                g_logState.m_repeatCount);
+      std::string strData2 =
+          StringUtils::Format("Previous line repeats %d times.", g_logState.m_repeatCount);
       PrintDebugString(strData2);
       WriteLogString(g_logState.m_repeatLogLevel, strData2);
       g_logState.m_repeatCount = 0;
@@ -93,7 +95,8 @@ void CLog::LogString(int logLevel, std::string&& logString)
 
 void CLog::LogString(int logLevel, int component, std::string&& logString)
 {
-  if (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->CanLogComponent(component) && IsLogLevelLogged(logLevel))
+  if (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->CanLogComponent(component) &&
+      IsLogLevelLogged(logLevel))
     LogString(logLevel, std::move(logString));
 }
 
@@ -109,16 +112,16 @@ bool CLog::Init(const std::string& path)
   return g_logState.m_platform.OpenLogFile(path + appName + ".log", path + appName + ".old.log");
 }
 
-void CLog::MemDump(char *pData, int length)
+void CLog::MemDump(char* pData, int length)
 {
   Log(LOGDEBUG, "MEM_DUMP: Dumping from %p", pData);
-  for (int i = 0; i < length; i+=16)
+  for (int i = 0; i < length; i += 16)
   {
     std::string strLine = StringUtils::Format("MEM_DUMP: %04x ", i);
-    char *alpha = pData;
-    for (int k=0; k < 4 && i + 4*k < length; k++)
+    char* alpha = pData;
+    for (int k = 0; k < 4 && i + 4 * k < length; k++)
     {
-      for (int j=0; j < 4 && i + 4*k + j < length; j++)
+      for (int j = 0; j < 4 && i + 4 * k + j < length; j++)
       {
         std::string strFormat = StringUtils::Format(" %02x", (unsigned char)*pData++);
         strLine += strFormat;
@@ -126,9 +129,9 @@ void CLog::MemDump(char *pData, int length)
       strLine += " ";
     }
     // pad with spaces
-    while (strLine.size() < 13*4 + 16)
+    while (strLine.size() < 13 * 4 + 16)
       strLine += " ";
-    for (int j=0; j < 16 && i + j < length; j++)
+    for (int j = 0; j < 16 && i + j < length; j++)
     {
       if (*alpha > 31)
         strLine += *alpha;
@@ -188,7 +191,7 @@ void CLog::PrintDebugString(const std::string& line)
 
 bool CLog::WriteLogString(int logLevel, const std::string& logString)
 {
-  static const char* prefixFormat = "%02d-%02d-%02d %02d:%02d:%02d.%03d T:%" PRIu64" %7s: ";
+  static const char* prefixFormat = "%02d-%02d-%02d %02d:%02d:%02d.%03d T:%" PRIu64 " %7s: ";
 
   std::string strData(logString);
   /* fixup newline alignment, number of spaces should equal prefix length */
@@ -198,16 +201,11 @@ bool CLog::WriteLogString(int logLevel, const std::string& logString)
   double millisecond;
   g_logState.m_platform.GetCurrentLocalTime(year, month, day, hour, minute, second, millisecond);
 
-  strData = StringUtils::Format(prefixFormat,
-                                  year,
-                                  month,
-                                  day,
-                                  hour,
-                                  minute,
-                                  second,
-                                  static_cast<int>(millisecond),
-                                  static_cast<uint64_t>(CThread::GetCurrentThreadNativeHandle()),
-                                  levelNames[logLevel]) + strData;
+  strData = StringUtils::Format(prefixFormat, year, month, day, hour, minute, second,
+                                static_cast<int>(millisecond),
+                                static_cast<uint64_t>(CThread::GetCurrentThreadNativeHandle()),
+                                levelNames[logLevel]) +
+            strData;
 
   return g_logState.m_platform.WriteStringToLog(strData);
 }

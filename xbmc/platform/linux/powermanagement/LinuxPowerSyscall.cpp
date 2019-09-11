@@ -7,6 +7,7 @@
  */
 
 #include "LinuxPowerSyscall.h"
+
 #include "FallbackPowerSyscall.h"
 #if defined(HAS_DBUS)
 #include "ConsoleUPowerSyscall.h"
@@ -27,17 +28,12 @@ IPowerSyscall* CLinuxPowerSyscall::CreateInstance()
   int bestCount = -1;
   int currCount = -1;
 
-  std::list< std::pair< std::function<bool()>,
-                        std::function<IPowerSyscall*()> > > powerManagers =
-  {
-    std::make_pair(CConsoleUPowerSyscall::HasConsoleKitAndUPower,
-                   [] { return new CConsoleUPowerSyscall(); }),
-    std::make_pair(CLogindUPowerSyscall::HasLogind,
-                   [] { return new CLogindUPowerSyscall(); }),
-    std::make_pair(CUPowerSyscall::HasUPower,
-                   [] { return new CUPowerSyscall(); })
-  };
-  for(const auto& powerManager : powerManagers)
+  std::list<std::pair<std::function<bool()>, std::function<IPowerSyscall*()>>> powerManagers = {
+      std::make_pair(CConsoleUPowerSyscall::HasConsoleKitAndUPower,
+                     [] { return new CConsoleUPowerSyscall(); }),
+      std::make_pair(CLogindUPowerSyscall::HasLogind, [] { return new CLogindUPowerSyscall(); }),
+      std::make_pair(CUPowerSyscall::HasUPower, [] { return new CUPowerSyscall(); })};
+  for (const auto& powerManager : powerManagers)
   {
     if (powerManager.first())
     {

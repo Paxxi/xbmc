@@ -46,11 +46,9 @@ VFSEntryPtr CVFSAddonCache::GetAddonInstance(const std::string& strId)
 
   CSingleLock lock(m_critSection);
 
-  const auto& itAddon = std::find_if(m_addonsInstances.begin(), m_addonsInstances.end(),
-    [&strId](const VFSEntryPtr& addon)
-    {
-      return addon->ID() == strId;
-    });
+  const auto& itAddon =
+      std::find_if(m_addonsInstances.begin(), m_addonsInstances.end(),
+                   [&strId](const VFSEntryPtr& addon) { return addon->ID() == strId; });
 
   if (itAddon != m_addonsInstances.end())
     addon = *itAddon;
@@ -104,68 +102,70 @@ void CVFSAddonCache::Update()
 
 class CVFSURLWrapper
 {
-  public:
-    explicit CVFSURLWrapper(const CURL& url2)
-    {
-      m_strings.push_back(url2.Get());
-      m_strings.push_back(url2.GetDomain());
-      m_strings.push_back(url2.GetHostName());
-      m_strings.push_back(url2.GetFileName());
-      m_strings.push_back(url2.GetOptions());
-      m_strings.push_back(url2.GetUserName());
-      m_strings.push_back(url2.GetPassWord());
-      m_strings.push_back(url2.GetRedacted());
-      m_strings.push_back(url2.GetShareName());
-      m_strings.push_back(url2.GetProtocol());
+public:
+  explicit CVFSURLWrapper(const CURL& url2)
+  {
+    m_strings.push_back(url2.Get());
+    m_strings.push_back(url2.GetDomain());
+    m_strings.push_back(url2.GetHostName());
+    m_strings.push_back(url2.GetFileName());
+    m_strings.push_back(url2.GetOptions());
+    m_strings.push_back(url2.GetUserName());
+    m_strings.push_back(url2.GetPassWord());
+    m_strings.push_back(url2.GetRedacted());
+    m_strings.push_back(url2.GetShareName());
+    m_strings.push_back(url2.GetProtocol());
 
-      url.url = m_strings[0].c_str();
-      url.domain = m_strings[1].c_str();
-      url.hostname = m_strings[2].c_str();
-      url.filename = m_strings[3].c_str();
-      url.port = url2.GetPort();
-      url.options = m_strings[4].c_str();
-      url.username = m_strings[5].c_str();
-      url.password = m_strings[6].c_str();
-      url.redacted = m_strings[7].c_str();
-      url.sharename = m_strings[8].c_str();
-      url.protocol = m_strings[9].c_str();
-    }
+    url.url = m_strings[0].c_str();
+    url.domain = m_strings[1].c_str();
+    url.hostname = m_strings[2].c_str();
+    url.filename = m_strings[3].c_str();
+    url.port = url2.GetPort();
+    url.options = m_strings[4].c_str();
+    url.username = m_strings[5].c_str();
+    url.password = m_strings[6].c_str();
+    url.redacted = m_strings[7].c_str();
+    url.sharename = m_strings[8].c_str();
+    url.protocol = m_strings[9].c_str();
+  }
 
-    VFSURL url;
-  protected:
-    std::vector<std::string> m_strings;
+  VFSURL url;
+
+protected:
+  std::vector<std::string> m_strings;
 };
 
 CVFSEntry::ProtocolInfo::ProtocolInfo(BinaryAddonBasePtr addonInfo)
-  : supportPath(addonInfo->Type(ADDON_VFS)->GetValue("@supportPath").asBoolean()),
-    supportUsername(addonInfo->Type(ADDON_VFS)->GetValue("@supportUsername").asBoolean()),
-    supportPassword(addonInfo->Type(ADDON_VFS)->GetValue("@supportPassword").asBoolean()),
-    supportPort(addonInfo->Type(ADDON_VFS)->GetValue("@supportPort").asBoolean()),
-    supportBrowsing(addonInfo->Type(ADDON_VFS)->GetValue("@supportBrowsing").asBoolean()),
-    supportWrite(addonInfo->Type(ADDON_VFS)->GetValue("@supportWrite").asBoolean()),
-    defaultPort(addonInfo->Type(ADDON_VFS)->GetValue("@defaultPort").asInteger()),
-    type(addonInfo->Type(ADDON_VFS)->GetValue("@protocols").asString()),
-    label(addonInfo->Type(ADDON_VFS)->GetValue("@label").asInteger())
+  : supportPath(addonInfo->Type(ADDON_VFS)->GetValue("@supportPath").asBoolean())
+  , supportUsername(addonInfo->Type(ADDON_VFS)->GetValue("@supportUsername").asBoolean())
+  , supportPassword(addonInfo->Type(ADDON_VFS)->GetValue("@supportPassword").asBoolean())
+  , supportPort(addonInfo->Type(ADDON_VFS)->GetValue("@supportPort").asBoolean())
+  , supportBrowsing(addonInfo->Type(ADDON_VFS)->GetValue("@supportBrowsing").asBoolean())
+  , supportWrite(addonInfo->Type(ADDON_VFS)->GetValue("@supportWrite").asBoolean())
+  , defaultPort(addonInfo->Type(ADDON_VFS)->GetValue("@defaultPort").asInteger())
+  , type(addonInfo->Type(ADDON_VFS)->GetValue("@protocols").asString())
+  , label(addonInfo->Type(ADDON_VFS)->GetValue("@label").asInteger())
 {
 }
 
 CVFSEntry::CVFSEntry(BinaryAddonBasePtr addonInfo)
-  : IAddonInstanceHandler(ADDON_INSTANCE_VFS, addonInfo),
-    m_protocols(addonInfo->Type(ADDON_VFS)->GetValue("@protocols").asString()),
-    m_extensions(addonInfo->Type(ADDON_VFS)->GetValue("@extensions").asString()),
-    m_zeroconf(addonInfo->Type(ADDON_VFS)->GetValue("@zeroconf").asString()),
-    m_files(addonInfo->Type(ADDON_VFS)->GetValue("@files").asBoolean()),
-    m_directories(addonInfo->Type(ADDON_VFS)->GetValue("@directories").asBoolean()),
-    m_filedirectories(addonInfo->Type(ADDON_VFS)->GetValue("@filedirectories").asBoolean()),
-    m_protocolInfo(addonInfo)
+  : IAddonInstanceHandler(ADDON_INSTANCE_VFS, addonInfo)
+  , m_protocols(addonInfo->Type(ADDON_VFS)->GetValue("@protocols").asString())
+  , m_extensions(addonInfo->Type(ADDON_VFS)->GetValue("@extensions").asString())
+  , m_zeroconf(addonInfo->Type(ADDON_VFS)->GetValue("@zeroconf").asString())
+  , m_files(addonInfo->Type(ADDON_VFS)->GetValue("@files").asBoolean())
+  , m_directories(addonInfo->Type(ADDON_VFS)->GetValue("@directories").asBoolean())
+  , m_filedirectories(addonInfo->Type(ADDON_VFS)->GetValue("@filedirectories").asBoolean())
+  , m_protocolInfo(addonInfo)
 {
   if (!addonInfo->Type(ADDON_VFS)->GetValue("@supportDialog").asBoolean())
     m_protocolInfo.type.clear();
 
-  m_struct = {{ 0 }};
+  m_struct = {{0}};
   m_struct.toKodi.kodiInstance = this;
   if (CreateInstance(&m_struct) != ADDON_STATUS_OK)
-    CLog::Log(LOGFATAL, "CVFSEntry - Couldn't create instance on add-on '%s'", addonInfo->Name().c_str());
+    CLog::Log(LOGFATAL, "CVFSEntry - Couldn't create instance on add-on '%s'",
+              addonInfo->Name().c_str());
 }
 
 CVFSEntry::~CVFSEntry()
@@ -341,7 +341,7 @@ static void VFSDirEntriesToCFileItemList(int num_entries,
                                          VFSDirEntry* entries,
                                          CFileItemList& items)
 {
-  for (int i=0;i<num_entries;++i)
+  for (int i = 0; i < num_entries; ++i)
   {
     CFileItemPtr item(new CFileItem());
     item->SetLabel(entries[i].label);
@@ -351,7 +351,7 @@ static void VFSDirEntriesToCFileItemList(int num_entries,
     item->m_bIsFolder = entries[i].folder;
     if (entries[i].title)
       item->m_strTitle = entries[i].title;
-    for (unsigned int j=0;j<entries[i].num_props;++j)
+    for (unsigned int j = 0; j < entries[i].num_props; ++j)
     {
       if (strcasecmp(entries[i].properties[j].name, "propmisusepreformatted") == 0)
       {
@@ -359,16 +359,15 @@ static void VFSDirEntriesToCFileItemList(int num_entries,
           item->SetLabelPreformatted(true);
         else
           item->SetLabelPreformatted(false);
-      } else
-        item->SetProperty(entries[i].properties[j].name,
-                          entries[i].properties[j].val);
+      }
+      else
+        item->SetProperty(entries[i].properties[j].name, entries[i].properties[j].val);
     }
     items.Add(item);
   }
 }
 
-bool CVFSEntry::GetDirectory(const CURL& url, CFileItemList& items,
-                             void* ctx)
+bool CVFSEntry::GetDirectory(const CURL& url, CFileItemList& items, void* ctx)
 {
   if (!m_struct.toAddon.get_directory || !m_struct.toAddon.free_directory)
     return false;
@@ -382,7 +381,8 @@ bool CVFSEntry::GetDirectory(const CURL& url, CFileItemList& items,
   VFSDirEntry* entries = nullptr;
   int num_entries = 0;
   CVFSURLWrapper url2(url);
-  bool ret = m_struct.toAddon.get_directory(&m_struct, &url2.url, &entries, &num_entries, &callbacks);
+  bool ret =
+      m_struct.toAddon.get_directory(&m_struct, &url2.url, &entries, &num_entries, &callbacks);
   if (ret)
   {
     VFSDirEntriesToCFileItemList(num_entries, entries, items);
@@ -403,7 +403,8 @@ bool CVFSEntry::ContainsFiles(const CURL& url, CFileItemList& items)
   CVFSURLWrapper url2(url);
   char rootpath[ADDON_STANDARD_STRING_LENGTH];
   rootpath[0] = 0;
-  bool ret = m_struct.toAddon.contains_files(&m_struct, &url2.url, &entries, &num_entries, rootpath);
+  bool ret =
+      m_struct.toAddon.contains_files(&m_struct, &url2.url, &entries, &num_entries, rootpath);
   if (!ret)
     return false;
 
@@ -415,8 +416,9 @@ bool CVFSEntry::ContainsFiles(const CURL& url, CFileItemList& items)
   return true;
 }
 
-CVFSEntryIFileWrapper::CVFSEntryIFileWrapper(VFSEntryPtr ptr) :
-  m_context(nullptr), m_addon(ptr)
+CVFSEntryIFileWrapper::CVFSEntryIFileWrapper(VFSEntryPtr ptr)
+  : m_context(nullptr)
+  , m_addon(ptr)
 {
 }
 
@@ -527,8 +529,8 @@ bool CVFSEntryIFileWrapper::Rename(const CURL& url, const CURL& url2)
   return m_addon->Rename(url, url2);
 }
 
-CVFSEntryIDirectoryWrapper::CVFSEntryIDirectoryWrapper(VFSEntryPtr ptr) :
-  m_addon(ptr)
+CVFSEntryIDirectoryWrapper::CVFSEntryIDirectoryWrapper(VFSEntryPtr ptr)
+  : m_addon(ptr)
 {
 }
 
@@ -547,8 +549,7 @@ bool CVFSEntryIDirectoryWrapper::Create(const CURL& url)
   return m_addon->CreateDirectory(url);
 }
 
-bool CVFSEntryIDirectoryWrapper::GetDirectory(const CURL& url,
-                                              CFileItemList& items)
+bool CVFSEntryIDirectoryWrapper::GetDirectory(const CURL& url, CFileItemList& items)
 {
   return m_addon->GetDirectory(url, items, this);
 }
@@ -558,7 +559,8 @@ bool CVFSEntryIDirectoryWrapper::DoGetKeyboardInput(void* ctx,
                                                     char** input,
                                                     bool hidden_input)
 {
-  return static_cast<CVFSEntryIDirectoryWrapper*>(ctx)->GetKeyboardInput2(heading, input, hidden_input);
+  return static_cast<CVFSEntryIDirectoryWrapper*>(ctx)->GetKeyboardInput2(heading, input,
+                                                                          hidden_input);
 }
 
 bool CVFSEntryIDirectoryWrapper::GetKeyboardInput2(const char* heading,
@@ -567,19 +569,16 @@ bool CVFSEntryIDirectoryWrapper::GetKeyboardInput2(const char* heading,
 {
   std::string inp;
   bool result;
-  if ((result=GetKeyboardInput(CVariant(std::string(heading)), inp, hidden_input)))
+  if ((result = GetKeyboardInput(CVariant(std::string(heading)), inp, hidden_input)))
     *input = strdup(inp.c_str());
 
   return result;
 }
 
-void CVFSEntryIDirectoryWrapper::DoSetErrorDialog(void* ctx, const char* heading,
-                                                  const char* line1,
-                                                  const char* line2,
-                                                  const char* line3)
+void CVFSEntryIDirectoryWrapper::DoSetErrorDialog(
+    void* ctx, const char* heading, const char* line1, const char* line2, const char* line3)
 {
-  static_cast<CVFSEntryIDirectoryWrapper*>(ctx)->SetErrorDialog2(heading, line1,
-                                                                 line2, line3);
+  static_cast<CVFSEntryIDirectoryWrapper*>(ctx)->SetErrorDialog2(heading, line1, line2, line3);
 }
 
 void CVFSEntryIDirectoryWrapper::SetErrorDialog2(const char* heading,
@@ -587,18 +586,16 @@ void CVFSEntryIDirectoryWrapper::SetErrorDialog2(const char* heading,
                                                  const char* line2,
                                                  const char* line3)
 {
-  CVariant l2=0, l3=0;
+  CVariant l2 = 0, l3 = 0;
   if (line2)
     l2 = std::string(line2);
   if (line3)
     l3 = std::string(line3);
   if (m_flags & XFILE::DIR_FLAG_ALLOW_PROMPT)
-    SetErrorDialog(CVariant(std::string(heading)),
-                   CVariant(std::string(line1)), l2, l3);
+    SetErrorDialog(CVariant(std::string(heading)), CVariant(std::string(line1)), l2, l3);
 }
 
-void CVFSEntryIDirectoryWrapper::DoRequireAuthentication(void* ctx,
-                                                         const char* url)
+void CVFSEntryIDirectoryWrapper::DoRequireAuthentication(void* ctx, const char* url)
 {
   static_cast<CVFSEntryIDirectoryWrapper*>(ctx)->RequireAuthentication2(CURL(url));
 }
@@ -610,4 +607,3 @@ void CVFSEntryIDirectoryWrapper::RequireAuthentication2(const CURL& url)
 }
 
 } /*namespace ADDON*/
-

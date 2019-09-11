@@ -24,5 +24,5 @@ namespace LINUX
  */
 std::int64_t TimespecDifference(timespec const& start, timespec const& end);
 
-}
-}
+} // namespace LINUX
+} // namespace KODI

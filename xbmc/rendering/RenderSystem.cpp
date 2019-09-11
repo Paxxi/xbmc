@@ -43,27 +43,30 @@ bool CRenderSystemBase::SupportsNPOT(bool dxt) const
 
 bool CRenderSystemBase::SupportsStereo(RENDER_STEREO_MODE mode) const
 {
-  switch(mode)
+  switch (mode)
   {
-    case RENDER_STEREO_MODE_OFF:
-    case RENDER_STEREO_MODE_SPLIT_HORIZONTAL:
-    case RENDER_STEREO_MODE_SPLIT_VERTICAL:
-    case RENDER_STEREO_MODE_MONO:
-      return true;
-    default:
-      return false;
+  case RENDER_STEREO_MODE_OFF:
+  case RENDER_STEREO_MODE_SPLIT_HORIZONTAL:
+  case RENDER_STEREO_MODE_SPLIT_VERTICAL:
+  case RENDER_STEREO_MODE_MONO:
+    return true;
+  default:
+    return false;
   }
 }
 
 void CRenderSystemBase::ShowSplash(const std::string& message)
 {
-  if (!CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_splashImage && !(m_splashImage || !message.empty()))
+  if (!CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_splashImage &&
+      !(m_splashImage || !message.empty()))
     return;
 
   if (!m_splashImage)
   {
-    m_splashImage = std::unique_ptr<CGUIImage>(new CGUIImage(0, 0, 0, 0, CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(),
-                                                       CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight(), CTextureInfo(CUtil::GetSplashPath())));
+    m_splashImage = std::unique_ptr<CGUIImage>(
+        new CGUIImage(0, 0, 0, 0, CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth(),
+                      CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight(),
+                      CTextureInfo(CUtil::GetSplashPath())));
     m_splashImage->SetAspectRatio(CAspectRatio::AR_SCALE);
   }
 
@@ -84,9 +87,11 @@ void CRenderSystemBase::ShowSplash(const std::string& message)
   {
     if (!m_splashMessageLayout)
     {
-      auto messageFont = g_fontManager.LoadTTF("__splash__", "arial.ttf", 0xFFFFFFFF, 0, 20, FONT_STYLE_NORMAL, false, 1.0f, 1.0f, &res);
+      auto messageFont = g_fontManager.LoadTTF("__splash__", "arial.ttf", 0xFFFFFFFF, 0, 20,
+                                               FONT_STYLE_NORMAL, false, 1.0f, 1.0f, &res);
       if (messageFont)
-        m_splashMessageLayout = std::unique_ptr<CGUITextLayout>(new CGUITextLayout(messageFont, true, 0));
+        m_splashMessageLayout =
+            std::unique_ptr<CGUITextLayout>(new CGUITextLayout(messageFont, true, 0));
     }
 
     if (m_splashMessageLayout)
@@ -98,7 +103,7 @@ void CRenderSystemBase::ShowSplash(const std::string& message)
       int width = CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth();
       int height = CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight();
       float y = height - textHeight - 100;
-      m_splashMessageLayout->RenderOutline(width/2, y, 0, 0xFF000000, XBFONT_CENTER_X, width);
+      m_splashMessageLayout->RenderOutline(width / 2, y, 0, 0xFF000000, XBFONT_CENTER_X, width);
     }
   }
 
@@ -107,4 +112,3 @@ void CRenderSystemBase::ShowSplash(const std::string& message)
   CServiceBroker::GetWinSystem()->GetGfxContext().unlock();
   CServiceBroker::GetWinSystem()->GetGfxContext().Flip(true, false);
 }
-

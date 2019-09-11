@@ -12,12 +12,12 @@
 
 class ColorUtils
 {
-  public:
-    /*! \brief Change the opacity of a given color
+public:
+  /*! \brief Change the opacity of a given color
      
      \param color The original color
      \param opacity The opacity value as a float
      \return the original color with the changed opacity/alpha value
      */
-    static UTILS::Color ChangeOpacity(const UTILS::Color color, const float opacity);
+  static UTILS::Color ChangeOpacity(const UTILS::Color color, const float opacity);
 };

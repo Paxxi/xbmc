@@ -18,9 +18,9 @@
 
 using namespace PVR;
 
-CPVRChannelGroupsContainer::CPVRChannelGroupsContainer(void) :
-    m_groupsRadio(new CPVRChannelGroups(true)),
-    m_groupsTV(new CPVRChannelGroups(false))
+CPVRChannelGroupsContainer::CPVRChannelGroupsContainer(void)
+  : m_groupsRadio(new CPVRChannelGroups(true))
+  , m_groupsTV(new CPVRChannelGroups(false))
 {
 }
 
@@ -68,7 +68,7 @@ void CPVRChannelGroupsContainer::Unload(void)
   m_bLoaded = false;
 }
 
-CPVRChannelGroups *CPVRChannelGroupsContainer::Get(bool bRadio) const
+CPVRChannelGroups* CPVRChannelGroupsContainer::Get(bool bRadio) const
 {
   return bRadio ? m_groupsRadio : m_groupsTV;
 }
@@ -105,12 +105,15 @@ CPVRChannelPtr CPVRChannelGroupsContainer::GetChannelByEpgId(int iEpgId) const
   return channel;
 }
 
-std::shared_ptr<CPVRChannel> CPVRChannelGroupsContainer::GetChannelForEpgTag(const std::shared_ptr<CPVREpgInfoTag>& epgTag) const
+std::shared_ptr<CPVRChannel> CPVRChannelGroupsContainer::GetChannelForEpgTag(
+    const std::shared_ptr<CPVREpgInfoTag>& epgTag) const
 {
   if (!epgTag)
     return {};
 
-  return Get(epgTag->IsRadio())->GetGroupAll()->GetByUniqueID(epgTag->UniqueChannelID(), epgTag->ClientID());
+  return Get(epgTag->IsRadio())
+      ->GetGroupAll()
+      ->GetByUniqueID(epgTag->UniqueChannelID(), epgTag->ClientID());
 }
 
 std::shared_ptr<CPVRChannel> CPVRChannelGroupsContainer::GetByPath(const std::string& strPath) const
@@ -145,11 +148,11 @@ CPVRChannelPtr CPVRChannelGroupsContainer::GetByUniqueID(int iUniqueChannelId, i
 std::shared_ptr<CPVRChannel> CPVRChannelGroupsContainer::GetLastPlayedChannel() const
 {
   const std::shared_ptr<CPVRChannel> channelTV = m_groupsTV->GetGroupAll()->GetLastPlayedChannel();
-  const std::shared_ptr<CPVRChannel> channelRadio = m_groupsRadio->GetGroupAll()->GetLastPlayedChannel();
+  const std::shared_ptr<CPVRChannel> channelRadio =
+      m_groupsRadio->GetGroupAll()->GetLastPlayedChannel();
 
-  if (!channelTV ||
-      (channelRadio && channelRadio->LastWatched() > channelTV->LastWatched()))
-     return channelRadio;
+  if (!channelTV || (channelRadio && channelRadio->LastWatched() > channelTV->LastWatched()))
+    return channelRadio;
 
   return channelTV;
 }
@@ -176,7 +179,7 @@ CPVRChannelGroupPtr CPVRChannelGroupsContainer::GetPreviousPlayedGroup(void)
   return m_lastPlayedGroups[0];
 }
 
-void CPVRChannelGroupsContainer::SetLastPlayedGroup(const CPVRChannelGroupPtr &group)
+void CPVRChannelGroupsContainer::SetLastPlayedGroup(const CPVRChannelGroupPtr& group)
 {
   CSingleLock lock(m_critSection);
   m_lastPlayedGroups[0] = m_lastPlayedGroups[1];

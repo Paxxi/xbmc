@@ -24,7 +24,10 @@ using namespace Shaders;
 // BaseYUV2RGBGLSLShader - base class for GLSL YUV2RGB shaders
 //////////////////////////////////////////////////////////////////////
 
-BaseYUV2RGBGLSLShader::BaseYUV2RGBGLSLShader(EShaderFormat format, AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries, bool toneMap)
+BaseYUV2RGBGLSLShader::BaseYUV2RGBGLSLShader(EShaderFormat format,
+                                             AVColorPrimaries dstPrimaries,
+                                             AVColorPrimaries srcPrimaries,
+                                             bool toneMap)
 {
   m_width = 1;
   m_height = 1;
@@ -71,10 +74,10 @@ BaseYUV2RGBGLSLShader::~BaseYUV2RGBGLSLShader()
 
 void BaseYUV2RGBGLSLShader::OnCompiledAndLinked()
 {
-  m_hVertex = glGetAttribLocation(ProgramHandle(),  "m_attrpos");
-  m_hYcoord = glGetAttribLocation(ProgramHandle(),  "m_attrcordY");
-  m_hUcoord = glGetAttribLocation(ProgramHandle(),  "m_attrcordU");
-  m_hVcoord = glGetAttribLocation(ProgramHandle(),  "m_attrcordV");
+  m_hVertex = glGetAttribLocation(ProgramHandle(), "m_attrpos");
+  m_hYcoord = glGetAttribLocation(ProgramHandle(), "m_attrcordY");
+  m_hUcoord = glGetAttribLocation(ProgramHandle(), "m_attrcordU");
+  m_hVcoord = glGetAttribLocation(ProgramHandle(), "m_attrcordV");
   m_hProj = glGetUniformLocation(ProgramHandle(), "m_proj");
   m_hModel = glGetUniformLocation(ProgramHandle(), "m_model");
   m_hAlpha = glGetUniformLocation(ProgramHandle(), "m_alpha");
@@ -105,7 +108,7 @@ bool BaseYUV2RGBGLSLShader::OnEnabled()
   m_pConvMatrix->GetYuvMat(yuvMat);
 
   glUniformMatrix4fv(m_hYuvMat, 1, GL_FALSE, (GLfloat*)yuvMat);
-  glUniformMatrix4fv(m_hProj,  1, GL_FALSE, m_proj);
+  glUniformMatrix4fv(m_hProj, 1, GL_FALSE, m_proj);
   glUniformMatrix4fv(m_hModel, 1, GL_FALSE, m_model);
   glUniform1f(m_hAlpha, m_alpha);
 
@@ -114,7 +117,7 @@ bool BaseYUV2RGBGLSLShader::OnEnabled()
   {
     glUniformMatrix3fv(m_hPrimMat, 1, GL_FALSE, (GLfloat*)primMat);
     glUniform1f(m_hGammaSrc, m_pConvMatrix->GetGammaSrc());
-    glUniform1f(m_hGammaDstInv, 1/m_pConvMatrix->GetGammaDst());
+    glUniform1f(m_hGammaDstInv, 1 / m_pConvMatrix->GetGammaDst());
   }
 
   if (m_toneMapping)
@@ -127,7 +130,8 @@ bool BaseYUV2RGBGLSLShader::OnEnabled()
     }
     else if (m_hasDisplayMetadata && m_displayMetadata.has_luminance)
     {
-      param = log10(100) / log10(m_displayMetadata.max_luminance.num/m_displayMetadata.max_luminance.den);
+      param = log10(100) /
+              log10(m_displayMetadata.max_luminance.num / m_displayMetadata.max_luminance.den);
     }
 
     // Sanity check
@@ -157,8 +161,10 @@ void BaseYUV2RGBGLSLShader::Free()
 {
 }
 
-void BaseYUV2RGBGLSLShader::SetColParams(AVColorSpace colSpace, int bits, bool limited,
-                                        int textureBits)
+void BaseYUV2RGBGLSLShader::SetColParams(AVColorSpace colSpace,
+                                         int bits,
+                                         bool limited,
+                                         int textureBits)
 {
   if (colSpace == AVCOL_SPC_UNSPECIFIED)
   {
@@ -170,8 +176,10 @@ void BaseYUV2RGBGLSLShader::SetColParams(AVColorSpace colSpace, int bits, bool l
   m_pConvMatrix->SetColParams(colSpace, bits, limited, textureBits);
 }
 
-void BaseYUV2RGBGLSLShader::SetDisplayMetadata(bool hasDisplayMetadata, AVMasteringDisplayMetadata displayMetadata,
-                                               bool hasLightMetadata, AVContentLightMetadata lightMetadata)
+void BaseYUV2RGBGLSLShader::SetDisplayMetadata(bool hasDisplayMetadata,
+                                               AVMasteringDisplayMetadata displayMetadata,
+                                               bool hasLightMetadata,
+                                               AVContentLightMetadata lightMetadata)
 {
   m_hasDisplayMetadata = hasDisplayMetadata;
   m_displayMetadata = displayMetadata;
@@ -184,7 +192,10 @@ void BaseYUV2RGBGLSLShader::SetDisplayMetadata(bool hasDisplayMetadata, AVMaster
 // Use for weave deinterlacing / progressive
 //////////////////////////////////////////////////////////////////////
 
-YUV2RGBProgressiveShader::YUV2RGBProgressiveShader(EShaderFormat format, AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries, bool toneMap)
+YUV2RGBProgressiveShader::YUV2RGBProgressiveShader(EShaderFormat format,
+                                                   AVColorPrimaries dstPrimaries,
+                                                   AVColorPrimaries srcPrimaries,
+                                                   bool toneMap)
   : BaseYUV2RGBGLSLShader(format, dstPrimaries, srcPrimaries, toneMap)
 {
   PixelShader()->LoadSource("gles_yuv2rgb_basic.frag", m_defines);
@@ -196,7 +207,10 @@ YUV2RGBProgressiveShader::YUV2RGBProgressiveShader(EShaderFormat format, AVColor
 // YUV2RGBBobShader - YUV2RGB with Bob deinterlacing
 //////////////////////////////////////////////////////////////////////
 
-YUV2RGBBobShader::YUV2RGBBobShader(EShaderFormat format, AVColorPrimaries dstPrimaries, AVColorPrimaries srcPrimaries, bool toneMap)
+YUV2RGBBobShader::YUV2RGBBobShader(EShaderFormat format,
+                                   AVColorPrimaries dstPrimaries,
+                                   AVColorPrimaries srcPrimaries,
+                                   bool toneMap)
   : BaseYUV2RGBGLSLShader(format, dstPrimaries, srcPrimaries, toneMap)
 {
   m_hStepX = -1;
@@ -218,7 +232,7 @@ void YUV2RGBBobShader::OnCompiledAndLinked()
 
 bool YUV2RGBBobShader::OnEnabled()
 {
-  if(!BaseYUV2RGBGLSLShader::OnEnabled())
+  if (!BaseYUV2RGBGLSLShader::OnEnabled())
     return false;
 
   glUniform1i(m_hField, m_field);

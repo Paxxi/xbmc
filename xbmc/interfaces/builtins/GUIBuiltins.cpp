@@ -45,8 +45,10 @@ static int Action(const std::vector<std::string>& params)
   unsigned int actionID;
   if (CActionTranslator::TranslateString(params[0], actionID))
   {
-    int windowID = params.size() == 2 ? CWindowTranslator::TranslateWindow(params[1]) : WINDOW_INVALID;
-    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, windowID, -1, static_cast<void*>(new CAction(actionID)));
+    int windowID =
+        params.size() == 2 ? CWindowTranslator::TranslateWindow(params[1]) : WINDOW_INVALID;
+    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, windowID, -1,
+                                                 static_cast<void*>(new CAction(actionID)));
   }
 
   return 0;
@@ -60,7 +62,7 @@ static int Action(const std::vector<std::string>& params)
  *           Set the Replace template parameter to true to replace current
  *           window in history.
  */
-  template<bool Replace>
+template<bool Replace>
 static int ActivateWindow(const std::vector<std::string>& params2)
 {
   std::vector<std::string> params(params2);
@@ -80,13 +82,16 @@ static int ActivateWindow(const std::vector<std::string>& params2)
     bool bIsSameStartFolder = true;
     if (!params.empty())
     {
-      CGUIWindow *activeWindow = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow());
+      CGUIWindow* activeWindow = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(
+          CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow());
       if (activeWindow && activeWindow->IsMediaWindow())
-        bIsSameStartFolder = static_cast<CGUIMediaWindow*>(activeWindow)->IsSameStartFolder(params[0]);
+        bIsSameStartFolder =
+            static_cast<CGUIMediaWindow*>(activeWindow)->IsSameStartFolder(params[0]);
     }
 
     // activate window only if window and path differ from the current active window
-    if (iWindow != CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow() || !bIsSameStartFolder)
+    if (iWindow != CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow() ||
+        !bIsSameStartFolder)
     {
       g_application.WakeUpScreenSaverAndDPMS();
       CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(iWindow, params, Replace);
@@ -95,7 +100,8 @@ static int ActivateWindow(const std::vector<std::string>& params2)
   }
   else
   {
-    CLog::Log(LOGERROR, "Activate/ReplaceWindow called with invalid destination window: %s", strWindow.c_str());
+    CLog::Log(LOGERROR, "Activate/ReplaceWindow called with invalid destination window: %s",
+              strWindow.c_str());
     return false;
   }
 
@@ -110,7 +116,7 @@ static int ActivateWindow(const std::vector<std::string>& params2)
  *           Set the Replace template parameter to true to replace current
  *           window in history.
  */
-  template<bool Replace>
+template<bool Replace>
 static int ActivateAndFocus(const std::vector<std::string>& params)
 {
   std::string strWindow = params[0];
@@ -128,18 +134,19 @@ static int ActivateAndFocus(const std::vector<std::string>& params)
       unsigned int iPtr = 1;
       while (params.size() > iPtr + 1)
       {
-        CGUIMessage msg(GUI_MSG_SETFOCUS, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(),
+        CGUIMessage msg(GUI_MSG_SETFOCUS,
+                        CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog(),
                         atol(params[iPtr].c_str()),
-                        (params.size() >= iPtr + 2) ? atol(params[iPtr + 1].c_str())+1 : 0);
+                        (params.size() >= iPtr + 2) ? atol(params[iPtr + 1].c_str()) + 1 : 0);
         CServiceBroker::GetGUI()->GetWindowManager().SendMessage(msg);
         iPtr += 2;
       }
       return 0;
     }
-
   }
   else
-    CLog::Log(LOGERROR, "Replace/ActivateWindowAndFocus called with invalid destination window: %s", strWindow.c_str());
+    CLog::Log(LOGERROR, "Replace/ActivateWindowAndFocus called with invalid destination window: %s",
+              strWindow.c_str());
 
   return 1;
 }
@@ -159,7 +166,7 @@ static int AlarmClock(const std::vector<std::string>& params)
   if (params.size() > 2)
   {
     if (params[2].find(':') == std::string::npos)
-      seconds = static_cast<float>(atoi(params[2].c_str())*60);
+      seconds = static_cast<float>(atoi(params[2].c_str()) * 60);
     else
       seconds = (float)StringUtils::TimeStringToSeconds(params[2]);
   }
@@ -171,24 +178,25 @@ static int AlarmClock(const std::vector<std::string>& params)
     else
       strHeading = g_localizeStrings.Get(13209);
     std::string strTime;
-    if( CGUIDialogNumeric::ShowAndGetNumber(strTime, strHeading) )
-      seconds = static_cast<float>(atoi(strTime.c_str())*60);
+    if (CGUIDialogNumeric::ShowAndGetNumber(strTime, strHeading))
+      seconds = static_cast<float>(atoi(strTime.c_str()) * 60);
     else
       return false;
   }
   bool silent = false;
   bool loop = false;
-  for (unsigned int i = 3; i < params.size() ; i++)
+  for (unsigned int i = 3; i < params.size(); i++)
   {
     // check "true" for backward comp
-    if (StringUtils::EqualsNoCase(params[i], "true") || StringUtils::EqualsNoCase(params[i], "silent"))
+    if (StringUtils::EqualsNoCase(params[i], "true") ||
+        StringUtils::EqualsNoCase(params[i], "silent"))
       silent = true;
     else if (StringUtils::EqualsNoCase(params[i], "loop"))
       loop = true;
   }
 
-  if( g_alarmClock.IsRunning() )
-    g_alarmClock.Stop(params[0],silent);
+  if (g_alarmClock.IsRunning())
+    g_alarmClock.Stop(params[0], silent);
   // no negative times not allowed, loop must have a positive time
   if (seconds < 0 || (seconds == 0 && loop))
     return false;
@@ -203,10 +211,9 @@ static int AlarmClock(const std::vector<std::string>& params)
  */
 static int CancelAlarm(const std::vector<std::string>& params)
 {
-  bool silent = (params.size() > 1 &&
-      (StringUtils::EqualsNoCase(params[1], "true") ||
-       StringUtils::EqualsNoCase(params[1], "silent")));
-  g_alarmClock.Stop(params[0],silent);
+  bool silent = (params.size() > 1 && (StringUtils::EqualsNoCase(params[1], "true") ||
+                                       StringUtils::EqualsNoCase(params[1], "silent")));
+  g_alarmClock.Stop(params[0], silent);
 
   return 0;
 }
@@ -218,9 +225,11 @@ static int CancelAlarm(const std::vector<std::string>& params)
  */
 static int ClearProperty(const std::vector<std::string>& params)
 {
-  CGUIWindow *window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(params.size() > 1 ? CWindowTranslator::TranslateWindow(params[1]) : CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
+  CGUIWindow* window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(
+      params.size() > 1 ? CWindowTranslator::TranslateWindow(params[1])
+                        : CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
   if (window)
-    window->SetProperty(params[0],"");
+    window->SetProperty(params[0], "");
 
   return 0;
 }
@@ -242,7 +251,7 @@ static int CloseDialog(const std::vector<std::string>& params)
   else
   {
     int id = CWindowTranslator::TranslateWindow(params[0]);
-    CGUIWindow *window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(id);
+    CGUIWindow* window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(id);
     if (window && window->IsDialog())
       static_cast<CGUIDialog*>(window)->Close(bForce);
   }
@@ -262,11 +271,11 @@ static int Notification(const std::vector<std::string>& params)
   if (params.size() < 2)
     return -1;
   if (params.size() == 4)
-    CGUIDialogKaiToast::QueueNotification(params[3],params[0],params[1],atoi(params[2].c_str()));
+    CGUIDialogKaiToast::QueueNotification(params[3], params[0], params[1], atoi(params[2].c_str()));
   else if (params.size() == 3)
-    CGUIDialogKaiToast::QueueNotification("",params[0],params[1],atoi(params[2].c_str()));
+    CGUIDialogKaiToast::QueueNotification("", params[0], params[1], atoi(params[2].c_str()));
   else
-    CGUIDialogKaiToast::QueueNotification(params[0],params[1]);
+    CGUIDialogKaiToast::QueueNotification(params[0], params[1]);
 
   return 0;
 }
@@ -300,7 +309,8 @@ static int Screenshot(const std::vector<std::string>& params)
     {
       if (XFILE::CDirectory::Exists(strSaveToPath))
       {
-        std::string file = CUtil::GetNextFilename(URIUtils::AddFileToFolder(strSaveToPath, "screenshot%03d.png"), 999);
+        std::string file = CUtil::GetNextFilename(
+            URIUtils::AddFileToFolder(strSaveToPath, "screenshot%03d.png"), 999);
 
         if (!file.empty())
         {
@@ -308,7 +318,8 @@ static int Screenshot(const std::vector<std::string>& params)
         }
         else
         {
-          CLog::Log(LOGWARNING, "Too many screen shots or invalid folder %s", strSaveToPath.c_str());
+          CLog::Log(LOGWARNING, "Too many screen shots or invalid folder %s",
+                    strSaveToPath.c_str());
         }
       }
       else
@@ -340,9 +351,11 @@ static int SetLanguage(const std::vector<std::string>& params)
  */
 static int SetProperty(const std::vector<std::string>& params)
 {
-  CGUIWindow *window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(params.size() > 2 ? CWindowTranslator::TranslateWindow(params[2]) : CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
+  CGUIWindow* window = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(
+      params.size() > 2 ? CWindowTranslator::TranslateWindow(params[2])
+                        : CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
   if (window)
-    window->SetProperty(params[0],params[1]);
+    window->SetProperty(params[0], params[1]);
 
   return 0;
 }
@@ -355,10 +368,12 @@ static int SetStereoMode(const std::vector<std::string>& params)
 {
   CAction action = CStereoscopicsManager::ConvertActionCommandToAction("SetStereoMode", params[0]);
   if (action.GetID() != ACTION_NONE)
-    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(action)));
+    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1,
+                                                 static_cast<void*>(new CAction(action)));
   else
   {
-    CLog::Log(LOGERROR,"Builtin 'SetStereoMode' called with unknown parameter: %s", params[0].c_str());
+    CLog::Log(LOGERROR, "Builtin 'SetStereoMode' called with unknown parameter: %s",
+              params[0].c_str());
     return -2;
   }
 
@@ -549,21 +564,37 @@ static int ToggleDirty(const std::vector<std::string>&)
 CBuiltins::CommandMap CGUIBuiltins::GetOperations() const
 {
   return {
-           {"action",                         {"Executes an action for the active window (same as in keymap)", 1, Action}},
-           {"cancelalarm",                    {"Cancels an alarm", 1, CancelAlarm}},
-           {"alarmclock",                     {"Prompt for a length of time and start an alarm clock", 2, AlarmClock}},
-           {"activatewindow",                 {"Activate the specified window", 1, ActivateWindow<false>}},
-           {"activatewindowandfocus",         {"Activate the specified window and sets focus to the specified id", 1, ActivateAndFocus<false>}},
-           {"clearproperty",                  {"Clears a window property for the current focused window/dialog (key,value)", 1, ClearProperty}},
-           {"dialog.close",                   {"Close a dialog", 1, CloseDialog}},
-           {"notification",                   {"Shows a notification on screen, specify header, then message, and optionally time in milliseconds and a icon.", 2, Notification}},
-           {"refreshrss",                     {"Reload RSS feeds from RSSFeeds.xml", 0, RefreshRSS}},
-           {"replacewindow",                  {"Replaces the current window with the new one", 1, ActivateWindow<true>}},
-           {"replacewindowandfocus",          {"Replaces the current window with the new one and sets focus to the specified id", 1, ActivateAndFocus<true>}},
-           {"setguilanguage",                 {"Set GUI Language", 1, SetLanguage}},
-           {"setproperty",                    {"Sets a window property for the current focused window/dialog (key,value)", 2, SetProperty}},
-           {"setstereomode",                  {"Changes the stereo mode of the GUI. Params can be: toggle, next, previous, select, tomono or any of the supported stereomodes (off, split_vertical, split_horizontal, row_interleaved, hardware_based, anaglyph_cyan_red, anaglyph_green_magenta, anaglyph_yellow_blue, monoscopic)", 1, SetStereoMode}},
-           {"takescreenshot",                 {"Takes a Screenshot", 0, Screenshot}},
-           {"toggledirtyregionvisualization", {"Enables/disables dirty-region visualization", 0, ToggleDirty}}
-         };
+      {"action", {"Executes an action for the active window (same as in keymap)", 1, Action}},
+      {"cancelalarm", {"Cancels an alarm", 1, CancelAlarm}},
+      {"alarmclock", {"Prompt for a length of time and start an alarm clock", 2, AlarmClock}},
+      {"activatewindow", {"Activate the specified window", 1, ActivateWindow<false>}},
+      {"activatewindowandfocus",
+       {"Activate the specified window and sets focus to the specified id", 1,
+        ActivateAndFocus<false>}},
+      {"clearproperty",
+       {"Clears a window property for the current focused window/dialog (key,value)", 1,
+        ClearProperty}},
+      {"dialog.close", {"Close a dialog", 1, CloseDialog}},
+      {"notification",
+       {"Shows a notification on screen, specify header, then message, and optionally time in "
+        "milliseconds and a icon.",
+        2, Notification}},
+      {"refreshrss", {"Reload RSS feeds from RSSFeeds.xml", 0, RefreshRSS}},
+      {"replacewindow", {"Replaces the current window with the new one", 1, ActivateWindow<true>}},
+      {"replacewindowandfocus",
+       {"Replaces the current window with the new one and sets focus to the specified id", 1,
+        ActivateAndFocus<true>}},
+      {"setguilanguage", {"Set GUI Language", 1, SetLanguage}},
+      {"setproperty",
+       {"Sets a window property for the current focused window/dialog (key,value)", 2,
+        SetProperty}},
+      {"setstereomode",
+       {"Changes the stereo mode of the GUI. Params can be: toggle, next, previous, select, tomono "
+        "or any of the supported stereomodes (off, split_vertical, split_horizontal, "
+        "row_interleaved, hardware_based, anaglyph_cyan_red, anaglyph_green_magenta, "
+        "anaglyph_yellow_blue, monoscopic)",
+        1, SetStereoMode}},
+      {"takescreenshot", {"Takes a Screenshot", 0, Screenshot}},
+      {"toggledirtyregionvisualization",
+       {"Enables/disables dirty-region visualization", 0, ToggleDirty}}};
 }

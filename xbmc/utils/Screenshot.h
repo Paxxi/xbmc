@@ -21,7 +21,7 @@ public:
   static void Register(std::function<std::unique_ptr<IScreenshotSurface>()> createFunc);
 
   static void TakeScreenshot();
-  static void TakeScreenshot(const std::string &filename, bool sync);
+  static void TakeScreenshot(const std::string& filename, bool sync);
 
 private:
   static std::vector<std::function<std::unique_ptr<IScreenshotSurface>()>> m_screenShotSurfaces;

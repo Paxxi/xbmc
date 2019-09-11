@@ -17,14 +17,14 @@ class CDVDOverlayCodecText : public CDVDOverlayCodec
 public:
   CDVDOverlayCodecText();
   ~CDVDOverlayCodecText() override;
-  bool Open(CDVDStreamInfo &hints, CDVDCodecOptions &options) override;
+  bool Open(CDVDStreamInfo& hints, CDVDCodecOptions& options) override;
   void Dispose() override;
-  int Decode(DemuxPacket *pPacket) override;
+  int Decode(DemuxPacket* pPacket) override;
   void Reset() override;
   void Flush() override;
   CDVDOverlay* GetOverlay() override;
 
 private:
-  bool             m_bIsSSA;
+  bool m_bIsSSA;
   CDVDOverlayText* m_pOverlay;
 };

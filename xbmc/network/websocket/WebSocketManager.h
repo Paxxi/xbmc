@@ -15,5 +15,5 @@ class CWebSocket;
 class CWebSocketManager
 {
 public:
-  static CWebSocket* Handle(const char* data, unsigned int length, std::string &response);
+  static CWebSocket* Handle(const char* data, unsigned int length, std::string& response);
 };

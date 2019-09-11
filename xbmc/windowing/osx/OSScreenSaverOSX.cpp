@@ -19,9 +19,9 @@ void COSScreenSaverOSX::Inhibit()
   // see Technical Q&A QA1340
   if (m_assertionID == 0)
   {
-    CFStringRef reasonForActivity= CFSTR("XBMC requested disable system screen saver");
-    IOPMAssertionCreateWithName(kIOPMAssertionTypeNoDisplaySleep,
-      kIOPMAssertionLevelOn, reasonForActivity, &m_assertionID);
+    CFStringRef reasonForActivity = CFSTR("XBMC requested disable system screen saver");
+    IOPMAssertionCreateWithName(kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn,
+                                reasonForActivity, &m_assertionID);
   }
 }
 

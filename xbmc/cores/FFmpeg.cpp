@@ -23,7 +23,7 @@ static thread_local CFFmpegLog* CFFmpegLogTls;
 void CFFmpegLog::SetLogLevel(int level)
 {
   CFFmpegLog::ClearLogLevel();
-  CFFmpegLog *log = new CFFmpegLog();
+  CFFmpegLog* log = new CFFmpegLog();
   log->level = level;
   CFFmpegLogTls = log;
 }
@@ -54,7 +54,7 @@ void ff_flush_avutil_log_buffers(void)
      If the thread using the buffer is still active, it will just
      add a new buffer next time it writes to the log */
   std::map<const CThread*, std::string>::iterator it;
-  for (it = g_logbuffer.begin(); it != g_logbuffer.end(); )
+  for (it = g_logbuffer.begin(); it != g_logbuffer.end();)
     if ((*it).second.empty())
       g_logbuffer.erase(it++);
     else
@@ -65,35 +65,36 @@ void ff_avutil_log(void* ptr, int level, const char* format, va_list va)
 {
   CSingleLock lock(m_logSection);
   const CThread* threadId = CThread::GetCurrentThread();
-  std::string &buffer = g_logbuffer[threadId];
+  std::string& buffer = g_logbuffer[threadId];
 
-  AVClass* avc= ptr ? *(AVClass**)ptr : NULL;
+  AVClass* avc = ptr ? *(AVClass**)ptr : NULL;
 
   int maxLevel = AV_LOG_WARNING;
   if (CFFmpegLog::GetLogLevel() > 0)
     maxLevel = AV_LOG_INFO;
 
   if (level > maxLevel &&
-     !CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->CanLogComponent(LOGFFMPEG))
+      !CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->CanLogComponent(LOGFFMPEG))
     return;
-  else if (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_logLevel <= LOG_LEVEL_NORMAL)
+  else if (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_logLevel <=
+           LOG_LEVEL_NORMAL)
     return;
 
   int type;
   switch (level)
   {
-    case AV_LOG_INFO:
-      type = LOGINFO;
-      break;
+  case AV_LOG_INFO:
+    type = LOGINFO;
+    break;
 
-    case AV_LOG_ERROR:
-      type = LOGERROR;
-      break;
+  case AV_LOG_ERROR:
+    type = LOGERROR;
+    break;
 
-    case AV_LOG_DEBUG:
-    default:
-      type = LOGDEBUG;
-      break;
+  case AV_LOG_DEBUG:
+  default:
+    type = LOGDEBUG;
+    break;
   }
 
   std::string message = StringUtils::FormatV(format, va);
@@ -112,8 +113,7 @@ void ff_avutil_log(void* ptr, int level, const char* format, va_list va)
   {
     if (pos > start)
       CLog::Log(type, "%s%s", prefix.c_str(), buffer.substr(start, pos - start).c_str());
-    start = pos+1;
+    start = pos + 1;
   }
   buffer.erase(0, start);
 }
-

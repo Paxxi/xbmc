@@ -34,7 +34,10 @@ std::string GetPlaylistLabel(int item, int playlistid = PLAYLIST_NONE);
 CGUIWindow* GetWindow(int contextWindow);
 CGUIControl* GetActiveContainer(int containerId, int contextWindow);
 CGUIMediaWindow* GetMediaWindow(int contextWindow);
-CGUIListItemPtr GetCurrentListItem(int contextWindow, int containerId = 0, int itemOffset = 0, unsigned int itemFlags = 0);
+CGUIListItemPtr GetCurrentListItem(int contextWindow,
+                                   int containerId = 0,
+                                   int itemOffset = 0,
+                                   unsigned int itemFlags = 0);
 
 std::string GetFileInfoLabelValueFromPath(int info, const std::string& filenameAndPath);
 

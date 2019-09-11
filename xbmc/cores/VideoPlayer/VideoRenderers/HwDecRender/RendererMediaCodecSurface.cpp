@@ -33,20 +33,24 @@ CRendererMediaCodecSurface::~CRendererMediaCodecSurface()
   Reset();
 }
 
-CBaseRenderer* CRendererMediaCodecSurface::Create(CVideoBuffer *buffer)
+CBaseRenderer* CRendererMediaCodecSurface::Create(CVideoBuffer* buffer)
 {
-  if (buffer && dynamic_cast<CMediaCodecVideoBuffer*>(buffer) && !dynamic_cast<CMediaCodecVideoBuffer*>(buffer)->HasSurfaceTexture())
+  if (buffer && dynamic_cast<CMediaCodecVideoBuffer*>(buffer) &&
+      !dynamic_cast<CMediaCodecVideoBuffer*>(buffer)->HasSurfaceTexture())
     return new CRendererMediaCodecSurface();
   return nullptr;
 }
 
 bool CRendererMediaCodecSurface::Register()
 {
-  VIDEOPLAYER::CRendererFactory::RegisterRenderer("mediacodec_surface", CRendererMediaCodecSurface::Create);
+  VIDEOPLAYER::CRendererFactory::RegisterRenderer("mediacodec_surface",
+                                                  CRendererMediaCodecSurface::Create);
   return true;
 }
 
-bool CRendererMediaCodecSurface::Configure(const VideoPicture &picture, float fps, unsigned int orientation)
+bool CRendererMediaCodecSurface::Configure(const VideoPicture& picture,
+                                           float fps,
+                                           unsigned int orientation)
 {
   CLog::Log(LOGNOTICE, "CRendererMediaCodecSurface::Configure");
 
@@ -80,11 +84,11 @@ bool CRendererMediaCodecSurface::RenderCapture(CRenderCapture* capture)
   return true;
 }
 
-void CRendererMediaCodecSurface::AddVideoPicture(const VideoPicture &picture, int index)
+void CRendererMediaCodecSurface::AddVideoPicture(const VideoPicture& picture, int index)
 {
   ReleaseBuffer(index);
 
-  BUFFER &buf(m_buffers[index]);
+  BUFFER& buf(m_buffers[index]);
   if (picture.videoBuffer)
   {
     buf.videoBuffer = picture.videoBuffer;
@@ -94,10 +98,10 @@ void CRendererMediaCodecSurface::AddVideoPicture(const VideoPicture &picture, in
 
 void CRendererMediaCodecSurface::ReleaseVideoBuffer(int idx, bool render)
 {
-  BUFFER &buf(m_buffers[idx]);
+  BUFFER& buf(m_buffers[idx]);
   if (buf.videoBuffer)
   {
-    CMediaCodecVideoBuffer *mcvb(dynamic_cast<CMediaCodecVideoBuffer*>(buf.videoBuffer));
+    CMediaCodecVideoBuffer* mcvb(dynamic_cast<CMediaCodecVideoBuffer*>(buf.videoBuffer));
     if (mcvb)
     {
       if (render && m_bConfigured)
@@ -117,10 +121,8 @@ void CRendererMediaCodecSurface::ReleaseBuffer(int idx)
 
 bool CRendererMediaCodecSurface::Supports(ERENDERFEATURE feature)
 {
-  if (feature == RENDERFEATURE_ZOOM ||
-    feature == RENDERFEATURE_STRETCH ||
-    feature == RENDERFEATURE_PIXEL_RATIO ||
-    feature == RENDERFEATURE_ROTATION)
+  if (feature == RENDERFEATURE_ZOOM || feature == RENDERFEATURE_STRETCH ||
+      feature == RENDERFEATURE_PIXEL_RATIO || feature == RENDERFEATURE_ROTATION)
     return true;
 
   return false;
@@ -128,12 +130,13 @@ bool CRendererMediaCodecSurface::Supports(ERENDERFEATURE feature)
 
 void CRendererMediaCodecSurface::Reset()
 {
-  for (int i = 0 ; i < 4 ; ++i)
+  for (int i = 0; i < 4; ++i)
     ReleaseVideoBuffer(i, false);
   m_lastIndex = -1;
 }
 
-void CRendererMediaCodecSurface::RenderUpdate(int index, int index2, bool clear, unsigned int flags, unsigned int alpha)
+void CRendererMediaCodecSurface::RenderUpdate(
+    int index, int index2, bool clear, unsigned int flags, unsigned int alpha)
 {
   m_bConfigured = true;
 
@@ -150,20 +153,20 @@ void CRendererMediaCodecSurface::RenderUpdate(int index, int index2, bool clear,
   m_surfDestRect = m_destRect;
   switch (stereo_mode)
   {
-    case RENDER_STEREO_MODE_SPLIT_HORIZONTAL:
-      m_surfDestRect.y2 *= 2.0;
-      break;
-    case RENDER_STEREO_MODE_SPLIT_VERTICAL:
-      m_surfDestRect.x2 *= 2.0;
-      break;
-    case RENDER_STEREO_MODE_MONO:
-      if (CONF_FLAGS_STEREO_MODE_MASK(m_iFlags) == CONF_FLAGS_STEREO_MODE_TAB)
-        m_surfDestRect.y2 = m_surfDestRect.y2 * 2.0;
-      else
-        m_surfDestRect.x2 = m_surfDestRect.x2 * 2.0;
-      break;
-    default:
-      break;
+  case RENDER_STEREO_MODE_SPLIT_HORIZONTAL:
+    m_surfDestRect.y2 *= 2.0;
+    break;
+  case RENDER_STEREO_MODE_SPLIT_VERTICAL:
+    m_surfDestRect.x2 *= 2.0;
+    break;
+  case RENDER_STEREO_MODE_MONO:
+    if (CONF_FLAGS_STEREO_MODE_MASK(m_iFlags) == CONF_FLAGS_STEREO_MODE_TAB)
+      m_surfDestRect.y2 = m_surfDestRect.y2 * 2.0;
+    else
+      m_surfDestRect.x2 = m_surfDestRect.x2 * 2.0;
+    break;
+  default:
+    break;
   }
 
   if (index != m_lastIndex)
@@ -180,14 +183,15 @@ void CRendererMediaCodecSurface::ReorderDrawPoints()
   // Handle orientation
   switch (m_renderOrientation)
   {
-    case 90:
-    case 270:
-    {
-      double scale = (double)m_surfDestRect.Height() / m_surfDestRect.Width();
-      int diff = (int) ((m_surfDestRect.Height()*scale - m_surfDestRect.Width()) / 2);
-      m_surfDestRect = CRect(m_surfDestRect.x1 - diff, m_surfDestRect.y1, m_surfDestRect.x2 + diff, m_surfDestRect.y2);
-    }
-    default:
-      break;
+  case 90:
+  case 270:
+  {
+    double scale = (double)m_surfDestRect.Height() / m_surfDestRect.Width();
+    int diff = (int)((m_surfDestRect.Height() * scale - m_surfDestRect.Width()) / 2);
+    m_surfDestRect = CRect(m_surfDestRect.x1 - diff, m_surfDestRect.y1, m_surfDestRect.x2 + diff,
+                           m_surfDestRect.y2);
+  }
+  default:
+    break;
   }
 }

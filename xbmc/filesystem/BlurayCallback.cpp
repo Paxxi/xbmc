@@ -27,7 +27,7 @@ void CBlurayCallback::bluray_logger(const char* msg)
   CLog::Log(LOGDEBUG, "CBlurayCallback::Logger - %s", msg);
 }
 
-void CBlurayCallback::dir_close(BD_DIR_H *dir)
+void CBlurayCallback::dir_close(BD_DIR_H* dir)
 {
   if (dir)
   {
@@ -37,7 +37,7 @@ void CBlurayCallback::dir_close(BD_DIR_H *dir)
   }
 }
 
-BD_DIR_H* CBlurayCallback::dir_open(void *handle, const char* rel_path)
+BD_DIR_H* CBlurayCallback::dir_open(void* handle, const char* rel_path)
 {
   std::string strRelPath(rel_path);
   std::string* strBasePath = reinterpret_cast<std::string*>(handle);
@@ -53,16 +53,17 @@ BD_DIR_H* CBlurayCallback::dir_open(void *handle, const char* rel_path)
 
   CLog::Log(LOGDEBUG, "CBlurayCallback - Opening dir %s\n", CURL::GetRedacted(strDirname).c_str());
 
-  SDirState *st = new SDirState();
+  SDirState* st = new SDirState();
   if (!CDirectory::GetDirectory(strDirname, st->list, "", DIR_FLAG_DEFAULTS))
   {
     if (!CFile::Exists(strDirname))
-      CLog::Log(LOGDEBUG, "CBlurayCallback - Error opening dir! (%s)\n", CURL::GetRedacted(strDirname).c_str());
+      CLog::Log(LOGDEBUG, "CBlurayCallback - Error opening dir! (%s)\n",
+                CURL::GetRedacted(strDirname).c_str());
     delete st;
     return nullptr;
   }
 
-  BD_DIR_H *dir = new BD_DIR_H;
+  BD_DIR_H* dir = new BD_DIR_H;
   dir->close = dir_close;
   dir->read = dir_read;
   dir->internal = (void*)st;
@@ -70,7 +71,7 @@ BD_DIR_H* CBlurayCallback::dir_open(void *handle, const char* rel_path)
   return dir;
 }
 
-int CBlurayCallback::dir_read(BD_DIR_H *dir, BD_DIRENT *entry)
+int CBlurayCallback::dir_read(BD_DIR_H* dir, BD_DIRENT* entry)
 {
   SDirState* state = static_cast<SDirState*>(dir->internal);
 
@@ -84,7 +85,7 @@ int CBlurayCallback::dir_read(BD_DIR_H *dir, BD_DIRENT *entry)
   return 0;
 }
 
-void CBlurayCallback::file_close(BD_FILE_H *file)
+void CBlurayCallback::file_close(BD_FILE_H* file)
 {
   if (file)
   {
@@ -93,15 +94,16 @@ void CBlurayCallback::file_close(BD_FILE_H *file)
   }
 }
 
-int CBlurayCallback::file_eof(BD_FILE_H *file)
+int CBlurayCallback::file_eof(BD_FILE_H* file)
 {
-  if (static_cast<CFile*>(file->internal)->GetPosition() == static_cast<CFile*>(file->internal)->GetLength())
+  if (static_cast<CFile*>(file->internal)->GetPosition() ==
+      static_cast<CFile*>(file->internal)->GetLength())
     return 1;
   else
     return 0;
 }
 
-BD_FILE_H * CBlurayCallback::file_open(void *handle, const char *rel_path)
+BD_FILE_H* CBlurayCallback::file_open(void* handle, const char* rel_path)
 {
   std::string strRelPath(rel_path);
   std::string* strBasePath = reinterpret_cast<std::string*>(handle);
@@ -113,7 +115,7 @@ BD_FILE_H * CBlurayCallback::file_open(void *handle, const char *rel_path)
 
   std::string strFilename = URIUtils::AddFileToFolder(*strBasePath, strRelPath);
 
-  BD_FILE_H *file = new BD_FILE_H;
+  BD_FILE_H* file = new BD_FILE_H;
 
   file->close = file_close;
   file->seek = file_seek;
@@ -129,7 +131,8 @@ BD_FILE_H * CBlurayCallback::file_open(void *handle, const char *rel_path)
     return file;
   }
 
-  CLog::Log(LOGDEBUG, "CBlurayCallback - Error opening file! (%s)", CURL::GetRedacted(strFilename).c_str());
+  CLog::Log(LOGDEBUG, "CBlurayCallback - Error opening file! (%s)",
+            CURL::GetRedacted(strFilename).c_str());
 
   delete fp;
   delete file;
@@ -137,22 +140,24 @@ BD_FILE_H * CBlurayCallback::file_open(void *handle, const char *rel_path)
   return nullptr;
 }
 
-int64_t CBlurayCallback::file_seek(BD_FILE_H *file, int64_t offset, int32_t origin)
+int64_t CBlurayCallback::file_seek(BD_FILE_H* file, int64_t offset, int32_t origin)
 {
   return static_cast<CFile*>(file->internal)->Seek(offset, origin);
 }
 
-int64_t CBlurayCallback::file_tell(BD_FILE_H *file)
+int64_t CBlurayCallback::file_tell(BD_FILE_H* file)
 {
   return static_cast<CFile*>(file->internal)->GetPosition();
 }
 
-int64_t CBlurayCallback::file_read(BD_FILE_H *file, uint8_t *buf, int64_t size)
+int64_t CBlurayCallback::file_read(BD_FILE_H* file, uint8_t* buf, int64_t size)
 {
-  return static_cast<int64_t>(static_cast<CFile*>(file->internal)->Read(buf, static_cast<size_t>(size)));
+  return static_cast<int64_t>(
+      static_cast<CFile*>(file->internal)->Read(buf, static_cast<size_t>(size)));
 }
 
-int64_t CBlurayCallback::file_write(BD_FILE_H *file, const uint8_t *buf, int64_t size)
+int64_t CBlurayCallback::file_write(BD_FILE_H* file, const uint8_t* buf, int64_t size)
 {
-  return static_cast<int64_t>(static_cast<CFile*>(file->internal)->Write(buf, static_cast<size_t>(size)));
+  return static_cast<int64_t>(
+      static_cast<CFile*>(file->internal)->Write(buf, static_cast<size_t>(size)));
 }

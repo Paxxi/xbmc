@@ -15,47 +15,46 @@
 
 namespace Shaders
 {
-  class GLSLOutput
-  {
-  public:
-    // take the 1st available texture unit as a parameter
-    GLSLOutput(
-      int texunit,
-      bool useDithering,
-      unsigned int ditherDepth,
-      bool fullrange,
-      GLuint clutTex,
-      int clutSize);
-    std::string GetDefines();
-    void OnCompiledAndLinked(GLuint programHandle);
-    bool OnEnabled();
-    void OnDisabled();
-    void Free();
+class GLSLOutput
+{
+public:
+  // take the 1st available texture unit as a parameter
+  GLSLOutput(int texunit,
+             bool useDithering,
+             unsigned int ditherDepth,
+             bool fullrange,
+             GLuint clutTex,
+             int clutSize);
+  std::string GetDefines();
+  void OnCompiledAndLinked(GLuint programHandle);
+  bool OnEnabled();
+  void OnDisabled();
+  void Free();
 
-  private:
-    void FreeTextures();
+private:
+  void FreeTextures();
 
-    bool m_dither;
-    unsigned int m_ditherDepth;
-    bool m_fullRange;
-    bool m_3DLUT;
-    // first texture unit available to us
-    int m_1stTexUnit;
-    int m_uDither;
-    int m_uCLUT;
-    int m_uCLUTSize;
+  bool m_dither;
+  unsigned int m_ditherDepth;
+  bool m_fullRange;
+  bool m_3DLUT;
+  // first texture unit available to us
+  int m_1stTexUnit;
+  int m_uDither;
+  int m_uCLUT;
+  int m_uCLUTSize;
 
-    // defines
+  // defines
 
-    // attribute locations
-    GLint m_hDither;
-    GLint m_hDitherQuant;
-    GLint m_hDitherSize;
-    GLint m_hCLUT;
-    GLint m_hCLUTSize;
+  // attribute locations
+  GLint m_hDither;
+  GLint m_hDitherQuant;
+  GLint m_hDitherSize;
+  GLint m_hCLUT;
+  GLint m_hCLUTSize;
 
-    // textures
-    GLuint m_tDitherTex;
-    GLuint m_tCLUTTex;
-  };
-}
+  // textures
+  GLuint m_tDitherTex;
+  GLuint m_tCLUTTex;
+};
+} // namespace Shaders

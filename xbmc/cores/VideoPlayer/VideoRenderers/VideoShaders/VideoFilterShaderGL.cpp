@@ -51,7 +51,9 @@ BaseVideoFilterShader::~BaseVideoFilterShader()
 // ConvolutionFilterShader - base class for video filter shaders
 //////////////////////////////////////////////////////////////////////
 
-ConvolutionFilterShader::ConvolutionFilterShader(ESCALINGMETHOD method, bool stretch, GLSLOutput *output)
+ConvolutionFilterShader::ConvolutionFilterShader(ESCALINGMETHOD method,
+                                                 bool stretch,
+                                                 GLSLOutput* output)
 {
   m_method = method;
   m_kernelTex1 = 0;
@@ -61,10 +63,8 @@ ConvolutionFilterShader::ConvolutionFilterShader(ESCALINGMETHOD method, bool str
 
   m_floattex = CServiceBroker::GetRenderSystem()->IsExtSupported("GL_ARB_texture_float");
 
-  if (m_method == VS_SCALINGMETHOD_CUBIC ||
-      m_method == VS_SCALINGMETHOD_LANCZOS2 ||
-      m_method == VS_SCALINGMETHOD_SPLINE36_FAST ||
-      m_method == VS_SCALINGMETHOD_LANCZOS3_FAST)
+  if (m_method == VS_SCALINGMETHOD_CUBIC || m_method == VS_SCALINGMETHOD_LANCZOS2 ||
+      m_method == VS_SCALINGMETHOD_SPLINE36_FAST || m_method == VS_SCALINGMETHOD_LANCZOS3_FAST)
   {
     shadername = "gl_convolution-4x4.glsl";
 
@@ -73,8 +73,7 @@ ConvolutionFilterShader::ConvolutionFilterShader(ESCALINGMETHOD method, bool str
     else
       m_internalformat = GL_RGBA;
   }
-  else if (m_method == VS_SCALINGMETHOD_SPLINE36 ||
-           m_method == VS_SCALINGMETHOD_LANCZOS3)
+  else if (m_method == VS_SCALINGMETHOD_SPLINE36 || m_method == VS_SCALINGMETHOD_LANCZOS3)
   {
     shadername = "gl_convolution-6x6.glsl";
 
@@ -95,11 +94,13 @@ ConvolutionFilterShader::ConvolutionFilterShader(ESCALINGMETHOD method, bool str
 
   // get defines from the output stage if used
   m_glslOutput = output;
-  if (m_glslOutput) {
+  if (m_glslOutput)
+  {
     defines += m_glslOutput->GetDefines();
   }
 
-  CLog::Log(LOGDEBUG, "GL: ConvolutionFilterShader: using %s defines:\n%s", shadername.c_str(), defines.c_str());
+  CLog::Log(LOGDEBUG, "GL: ConvolutionFilterShader: using %s defines:\n%s", shadername.c_str(),
+            defines.c_str());
   PixelShader()->LoadSource(shadername, defines);
   PixelShader()->AppendSource("gl_output.glsl");
 }
@@ -133,7 +134,7 @@ void ConvolutionFilterShader::OnCompiledAndLinked()
 
   glGenTextures(1, &m_kernelTex1);
 
-  if ((m_kernelTex1<=0))
+  if ((m_kernelTex1 <= 0))
   {
     CLog::Log(LOGERROR, "GL: ConvolutionFilterShader: Error creating kernel texture");
     return;
@@ -150,17 +151,17 @@ void ConvolutionFilterShader::OnCompiledAndLinked()
 
   //if float textures are supported, we can load the kernel as a float texture
   //if not we load it as 8 bit unsigned which gets converted back to float in the shader
-  GLenum  format;
+  GLenum format;
   GLvoid* data;
   if (m_floattex)
   {
     format = GL_FLOAT;
-    data   = (GLvoid*)kernel.GetFloatPixels();
+    data = (GLvoid*)kernel.GetFloatPixels();
   }
   else
   {
     format = GL_UNSIGNED_BYTE;
-    data   = (GLvoid*)kernel.GetUint8Pixels();
+    data = (GLvoid*)kernel.GetUint8Pixels();
   }
 
   glTexImage1D(TEXTARGET, 0, m_internalformat, kernel.GetSize(), 0, GL_RGBA, format, data);
@@ -190,13 +191,15 @@ bool ConvolutionFilterShader::OnEnabled()
   glUniformMatrix4fv(m_hModel, 1, GL_FALSE, m_model);
 
   VerifyGLState();
-  if (m_glslOutput) m_glslOutput->OnEnabled();
+  if (m_glslOutput)
+    m_glslOutput->OnEnabled();
   return true;
 }
 
 void ConvolutionFilterShader::OnDisabled()
 {
-  if (m_glslOutput) m_glslOutput->OnDisabled();
+  if (m_glslOutput)
+    m_glslOutput->OnDisabled();
 }
 
 void ConvolutionFilterShader::Free()
@@ -204,7 +207,8 @@ void ConvolutionFilterShader::Free()
   if (m_kernelTex1)
     glDeleteTextures(1, &m_kernelTex1);
   m_kernelTex1 = 0;
-  if (m_glslOutput) m_glslOutput->Free();
+  if (m_glslOutput)
+    m_glslOutput->Free();
   BaseVideoFilterShader::Free();
 }
 

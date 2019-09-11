@@ -15,23 +15,23 @@
 class CGLShader : public Shaders::CGLSLShaderProgram
 {
 public:
-  CGLShader(const char *shader, std::string prefix);
-  CGLShader(const char *vshader, const char *fshader, std::string prefix);
+  CGLShader(const char* shader, std::string prefix);
+  CGLShader(const char* vshader, const char* fshader, std::string prefix);
   void OnCompiledAndLinked();
   bool OnEnabled();
   void Free();
 
-  GLint GetPosLoc() {return m_hPos;}
-  GLint GetColLoc() {return m_hCol;}
-  GLint GetCord0Loc() {return m_hCord0;}
-  GLint GetCord1Loc() {return m_hCord1;}
-  GLint GetUniColLoc() {return m_hUniCol;}
-  GLint GetModelLoc() {return m_hModel; }
-  bool HardwareClipIsPossible() {return m_clipPossible; }
-  GLfloat GetClipXFactor() {return m_clipXFactor; }
-  GLfloat GetClipXOffset() {return m_clipXOffset; }
-  GLfloat GetClipYFactor() {return m_clipYFactor; }
-  GLfloat GetClipYOffset() {return m_clipYOffset; }
+  GLint GetPosLoc() { return m_hPos; }
+  GLint GetColLoc() { return m_hCol; }
+  GLint GetCord0Loc() { return m_hCord0; }
+  GLint GetCord1Loc() { return m_hCord1; }
+  GLint GetUniColLoc() { return m_hUniCol; }
+  GLint GetModelLoc() { return m_hModel; }
+  bool HardwareClipIsPossible() { return m_clipPossible; }
+  GLfloat GetClipXFactor() { return m_clipXFactor; }
+  GLfloat GetClipXOffset() { return m_clipXOffset; }
+  GLfloat GetClipYFactor() { return m_clipYFactor; }
+  GLfloat GetClipYOffset() { return m_clipYOffset; }
 
 protected:
   GLint m_hTex0 = 0;
@@ -44,8 +44,8 @@ protected:
   GLint m_hCord0 = 0;
   GLint m_hCord1 = 0;
 
-  const GLfloat *m_proj = nullptr;
-  const GLfloat *m_model = nullptr;
+  const GLfloat* m_proj = nullptr;
+  const GLfloat* m_model = nullptr;
 
   bool m_clipPossible = false;
   GLfloat m_clipXFactor;

@@ -26,28 +26,25 @@ namespace
 using ActionName = std::string;
 using KeyID = uint32_t;
 
-static const std::map<ActionName, KeyID> MouseKeys =
-{
-    { "click"                    , KEY_MOUSE_CLICK },
-    { "leftclick"                , KEY_MOUSE_CLICK },
-    { "rightclick"               , KEY_MOUSE_RIGHTCLICK },
-    { "middleclick"              , KEY_MOUSE_MIDDLECLICK },
-    { "doubleclick"              , KEY_MOUSE_DOUBLE_CLICK },
-    { "longclick"                , KEY_MOUSE_LONG_CLICK },
-    { "wheelup"                  , KEY_MOUSE_WHEEL_UP },
-    { "wheeldown"                , KEY_MOUSE_WHEEL_DOWN },
-    { "mousemove"                , KEY_MOUSE_MOVE },
-    { "mousedrag"                , KEY_MOUSE_DRAG },
-    { "mousedragstart"           , KEY_MOUSE_DRAG_START },
-    { "mousedragend"             , KEY_MOUSE_DRAG_END },
-    { "mouserdrag"               , KEY_MOUSE_RDRAG },
-    { "mouserdragstart"          , KEY_MOUSE_RDRAG_START },
-    { "mouserdragend"            , KEY_MOUSE_RDRAG_END }
-};
+static const std::map<ActionName, KeyID> MouseKeys = {{"click", KEY_MOUSE_CLICK},
+                                                      {"leftclick", KEY_MOUSE_CLICK},
+                                                      {"rightclick", KEY_MOUSE_RIGHTCLICK},
+                                                      {"middleclick", KEY_MOUSE_MIDDLECLICK},
+                                                      {"doubleclick", KEY_MOUSE_DOUBLE_CLICK},
+                                                      {"longclick", KEY_MOUSE_LONG_CLICK},
+                                                      {"wheelup", KEY_MOUSE_WHEEL_UP},
+                                                      {"wheeldown", KEY_MOUSE_WHEEL_DOWN},
+                                                      {"mousemove", KEY_MOUSE_MOVE},
+                                                      {"mousedrag", KEY_MOUSE_DRAG},
+                                                      {"mousedragstart", KEY_MOUSE_DRAG_START},
+                                                      {"mousedragend", KEY_MOUSE_DRAG_END},
+                                                      {"mouserdrag", KEY_MOUSE_RDRAG},
+                                                      {"mouserdragstart", KEY_MOUSE_RDRAG_START},
+                                                      {"mouserdragend", KEY_MOUSE_RDRAG_END}};
 
 } // anonymous namespace
 
-uint32_t CMouseTranslator::TranslateCommand(const TiXmlElement *pButton)
+uint32_t CMouseTranslator::TranslateCommand(const TiXmlElement* pButton)
 {
   uint32_t buttonId = 0;
 
@@ -81,7 +78,7 @@ uint32_t CMouseTranslator::TranslateCommand(const TiXmlElement *pButton)
   return buttonId;
 }
 
-bool CMouseTranslator::TranslateEventID(unsigned int eventId, BUTTON_ID &buttonId)
+bool CMouseTranslator::TranslateEventID(unsigned int eventId, BUTTON_ID& buttonId)
 {
   switch (eventId)
   {

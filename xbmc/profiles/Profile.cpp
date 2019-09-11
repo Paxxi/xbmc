@@ -11,8 +11,8 @@
 #include "XBDateTime.h"
 #include "utils/XMLUtils.h"
 
-CProfile::CLock::CLock(LockType type, const std::string &password):
-  code(password)
+CProfile::CLock::CLock(LockType type, const std::string& password)
+  : code(password)
 {
   programs = false;
   pictures = false;
@@ -34,9 +34,9 @@ void CProfile::CLock::Validate()
     code = "-";
 }
 
-CProfile::CProfile(const std::string &directory, const std::string &name, const int id):
-  m_directory(directory),
-  m_name(name)
+CProfile::CProfile(const std::string& directory, const std::string& name, const int id)
+  : m_directory(directory)
+  , m_name(name)
 {
   m_id = id;
   m_bDatabases = true;
@@ -56,10 +56,10 @@ void CProfile::setDate()
   if (strDate.empty() || strTime.empty())
     setDate("-");
   else
-    setDate(strDate+" - "+strTime);
+    setDate(strDate + " - " + strTime);
 }
 
-void CProfile::Load(const TiXmlNode *node, int nextIdProfile)
+void CProfile::Load(const TiXmlNode* node, int nextIdProfile)
 {
   if (!XMLUtils::GetInt(node, "id", m_id))
     m_id = nextIdProfile;
@@ -92,10 +92,10 @@ void CProfile::Load(const TiXmlNode *node, int nextIdProfile)
   XMLUtils::GetString(node, "lastdate", m_date);
 }
 
-void CProfile::Save(TiXmlNode *root) const
+void CProfile::Save(TiXmlNode* root) const
 {
   TiXmlElement profileNode("profile");
-  TiXmlNode *node = root->InsertEndChild(profileNode);
+  TiXmlNode* node = root->InsertEndChild(profileNode);
 
   XMLUtils::SetInt(node, "id", m_id);
   XMLUtils::SetString(node, "name", m_name);
@@ -115,11 +115,11 @@ void CProfile::Save(TiXmlNode *root) const
   XMLUtils::SetBoolean(node, "lockgames", m_locks.games);
 
   XMLUtils::SetInt(node, "lockmode", m_locks.mode);
-  XMLUtils::SetString(node,"lockcode", m_locks.code);
+  XMLUtils::SetString(node, "lockcode", m_locks.code);
   XMLUtils::SetString(node, "lastdate", m_date);
 }
 
-void CProfile::SetLocks(const CProfile::CLock &locks)
+void CProfile::SetLocks(const CProfile::CLock& locks)
 {
   m_locks = locks;
   m_locks.Validate();

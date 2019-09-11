@@ -33,6 +33,6 @@ private:
   std::unique_ptr<wayland::display_t> m_display;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

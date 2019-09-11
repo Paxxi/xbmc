@@ -19,9 +19,9 @@ class CVideoLayerBridge
 {
 public:
   virtual ~CVideoLayerBridge() = default;
-  virtual void Disable() {};
+  virtual void Disable(){};
 };
 
-}
-}
-}
+} // namespace GBM
+} // namespace WINDOWING
+} // namespace KODI

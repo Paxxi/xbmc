@@ -33,7 +33,7 @@ enum HTTPMethod
   HEAD
 };
 
-HTTPMethod GetHTTPMethod(const char *method);
+HTTPMethod GetHTTPMethod(const char* method);
 std::string GetHTTPMethod(HTTPMethod method);
 
 typedef enum HTTPResponseType
@@ -59,8 +59,8 @@ typedef enum HTTPResponseType
 
 typedef struct HTTPRequest
 {
-  CWebServer *webserver;
-  struct MHD_Connection *connection;
+  CWebServer* webserver;
+  struct MHD_Connection* connection;
   std::string pathUrlFull;
   std::string pathUrl;
   HTTPMethod method;
@@ -68,7 +68,8 @@ typedef struct HTTPRequest
   CHttpRanges ranges;
 } HTTPRequest;
 
-typedef struct HTTPResponseDetails {
+typedef struct HTTPResponseDetails
+{
   HTTPResponseType type;
   int status;
   std::multimap<std::string, std::string> headers;
@@ -91,7 +92,7 @@ public:
    *
    * \param request HTTP request to be handled
    */
-  virtual IHTTPRequestHandler* Create(const HTTPRequest &request) const = 0;
+  virtual IHTTPRequestHandler* Create(const HTTPRequest& request) const = 0;
 
   /*!
    * \brief Returns the priority of the HTTP request handler.
@@ -107,7 +108,7 @@ public:
   * \param request HTTP request to be handled
   * \return True if the given HTTP request can be handled otherwise false.
   */
-  virtual bool CanHandleRequest(const HTTPRequest &request) const = 0;
+  virtual bool CanHandleRequest(const HTTPRequest& request) const = 0;
 
   /*!
    * \brief Handles the HTTP request.
@@ -138,7 +139,7 @@ public:
   *
   * \details This is only used if the response can be cached.
   */
-  virtual bool GetLastModifiedDate(CDateTime &lastModified) const { return false; }
+  virtual bool GetLastModifiedDate(CDateTime& lastModified) const { return false; }
 
   /*!
    * \brief Returns the ranges with raw data belonging to the response.
@@ -189,7 +190,7 @@ public:
   * \param field HTTP header field name
   * \return True if the header field is set, otherwise false.
   */
-  bool HasResponseHeader(const std::string &field) const;
+  bool HasResponseHeader(const std::string& field) const;
 
   /*!
    * \brief Adds the given HTTP header field and value to the response details.
@@ -199,7 +200,9 @@ public:
    * \param allowMultiple Whether the same header is allowed multiple times
    * \return True if the header field was added, otherwise false.
    */
-  bool AddResponseHeader(const std::string &field, const std::string &value, bool allowMultiple = false);
+  bool AddResponseHeader(const std::string& field,
+                         const std::string& value,
+                         bool allowMultiple = false);
 
   /*!
   * \brief Returns the HTTP response header details.
@@ -212,24 +215,23 @@ public:
    * \param key Key of the HTTP POST field
    * \param value Value of the HTTP POST field
    */
-  void AddPostField(const std::string &key, const std::string &value);
+  void AddPostField(const std::string& key, const std::string& value);
   /*!
   * \brief Adds the given raw HTTP POST data.
   *
   * \param data Raw HTTP POST data
   * \param size Size of the raw HTTP POST data
   */
-  bool AddPostData(const char *data, size_t size);
+  bool AddPostData(const char* data, size_t size);
 
 protected:
   IHTTPRequestHandler();
-  explicit IHTTPRequestHandler(const HTTPRequest &request);
+  explicit IHTTPRequestHandler(const HTTPRequest& request);
 
-  virtual bool appendPostData(const char *data, size_t size)
-  { return true; }
+  virtual bool appendPostData(const char* data, size_t size) { return true; }
 
   bool GetRequestedRanges(uint64_t totalLength);
-  bool GetHostnameAndPort(std::string& hostname, uint16_t &port);
+  bool GetHostnameAndPort(std::string& hostname, uint16_t& port);
 
   HTTPRequest m_request;
   HTTPResponseDetails m_response;

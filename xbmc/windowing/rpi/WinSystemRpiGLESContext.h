@@ -19,26 +19,24 @@ public:
   virtual ~CWinSystemRpiGLESContext() = default;
 
   // Implementation of CWinSystemBase via CWinSystemRpi
-  CRenderSystemBase *GetRenderSystem() override { return this; }
+  CRenderSystemBase* GetRenderSystem() override { return this; }
   bool InitWindowSystem() override;
-  bool CreateNewWindow(const std::string& name,
-                       bool fullScreen,
-                       RESOLUTION_INFO& res) override;
+  bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
 
   bool ResizeWindow(int newWidth, int newHeight, int newLeft, int newTop) override;
   bool SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays) override;
 
-  virtual std::unique_ptr<CVideoSync> GetVideoSync(void *clock) override;
+  virtual std::unique_ptr<CVideoSync> GetVideoSync(void* clock) override;
 
   EGLDisplay GetEGLDisplay() const;
   EGLSurface GetEGLSurface() const;
   EGLContext GetEGLContext() const;
-  EGLConfig  GetEGLConfig() const;
+  EGLConfig GetEGLConfig() const;
+
 protected:
   void SetVSyncImpl(bool enable) override;
   void PresentRenderImpl(bool rendered) override;
 
 private:
   CEGLContextUtils m_pGLContext;
-
 };

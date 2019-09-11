@@ -20,5 +20,5 @@ namespace LINUX
  */
 const std::string DESKTOP_FILE_NAME = "kodi";
 
-}
-}
+} // namespace LINUX
+} // namespace KODI

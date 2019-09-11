@@ -12,10 +12,11 @@
 
 #include <stdio.h>
 #include <string>
-#include <sys/time.h>
-#include <sys/types.h>
 #include <type_traits>
 #include <vector>
+
+#include <sys/time.h>
+#include <sys/types.h>
 
 #define CURL CURL_HANDLE
 #include <curl/curl.h>

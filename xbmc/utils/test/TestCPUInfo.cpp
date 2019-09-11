@@ -7,14 +7,14 @@
  */
 
 #if defined(TARGET_WINDOWS)
-#  include <windows.h>
+#include <windows.h>
 #endif
 
-#include "utils/CPUInfo.h"
-#include "utils/Temperature.h"
 #include "ServiceBroker.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
+#include "utils/CPUInfo.h"
+#include "utils/Temperature.h"
 
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
@@ -42,31 +42,27 @@ namespace
 class TemporarySetting
 {
 public:
-
-  TemporarySetting(std::string &setting, const char *newValue) :
-    m_Setting(setting),
-    m_OldValue(setting)
+  TemporarySetting(std::string& setting, const char* newValue)
+    : m_Setting(setting)
+    , m_OldValue(setting)
   {
     m_Setting = newValue;
   }
 
-  ~TemporarySetting()
-  {
-    m_Setting = m_OldValue;
-  }
+  ~TemporarySetting() { m_Setting = m_OldValue; }
 
 private:
-
-  std::string &m_Setting;
+  std::string& m_Setting;
   std::string m_OldValue;
 };
-}
+} // namespace
 
 //Disabled for windows because there is no implementation to get the CPU temp and there will probably never be one
 #ifndef TARGET_WINDOWS
 TEST(TestCPUInfo, getTemperature)
 {
-  TemporarySetting command(CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_cpuTempCmd, "echo '50 c'");
+  TemporarySetting command(
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_cpuTempCmd, "echo '50 c'");
   CTemperature t;
   EXPECT_TRUE(g_cpuInfo.getTemperature(t));
   EXPECT_TRUE(t.IsValid());

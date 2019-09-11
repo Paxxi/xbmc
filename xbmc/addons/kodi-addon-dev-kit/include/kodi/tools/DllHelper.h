@@ -9,16 +9,16 @@
 #pragma once
 
 #include <string>
+
 #include <kodi/AddonBase.h>
 
-#ifdef _WIN32                   // windows
+#ifdef _WIN32 // windows
 #include <p8-platform/windows/dlfcn-win32.h>
 #else
-#include <dlfcn.h>              // linux+osx
+#include <dlfcn.h> // linux+osx
 #endif
 
-#define REGISTER_DLL_SYMBOL(functionPtr) \
-  CDllHelper::RegisterSymbol(functionPtr, #functionPtr)
+#define REGISTER_DLL_SYMBOL(functionPtr) CDllHelper::RegisterSymbol(functionPtr, #functionPtr)
 
 /// @brief Class to help with load of shared library functions
 ///
@@ -73,7 +73,10 @@
 class CDllHelper
 {
 public:
-  CDllHelper() : m_dll(nullptr) { }
+  CDllHelper()
+    : m_dll(nullptr)
+  {
+  }
   virtual ~CDllHelper()
   {
     if (m_dll)
@@ -101,7 +104,7 @@ public:
   /// @note This function should not be used, use instead the macro
   /// REGISTER_DLL_SYMBOL to register the symbol pointer.
   ///
-  template <typename T>
+  template<typename T>
   bool RegisterSymbol(T& functionPtr, const char* strFunctionPtr)
   {
     functionPtr = reinterpret_cast<T>(dlsym(m_dll, strFunctionPtr));

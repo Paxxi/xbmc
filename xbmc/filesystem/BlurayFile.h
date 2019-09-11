@@ -13,13 +13,13 @@
 namespace XFILE
 {
 
-  class CBlurayFile : public COverrideFile
-  {
-  public:
-    CBlurayFile();
-    ~CBlurayFile() override;
+class CBlurayFile : public COverrideFile
+{
+public:
+  CBlurayFile();
+  ~CBlurayFile() override;
 
-  protected:
-    std::string TranslatePath(const CURL& url) override;
-  };
-}
+protected:
+  std::string TranslatePath(const CURL& url) override;
+};
+} // namespace XFILE

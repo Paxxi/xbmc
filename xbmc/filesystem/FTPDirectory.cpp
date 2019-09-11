@@ -23,14 +23,14 @@ using namespace XFILE;
 CFTPDirectory::CFTPDirectory(void) = default;
 CFTPDirectory::~CFTPDirectory(void) = default;
 
-bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
+bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList& items)
 {
   CCurlFile reader;
 
   CURL url(url2);
 
   std::string path = url.GetFileName();
-  if( !path.empty() && !StringUtils::EndsWith(path, "/") )
+  if (!path.empty() && !StringUtils::EndsWith(path, "/"))
   {
     path += "/";
     url.SetFileName(path);
@@ -42,7 +42,7 @@ bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
   bool serverNotUseUTF8 = url.GetProtocolOption("utf8") == "0";
 
   char buffer[MAX_PATH + 1024];
-  while( reader.ReadString(buffer, sizeof(buffer)) )
+  while (reader.ReadString(buffer, sizeof(buffer)))
   {
     std::string strBuffer = buffer;
 
@@ -51,17 +51,17 @@ bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
     CFTPParse parse;
     if (parse.FTPParse(strBuffer))
     {
-      if( parse.getName().length() == 0 )
+      if (parse.getName().length() == 0)
         continue;
 
-      if( parse.getFlagtrycwd() == 0 && parse.getFlagtryretr() == 0 )
+      if (parse.getFlagtrycwd() == 0 && parse.getFlagtryretr() == 0)
         continue;
 
       /* buffer name */
       std::string name;
       name.assign(parse.getName());
 
-      if( name == ".." || name == "." )
+      if (name == ".." || name == ".")
         continue;
 
       // server returned filename could in utf8 or non-utf8 encoding
@@ -91,7 +91,7 @@ bool CFTPDirectory::GetDirectory(const CURL& url2, CFileItemList &items)
       pItem->SetPath(url.Get());
 
       pItem->m_dwSize = parse.getSize();
-      pItem->m_dateTime=parse.getTime();
+      pItem->m_dateTime = parse.getTime();
 
       items.Add(pItem);
     }

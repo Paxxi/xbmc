@@ -17,12 +17,22 @@ class IAEResample
 {
 public:
   // return the name of this sync for logging
-  virtual const char *GetName() = 0;
+  virtual const char* GetName() = 0;
   IAEResample() = default;
   virtual ~IAEResample() = default;
-  virtual bool Init(SampleConfig dstConfig, SampleConfig srcConfig, bool upmix, bool normalize, double centerMix,
-                    CAEChannelInfo *remapLayout, AEQuality quality, bool force_resample) = 0;
-  virtual int Resample(uint8_t **dst_buffer, int dst_samples, uint8_t **src_buffer, int src_samples, double ratio) = 0;
+  virtual bool Init(SampleConfig dstConfig,
+                    SampleConfig srcConfig,
+                    bool upmix,
+                    bool normalize,
+                    double centerMix,
+                    CAEChannelInfo* remapLayout,
+                    AEQuality quality,
+                    bool force_resample) = 0;
+  virtual int Resample(uint8_t** dst_buffer,
+                       int dst_samples,
+                       uint8_t** src_buffer,
+                       int src_samples,
+                       double ratio) = 0;
   virtual int64_t GetDelay(int64_t base) = 0;
   virtual int GetBufferedSamples() = 0;
   virtual bool WantsNewSamples(int samples) = 0;
@@ -31,4 +41,4 @@ public:
   virtual int GetDstBufferSize(int samples) = 0;
 };
 
-}
+} // namespace ActiveAE

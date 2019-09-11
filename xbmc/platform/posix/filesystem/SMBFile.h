@@ -39,12 +39,13 @@ public:
   void SetActivityTime();
   void AddActiveConnection();
   void AddIdleConnection();
-  std::string URLEncode(const std::string &value);
-  std::string URLEncode(const CURL &url);
+  std::string URLEncode(const std::string& value);
+  std::string URLEncode(const CURL& url);
 
   DWORD ConvertUnixToNT(int error);
+
 private:
-  SMBCCTX *m_context;
+  SMBCCTX* m_context;
   int m_OpenConnections;
   unsigned int m_IdleTimeout;
   static bool IsFirstInit;
@@ -58,7 +59,7 @@ class CSMBFile : public IFile
 {
 public:
   CSMBFile();
-  int OpenFile(const CURL &url, std::string& strAuth);
+  int OpenFile(const CURL& url, std::string& strAuth);
   ~CSMBFile() override;
   void Close() override;
   int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET) override;
@@ -75,15 +76,15 @@ public:
   bool OpenForWrite(const CURL& url, bool bOverWrite = false) override;
   bool Delete(const CURL& url) override;
   bool Rename(const CURL& url, const CURL& urlnew) override;
-  int GetChunkSize() override { return 64*1024; }
+  int GetChunkSize() override { return 64 * 1024; }
   int IoControl(EIoControl request, void* param) override;
 
 protected:
   CURL m_url;
   bool IsValidFile(const std::string& strFileName);
-  std::string GetAuthenticatedPath(const CURL &url);
+  std::string GetAuthenticatedPath(const CURL& url);
   int64_t m_fileSize;
   int m_fd;
   bool m_allowRetry;
 };
-}
+} // namespace XFILE

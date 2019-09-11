@@ -72,7 +72,9 @@ public:
   *   \param[in] checkWin32Locales Whether to also check WIN32 specific language codes.
   *   \return true if the conversion succeeded, false otherwise.
   */
-  static bool ConvertISO6391ToISO6392B(const std::string& strISO6391, std::string& strISO6392B, bool checkWin32Locales = false);
+  static bool ConvertISO6391ToISO6392B(const std::string& strISO6391,
+                                       std::string& strISO6392B,
+                                       bool checkWin32Locales = false);
 
   /** \brief Converts a language given as 2-Char (ISO 639-1),
   *          3-Char (ISO 639-2/T or ISO 639-2/B),
@@ -82,7 +84,9 @@ public:
   *   \param[in] checkWin32Locales Whether to also check WIN32 specific language codes.
   *   \return true if the conversion succeeded, false otherwise.
   */
-  bool ConvertToISO6392B(const std::string& strCharCode, std::string& strISO6392B, bool checkWin32Locales = false);
+  bool ConvertToISO6392B(const std::string& strCharCode,
+                         std::string& strISO6392B,
+                         bool checkWin32Locales = false);
 
   /** \brief Converts a language given as 2-Char (ISO 639-1),
   *          3-Char (ISO 639-2/T or ISO 639-2/B),
@@ -92,7 +96,9 @@ public:
   *   \param[in] checkWin32Locales Whether to also check WIN32 specific language codes.
   *   \return true if the conversion succeeded, false otherwise.
   */
-  bool ConvertToISO6392T(const std::string& strCharCode, std::string& strISO6392T, bool checkWin32Locales = false);
+  bool ConvertToISO6392T(const std::string& strCharCode,
+                         std::string& strISO6392T,
+                         bool checkWin32Locales = false);
 
   /** \brief Converts a language given as 2-Char (ISO 639-1),
   *          3-Char (ISO 639-2/T or ISO 639-2/B),
@@ -103,13 +109,16 @@ public:
   std::string ConvertToISO6392T(const std::string& lang);
 
 #ifdef TARGET_WINDOWS
-  static bool ConvertISO31661Alpha2ToISO31661Alpha3(const std::string& strISO31661Alpha2, std::string& strISO31661Alpha3);
-  static bool ConvertWindowsLanguageCodeToISO6392B(const std::string& strWindowsLanguageCode, std::string& strISO6392B);
+  static bool ConvertISO31661Alpha2ToISO31661Alpha3(const std::string& strISO31661Alpha2,
+                                                    std::string& strISO31661Alpha3);
+  static bool ConvertWindowsLanguageCodeToISO6392B(const std::string& strWindowsLanguageCode,
+                                                   std::string& strISO6392B);
 #endif
 
-  std::vector<std::string> GetLanguageNames(LANGFORMATS format = ISO_639_1, bool customNames = false);
-protected:
+  std::vector<std::string> GetLanguageNames(LANGFORMATS format = ISO_639_1,
+                                            bool customNames = false);
 
+protected:
   /** \brief Converts a language code given as a long, see #MAKECODE(a, b, c, d)
   *          to its string representation.
   *   \param[in] code The language code given as a long, see #MAKECODE(a, b, c, d).
@@ -134,7 +143,7 @@ protected:
   *   \param[out] userCode The user defined language code of the given language desc.
   *   \return true if desc was found, false otherwise.
   */
-  bool LookupUserCode(const std::string& desc, std::string &userCode);
+  bool LookupUserCode(const std::string& desc, std::string& userCode);
 
   typedef std::map<std::string, std::string> STRINGLOOKUPTABLE;
   STRINGLOOKUPTABLE m_mapUser;

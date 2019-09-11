@@ -102,29 +102,30 @@ void CIRServerSuite::Process()
 
 bool CIRServerSuite::Connect(bool logMessages)
 {
-  char     namebuf[NI_MAXHOST], portbuf[NI_MAXSERV];
-  struct   addrinfo hints = {};
-  struct   addrinfo *result, *addr;
-  char     service[33];
-  int      res;
+  char namebuf[NI_MAXHOST], portbuf[NI_MAXSERV];
+  struct addrinfo hints = {};
+  struct addrinfo *result, *addr;
+  char service[33];
+  int res;
 
-  hints.ai_family   = AF_UNSPEC;
+  hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
   hints.ai_protocol = IPPROTO_TCP;
   sprintf(service, "%d", IRSS_PORT);
 
   res = getaddrinfo("localhost", service, &hints, &result);
-  if(res)
+  if (res)
   {
     if (logMessages)
       CLog::LogF(LOGDEBUG, "getaddrinfo failed: %s",
-                KODI::PLATFORM::WINDOWS::FromW(gai_strerror(res)));
+                 KODI::PLATFORM::WINDOWS::FromW(gai_strerror(res)));
     return false;
   }
 
-  for(addr = result; addr; addr = addr->ai_next)
+  for (addr = result; addr; addr = addr->ai_next)
   {
-    if(getnameinfo(addr->ai_addr, addr->ai_addrlen, namebuf, sizeof(namebuf), portbuf, sizeof(portbuf),NI_NUMERICHOST))
+    if (getnameinfo(addr->ai_addr, addr->ai_addrlen, namebuf, sizeof(namebuf), portbuf,
+                    sizeof(portbuf), NI_NUMERICHOST))
     {
       strcpy(namebuf, "[unknown]");
       strcpy(portbuf, "[unknown]");
@@ -134,10 +135,10 @@ bool CIRServerSuite::Connect(bool logMessages)
       CLog::LogF(LOGDEBUG, "connecting to: %s:%s ...", namebuf, portbuf);
 
     m_socket = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
-    if(m_socket == INVALID_SOCKET)
+    if (m_socket == INVALID_SOCKET)
       continue;
 
-    if(connect(m_socket, addr->ai_addr, addr->ai_addrlen) != SOCKET_ERROR)
+    if (connect(m_socket, addr->ai_addr, addr->ai_addrlen) != SOCKET_ERROR)
       break;
 
     closesocket(m_socket);
@@ -145,7 +146,7 @@ bool CIRServerSuite::Connect(bool logMessages)
   }
 
   freeaddrinfo(result);
-  if(m_socket == INVALID_SOCKET)
+  if (m_socket == INVALID_SOCKET)
   {
     if (logMessages)
       CLog::LogF(LOGDEBUG, "failed to connect");
@@ -266,47 +267,47 @@ bool CIRServerSuite::ReadNext()
     //should we do something?
     break;
   case IRSSMT_AvailableReceivers:
+  {
+    uint32_t size = mess.GetDataSize();
+    if (size > 0)
     {
-      uint32_t size = mess.GetDataSize();
-      if (size > 0)
-      {
-        char* data = mess.GetData();
-        char* availablereceivers = new char[size + 1];
-        memcpy(availablereceivers, data, size);
-        availablereceivers[size] = '\0';
-        CLog::LogF(LOGINFO, "available receivers: %s", availablereceivers);
-        delete[] availablereceivers;
-      }
+      char* data = mess.GetData();
+      char* availablereceivers = new char[size + 1];
+      memcpy(availablereceivers, data, size);
+      availablereceivers[size] = '\0';
+      CLog::LogF(LOGINFO, "available receivers: %s", availablereceivers);
+      delete[] availablereceivers;
     }
-    break;
+  }
+  break;
   case IRSSMT_DetectedReceivers:
+  {
+    uint32_t size = mess.GetDataSize();
+    if (size > 0)
     {
-      uint32_t size = mess.GetDataSize();
-      if (size > 0)
-      {
-        char* data = mess.GetData();
-        char* detectedreceivers = new char[size + 1];
-        memcpy(detectedreceivers, data, size);
-        detectedreceivers[size] = '\0';
-        CLog::LogF(LOGINFO, "detected receivers: %s", detectedreceivers);
-        delete[] detectedreceivers;
-      }
+      char* data = mess.GetData();
+      char* detectedreceivers = new char[size + 1];
+      memcpy(detectedreceivers, data, size);
+      detectedreceivers[size] = '\0';
+      CLog::LogF(LOGINFO, "detected receivers: %s", detectedreceivers);
+      delete[] detectedreceivers;
     }
-    break;
+  }
+  break;
   case IRSSMT_ActiveReceivers:
+  {
+    uint32_t size = mess.GetDataSize();
+    if (size > 0)
     {
-      uint32_t size = mess.GetDataSize();
-      if (size > 0)
-      {
-        char* data = mess.GetData();
-        char* activereceivers = new char[size + 1];
-        memcpy(activereceivers, data, size);
-        activereceivers[size] = '\0';
-        CLog::LogF(LOGINFO, "active receivers: %s", activereceivers);
-        delete[] activereceivers;
-      }
+      char* data = mess.GetData();
+      char* activereceivers = new char[size + 1];
+      memcpy(activereceivers, data, size);
+      activereceivers[size] = '\0';
+      CLog::LogF(LOGINFO, "active receivers: %s", activereceivers);
+      delete[] activereceivers;
     }
-    break;
+  }
+  break;
   }
   return true;
 }
@@ -370,7 +371,8 @@ bool CIRServerSuite::HandleRemoteEvent(CIrssMessage& message)
     deviceName[devicenamelength] = '\0';
     keycode[keycodelength] = '\0';
 
-    int profileId = CServiceBroker::GetSettingsComponent()->GetProfileManager()->GetCurrentProfileId();
+    int profileId =
+        CServiceBroker::GetSettingsComponent()->GetProfileManager()->GetCurrentProfileId();
     if (m_profileId != profileId)
     {
       m_profileId = profileId;
@@ -393,18 +395,18 @@ bool CIRServerSuite::HandleRemoteEvent(CIrssMessage& message)
     delete[] keycode;
     return true;
   }
-  catch(...)
+  catch (...)
   {
     CLog::LogF(LOGERROR, "exception while processing RemoteEvent.");
     return false;
   }
 }
 
-int CIRServerSuite::ReadN(char *buffer, int n)
+int CIRServerSuite::ReadN(char* buffer, int n)
 {
   int nOriginalSize = n;
   memset(buffer, 0, n);
-  char *ptr = buffer;
+  char* ptr = buffer;
   while (n > 0)
   {
     int nBytes = 0;
@@ -441,9 +443,9 @@ int CIRServerSuite::ReadN(char *buffer, int n)
   return nOriginalSize - n;
 }
 
-bool CIRServerSuite::WriteN(const char *buffer, int n)
+bool CIRServerSuite::WriteN(const char* buffer, int n)
 {
-  const char *ptr = buffer;
+  const char* ptr = buffer;
   while (n > 0)
   {
     int nBytes;
@@ -469,7 +471,7 @@ bool CIRServerSuite::WriteN(const char *buffer, int n)
   return n == 0;
 }
 
-int CIRServerSuite::ReadPacket(CIrssMessage &message)
+int CIRServerSuite::ReadPacket(CIrssMessage& message)
 {
   try
   {
@@ -506,7 +508,7 @@ int CIRServerSuite::ReadPacket(CIrssMessage &message)
     delete[] messagebytes;
     return size;
   }
-  catch(...)
+  catch (...)
   {
     CLog::LogF(LOGERROR, "exception while processing packet.");
     return -1;

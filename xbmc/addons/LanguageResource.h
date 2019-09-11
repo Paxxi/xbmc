@@ -24,7 +24,7 @@ public:
 
   void OnPostInstall(bool update, bool modal) override;
 
-  bool IsAllowed(const std::string &file) const override;
+  bool IsAllowed(const std::string& file) const override;
 
   const CLocale& GetLocale() const { return m_locale; }
 
@@ -40,7 +40,7 @@ public:
 
   static std::string GetAddonId(const std::string& locale);
 
-  static bool FindLegacyLanguage(const std::string &locale, std::string &legacyLanguage);
+  static bool FindLegacyLanguage(const std::string& locale, std::string& legacyLanguage);
 
 private:
   CLocale m_locale;
@@ -56,4 +56,4 @@ private:
   std::set<std::string> m_sortTokens;
 };
 
-}
+} // namespace ADDON

@@ -25,7 +25,7 @@
 
 #ifdef TARGET_WINDOWS_DESKTOP
 #ifdef NDEBUG
-#pragma comment(lib,"lzo2.lib")
+#pragma comment(lib, "lzo2.lib")
 #elif defined _WIN64
 #pragma comment(lib, "lzo2d.lib")
 #else
@@ -66,20 +66,22 @@ bool CTextureBundleXBT::OpenBundle()
   auto mediaDir = CServiceBroker::GetWinSystem()->GetGfxContext().GetMediaDir();
   if (mediaDir.empty())
   {
-    mediaDir = CSpecialProtocol::TranslatePath(
-      URIUtils::AddFileToFolder("special://home/addons",
-        CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOOKANDFEEL_SKIN)));
+    mediaDir = CSpecialProtocol::TranslatePath(URIUtils::AddFileToFolder(
+        "special://home/addons", CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                                     CSettings::SETTING_LOOKANDFEEL_SKIN)));
   }
 
   if (m_themeBundle)
   {
     // if we are the theme bundle, we only load if the user has chosen
     // a valid theme (or the skin has a default one)
-    std::string theme = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOOKANDFEEL_SKINTHEME);
+    std::string theme = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+        CSettings::SETTING_LOOKANDFEEL_SKINTHEME);
     if (!theme.empty() && !StringUtils::EqualsNoCase(theme, "SKINDEFAULT"))
     {
       std::string themeXBT(URIUtils::ReplaceExtension(theme, ".xbt"));
-      m_path = URIUtils::AddFileToFolder(CServiceBroker::GetWinSystem()->GetGfxContext().GetMediaDir(), "media", themeXBT);
+      m_path = URIUtils::AddFileToFolder(
+          CServiceBroker::GetWinSystem()->GetGfxContext().GetMediaDir(), "media", themeXBT);
     }
     else
     {
@@ -88,7 +90,8 @@ bool CTextureBundleXBT::OpenBundle()
   }
   else
   {
-    m_path = URIUtils::AddFileToFolder(CServiceBroker::GetWinSystem()->GetGfxContext().GetMediaDir(), "media", "Textures.xbt");
+    m_path = URIUtils::AddFileToFolder(
+        CServiceBroker::GetWinSystem()->GetGfxContext().GetMediaDir(), "media", "Textures.xbt");
   }
 
   m_path = CSpecialProtocol::TranslatePathConvertCase(m_path);
@@ -127,7 +130,8 @@ bool CTextureBundleXBT::HasFile(const std::string& Filename)
   return m_XBTFReader->Exists(name);
 }
 
-void CTextureBundleXBT::GetTexturesFromPath(const std::string &path, std::vector<std::string> &textures)
+void CTextureBundleXBT::GetTexturesFromPath(const std::string& path,
+                                            std::vector<std::string>& textures)
 {
   if (path.size() > 1 && path[1] == ':')
     return;
@@ -147,8 +151,10 @@ void CTextureBundleXBT::GetTexturesFromPath(const std::string &path, std::vector
   }
 }
 
-bool CTextureBundleXBT::LoadTexture(const std::string& Filename, CBaseTexture** ppTexture,
-                                     int &width, int &height)
+bool CTextureBundleXBT::LoadTexture(const std::string& Filename,
+                                    CBaseTexture** ppTexture,
+                                    int& width,
+                                    int& height)
 {
   std::string name = Normalize(Filename);
 
@@ -171,8 +177,12 @@ bool CTextureBundleXBT::LoadTexture(const std::string& Filename, CBaseTexture** 
   return true;
 }
 
-int CTextureBundleXBT::LoadAnim(const std::string& Filename, CBaseTexture*** ppTextures,
-                              int &width, int &height, int& nLoops, int** ppDelays)
+int CTextureBundleXBT::LoadAnim(const std::string& Filename,
+                                CBaseTexture*** ppTextures,
+                                int& width,
+                                int& height,
+                                int& nLoops,
+                                int** ppDelays)
 {
   std::string name = Normalize(Filename);
 
@@ -206,13 +216,16 @@ int CTextureBundleXBT::LoadAnim(const std::string& Filename, CBaseTexture*** ppT
   return nTextures;
 }
 
-bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name, CXBTFFrame& frame, CBaseTexture** ppTexture)
+bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name,
+                                              CXBTFFrame& frame,
+                                              CBaseTexture** ppTexture)
 {
   // found texture - allocate the necessary buffers
-  unsigned char *buffer = new unsigned char [(size_t)frame.GetPackedSize()];
+  unsigned char* buffer = new unsigned char[(size_t)frame.GetPackedSize()];
   if (buffer == NULL)
   {
-    CLog::Log(LOGERROR, "Out of memory loading texture: %s (need %" PRIu64" bytes)", name.c_str(), frame.GetPackedSize());
+    CLog::Log(LOGERROR, "Out of memory loading texture: %s (need %" PRIu64 " bytes)", name.c_str(),
+              frame.GetPackedSize());
     return false;
   }
 
@@ -227,15 +240,17 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name, CXBTFFram
   // check if it's packed with lzo
   if (frame.IsPacked())
   { // unpack
-    unsigned char *unpacked = new unsigned char[(size_t)frame.GetUnpackedSize()];
+    unsigned char* unpacked = new unsigned char[(size_t)frame.GetUnpackedSize()];
     if (unpacked == NULL)
     {
-      CLog::Log(LOGERROR, "Out of memory unpacking texture: %s (need %" PRIu64" bytes)", name.c_str(), frame.GetUnpackedSize());
+      CLog::Log(LOGERROR, "Out of memory unpacking texture: %s (need %" PRIu64 " bytes)",
+                name.c_str(), frame.GetUnpackedSize());
       delete[] buffer;
       return false;
     }
     lzo_uint s = (lzo_uint)frame.GetUnpackedSize();
-    if (lzo1x_decompress_safe(buffer, (lzo_uint)frame.GetPackedSize(), unpacked, &s, NULL) != LZO_E_OK ||
+    if (lzo1x_decompress_safe(buffer, (lzo_uint)frame.GetPackedSize(), unpacked, &s, NULL) !=
+            LZO_E_OK ||
         s != frame.GetUnpackedSize())
     {
       CLog::Log(LOGERROR, "Error loading texture: %s: Decompression error", name.c_str());
@@ -249,7 +264,9 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const std::string& name, CXBTFFram
 
   // create an xbmc texture
   *ppTexture = new CTexture();
-  (*ppTexture)->LoadFromMemory(frame.GetWidth(), frame.GetHeight(), 0, frame.GetFormat(), frame.HasAlpha(), buffer);
+  (*ppTexture)
+      ->LoadFromMemory(frame.GetWidth(), frame.GetHeight(), 0, frame.GetFormat(), frame.HasAlpha(),
+                       buffer);
 
   delete[] buffer;
 
@@ -263,13 +280,13 @@ void CTextureBundleXBT::SetThemeBundle(bool themeBundle)
 
 // normalize to how it's stored within the bundle
 // lower case + using forward slash rather than back slash
-std::string CTextureBundleXBT::Normalize(const std::string &name)
+std::string CTextureBundleXBT::Normalize(const std::string& name)
 {
   std::string newName(name);
 
   StringUtils::Trim(newName);
   StringUtils::ToLower(newName);
-  StringUtils::Replace(newName, '\\','/');
+  StringUtils::Replace(newName, '\\', '/');
 
   return newName;
 }
@@ -279,7 +296,9 @@ uint8_t* CTextureBundleXBT::UnpackFrame(const CXBTFReader& reader, const CXBTFFr
   uint8_t* packedBuffer = new uint8_t[static_cast<size_t>(frame.GetPackedSize())];
   if (packedBuffer == nullptr)
   {
-    CLog::Log(LOGERROR, "CTextureBundleXBT: out of memory loading frame with %" PRIu64" packed bytes", frame.GetPackedSize());
+    CLog::Log(LOGERROR,
+              "CTextureBundleXBT: out of memory loading frame with %" PRIu64 " packed bytes",
+              frame.GetPackedSize());
     return nullptr;
   }
 
@@ -298,7 +317,9 @@ uint8_t* CTextureBundleXBT::UnpackFrame(const CXBTFReader& reader, const CXBTFFr
   uint8_t* unpackedBuffer = new uint8_t[static_cast<size_t>(frame.GetUnpackedSize())];
   if (unpackedBuffer == nullptr)
   {
-    CLog::Log(LOGERROR, "CTextureBundleXBT: out of memory loading frame with %" PRIu64" unpacked bytes", frame.GetPackedSize());
+    CLog::Log(LOGERROR,
+              "CTextureBundleXBT: out of memory loading frame with %" PRIu64 " unpacked bytes",
+              frame.GetPackedSize());
     delete[] packedBuffer;
     return nullptr;
   }
@@ -313,9 +334,14 @@ uint8_t* CTextureBundleXBT::UnpackFrame(const CXBTFReader& reader, const CXBTFFr
   }
 
   lzo_uint size = static_cast<lzo_uint>(frame.GetUnpackedSize());
-  if (lzo1x_decompress_safe(packedBuffer, static_cast<lzo_uint>(frame.GetPackedSize()), unpackedBuffer, &size, nullptr) != LZO_E_OK || size != frame.GetUnpackedSize())
+  if (lzo1x_decompress_safe(packedBuffer, static_cast<lzo_uint>(frame.GetPackedSize()),
+                            unpackedBuffer, &size, nullptr) != LZO_E_OK ||
+      size != frame.GetUnpackedSize())
   {
-    CLog::Log(LOGERROR, "CTextureBundleXBT: failed to decompress frame with %" PRIu64" unpacked bytes to %" PRIu64" bytes", frame.GetPackedSize(), frame.GetUnpackedSize());
+    CLog::Log(LOGERROR,
+              "CTextureBundleXBT: failed to decompress frame with %" PRIu64
+              " unpacked bytes to %" PRIu64 " bytes",
+              frame.GetPackedSize(), frame.GetUnpackedSize());
     delete[] packedBuffer;
     delete[] unpackedBuffer;
     return nullptr;

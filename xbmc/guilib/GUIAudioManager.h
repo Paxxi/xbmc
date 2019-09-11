@@ -22,22 +22,26 @@ class CSettings;
 class TiXmlNode;
 class IAESound;
 
-enum WINDOW_SOUND { SOUND_INIT = 0, SOUND_DEINIT };
+enum WINDOW_SOUND
+{
+  SOUND_INIT = 0,
+  SOUND_DEINIT
+};
 
 class CGUIAudioManager : public ISettingCallback
 {
   class CWindowSounds
   {
   public:
-    IAESound *initSound;
-    IAESound *deInitSound;
+    IAESound* initSound;
+    IAESound* deInitSound;
   };
 
   class CSoundInfo
   {
   public:
     int usage;
-    IAESound *sound;
+    IAESound* sound;
   };
 
 public:
@@ -45,7 +49,9 @@ public:
   ~CGUIAudioManager() override;
 
   void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
-  bool OnSettingUpdate(std::shared_ptr<CSetting> setting, const char *oldSettingId, const TiXmlNode *oldSettingNode) override;
+  bool OnSettingUpdate(std::shared_ptr<CSetting> setting,
+                       const char* oldSettingId,
+                       const TiXmlNode* oldSettingNode) override;
 
   void Initialize();
   void DeInitialize();
@@ -67,23 +73,22 @@ private:
   std::shared_ptr<CSettings> m_settings;
 
   typedef std::map<const std::string, CSoundInfo> soundCache;
-  typedef std::map<int, IAESound*              > actionSoundMap;
-  typedef std::map<int, CWindowSounds          > windowSoundMap;
-  typedef std::map<const std::string, IAESound* > pythonSoundsMap;
+  typedef std::map<int, IAESound*> actionSoundMap;
+  typedef std::map<int, CWindowSounds> windowSoundMap;
+  typedef std::map<const std::string, IAESound*> pythonSoundsMap;
 
-  soundCache          m_soundCache;
-  actionSoundMap      m_actionSoundMap;
-  windowSoundMap      m_windowSoundMap;
-  pythonSoundsMap     m_pythonSounds;
+  soundCache m_soundCache;
+  actionSoundMap m_actionSoundMap;
+  windowSoundMap m_windowSoundMap;
+  pythonSoundsMap m_pythonSounds;
 
-  std::string          m_strMediaDir;
-  bool                m_bEnabled;
+  std::string m_strMediaDir;
+  bool m_bEnabled;
 
-  CCriticalSection    m_cs;
+  CCriticalSection m_cs;
 
-  IAESound* LoadSound(const std::string &filename);
-  void      FreeSound(IAESound *sound);
-  void      FreeSoundAllUsage(IAESound *sound);
+  IAESound* LoadSound(const std::string& filename);
+  void FreeSound(IAESound* sound);
+  void FreeSoundAllUsage(IAESound* sound);
   IAESound* LoadWindowSound(TiXmlNode* pWindowNode, const std::string& strIdentifier);
 };
-

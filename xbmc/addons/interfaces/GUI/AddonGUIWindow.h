@@ -14,7 +14,7 @@
 
 namespace ADDON
 {
-  class CAddon;
+class CAddon;
 }
 
 namespace KodiAPI
@@ -24,14 +24,14 @@ namespace GUI
 
 class CGUIAddonWindow : public CGUIMediaWindow
 {
-friend class CAddonCallbacksGUI;
+  friend class CAddonCallbacksGUI;
 
 public:
   CGUIAddonWindow(int id, const std::string& strXML, ADDON::CAddon* addon);
   ~CGUIAddonWindow(void) override;
 
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
   void AllocResources(bool forceLoad = false) override;
   void FreeResources(bool forceUnLoad = false) override;
   void Render() override;
@@ -44,12 +44,12 @@ public:
   int GetListSize();
   int GetCurrentListPosition();
   void SetCurrentListPosition(int item);
-  bool OnClick(int iItem, const std::string &player = "") override;
+  bool OnClick(int iItem, const std::string& player = "") override;
 
 protected:
   using CGUIMediaWindow::Update;
   void Update();
-  void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
   void SetupShares() override;
 
   bool (*CBOnInit)(GUIHANDLE cbhdl);
@@ -57,16 +57,16 @@ protected:
   bool (*CBOnClick)(GUIHANDLE cbhdl, int controlId);
   bool (*CBOnAction)(GUIHANDLE cbhdl, int);
 
-  GUIHANDLE        m_clientHandle;
+  GUIHANDLE m_clientHandle;
   const int m_iWindowId;
   int m_iOldWindowId;
   bool m_bModal;
   bool m_bIsDialog;
 
 private:
-  CEvent           m_actionEvent;
-  ADDON::CAddon*   m_addon;
-  std::string      m_mediaDir;
+  CEvent m_actionEvent;
+  ADDON::CAddon* m_addon;
+  std::string m_mediaDir;
 };
 
 /*\_____________________________________________________________________________
@@ -78,17 +78,17 @@ public:
   CGUIAddonWindowDialog(int id, const std::string& strXML, ADDON::CAddon* addon);
   ~CGUIAddonWindowDialog(void) override;
 
-  void            Show(bool show = true);
-  bool    OnMessage(CGUIMessage &message) override;
-  bool    IsDialogRunning() const override { return m_bRunning; }
-  bool    IsDialog() const override { return true;};
-  bool    IsModalDialog() const override { return true; };
-  bool    IsMediaWindow() const override { return false; };
+  void Show(bool show = true);
+  bool OnMessage(CGUIMessage& message) override;
+  bool IsDialogRunning() const override { return m_bRunning; }
+  bool IsDialog() const override { return true; };
+  bool IsModalDialog() const override { return true; };
+  bool IsMediaWindow() const override { return false; };
 
   void Show_Internal(bool show = true);
 
 private:
-  bool             m_bRunning;
+  bool m_bRunning;
 };
 
 } /* namespace GUI */

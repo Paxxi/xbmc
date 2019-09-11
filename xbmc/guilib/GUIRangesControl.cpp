@@ -15,13 +15,18 @@
 
 #include <cmath>
 
-CGUIRangesControl::CGUIRange::CGUIRange(float fPosX, float fPosY, float fWidth, float fHeight,
-                                        const CTextureInfo& lowerTextureInfo, const CTextureInfo& fillTextureInfo,
-                                        const CTextureInfo& upperTextureInfo, const std::pair<float, float>& percentages)
-: m_guiLowerTexture(fPosX, fPosY, fWidth, fHeight, lowerTextureInfo),
-  m_guiFillTexture(fPosX, fPosY, fWidth, fHeight, fillTextureInfo),
-  m_guiUpperTexture(fPosX, fPosY, fWidth, fHeight, upperTextureInfo),
-  m_percentValues(percentages)
+CGUIRangesControl::CGUIRange::CGUIRange(float fPosX,
+                                        float fPosY,
+                                        float fWidth,
+                                        float fHeight,
+                                        const CTextureInfo& lowerTextureInfo,
+                                        const CTextureInfo& fillTextureInfo,
+                                        const CTextureInfo& upperTextureInfo,
+                                        const std::pair<float, float>& percentages)
+  : m_guiLowerTexture(fPosX, fPosY, fWidth, fHeight, lowerTextureInfo)
+  , m_guiFillTexture(fPosX, fPosY, fWidth, fHeight, fillTextureInfo)
+  , m_guiUpperTexture(fPosX, fPosY, fWidth, fHeight, upperTextureInfo)
+  , m_percentValues(percentages)
 {
 }
 
@@ -57,7 +62,8 @@ void CGUIRangesControl::CGUIRange::SetInvalid()
   m_guiLowerTexture.SetInvalid();
 }
 
-bool CGUIRangesControl::CGUIRange::SetDiffuseColor(const KODI::GUILIB::GUIINFO::CGUIInfoColor& color)
+bool CGUIRangesControl::CGUIRange::SetDiffuseColor(
+    const KODI::GUILIB::GUIINFO::CGUIInfoColor& color)
 {
   bool bChanged = false;
   bChanged |= m_guiFillTexture.SetDiffuseColor(color);
@@ -94,8 +100,11 @@ void CGUIRangesControl::CGUIRange::Render()
 }
 
 bool CGUIRangesControl::CGUIRange::UpdateLayout(float fBackgroundTextureHeight,
-                                                float fPosX, float fPosY, float fWidth,
-                                                float fScaleX, float fScaleY)
+                                                float fPosX,
+                                                float fPosY,
+                                                float fWidth,
+                                                float fScaleX,
+                                                float fScaleY)
 {
   bool bChanged = false;
 
@@ -104,34 +113,49 @@ bool CGUIRangesControl::CGUIRange::UpdateLayout(float fBackgroundTextureHeight,
     // rendering without left and right image - fill the mid image completely
     float width = (m_percentValues.second - m_percentValues.first) * fWidth * 0.01f;
     float offsetX = m_percentValues.first * fWidth * 0.01f;
-    float offsetY = std::fabs(fScaleY * 0.5f * (m_guiFillTexture.GetTextureHeight() - fBackgroundTextureHeight));
-    bChanged |= m_guiFillTexture.SetPosition(fPosX + (offsetX > 0 ? offsetX : 0), fPosY + (offsetY > 0 ? offsetY : 0));
+    float offsetY = std::fabs(fScaleY * 0.5f *
+                              (m_guiFillTexture.GetTextureHeight() - fBackgroundTextureHeight));
+    bChanged |= m_guiFillTexture.SetPosition(fPosX + (offsetX > 0 ? offsetX : 0),
+                                             fPosY + (offsetY > 0 ? offsetY : 0));
     bChanged |= m_guiFillTexture.SetHeight(fScaleY * m_guiFillTexture.GetTextureHeight());
     bChanged |= m_guiFillTexture.SetWidth(width);
   }
   else
   {
-    float offsetX = m_percentValues.first * fWidth * 0.01f - m_guiLowerTexture.GetTextureWidth() * 0.5f;
-    float offsetY = std::fabs(fScaleY * 0.5f * (m_guiLowerTexture.GetTextureHeight() - fBackgroundTextureHeight));
-    bChanged |= m_guiLowerTexture.SetPosition(fPosX + (offsetX > 0 ? offsetX : 0), fPosY + (offsetY > 0 ? offsetY : 0));
+    float offsetX =
+        m_percentValues.first * fWidth * 0.01f - m_guiLowerTexture.GetTextureWidth() * 0.5f;
+    float offsetY = std::fabs(fScaleY * 0.5f *
+                              (m_guiLowerTexture.GetTextureHeight() - fBackgroundTextureHeight));
+    bChanged |= m_guiLowerTexture.SetPosition(fPosX + (offsetX > 0 ? offsetX : 0),
+                                              fPosY + (offsetY > 0 ? offsetY : 0));
     bChanged |= m_guiLowerTexture.SetHeight(fScaleY * m_guiLowerTexture.GetTextureHeight());
-    bChanged |= m_guiLowerTexture.SetWidth(m_percentValues.first == 0.0f ? m_guiLowerTexture.GetTextureWidth() * 0.5f : m_guiLowerTexture.GetTextureWidth());
+    bChanged |= m_guiLowerTexture.SetWidth(m_percentValues.first == 0.0f
+                                               ? m_guiLowerTexture.GetTextureWidth() * 0.5f
+                                               : m_guiLowerTexture.GetTextureWidth());
 
     if (m_percentValues.first != m_percentValues.second)
     {
-      float width = (m_percentValues.second - m_percentValues.first) * fWidth * 0.01f - m_guiLowerTexture.GetTextureWidth() * 0.5f - m_guiUpperTexture.GetTextureWidth() * 0.5f;
+      float width = (m_percentValues.second - m_percentValues.first) * fWidth * 0.01f -
+                    m_guiLowerTexture.GetTextureWidth() * 0.5f -
+                    m_guiUpperTexture.GetTextureWidth() * 0.5f;
 
       offsetX += m_guiLowerTexture.GetTextureWidth();
-      offsetY = std::fabs(fScaleY * 0.5f * (m_guiFillTexture.GetTextureHeight() - fBackgroundTextureHeight));
-      bChanged |= m_guiFillTexture.SetPosition(fPosX + offsetX, fPosY + (offsetY > 0 ? offsetY : 0));
+      offsetY = std::fabs(fScaleY * 0.5f *
+                          (m_guiFillTexture.GetTextureHeight() - fBackgroundTextureHeight));
+      bChanged |=
+          m_guiFillTexture.SetPosition(fPosX + offsetX, fPosY + (offsetY > 0 ? offsetY : 0));
       bChanged |= m_guiFillTexture.SetHeight(fScaleY * m_guiFillTexture.GetTextureHeight());
       bChanged |= m_guiFillTexture.SetWidth(width);
 
       offsetX += width;
-      offsetY = std::fabs(fScaleY * 0.5f * (m_guiUpperTexture.GetTextureHeight() - fBackgroundTextureHeight));
-      bChanged |= m_guiUpperTexture.SetPosition(fPosX + offsetX, fPosY + (offsetY > 0 ? offsetY : 0));
+      offsetY = std::fabs(fScaleY * 0.5f *
+                          (m_guiUpperTexture.GetTextureHeight() - fBackgroundTextureHeight));
+      bChanged |=
+          m_guiUpperTexture.SetPosition(fPosX + offsetX, fPosY + (offsetY > 0 ? offsetY : 0));
       bChanged |= m_guiUpperTexture.SetHeight(fScaleY * m_guiUpperTexture.GetTextureHeight());
-      bChanged |= m_guiUpperTexture.SetWidth(m_percentValues.first == 100.0f ? m_guiUpperTexture.GetTextureWidth() * 0.5f : m_guiUpperTexture.GetTextureWidth());
+      bChanged |= m_guiUpperTexture.SetWidth(m_percentValues.first == 100.0f
+                                                 ? m_guiUpperTexture.GetTextureWidth() * 0.5f
+                                                 : m_guiUpperTexture.GetTextureWidth());
     }
     else
     {
@@ -143,20 +167,25 @@ bool CGUIRangesControl::CGUIRange::UpdateLayout(float fBackgroundTextureHeight,
   return bChanged;
 }
 
-CGUIRangesControl::CGUIRangesControl(int iParentID, int iControlID,
-                                     float fPosX, float fPosY, float fWidth, float fHeight,
+CGUIRangesControl::CGUIRangesControl(int iParentID,
+                                     int iControlID,
+                                     float fPosX,
+                                     float fPosY,
+                                     float fWidth,
+                                     float fHeight,
                                      const CTextureInfo& backGroundTextureInfo,
                                      const CTextureInfo& lowerTextureInfo,
                                      const CTextureInfo& fillTextureInfo,
                                      const CTextureInfo& upperTextureInfo,
-                                     const CTextureInfo& overlayTextureInfo, int iInfo)
-: CGUIControl(iParentID, iControlID, fPosX, fPosY, fWidth, fHeight),
-  m_guiBackground(fPosX, fPosY, fWidth, fHeight, backGroundTextureInfo),
-  m_guiOverlay(fPosX, fPosY, fWidth, fHeight, overlayTextureInfo),
-  m_guiLowerTextureInfo(lowerTextureInfo),
-  m_guiFillTextureInfo(fillTextureInfo),
-  m_guiUpperTextureInfo(upperTextureInfo),
-  m_iInfoCode(iInfo)
+                                     const CTextureInfo& overlayTextureInfo,
+                                     int iInfo)
+  : CGUIControl(iParentID, iControlID, fPosX, fPosY, fWidth, fHeight)
+  , m_guiBackground(fPosX, fPosY, fWidth, fHeight, backGroundTextureInfo)
+  , m_guiOverlay(fPosX, fPosY, fWidth, fHeight, overlayTextureInfo)
+  , m_guiLowerTextureInfo(lowerTextureInfo)
+  , m_guiFillTextureInfo(fillTextureInfo)
+  , m_guiUpperTextureInfo(upperTextureInfo)
+  , m_iInfoCode(iInfo)
 {
   ControlType = GUICONTROL_RANGES;
 }
@@ -215,11 +244,12 @@ void CGUIRangesControl::SetRanges(const std::vector<std::pair<float, float>>& ra
 {
   ClearRanges();
   for (const auto& range : ranges)
-    m_ranges.emplace_back(CGUIRange(m_posX, m_posY, m_width, m_height,
-                                    m_guiLowerTextureInfo, m_guiFillTextureInfo, m_guiUpperTextureInfo, range));
+    m_ranges.emplace_back(CGUIRange(m_posX, m_posY, m_width, m_height, m_guiLowerTextureInfo,
+                                    m_guiFillTextureInfo, m_guiUpperTextureInfo, range));
 
   for (auto& range : m_ranges)
-    range.AllocResources(); // note: we need to alloc the instance actually inserted into the vector; hence the second loop.
+    range
+        .AllocResources(); // note: we need to alloc the instance actually inserted into the vector; hence the second loop.
 }
 
 void CGUIRangesControl::ClearRanges()
@@ -304,20 +334,26 @@ bool CGUIRangesControl::UpdateLayout()
   bChanged |= m_guiBackground.SetHeight(m_height);
   bChanged |= m_guiBackground.SetWidth(m_width);
 
-  float fScaleX = m_guiBackground.GetTextureWidth() ? m_width / m_guiBackground.GetTextureWidth() : 1.0f;
-  float fScaleY = m_guiBackground.GetTextureHeight() ? m_height / m_guiBackground.GetTextureHeight() : 1.0f;
+  float fScaleX =
+      m_guiBackground.GetTextureWidth() ? m_width / m_guiBackground.GetTextureWidth() : 1.0f;
+  float fScaleY =
+      m_guiBackground.GetTextureHeight() ? m_height / m_guiBackground.GetTextureHeight() : 1.0f;
 
   float posX = m_guiBackground.GetXPosition();
   float posY = m_guiBackground.GetYPosition();
 
   for (auto& range : m_ranges)
-    bChanged |= range.UpdateLayout(m_guiBackground.GetTextureHeight(), posX, posY, m_width, fScaleX, fScaleY);
+    bChanged |= range.UpdateLayout(m_guiBackground.GetTextureHeight(), posX, posY, m_width, fScaleX,
+                                   fScaleY);
 
-  float offset = std::fabs(fScaleY * 0.5f * (m_guiOverlay.GetTextureHeight() - m_guiBackground.GetTextureHeight()));
-  if (offset > 0)  //  Center texture to the background if necessary
-    bChanged |= m_guiOverlay.SetPosition(m_guiBackground.GetXPosition(), m_guiBackground.GetYPosition() + offset);
+  float offset = std::fabs(fScaleY * 0.5f *
+                           (m_guiOverlay.GetTextureHeight() - m_guiBackground.GetTextureHeight()));
+  if (offset > 0) //  Center texture to the background if necessary
+    bChanged |= m_guiOverlay.SetPosition(m_guiBackground.GetXPosition(),
+                                         m_guiBackground.GetYPosition() + offset);
   else
-    bChanged |= m_guiOverlay.SetPosition(m_guiBackground.GetXPosition(), m_guiBackground.GetYPosition());
+    bChanged |=
+        m_guiOverlay.SetPosition(m_guiBackground.GetXPosition(), m_guiBackground.GetYPosition());
 
   bChanged |= m_guiOverlay.SetHeight(fScaleY * m_guiOverlay.GetTextureHeight());
   bChanged |= m_guiOverlay.SetWidth(fScaleX * m_guiOverlay.GetTextureWidth());
@@ -329,7 +365,8 @@ void CGUIRangesControl::UpdateInfo(const CGUIListItem* item /* = nullptr */)
 {
   if (!IsDisabled() && m_iInfoCode)
   {
-    const std::string value = CServiceBroker::GetGUI()->GetInfoManager().GetLabel(m_iInfoCode, m_parentID);
+    const std::string value =
+        CServiceBroker::GetGUI()->GetInfoManager().GetLabel(m_iInfoCode, m_parentID);
     if (value != m_prevRanges)
     {
       std::vector<std::pair<float, float>> ranges;
@@ -350,11 +387,13 @@ void CGUIRangesControl::UpdateInfo(const CGUIListItem* item /* = nullptr */)
           if (first <= second)
             ranges.emplace_back(std::make_pair(first, second));
           else
-            CLog::Log(LOGERROR, "CGUIRangesControl::UpdateInfo - malformed ranges csv string (end element must be larger or equal than start element)");
+            CLog::Log(LOGERROR, "CGUIRangesControl::UpdateInfo - malformed ranges csv string (end "
+                                "element must be larger or equal than start element)");
         }
       }
       else
-        CLog::Log(LOGERROR, "CGUIRangesControl::UpdateInfo - malformed ranges csv string (string must contain even number of elements)");
+        CLog::Log(LOGERROR, "CGUIRangesControl::UpdateInfo - malformed ranges csv string (string "
+                            "must contain even number of elements)");
 
       SetRanges(ranges);
       m_prevRanges = value;

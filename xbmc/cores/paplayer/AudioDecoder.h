@@ -15,22 +15,24 @@
 
 class CFileItem;
 
-#define PACKET_SIZE 3840    // audio packet size - we keep 1 in reserve for gapless playback
-                            // using a multiple of 1, 2, 3, 4, 5, 6 to guarantee track alignment
-                            // note that 7 or higher channels won't work too well.
+#define PACKET_SIZE \
+  3840 // audio packet size - we keep 1 in reserve for gapless playback \
+      // using a multiple of 1, 2, 3, 4, 5, 6 to guarantee track alignment \
+      // note that 7 or higher channels won't work too well.
 
-#define INPUT_SIZE PACKET_SIZE * 3      // input data size we read from the codecs at a time
-                                        // * 3 to allow 24 bit audio
+#define INPUT_SIZE \
+  PACKET_SIZE * 3 // input data size we read from the codecs at a time \
+      // * 3 to allow 24 bit audio
 
-#define OUTPUT_SAMPLES PACKET_SIZE      // max number of output samples
-#define INPUT_SAMPLES  PACKET_SIZE      // number of input samples (distributed over channels)
+#define OUTPUT_SAMPLES PACKET_SIZE // max number of output samples
+#define INPUT_SAMPLES PACKET_SIZE // number of input samples (distributed over channels)
 
-#define STATUS_NO_FILE  0
-#define STATUS_QUEUING  1
-#define STATUS_QUEUED   2
-#define STATUS_PLAYING  3
-#define STATUS_ENDING   4
-#define STATUS_ENDED    5
+#define STATUS_NO_FILE 0
+#define STATUS_QUEUING 1
+#define STATUS_QUEUED 2
+#define STATUS_PLAYING 3
+#define STATUS_ENDING 4
+#define STATUS_ENDED 5
 
 // return codes from decoders
 #define RET_ERROR -1
@@ -43,16 +45,22 @@ public:
   CAudioDecoder();
   ~CAudioDecoder();
 
-  bool Create(const CFileItem &file, int64_t seekOffset);
+  bool Create(const CFileItem& file, int64_t seekOffset);
   void Destroy();
 
   int ReadSamples(int numsamples);
 
-  bool CanSeek() { if (m_codec) return m_codec->CanSeek(); else return false; };
+  bool CanSeek()
+  {
+    if (m_codec)
+      return m_codec->CanSeek();
+    else
+      return false;
+  };
   int64_t Seek(int64_t time);
   int64_t TotalTime();
   void SetTotalTime(int64_t time);
-  void Start() { m_canPlay = true;}; // cause a pre-buffered stream to start.
+  void Start() { m_canPlay = true; }; // cause a pre-buffered stream to start.
   int GetStatus() { return m_status; };
   void SetStatus(int status) { m_status = status; }
 
@@ -60,10 +68,10 @@ public:
   unsigned int GetChannels() { return GetFormat().m_channelLayout.Count(); }
   // Data management
   unsigned int GetDataSize(bool checkPktSize);
-  void *GetData(unsigned int samples);
-  uint8_t* GetRawData(int &size);
-  ICodec *GetCodec() const { return m_codec; }
-  float GetReplayGain(float &peakVal);
+  void* GetData(unsigned int samples);
+  uint8_t* GetRawData(int& size);
+  ICodec* GetCodec() const { return m_codec; }
+  float GetReplayGain(float& peakVal);
 
 private:
   // pcm buffer
@@ -76,7 +84,7 @@ private:
   uint8_t m_pcmInputBuffer[INPUT_SIZE];
   float m_inputBuffer[INPUT_SAMPLES];
 
-  uint8_t *m_rawBuffer;
+  uint8_t* m_rawBuffer;
   int m_rawBufferSize;
 
   // status

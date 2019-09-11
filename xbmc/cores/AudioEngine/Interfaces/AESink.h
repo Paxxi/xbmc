@@ -19,7 +19,7 @@ class IAESink
 {
 public:
   /* return the name of this sync for logging */
-  virtual const char *GetName() = 0;
+  virtual const char* GetName() = 0;
 
   IAESink() = default;
   virtual ~IAESink() = default;
@@ -29,7 +29,7 @@ public:
     if however it does not honour what is requested, it MUST update device/format
     with what it does support.
   */
-  virtual bool Initialize  (AEAudioFormat &format, std::string &device) = 0;
+  virtual bool Initialize(AEAudioFormat& format, std::string& device) = 0;
 
   /*
     Deinitialize the sink for destruction
@@ -53,13 +53,13 @@ public:
    * @param offset offset in frames where audio data starts
    * @return number of frames consumed by the sink
   */
-  virtual unsigned int AddPackets(uint8_t **data, unsigned int frames, unsigned int offset) = 0;
+  virtual unsigned int AddPackets(uint8_t** data, unsigned int frames, unsigned int offset) = 0;
 
   /*!
    * @brief instruct the sink to add a pause
    * @param millis ms to pause
    */
-  virtual void AddPause(unsigned int millis) {};
+  virtual void AddPause(unsigned int millis){};
 
   /*!
    * @brief Return a timestamped status structure with delay and sink info
@@ -70,16 +70,15 @@ public:
   /*
     Drain the sink
    */
-  virtual void Drain() {};
+  virtual void Drain(){};
 
   /*
     Indicates if sink can handle volume control.
   */
-  virtual bool  HasVolume() {return false;};
+  virtual bool HasVolume() { return false; };
 
   /*
     This method sets the volume control, volume ranges from 0.0 to 1.0.
   */
-  virtual void  SetVolume(float volume) {};
+  virtual void SetVolume(float volume){};
 };
-

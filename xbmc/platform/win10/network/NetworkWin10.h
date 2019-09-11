@@ -46,27 +46,27 @@ private:
 class CNetworkWin10 : public CNetworkBase
 {
 public:
-    CNetworkWin10();
-    virtual ~CNetworkWin10(void);
+  CNetworkWin10();
+  virtual ~CNetworkWin10(void);
 
-    std::vector<CNetworkInterface*>& GetInterfaceList(void) override;
-    CNetworkInterface* GetFirstConnectedInterface() override;
-    std::vector<std::string> GetNameServers(void) override;
+  std::vector<CNetworkInterface*>& GetInterfaceList(void) override;
+  CNetworkInterface* GetFirstConnectedInterface() override;
+  std::vector<std::string> GetNameServers(void) override;
 
-    bool PingHost(unsigned long host, unsigned int timeout_ms = 2000) override;
+  bool PingHost(unsigned long host, unsigned int timeout_ms = 2000) override;
 
-    friend class CNetworkInterfaceWin10;
+  friend class CNetworkInterfaceWin10;
+
 private:
-    int GetSocket() { return m_sock; }
-    void queryInterfaceList();
-    void CleanInterfaceList();
+  int GetSocket() { return m_sock; }
+  void queryInterfaceList();
+  void CleanInterfaceList();
 
-    std::vector<CNetworkInterface*> m_interfaces;
-    int m_sock;
-    CStopWatch m_netrefreshTimer;
-    CCriticalSection m_critSection;
-    PIP_ADAPTER_ADDRESSES m_adapterAddresses;
+  std::vector<CNetworkInterface*> m_interfaces;
+  int m_sock;
+  CStopWatch m_netrefreshTimer;
+  CCriticalSection m_critSection;
+  PIP_ADAPTER_ADDRESSES m_adapterAddresses;
 };
 
 using CNetwork = CNetworkWin10;
-

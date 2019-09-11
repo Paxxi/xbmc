@@ -22,5 +22,5 @@ public:
 
 protected:
   bool parse() override;
-  bool validateOption(const std::string &key, const CVariant &value) override;
+  bool validateOption(const std::string& key, const CVariant& value) override;
 };

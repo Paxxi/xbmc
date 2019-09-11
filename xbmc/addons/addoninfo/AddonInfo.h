@@ -32,19 +32,18 @@ struct DependencyInfo
   AddonVersion requiredVersion;
   bool optional;
   DependencyInfo(std::string id, AddonVersion requiredVersion, bool optional)
-      : id(id), requiredVersion(requiredVersion), optional(optional) {}
+    : id(id)
+    , requiredVersion(requiredVersion)
+    , optional(optional)
+  {
+  }
 
   bool operator==(const DependencyInfo& rhs) const
   {
-    return id == rhs.id &&
-            requiredVersion == rhs.requiredVersion &&
-            optional == rhs.optional;
+    return id == rhs.id && requiredVersion == rhs.requiredVersion && optional == rhs.optional;
   }
 
-  bool operator!=(const DependencyInfo& rhs) const
-  {
-    return !(rhs == *this);
-  }
+  bool operator!=(const DependencyInfo& rhs) const { return !(rhs == *this); }
 };
 
 typedef std::map<std::string, std::string> InfoMap;
@@ -61,7 +60,10 @@ public:
   void SetMainType(TYPE type) { m_mainType = type; }
   void SetLibName(const std::string& libname) { m_libname = libname; }
   void SetPath(const std::string& path) { m_path = path; }
-  void AddExtraInfo(const std::string& idName, const std::string& value) { m_extrainfo[idName] = value; }
+  void AddExtraInfo(const std::string& idName, const std::string& value)
+  {
+    m_extrainfo[idName] = value;
+  }
   void SetLastUsed(const CDateTime& dateTime) { m_lastUsed = dateTime; }
 
   const std::string& ID() const { return m_id; }
@@ -149,7 +151,8 @@ private:
   InfoMap m_extrainfo;
   std::vector<std::string> m_platforms;
 
-  const std::string& GetTranslatedText(const std::unordered_map<std::string, std::string>& locales) const;
+  const std::string& GetTranslatedText(
+      const std::unordered_map<std::string, std::string>& locales) const;
 };
 
 } /* namespace ADDON */

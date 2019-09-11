@@ -10,129 +10,134 @@
 #ifdef TARGET_ANDROID
 #include "platform/android/bionic_supplement/bionic_supplement.h"
 #endif
-#include "PlatformDefs.h"
 #include "PosixTimezone.h"
-#include "utils/SystemInfo.h"
-
 #include "ServiceBroker.h"
 #include "Util.h"
-#include "utils/StringUtils.h"
 #include "XBDateTime.h"
-#include "settings/lib/Setting.h"
-#include "settings/lib/SettingDefinitions.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include <stdlib.h>
+#include "settings/lib/Setting.h"
+#include "settings/lib/SettingDefinitions.h"
+#include "utils/StringUtils.h"
+#include "utils/SystemInfo.h"
 
 #include <algorithm>
+#include <stdlib.h>
+
+#include "PlatformDefs.h"
 
 CPosixTimezone::CPosixTimezone()
 {
-   char* line = NULL;
-   size_t linelen = 0;
-   int nameonfourthfield = 0;
-   std::string s;
-   std::vector<std::string> tokens;
+  char* line = NULL;
+  size_t linelen = 0;
+  int nameonfourthfield = 0;
+  std::string s;
+  std::vector<std::string> tokens;
 
-   // Load timezones
-   FILE* fp = fopen("/usr/share/zoneinfo/zone.tab", "r");
-   if (fp)
-   {
-      std::string countryCode;
-      std::string timezoneName;
+  // Load timezones
+  FILE* fp = fopen("/usr/share/zoneinfo/zone.tab", "r");
+  if (fp)
+  {
+    std::string countryCode;
+    std::string timezoneName;
 
-      while (getdelim(&line, &linelen, '\n', fp) > 0)
+    while (getdelim(&line, &linelen, '\n', fp) > 0)
+    {
+      tokens.clear();
+      s = line;
+      StringUtils::Trim(s);
+
+      if (s.length() == 0)
+        continue;
+
+      if (s[0] == '#')
+        continue;
+
+      StringUtils::Tokenize(s, tokens, " \t");
+      if (tokens.size() < 3)
+        continue;
+
+      countryCode = tokens[0];
+      timezoneName = tokens[2];
+
+      if (m_timezonesByCountryCode.count(countryCode) == 0)
       {
-         tokens.clear();
-         s = line;
-         StringUtils::Trim(s);
-
-         if (s.length() == 0)
-            continue;
-
-         if (s[0] == '#')
-            continue;
-
-         StringUtils::Tokenize(s, tokens, " \t");
-         if (tokens.size() < 3)
-            continue;
-
-         countryCode = tokens[0];
-         timezoneName = tokens[2];
-
-         if (m_timezonesByCountryCode.count(countryCode) == 0)
-         {
-            std::vector<std::string> timezones;
-            timezones.push_back(timezoneName);
-            m_timezonesByCountryCode[countryCode] = timezones;
-         }
-         else
-         {
-            std::vector<std::string>& timezones = m_timezonesByCountryCode[countryCode];
-            timezones.push_back(timezoneName);
-         }
-
-         m_countriesByTimezoneName[timezoneName] = countryCode;
+        std::vector<std::string> timezones;
+        timezones.push_back(timezoneName);
+        m_timezonesByCountryCode[countryCode] = timezones;
       }
-      fclose(fp);
-   }
-
-   if (line)
-   {
-     free(line);
-     line = NULL;
-     linelen = 0;
-   }
-
-   // Load countries
-   fp = fopen("/usr/share/zoneinfo/iso3166.tab", "r");
-   if (!fp)
-   {
-      fp = fopen("/usr/share/misc/iso3166", "r");
-      nameonfourthfield = 1;
-   }
-   if (fp)
-   {
-      std::string countryCode;
-      std::string countryName;
-
-      while (getdelim(&line, &linelen, '\n', fp) > 0)
+      else
       {
-         s = line;
-         StringUtils::Trim(s);
-
-        //! @todo STRING_CLEANUP
-         if (s.length() == 0)
-            continue;
-
-         if (s[0] == '#')
-            continue;
-
-         // Search for the first non space from the 2nd character and on
-         int i = 2;
-         while (s[i] == ' ' || s[i] == '\t') i++;
-
-         if (nameonfourthfield)
-         {
-            // skip three letter
-            while (s[i] != ' ' && s[i] != '\t') i++;
-            while (s[i] == ' ' || s[i] == '\t') i++;
-            // skip number
-            while (s[i] != ' ' && s[i] != '\t') i++;
-            while (s[i] == ' ' || s[i] == '\t') i++;
-         }
-
-         countryCode = s.substr(0, 2);
-         countryName = s.substr(i);
-
-         m_counties.push_back(countryName);
-         m_countryByCode[countryCode] = countryName;
-         m_countryByName[countryName] = countryCode;
+        std::vector<std::string>& timezones = m_timezonesByCountryCode[countryCode];
+        timezones.push_back(timezoneName);
       }
-      sort(m_counties.begin(), m_counties.end(), sortstringbyname());
-      fclose(fp);
-   }
-   free(line);
+
+      m_countriesByTimezoneName[timezoneName] = countryCode;
+    }
+    fclose(fp);
+  }
+
+  if (line)
+  {
+    free(line);
+    line = NULL;
+    linelen = 0;
+  }
+
+  // Load countries
+  fp = fopen("/usr/share/zoneinfo/iso3166.tab", "r");
+  if (!fp)
+  {
+    fp = fopen("/usr/share/misc/iso3166", "r");
+    nameonfourthfield = 1;
+  }
+  if (fp)
+  {
+    std::string countryCode;
+    std::string countryName;
+
+    while (getdelim(&line, &linelen, '\n', fp) > 0)
+    {
+      s = line;
+      StringUtils::Trim(s);
+
+      //! @todo STRING_CLEANUP
+      if (s.length() == 0)
+        continue;
+
+      if (s[0] == '#')
+        continue;
+
+      // Search for the first non space from the 2nd character and on
+      int i = 2;
+      while (s[i] == ' ' || s[i] == '\t')
+        i++;
+
+      if (nameonfourthfield)
+      {
+        // skip three letter
+        while (s[i] != ' ' && s[i] != '\t')
+          i++;
+        while (s[i] == ' ' || s[i] == '\t')
+          i++;
+        // skip number
+        while (s[i] != ' ' && s[i] != '\t')
+          i++;
+        while (s[i] == ' ' || s[i] == '\t')
+          i++;
+      }
+
+      countryCode = s.substr(0, 2);
+      countryName = s.substr(i);
+
+      m_counties.push_back(countryName);
+      m_countryByCode[countryCode] = countryName;
+      m_countryByName[countryName] = countryCode;
+    }
+    sort(m_counties.begin(), m_counties.end(), sortstringbyname());
+    fclose(fp);
+  }
+  free(line);
 }
 
 void CPosixTimezone::OnSettingChanged(std::shared_ptr<const CSetting> setting)
@@ -140,7 +145,7 @@ void CPosixTimezone::OnSettingChanged(std::shared_ptr<const CSetting> setting)
   if (setting == NULL)
     return;
 
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
   if (settingId == CSettings::SETTING_LOCALE_TIMEZONE)
   {
     SetTimezone(std::static_pointer_cast<const CSettingString>(setting)->GetValue());
@@ -157,26 +162,27 @@ void CPosixTimezone::OnSettingChanged(std::shared_ptr<const CSetting> setting)
 
 void CPosixTimezone::OnSettingsLoaded()
 {
-  SetTimezone(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOCALE_TIMEZONE));
+  SetTimezone(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+      CSettings::SETTING_LOCALE_TIMEZONE));
   CDateTime::ResetTimezoneBias();
 }
 
 std::vector<std::string> CPosixTimezone::GetCounties()
 {
-   return m_counties;
+  return m_counties;
 }
 
 std::vector<std::string> CPosixTimezone::GetTimezonesByCountry(const std::string& country)
 {
-   return m_timezonesByCountryCode[m_countryByName[country]];
+  return m_timezonesByCountryCode[m_countryByName[country]];
 }
 
 std::string CPosixTimezone::GetCountryByTimezone(const std::string& timezone)
 {
 #if defined(TARGET_DARWIN)
-   return "?";
+  return "?";
 #else
-   return m_countryByCode[m_countriesByTimezoneName[timezone]];
+  return m_countryByCode[m_countriesByTimezoneName[timezone]];
 #endif
 }
 
@@ -199,53 +205,60 @@ void CPosixTimezone::SetTimezone(std::string timezoneName)
 
 std::string CPosixTimezone::GetOSConfiguredTimezone()
 {
-   char timezoneName[255];
+  char timezoneName[255];
 
-   // try Slackware approach first
-   ssize_t rlrc = readlink("/etc/localtime-copied-from"
-                           , timezoneName, sizeof(timezoneName)-1);
-   if (rlrc != -1)
-   {
-     timezoneName[rlrc] = '\0';
+  // try Slackware approach first
+  ssize_t rlrc = readlink("/etc/localtime-copied-from", timezoneName, sizeof(timezoneName) - 1);
+  if (rlrc != -1)
+  {
+    timezoneName[rlrc] = '\0';
 
-     char* p = strrchr(timezoneName,'/');
-     if (p)
-     { // we want the previous '/'
-       char* q = p;
-       *q = 0;
-       p = strrchr(timezoneName,'/');
-       *q = '/';
-       if (p)
-         p++;
-     }
-     return p;
-   }
+    char* p = strrchr(timezoneName, '/');
+    if (p)
+    { // we want the previous '/'
+      char* q = p;
+      *q = 0;
+      p = strrchr(timezoneName, '/');
+      *q = '/';
+      if (p)
+        p++;
+    }
+    return p;
+  }
 
-   // now try Debian approach
-   timezoneName[0] = 0;
-   FILE* fp = fopen("/etc/timezone", "r");
-   if (fp)
-   {
-      if (fgets(timezoneName, sizeof(timezoneName), fp))
-        timezoneName[strlen(timezoneName)-1] = '\0';
-      fclose(fp);
-   }
+  // now try Debian approach
+  timezoneName[0] = 0;
+  FILE* fp = fopen("/etc/timezone", "r");
+  if (fp)
+  {
+    if (fgets(timezoneName, sizeof(timezoneName), fp))
+      timezoneName[strlen(timezoneName) - 1] = '\0';
+    fclose(fp);
+  }
 
-   return timezoneName;
+  return timezoneName;
 }
 
-void CPosixTimezone::SettingOptionsTimezoneCountriesFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data)
+void CPosixTimezone::SettingOptionsTimezoneCountriesFiller(std::shared_ptr<const CSetting> setting,
+                                                           std::vector<StringSettingOption>& list,
+                                                           std::string& current,
+                                                           void* data)
 {
   std::vector<std::string> countries = g_timezone.GetCounties();
   for (unsigned int i = 0; i < countries.size(); i++)
     list.push_back(StringSettingOption(countries[i], countries[i]));
 }
 
-void CPosixTimezone::SettingOptionsTimezonesFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data)
+void CPosixTimezone::SettingOptionsTimezonesFiller(std::shared_ptr<const CSetting> setting,
+                                                   std::vector<StringSettingOption>& list,
+                                                   std::string& current,
+                                                   void* data)
 {
   current = std::static_pointer_cast<const CSettingString>(setting)->GetValue();
   bool found = false;
-  std::vector<std::string> timezones = g_timezone.GetTimezonesByCountry(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOCALE_TIMEZONECOUNTRY));
+  std::vector<std::string> timezones = g_timezone.GetTimezonesByCountry(
+      CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+          CSettings::SETTING_LOCALE_TIMEZONECOUNTRY));
   for (unsigned int i = 0; i < timezones.size(); i++)
   {
     if (!found && StringUtils::EqualsNoCase(timezones[i], current))

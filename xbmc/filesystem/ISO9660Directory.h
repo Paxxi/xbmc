@@ -12,13 +12,12 @@
 
 namespace XFILE
 {
-class CISO9660Directory :
-      public IDirectory
+class CISO9660Directory : public IDirectory
 {
 public:
   CISO9660Directory(void);
   ~CISO9660Directory(void) override;
-  bool GetDirectory(const CURL& url, CFileItemList &items) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
   bool Exists(const CURL& url) override;
 };
-}
+} // namespace XFILE

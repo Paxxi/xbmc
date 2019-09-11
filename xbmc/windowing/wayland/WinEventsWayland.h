@@ -17,7 +17,7 @@ namespace wayland
 {
 class event_queue_t;
 class display_t;
-}
+} // namespace wayland
 
 namespace KODI
 {
@@ -44,6 +44,6 @@ private:
   std::queue<XBMC_Event> m_queue;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

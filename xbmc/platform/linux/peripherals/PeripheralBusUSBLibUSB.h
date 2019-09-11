@@ -15,20 +15,20 @@ struct usb_bus;
 
 namespace PERIPHERALS
 {
-  class CPeripherals;
+class CPeripherals;
 
-  class CPeripheralBusUSB : public CPeripheralBus
-  {
-  public:
-    explicit CPeripheralBusUSB(CPeripherals& manager);
+class CPeripheralBusUSB : public CPeripheralBus
+{
+public:
+  explicit CPeripheralBusUSB(CPeripherals& manager);
 
-    /*!
+  /*!
      * @see PeripheralBus::PerformDeviceScan()
      */
-    bool PerformDeviceScan(PeripheralScanResults &results);
+  bool PerformDeviceScan(PeripheralScanResults& results);
 
-  protected:
-    static const PeripheralType GetType(int iDeviceClass);
-    struct usb_bus *m_busses;
-  };
-}
+protected:
+  static const PeripheralType GetType(int iDeviceClass);
+  struct usb_bus* m_busses;
+};
+} // namespace PERIPHERALS

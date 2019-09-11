@@ -25,12 +25,12 @@ class CViewStateSettings : public ISubSettings
 public:
   static CViewStateSettings& GetInstance();
 
-  bool Load(const TiXmlNode *settings) override;
-  bool Save(TiXmlNode *settings) const override;
+  bool Load(const TiXmlNode* settings) override;
+  bool Save(TiXmlNode* settings) const override;
   void Clear() override;
 
-  const CViewState* Get(const std::string &viewState) const;
-  CViewState* Get(const std::string &viewState);
+  const CViewState* Get(const std::string& viewState) const;
+  CViewState* Get(const std::string& viewState);
 
   SettingLevel GetSettingLevel() const { return m_settingLevel; }
   void SetSettingLevel(SettingLevel settingLevel);
@@ -42,7 +42,10 @@ public:
   void CycleEventLevel();
   EventLevel GetNextEventLevel() const;
   bool ShowHigherEventLevels() const { return m_eventShowHigherLevels; }
-  void SetShowHigherEventLevels(bool showHigherEventLevels) { m_eventShowHigherLevels = showHigherEventLevels; }
+  void SetShowHigherEventLevels(bool showHigherEventLevels)
+  {
+    m_eventShowHigherLevels = showHigherEventLevels;
+  }
   void ToggleShowHigherEventLevels() { m_eventShowHigherLevels = !m_eventShowHigherLevels; }
 
 protected:
@@ -58,5 +61,7 @@ private:
   bool m_eventShowHigherLevels = true;
   mutable CCriticalSection m_critical;
 
-  void AddViewState(const std::string& strTagName, int defaultView = DEFAULT_VIEW_LIST, SortBy defaultSort = SortByLabel);
+  void AddViewState(const std::string& strTagName,
+                    int defaultView = DEFAULT_VIEW_LIST,
+                    SortBy defaultSort = SortByLabel);
 };

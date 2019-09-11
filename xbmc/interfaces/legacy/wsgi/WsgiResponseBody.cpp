@@ -10,20 +10,21 @@
 
 namespace XBMCAddon
 {
-  namespace xbmcwsgi
-  {
-    WsgiResponseBody::WsgiResponseBody()
-      : m_data()
-    { }
-
-    WsgiResponseBody::~WsgiResponseBody() = default;
-
-    void WsgiResponseBody::operator()(const String& data)
-    {
-      if (data.empty())
-        return;
-
-      m_data.append(data);
-    }
-  }
+namespace xbmcwsgi
+{
+WsgiResponseBody::WsgiResponseBody()
+  : m_data()
+{
 }
+
+WsgiResponseBody::~WsgiResponseBody() = default;
+
+void WsgiResponseBody::operator()(const String& data)
+{
+  if (data.empty())
+    return;
+
+  m_data.append(data);
+}
+} // namespace xbmcwsgi
+} // namespace XBMCAddon

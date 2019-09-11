@@ -15,10 +15,10 @@ class CGUIRenderingControl;
 extern "C"
 {
 
-struct AddonGlobalInterface;
+  struct AddonGlobalInterface;
 
-namespace ADDON
-{
+  namespace ADDON
+  {
 
   class CAddonDll;
 
@@ -47,43 +47,35 @@ namespace ADDON
      */
     //@{
     static void set_callbacks(void* kodiBase,
-                             void* handle,
-                             void* clienthandle,
-                             bool (*createCB)(void*,int,int,int,int,void*),
-                             void (*renderCB)(void*),
-                             void (*stopCB)(void*),
-                             bool (*dirtyCB)(void*));
+                              void* handle,
+                              void* clienthandle,
+                              bool (*createCB)(void*, int, int, int, int, void*),
+                              void (*renderCB)(void*),
+                              void (*stopCB)(void*),
+                              bool (*dirtyCB)(void*));
     static void destroy(void* kodiBase, void* handle);
     //@}
   };
 
   class CGUIAddonRenderingControl : public IRenderingCallback
   {
-  friend struct Interface_GUIControlAddonRendering;
+    friend struct Interface_GUIControlAddonRendering;
+
   public:
-    explicit CGUIAddonRenderingControl(CGUIRenderingControl *pControl);
+    explicit CGUIAddonRenderingControl(CGUIRenderingControl* pControl);
     virtual ~CGUIAddonRenderingControl() = default;
 
-    bool Create(int x, int y, int w, int h, void *device) override;
+    bool Create(int x, int y, int w, int h, void* device) override;
     void Render() override;
     void Stop() override;
     bool IsDirty() override;
     virtual void Delete();
 
   protected:
-    bool (*CBCreate)
-        (void*   cbhdl,
-         int         x,
-         int         y,
-         int         w,
-         int         h,
-         void       *device);
-    void (*CBRender)
-        (void*   cbhdl);
-    void (*CBStop)
-        (void*   cbhdl);
-    bool (*CBDirty)
-        (void*   cbhdl);
+    bool (*CBCreate)(void* cbhdl, int x, int y, int w, int h, void* device);
+    void (*CBRender)(void* cbhdl);
+    void (*CBStop)(void* cbhdl);
+    bool (*CBDirty)(void* cbhdl);
 
     void* m_clientHandle;
     CAddonDll* m_addon;
@@ -91,5 +83,5 @@ namespace ADDON
     int m_refCount;
   };
 
-} /* namespace ADDON */
+  } /* namespace ADDON */
 } /* extern "C" */

@@ -22,16 +22,16 @@ namespace INFO
 class InfoBool
 {
 public:
-  InfoBool(const std::string &expression, int context, unsigned int &refreshCounter);
+  InfoBool(const std::string& expression, int context, unsigned int& refreshCounter);
   virtual ~InfoBool() = default;
 
-  virtual void Initialize() {};
+  virtual void Initialize(){};
 
   /*! \brief Get the value of this info bool
    This is called to update (if dirty) and fetch the value of the info bool
    \param item the item used to evaluate the bool
    */
-  inline bool Get(const CGUIListItem *item = NULL)
+  inline bool Get(const CGUIListItem* item = NULL)
   {
     if (item && m_listItemDependent)
       Update(item);
@@ -43,13 +43,12 @@ public:
     return m_value;
   }
 
-  bool operator==(const InfoBool &right) const
+  bool operator==(const InfoBool& right) const
   {
-    return (m_context == right.m_context &&
-            m_expression == right.m_expression);
+    return (m_context == right.m_context && m_expression == right.m_expression);
   }
 
-  bool operator<(const InfoBool &right) const
+  bool operator<(const InfoBool& right) const
   {
     if (m_context < right.m_context)
       return true;
@@ -62,21 +61,21 @@ public:
   /*! \brief Update the value of this info bool
    This is called if and only if the info bool is dirty, allowing it to update it's current value
    */
-  virtual void Update(const CGUIListItem *item) {};
+  virtual void Update(const CGUIListItem* item){};
 
-  const std::string &GetExpression() const { return m_expression; }
+  const std::string& GetExpression() const { return m_expression; }
   bool ListItemDependent() const { return m_listItemDependent; }
-protected:
 
-  bool m_value;                ///< current value
-  int m_context;               ///< contextual information to go with the condition
-  bool m_listItemDependent;    ///< do not cache if a listitem pointer is given
-  std::string  m_expression;   ///< original expression
+protected:
+  bool m_value; ///< current value
+  int m_context; ///< contextual information to go with the condition
+  bool m_listItemDependent; ///< do not cache if a listitem pointer is given
+  std::string m_expression; ///< original expression
 
 private:
   unsigned int m_refreshCounter;
-  unsigned int &m_parentRefreshCounter;
+  unsigned int& m_parentRefreshCounter;
 };
 
 typedef std::shared_ptr<InfoBool> InfoPtr;
-};
+}; // namespace INFO

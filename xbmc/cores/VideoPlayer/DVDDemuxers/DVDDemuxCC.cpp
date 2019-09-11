@@ -17,7 +17,7 @@
 class CBitstream
 {
 public:
-  CBitstream(uint8_t *data, int bits)
+  CBitstream(uint8_t* data, int bits)
   {
     m_data = data;
     m_offset = 0;
@@ -55,7 +55,7 @@ public:
   }
 
 private:
-  uint8_t *m_data;
+  uint8_t* m_data;
   int m_offset;
   int m_len;
   bool m_error;
@@ -65,6 +65,7 @@ class CCaptionBlock
 {
   CCaptionBlock(const CCaptionBlock&) = delete;
   CCaptionBlock& operator=(const CCaptionBlock&) = delete;
+
 public:
   explicit CCaptionBlock(int size)
   {
@@ -72,16 +73,13 @@ public:
     m_size = size;
     m_pts = 0.0; //silence coverity uninitialized warning, is set elsewhere
   }
-  virtual ~CCaptionBlock()
-  {
-    free(m_data);
-  }
+  virtual ~CCaptionBlock() { free(m_data); }
   double m_pts;
-  uint8_t *m_data;
+  uint8_t* m_data;
   int m_size;
 };
 
-bool reorder_sort (CCaptionBlock *lhs, CCaptionBlock *rhs)
+bool reorder_sort(CCaptionBlock* lhs, CCaptionBlock* rhs)
 {
   return (lhs->m_pts > rhs->m_pts);
 }
@@ -101,7 +99,7 @@ CDVDDemuxCC::~CDVDDemuxCC()
 
 CDemuxStream* CDVDDemuxCC::GetStream(int iStreamId) const
 {
-  for (int i=0; i<GetNrOfStreams(); i++)
+  for (int i = 0; i < GetNrOfStreams(); i++)
   {
     if (m_streams[i].uniqueId == iStreamId)
       return const_cast<CDemuxStreamSubtitle*>(&m_streams[i]);
@@ -127,9 +125,9 @@ int CDVDDemuxCC::GetNrOfStreams() const
   return m_streams.size();
 }
 
-DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
+DemuxPacket* CDVDDemuxCC::Read(DemuxPacket* pSrcPacket)
 {
-  DemuxPacket *pPacket = NULL;
+  DemuxPacket* pPacket = NULL;
   uint32_t startcode = 0xffffffff;
   int picType = 0;
   int p = 0;
@@ -162,21 +160,20 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
         {
           if (len > 4)
           {
-            uint8_t *buf = pSrcPacket->pData + p;
+            uint8_t* buf = pSrcPacket->pData + p;
             picType = (buf[1] & 0x38) >> 3;
           }
         }
         else if (scode == 0xb2) // user data
         {
-          uint8_t *buf = pSrcPacket->pData + p;
-          if (len >= 6 &&
-            buf[0] == 'G' && buf[1] == 'A' && buf[2] == '9' && buf[3] == '4' &&
-            buf[4] == 3 && (buf[5] & 0x40))
+          uint8_t* buf = pSrcPacket->pData + p;
+          if (len >= 6 && buf[0] == 'G' && buf[1] == 'A' && buf[2] == '9' && buf[3] == '4' &&
+              buf[4] == 3 && (buf[5] & 0x40))
           {
             int cc_count = buf[5] & 0x1f;
             if (cc_count > 0 && len >= 7 + cc_count * 3)
             {
-              CCaptionBlock *cc = new CCaptionBlock(cc_count * 3);
+              CCaptionBlock* cc = new CCaptionBlock(cc_count * 3);
               memcpy(cc->m_data, buf + 7, cc_count * 3);
               cc->m_pts = pSrcPacket->pts;
               if (picType == 1 || picType == 2)
@@ -185,8 +182,7 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
                 m_ccReorderBuffer.push_back(cc);
             }
           }
-          else if (len >= 6 &&
-                   buf[0] == 'C' && buf[1] == 'C' && buf[2] == 1)
+          else if (len >= 6 && buf[0] == 'C' && buf[1] == 'C' && buf[2] == 1)
           {
             int oddidx = (buf[4] & 0x80) ? 0 : 1;
             int cc_count = (buf[4] & 0x3e) >> 1;
@@ -196,9 +192,9 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
 
             if (cc_count > 0 && len >= 5 + cc_count * 3 * 2)
             {
-              CCaptionBlock *cc = new CCaptionBlock(cc_count * 3);
-              uint8_t *src = buf + 5;
-              uint8_t *dst = cc->m_data;
+              CCaptionBlock* cc = new CCaptionBlock(cc_count * 3);
+              uint8_t* src = buf + 5;
+              uint8_t* dst = cc->m_data;
 
               for (int i = 0; i < cc_count; i++)
               {
@@ -230,7 +226,7 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
         // slice data comes after SEI
         if (scode >= 1 && scode <= 5)
         {
-          uint8_t *buf = pSrcPacket->pData + p;
+          uint8_t* buf = pSrcPacket->pData + p;
           CBitstream bs(buf, len * 8);
           bs.readGolombUE();
           int sliceType = bs.readGolombUE();
@@ -249,16 +245,15 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
         }
         if (scode == 0x06) // SEI
         {
-          uint8_t *buf = pSrcPacket->pData + p;
-          if (len >= 12 &&
-            buf[3] == 0 && buf[4] == 49 &&
-            buf[5] == 'G' && buf[6] == 'A' && buf[7] == '9' && buf[8] == '4' && buf[9] == 3)
+          uint8_t* buf = pSrcPacket->pData + p;
+          if (len >= 12 && buf[3] == 0 && buf[4] == 49 && buf[5] == 'G' && buf[6] == 'A' &&
+              buf[7] == '9' && buf[8] == '4' && buf[9] == 3)
           {
-            uint8_t *userdata = buf + 10;
+            uint8_t* userdata = buf + 10;
             int cc_count = userdata[0] & 0x1f;
             if (len >= cc_count * 3 + 10)
             {
-              CCaptionBlock *cc = new CCaptionBlock(cc_count * 3);
+              CCaptionBlock* cc = new CCaptionBlock(cc_count * 3);
               memcpy(cc->m_data, userdata + 2, cc_count * 3);
               cc->m_pts = pSrcPacket->pts;
               m_ccTempBuffer.push_back(cc);
@@ -283,9 +278,9 @@ DemuxPacket* CDVDDemuxCC::Read(DemuxPacket *pSrcPacket)
   return pPacket;
 }
 
-void CDVDDemuxCC::Handler(int service, void *userdata)
+void CDVDDemuxCC::Handler(int service, void* userdata)
 {
-  CDVDDemuxCC *ctx = static_cast<CDVDDemuxCC*>(userdata);
+  CDVDDemuxCC* ctx = static_cast<CDVDDemuxCC*>(userdata);
 
   unsigned int idx;
 
@@ -364,11 +359,11 @@ void CDVDDemuxCC::Dispose()
 
 DemuxPacket* CDVDDemuxCC::Decode()
 {
-  DemuxPacket *pPacket = NULL;
+  DemuxPacket* pPacket = NULL;
 
-  while(!m_hasData && !m_ccReorderBuffer.empty())
+  while (!m_hasData && !m_ccReorderBuffer.empty())
   {
-    CCaptionBlock *cc = m_ccReorderBuffer.back();
+    CCaptionBlock* cc = m_ccReorderBuffer.back();
     m_ccReorderBuffer.pop_back();
     m_curPts = cc->m_pts;
     m_ccDecoder->Decode(cc->m_data, cc->m_size);
@@ -377,13 +372,13 @@ DemuxPacket* CDVDDemuxCC::Decode()
 
   if (m_hasData)
   {
-    for (unsigned int i=0; i<m_streamdata.size(); i++)
+    for (unsigned int i = 0; i < m_streamdata.size(); i++)
     {
       if (m_streamdata[i].hasData)
       {
         int service = m_streamdata[i].service;
 
-        char *data;
+        char* data;
         int len;
         if (service == 0)
         {

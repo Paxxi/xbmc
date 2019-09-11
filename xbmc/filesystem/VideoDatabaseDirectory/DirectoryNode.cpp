@@ -56,8 +56,8 @@ CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
   // we always have a root node, it is special and has a path of ""
   Path.insert(Path.begin(), "");
 
-  CDirectoryNode *pNode = nullptr;
-  CDirectoryNode *pParent = nullptr;
+  CDirectoryNode* pNode = nullptr;
+  CDirectoryNode* pParent = nullptr;
   NODE_TYPE NodeType = NODE_TYPE_ROOT;
   // loop down the dir path, creating a node with a parent.
   // if we hit a child type of NODE_TYPE_NONE, then we are done.
@@ -87,7 +87,9 @@ void CDirectoryNode::GetDatabaseInfo(const std::string& strPath, CQueryParams& p
 }
 
 //  Create a node object
-CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const std::string& strName, CDirectoryNode* pParent)
+CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type,
+                                           const std::string& strName,
+                                           CDirectoryNode* pParent)
 {
   switch (Type)
   {
@@ -118,17 +120,17 @@ CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const std::string& st
   case NODE_TYPE_EPISODES:
     return new CDirectoryNodeEpisodes(strName, pParent);
   case NODE_TYPE_RECENTLY_ADDED_MOVIES:
-    return new CDirectoryNodeRecentlyAddedMovies(strName,pParent);
+    return new CDirectoryNodeRecentlyAddedMovies(strName, pParent);
   case NODE_TYPE_RECENTLY_ADDED_EPISODES:
-    return new CDirectoryNodeRecentlyAddedEpisodes(strName,pParent);
+    return new CDirectoryNodeRecentlyAddedEpisodes(strName, pParent);
   case NODE_TYPE_MUSICVIDEOS_OVERVIEW:
-    return new CDirectoryNodeMusicVideosOverview(strName,pParent);
+    return new CDirectoryNodeMusicVideosOverview(strName, pParent);
   case NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS:
-    return new CDirectoryNodeRecentlyAddedMusicVideos(strName,pParent);
+    return new CDirectoryNodeRecentlyAddedMusicVideos(strName, pParent);
   case NODE_TYPE_INPROGRESS_TVSHOWS:
-    return new CDirectoryNodeInProgressTvShows(strName,pParent);
+    return new CDirectoryNodeInProgressTvShows(strName, pParent);
   case NODE_TYPE_TITLE_MUSICVIDEOS:
-    return new CDirectoryNodeTitleMusicVideos(strName,pParent);
+    return new CDirectoryNodeTitleMusicVideos(strName, pParent);
   default:
     break;
   }
@@ -185,19 +187,19 @@ std::string CDirectoryNode::BuildPath() const
   if (!m_strName.empty())
     array.insert(array.begin(), m_strName);
 
-  CDirectoryNode* pParent=m_pParent;
+  CDirectoryNode* pParent = m_pParent;
   while (pParent != nullptr)
   {
-    const std::string& strNodeName=pParent->GetName();
+    const std::string& strNodeName = pParent->GetName();
     if (!strNodeName.empty())
       array.insert(array.begin(), strNodeName);
 
     pParent = pParent->GetParent();
   }
 
-  std::string strPath="videodb://";
+  std::string strPath = "videodb://";
   for (int i = 0; i < static_cast<int>(array.size()); ++i)
-    strPath += array[i]+"/";
+    strPath += array[i] + "/";
 
   std::string options = m_options.GetOptionsString();
   if (!options.empty())
@@ -206,7 +208,7 @@ std::string CDirectoryNode::BuildPath() const
   return strPath;
 }
 
-void CDirectoryNode::AddOptions(const std::string &options)
+void CDirectoryNode::AddOptions(const std::string& options)
 {
   if (options.empty())
     return;
@@ -221,7 +223,7 @@ void CDirectoryNode::CollectQueryParams(CQueryParams& params) const
 {
   params.SetQueryParam(m_Type, m_strName);
 
-  CDirectoryNode* pParent=m_pParent;
+  CDirectoryNode* pParent = m_pParent;
   while (pParent != nullptr)
   {
     params.SetQueryParam(pParent->GetType(), pParent->GetName());
@@ -244,7 +246,7 @@ bool CDirectoryNode::GetChilds(CFileItemList& items)
 
   std::unique_ptr<CDirectoryNode> pNode(CDirectoryNode::CreateNode(GetChildType(), "", this));
 
-  bool bSuccess=false;
+  bool bSuccess = false;
   if (pNode)
   {
     pNode->m_options = m_options;

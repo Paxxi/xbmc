@@ -30,7 +30,7 @@ public:
   const std::string GetInfo(int info) const;
 
   bool Loaded() const { return m_isLoaded; };
-  bool Load(const std::string &path);
+  bool Load(const std::string& path);
 
   void SetInfo(const std::string& key, const std::string& value);
 
@@ -41,15 +41,15 @@ public:
    * DateTime tags. See libexif CExifParse::ProcessDir for details.
    */
   const CDateTime& GetDateTimeTaken() const;
+
 private:
-  static int TranslateString(const std::string &info);
-  void GetStringFromArchive(CArchive &ar, char *string, size_t length);
+  static int TranslateString(const std::string& info);
+  void GetStringFromArchive(CArchive& ar, char* string, size_t length);
 
   ExifInfo_t m_exifInfo;
   IPTCInfo_t m_iptcInfo;
-  bool       m_isLoaded;             // Set to true if metadata has been loaded from the picture file successfully
-  bool       m_isInfoSetExternally;  // Set to true if metadata has been set by an external call to SetInfo
-  CDateTime  m_dateTimeTaken;
+  bool m_isLoaded; // Set to true if metadata has been loaded from the picture file successfully
+  bool m_isInfoSetExternally; // Set to true if metadata has been set by an external call to SetInfo
+  CDateTime m_dateTimeTaken;
   void ConvertDateTime();
 };
-

@@ -6,50 +6,54 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <limits.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-
-#include "network/Network.h"
 #include "Application.h"
-#include "ServiceBroker.h"
 #include "DNSNameCache.h"
-#include "dialogs/GUIDialogProgress.h"
+#include "ServiceBroker.h"
 #include "dialogs/GUIDialogKaiToast.h"
+#include "dialogs/GUIDialogProgress.h"
 #include "filesystem/SpecialProtocol.h"
 #include "guilib/GUIComponent.h"
 #include "guilib/GUIWindowManager.h"
 #include "guilib/LocalizeStrings.h"
+#include "network/Network.h"
 #include "settings/AdvancedSettings.h"
+#include "settings/MediaSourceSettings.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "settings/MediaSourceSettings.h"
 #include "settings/lib/Setting.h"
 #include "utils/JobManager.h"
-#include "utils/log.h"
-#include "utils/XMLUtils.h"
-#include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
 #include "utils/Variant.h"
+#include "utils/XMLUtils.h"
+#include "utils/log.h"
+
+#include <limits.h>
+
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
 #endif
 
 #ifdef HAS_UPNP
 #include "network/upnp/UPnP.h"
+
 #include <Platinum/Source/Platinum/Platinum.h>
 #endif
 
 #include "WakeOnAccess.h"
 
-#define DEFAULT_NETWORK_INIT_SEC      (20)   // wait 20 sec for network after startup or resume
-#define DEFAULT_NETWORK_SETTLE_MS     (500)  // require 500ms of consistent network availability before trusting it
+#define DEFAULT_NETWORK_INIT_SEC (20) // wait 20 sec for network after startup or resume
+#define DEFAULT_NETWORK_SETTLE_MS \
+  (500) // require 500ms of consistent network availability before trusting it
 
-#define DEFAULT_TIMEOUT_SEC (5*60)           // at least 5 minutes between each magic packets
-#define DEFAULT_WAIT_FOR_ONLINE_SEC_1 (40)   // wait at 40 seconds after sending magic packet
-#define DEFAULT_WAIT_FOR_ONLINE_SEC_2 (40)   // same for extended wait
-#define DEFAULT_WAIT_FOR_SERVICES_SEC (5)    // wait 5 seconds after host go online to launch file sharing deamons
+#define DEFAULT_TIMEOUT_SEC (5 * 60) // at least 5 minutes between each magic packets
+#define DEFAULT_WAIT_FOR_ONLINE_SEC_1 (40) // wait at 40 seconds after sending magic packet
+#define DEFAULT_WAIT_FOR_ONLINE_SEC_2 (40) // same for extended wait
+#define DEFAULT_WAIT_FOR_SERVICES_SEC \
+  (5) // wait 5 seconds after host go online to launch file sharing deamons
 
 static CDateTime upnpInitReady;
 
@@ -83,19 +87,17 @@ static void ShowDiscoveryMessage(const char* function, const char* server_name, 
     CLog::Log(LOGINFO, "%s - Update existing entry for host '%s'", function, server_name);
     message = StringUtils::Format(LOCALIZED(13034).c_str(), server_name);
   }
-  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, LOCALIZED(13033), message, 4000, true, 3000);
+  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, LOCALIZED(13033), message, 4000,
+                                        true, 3000);
 }
 
 struct UPnPServer
 {
-  UPnPServer()
-  {
-    m_nextWake = CDateTime::GetCurrentDateTime();
-  }
-  bool operator == (const UPnPServer& server) const { return server.m_uuid == m_uuid; }
-  bool operator != (const UPnPServer& server) const { return !(*this == server); }
-  bool operator == (const std::string& server_uuid) const { return server_uuid == m_uuid; }
-  bool operator != (const std::string& server_uuid) const { return !(*this == server_uuid); }
+  UPnPServer() { m_nextWake = CDateTime::GetCurrentDateTime(); }
+  bool operator==(const UPnPServer& server) const { return server.m_uuid == m_uuid; }
+  bool operator!=(const UPnPServer& server) const { return !(*this == server); }
+  bool operator==(const std::string& server_uuid) const { return server_uuid == m_uuid; }
+  bool operator!=(const std::string& server_uuid) const { return !(*this == server_uuid); }
   std::string m_name;
   std::string m_uuid;
   std::string m_mac;
@@ -116,14 +118,17 @@ static void AddOrUpdateUPnPServer(std::vector<UPnPServer>& list, const UPnPServe
   bool addNewEntry = serverIt == list.end();
 
   if (addNewEntry)
-	  list.push_back(server); // add server
+    list.push_back(server); // add server
   else
     *serverIt = server; // update existing server
 
   ShowDiscoveryMessage(__FUNCTION__, server.m_name.c_str(), addNewEntry);
 }
 
-static void AddMatchingUPnPServers(std::vector<UPnPServer>& list, const std::string& host, const std::string& mac, const CDateTimeSpan& wakeupDelay)
+static void AddMatchingUPnPServers(std::vector<UPnPServer>& list,
+                                   const std::string& host,
+                                   const std::string& mac,
+                                   const CDateTimeSpan& wakeupDelay)
 {
 #ifdef HAS_UPNP
   while (CDateTime::GetCurrentDateTime() < upnpInitReady)
@@ -136,9 +141,11 @@ static void AddMatchingUPnPServers(std::vector<UPnPServer>& list, const std::str
     UPnPServer server;
     server.m_nextWake += wakeupDelay;
 
-    for (NPT_List<PLT_DeviceDataReference>::Iterator device = browser->GetMediaServers().GetFirstItem(); device; ++device)
+    for (NPT_List<PLT_DeviceDataReference>::Iterator device =
+             browser->GetMediaServers().GetFirstItem();
+         device; ++device)
     {
-      if (host == (const char*) (*device)->GetURLBase().GetHost())
+      if (host == (const char*)(*device)->GetURLBase().GetHost())
       {
         server.m_name = (*device)->GetFriendlyName();
         server.m_uuid = (*device)->GetUUID();
@@ -174,8 +181,8 @@ static std::string LookupUPnPHost(const std::string& uuid)
   return "";
 }
 
-CWakeOnAccess::WakeUpEntry::WakeUpEntry (bool isAwake)
-  : timeout (0, 0, 0, DEFAULT_TIMEOUT_SEC)
+CWakeOnAccess::WakeUpEntry::WakeUpEntry(bool isAwake)
+  : timeout(0, 0, 0, DEFAULT_TIMEOUT_SEC)
   , wait_online1_sec(DEFAULT_WAIT_FOR_ONLINE_SEC_1)
   , wait_online2_sec(DEFAULT_WAIT_FOR_ONLINE_SEC_2)
   , wait_services_sec(DEFAULT_WAIT_FOR_SERVICES_SEC)
@@ -191,7 +198,10 @@ CWakeOnAccess::WakeUpEntry::WakeUpEntry (bool isAwake)
 class CMACDiscoveryJob : public CJob
 {
 public:
-  explicit CMACDiscoveryJob(const std::string& host) : m_host(host) {}
+  explicit CMACDiscoveryJob(const std::string& host)
+    : m_host(host)
+  {
+  }
 
   bool DoWork() override;
 
@@ -229,7 +239,7 @@ class WaitCondition
 {
 public:
   virtual ~WaitCondition() = default;
-  virtual bool SuccessWaiting () const { return false; }
+  virtual bool SuccessWaiting() const { return false; }
 };
 
 //
@@ -237,7 +247,8 @@ public:
 class NestDetect
 {
 public:
-  NestDetect() : m_gui_thread (g_application.IsCurrentThread())
+  NestDetect()
+    : m_gui_thread(g_application.IsCurrentThread())
   {
     if (m_gui_thread)
       ++m_nest;
@@ -247,14 +258,8 @@ public:
     if (m_gui_thread)
       m_nest--;
   }
-  static int Level()
-  {
-    return m_nest;
-  }
-  bool IsNested() const
-  {
-    return m_gui_thread && m_nest > 1;
-  }
+  static int Level() { return m_nest; }
+  bool IsNested() const { return m_gui_thread && m_nest > 1; }
 
 private:
   static int m_nest;
@@ -267,11 +272,12 @@ int NestDetect::m_nest = 0;
 class ProgressDialogHelper
 {
 public:
-  explicit ProgressDialogHelper (const std::string& heading) : m_dialog(0)
+  explicit ProgressDialogHelper(const std::string& heading)
+    : m_dialog(0)
   {
     if (g_application.IsCurrentThread())
     {
-      CGUIComponent *gui = CServiceBroker::GetGUI();
+      CGUIComponent* gui = CServiceBroker::GetGUI();
       if (gui)
         m_dialog = gui->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
     }
@@ -284,7 +290,7 @@ public:
       m_dialog->SetLine(2, CVariant{""});
     }
   }
-  ~ProgressDialogHelper ()
+  ~ProgressDialogHelper()
   {
     if (m_dialog)
       m_dialog->Close();
@@ -292,9 +298,16 @@ public:
 
   bool HasDialog() const { return m_dialog != 0; }
 
-  enum wait_result { TimedOut, Canceled, Success };
+  enum wait_result
+  {
+    TimedOut,
+    Canceled,
+    Success
+  };
 
-  wait_result ShowAndWait (const WaitCondition& waitObj, unsigned timeOutSec, const std::string& line1)
+  wait_result ShowAndWait(const WaitCondition& waitObj,
+                          unsigned timeOutSec,
+                          const std::string& line1)
   {
     unsigned timeOutMs = timeOutSec * 1000;
 
@@ -305,7 +318,7 @@ public:
       m_dialog->SetPercentage(1); // avoid flickering by starting at 1% ..
     }
 
-    XbmcThreads::EndTime end_time (timeOutMs);
+    XbmcThreads::EndTime end_time(timeOutMs);
 
     while (!end_time.IsTimePast())
     {
@@ -328,7 +341,7 @@ public:
         m_dialog->SetPercentage(std::max(percentage, 1)); // avoid flickering , keep minimum 1%
       }
 
-      Sleep (m_dialog ? 20 : 200);
+      Sleep(m_dialog ? 20 : 200);
     }
 
     return TimedOut;
@@ -341,19 +354,22 @@ private:
 class NetworkStartWaiter : public WaitCondition
 {
 public:
-  NetworkStartWaiter (unsigned settle_time_ms, const std::string& host) : m_settle_time_ms (settle_time_ms), m_host(host)
+  NetworkStartWaiter(unsigned settle_time_ms, const std::string& host)
+    : m_settle_time_ms(settle_time_ms)
+    , m_host(host)
   {
   }
-  bool SuccessWaiting () const override
+  bool SuccessWaiting() const override
   {
     unsigned long address = ntohl(HostToIP(m_host));
     bool online = CServiceBroker::GetNetwork().HasInterfaceForIP(address);
 
     if (!online) // setup endtime so we dont return true until network is consistently connected
-      m_end.Set (m_settle_time_ms);
+      m_end.Set(m_settle_time_ms);
 
     return online && m_end.IsTimePast();
   }
+
 private:
   mutable XbmcThreads::EndTime m_end;
   unsigned m_settle_time_ms;
@@ -363,8 +379,10 @@ private:
 class PingResponseWaiter : public WaitCondition, private IJobCallback
 {
 public:
-  PingResponseWaiter (bool async, const CWakeOnAccess::WakeUpEntry& server)
-    : m_server(server), m_jobId(0), m_hostOnline(false)
+  PingResponseWaiter(bool async, const CWakeOnAccess::WakeUpEntry& server)
+    : m_server(server)
+    , m_jobId(0)
+    , m_hostOnline(false)
   {
     if (async)
     {
@@ -372,16 +390,10 @@ public:
       m_jobId = CJobManager::GetInstance().AddJob(job, this);
     }
   }
-  ~PingResponseWaiter() override
-  {
-    CJobManager::GetInstance().CancelJob(m_jobId);
-  }
-  bool SuccessWaiting () const override
-  {
-    return m_jobId ? m_hostOnline : Ping(m_server);
-  }
+  ~PingResponseWaiter() override { CJobManager::GetInstance().CancelJob(m_jobId); }
+  bool SuccessWaiting() const override { return m_jobId ? m_hostOnline : Ping(m_server); }
 
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override
   {
     m_hostOnline = success;
   }
@@ -392,7 +404,8 @@ public:
     {
       unsigned long dst_ip = HostToIP(server.host);
 
-      return CServiceBroker::GetNetwork().PingHost(dst_ip, server.ping_port, timeOutMs, server.ping_mode & 1);
+      return CServiceBroker::GetNetwork().PingHost(dst_ip, server.ping_port, timeOutMs,
+                                                   server.ping_mode & 1);
     }
     else // upnp mode
     {
@@ -412,21 +425,24 @@ public:
 private:
   class CHostProberJob : public CJob
   {
-    public:
-      explicit CHostProberJob(const CWakeOnAccess::WakeUpEntry& server) : m_server (server) {}
+  public:
+    explicit CHostProberJob(const CWakeOnAccess::WakeUpEntry& server)
+      : m_server(server)
+    {
+    }
 
-      bool DoWork() override
+    bool DoWork() override
+    {
+      while (!ShouldCancel(0, 0))
       {
-        while (!ShouldCancel(0,0))
-        {
-          if (PingResponseWaiter::Ping(m_server))
-            return true;
-        }
-        return false;
+        if (PingResponseWaiter::Ping(m_server))
+          return true;
       }
+      return false;
+    }
 
-    private:
-      const CWakeOnAccess::WakeUpEntry& m_server;
+  private:
+    const CWakeOnAccess::WakeUpEntry& m_server;
   };
 
   const CWakeOnAccess::WakeUpEntry& m_server;
@@ -437,12 +453,12 @@ private:
 //
 
 CWakeOnAccess::CWakeOnAccess()
-  : m_netinit_sec(DEFAULT_NETWORK_INIT_SEC)    // wait for network to connect
-  , m_netsettle_ms(DEFAULT_NETWORK_SETTLE_MS)  // wait for network to settle
+  : m_netinit_sec(DEFAULT_NETWORK_INIT_SEC) // wait for network to connect
+  , m_netsettle_ms(DEFAULT_NETWORK_SETTLE_MS) // wait for network to settle
 {
 }
 
-CWakeOnAccess &CWakeOnAccess::GetInstance()
+CWakeOnAccess& CWakeOnAccess::GetInstance()
 {
   static CWakeOnAccess sWakeOnAccess;
   return sWakeOnAccess;
@@ -463,7 +479,9 @@ bool CWakeOnAccess::WakeUpHost(const std::string& hostName, const std::string& c
   return WakeUpHost(hostName, customMessage, false);
 }
 
-bool CWakeOnAccess::WakeUpHost(const std::string& hostName, const std::string& customMessage, bool upnpMode)
+bool CWakeOnAccess::WakeUpHost(const std::string& hostName,
+                               const std::string& customMessage,
+                               bool upnpMode)
 {
   if (!IsEnabled())
     return true; // bail if feature is turned off
@@ -472,17 +490,20 @@ bool CWakeOnAccess::WakeUpHost(const std::string& hostName, const std::string& c
 
   if (FindOrTouchHostEntry(hostName, upnpMode, server))
   {
-    CLog::Log(LOGNOTICE, "WakeOnAccess [%s] trigged by accessing : %s", server.friendlyName.c_str(), customMessage.c_str());
+    CLog::Log(LOGNOTICE, "WakeOnAccess [%s] trigged by accessing : %s", server.friendlyName.c_str(),
+              customMessage.c_str());
 
-    NestDetect nesting ; // detect recursive calls on gui thread..
+    NestDetect nesting; // detect recursive calls on gui thread..
 
     if (nesting.IsNested()) // we might get in trouble if it gets called back in loop
-      CLog::Log(LOGWARNING,"WakeOnAccess recursively called on gui-thread [%d]", NestDetect::Level());
+      CLog::Log(LOGWARNING, "WakeOnAccess recursively called on gui-thread [%d]",
+                NestDetect::Level());
 
     bool ret = WakeUpHost(server);
 
     if (!ret) // extra log if we fail for some reason
-      CLog::Log(LOGWARNING, "WakeOnAccess failed to bring up [%s] - there may be trouble ahead !", server.friendlyName.c_str());
+      CLog::Log(LOGWARNING, "WakeOnAccess failed to bring up [%s] - there may be trouble ahead !",
+                server.friendlyName.c_str());
 
     TouchHostEntry(hostName, upnpMode);
 
@@ -495,17 +516,19 @@ bool CWakeOnAccess::WakeUpHost(const WakeUpEntry& server)
 {
   std::string heading = StringUtils::Format(LOCALIZED(13027).c_str(), server.friendlyName.c_str());
 
-  ProgressDialogHelper dlg (heading);
+  ProgressDialogHelper dlg(heading);
 
   {
-    NetworkStartWaiter waitObj (m_netsettle_ms, server.host); // wait until network connected before sending wake-on-lan
+    NetworkStartWaiter waitObj(
+        m_netsettle_ms, server.host); // wait until network connected before sending wake-on-lan
 
-    if (dlg.ShowAndWait (waitObj, m_netinit_sec, LOCALIZED(13028)) != ProgressDialogHelper::Success)
+    if (dlg.ShowAndWait(waitObj, m_netinit_sec, LOCALIZED(13028)) != ProgressDialogHelper::Success)
     {
       if (CServiceBroker::GetNetwork().IsConnected() && HostToIP(server.host) == INADDR_NONE)
       {
         // network connected (at least one interface) but dns-lookup failed (host by name, not ip-address), so dont abort yet
-        CLog::Log(LOGWARNING, "WakeOnAccess timeout/cancel while waiting for network (proceeding anyway)");
+        CLog::Log(LOGWARNING,
+                  "WakeOnAccess timeout/cancel while waiting for network (proceeding anyway)");
       }
       else
       {
@@ -517,13 +540,13 @@ bool CWakeOnAccess::WakeUpHost(const WakeUpEntry& server)
 
   if (PingResponseWaiter::Ping(server, 500)) // quick ping with short timeout to not block too long
   {
-    CLog::Log(LOGNOTICE,"WakeOnAccess success exit, server already running");
+    CLog::Log(LOGNOTICE, "WakeOnAccess success exit, server already running");
     return true;
   }
 
   if (!CServiceBroker::GetNetwork().WakeOnLan(server.mac.c_str()))
   {
-    CLog::Log(LOGERROR,"WakeOnAccess failed to send. (Is it blocked by firewall?)");
+    CLog::Log(LOGERROR, "WakeOnAccess failed to send. (Is it blocked by firewall?)");
 
     if (g_application.IsCurrentThread() || !g_application.GetAppPlayer().IsPlaying())
       CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, heading, LOCALIZED(13029));
@@ -531,17 +554,17 @@ bool CWakeOnAccess::WakeUpHost(const WakeUpEntry& server)
   }
 
   {
-    PingResponseWaiter waitObj (dlg.HasDialog(), server); // wait for ping response ..
+    PingResponseWaiter waitObj(dlg.HasDialog(), server); // wait for ping response ..
 
-    ProgressDialogHelper::wait_result
-      result = dlg.ShowAndWait (waitObj, server.wait_online1_sec, LOCALIZED(13030));
+    ProgressDialogHelper::wait_result result =
+        dlg.ShowAndWait(waitObj, server.wait_online1_sec, LOCALIZED(13030));
 
     if (result == ProgressDialogHelper::TimedOut)
-      result = dlg.ShowAndWait (waitObj, server.wait_online2_sec, LOCALIZED(13031));
+      result = dlg.ShowAndWait(waitObj, server.wait_online2_sec, LOCALIZED(13031));
 
     if (result != ProgressDialogHelper::Success)
     {
-      CLog::Log(LOGNOTICE,"WakeOnAccess timeout/cancel while waiting for response");
+      CLog::Log(LOGNOTICE, "WakeOnAccess timeout/cancel while waiting for response");
       return false; // timedout or canceled
     }
   }
@@ -549,18 +572,20 @@ bool CWakeOnAccess::WakeUpHost(const WakeUpEntry& server)
   // we have ping response ; just add extra wait-for-services before returning if requested
 
   {
-    WaitCondition waitObj ; // wait uninterruptable fixed time for services ..
+    WaitCondition waitObj; // wait uninterruptable fixed time for services ..
 
-    dlg.ShowAndWait (waitObj, server.wait_services_sec, LOCALIZED(13032));
+    dlg.ShowAndWait(waitObj, server.wait_services_sec, LOCALIZED(13032));
 
-    CLog::Log(LOGNOTICE,"WakeOnAccess sequence completed, server started");
+    CLog::Log(LOGNOTICE, "WakeOnAccess sequence completed, server started");
   }
   return true;
 }
 
-bool CWakeOnAccess::FindOrTouchHostEntry(const std::string& hostName, bool upnpMode, WakeUpEntry& result)
+bool CWakeOnAccess::FindOrTouchHostEntry(const std::string& hostName,
+                                         bool upnpMode,
+                                         WakeUpEntry& result)
 {
-  CSingleLock lock (m_entrylist_protect);
+  CSingleLock lock(m_entrylist_protect);
 
   bool need_wakeup = false;
 
@@ -568,7 +593,8 @@ bool CWakeOnAccess::FindOrTouchHostEntry(const std::string& hostName, bool upnpM
 
   for (auto& server : m_entries)
   {
-    if (upnp ? StringUtils::EqualsNoCase(upnp->m_mac, server.mac) : StringUtils::EqualsNoCase(hostName, server.host))
+    if (upnp ? StringUtils::EqualsNoCase(upnp->m_mac, server.mac)
+             : StringUtils::EqualsNoCase(hostName, server.host))
     {
       CDateTime now = CDateTime::GetCurrentDateTime();
 
@@ -600,13 +626,14 @@ bool CWakeOnAccess::FindOrTouchHostEntry(const std::string& hostName, bool upnpM
 
 void CWakeOnAccess::TouchHostEntry(const std::string& hostName, bool upnpMode)
 {
-  CSingleLock lock (m_entrylist_protect);
+  CSingleLock lock(m_entrylist_protect);
 
   UPnPServer* upnp = upnpMode ? LookupUPnPServer(m_UPnPServers, hostName) : nullptr;
 
   for (auto& server : m_entries)
   {
-    if (upnp ? StringUtils::EqualsNoCase(upnp->m_mac, server.mac) : StringUtils::EqualsNoCase(hostName, server.host))
+    if (upnp ? StringUtils::EqualsNoCase(upnp->m_mac, server.mac)
+             : StringUtils::EqualsNoCase(hostName, server.host))
     {
       server.nextWake = CDateTime::GetCurrentDateTime() + server.timeout;
 
@@ -618,7 +645,7 @@ void CWakeOnAccess::TouchHostEntry(const std::string& hostName, bool upnpMode)
   }
 }
 
-static void AddHost (const std::string& host, std::vector<std::string>& hosts)
+static void AddHost(const std::string& host, std::vector<std::string>& hosts)
 {
   for (const auto& it : hosts)
     if (StringUtils::EqualsNoCase(host, it))
@@ -641,7 +668,8 @@ void CWakeOnAccess::QueueMACDiscoveryForHost(const std::string& host)
     if (URIUtils::IsHostOnLAN(host, true))
       CJobManager::GetInstance().AddJob(new CMACDiscoveryJob(host), this);
     else
-      CLog::Log(LOGNOTICE, "%s - skip Mac discovery for non-local host '%s'", __FUNCTION__, host.c_str());
+      CLog::Log(LOGNOTICE, "%s - skip Mac discovery for non-local host '%s'", __FUNCTION__,
+                host.c_str());
   }
 }
 
@@ -685,7 +713,8 @@ void CWakeOnAccess::QueueMACDiscoveryForAllRemotes()
   AddHostsFromVecSource(ms.GetSources("pictures"), hosts);
   AddHostsFromVecSource(ms.GetSources("programs"), hosts);
 
-  const std::shared_ptr<CAdvancedSettings> advancedSettings = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
+  const std::shared_ptr<CAdvancedSettings> advancedSettings =
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
 
   // add mysql servers
   AddHostFromDatabase(advancedSettings->m_databaseVideo, hosts);
@@ -697,7 +726,7 @@ void CWakeOnAccess::QueueMACDiscoveryForAllRemotes()
   for (const auto& pathPair : advancedSettings->m_pathSubstitutions)
   {
     CURL url(pathPair.second);
-    AddHost (url.GetHostName(), hosts);
+    AddHost(url.GetHostName(), hosts);
   }
 
   for (const std::string& host : hosts)
@@ -706,7 +735,8 @@ void CWakeOnAccess::QueueMACDiscoveryForAllRemotes()
 
 void CWakeOnAccess::SaveMACDiscoveryResult(const std::string& host, const std::string& mac)
 {
-  CLog::Log(LOGNOTICE, "%s - Mac discovered for host '%s' -> '%s'", __FUNCTION__, host.c_str(), mac.c_str());
+  CLog::Log(LOGNOTICE, "%s - Mac discovered for host '%s' -> '%s'", __FUNCTION__, host.c_str(),
+            mac.c_str());
 
   for (auto& i : m_entries)
   {
@@ -722,9 +752,9 @@ void CWakeOnAccess::SaveMACDiscoveryResult(const std::string& host, const std::s
   }
 
   // not found entry to update - create using default values
-  WakeUpEntry entry (true);
+  WakeUpEntry entry(true);
   entry.host = host;
-  entry.mac  = mac;
+  entry.mac = mac;
   m_entries.push_back(entry);
   ShowDiscoveryMessage(__FUNCTION__, host.c_str(), true);
 
@@ -732,7 +762,7 @@ void CWakeOnAccess::SaveMACDiscoveryResult(const std::string& host, const std::s
   SaveToXML();
 }
 
-void CWakeOnAccess::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CWakeOnAccess::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   CMACDiscoveryJob* discoverJob = static_cast<CMACDiscoveryJob*>(job);
 
@@ -741,7 +771,7 @@ void CWakeOnAccess::OnJobComplete(unsigned int jobID, bool success, CJob *job)
 
   if (success)
   {
-    CSingleLock lock (m_entrylist_protect);
+    CSingleLock lock(m_entrylist_protect);
 
     SaveMACDiscoveryResult(host, mac);
   }
@@ -753,7 +783,8 @@ void CWakeOnAccess::OnJobComplete(unsigned int jobID, bool success, CJob *job)
     {
       std::string heading = LOCALIZED(13033);
       std::string message = StringUtils::Format(LOCALIZED(13036).c_str(), host.c_str());
-      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, heading, message, 4000, true, 3000);
+      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, heading, message, 4000, true,
+                                            3000);
     }
   }
 }
@@ -782,7 +813,7 @@ std::string CWakeOnAccess::GetSettingFile()
 
 void CWakeOnAccess::OnSettingsLoaded()
 {
-  CSingleLock lock (m_entrylist_protect);
+  CSingleLock lock(m_entrylist_protect);
 
   LoadFromXML();
 }
@@ -791,12 +822,13 @@ void CWakeOnAccess::SetEnabled(bool enabled)
 {
   m_enabled = enabled;
 
-  CLog::Log(LOGNOTICE,"WakeOnAccess - Enabled:%s", m_enabled ? "TRUE" : "FALSE");
+  CLog::Log(LOGNOTICE, "WakeOnAccess - Enabled:%s", m_enabled ? "TRUE" : "FALSE");
 }
 
 void CWakeOnAccess::LoadFromXML()
 {
-  bool enabled = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_POWERMANAGEMENT_WAKEONACCESS);
+  bool enabled = CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+      CSettings::SETTING_POWERMANAGEMENT_WAKEONACCESS);
 
   CXBMCTinyXML xmlDoc;
   if (!xmlDoc.LoadFile(GetSettingFile()))
@@ -809,24 +841,25 @@ void CWakeOnAccess::LoadFromXML()
   TiXmlElement* pRootElement = xmlDoc.RootElement();
   if (strcmpi(pRootElement->Value(), "onaccesswakeup"))
   {
-    CLog::Log(LOGERROR, "%s - XML file %s doesnt contain <onaccesswakeup>", __FUNCTION__, GetSettingFile().c_str());
+    CLog::Log(LOGERROR, "%s - XML file %s doesnt contain <onaccesswakeup>", __FUNCTION__,
+              GetSettingFile().c_str());
     return;
   }
 
   m_entries.clear();
 
-  CLog::Log(LOGNOTICE,"WakeOnAccess - Load settings :");
+  CLog::Log(LOGNOTICE, "WakeOnAccess - Load settings :");
 
   SetEnabled(enabled);
 
   int tmp;
   if (XMLUtils::GetInt(pRootElement, "netinittimeout", tmp, 0, 5 * 60))
     m_netinit_sec = tmp;
-  CLog::Log(LOGNOTICE,"  -Network init timeout : [%d] sec", m_netinit_sec);
+  CLog::Log(LOGNOTICE, "  -Network init timeout : [%d] sec", m_netinit_sec);
 
   if (XMLUtils::GetInt(pRootElement, "netsettletime", tmp, 0, 5 * 1000))
     m_netsettle_ms = tmp;
-  CLog::Log(LOGNOTICE,"  -Network settle time  : [%d] ms", m_netsettle_ms);
+  CLog::Log(LOGNOTICE, "  -Network settle time  : [%d] ms", m_netsettle_ms);
 
   const TiXmlNode* pWakeUp = pRootElement->FirstChildElement("wakeup");
   while (pWakeUp)
@@ -843,17 +876,17 @@ void CWakeOnAccess::LoadFromXML()
     if (entry.host.empty())
       CLog::Log(LOGERROR, "%s - Missing <host> tag or it's empty", __FUNCTION__);
     else if (entry.mac.empty())
-       CLog::Log(LOGERROR, "%s - Missing <mac> tag or it's empty", __FUNCTION__);
+      CLog::Log(LOGERROR, "%s - Missing <mac> tag or it's empty", __FUNCTION__);
     else
     {
       if (XMLUtils::GetInt(pWakeUp, "pingport", tmp, 0, USHRT_MAX))
-        entry.ping_port = (unsigned short) tmp;
+        entry.ping_port = (unsigned short)tmp;
 
       if (XMLUtils::GetInt(pWakeUp, "pingmode", tmp, 0, USHRT_MAX))
-        entry.ping_mode = (unsigned short) tmp;
+        entry.ping_mode = (unsigned short)tmp;
 
       if (XMLUtils::GetInt(pWakeUp, "timeout", tmp, 10, 12 * 60 * 60))
-        entry.timeout.SetDateTimeSpan (0, 0, 0, tmp);
+        entry.timeout.SetDateTimeSpan(0, 0, 0, tmp);
 
       if (XMLUtils::GetInt(pWakeUp, "waitonline", tmp, 0, 10 * 60)) // max 10 minutes
         entry.wait_online1_sec = tmp;
@@ -864,15 +897,15 @@ void CWakeOnAccess::LoadFromXML()
       if (XMLUtils::GetInt(pWakeUp, "waitservices", tmp, 0, 5 * 60)) // max 5 minutes
         entry.wait_services_sec = tmp;
 
-      CLog::Log(LOGNOTICE,"  Registering wakeup entry:");
-      CLog::Log(LOGNOTICE,"    HostName        : %s", entry.host.c_str());
-      CLog::Log(LOGNOTICE,"    MacAddress      : %s", entry.mac.c_str());
-      CLog::Log(LOGNOTICE,"    PingPort        : %d", entry.ping_port);
-      CLog::Log(LOGNOTICE,"    PingMode        : %d", entry.ping_mode);
-      CLog::Log(LOGNOTICE,"    Timeout         : %d (sec)", GetTotalSeconds(entry.timeout));
-      CLog::Log(LOGNOTICE,"    WaitForOnline   : %d (sec)", entry.wait_online1_sec);
-      CLog::Log(LOGNOTICE,"    WaitForOnlineEx : %d (sec)", entry.wait_online2_sec);
-      CLog::Log(LOGNOTICE,"    WaitForServices : %d (sec)", entry.wait_services_sec);
+      CLog::Log(LOGNOTICE, "  Registering wakeup entry:");
+      CLog::Log(LOGNOTICE, "    HostName        : %s", entry.host.c_str());
+      CLog::Log(LOGNOTICE, "    MacAddress      : %s", entry.mac.c_str());
+      CLog::Log(LOGNOTICE, "    PingPort        : %d", entry.ping_port);
+      CLog::Log(LOGNOTICE, "    PingMode        : %d", entry.ping_mode);
+      CLog::Log(LOGNOTICE, "    Timeout         : %d (sec)", GetTotalSeconds(entry.timeout));
+      CLog::Log(LOGNOTICE, "    WaitForOnline   : %d (sec)", entry.wait_online1_sec);
+      CLog::Log(LOGNOTICE, "    WaitForOnlineEx : %d (sec)", entry.wait_online2_sec);
+      CLog::Log(LOGNOTICE, "    WaitForServices : %d (sec)", entry.wait_services_sec);
 
       m_entries.push_back(entry);
     }
@@ -899,7 +932,8 @@ void CWakeOnAccess::LoadFromXML()
       CLog::Log(LOGERROR, "%s - Missing or empty <upnp_map> entry", __FUNCTION__);
     else
     {
-      CLog::Log(LOGNOTICE, "  Registering upnp_map entry [%s : %s] -> [%s]", server.m_name.c_str(), server.m_uuid.c_str(), server.m_mac.c_str());
+      CLog::Log(LOGNOTICE, "  Registering upnp_map entry [%s : %s] -> [%s]", server.m_name.c_str(),
+                server.m_uuid.c_str(), server.m_mac.c_str());
 
       m_UPnPServers.push_back(server);
     }
@@ -912,8 +946,9 @@ void CWakeOnAccess::SaveToXML()
 {
   CXBMCTinyXML xmlDoc;
   TiXmlElement xmlRootElement("onaccesswakeup");
-  TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
-  if (!pRoot) return;
+  TiXmlNode* pRoot = xmlDoc.InsertEndChild(xmlRootElement);
+  if (!pRoot)
+    return;
 
   XMLUtils::SetInt(pRoot, "netinittimeout", m_netinit_sec);
   XMLUtils::SetInt(pRoot, "netsettletime", m_netsettle_ms);

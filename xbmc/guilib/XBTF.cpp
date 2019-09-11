@@ -104,28 +104,24 @@ void CXBTFFrame::SetDuration(uint32_t duration)
 
 uint64_t CXBTFFrame::GetHeaderSize() const
 {
-  uint64_t result =
-    sizeof(m_width) +
-    sizeof(m_height) +
-    sizeof(m_format) +
-    sizeof(m_packedSize) +
-    sizeof(m_unpackedSize) +
-    sizeof(m_offset) +
-    sizeof(m_duration);
+  uint64_t result = sizeof(m_width) + sizeof(m_height) + sizeof(m_format) + sizeof(m_packedSize) +
+                    sizeof(m_unpackedSize) + sizeof(m_offset) + sizeof(m_duration);
 
   return result;
 }
 
 CXBTFFile::CXBTFFile()
-  : m_path(),
-    m_frames()
-{ }
+  : m_path()
+  , m_frames()
+{
+}
 
 CXBTFFile::CXBTFFile(const CXBTFFile& ref)
-  : m_path(ref.m_path),
-    m_loop(ref.m_loop),
-    m_frames(ref.m_frames)
-{ }
+  : m_path(ref.m_path)
+  , m_loop(ref.m_loop)
+  , m_frames(ref.m_frames)
+{
+}
 
 const std::string& CXBTFFile::GetPath() const
 {
@@ -177,10 +173,7 @@ uint64_t CXBTFFile::GetUnpackedSize() const
 
 uint64_t CXBTFFile::GetHeaderSize() const
 {
-  uint64_t result =
-    MaximumPathLength +
-    sizeof(m_loop) +
-    sizeof(uint32_t); /* Number of frames */
+  uint64_t result = MaximumPathLength + sizeof(m_loop) + sizeof(uint32_t); /* Number of frames */
 
   for (const auto& frame : m_frames)
     result += frame.GetHeaderSize();
@@ -190,8 +183,8 @@ uint64_t CXBTFFile::GetHeaderSize() const
 
 uint64_t CXBTFBase::GetHeaderSize() const
 {
-  uint64_t result = XBTF_MAGIC.size() + XBTF_VERSION.size() +
-    sizeof(uint32_t) /* number of files */;
+  uint64_t result =
+      XBTF_MAGIC.size() + XBTF_VERSION.size() + sizeof(uint32_t) /* number of files */;
 
   for (const auto& file : m_files)
     result += file.second.GetHeaderSize();

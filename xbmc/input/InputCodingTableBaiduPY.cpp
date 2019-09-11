@@ -19,13 +19,13 @@
 #include <stdlib.h>
 #include <utility>
 
-CInputCodingTableBaiduPY::CInputCodingTableBaiduPY(const std::string& strUrl) :
-  CThread("BaiduPYApi"),
-  m_messageCounter{ 0 },
-  m_api_begin{ 0 },
-  m_api_end{ 20 },
-  m_api_nomore{ false },
-  m_initialized{ false }
+CInputCodingTableBaiduPY::CInputCodingTableBaiduPY(const std::string& strUrl)
+  : CThread("BaiduPYApi")
+  , m_messageCounter{0}
+  , m_api_begin{0}
+  , m_api_end{20}
+  , m_api_nomore{false}
+  , m_initialized{false}
 {
   m_url = strUrl;
   m_codechars = "abcdefghijklmnopqrstuvwxyz";
@@ -59,7 +59,8 @@ void CInputCodingTableBaiduPY::Process()
   }
 }
 
-void CInputCodingTableBaiduPY::HandleResponse(const std::string& strCode, const std::string& response)
+void CInputCodingTableBaiduPY::HandleResponse(const std::string& strCode,
+                                              const std::string& response)
 {
   if (strCode != m_code) // don't handle obsolete response
     return;
@@ -89,7 +90,8 @@ void CInputCodingTableBaiduPY::HandleResponse(const std::string& strCode, const 
   CGUIMessage msg(GUI_MSG_CODINGTABLE_LOOKUP_COMPLETED, 0, 0, m_messageCounter);
   msg.SetStringParam(strCode);
   lock.Leave();
-  CServiceBroker::GetGUI()->GetWindowManager().SendThreadMessage(msg, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
+  CServiceBroker::GetGUI()->GetWindowManager().SendThreadMessage(
+      msg, CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindowOrDialog());
 }
 
 std::wstring CInputCodingTableBaiduPY::UnicodeToWString(const std::string& unicode)

@@ -33,13 +33,13 @@ using namespace KODI::MESSAGING;
 #define SETTING_RECORDING_PLAYCOUNT "recording.playcount"
 #define SETTING_RECORDING_LIFETIME "recording.lifetime"
 
-CGUIDialogPVRRecordingSettings::CGUIDialogPVRRecordingSettings() :
-  CGUIDialogSettingsManualBase(WINDOW_DIALOG_PVR_RECORDING_SETTING, "DialogSettings.xml")
+CGUIDialogPVRRecordingSettings::CGUIDialogPVRRecordingSettings()
+  : CGUIDialogSettingsManualBase(WINDOW_DIALOG_PVR_RECORDING_SETTING, "DialogSettings.xml")
 {
   m_loadType = LOAD_EVERY_TIME;
 }
 
-void CGUIDialogPVRRecordingSettings::SetRecording(const CPVRRecordingPtr &recording)
+void CGUIDialogPVRRecordingSettings::SetRecording(const CPVRRecordingPtr& recording)
 {
   if (!recording)
   {
@@ -91,11 +91,13 @@ void CGUIDialogPVRRecordingSettings::InitializeSettings()
 
   // Play count
   if (client && client->GetClientCapabilities().SupportsRecordingsPlayCount())
-    setting = AddEdit(group, SETTING_RECORDING_PLAYCOUNT, 567, SettingLevel::Basic, m_recording->GetLocalPlayCount());
+    setting = AddEdit(group, SETTING_RECORDING_PLAYCOUNT, 567, SettingLevel::Basic,
+                      m_recording->GetLocalPlayCount());
 
   // Lifetime
   if (client && client->GetClientCapabilities().SupportsRecordingsLifetimeChange())
-    setting = AddList(group, SETTING_RECORDING_LIFETIME, 19083, SettingLevel::Basic, m_iLifetime, LifetimesFiller, 19083);
+    setting = AddList(group, SETTING_RECORDING_LIFETIME, 19083, SettingLevel::Basic, m_iLifetime,
+                      LifetimesFiller, 19083);
 }
 
 bool CGUIDialogPVRRecordingSettings::CanEditRecording(const CFileItem& item)
@@ -103,15 +105,15 @@ bool CGUIDialogPVRRecordingSettings::CanEditRecording(const CFileItem& item)
   if (!item.HasPVRRecordingInfoTag())
     return false;
 
-  const std::shared_ptr<CPVRClient> client = CServiceBroker::GetPVRManager().GetClient(item.GetPVRRecordingInfoTag()->ClientID());
+  const std::shared_ptr<CPVRClient> client =
+      CServiceBroker::GetPVRManager().GetClient(item.GetPVRRecordingInfoTag()->ClientID());
 
   if (!client)
     return false;
 
   const CPVRClientCapabilities& capabilities = client->GetClientCapabilities();
 
-  return capabilities.SupportsRecordingsRename() ||
-         capabilities.SupportsRecordingsPlayCount() ||
+  return capabilities.SupportsRecordingsRename() || capabilities.SupportsRecordingsPlayCount() ||
          capabilities.SupportsRecordingsLifetimeChange();
 }
 
@@ -123,15 +125,17 @@ bool CGUIDialogPVRRecordingSettings::OnSettingChanging(std::shared_ptr<const CSe
     return false;
   }
 
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
 
   if (settingId == SETTING_RECORDING_LIFETIME)
   {
     int iNewLifetime = std::static_pointer_cast<const CSettingInt>(setting)->GetValue();
     if (m_recording->WillBeExpiredWithNewLifetime(iNewLifetime))
     {
-      if (HELPERS::ShowYesNoDialogText(CVariant{19068}, // "Recording settings"
-                                       StringUtils::Format(g_localizeStrings.Get(19147).c_str(), iNewLifetime)) // "Setting the lieftime..."
+      if (HELPERS::ShowYesNoDialogText(
+              CVariant{19068}, // "Recording settings"
+              StringUtils::Format(g_localizeStrings.Get(19147).c_str(),
+                                  iNewLifetime)) // "Setting the lieftime..."
           != HELPERS::DialogResponse::YES)
         return false;
     }
@@ -150,7 +154,7 @@ void CGUIDialogPVRRecordingSettings::OnSettingChanged(std::shared_ptr<const CSet
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
 
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
 
   if (settingId == SETTING_RECORDING_NAME)
   {
@@ -178,18 +182,21 @@ void CGUIDialogPVRRecordingSettings::Save()
   m_recording->m_iLifetime = m_iLifetime;
 }
 
-void CGUIDialogPVRRecordingSettings::LifetimesFiller(
-  SettingConstPtr setting, std::vector<IntegerSettingOption> &list, int &current, void *data)
+void CGUIDialogPVRRecordingSettings::LifetimesFiller(SettingConstPtr setting,
+                                                     std::vector<IntegerSettingOption>& list,
+                                                     int& current,
+                                                     void* data)
 {
-  CGUIDialogPVRRecordingSettings *pThis = static_cast<CGUIDialogPVRRecordingSettings*>(data);
+  CGUIDialogPVRRecordingSettings* pThis = static_cast<CGUIDialogPVRRecordingSettings*>(data);
   if (pThis)
   {
     list.clear();
 
-    const CPVRClientPtr client = CServiceBroker::GetPVRManager().GetClient(pThis->m_recording->ClientID());
+    const CPVRClientPtr client =
+        CServiceBroker::GetPVRManager().GetClient(pThis->m_recording->ClientID());
     if (client)
     {
-      std::vector<std::pair<std::string,int>> values;
+      std::vector<std::pair<std::string, int>> values;
       client->GetClientCapabilities().GetRecordingsLifetimeValues(values);
       for (const auto& value : values)
         list.emplace_back(IntegerSettingOption(value.first, value.second));
@@ -209,7 +216,9 @@ void CGUIDialogPVRRecordingSettings::LifetimesFiller(
     if (it == list.end())
     {
       // PVR backend supplied value is not in the list of predefined values. Insert it.
-      list.insert(it, IntegerSettingOption(StringUtils::Format(g_localizeStrings.Get(17999).c_str(), current) /* %i days */, current));
+      list.insert(it, IntegerSettingOption(StringUtils::Format(g_localizeStrings.Get(17999).c_str(),
+                                                               current) /* %i days */,
+                                           current));
     }
   }
   else

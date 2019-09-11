@@ -14,8 +14,7 @@
 
 #include <memory>
 
-class CDVDVideoCodecDRMPRIME
-  : public CDVDVideoCodec
+class CDVDVideoCodecDRMPRIME : public CDVDVideoCodec
 {
 public:
   explicit CDVDVideoCodecDRMPRIME(CProcessInfo& processInfo);

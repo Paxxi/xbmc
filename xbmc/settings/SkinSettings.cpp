@@ -22,7 +22,7 @@
 #include <memory>
 #include <string>
 
-#define XML_SKINSETTINGS  "skinsettings"
+#define XML_SKINSETTINGS "skinsettings"
 
 CSkinSettings::CSkinSettings()
 {
@@ -37,7 +37,7 @@ CSkinSettings& CSkinSettings::GetInstance()
   return sSkinSettings;
 }
 
-int CSkinSettings::TranslateString(const std::string &setting)
+int CSkinSettings::TranslateString(const std::string& setting)
 {
   return g_SkinInfo->TranslateString(setting);
 }
@@ -47,12 +47,12 @@ const std::string& CSkinSettings::GetString(int setting) const
   return g_SkinInfo->GetString(setting);
 }
 
-void CSkinSettings::SetString(int setting, const std::string &label)
+void CSkinSettings::SetString(int setting, const std::string& label)
 {
   g_SkinInfo->SetString(setting, label);
 }
 
-int CSkinSettings::TranslateBool(const std::string &setting)
+int CSkinSettings::TranslateBool(const std::string& setting)
 {
   return g_SkinInfo->TranslateBool(setting);
 }
@@ -67,7 +67,7 @@ void CSkinSettings::SetBool(int setting, bool set)
   g_SkinInfo->SetBool(setting, set);
 }
 
-void CSkinSettings::Reset(const std::string &setting)
+void CSkinSettings::Reset(const std::string& setting)
 {
   g_SkinInfo->Reset(setting);
 }
@@ -81,12 +81,12 @@ void CSkinSettings::Reset()
   infoMgr.GetInfoProviders().GetGUIControlsInfoProvider().ResetContainerMovingCache();
 }
 
-bool CSkinSettings::Load(const TiXmlNode *settings)
+bool CSkinSettings::Load(const TiXmlNode* settings)
 {
   if (settings == nullptr)
     return false;
 
-  const TiXmlElement *rootElement = settings->FirstChildElement(XML_SKINSETTINGS);
+  const TiXmlElement* rootElement = settings->FirstChildElement(XML_SKINSETTINGS);
 
   // return true in the case skinsettings is missing. It just means that
   // it's been migrated and it's not an error
@@ -103,7 +103,7 @@ bool CSkinSettings::Load(const TiXmlNode *settings)
   return true;
 }
 
-bool CSkinSettings::Save(TiXmlNode *settings) const
+bool CSkinSettings::Save(TiXmlNode* settings) const
 {
   if (settings == nullptr)
     return false;
@@ -140,13 +140,15 @@ void CSkinSettings::MigrateSettings(const ADDON::SkinPtr& skin)
     {
       int settingNumber = skin->TranslateString(settingName);
       if (settingNumber >= 0)
-        skin->SetString(settingNumber, std::dynamic_pointer_cast<ADDON::CSkinSettingString>(setting)->value);
+        skin->SetString(settingNumber,
+                        std::dynamic_pointer_cast<ADDON::CSkinSettingString>(setting)->value);
     }
     else if (setting->GetType() == "bool")
     {
       int settingNumber = skin->TranslateBool(settingName);
       if (settingNumber >= 0)
-        skin->SetBool(settingNumber, std::dynamic_pointer_cast<ADDON::CSkinSettingBool>(setting)->value);
+        skin->SetBool(settingNumber,
+                      std::dynamic_pointer_cast<ADDON::CSkinSettingBool>(setting)->value);
     }
 
     m_settings.erase(setting);
@@ -162,4 +164,3 @@ void CSkinSettings::MigrateSettings(const ADDON::SkinPtr& skin)
     CServiceBroker::GetSettingsComponent()->GetSettings()->Save();
   }
 }
-

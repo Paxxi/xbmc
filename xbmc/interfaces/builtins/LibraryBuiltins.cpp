@@ -36,10 +36,10 @@ static int CleanLibrary(const std::vector<std::string>& params)
   bool userInitiated = true;
   if (params.size() > 1)
     userInitiated = StringUtils::EqualsNoCase(params[1], "true");
-  if (!params.size() || StringUtils::EqualsNoCase(params[0], "video")
-                     || StringUtils::EqualsNoCase(params[0], "movies")
-                     || StringUtils::EqualsNoCase(params[0], "tvshows")
-                     || StringUtils::EqualsNoCase(params[0], "musicvideos"))
+  if (!params.size() || StringUtils::EqualsNoCase(params[0], "video") ||
+      StringUtils::EqualsNoCase(params[0], "movies") ||
+      StringUtils::EqualsNoCase(params[0], "tvshows") ||
+      StringUtils::EqualsNoCase(params[0], "musicvideos"))
   {
     if (!g_application.IsVideoScanning())
     {
@@ -57,7 +57,8 @@ static int CleanLibrary(const std::vector<std::string>& params)
       CLog::Log(LOGERROR, "CleanLibrary is not possible while scanning for media info");
   }
   else
-    CLog::Log(LOGERROR, "Unknown content type '%s' passed to CleanLibrary, ignoring", params[0].c_str());
+    CLog::Log(LOGERROR, "Unknown content type '%s' passed to CleanLibrary, ignoring",
+              params[0].c_str());
 
   return 0;
 }
@@ -81,16 +82,17 @@ static int ExportLibrary(const std::vector<std::string>& params)
   g_mediaManager.GetNetworkLocations(shares);
   g_mediaManager.GetRemovableDrives(shares);
   bool singleFile;
-  bool thumbs=false;
-  bool actorThumbs=false;
-  bool overwrite=false;
-  bool cancelled=false;
+  bool thumbs = false;
+  bool actorThumbs = false;
+  bool overwrite = false;
+  bool cancelled = false;
 
   if (params.size() > 1)
     singleFile = StringUtils::EqualsNoCase(params[1], "false");
   else
   {
-    HELPERS::DialogResponse result = HELPERS::ShowYesNoDialogText(CVariant{iHeading}, CVariant{20426}, CVariant{20428}, CVariant{20429});
+    HELPERS::DialogResponse result = HELPERS::ShowYesNoDialogText(
+        CVariant{iHeading}, CVariant{20426}, CVariant{20428}, CVariant{20429});
     cancelled = result == HELPERS::DialogResponse::CANCELLED;
     singleFile = result != HELPERS::DialogResponse::YES;
   }
@@ -104,7 +106,8 @@ static int ExportLibrary(const std::vector<std::string>& params)
       thumbs = StringUtils::EqualsNoCase(params[2], "true");
     else
     {
-      HELPERS::DialogResponse result = HELPERS::ShowYesNoDialogText(CVariant{iHeading}, CVariant{20430});
+      HELPERS::DialogResponse result =
+          HELPERS::ShowYesNoDialogText(CVariant{iHeading}, CVariant{20430});
       cancelled = result == HELPERS::DialogResponse::CANCELLED;
       thumbs = result == HELPERS::DialogResponse::YES;
     }
@@ -119,7 +122,8 @@ static int ExportLibrary(const std::vector<std::string>& params)
       actorThumbs = StringUtils::EqualsNoCase(params[4], "true");
     else
     {
-      HELPERS::DialogResponse result = HELPERS::ShowYesNoDialogText(CVariant{iHeading}, CVariant{20436});
+      HELPERS::DialogResponse result =
+          HELPERS::ShowYesNoDialogText(CVariant{iHeading}, CVariant{20436});
       cancelled = result == HELPERS::DialogResponse::CANCELLED;
       actorThumbs = result == HELPERS::DialogResponse::YES;
     }
@@ -134,7 +138,8 @@ static int ExportLibrary(const std::vector<std::string>& params)
       overwrite = StringUtils::EqualsNoCase(params[3], "true");
     else
     {
-      HELPERS::DialogResponse result = HELPERS::ShowYesNoDialogText(CVariant{iHeading}, CVariant{20431});
+      HELPERS::DialogResponse result =
+          HELPERS::ShowYesNoDialogText(CVariant{iHeading}, CVariant{20431});
       cancelled = result == HELPERS::DialogResponse::CANCELLED;
       overwrite = result == HELPERS::DialogResponse::YES;
     }
@@ -144,10 +149,9 @@ static int ExportLibrary(const std::vector<std::string>& params)
     return -1;
 
   if (params.size() > 2)
-    path=params[2];
+    path = params[2];
   if (!singleFile || !path.empty() ||
-      CGUIDialogFileBrowser::ShowAndGetDirectory(shares, g_localizeStrings.Get(661),
-                                                 path, true))
+      CGUIDialogFileBrowser::ShowAndGetDirectory(shares, g_localizeStrings.Get(661), path, true))
   {
     if (StringUtils::EqualsNoCase(params[0], "video"))
     {
@@ -234,8 +238,9 @@ static int ExportLibrary2(const std::vector<std::string>& params)
   {
     CVideoDatabase videodatabase;
     videodatabase.Open();
-    videodatabase.ExportToXML(settings.m_strPath, settings.IsSingleFile(),
-      settings.m_artwork, settings.IsItemExported(ELIBEXPORT_ACTORTHUMBS), settings.m_overwrite);
+    videodatabase.ExportToXML(settings.m_strPath, settings.IsSingleFile(), settings.m_artwork,
+                              settings.IsItemExported(ELIBEXPORT_ACTORTHUMBS),
+                              settings.m_overwrite);
     videodatabase.Close();
   }
   return 0;
@@ -343,11 +348,10 @@ static int SearchVideoLibrary(const std::vector<std::string>& params)
 
 CBuiltins::CommandMap CLibraryBuiltins::GetOperations() const
 {
-  return {
-          {"cleanlibrary",        {"Clean the video/music library", 1, CleanLibrary}},
-          {"exportlibrary",       {"Export the video/music library", 1, ExportLibrary}},
-          {"exportlibrary2",      {"Export the video/music library", 1, ExportLibrary2}},
-          {"updatelibrary",       {"Update the selected library (music or video)", 1, UpdateLibrary}},
-          {"videolibrary.search", {"Brings up a search dialog which will search the library", 0, SearchVideoLibrary}}
-         };
+  return {{"cleanlibrary", {"Clean the video/music library", 1, CleanLibrary}},
+          {"exportlibrary", {"Export the video/music library", 1, ExportLibrary}},
+          {"exportlibrary2", {"Export the video/music library", 1, ExportLibrary2}},
+          {"updatelibrary", {"Update the selected library (music or video)", 1, UpdateLibrary}},
+          {"videolibrary.search",
+           {"Brings up a search dialog which will search the library", 0, SearchVideoLibrary}}};
 }

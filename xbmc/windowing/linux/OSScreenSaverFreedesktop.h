@@ -33,6 +33,6 @@ private:
   std::uint32_t m_cookie;
 };
 
-}
-}
-}
+} // namespace LINUX
+} // namespace WINDOWING
+} // namespace KODI

@@ -12,10 +12,10 @@
 
 namespace XFILE
 {
-  class CDAVCommon
-  {
-    public:
-      static bool ValueWithoutNamespace(const TiXmlNode *pNode, const std::string& value);
-      static std::string GetStatusTag(const TiXmlElement *pElement);
-  };
-}
+class CDAVCommon
+{
+public:
+  static bool ValueWithoutNamespace(const TiXmlNode* pNode, const std::string& value);
+  static std::string GetStatusTag(const TiXmlElement* pElement);
+};
+} // namespace XFILE

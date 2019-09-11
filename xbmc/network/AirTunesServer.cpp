@@ -11,36 +11,36 @@
 
 #include "AirTunesServer.h"
 
-#include <map>
-#include <string>
-#include <utility>
-
 #include "Application.h"
-#include "ServiceBroker.h"
-#include "cores/VideoPlayer/DVDDemuxers/DVDDemuxBXA.h"
 #include "FileItem.h"
+#include "GUIInfoManager.h"
+#include "ServiceBroker.h"
+#include "URL.h"
+#include "cores/VideoPlayer/DVDDemuxers/DVDDemuxBXA.h"
 #include "filesystem/File.h"
 #include "filesystem/PipeFile.h"
-#include "GUIInfoManager.h"
 #include "guilib/GUIComponent.h"
 #include "guilib/GUIWindowManager.h"
 #include "input/Key.h"
 #include "interfaces/AnnouncementManager.h"
 #include "messaging/ApplicationMessenger.h"
 #include "music/tags/MusicInfoTag.h"
-#include "network/dacp/dacp.h"
 #include "network/Network.h"
 #include "network/Zeroconf.h"
 #include "network/ZeroconfBrowser.h"
+#include "network/dacp/dacp.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "URL.h"
 #include "utils/EndianSwap.h"
-#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/SystemInfo.h"
 #include "utils/Variant.h"
+#include "utils/log.h"
+
+#include <map>
+#include <string>
+#include <utility>
 
 #if !defined(TARGET_WINDOWS)
 #pragma GCC diagnostic ignored "-Wwrite-strings"
@@ -57,13 +57,13 @@
 using namespace XFILE;
 using namespace KODI::MESSAGING;
 
-CAirTunesServer *CAirTunesServer::ServerInstance = NULL;
+CAirTunesServer* CAirTunesServer::ServerInstance = NULL;
 std::string CAirTunesServer::m_macAddress;
 std::string CAirTunesServer::m_metadata[3];
 CCriticalSection CAirTunesServer::m_metadataLock;
 bool CAirTunesServer::m_streamStarted = false;
 CCriticalSection CAirTunesServer::m_dacpLock;
-CDACP *CAirTunesServer::m_pDACP = NULL;
+CDACP* CAirTunesServer::m_pDACP = NULL;
 std::string CAirTunesServer::m_dacp_id;
 std::string CAirTunesServer::m_active_remote_header;
 CCriticalSection CAirTunesServer::m_actionQueueLock;
@@ -77,7 +77,7 @@ unsigned int CAirTunesServer::m_cachedCurrentTime = 0;
 
 
 //parse daap metadata - thx to project MythTV
-std::map<std::string, std::string> decodeDMAP(const char *buffer, unsigned int size)
+std::map<std::string, std::string> decodeDMAP(const char* buffer, unsigned int size)
 {
   std::map<std::string, std::string> result;
   unsigned int offset = 8;
@@ -86,10 +86,10 @@ std::map<std::string, std::string> decodeDMAP(const char *buffer, unsigned int s
     std::string tag;
     tag.append(buffer + offset, 4);
     offset += 4;
-    uint32_t length = Endian_SwapBE32(*(const uint32_t *)(buffer + offset));
+    uint32_t length = Endian_SwapBE32(*(const uint32_t*)(buffer + offset));
     offset += sizeof(uint32_t);
     std::string content;
-    content.append(buffer + offset, length);//possible fixme - utf8?
+    content.append(buffer + offset, length); //possible fixme - utf8?
     offset += length;
     result[tag] = content;
   }
@@ -118,16 +118,17 @@ void CAirTunesServer::RefreshMetadata()
   if (infoMgr.GetCurrentSongTag())
     tag = *infoMgr.GetCurrentSongTag();
   if (m_metadata[0].length())
-    tag.SetAlbum(m_metadata[0]);//album
+    tag.SetAlbum(m_metadata[0]); //album
   if (m_metadata[1].length())
-    tag.SetTitle(m_metadata[1]);//title
+    tag.SetTitle(m_metadata[1]); //title
   if (m_metadata[2].length())
-    tag.SetArtist(m_metadata[2]);//artist
+    tag.SetArtist(m_metadata[2]); //artist
 
-  CApplicationMessenger::GetInstance().PostMsg(TMSG_UPDATE_CURRENT_ITEM, 1, -1, static_cast<void*>(new CFileItem(tag)));
+  CApplicationMessenger::GetInstance().PostMsg(TMSG_UPDATE_CURRENT_ITEM, 1, -1,
+                                               static_cast<void*>(new CFileItem(tag)));
 }
 
-void CAirTunesServer::RefreshCoverArt(const char *outputFilename/* = NULL*/)
+void CAirTunesServer::RefreshCoverArt(const char* outputFilename /* = NULL*/)
 {
   static std::string coverArtFile = TMP_COVERART_PATH_JPG;
 
@@ -142,29 +143,32 @@ void CAirTunesServer::RefreshCoverArt(const char *outputFilename/* = NULL*/)
   //update the ui
   infoMgr.SetCurrentAlbumThumb(coverArtFile);
   //update the ui
-  CGUIMessage msg(GUI_MSG_NOTIFY_ALL,0,0,GUI_MSG_REFRESH_THUMBS);
+  CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_REFRESH_THUMBS);
   CServiceBroker::GetGUI()->GetWindowManager().SendThreadMessage(msg);
 }
 
-void CAirTunesServer::SetMetadataFromBuffer(const char *buffer, unsigned int size)
+void CAirTunesServer::SetMetadataFromBuffer(const char* buffer, unsigned int size)
 {
 
   std::map<std::string, std::string> metadata = decodeDMAP(buffer, size);
   CSingleLock lock(m_metadataLock);
 
-  if(metadata["asal"].length())
-    m_metadata[0] = metadata["asal"];//album
-  if(metadata["minm"].length())
-    m_metadata[1] = metadata["minm"];//title
-  if(metadata["asar"].length())
-    m_metadata[2] = metadata["asar"];//artist
+  if (metadata["asal"].length())
+    m_metadata[0] = metadata["asal"]; //album
+  if (metadata["minm"].length())
+    m_metadata[1] = metadata["minm"]; //title
+  if (metadata["asar"].length())
+    m_metadata[2] = metadata["asar"]; //artist
 
   RefreshMetadata();
 }
 
-void CAirTunesServer::Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
+void CAirTunesServer::Announce(ANNOUNCEMENT::AnnouncementFlag flag,
+                               const char* sender,
+                               const char* message,
+                               const CVariant& data)
 {
-  if ( (flag & ANNOUNCEMENT::Player) && strcmp(sender, "xbmc") == 0)
+  if ((flag & ANNOUNCEMENT::Player) && strcmp(sender, "xbmc") == 0)
   {
     if ((strcmp(message, "OnPlay") == 0 || strcmp(message, "OnResume") == 0) && m_streamStarted)
     {
@@ -196,20 +200,20 @@ void CAirTunesServer::EnableActionProcessing(bool enable)
   ServerInstance->RegisterActionListener(enable);
 }
 
-bool CAirTunesServer::OnAction(const CAction &action)
+bool CAirTunesServer::OnAction(const CAction& action)
 {
-  switch(action.GetID())
+  switch (action.GetID())
   {
-    case ACTION_NEXT_ITEM:
-    case ACTION_PREV_ITEM:
-    case ACTION_VOLUME_UP:
-    case ACTION_VOLUME_DOWN:
-    case ACTION_MUTE:
-    {
-      CSingleLock lock(m_actionQueueLock);
-      m_actionQueue.push_back(action);
-      m_processActions.Set();
-    }
+  case ACTION_NEXT_ITEM:
+  case ACTION_PREV_ITEM:
+  case ACTION_VOLUME_UP:
+  case ACTION_VOLUME_DOWN:
+  case ACTION_MUTE:
+  {
+    CSingleLock lock(m_actionQueueLock);
+    m_actionQueue.push_back(action);
+    m_processActions.Set();
+  }
   }
   return false;
 }
@@ -217,15 +221,15 @@ bool CAirTunesServer::OnAction(const CAction &action)
 void CAirTunesServer::Process()
 {
   m_bStop = false;
-  while(!m_bStop)
+  while (!m_bStop)
   {
     if (m_streamStarted)
-      SetupRemoteControl();// check for remote controls
+      SetupRemoteControl(); // check for remote controls
 
-    m_processActions.WaitMSec(1000);// timeout for being able to stop
+    m_processActions.WaitMSec(1000); // timeout for being able to stop
     std::list<CAction> currentActions;
     {
-      CSingleLock lock(m_actionQueueLock);// copy and clear the source queue
+      CSingleLock lock(m_actionQueueLock); // copy and clear the source queue
       currentActions.insert(currentActions.begin(), m_actionQueue.begin(), m_actionQueue.end());
       m_actionQueue.clear();
     }
@@ -235,30 +239,30 @@ void CAirTunesServer::Process()
       CSingleLock lock(m_dacpLock);
       if (m_pDACP)
       {
-        switch(currentAction.GetID())
+        switch (currentAction.GetID())
         {
-          case ACTION_NEXT_ITEM:
-            m_pDACP->NextItem();
-            break;
-          case ACTION_PREV_ITEM:
-            m_pDACP->PrevItem();
-            break;
-          case ACTION_VOLUME_UP:
-            m_pDACP->VolumeUp();
-            break;
-          case ACTION_VOLUME_DOWN:
-            m_pDACP->VolumeDown();
-            break;
-          case ACTION_MUTE:
-            m_pDACP->ToggleMute();
-            break;
+        case ACTION_NEXT_ITEM:
+          m_pDACP->NextItem();
+          break;
+        case ACTION_PREV_ITEM:
+          m_pDACP->PrevItem();
+          break;
+        case ACTION_VOLUME_UP:
+          m_pDACP->VolumeUp();
+          break;
+        case ACTION_VOLUME_DOWN:
+          m_pDACP->VolumeDown();
+          break;
+        case ACTION_MUTE:
+          m_pDACP->ToggleMute();
+          break;
         }
       }
     }
   }
 }
 
-bool IsJPEG(const char *buffer, unsigned int size)
+bool IsJPEG(const char* buffer, unsigned int size)
 {
   bool ret = false;
   if (size < 2)
@@ -275,19 +279,19 @@ bool IsJPEG(const char *buffer, unsigned int size)
     ret = false;
     //check on FF D9 big + little endian on end
     if ((buffer[size - 2] == (char)0xd9 && buffer[size - 1] == (char)0xff) ||
-       (buffer[size - 1] == (char)0xd9 && buffer[size - 2] == (char)0xff))
-        ret = true;
+        (buffer[size - 1] == (char)0xd9 && buffer[size - 2] == (char)0xff))
+      ret = true;
   }
 
   return ret;
 }
 
-void CAirTunesServer::SetCoverArtFromBuffer(const char *buffer, unsigned int size)
+void CAirTunesServer::SetCoverArtFromBuffer(const char* buffer, unsigned int size)
 {
   XFILE::CFile tmpFile;
   std::string tmpFilename = TMP_COVERART_PATH_PNG;
 
-  if(!size)
+  if (!size)
     return;
 
   CSingleLock lock(m_metadataLock);
@@ -297,7 +301,7 @@ void CAirTunesServer::SetCoverArtFromBuffer(const char *buffer, unsigned int siz
 
   if (tmpFile.OpenForWrite(tmpFilename, true))
   {
-    int writtenBytes=0;
+    int writtenBytes = 0;
     writtenBytes = tmpFile.Write(buffer, size);
     tmpFile.Close();
 
@@ -314,7 +318,8 @@ void CAirTunesServer::FreeDACPRemote()
   m_pDACP = NULL;
 }
 
-#define RSA_KEY " \
+#define RSA_KEY \
+  " \
 -----BEGIN RSA PRIVATE KEY-----\
 MIIEpQIBAAKCAQEA59dE8qLieItsH1WgjrcFRKj6eUWqi+bGLOX1HL3U3GhC/j0Qg90u3sG/1CUt\
 wC5vOYvfDmFI6oSFXi5ELabWJmT2dKHzBJKa3k9ok+8t9ucRqMd6DZHJ2YCCLlDRKSKv6kDqnw4U\
@@ -339,21 +344,30 @@ LAuE4Pu13aKiJnfft7hIjbK+5kyb3TysZvoyDnb3HOKvInK7vXbKuU4ISgxB2bB3HcYzQMGsz1qJ\
 2gG0N5hvJpzwwhbhXqFKA4zaaSrw622wDniAK5MlIE0tIAKKP4yxNGjoD2QYjhBGuhvkWKY=\
 -----END RSA PRIVATE KEY-----"
 
-void CAirTunesServer::AudioOutputFunctions::audio_set_metadata(void *cls, void *session, const void *buffer, int buflen)
+void CAirTunesServer::AudioOutputFunctions::audio_set_metadata(void* cls,
+                                                               void* session,
+                                                               const void* buffer,
+                                                               int buflen)
 {
-  CAirTunesServer::SetMetadataFromBuffer((const char *)buffer, buflen);
+  CAirTunesServer::SetMetadataFromBuffer((const char*)buffer, buflen);
 }
 
-void CAirTunesServer::AudioOutputFunctions::audio_set_coverart(void *cls, void *session, const void *buffer, int buflen)
+void CAirTunesServer::AudioOutputFunctions::audio_set_coverart(void* cls,
+                                                               void* session,
+                                                               const void* buffer,
+                                                               int buflen)
 {
-  CAirTunesServer::SetCoverArtFromBuffer((const char *)buffer, buflen);
+  CAirTunesServer::SetCoverArtFromBuffer((const char*)buffer, buflen);
 }
 
-char session[]="Kodi-AirTunes";
+char session[] = "Kodi-AirTunes";
 
-void* CAirTunesServer::AudioOutputFunctions::audio_init(void *cls, int bits, int channels, int samplerate)
+void* CAirTunesServer::AudioOutputFunctions::audio_init(void* cls,
+                                                        int bits,
+                                                        int channels,
+                                                        int samplerate)
 {
-  XFILE::CPipeFile *pipe=(XFILE::CPipeFile *)cls;
+  XFILE::CPipeFile* pipe = (XFILE::CPipeFile*)cls;
   const CURL pathToUrl(XFILE::PipesManager::GetInstance().GetUniquePipeName());
   pipe->OpenForWrite(pathToUrl);
   pipe->SetOpenThreshold(300);
@@ -371,7 +385,7 @@ void* CAirTunesServer::AudioOutputFunctions::audio_init(void *cls, int bits, int
 
   CApplicationMessenger::GetInstance().SendMsg(TMSG_MEDIA_STOP);
 
-  CFileItem *item = new CFileItem();
+  CFileItem* item = new CFileItem();
   item->SetPath(pipe->GetName());
   item->SetMimeType("audio/x-xbmc-pcm");
   m_streamStarted = true;
@@ -389,10 +403,11 @@ void* CAirTunesServer::AudioOutputFunctions::audio_init(void *cls, int bits, int
   CZeroconfBrowser::GetInstance()->AddServiceType(ZEROCONF_DACP_SERVICE);
   CAirTunesServer::EnableActionProcessing(true);
 
-  return session;//session
+  return session; //session
 }
 
-void CAirTunesServer::AudioOutputFunctions::audio_remote_control_id(void *cls, const char *dacp_id, const char *active_remote_header)
+void CAirTunesServer::AudioOutputFunctions::audio_remote_control_id(
+    void* cls, const char* dacp_id, const char* active_remote_header)
 {
   if (dacp_id && active_remote_header)
   {
@@ -409,22 +424,22 @@ void CAirTunesServer::InformPlayerAboutPlayTimes()
     unsigned int position = m_cachedCurrentTime - m_cachedStartTime;
     duration /= m_sampleRate;
     position /= m_sampleRate;
-  
+
     if (g_application.GetAppPlayer().IsPlaying())
     {
       g_application.GetAppPlayer().SetTime(position * 1000);
       g_application.GetAppPlayer().SetTotalTime(duration * 1000);
-      
+
       // reset play times now that we have informed the player
       m_cachedEndTime = 0;
       m_cachedCurrentTime = 0;
       m_cachedStartTime = 0;
-
     }
   }
 }
 
-void CAirTunesServer::AudioOutputFunctions::audio_set_progress(void *cls, void *session, unsigned int start, unsigned int curr, unsigned int end)
+void CAirTunesServer::AudioOutputFunctions::audio_set_progress(
+    void* cls, void* session, unsigned int start, unsigned int curr, unsigned int end)
 {
   m_cachedStartTime = start;
   m_cachedCurrentTime = curr;
@@ -444,8 +459,9 @@ void CAirTunesServer::SetupRemoteControl()
     return;
 
   // check for the service matching m_dacp_id
-  std::vector<CZeroconfBrowser::ZeroconfService> services = CZeroconfBrowser::GetInstance()->GetFoundServices();
-  for (auto service : services )
+  std::vector<CZeroconfBrowser::ZeroconfService> services =
+      CZeroconfBrowser::GetInstance()->GetFoundServices();
+  for (auto service : services)
   {
     if (StringUtils::EqualsNoCase(service.GetType(), std::string(ZEROCONF_DACP_SERVICE) + "."))
     {
@@ -474,29 +490,33 @@ void CAirTunesServer::SetupRemoteControl()
   }
 }
 
-void  CAirTunesServer::AudioOutputFunctions::audio_set_volume(void *cls, void *session, float volume)
+void CAirTunesServer::AudioOutputFunctions::audio_set_volume(void* cls, void* session, float volume)
 {
   //volume from -30 - 0 - -144 means mute
-  float volPercent = volume < -30.0f ? 0 : 1 - volume/-30;
+  float volPercent = volume < -30.0f ? 0 : 1 - volume / -30;
 #ifdef HAS_AIRPLAY
   CAirPlayServer::backupVolume();
 #endif
-  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_SERVICES_AIRPLAYVOLUMECONTROL))
-    g_application.SetVolume(volPercent, false);//non-percent volume 0.0-1.0
+  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+          CSettings::SETTING_SERVICES_AIRPLAYVOLUMECONTROL))
+    g_application.SetVolume(volPercent, false); //non-percent volume 0.0-1.0
 }
 
-void  CAirTunesServer::AudioOutputFunctions::audio_process(void *cls, void *session, const void *buffer, int buflen)
+void CAirTunesServer::AudioOutputFunctions::audio_process(void* cls,
+                                                          void* session,
+                                                          const void* buffer,
+                                                          int buflen)
 {
-  XFILE::CPipeFile *pipe=(XFILE::CPipeFile *)cls;
+  XFILE::CPipeFile* pipe = (XFILE::CPipeFile*)cls;
   pipe->Write(buffer, buflen);
-  
+
   // in case there are some play times cached that are not yet sent to the player - do it here
   InformPlayerAboutPlayTimes();
 }
 
-void  CAirTunesServer::AudioOutputFunctions::audio_destroy(void *cls, void *session)
+void CAirTunesServer::AudioOutputFunctions::audio_destroy(void* cls, void* session)
 {
-  XFILE::CPipeFile *pipe=(XFILE::CPipeFile *)cls;
+  XFILE::CPipeFile* pipe = (XFILE::CPipeFile*)cls;
   pipe->SetEof();
   pipe->Close();
 
@@ -527,53 +547,56 @@ void  CAirTunesServer::AudioOutputFunctions::audio_destroy(void *cls, void *sess
   CAirTunesServer::EnableActionProcessing(false);
 }
 
-void shairplay_log(void *cls, int level, const char *msg)
+void shairplay_log(void* cls, int level, const char* msg)
 {
   int xbmcLevel = LOGINFO;
-  if(!CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->CanLogComponent(LOGAIRTUNES))
+  if (!CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->CanLogComponent(LOGAIRTUNES))
     return;
 
-  switch(level)
+  switch (level)
   {
-    case RAOP_LOG_EMERG:    // system is unusable
-      xbmcLevel = LOGFATAL;
-      break;
-    case RAOP_LOG_ALERT:    // action must be taken immediately
-    case RAOP_LOG_CRIT:     // critical conditions
-      xbmcLevel = LOGSEVERE;
-      break;
-    case RAOP_LOG_ERR:      // error conditions
-      xbmcLevel = LOGERROR;
-      break;
-    case RAOP_LOG_WARNING:  // warning conditions
-      xbmcLevel = LOGWARNING;
-      break;
-    case RAOP_LOG_NOTICE:   // normal but significant condition
-      xbmcLevel = LOGNOTICE;
-      break;
-    case RAOP_LOG_INFO:     // informational
-      xbmcLevel = LOGINFO;
-      break;
-    case RAOP_LOG_DEBUG:    // debug-level messages
-      xbmcLevel = LOGDEBUG;
-      break;
-    default:
-      break;
+  case RAOP_LOG_EMERG: // system is unusable
+    xbmcLevel = LOGFATAL;
+    break;
+  case RAOP_LOG_ALERT: // action must be taken immediately
+  case RAOP_LOG_CRIT: // critical conditions
+    xbmcLevel = LOGSEVERE;
+    break;
+  case RAOP_LOG_ERR: // error conditions
+    xbmcLevel = LOGERROR;
+    break;
+  case RAOP_LOG_WARNING: // warning conditions
+    xbmcLevel = LOGWARNING;
+    break;
+  case RAOP_LOG_NOTICE: // normal but significant condition
+    xbmcLevel = LOGNOTICE;
+    break;
+  case RAOP_LOG_INFO: // informational
+    xbmcLevel = LOGINFO;
+    break;
+  case RAOP_LOG_DEBUG: // debug-level messages
+    xbmcLevel = LOGDEBUG;
+    break;
+  default:
+    break;
   }
-    CLog::Log(xbmcLevel, "AIRTUNES: %s", msg);
+  CLog::Log(xbmcLevel, "AIRTUNES: %s", msg);
 }
 
-bool CAirTunesServer::StartServer(int port, bool nonlocal, bool usePassword, const std::string &password/*=""*/)
+bool CAirTunesServer::StartServer(int port,
+                                  bool nonlocal,
+                                  bool usePassword,
+                                  const std::string& password /*=""*/)
 {
   bool success = false;
   std::string pw = password;
-  CNetworkInterface *net = CServiceBroker::GetNetwork().GetFirstConnectedInterface();
+  CNetworkInterface* net = CServiceBroker::GetNetwork().GetFirstConnectedInterface();
   StopServer(true);
 
   if (net)
   {
     m_macAddress = net->GetMacAddress();
-    StringUtils::Replace(m_macAddress, ":","");
+    StringUtils::Replace(m_macAddress, ":", "");
     while (m_macAddress.size() < 12)
     {
       m_macAddress = '0' + m_macAddress;
@@ -593,27 +616,26 @@ bool CAirTunesServer::StartServer(int port, bool nonlocal, bool usePassword, con
   if (ServerInstance->Initialize(pw))
   {
     success = true;
-    std::string appName = StringUtils::Format("%s@%s",
-                                             m_macAddress.c_str(),
-                                             CSysInfo::GetDeviceName().c_str());
+    std::string appName =
+        StringUtils::Format("%s@%s", m_macAddress.c_str(), CSysInfo::GetDeviceName().c_str());
 
-    std::vector<std::pair<std::string, std::string> > txt;
-    txt.push_back(std::make_pair("txtvers",  "1"));
+    std::vector<std::pair<std::string, std::string>> txt;
+    txt.push_back(std::make_pair("txtvers", "1"));
     txt.push_back(std::make_pair("cn", "0,1"));
     txt.push_back(std::make_pair("ch", "2"));
     txt.push_back(std::make_pair("ek", "1"));
     txt.push_back(std::make_pair("et", "0,1"));
     txt.push_back(std::make_pair("sv", "false"));
-    txt.push_back(std::make_pair("tp",  "UDP"));
-    txt.push_back(std::make_pair("sm",  "false"));
-    txt.push_back(std::make_pair("ss",  "16"));
-    txt.push_back(std::make_pair("sr",  "44100"));
-    txt.push_back(std::make_pair("pw",  usePassword?"true":"false"));
-    txt.push_back(std::make_pair("vn",  "3"));
-    txt.push_back(std::make_pair("da",  "true"));
-    txt.push_back(std::make_pair("md",  "0,1,2"));
-    txt.push_back(std::make_pair("am",  "Kodi,1"));
-    txt.push_back(std::make_pair("vs",  "130.14"));
+    txt.push_back(std::make_pair("tp", "UDP"));
+    txt.push_back(std::make_pair("sm", "false"));
+    txt.push_back(std::make_pair("ss", "16"));
+    txt.push_back(std::make_pair("sr", "44100"));
+    txt.push_back(std::make_pair("pw", usePassword ? "true" : "false"));
+    txt.push_back(std::make_pair("vn", "3"));
+    txt.push_back(std::make_pair("da", "true"));
+    txt.push_back(std::make_pair("md", "0,1,2"));
+    txt.push_back(std::make_pair("am", "Kodi,1"));
+    txt.push_back(std::make_pair("vs", "130.14"));
 
     CZeroconf::GetInstance()->PublishService("servers.airtunes", "_raop._tcp", appName, port, txt);
   }
@@ -682,7 +704,7 @@ void CAirTunesServer::RegisterActionListener(bool doRegister)
   }
 }
 
-bool CAirTunesServer::Initialize(const std::string &password)
+bool CAirTunesServer::Initialize(const std::string& password)
 {
   bool ret = false;
 

@@ -34,7 +34,10 @@ bool CDVDSubtitleTagSami::Init()
   return true;
 }
 
-void CDVDSubtitleTagSami::ConvertLine(CDVDOverlayText* pOverlay, const char* line, int len, const char* lang)
+void CDVDSubtitleTagSami::ConvertLine(CDVDOverlayText* pOverlay,
+                                      const char* line,
+                                      int len,
+                                      const char* lang)
 {
   std::string strUTF8;
   strUTF8.assign(line, len);
@@ -42,7 +45,7 @@ void CDVDSubtitleTagSami::ConvertLine(CDVDOverlayText* pOverlay, const char* lin
 
   int pos = 0;
   int del_start = 0;
-  while ((pos=m_tags->RegFind(strUTF8.c_str(), pos)) >= 0)
+  while ((pos = m_tags->RegFind(strUTF8.c_str(), pos)) >= 0)
   {
     // Parse Tags
     std::string fullTag = m_tags->GetMatch(0);
@@ -85,12 +88,12 @@ void CDVDSubtitleTagSami::ConvertLine(CDVDOverlayText* pOverlay, const char* lin
       std::string tempColorTag = "[COLOR FF";
       std::string tagOptionValue;
       if (StringUtils::StartsWith(fullTag, "{\\c&h"))
-         tagOptionValue = fullTag.substr(5,6);
+        tagOptionValue = fullTag.substr(5, 6);
       else
-         tagOptionValue = fullTag.substr(6,6);
-      tempColorTag += tagOptionValue.substr(4,2);
-      tempColorTag += tagOptionValue.substr(2,2);
-      tempColorTag += tagOptionValue.substr(0,2);
+        tagOptionValue = fullTag.substr(6, 6);
+      tempColorTag += tagOptionValue.substr(4, 2);
+      tempColorTag += tagOptionValue.substr(2, 2);
+      tempColorTag += tagOptionValue.substr(0, 2);
       tempColorTag += "]";
       strUTF8.insert(pos, tempColorTag);
       pos += tempColorTag.length();
@@ -112,21 +115,21 @@ void CDVDSubtitleTagSami::ConvertLine(CDVDOverlayText* pOverlay, const char* lin
             tagOptionValue.erase(0, 1);
             tempColorTag += "FF";
           }
-          else if( tagOptionValue.size() == 6 )
+          else if (tagOptionValue.size() == 6)
           {
             bool bHex = true;
-            for( int i=0 ; i<6 ; i++ )
+            for (int i = 0; i < 6; i++)
             {
               char temp = tagOptionValue[i];
-              if( !(('0' <= temp && temp <= '9') ||
-                ('a' <= temp && temp <= 'f') ||
-                ('A' <= temp && temp <= 'F') ))
+              if (!(('0' <= temp && temp <= '9') || ('a' <= temp && temp <= 'f') ||
+                    ('A' <= temp && temp <= 'F')))
               {
                 bHex = false;
                 break;
               }
             }
-            if( bHex ) tempColorTag += "FF";
+            if (bHex)
+              tempColorTag += "FF";
           }
           tempColorTag += tagOptionValue;
           tempColorTag += "]";
@@ -176,14 +179,14 @@ void CDVDSubtitleTagSami::ConvertLine(CDVDOverlayText* pOverlay, const char* lin
     }
   }
 
-  if(m_flag[FLAG_LANGUAGE])
+  if (m_flag[FLAG_LANGUAGE])
     strUTF8.erase(del_start);
 
   if (strUTF8.empty())
     return;
 
-  if( strUTF8[strUTF8.size()-1] == '\n' )
-    strUTF8.erase(strUTF8.size()-1);
+  if (strUTF8[strUTF8.size() - 1] == '\n')
+    strUTF8.erase(strUTF8.size() - 1);
 
   // add a new text element to our container
   pOverlay->AddElement(new CDVDOverlayText::CElementText(strUTF8.c_str()));
@@ -214,7 +217,8 @@ void CDVDSubtitleTagSami::LoadHead(CDVDSubtitleStream* samiStream)
   char cLine[1024];
   bool inSTYLE = false;
   CRegExp reg(true);
-  if (!reg.RegComp("\\.([a-z]+)[ \t]*\\{[ \t]*name:([^;]*?);[ \t]*lang:([^;]*?);[ \t]*SAMIType:([^;]*?);[ \t]*\\}"))
+  if (!reg.RegComp("\\.([a-z]+)[ \t]*\\{[ \t]*name:([^;]*?);[ \t]*lang:([^;]*?);[ "
+                   "\t]*SAMIType:([^;]*?);[ \t]*\\}"))
     return;
 
   while (samiStream->ReadLine(cLine, sizeof(cLine)))
@@ -222,7 +226,7 @@ void CDVDSubtitleTagSami::LoadHead(CDVDSubtitleStream* samiStream)
     std::string line = cLine;
     StringUtils::Trim(line);
 
-   if (StringUtils::EqualsNoCase(line, "<BODY>"))
+    if (StringUtils::EqualsNoCase(line, "<BODY>"))
       break;
     if (inSTYLE)
     {

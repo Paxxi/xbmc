@@ -22,7 +22,7 @@ static int Show(const std::vector<std::string>& params)
 {
   CGUIMessage msg(GUI_MSG_SHOW_PICTURE, 0, 0);
   msg.SetStringParam(params[0]);
-  CGUIWindow *pWindow = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_SLIDESHOW);
+  CGUIWindow* pWindow = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_SLIDESHOW);
   if (pWindow)
     pWindow->OnMessage(msg);
 
@@ -40,7 +40,7 @@ static int Show(const std::vector<std::string>& params)
  *
  *  Set the template parameter Recursive to true to run a recursive slideshow.
  */
-  template<bool Recursive>
+template<bool Recursive>
 static int Slideshow(const std::vector<std::string>& params)
 {
   std::string beginSlidePath;
@@ -54,7 +54,7 @@ static int Slideshow(const std::vector<std::string>& params)
   // and then quoted, or not. See CUtil::SplitParams()
   else
   {
-    for (unsigned int i = 1 ; i < params.size() ; i++)
+    for (unsigned int i = 1; i < params.size(); i++)
     {
       if (StringUtils::EqualsNoCase(params[i], "recursive"))
         flags |= 1;
@@ -74,7 +74,7 @@ static int Slideshow(const std::vector<std::string>& params)
   strParams.push_back(params[0]);
   strParams.push_back(beginSlidePath);
   msg.SetStringParams(strParams);
-  CGUIWindow *pWindow = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_SLIDESHOW);
+  CGUIWindow* pWindow = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_SLIDESHOW);
   if (pWindow)
     pWindow->OnMessage(msg);
 
@@ -128,8 +128,8 @@ static int Slideshow(const std::vector<std::string>& params)
 CBuiltins::CommandMap CPictureBuiltins::GetOperations() const
 {
   return {
-           {"recursiveslideshow", {"Run a slideshow from the specified directory, including all subdirs", 1, Slideshow<true>}},
-           {"showpicture",        {"Display a picture by file path", 1, Show}},
-           {"slideshow",          {"Run a slideshow from the specified directory", 1, Slideshow<false>}}
-         };
+      {"recursiveslideshow",
+       {"Run a slideshow from the specified directory, including all subdirs", 1, Slideshow<true>}},
+      {"showpicture", {"Display a picture by file path", 1, Show}},
+      {"slideshow", {"Run a slideshow from the specified directory", 1, Slideshow<false>}}};
 }

@@ -10,28 +10,29 @@
 
 #pragma once
 
-#include "ifo_types.h" /*  vm_cmd_t */
 #include "dvdnav_internal.h"
+#include "ifo_types.h" /*  vm_cmd_t */
 
 /* link command types */
-typedef enum {
-  LinkNoLink  = 0,
+typedef enum
+{
+  LinkNoLink = 0,
 
-  LinkTopC    = 1,
-  LinkNextC   = 2,
-  LinkPrevC   = 3,
+  LinkTopC = 1,
+  LinkNextC = 2,
+  LinkPrevC = 3,
 
-  LinkTopPG   = 5,
-  LinkNextPG  = 6,
-  LinkPrevPG  = 7,
+  LinkTopPG = 5,
+  LinkNextPG = 6,
+  LinkPrevPG = 7,
 
-  LinkTopPGC  = 9,
+  LinkTopPGC = 9,
   LinkNextPGC = 10,
   LinkPrevPGC = 11,
   LinkGoUpPGC = 12,
   LinkTailPGC = 13,
 
-  LinkRSM     = 16,
+  LinkRSM = 16,
 
   LinkPGCN,
   LinkPTTN,
@@ -58,33 +59,39 @@ typedef enum {
 } link_cmd_t;
 
 /* a link's data set */
-typedef struct {
+typedef struct
+{
   link_cmd_t command;
-  uint16_t   data1;
-  uint16_t   data2;
-  uint16_t   data3;
+  uint16_t data1;
+  uint16_t data2;
+  uint16_t data3;
 } link_t;
 
 /* the VM registers */
-typedef struct {
+typedef struct
+{
   uint16_t SPRM[24];
   uint16_t GPRM[16];
-  uint8_t  GPRM_mode[16];  /* Need to have some thing to indicate normal/counter mode for every GPRM */
+  uint8_t
+      GPRM_mode[16]; /* Need to have some thing to indicate normal/counter mode for every GPRM */
   struct timeval GPRM_time[16]; /* For counter mode */
 } registers_t;
 
 /* a VM command data set */
-typedef struct {
+typedef struct
+{
   uint64_t instruction;
   uint64_t examined;
-  registers_t *registers;
+  registers_t* registers;
 } command_t;
 
 /* the big VM function, executing the given commands and writing
  * the link where to continue, the return value indicates if a jump
  * has been performed */
-int32_t vmEval_CMD(vm_cmd_t commands[], int32_t num_commands,
-	       registers_t *registers, link_t *return_values);
+int32_t vmEval_CMD(vm_cmd_t commands[],
+                   int32_t num_commands,
+                   registers_t* registers,
+                   link_t* return_values);
 
 /* extracts some bits from the command */
 uint32_t vm_getbits(command_t* command, int32_t start, int32_t count);
@@ -94,6 +101,5 @@ uint32_t vm_getbits(command_t* command, int32_t start, int32_t count);
 void vm_print_link(link_t value);
 
 /* for debugging: dumps VM registers */
-void vm_print_registers( registers_t *registers );
+void vm_print_registers(registers_t* registers);
 #endif
-

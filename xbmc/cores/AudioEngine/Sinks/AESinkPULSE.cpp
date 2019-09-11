@@ -15,45 +15,45 @@
 #include "utils/StringUtils.h"
 #include "utils/log.h"
 
-static const char *ContextStateToString(pa_context_state s)
+static const char* ContextStateToString(pa_context_state s)
 {
   switch (s)
   {
-    case PA_CONTEXT_UNCONNECTED:
-      return "unconnected";
-    case PA_CONTEXT_CONNECTING:
-      return "connecting";
-    case PA_CONTEXT_AUTHORIZING:
-      return "authorizing";
-    case PA_CONTEXT_SETTING_NAME:
-      return "setting name";
-    case PA_CONTEXT_READY:
-      return "ready";
-    case PA_CONTEXT_FAILED:
-      return "failed";
-    case PA_CONTEXT_TERMINATED:
-      return "terminated";
-    default:
-      return "none";
+  case PA_CONTEXT_UNCONNECTED:
+    return "unconnected";
+  case PA_CONTEXT_CONNECTING:
+    return "connecting";
+  case PA_CONTEXT_AUTHORIZING:
+    return "authorizing";
+  case PA_CONTEXT_SETTING_NAME:
+    return "setting name";
+  case PA_CONTEXT_READY:
+    return "ready";
+  case PA_CONTEXT_FAILED:
+    return "failed";
+  case PA_CONTEXT_TERMINATED:
+    return "terminated";
+  default:
+    return "none";
   }
 }
 
-static const char *StreamStateToString(pa_stream_state s)
+static const char* StreamStateToString(pa_stream_state s)
 {
-  switch(s)
+  switch (s)
   {
-    case PA_STREAM_UNCONNECTED:
-      return "unconnected";
-    case PA_STREAM_CREATING:
-      return "creating";
-    case PA_STREAM_READY:
-      return "ready";
-    case PA_STREAM_FAILED:
-      return "failed";
-    case PA_STREAM_TERMINATED:
-      return "terminated";
-    default:
-      return "none";
+  case PA_STREAM_UNCONNECTED:
+    return "unconnected";
+  case PA_STREAM_CREATING:
+    return "creating";
+  case PA_STREAM_READY:
+    return "ready";
+  case PA_STREAM_FAILED:
+    return "failed";
+  case PA_STREAM_TERMINATED:
+    return "terminated";
+  default:
+    return "none";
   }
 }
 
@@ -61,16 +61,16 @@ static pa_sample_format AEStreamFormatToPulseFormat(CAEStreamInfo::DataType type
 {
   switch (type)
   {
-    case CAEStreamInfo::STREAM_TYPE_AC3:
-    case CAEStreamInfo::STREAM_TYPE_DTS_512:
-    case CAEStreamInfo::STREAM_TYPE_DTS_1024:
-    case CAEStreamInfo::STREAM_TYPE_DTS_2048:
-    case CAEStreamInfo::STREAM_TYPE_DTSHD_CORE:
-    case CAEStreamInfo::STREAM_TYPE_EAC3:
-      return PA_SAMPLE_S16NE;
+  case CAEStreamInfo::STREAM_TYPE_AC3:
+  case CAEStreamInfo::STREAM_TYPE_DTS_512:
+  case CAEStreamInfo::STREAM_TYPE_DTS_1024:
+  case CAEStreamInfo::STREAM_TYPE_DTS_2048:
+  case CAEStreamInfo::STREAM_TYPE_DTSHD_CORE:
+  case CAEStreamInfo::STREAM_TYPE_EAC3:
+    return PA_SAMPLE_S16NE;
 
-    default:
-      return PA_SAMPLE_INVALID;
+  default:
+    return PA_SAMPLE_INVALID;
   }
 }
 
@@ -78,15 +78,21 @@ static pa_sample_format AEFormatToPulseFormat(AEDataFormat format)
 {
   switch (format)
   {
-    case AE_FMT_U8     : return PA_SAMPLE_U8;
-    case AE_FMT_S16NE  : return PA_SAMPLE_S16NE;
-    case AE_FMT_S24NE3 : return PA_SAMPLE_S24NE;
-    case AE_FMT_S24NE4 : return PA_SAMPLE_S24_32NE;
-    case AE_FMT_S32NE  : return PA_SAMPLE_S32NE;
-    case AE_FMT_FLOAT  : return PA_SAMPLE_FLOAT32;
+  case AE_FMT_U8:
+    return PA_SAMPLE_U8;
+  case AE_FMT_S16NE:
+    return PA_SAMPLE_S16NE;
+  case AE_FMT_S24NE3:
+    return PA_SAMPLE_S24NE;
+  case AE_FMT_S24NE4:
+    return PA_SAMPLE_S24_32NE;
+  case AE_FMT_S32NE:
+    return PA_SAMPLE_S32NE;
+  case AE_FMT_FLOAT:
+    return PA_SAMPLE_FLOAT32;
 
-    default:
-      return PA_SAMPLE_INVALID;
+  default:
+    return PA_SAMPLE_INVALID;
   }
 }
 
@@ -94,20 +100,20 @@ static pa_encoding AEStreamFormatToPulseEncoding(CAEStreamInfo::DataType type)
 {
   switch (type)
   {
-    case CAEStreamInfo::STREAM_TYPE_AC3:
-      return PA_ENCODING_AC3_IEC61937;
+  case CAEStreamInfo::STREAM_TYPE_AC3:
+    return PA_ENCODING_AC3_IEC61937;
 
-    case CAEStreamInfo::STREAM_TYPE_DTS_512:
-    case CAEStreamInfo::STREAM_TYPE_DTS_1024:
-    case CAEStreamInfo::STREAM_TYPE_DTS_2048:
-    case CAEStreamInfo::STREAM_TYPE_DTSHD_CORE:
-      return PA_ENCODING_DTS_IEC61937;
+  case CAEStreamInfo::STREAM_TYPE_DTS_512:
+  case CAEStreamInfo::STREAM_TYPE_DTS_1024:
+  case CAEStreamInfo::STREAM_TYPE_DTS_2048:
+  case CAEStreamInfo::STREAM_TYPE_DTSHD_CORE:
+    return PA_ENCODING_DTS_IEC61937;
 
-    case CAEStreamInfo::STREAM_TYPE_EAC3:
-      return PA_ENCODING_EAC3_IEC61937;
+  case CAEStreamInfo::STREAM_TYPE_EAC3:
+    return PA_ENCODING_EAC3_IEC61937;
 
-    default:
-      return PA_ENCODING_INVALID;
+  default:
+    return PA_ENCODING_INVALID;
   }
 }
 
@@ -115,101 +121,87 @@ static pa_encoding AEFormatToPulseEncoding(AEDataFormat format)
 {
   switch (format)
   {
-    case AE_FMT_RAW:
-      return PA_ENCODING_INVALID;
+  case AE_FMT_RAW:
+    return PA_ENCODING_INVALID;
 
-    default:
-      return PA_ENCODING_PCM;
+  default:
+    return PA_ENCODING_PCM;
   }
 }
 
-static AEDataFormat defaultDataFormats[] = {
-  AE_FMT_U8,
-  AE_FMT_S16NE,
-  AE_FMT_S24NE3,
-  AE_FMT_S24NE4,
-  AE_FMT_S32NE,
-  AE_FMT_FLOAT
-};
+static AEDataFormat defaultDataFormats[] = {AE_FMT_U8,     AE_FMT_S16NE, AE_FMT_S24NE3,
+                                            AE_FMT_S24NE4, AE_FMT_S32NE, AE_FMT_FLOAT};
 
-static unsigned int defaultSampleRates[] = {
-  5512,
-  8000,
-  11025,
-  16000,
-  22050,
-  32000,
-  44100,
-  48000,
-  64000,
-  88200,
-  96000,
-  176400,
-  192000,
-  384000
-};
+static unsigned int defaultSampleRates[] = {5512,  8000,  11025, 16000, 22050,  32000,  44100,
+                                            48000, 64000, 88200, 96000, 176400, 192000, 384000};
 
 /* Static callback functions */
 
-static void ContextStateCallback(pa_context *c, void *userdata)
+static void ContextStateCallback(pa_context* c, void* userdata)
 {
   pa_threaded_mainloop* m = static_cast<pa_threaded_mainloop*>(userdata);
   switch (pa_context_get_state(c))
   {
-    case PA_CONTEXT_READY:
-    case PA_CONTEXT_TERMINATED:
-    case PA_CONTEXT_UNCONNECTED:
-    case PA_CONTEXT_CONNECTING:
-    case PA_CONTEXT_AUTHORIZING:
-    case PA_CONTEXT_SETTING_NAME:
-    case PA_CONTEXT_FAILED:
-      pa_threaded_mainloop_signal(m, 0);
-      break;
+  case PA_CONTEXT_READY:
+  case PA_CONTEXT_TERMINATED:
+  case PA_CONTEXT_UNCONNECTED:
+  case PA_CONTEXT_CONNECTING:
+  case PA_CONTEXT_AUTHORIZING:
+  case PA_CONTEXT_SETTING_NAME:
+  case PA_CONTEXT_FAILED:
+    pa_threaded_mainloop_signal(m, 0);
+    break;
   }
 }
 
-static void StreamStateCallback(pa_stream *s, void *userdata)
+static void StreamStateCallback(pa_stream* s, void* userdata)
 {
   pa_threaded_mainloop* m = static_cast<pa_threaded_mainloop*>(userdata);
   switch (pa_stream_get_state(s))
   {
-    case PA_STREAM_UNCONNECTED:
-    case PA_STREAM_CREATING:
-    case PA_STREAM_READY:
-    case PA_STREAM_FAILED:
-    case PA_STREAM_TERMINATED:
-      pa_threaded_mainloop_signal(m, 0);
-      break;
+  case PA_STREAM_UNCONNECTED:
+  case PA_STREAM_CREATING:
+  case PA_STREAM_READY:
+  case PA_STREAM_FAILED:
+  case PA_STREAM_TERMINATED:
+    pa_threaded_mainloop_signal(m, 0);
+    break;
   }
 }
 
-static void StreamRequestCallback(pa_stream *s, size_t length, void *userdata)
+static void StreamRequestCallback(pa_stream* s, size_t length, void* userdata)
 {
   pa_threaded_mainloop* m = static_cast<pa_threaded_mainloop*>(userdata);
   pa_threaded_mainloop_signal(m, 0);
 }
 
-static void StreamLatencyUpdateCallback(pa_stream *s, void *userdata)
+static void StreamLatencyUpdateCallback(pa_stream* s, void* userdata)
 {
   pa_threaded_mainloop* m = static_cast<pa_threaded_mainloop*>(userdata);
   pa_threaded_mainloop_signal(m, 0);
 }
 
 
-static void SinkInputInfoCallback(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
+static void SinkInputInfoCallback(pa_context* c,
+                                  const pa_sink_input_info* i,
+                                  int eol,
+                                  void* userdata)
 {
-  CAESinkPULSE *p = static_cast<CAESinkPULSE*>(userdata);
+  CAESinkPULSE* p = static_cast<CAESinkPULSE*>(userdata);
   if (!p || !p->IsInitialized())
     return;
 
-  if(i && i->has_volume && !i->corked)
+  if (i && i->has_volume && !i->corked)
     p->UpdateInternalVolume(&(i->volume));
 }
 
-static void SinkChangedCallback(pa_context *c, pa_subscription_event_type_t t, uint32_t idx, void *userdata)
+static void SinkChangedCallback(pa_context* c,
+                                pa_subscription_event_type_t t,
+                                uint32_t idx,
+                                void* userdata)
 {
   CAESinkPULSE* p = static_cast<CAESinkPULSE*>(userdata);
-  if(!p)
+  if (!p)
     return;
 
   CSingleLock lock(p->m_sec);
@@ -258,10 +250,10 @@ static void SinkChangedCallback(pa_context *c, pa_subscription_event_type_t t, u
 
 struct SinkInfoStruct
 {
-  AEDeviceInfoList *list;
+  AEDeviceInfoList* list;
   bool isHWDevice;
   bool device_found;
-  pa_threaded_mainloop *mainloop;
+  pa_threaded_mainloop* mainloop;
   int samplerate;
   pa_channel_map map;
   SinkInfoStruct()
@@ -277,7 +269,7 @@ struct SinkInfoStruct
 
 struct ModuleInfoStruct
 {
-  pa_threaded_mainloop *mainloop;
+  pa_threaded_mainloop* mainloop;
   bool hasAllowPT;
   ModuleInfoStruct()
   {
@@ -286,13 +278,13 @@ struct ModuleInfoStruct
   }
 };
 
-static void SinkInfoCallback(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
+static void SinkInfoCallback(pa_context* c, const pa_sink_info* i, int eol, void* userdata)
 {
-  SinkInfoStruct *sinkStruct = static_cast<SinkInfoStruct*>(userdata);
+  SinkInfoStruct* sinkStruct = static_cast<SinkInfoStruct*>(userdata);
   if (!sinkStruct)
     return;
 
-  if(i)
+  if (i)
   {
     if (i->flags && (i->flags & PA_SINK_HARDWARE))
       sinkStruct->isHWDevice = true;
@@ -309,25 +301,63 @@ static AEChannel PAChannelToAEChannel(pa_channel_position_t channel)
   AEChannel ae_channel;
   switch (channel)
   {
-    case PA_CHANNEL_POSITION_FRONT_LEFT:            ae_channel = AE_CH_FL; break;
-    case PA_CHANNEL_POSITION_FRONT_RIGHT:           ae_channel = AE_CH_FR; break;
-    case PA_CHANNEL_POSITION_FRONT_CENTER:          ae_channel = AE_CH_FC; break;
-    case PA_CHANNEL_POSITION_LFE:                   ae_channel = AE_CH_LFE; break;
-    case PA_CHANNEL_POSITION_REAR_LEFT:             ae_channel = AE_CH_BL; break;
-    case PA_CHANNEL_POSITION_REAR_RIGHT:            ae_channel = AE_CH_BR; break;
-    case PA_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER:  ae_channel = AE_CH_FLOC; break;
-    case PA_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER: ae_channel = AE_CH_FROC; break;
-    case PA_CHANNEL_POSITION_REAR_CENTER:           ae_channel = AE_CH_BC; break;
-    case PA_CHANNEL_POSITION_SIDE_LEFT:             ae_channel = AE_CH_SL; break;
-    case PA_CHANNEL_POSITION_SIDE_RIGHT:            ae_channel = AE_CH_SR; break;
-    case PA_CHANNEL_POSITION_TOP_FRONT_LEFT:        ae_channel = AE_CH_TFL; break;
-    case PA_CHANNEL_POSITION_TOP_FRONT_RIGHT:       ae_channel = AE_CH_TFR; break;
-    case PA_CHANNEL_POSITION_TOP_FRONT_CENTER:      ae_channel = AE_CH_TFC; break;
-    case PA_CHANNEL_POSITION_TOP_CENTER:            ae_channel = AE_CH_TC; break;
-    case PA_CHANNEL_POSITION_TOP_REAR_LEFT:         ae_channel = AE_CH_TBL; break;
-    case PA_CHANNEL_POSITION_TOP_REAR_RIGHT:        ae_channel = AE_CH_TBR; break;
-    case PA_CHANNEL_POSITION_TOP_REAR_CENTER:       ae_channel = AE_CH_TBC; break;
-    default:                                        ae_channel = AE_CH_NULL; break;
+  case PA_CHANNEL_POSITION_FRONT_LEFT:
+    ae_channel = AE_CH_FL;
+    break;
+  case PA_CHANNEL_POSITION_FRONT_RIGHT:
+    ae_channel = AE_CH_FR;
+    break;
+  case PA_CHANNEL_POSITION_FRONT_CENTER:
+    ae_channel = AE_CH_FC;
+    break;
+  case PA_CHANNEL_POSITION_LFE:
+    ae_channel = AE_CH_LFE;
+    break;
+  case PA_CHANNEL_POSITION_REAR_LEFT:
+    ae_channel = AE_CH_BL;
+    break;
+  case PA_CHANNEL_POSITION_REAR_RIGHT:
+    ae_channel = AE_CH_BR;
+    break;
+  case PA_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER:
+    ae_channel = AE_CH_FLOC;
+    break;
+  case PA_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER:
+    ae_channel = AE_CH_FROC;
+    break;
+  case PA_CHANNEL_POSITION_REAR_CENTER:
+    ae_channel = AE_CH_BC;
+    break;
+  case PA_CHANNEL_POSITION_SIDE_LEFT:
+    ae_channel = AE_CH_SL;
+    break;
+  case PA_CHANNEL_POSITION_SIDE_RIGHT:
+    ae_channel = AE_CH_SR;
+    break;
+  case PA_CHANNEL_POSITION_TOP_FRONT_LEFT:
+    ae_channel = AE_CH_TFL;
+    break;
+  case PA_CHANNEL_POSITION_TOP_FRONT_RIGHT:
+    ae_channel = AE_CH_TFR;
+    break;
+  case PA_CHANNEL_POSITION_TOP_FRONT_CENTER:
+    ae_channel = AE_CH_TFC;
+    break;
+  case PA_CHANNEL_POSITION_TOP_CENTER:
+    ae_channel = AE_CH_TC;
+    break;
+  case PA_CHANNEL_POSITION_TOP_REAR_LEFT:
+    ae_channel = AE_CH_TBL;
+    break;
+  case PA_CHANNEL_POSITION_TOP_REAR_RIGHT:
+    ae_channel = AE_CH_TBR;
+    break;
+  case PA_CHANNEL_POSITION_TOP_REAR_CENTER:
+    ae_channel = AE_CH_TBC;
+    break;
+  default:
+    ae_channel = AE_CH_NULL;
+    break;
   }
   return ae_channel;
 }
@@ -337,25 +367,63 @@ static pa_channel_position_t AEChannelToPAChannel(AEChannel ae_channel)
   pa_channel_position_t pa_channel;
   switch (ae_channel)
   {
-    case AE_CH_FL:    pa_channel = PA_CHANNEL_POSITION_FRONT_LEFT; break;
-    case AE_CH_FR:    pa_channel = PA_CHANNEL_POSITION_FRONT_RIGHT; break;
-    case AE_CH_FC:    pa_channel = PA_CHANNEL_POSITION_FRONT_CENTER; break;
-    case AE_CH_LFE:   pa_channel = PA_CHANNEL_POSITION_LFE; break;
-    case AE_CH_BL:    pa_channel = PA_CHANNEL_POSITION_REAR_LEFT; break;
-    case AE_CH_BR:    pa_channel = PA_CHANNEL_POSITION_REAR_RIGHT; break;
-    case AE_CH_FLOC:  pa_channel = PA_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER; break;
-    case AE_CH_FROC:  pa_channel = PA_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER; break;
-    case AE_CH_BC:    pa_channel = PA_CHANNEL_POSITION_REAR_CENTER; break;
-    case AE_CH_SL:    pa_channel = PA_CHANNEL_POSITION_SIDE_LEFT; break;
-    case AE_CH_SR:    pa_channel = PA_CHANNEL_POSITION_SIDE_RIGHT; break;
-    case AE_CH_TFL:   pa_channel = PA_CHANNEL_POSITION_TOP_FRONT_LEFT; break;
-    case AE_CH_TFR:   pa_channel = PA_CHANNEL_POSITION_TOP_FRONT_RIGHT; break;
-    case AE_CH_TFC:   pa_channel = PA_CHANNEL_POSITION_TOP_FRONT_CENTER; break;
-    case AE_CH_TC:    pa_channel = PA_CHANNEL_POSITION_TOP_CENTER; break;
-    case AE_CH_TBL:   pa_channel = PA_CHANNEL_POSITION_TOP_REAR_LEFT; break;
-    case AE_CH_TBR:   pa_channel = PA_CHANNEL_POSITION_TOP_REAR_RIGHT; break;
-    case AE_CH_TBC:   pa_channel = PA_CHANNEL_POSITION_TOP_REAR_CENTER; break;
-    default:          pa_channel = PA_CHANNEL_POSITION_INVALID; break;
+  case AE_CH_FL:
+    pa_channel = PA_CHANNEL_POSITION_FRONT_LEFT;
+    break;
+  case AE_CH_FR:
+    pa_channel = PA_CHANNEL_POSITION_FRONT_RIGHT;
+    break;
+  case AE_CH_FC:
+    pa_channel = PA_CHANNEL_POSITION_FRONT_CENTER;
+    break;
+  case AE_CH_LFE:
+    pa_channel = PA_CHANNEL_POSITION_LFE;
+    break;
+  case AE_CH_BL:
+    pa_channel = PA_CHANNEL_POSITION_REAR_LEFT;
+    break;
+  case AE_CH_BR:
+    pa_channel = PA_CHANNEL_POSITION_REAR_RIGHT;
+    break;
+  case AE_CH_FLOC:
+    pa_channel = PA_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER;
+    break;
+  case AE_CH_FROC:
+    pa_channel = PA_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER;
+    break;
+  case AE_CH_BC:
+    pa_channel = PA_CHANNEL_POSITION_REAR_CENTER;
+    break;
+  case AE_CH_SL:
+    pa_channel = PA_CHANNEL_POSITION_SIDE_LEFT;
+    break;
+  case AE_CH_SR:
+    pa_channel = PA_CHANNEL_POSITION_SIDE_RIGHT;
+    break;
+  case AE_CH_TFL:
+    pa_channel = PA_CHANNEL_POSITION_TOP_FRONT_LEFT;
+    break;
+  case AE_CH_TFR:
+    pa_channel = PA_CHANNEL_POSITION_TOP_FRONT_RIGHT;
+    break;
+  case AE_CH_TFC:
+    pa_channel = PA_CHANNEL_POSITION_TOP_FRONT_CENTER;
+    break;
+  case AE_CH_TC:
+    pa_channel = PA_CHANNEL_POSITION_TOP_CENTER;
+    break;
+  case AE_CH_TBL:
+    pa_channel = PA_CHANNEL_POSITION_TOP_REAR_LEFT;
+    break;
+  case AE_CH_TBR:
+    pa_channel = PA_CHANNEL_POSITION_TOP_REAR_RIGHT;
+    break;
+  case AE_CH_TBC:
+    pa_channel = PA_CHANNEL_POSITION_TOP_REAR_CENTER;
+    break;
+  default:
+    pa_channel = PA_CHANNEL_POSITION_INVALID;
+    break;
   }
   return pa_channel;
 }
@@ -368,7 +436,7 @@ static pa_channel_map AEChannelMapToPAChannel(const CAEChannelInfo& info)
   for (unsigned int i = 0; i < info.Count(); ++i)
   {
     pos = AEChannelToPAChannel(info[i]);
-    if(pos != PA_CHANNEL_POSITION_INVALID)
+    if (pos != PA_CHANNEL_POSITION_INVALID)
     {
       // remember channel name and increase channel count
       map.map[map.channels++] = pos;
@@ -382,19 +450,19 @@ static CAEChannelInfo PAChannelToAEChannelMap(const pa_channel_map& channels)
   CAEChannelInfo info;
   AEChannel ch;
   info.Reset();
-  for (unsigned int i=0; i<channels.channels; i++)
+  for (unsigned int i = 0; i < channels.channels; i++)
   {
     ch = PAChannelToAEChannel(channels.map[i]);
-    if(ch != AE_CH_NULL)
+    if (ch != AE_CH_NULL)
       info += ch;
   }
   return info;
 }
 
-#if PA_CHECK_VERSION(10,0,0)
-static void ModuleInfoCallback(pa_context* c, const pa_module_info *i, int eol, void *userdata)
+#if PA_CHECK_VERSION(10, 0, 0)
+static void ModuleInfoCallback(pa_context* c, const pa_module_info* i, int eol, void* userdata)
 {
-  ModuleInfoStruct *mis = static_cast<ModuleInfoStruct*>(userdata);
+  ModuleInfoStruct* mis = static_cast<ModuleInfoStruct*>(userdata);
   if (!mis)
     return;
 
@@ -406,23 +474,25 @@ static void ModuleInfoCallback(pa_context* c, const pa_module_info *i, int eol, 
   pa_threaded_mainloop_signal(mis->mainloop, 0);
 }
 #endif
-static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
+static void SinkInfoRequestCallback(pa_context* c, const pa_sink_info* i, int eol, void* userdata)
 {
 
-  SinkInfoStruct *sinkStruct = static_cast<SinkInfoStruct*>(userdata);
+  SinkInfoStruct* sinkStruct = static_cast<SinkInfoStruct*>(userdata);
   if (!sinkStruct)
     return;
 
-  if(sinkStruct->list->empty())
+  if (sinkStruct->list->empty())
   {
     //add a default device first
     CAEDeviceInfo defaultDevice;
     defaultDevice.m_deviceName = std::string("Default");
     defaultDevice.m_displayName = std::string("Default");
     defaultDevice.m_displayNameExtra = std::string("Default Output Device (PULSEAUDIO)");
-    defaultDevice.m_dataFormats.insert(defaultDevice.m_dataFormats.end(), defaultDataFormats, defaultDataFormats + ARRAY_SIZE(defaultDataFormats));
+    defaultDevice.m_dataFormats.insert(defaultDevice.m_dataFormats.end(), defaultDataFormats,
+                                       defaultDataFormats + ARRAY_SIZE(defaultDataFormats));
     defaultDevice.m_channels = CAEChannelInfo(AE_CH_LAYOUT_2_0);
-    defaultDevice.m_sampleRates.assign(defaultSampleRates, defaultSampleRates + ARRAY_SIZE(defaultSampleRates));
+    defaultDevice.m_sampleRates.assign(defaultSampleRates,
+                                       defaultSampleRates + ARRAY_SIZE(defaultSampleRates));
     defaultDevice.m_deviceType = AE_DEVTYPE_PCM;
     defaultDevice.m_wantsIECPassthrough = true;
     sinkStruct->list->push_back(defaultDevice);
@@ -434,7 +504,8 @@ static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eo
     device.m_deviceName = std::string(i->name);
     device.m_displayName = std::string(i->description);
     if (i->active_port && i->active_port->description)
-      device.m_displayNameExtra = std::string((i->active_port->description)).append(" (PULSEAUDIO)");
+      device.m_displayNameExtra =
+          std::string((i->active_port->description)).append(" (PULSEAUDIO)");
     else
       device.m_displayNameExtra = std::string((i->description)).append(" (PULSEAUDIO)");
     unsigned int device_type = AE_DEVTYPE_PCM; //0
@@ -442,35 +513,37 @@ static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eo
     device.m_channels = PAChannelToAEChannelMap(i->channel_map);
 
     // Don't add devices that would not have a channel map
-    if(device.m_channels.Count() == 0)
+    if (device.m_channels.Count() == 0)
       valid = false;
 
-    device.m_sampleRates.assign(defaultSampleRates, defaultSampleRates + ARRAY_SIZE(defaultSampleRates));
+    device.m_sampleRates.assign(defaultSampleRates,
+                                defaultSampleRates + ARRAY_SIZE(defaultSampleRates));
 
     for (unsigned int j = 0; j < i->n_formats; j++)
     {
-      switch(i->formats[j]->encoding)
+      switch (i->formats[j]->encoding)
       {
-        case PA_ENCODING_AC3_IEC61937:
-          device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_AC3);
-          device_type = AE_DEVTYPE_IEC958;
-          break;
-        case PA_ENCODING_DTS_IEC61937:
-          device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTSHD_CORE);
-          device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTS_1024);
-          device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTS_512);
-          device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTS_2048);
-          device_type = AE_DEVTYPE_IEC958;
-          break;
-        case PA_ENCODING_EAC3_IEC61937:
-          device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_EAC3);
-          device_type = AE_DEVTYPE_IEC958;
-          break;
-        case PA_ENCODING_PCM:
-          device.m_dataFormats.insert(device.m_dataFormats.end(), defaultDataFormats, defaultDataFormats + ARRAY_SIZE(defaultDataFormats));
-          break;
-        default:
-          break;
+      case PA_ENCODING_AC3_IEC61937:
+        device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_AC3);
+        device_type = AE_DEVTYPE_IEC958;
+        break;
+      case PA_ENCODING_DTS_IEC61937:
+        device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTSHD_CORE);
+        device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTS_1024);
+        device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTS_512);
+        device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_DTS_2048);
+        device_type = AE_DEVTYPE_IEC958;
+        break;
+      case PA_ENCODING_EAC3_IEC61937:
+        device.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_EAC3);
+        device_type = AE_DEVTYPE_IEC958;
+        break;
+      case PA_ENCODING_PCM:
+        device.m_dataFormats.insert(device.m_dataFormats.end(), defaultDataFormats,
+                                    defaultDataFormats + ARRAY_SIZE(defaultDataFormats));
+        break;
+      default:
+        break;
       }
     }
     // passthrough is only working when device has Stereo channel config
@@ -484,14 +557,16 @@ static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eo
 
     device.m_wantsIECPassthrough = true;
 
-    if(valid)
+    if (valid)
     {
-      CLog::Log(LOGDEBUG, "PulseAudio: Found %s with devicestring %s", device.m_displayName.c_str(), device.m_deviceName.c_str());
+      CLog::Log(LOGDEBUG, "PulseAudio: Found %s with devicestring %s", device.m_displayName.c_str(),
+                device.m_deviceName.c_str());
       sinkStruct->list->push_back(device);
     }
     else
     {
-      CLog::Log(LOGDEBUG, "PulseAudio: Skipped %s with devicestring %s", device.m_displayName.c_str(), device.m_deviceName.c_str());
+      CLog::Log(LOGDEBUG, "PulseAudio: Skipped %s with devicestring %s",
+                device.m_displayName.c_str(), device.m_deviceName.c_str());
     }
   }
   pa_threaded_mainloop_signal(sinkStruct->mainloop, 0);
@@ -502,7 +577,7 @@ static void SinkInfoRequestCallback(pa_context *c, const pa_sink_info *i, int eo
 bool CAESinkPULSE::Register()
 {
   // check if pulseaudio is actually available
-  pa_simple *s;
+  pa_simple* s;
   pa_sample_spec ss;
   ss.format = PA_SAMPLE_S16NE;
   ss.channels = 2;
@@ -527,7 +602,7 @@ bool CAESinkPULSE::Register()
   return true;
 }
 
-IAESink* CAESinkPULSE::Create(std::string &device, AEAudioFormat& desiredFormat)
+IAESink* CAESinkPULSE::Create(std::string& device, AEAudioFormat& desiredFormat)
 {
   IAESink* sink = new CAESinkPULSE();
   if (sink->Initialize(desiredFormat, device))
@@ -557,7 +632,7 @@ CAESinkPULSE::~CAESinkPULSE()
   Deinitialize();
 }
 
-bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
+bool CAESinkPULSE::Initialize(AEAudioFormat& format, std::string& device)
 {
   {
     CSingleLock lock(m_sec);
@@ -583,25 +658,26 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
   struct pa_channel_map map;
   pa_channel_map_init(&map);
 
-   // PULSE cannot cope with e.g. planar formats so we fall back to FLOAT
-   // when we receive an invalid pulse format
-   pa_sample_format pa_fmt;
-   // PA can only handle IEC packed RAW format if we get a RAW format
-   if (format.m_dataFormat == AE_FMT_RAW)
-   {
-     pa_fmt = AEStreamFormatToPulseFormat(format.m_streamInfo.m_type);
-     m_passthrough = true;
-   }
-   else
+  // PULSE cannot cope with e.g. planar formats so we fall back to FLOAT
+  // when we receive an invalid pulse format
+  pa_sample_format pa_fmt;
+  // PA can only handle IEC packed RAW format if we get a RAW format
+  if (format.m_dataFormat == AE_FMT_RAW)
+  {
+    pa_fmt = AEStreamFormatToPulseFormat(format.m_streamInfo.m_type);
+    m_passthrough = true;
+  }
+  else
     pa_fmt = AEFormatToPulseFormat(format.m_dataFormat);
 
-   if (pa_fmt == PA_SAMPLE_INVALID)
-   {
-     CLog::Log(LOGDEBUG, "PULSE does not support format: %s - will fallback to AE_FMT_FLOAT", CAEUtil::DataFormatToStr(format.m_dataFormat));
-     format.m_dataFormat = AE_FMT_FLOAT;
-     pa_fmt = PA_SAMPLE_FLOAT32;
-     m_passthrough = false;
-   }
+  if (pa_fmt == PA_SAMPLE_INVALID)
+  {
+    CLog::Log(LOGDEBUG, "PULSE does not support format: %s - will fallback to AE_FMT_FLOAT",
+              CAEUtil::DataFormatToStr(format.m_dataFormat));
+    format.m_dataFormat = AE_FMT_FLOAT;
+    pa_fmt = PA_SAMPLE_FLOAT32;
+    m_passthrough = false;
+  }
   // store information about current sink
   SinkInfoStruct sinkStruct;
   sinkStruct.mainloop = m_MainLoop;
@@ -609,10 +685,13 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
 
   // get real sample rate of the device we want to open - to avoid resampling
   bool isDefaultDevice = false;
-  if(StringUtils::EndsWithNoCase(device, std::string("default")))
+  if (StringUtils::EndsWithNoCase(device, std::string("default")))
     isDefaultDevice = true;
 
-  WaitForOperation(pa_context_get_sink_info_by_name(m_Context, isDefaultDevice ? NULL : device.c_str(), SinkInfoCallback, &sinkStruct), m_MainLoop, "Get Sink Info");
+  WaitForOperation(pa_context_get_sink_info_by_name(m_Context,
+                                                    isDefaultDevice ? NULL : device.c_str(),
+                                                    SinkInfoCallback, &sinkStruct),
+                   m_MainLoop, "Get Sink Info");
   // only check if the device is existing - don't alter the sample rate
   if (!sinkStruct.device_found)
   {
@@ -624,7 +703,7 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
 
   bool use_pa_mixing = false;
 
-  if(m_passthrough)
+  if (m_passthrough)
   {
     map.channels = 2;
     format.m_channelLayout = AE_CH_LAYOUT_2_0;
@@ -635,7 +714,7 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
     // can be set to "no". Therefore we give the choice back to user and let
     // him configure the soundserver the way he likes - this makes the pre 11
     // workaround obsolete
-#if PA_CHECK_VERSION(11,0,0)
+#if PA_CHECK_VERSION(11, 0, 0)
     use_pa_mixing = true;
     map = AEChannelMapToPAChannel(format.m_channelLayout);
 #else
@@ -664,17 +743,17 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
   // Pulse can resample everything between 1 hz and 192000 hz / 384000 hz (starting with 9.0)
   // Make sure we are in the range that we originally added
   unsigned int max_pulse_sample_rate = 192000U;
-#if PA_CHECK_VERSION(9,0,0)
+#if PA_CHECK_VERSION(9, 0, 0)
   max_pulse_sample_rate = 384000U;
 #endif
   format.m_sampleRate = std::max(5512U, std::min(format.m_sampleRate, max_pulse_sample_rate));
 
-  pa_format_info *info[1];
+  pa_format_info* info[1];
   info[0] = pa_format_info_new();
   if (m_passthrough)
     info[0]->encoding = AEStreamFormatToPulseEncoding(format.m_streamInfo.m_type);
   else
-   info[0]->encoding = AEFormatToPulseEncoding(format.m_dataFormat);
+    info[0]->encoding = AEFormatToPulseEncoding(format.m_dataFormat);
 
   if (info[0]->encoding == PA_ENCODING_INVALID)
   {
@@ -685,7 +764,7 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
     return false;
   }
 
-  if(!m_passthrough)
+  if (!m_passthrough)
   {
     pa_format_info_set_sample_format(info[0], pa_fmt);
     pa_format_info_set_channel_map(info[0], &map);
@@ -744,7 +823,7 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
   // align with AE's max buffer
   unsigned int latency = m_BytesPerSecond / 2.5; // 400 ms
   unsigned int process_time = latency / 4; // 100 ms
-  if(sinkStruct.isHWDevice)
+  if (sinkStruct.isHWDevice)
   {
     // on hw devices buffers can be further reduced
     // 200ms max latency
@@ -755,11 +834,12 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
 
   pa_buffer_attr buffer_attr;
   buffer_attr.fragsize = latency;
-  buffer_attr.maxlength = (uint32_t) -1;
+  buffer_attr.maxlength = (uint32_t)-1;
   buffer_attr.minreq = process_time;
-  buffer_attr.prebuf = (uint32_t) -1;
+  buffer_attr.prebuf = (uint32_t)-1;
   buffer_attr.tlength = latency;
-  int flags = (PA_STREAM_INTERPOLATE_TIMING | PA_STREAM_AUTO_TIMING_UPDATE | PA_STREAM_ADJUST_LATENCY);
+  int flags =
+      (PA_STREAM_INTERPOLATE_TIMING | PA_STREAM_AUTO_TIMING_UPDATE | PA_STREAM_ADJUST_LATENCY);
 
   // by default PA will upmix / remix everything when multi channel layout is configured
   // if we have enough channels in the target layout ask PA not to remix to related channels
@@ -770,7 +850,8 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
   if (m_passthrough)
     flags |= PA_STREAM_PASSTHROUGH;
 
-  if (pa_stream_connect_playback(m_Stream, isDefaultDevice ? NULL : device.c_str(), &buffer_attr, (pa_stream_flags) flags, NULL, NULL) < 0)
+  if (pa_stream_connect_playback(m_Stream, isDefaultDevice ? NULL : device.c_str(), &buffer_attr,
+                                 (pa_stream_flags)flags, NULL, NULL) < 0)
   {
     CLog::Log(LOGERROR, "PulseAudio: Failed to connect stream to output");
     pa_threaded_mainloop_unlock(m_MainLoop);
@@ -782,9 +863,10 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
   do
   {
     pa_threaded_mainloop_wait(m_MainLoop);
-    CLog::Log(LOGDEBUG, "PulseAudio: Stream %s", StreamStateToString(pa_stream_get_state(m_Stream)));
-  }
-  while (pa_stream_get_state(m_Stream) != PA_STREAM_READY && pa_stream_get_state(m_Stream) != PA_STREAM_FAILED);
+    CLog::Log(LOGDEBUG, "PulseAudio: Stream %s",
+              StreamStateToString(pa_stream_get_state(m_Stream)));
+  } while (pa_stream_get_state(m_Stream) != PA_STREAM_READY &&
+           pa_stream_get_state(m_Stream) != PA_STREAM_FAILED);
 
   if (pa_stream_get_state(m_Stream) == PA_STREAM_FAILED)
   {
@@ -794,7 +876,7 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
     return false;
   }
 
-  const pa_buffer_attr *a;
+  const pa_buffer_attr* a;
 
   if (!(a = pa_stream_get_buffer_attr(m_Stream)))
   {
@@ -816,8 +898,9 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
     CSingleLock lock(m_sec);
     // Register Callback for Sink changes
     pa_context_set_subscribe_callback(m_Context, SinkChangedCallback, this);
-    const pa_subscription_mask_t mask = pa_subscription_mask_t (PA_SUBSCRIPTION_MASK_SINK | PA_SUBSCRIPTION_MASK_SINK_INPUT);
-    pa_operation *op = pa_context_subscribe(m_Context, mask, NULL, this);
+    const pa_subscription_mask_t mask =
+        pa_subscription_mask_t(PA_SUBSCRIPTION_MASK_SINK | PA_SUBSCRIPTION_MASK_SINK_INPUT);
+    pa_operation* op = pa_context_subscribe(m_Context, mask, NULL, this);
     if (op != NULL)
       pa_operation_unref(op);
   }
@@ -829,8 +912,8 @@ bool CAESinkPULSE::Initialize(AEAudioFormat &format, std::string &device)
   format.m_dataFormat = m_passthrough ? AE_FMT_S16NE : format.m_dataFormat;
 
   CLog::Log(LOGNOTICE, "PulseAudio: Opened device %s in %s mode with Buffersize %u ms",
-                      device.c_str(), m_passthrough ? "passthrough" : "pcm",
-                      (unsigned int) ((m_BufferSize / (float) m_BytesPerSecond) * 1000));
+            device.c_str(), m_passthrough ? "passthrough" : "pcm",
+            (unsigned int)((m_BufferSize / (float)m_BytesPerSecond) * 1000));
 
   // Cork stream will resume when adding first package
   Pause(true);
@@ -904,7 +987,7 @@ double CAESinkPULSE::GetCacheTotal()
   return (float)m_BufferSize / (float)m_BytesPerSecond;
 }
 
-unsigned int CAESinkPULSE::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
+unsigned int CAESinkPULSE::AddPackets(uint8_t** data, unsigned int frames, unsigned int offset)
 {
   if (!m_IsAllocated)
     return 0;
@@ -918,12 +1001,12 @@ unsigned int CAESinkPULSE::AddPackets(uint8_t **data, unsigned int frames, unsig
 
   unsigned int available = frames * m_format.m_frameSize;
   unsigned int length = 0;
-  void *buffer = data[0]+offset*m_format.m_frameSize;
+  void* buffer = data[0] + offset * m_format.m_frameSize;
   // care a bit for fragmentation
   while ((length = pa_stream_writable_size(m_Stream)) < m_periodSize)
     pa_threaded_mainloop_wait(m_MainLoop);
 
-  length =  std::min(length, available);
+  length = std::min(length, available);
 
   int error = pa_stream_write(m_Stream, buffer, length, NULL, 0, PA_SEEK_RELATIVE);
   pa_threaded_mainloop_unlock(m_MainLoop);
@@ -980,25 +1063,26 @@ void CAESinkPULSE::SetVolume(float volume)
 
     if (m_volume_needs_update)
     {
-       m_volume_needs_update = false;
-       pa_volume_t n_vol = pa_cvolume_avg(&m_Volume);
-       n_vol = std::min(n_vol, PA_VOLUME_NORM);
-       per_cent_volume = (float) n_vol / PA_VOLUME_NORM;
-       // only update internal volume
-       pa_threaded_mainloop_unlock(m_MainLoop);
-       g_application.SetVolume(per_cent_volume, false);
-       return;
+      m_volume_needs_update = false;
+      pa_volume_t n_vol = pa_cvolume_avg(&m_Volume);
+      n_vol = std::min(n_vol, PA_VOLUME_NORM);
+      per_cent_volume = (float)n_vol / PA_VOLUME_NORM;
+      // only update internal volume
+      pa_threaded_mainloop_unlock(m_MainLoop);
+      g_application.SetVolume(per_cent_volume, false);
+      return;
     }
 
     pa_volume_t pavolume = per_cent_volume * PA_VOLUME_NORM;
     unsigned int sink_input_idx = pa_stream_get_index(m_Stream);
 
-    if ( pavolume <= 0 )
+    if (pavolume <= 0)
       pa_cvolume_mute(&m_Volume, m_Channels);
     else
       pa_cvolume_set(&m_Volume, m_Channels, pavolume);
 
-    pa_operation *op = pa_context_set_sink_input_volume(m_Context, sink_input_idx, &m_Volume, NULL, NULL);
+    pa_operation* op =
+        pa_context_set_sink_input_volume(m_Context, sink_input_idx, &m_Volume, NULL, NULL);
     if (op == NULL)
       CLog::Log(LOGERROR, "PulseAudio: Failed to set volume");
     else
@@ -1008,10 +1092,10 @@ void CAESinkPULSE::SetVolume(float volume)
   }
 }
 
-void CAESinkPULSE::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
+void CAESinkPULSE::EnumerateDevicesEx(AEDeviceInfoList& list, bool force)
 {
-  pa_context *context;
-  pa_threaded_mainloop *mainloop;
+  pa_context* context;
+  pa_threaded_mainloop* mainloop;
 
   if (!SetupContext(NULL, &context, &mainloop))
   {
@@ -1028,14 +1112,18 @@ void CAESinkPULSE::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
   ModuleInfoStruct mis;
   mis.mainloop = mainloop;
 
-#if PA_CHECK_VERSION(10,0,0)
-  WaitForOperation(pa_context_get_module_info_list(context, ModuleInfoCallback, &mis), mainloop, "Check PA Modules");
+#if PA_CHECK_VERSION(10, 0, 0)
+  WaitForOperation(pa_context_get_module_info_list(context, ModuleInfoCallback, &mis), mainloop,
+                   "Check PA Modules");
 #endif
   if (!mis.hasAllowPT)
   {
-    CLog::Log(LOGWARNING, "Pulseaudio module module-allow-passthrough not loaded - opening PT devices might fail");
+    CLog::Log(
+        LOGWARNING,
+        "Pulseaudio module module-allow-passthrough not loaded - opening PT devices might fail");
   }
-  WaitForOperation(pa_context_get_sink_info_list(context, SinkInfoRequestCallback, &sinkStruct), mainloop, "EnumerateAudioSinks");
+  WaitForOperation(pa_context_get_sink_info_list(context, SinkInfoRequestCallback, &sinkStruct),
+                   mainloop, "EnumerateAudioSinks");
 
   pa_threaded_mainloop_unlock(mainloop);
 
@@ -1058,22 +1146,25 @@ void CAESinkPULSE::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
 
 bool CAESinkPULSE::IsInitialized()
 {
- CSingleLock lock(m_sec);
- return m_IsAllocated;
+  CSingleLock lock(m_sec);
+  return m_IsAllocated;
 }
 
 void CAESinkPULSE::Pause(bool pause)
 {
   pa_threaded_mainloop_lock(m_MainLoop);
 
-  if (!WaitForOperation(pa_stream_cork(m_Stream, pause ? 1 : 0, NULL, NULL), m_MainLoop, pause ? "Pause" : "Resume"))
+  if (!WaitForOperation(pa_stream_cork(m_Stream, pause ? 1 : 0, NULL, NULL), m_MainLoop,
+                        pause ? "Pause" : "Resume"))
     pause = !pause;
 
   m_IsStreamPaused = pause;
   pa_threaded_mainloop_unlock(m_MainLoop);
 }
 
-inline bool CAESinkPULSE::WaitForOperation(pa_operation *op, pa_threaded_mainloop *mainloop, const char *LogEntry = "")
+inline bool CAESinkPULSE::WaitForOperation(pa_operation* op,
+                                           pa_threaded_mainloop* mainloop,
+                                           const char* LogEntry = "")
 {
   if (op == NULL)
     return false;
@@ -1093,7 +1184,9 @@ inline bool CAESinkPULSE::WaitForOperation(pa_operation *op, pa_threaded_mainloo
   return success;
 }
 
-bool CAESinkPULSE::SetupContext(const char *host, pa_context **context, pa_threaded_mainloop **mainloop)
+bool CAESinkPULSE::SetupContext(const char* host,
+                                pa_context** context,
+                                pa_threaded_mainloop** mainloop)
 {
   if ((*mainloop = pa_threaded_mainloop_new()) == NULL)
   {
@@ -1127,9 +1220,10 @@ bool CAESinkPULSE::SetupContext(const char *host, pa_context **context, pa_threa
   do
   {
     pa_threaded_mainloop_wait(*mainloop);
-    CLog::Log(LOGDEBUG, "PulseAudio: Context %s", ContextStateToString(pa_context_get_state(*context)));
-  }
-  while (pa_context_get_state(*context) != PA_CONTEXT_READY && pa_context_get_state(*context) != PA_CONTEXT_FAILED);
+    CLog::Log(LOGDEBUG, "PulseAudio: Context %s",
+              ContextStateToString(pa_context_get_state(*context)));
+  } while (pa_context_get_state(*context) != PA_CONTEXT_READY &&
+           pa_context_get_state(*context) != PA_CONTEXT_FAILED);
 
   if (pa_context_get_state(*context) == PA_CONTEXT_FAILED)
   {

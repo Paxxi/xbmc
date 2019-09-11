@@ -27,19 +27,18 @@
 
 using namespace ADDON;
 
-CWeatherManager::CWeatherManager(void) : CInfoLoader(30 * 60 * 1000) // 30 minutes
+CWeatherManager::CWeatherManager(void)
+  : CInfoLoader(30 * 60 * 1000) // 30 minutes
 {
-  CServiceBroker::GetSettingsComponent()->GetSettings()->GetSettingsManager()->RegisterCallback(this, {
-    CSettings::SETTING_WEATHER_ADDON,
-    CSettings::SETTING_WEATHER_ADDONSETTINGS
-  });
+  CServiceBroker::GetSettingsComponent()->GetSettings()->GetSettingsManager()->RegisterCallback(
+      this, {CSettings::SETTING_WEATHER_ADDON, CSettings::SETTING_WEATHER_ADDONSETTINGS});
 
   Reset();
 }
 
 CWeatherManager::~CWeatherManager(void)
 {
-  CSettingsComponent *settingsComponent = CServiceBroker::GetSettingsComponent();
+  CSettingsComponent* settingsComponent = CServiceBroker::GetSettingsComponent();
   if (!settingsComponent)
     return;
 
@@ -60,27 +59,28 @@ std::string CWeatherManager::BusyInfo(int info) const
 
 std::string CWeatherManager::TranslateInfo(int info) const
 {
-  switch (info) {
-    case WEATHER_LABEL_CURRENT_COND:
-      return m_info.currentConditions;
-    case WEATHER_IMAGE_CURRENT_ICON:
-      return m_info.currentIcon;
-    case WEATHER_LABEL_CURRENT_TEMP:
-      return m_info.currentTemperature;
-    case WEATHER_LABEL_CURRENT_FEEL:
-      return m_info.currentFeelsLike;
-    case WEATHER_LABEL_CURRENT_UVID:
-      return m_info.currentUVIndex;
-    case WEATHER_LABEL_CURRENT_WIND:
-      return m_info.currentWind;
-    case WEATHER_LABEL_CURRENT_DEWP:
-      return m_info.currentDewPoint;
-    case WEATHER_LABEL_CURRENT_HUMI:
-      return m_info.currentHumidity;
-    case WEATHER_LABEL_LOCATION:
-      return m_info.location;
-    default:
-      return "";
+  switch (info)
+  {
+  case WEATHER_LABEL_CURRENT_COND:
+    return m_info.currentConditions;
+  case WEATHER_IMAGE_CURRENT_ICON:
+    return m_info.currentIcon;
+  case WEATHER_LABEL_CURRENT_TEMP:
+    return m_info.currentTemperature;
+  case WEATHER_LABEL_CURRENT_FEEL:
+    return m_info.currentFeelsLike;
+  case WEATHER_LABEL_CURRENT_UVID:
+    return m_info.currentUVIndex;
+  case WEATHER_LABEL_CURRENT_WIND:
+    return m_info.currentWind;
+  case WEATHER_LABEL_CURRENT_DEWP:
+    return m_info.currentDewPoint;
+  case WEATHER_LABEL_CURRENT_HUMI:
+    return m_info.currentHumidity;
+  case WEATHER_LABEL_LOCATION:
+    return m_info.location;
+  default:
+    return "";
   }
 }
 
@@ -112,7 +112,7 @@ bool CWeatherManager::IsFetched()
   return !m_info.lastUpdateTime.empty();
 }
 
-const ForecastDay &CWeatherManager::GetForecast(int day) const
+const ForecastDay& CWeatherManager::GetForecast(int day) const
 {
   return m_info.forecast[day];
 }
@@ -135,15 +135,16 @@ void CWeatherManager::SetArea(int iLocation)
  */
 int CWeatherManager::GetArea() const
 {
-  return CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_WEATHER_CURRENTLOCATION);
+  return CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+      CSettings::SETTING_WEATHER_CURRENTLOCATION);
 }
 
-CJob *CWeatherManager::GetJob() const
+CJob* CWeatherManager::GetJob() const
 {
   return new CWeatherJob(GetArea());
 }
 
-void CWeatherManager::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CWeatherManager::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   m_info = static_cast<CWeatherJob*>(job)->GetInfo();
   CInfoLoader::OnJobComplete(jobID, success, job);
@@ -174,11 +175,14 @@ void CWeatherManager::OnSettingAction(std::shared_ptr<const CSetting> setting)
   if (settingId == CSettings::SETTING_WEATHER_ADDONSETTINGS)
   {
     AddonPtr addon;
-    if (CServiceBroker::GetAddonMgr().GetAddon(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_WEATHER_ADDON), addon, ADDON_SCRIPT_WEATHER) && addon != NULL)
+    if (CServiceBroker::GetAddonMgr().GetAddon(
+            CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                CSettings::SETTING_WEATHER_ADDON),
+            addon, ADDON_SCRIPT_WEATHER) &&
+        addon != NULL)
     { //! @todo maybe have ShowAndGetInput return a bool if settings changed, then only reset weather if true.
       CGUIDialogAddonSettings::ShowForAddon(addon);
       Refresh();
     }
   }
 }
-

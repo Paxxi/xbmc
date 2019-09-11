@@ -19,9 +19,9 @@ public:
   CHttpRange(uint64_t firstPosition, uint64_t lastPosition);
   virtual ~CHttpRange() = default;
 
-  bool operator<(const CHttpRange &other) const;
-  bool operator==(const CHttpRange &other) const;
-  bool operator!=(const CHttpRange &other) const;
+  bool operator<(const CHttpRange& other) const;
+  bool operator==(const CHttpRange& other) const;
+  bool operator!=(const CHttpRange& other) const;
 
   virtual uint64_t GetFirstPosition() const { return m_first; }
   virtual void SetFirstPosition(uint64_t firstPosition) { m_first = firstPosition; }
@@ -49,8 +49,8 @@ public:
   CHttpResponseRange(const void* data, uint64_t length);
   ~CHttpResponseRange() override = default;
 
-  bool operator==(const CHttpResponseRange &other) const;
-  bool operator!=(const CHttpResponseRange &other) const;
+  bool operator==(const CHttpResponseRange& other) const;
+  bool operator!=(const CHttpResponseRange& other) const;
 
   const void* GetData() const { return m_data; }
   void SetData(const void* data) { m_data = data; }
@@ -150,7 +150,8 @@ public:
   * \param contentType (Actual) Content type of the original content
   * \return Multipart boundary (including the Content-Type HTTP header) value that can be used in ranged HTTP responses
   */
-  static std::string GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundary, const std::string& contentType);
+  static std::string GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundary,
+                                                         const std::string& contentType);
 
   /*!
   * \brief Generates a multipart boundary including the Content-Type HTTP
@@ -162,7 +163,9 @@ public:
   * \param range HTTP range definition used to generate the Content-Range HTTP header
   * \return Multipart boundary (including the Content-Type and Content-Range HTTP headers) value that can be used in ranged HTTP responses
   */
-  static std::string GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundary, const std::string& contentType, const CHttpRange* range);
+  static std::string GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundary,
+                                                         const std::string& contentType,
+                                                         const CHttpRange* range);
 
   /*!
   * \brief Generates a multipart boundary including the Content-Type HTTP
@@ -173,7 +176,8 @@ public:
   * \param range HTTP range definition used to generate the Content-Range HTTP header
   * \return Multipart boundary (including the Content-Type and Content-Range HTTP headers) value that can be used in ranged HTTP responses
   */
-  static std::string GenerateMultipartBoundaryWithHeader(const std::string& multipartBoundaryWithContentType, const CHttpRange* range);
+  static std::string GenerateMultipartBoundaryWithHeader(
+      const std::string& multipartBoundaryWithContentType, const CHttpRange* range);
 
   /*!
   * \brief Generates a multipart boundary end that can be used in ranged HTTP

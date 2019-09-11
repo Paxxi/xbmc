@@ -12,14 +12,14 @@
 
 namespace XFILE
 {
-  class CFTPDirectory : public IDirectory
-  {
-    public:
-      CFTPDirectory(void);
-      ~CFTPDirectory(void) override;
-      bool GetDirectory(const CURL& url, CFileItemList &items) override;
-      bool Exists(const CURL& url) override;
-    private:
-  };
-}
+class CFTPDirectory : public IDirectory
+{
+public:
+  CFTPDirectory(void);
+  ~CFTPDirectory(void) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool Exists(const CURL& url) override;
 
+private:
+};
+} // namespace XFILE

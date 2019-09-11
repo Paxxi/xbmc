@@ -18,84 +18,85 @@
 #include <string>
 #include <vector>
 
-#define TMSG_MASK_MESSAGE                 0xFFFF0000 // only keep the high bits to route messages
-#define TMSG_MASK_APPLICATION             (1<<30) //Don't use bit 31 as it'll fail to build, using unsigned variable to hold the message.
-#define TMSG_MASK_PLAYLISTPLAYER          (1<<29)
-#define TMSG_MASK_GUIINFOMANAGER          (1<<28)
-#define TMSG_MASK_WINDOWMANAGER           (1<<27)
-#define TMSG_MASK_PERIPHERALS             (1<<26)
+#define TMSG_MASK_MESSAGE 0xFFFF0000 // only keep the high bits to route messages
+#define TMSG_MASK_APPLICATION \
+  (1 << 30) //Don't use bit 31 as it'll fail to build, using unsigned variable to hold the message.
+#define TMSG_MASK_PLAYLISTPLAYER (1 << 29)
+#define TMSG_MASK_GUIINFOMANAGER (1 << 28)
+#define TMSG_MASK_WINDOWMANAGER (1 << 27)
+#define TMSG_MASK_PERIPHERALS (1 << 26)
 
 // defines here
-#define TMSG_PLAYLISTPLAYER_PLAY          TMSG_MASK_PLAYLISTPLAYER + 0
-#define TMSG_PLAYLISTPLAYER_NEXT          TMSG_MASK_PLAYLISTPLAYER + 1
-#define TMSG_PLAYLISTPLAYER_PREV          TMSG_MASK_PLAYLISTPLAYER + 2
-#define TMSG_PLAYLISTPLAYER_ADD           TMSG_MASK_PLAYLISTPLAYER + 3
-#define TMSG_PLAYLISTPLAYER_CLEAR         TMSG_MASK_PLAYLISTPLAYER + 4
-#define TMSG_PLAYLISTPLAYER_SHUFFLE       TMSG_MASK_PLAYLISTPLAYER + 5
-#define TMSG_PLAYLISTPLAYER_GET_ITEMS     TMSG_MASK_PLAYLISTPLAYER + 6
-#define TMSG_PLAYLISTPLAYER_PLAY_SONG_ID  TMSG_MASK_PLAYLISTPLAYER + 7
-#define TMSG_PLAYLISTPLAYER_INSERT        TMSG_MASK_PLAYLISTPLAYER + 8
-#define TMSG_PLAYLISTPLAYER_REMOVE        TMSG_MASK_PLAYLISTPLAYER + 9
-#define TMSG_PLAYLISTPLAYER_SWAP          TMSG_MASK_PLAYLISTPLAYER + 10
-#define TMSG_PLAYLISTPLAYER_REPEAT        TMSG_MASK_PLAYLISTPLAYER + 11
-#define TMSG_MEDIA_PLAY                   TMSG_MASK_PLAYLISTPLAYER + 12
-#define TMSG_MEDIA_STOP                   TMSG_MASK_PLAYLISTPLAYER + 13
+#define TMSG_PLAYLISTPLAYER_PLAY TMSG_MASK_PLAYLISTPLAYER + 0
+#define TMSG_PLAYLISTPLAYER_NEXT TMSG_MASK_PLAYLISTPLAYER + 1
+#define TMSG_PLAYLISTPLAYER_PREV TMSG_MASK_PLAYLISTPLAYER + 2
+#define TMSG_PLAYLISTPLAYER_ADD TMSG_MASK_PLAYLISTPLAYER + 3
+#define TMSG_PLAYLISTPLAYER_CLEAR TMSG_MASK_PLAYLISTPLAYER + 4
+#define TMSG_PLAYLISTPLAYER_SHUFFLE TMSG_MASK_PLAYLISTPLAYER + 5
+#define TMSG_PLAYLISTPLAYER_GET_ITEMS TMSG_MASK_PLAYLISTPLAYER + 6
+#define TMSG_PLAYLISTPLAYER_PLAY_SONG_ID TMSG_MASK_PLAYLISTPLAYER + 7
+#define TMSG_PLAYLISTPLAYER_INSERT TMSG_MASK_PLAYLISTPLAYER + 8
+#define TMSG_PLAYLISTPLAYER_REMOVE TMSG_MASK_PLAYLISTPLAYER + 9
+#define TMSG_PLAYLISTPLAYER_SWAP TMSG_MASK_PLAYLISTPLAYER + 10
+#define TMSG_PLAYLISTPLAYER_REPEAT TMSG_MASK_PLAYLISTPLAYER + 11
+#define TMSG_MEDIA_PLAY TMSG_MASK_PLAYLISTPLAYER + 12
+#define TMSG_MEDIA_STOP TMSG_MASK_PLAYLISTPLAYER + 13
 // the PAUSE is indeed a PLAYPAUSE
-#define TMSG_MEDIA_PAUSE                  TMSG_MASK_PLAYLISTPLAYER + 14
-#define TMSG_MEDIA_RESTART                TMSG_MASK_PLAYLISTPLAYER + 15
-#define TMSG_MEDIA_UNPAUSE                TMSG_MASK_PLAYLISTPLAYER + 16
-#define TMSG_MEDIA_PAUSE_IF_PLAYING       TMSG_MASK_PLAYLISTPLAYER + 17
-#define TMSG_MEDIA_SEEK_TIME              TMSG_MASK_PLAYLISTPLAYER + 18
+#define TMSG_MEDIA_PAUSE TMSG_MASK_PLAYLISTPLAYER + 14
+#define TMSG_MEDIA_RESTART TMSG_MASK_PLAYLISTPLAYER + 15
+#define TMSG_MEDIA_UNPAUSE TMSG_MASK_PLAYLISTPLAYER + 16
+#define TMSG_MEDIA_PAUSE_IF_PLAYING TMSG_MASK_PLAYLISTPLAYER + 17
+#define TMSG_MEDIA_SEEK_TIME TMSG_MASK_PLAYLISTPLAYER + 18
 
-#define TMSG_SHUTDOWN                     TMSG_MASK_APPLICATION + 0
-#define TMSG_POWERDOWN                    TMSG_MASK_APPLICATION + 1
-#define TMSG_QUIT                         TMSG_MASK_APPLICATION + 2
-#define TMSG_HIBERNATE                    TMSG_MASK_APPLICATION + 3
-#define TMSG_SUSPEND                      TMSG_MASK_APPLICATION + 4
-#define TMSG_RESTART                      TMSG_MASK_APPLICATION + 5
-#define TMSG_RESET                        TMSG_MASK_APPLICATION + 6
-#define TMSG_RESTARTAPP                   TMSG_MASK_APPLICATION + 7
-#define TMSG_ACTIVATESCREENSAVER          TMSG_MASK_APPLICATION + 8
-#define TMSG_NETWORKMESSAGE               TMSG_MASK_APPLICATION + 9
+#define TMSG_SHUTDOWN TMSG_MASK_APPLICATION + 0
+#define TMSG_POWERDOWN TMSG_MASK_APPLICATION + 1
+#define TMSG_QUIT TMSG_MASK_APPLICATION + 2
+#define TMSG_HIBERNATE TMSG_MASK_APPLICATION + 3
+#define TMSG_SUSPEND TMSG_MASK_APPLICATION + 4
+#define TMSG_RESTART TMSG_MASK_APPLICATION + 5
+#define TMSG_RESET TMSG_MASK_APPLICATION + 6
+#define TMSG_RESTARTAPP TMSG_MASK_APPLICATION + 7
+#define TMSG_ACTIVATESCREENSAVER TMSG_MASK_APPLICATION + 8
+#define TMSG_NETWORKMESSAGE TMSG_MASK_APPLICATION + 9
 // unused: TMSG_MASK_APPLICATION + 10
-#define TMSG_VOLUME_SHOW                  TMSG_MASK_APPLICATION + 11
-#define TMSG_DISPLAY_SETUP                TMSG_MASK_APPLICATION + 12
-#define TMSG_DISPLAY_DESTROY              TMSG_MASK_APPLICATION + 13
-#define TMSG_SETVIDEORESOLUTION           TMSG_MASK_APPLICATION + 14
-#define TMSG_SWITCHTOFULLSCREEN           TMSG_MASK_APPLICATION + 15
-#define TMSG_MINIMIZE                     TMSG_MASK_APPLICATION + 16
-#define TMSG_TOGGLEFULLSCREEN             TMSG_MASK_APPLICATION + 17
-#define TMSG_SETLANGUAGE                  TMSG_MASK_APPLICATION + 18
-#define TMSG_RENDERER_FLUSH               TMSG_MASK_APPLICATION + 19
-#define TMSG_INHIBITIDLESHUTDOWN          TMSG_MASK_APPLICATION + 20
-#define TMSG_START_ANDROID_ACTIVITY       TMSG_MASK_APPLICATION + 21
-#define TMSG_EXECUTE_SCRIPT               TMSG_MASK_APPLICATION + 22
-#define TMSG_EXECUTE_BUILT_IN             TMSG_MASK_APPLICATION + 23
-#define TMSG_EXECUTE_OS                   TMSG_MASK_APPLICATION + 24
-#define TMSG_PICTURE_SHOW                 TMSG_MASK_APPLICATION + 25
-#define TMSG_PICTURE_SLIDESHOW            TMSG_MASK_APPLICATION + 26
-#define TMSG_LOADPROFILE                  TMSG_MASK_APPLICATION + 27
-#define TMSG_VIDEORESIZE                  TMSG_MASK_APPLICATION + 28
+#define TMSG_VOLUME_SHOW TMSG_MASK_APPLICATION + 11
+#define TMSG_DISPLAY_SETUP TMSG_MASK_APPLICATION + 12
+#define TMSG_DISPLAY_DESTROY TMSG_MASK_APPLICATION + 13
+#define TMSG_SETVIDEORESOLUTION TMSG_MASK_APPLICATION + 14
+#define TMSG_SWITCHTOFULLSCREEN TMSG_MASK_APPLICATION + 15
+#define TMSG_MINIMIZE TMSG_MASK_APPLICATION + 16
+#define TMSG_TOGGLEFULLSCREEN TMSG_MASK_APPLICATION + 17
+#define TMSG_SETLANGUAGE TMSG_MASK_APPLICATION + 18
+#define TMSG_RENDERER_FLUSH TMSG_MASK_APPLICATION + 19
+#define TMSG_INHIBITIDLESHUTDOWN TMSG_MASK_APPLICATION + 20
+#define TMSG_START_ANDROID_ACTIVITY TMSG_MASK_APPLICATION + 21
+#define TMSG_EXECUTE_SCRIPT TMSG_MASK_APPLICATION + 22
+#define TMSG_EXECUTE_BUILT_IN TMSG_MASK_APPLICATION + 23
+#define TMSG_EXECUTE_OS TMSG_MASK_APPLICATION + 24
+#define TMSG_PICTURE_SHOW TMSG_MASK_APPLICATION + 25
+#define TMSG_PICTURE_SLIDESHOW TMSG_MASK_APPLICATION + 26
+#define TMSG_LOADPROFILE TMSG_MASK_APPLICATION + 27
+#define TMSG_VIDEORESIZE TMSG_MASK_APPLICATION + 28
 
-#define TMSG_SYSTEM_POWERDOWN             TMSG_MASK_APPLICATION + 30
-#define TMSG_RENDERER_PREINIT             TMSG_MASK_APPLICATION + 31
-#define TMSG_RENDERER_UNINIT              TMSG_MASK_APPLICATION + 32
+#define TMSG_SYSTEM_POWERDOWN TMSG_MASK_APPLICATION + 30
+#define TMSG_RENDERER_PREINIT TMSG_MASK_APPLICATION + 31
+#define TMSG_RENDERER_UNINIT TMSG_MASK_APPLICATION + 32
 
-#define TMSG_GUI_INFOLABEL                TMSG_MASK_GUIINFOMANAGER + 0
-#define TMSG_GUI_INFOBOOL                 TMSG_MASK_GUIINFOMANAGER + 1
-#define TMSG_UPDATE_CURRENT_ITEM          TMSG_MASK_GUIINFOMANAGER + 2
+#define TMSG_GUI_INFOLABEL TMSG_MASK_GUIINFOMANAGER + 0
+#define TMSG_GUI_INFOBOOL TMSG_MASK_GUIINFOMANAGER + 1
+#define TMSG_UPDATE_CURRENT_ITEM TMSG_MASK_GUIINFOMANAGER + 2
 
-#define TMSG_CECTOGGLESTATE               TMSG_MASK_PERIPHERALS + 1
-#define TMSG_CECACTIVATESOURCE            TMSG_MASK_PERIPHERALS + 2
-#define TMSG_CECSTANDBY                   TMSG_MASK_PERIPHERALS + 3
+#define TMSG_CECTOGGLESTATE TMSG_MASK_PERIPHERALS + 1
+#define TMSG_CECACTIVATESOURCE TMSG_MASK_PERIPHERALS + 2
+#define TMSG_CECSTANDBY TMSG_MASK_PERIPHERALS + 3
 
-#define TMSG_GUI_DIALOG_OPEN              TMSG_MASK_WINDOWMANAGER + 1
-#define TMSG_GUI_ACTIVATE_WINDOW          TMSG_MASK_WINDOWMANAGER + 2
-#define TMSG_GUI_PYTHON_DIALOG            TMSG_MASK_WINDOWMANAGER + 3
-#define TMSG_GUI_WINDOW_CLOSE             TMSG_MASK_WINDOWMANAGER + 4
-#define TMSG_GUI_ACTION                   TMSG_MASK_WINDOWMANAGER + 5
-#define TMSG_GUI_ADDON_DIALOG             TMSG_MASK_WINDOWMANAGER + 6
-#define TMSG_GUI_MESSAGE                  TMSG_MASK_WINDOWMANAGER + 7
+#define TMSG_GUI_DIALOG_OPEN TMSG_MASK_WINDOWMANAGER + 1
+#define TMSG_GUI_ACTIVATE_WINDOW TMSG_MASK_WINDOWMANAGER + 2
+#define TMSG_GUI_PYTHON_DIALOG TMSG_MASK_WINDOWMANAGER + 3
+#define TMSG_GUI_WINDOW_CLOSE TMSG_MASK_WINDOWMANAGER + 4
+#define TMSG_GUI_ACTION TMSG_MASK_WINDOWMANAGER + 5
+#define TMSG_GUI_ADDON_DIALOG TMSG_MASK_WINDOWMANAGER + 6
+#define TMSG_GUI_MESSAGE TMSG_MASK_WINDOWMANAGER + 7
 
 /*!
   \def TMSG_GUI_DIALOG_YESNO
@@ -117,8 +118,8 @@
   \returns -1 for cancelled, 0 for No and 1 for Yes
   \sa HELPERS::DialogYesNoMessage
 */
-#define TMSG_GUI_DIALOG_YESNO             TMSG_MASK_WINDOWMANAGER + 8
-#define TMSG_GUI_DIALOG_OK                TMSG_MASK_WINDOWMANAGER + 9
+#define TMSG_GUI_DIALOG_YESNO TMSG_MASK_WINDOWMANAGER + 8
+#define TMSG_GUI_DIALOG_OK TMSG_MASK_WINDOWMANAGER + 9
 
 /*!
   \def TMSG_GUI_PREVIOUS_WINDOW
@@ -127,11 +128,10 @@
   This is an alternative to TMSG_GUI_ACTIVATE_WINDOW, but it keeps
   all configured parameters, like startup directory.
 */
-#define TMSG_GUI_PREVIOUS_WINDOW          TMSG_MASK_WINDOWMANAGER + 10
+#define TMSG_GUI_PREVIOUS_WINDOW TMSG_MASK_WINDOWMANAGER + 10
 
 
-#define TMSG_CALLBACK                     800
-
+#define TMSG_CALLBACK 800
 
 
 class CGUIMessage;
@@ -144,8 +144,8 @@ class IMessageTarget;
 
 struct ThreadMessageCallback
 {
-  void (*callback)(void *userptr);
-  void *userptr;
+  void (*callback)(void* userptr);
+  void* userptr;
 };
 
 /*!
@@ -301,7 +301,12 @@ public:
    * \param [in] params value depends on the message being sent, kept for backward compatiblity
    * \return meaning of the return varies based on the message
    */
-  int SendMsg(uint32_t messageId, int param1, int param2, void* payload, std::string strParam, std::vector<std::string> params);
+  int SendMsg(uint32_t messageId,
+              int param1,
+              int param2,
+              void* payload,
+              std::string strParam,
+              std::vector<std::string> params);
 
   /*!
    * \brief Send a non-blocking message and return immediately
@@ -366,7 +371,12 @@ public:
    * \param [in] strParam value depends on the message being sent, remains for backward compat
    * \param [in] params value depends on the message being sent, kept for backward compatiblity
    */
-  void PostMsg(uint32_t messageId, int param1, int param2, void* payload, std::string strParam, std::vector<std::string> params);
+  void PostMsg(uint32_t messageId,
+               int param1,
+               int param2,
+               void* payload,
+               std::string strParam,
+               std::vector<std::string> params);
 
   /*!
    * \brief Called from any thread to dispatch messages
@@ -387,7 +397,9 @@ public:
    * \param windowID optional window to send the message to (defaults to no specified window).
    * \param waitResult whether to wait for the result (defaults to false).
    */
-  void SendGUIMessage(const CGUIMessage &msg, int windowID = WINDOW_INVALID, bool waitResult=false);
+  void SendGUIMessage(const CGUIMessage& msg,
+                      int windowID = WINDOW_INVALID,
+                      bool waitResult = false);
 
   /*!
    * \brief This should be called any class implementing \sa IMessageTarget before it
@@ -415,14 +427,15 @@ private:
   ~CApplicationMessenger();
 
   int SendMsg(ThreadMessage&& msg, bool wait);
-  void ProcessMessage(ThreadMessage *pMsg);
+  void ProcessMessage(ThreadMessage* pMsg);
 
   std::queue<ThreadMessage*> m_vecMessages; /*!< queue for regular messages */
   std::queue<ThreadMessage*> m_vecWindowMessages; /*!< queue for UI messages */
-  std::map<int, IMessageTarget*> m_mapTargets; /*!< a map of registered receivers indexed on the message mask*/
+  std::map<int, IMessageTarget*>
+      m_mapTargets; /*!< a map of registered receivers indexed on the message mask*/
   CCriticalSection m_critSection;
   std::thread::id m_guiThreadId;
-  bool m_bStop{ false };
+  bool m_bStop{false};
 };
-}
-}
+} // namespace MESSAGING
+} // namespace KODI

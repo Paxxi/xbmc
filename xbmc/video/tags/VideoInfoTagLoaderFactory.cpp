@@ -37,7 +37,8 @@ IVideoInfoTagLoader* CVideoInfoTagLoaderFactory::CreateLoader(const CFileItem& i
     return nfo;
   delete nfo;
 
-  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYVIDEOS_USETAGS) &&
+  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+          CSettings::SETTING_MYVIDEOS_USETAGS) &&
       (item.IsType(".mkv") || item.IsType(".mp4") || item.IsType(".avi") || item.IsType(".m4v")))
   {
     CVideoTagLoaderFFmpeg* ff = new CVideoTagLoaderFFmpeg(item, info, lookInFolder);

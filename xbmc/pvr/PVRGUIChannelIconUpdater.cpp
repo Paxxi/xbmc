@@ -31,13 +31,15 @@ using namespace PVR;
 
 void CPVRGUIChannelIconUpdater::SearchAndUpdateMissingChannelIcons() const
 {
-  const std::string iconPath = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_PVRMENU_ICONPATH);
+  const std::string iconPath = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+      CSettings::SETTING_PVRMENU_ICONPATH);
   if (iconPath.empty())
     return;
 
   // fetch files in icon path for fast lookup
   CFileItemList fileItemList;
-  XFILE::CDirectory::GetDirectory(iconPath, fileItemList, ".jpg|.png|.tbn", XFILE::DIR_FLAG_DEFAULTS);
+  XFILE::CDirectory::GetDirectory(iconPath, fileItemList, ".jpg|.png|.tbn",
+                                  XFILE::DIR_FLAG_DEFAULTS);
 
   if (fileItemList.IsEmpty())
     return;
@@ -54,7 +56,8 @@ void CPVRGUIChannelIconUpdater::SearchAndUpdateMissingChannelIcons() const
     fileItemMap.insert({baseName, item->GetPath()});
   }
 
-  CPVRGUIProgressHandler* progressHandler = new CPVRGUIProgressHandler(g_localizeStrings.Get(19286)); // Searching for channel icons
+  CPVRGUIProgressHandler* progressHandler =
+      new CPVRGUIProgressHandler(g_localizeStrings.Get(19286)); // Searching for channel icons
 
   for (const auto& group : m_groups)
   {
@@ -62,7 +65,8 @@ void CPVRGUIChannelIconUpdater::SearchAndUpdateMissingChannelIcons() const
     int channelIndex = 0;
     for (const auto& member : members)
     {
-      progressHandler->UpdateProgress(member.channel->ChannelName(), channelIndex++, members.size());
+      progressHandler->UpdateProgress(member.channel->ChannelName(), channelIndex++,
+                                      members.size());
 
       // skip if an icon is already set and exists
       if (XFILE::CFile::Exists(member.channel->IconPath()))
@@ -72,7 +76,8 @@ void CPVRGUIChannelIconUpdater::SearchAndUpdateMissingChannelIcons() const
       member.channel->SetIconPath("");
 
       const std::string strChannelUid = StringUtils::Format("%08d", member.channel->UniqueID());
-      std::string strLegalClientChannelName = CUtil::MakeLegalFileName(member.channel->ClientChannelName());
+      std::string strLegalClientChannelName =
+          CUtil::MakeLegalFileName(member.channel->ClientChannelName());
       StringUtils::ToLower(strLegalClientChannelName);
       std::string strLegalChannelName = CUtil::MakeLegalFileName(member.channel->ChannelName());
       StringUtils::ToLower(strLegalChannelName);
@@ -82,7 +87,9 @@ void CPVRGUIChannelIconUpdater::SearchAndUpdateMissingChannelIcons() const
           (itItem = fileItemMap.find(strLegalChannelName)) != fileItemMap.end() ||
           (itItem = fileItemMap.find(strChannelUid)) != fileItemMap.end())
       {
-        member.channel->SetIconPath(itItem->second, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_bPVRAutoScanIconsUserSet);
+        member.channel->SetIconPath(itItem->second, CServiceBroker::GetSettingsComponent()
+                                                        ->GetAdvancedSettings()
+                                                        ->m_bPVRAutoScanIconsUserSet);
       }
 
       if (m_bUpdateDb)

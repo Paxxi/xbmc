@@ -22,5 +22,5 @@ void RandomShuffle(TIterator begin, TIterator end)
   std::mt19937 mt(rd());
   std::shuffle(begin, end, mt);
 }
-}
-}
+} // namespace UTILS
+} // namespace KODI

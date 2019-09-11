@@ -31,7 +31,11 @@ public:
    * \param class_ class of the surface, which should match the name of the
    *               .desktop file of the application
    */
-  CShellSurfaceWlShell(IShellSurfaceHandler& handler, CConnection& connection, wayland::surface_t const& surface, std::string title, std::string class_);
+  CShellSurfaceWlShell(IShellSurfaceHandler& handler,
+                       CConnection& connection,
+                       wayland::surface_t const& surface,
+                       std::string title,
+                       std::string class_);
 
   void Initialize() override;
 
@@ -44,8 +48,12 @@ public:
   void AckConfigure(std::uint32_t serial) override;
 
   void StartMove(const wayland::seat_t& seat, std::uint32_t serial) override;
-  void StartResize(const wayland::seat_t& seat, std::uint32_t serial, wayland::shell_surface_resize edge) override;
-  void ShowShellContextMenu(const wayland::seat_t& seat, std::uint32_t serial, CPointInt position) override;
+  void StartResize(const wayland::seat_t& seat,
+                   std::uint32_t serial,
+                   wayland::shell_surface_resize edge) override;
+  void ShowShellContextMenu(const wayland::seat_t& seat,
+                            std::uint32_t serial,
+                            CPointInt position) override;
 
 private:
   IShellSurfaceHandler& m_handler;
@@ -54,6 +62,6 @@ private:
   StateBitset m_surfaceState;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

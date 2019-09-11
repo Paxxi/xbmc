@@ -17,7 +17,7 @@
 
 using namespace ADDON;
 
-ICodec* CodecFactory::CreateCodec(const std::string &strFileType)
+ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
 {
   std::string fileType = strFileType;
   StringUtils::ToLower(fileType);
@@ -26,7 +26,7 @@ ICodec* CodecFactory::CreateCodec(const std::string &strFileType)
   CServiceBroker::GetBinaryAddonManager().GetAddonInfos(addonInfos, true, ADDON_AUDIODECODER);
   for (const auto& addonInfo : addonInfos)
   {
-    if (CAudioDecoder::GetExtensions(addonInfo).find("."+fileType) != std::string::npos)
+    if (CAudioDecoder::GetExtensions(addonInfo).find("." + fileType) != std::string::npos)
     {
       CAudioDecoder* result = new CAudioDecoder(addonInfo);
       if (!result->CreateDecoder())
@@ -38,7 +38,7 @@ ICodec* CodecFactory::CreateCodec(const std::string &strFileType)
     }
   }
 
-  VideoPlayerCodec *dvdcodec = new VideoPlayerCodec();
+  VideoPlayerCodec* dvdcodec = new VideoPlayerCodec();
   return dvdcodec;
 }
 
@@ -66,37 +66,25 @@ ICodec* CodecFactory::CreateCodecDemux(const CFileItem& file, unsigned int filec
     }
   }
 
-  if( content == "audio/mpeg"       ||
-      content == "audio/mpeg3"      ||
-      content == "audio/mp3"        ||
-      content == "audio/aac"        ||
-      content == "audio/aacp"       ||
-      content == "audio/x-ms-wma"   ||
-      content == "audio/x-ape"      ||
-      content == "audio/ape"        ||
-      content == "application/ogg"  ||
-      content == "audio/ogg"        ||
-      content == "audio/x-xbmc-pcm" ||
-      content == "audio/flac"       ||
-      content == "audio/x-flac"     ||
-      content == "application/x-flac"
-      )
+  if (content == "audio/mpeg" || content == "audio/mpeg3" || content == "audio/mp3" ||
+      content == "audio/aac" || content == "audio/aacp" || content == "audio/x-ms-wma" ||
+      content == "audio/x-ape" || content == "audio/ape" || content == "application/ogg" ||
+      content == "audio/ogg" || content == "audio/x-xbmc-pcm" || content == "audio/flac" ||
+      content == "audio/x-flac" || content == "application/x-flac")
   {
-    VideoPlayerCodec *dvdcodec = new VideoPlayerCodec();
+    VideoPlayerCodec* dvdcodec = new VideoPlayerCodec();
     dvdcodec->SetContentType(content);
     return dvdcodec;
   }
   else if (urlFile.IsProtocol("shout"))
   {
-    VideoPlayerCodec *dvdcodec = new VideoPlayerCodec();
+    VideoPlayerCodec* dvdcodec = new VideoPlayerCodec();
     dvdcodec->SetContentType("audio/mp3");
     return dvdcodec; // if we got this far with internet radio - content-type was wrong. gamble on mp3.
   }
-  else if (urlFile.IsFileType("wav") ||
-      content == "audio/wav" ||
-      content == "audio/x-wav")
+  else if (urlFile.IsFileType("wav") || content == "audio/wav" || content == "audio/x-wav")
   {
-    VideoPlayerCodec *dvdcodec = new VideoPlayerCodec();
+    VideoPlayerCodec* dvdcodec = new VideoPlayerCodec();
     dvdcodec->SetContentType("audio/x-spdif-compressed");
     if (dvdcodec->Init(file, filecache))
     {
@@ -110,4 +98,3 @@ ICodec* CodecFactory::CreateCodecDemux(const CFileItem& file, unsigned int filec
   else
     return CreateCodec(urlFile.GetFileType());
 }
-

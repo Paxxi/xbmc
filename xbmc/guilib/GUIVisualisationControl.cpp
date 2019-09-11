@@ -39,7 +39,7 @@ CAudioBuffer::CAudioBuffer(int iSize)
 
 CAudioBuffer::~CAudioBuffer()
 {
-  delete [] m_pBuffer;
+  delete[] m_pBuffer;
 }
 
 const float* CAudioBuffer::Get() const
@@ -62,23 +62,24 @@ void CAudioBuffer::Set(const float* psBuffer, int iSize)
     m_pBuffer[i] = 0;
 }
 
-CGUIVisualisationControl::CGUIVisualisationControl(int parentID, int controlID, float posX, float posY, float width, float height)
-  : CGUIControl(parentID, controlID, posX, posY, width, height),
-    m_callStart(false),
-    m_alreadyStarted(false),
-    m_attemptedLoad(false),
-    m_updateTrack(false),
-    m_instance(nullptr)
+CGUIVisualisationControl::CGUIVisualisationControl(
+    int parentID, int controlID, float posX, float posY, float width, float height)
+  : CGUIControl(parentID, controlID, posX, posY, width, height)
+  , m_callStart(false)
+  , m_alreadyStarted(false)
+  , m_attemptedLoad(false)
+  , m_updateTrack(false)
+  , m_instance(nullptr)
 {
   ControlType = GUICONTROL_VISUALISATION;
 }
 
-CGUIVisualisationControl::CGUIVisualisationControl(const CGUIVisualisationControl &from)
-  : CGUIControl(from),
-    m_callStart(false),
-    m_alreadyStarted(false),
-    m_attemptedLoad(false),
-    m_instance(nullptr)
+CGUIVisualisationControl::CGUIVisualisationControl(const CGUIVisualisationControl& from)
+  : CGUIControl(from)
+  , m_callStart(false)
+  , m_alreadyStarted(false)
+  , m_attemptedLoad(false)
+  , m_instance(nullptr)
 {
   ControlType = GUICONTROL_VISUALISATION;
 }
@@ -90,7 +91,7 @@ std::string CGUIVisualisationControl::Name()
   return m_instance->Name();
 }
 
-bool CGUIVisualisationControl::OnMessage(CGUIMessage &message)
+bool CGUIVisualisationControl::OnMessage(CGUIMessage& message)
 {
   if (m_alreadyStarted)
   {
@@ -112,7 +113,7 @@ bool CGUIVisualisationControl::OnMessage(CGUIMessage &message)
   return CGUIControl::OnMessage(message);
 }
 
-bool CGUIVisualisationControl::OnAction(const CAction &action)
+bool CGUIVisualisationControl::OnAction(const CAction& action)
 {
   if (m_alreadyStarted)
   {
@@ -145,7 +146,7 @@ bool CGUIVisualisationControl::OnAction(const CAction &action)
   return CGUIControl::OnAction(action);
 }
 
-void CGUIVisualisationControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUIVisualisationControl::Process(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
   if (g_application.GetAppPlayer().IsPlayingAudio())
   {
@@ -168,7 +169,8 @@ void CGUIVisualisationControl::Process(unsigned int currentTime, CDirtyRegionLis
       }
 
       std::string songTitle = URIUtils::GetFileName(g_application.CurrentFile());
-      const MUSIC_INFO::CMusicInfoTag* tag = CServiceBroker::GetGUI()->GetInfoManager().GetCurrentSongTag();
+      const MUSIC_INFO::CMusicInfoTag* tag =
+          CServiceBroker::GetGUI()->GetInfoManager().GetCurrentSongTag();
       if (tag && !tag->GetTitle().empty())
         songTitle = tag->GetTitle();
       m_alreadyStarted = m_instance->Start(m_channels, m_samplesPerSec, m_bitsPerSample, songTitle);
@@ -215,7 +217,7 @@ void CGUIVisualisationControl::Render()
   CGUIControl::Render();
 }
 
-void CGUIVisualisationControl::UpdateVisibility(const CGUIListItem *item/* = nullptr*/)
+void CGUIVisualisationControl::UpdateVisibility(const CGUIListItem* item /* = nullptr*/)
 {
   // if made invisible, start timer, only free addonptr after
   // some period, configurable by window class
@@ -224,7 +226,7 @@ void CGUIVisualisationControl::UpdateVisibility(const CGUIListItem *item/* = nul
     FreeResources();
 }
 
-bool CGUIVisualisationControl::CanFocusFromPoint(const CPoint &point) const
+bool CGUIVisualisationControl::CanFocusFromPoint(const CPoint& point) const
 { // mouse is allowed to focus this control, but it doesn't actually receive focus
   return IsVisible() && HitTest(point);
 }
@@ -266,15 +268,16 @@ void CGUIVisualisationControl::OnAudioData(const float* audioData, unsigned int 
   // Fourier transform the data if the vis wants it...
   if (m_wantsFreq)
   {
-    const float *psAudioData = ptrAudioBuffer->Get();
+    const float* psAudioData = ptrAudioBuffer->Get();
 
     if (!m_transform)
-      m_transform.reset(new RFFT(AUDIO_BUFFER_SIZE/2, false)); // half due to stereo
+      m_transform.reset(new RFFT(AUDIO_BUFFER_SIZE / 2, false)); // half due to stereo
 
     m_transform->calc(psAudioData, m_freq);
 
     // Transfer data to our visualisation
-    m_instance->AudioData(psAudioData, ptrAudioBuffer->Size(), m_freq, AUDIO_BUFFER_SIZE/2); // half due to complex-conjugate
+    m_instance->AudioData(psAudioData, ptrAudioBuffer->Size(), m_freq,
+                          AUDIO_BUFFER_SIZE / 2); // half due to complex-conjugate
   }
   else
   { // Transfer data to our visualisation
@@ -288,7 +291,8 @@ void CGUIVisualisationControl::UpdateTrack()
     return;
 
   // get the current album art filename
-  m_albumThumb = CSpecialProtocol::TranslatePath(CServiceBroker::GetGUI()->GetInfoManager().GetImage(MUSICPLAYER_COVER, WINDOW_INVALID));
+  m_albumThumb = CSpecialProtocol::TranslatePath(
+      CServiceBroker::GetGUI()->GetInfoManager().GetImage(MUSICPLAYER_COVER, WINDOW_INVALID));
   if (m_albumThumb == "DefaultAlbumCover.png")
     m_albumThumb = "";
   else
@@ -296,27 +300,30 @@ void CGUIVisualisationControl::UpdateTrack()
 
   m_instance->OnAction(VIS_ACTION_UPDATE_ALBUMART, (const void*)(m_albumThumb.c_str()));
 
-  const MUSIC_INFO::CMusicInfoTag* tag = CServiceBroker::GetGUI()->GetInfoManager().GetCurrentSongTag();
+  const MUSIC_INFO::CMusicInfoTag* tag =
+      CServiceBroker::GetGUI()->GetInfoManager().GetCurrentSongTag();
   if (!tag)
     return;
 
   std::string artist(tag->GetArtistString());
   std::string albumArtist(tag->GetAlbumArtistString());
-  std::string genre(StringUtils::Join(tag->GetGenre(), CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator));
+  std::string genre(StringUtils::Join(
+      tag->GetGenre(),
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_musicItemSeparator));
 
   VisTrack track = {0};
-  track.title       = tag->GetTitle().c_str();
-  track.artist      = artist.c_str();
-  track.album       = tag->GetAlbum().c_str();
+  track.title = tag->GetTitle().c_str();
+  track.artist = artist.c_str();
+  track.album = tag->GetAlbum().c_str();
   track.albumArtist = albumArtist.c_str();
-  track.genre       = genre.c_str();
-  track.comment     = tag->GetComment().c_str();
-  track.lyrics      = tag->GetLyrics().c_str();
+  track.genre = genre.c_str();
+  track.comment = tag->GetComment().c_str();
+  track.lyrics = tag->GetLyrics().c_str();
   track.trackNumber = tag->GetTrackNumber();
-  track.discNumber  = tag->GetDiscNumber();
-  track.duration    = tag->GetDuration();
-  track.year        = tag->GetYear();
-  track.rating      = tag->GetUserrating();
+  track.discNumber = tag->GetDiscNumber();
+  track.duration = tag->GetDuration();
+  track.year = tag->GetYear();
+  track.rating = tag->GetUserrating();
 
   m_instance->OnAction(VIS_ACTION_UPDATE_TRACK, &track);
 }
@@ -359,7 +366,7 @@ std::string CGUIVisualisationControl::GetActivePresetName()
   return "";
 }
 
-bool CGUIVisualisationControl::GetPresetList(std::vector<std::string> &vecpresets)
+bool CGUIVisualisationControl::GetPresetList(std::vector<std::string>& vecpresets)
 {
   if (m_instance && m_alreadyStarted)
     return m_instance->GetPresetList(vecpresets);
@@ -369,7 +376,11 @@ bool CGUIVisualisationControl::GetPresetList(std::vector<std::string> &vecpreset
 
 bool CGUIVisualisationControl::InitVisualization()
 {
-  const ADDON::BinaryAddonBasePtr addonBase = CServiceBroker::GetBinaryAddonManager().GetInstalledAddonInfo(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_MUSICPLAYER_VISUALISATION), ADDON::ADDON_VIZ);
+  const ADDON::BinaryAddonBasePtr addonBase =
+      CServiceBroker::GetBinaryAddonManager().GetInstalledAddonInfo(
+          CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+              CSettings::SETTING_MUSICPLAYER_VISUALISATION),
+          ADDON::ADDON_VIZ);
   if (!addonBase)
     return false;
 
@@ -377,10 +388,16 @@ bool CGUIVisualisationControl::InitVisualization()
 
   CServiceBroker::GetWinSystem()->GetGfxContext().CaptureStateBlock();
 
-  float x = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalXCoord(GetXPosition(), GetYPosition());
-  float y = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalYCoord(GetXPosition(), GetYPosition());
-  float w = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalXCoord(GetXPosition() + GetWidth(), GetYPosition() + GetHeight()) - x;
-  float h = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalYCoord(GetXPosition() + GetWidth(), GetYPosition() + GetHeight()) - y;
+  float x = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalXCoord(GetXPosition(),
+                                                                             GetYPosition());
+  float y = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalYCoord(GetXPosition(),
+                                                                             GetYPosition());
+  float w = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalXCoord(
+                GetXPosition() + GetWidth(), GetYPosition() + GetHeight()) -
+            x;
+  float h = CServiceBroker::GetWinSystem()->GetGfxContext().ScaleFinalYCoord(
+                GetXPosition() + GetWidth(), GetYPosition() + GetHeight()) -
+            y;
   if (x < 0)
     x = 0;
   if (y < 0)
@@ -403,7 +420,7 @@ void CGUIVisualisationControl::DeInitVisualization()
   if (!m_attemptedLoad)
     return;
 
-  IAE * ae = CServiceBroker::GetActiveAE();
+  IAE* ae = CServiceBroker::GetActiveAE();
   if (ae)
     ae->UnregisterAudioCallback(this);
 
@@ -436,7 +453,7 @@ void CGUIVisualisationControl::CreateBuffers()
   ClearBuffers();
 
   // Get the number of buffers from the current vis
-  VIS_INFO info { false, 0 };
+  VIS_INFO info{false, 0};
 
   if (m_instance)
     m_instance->GetInfo(&info);

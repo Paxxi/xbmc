@@ -18,9 +18,9 @@ CIrssMessage::CIrssMessage()
 
 CIrssMessage::CIrssMessage(IRSS_MessageType type, uint32_t flags)
 {
-  m_type     = type;
-  m_flags    = flags;
-  m_data     = NULL;
+  m_type = type;
+  m_flags = flags;
+  m_data = NULL;
   m_dataSize = 0;
 }
 

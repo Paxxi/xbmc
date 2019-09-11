@@ -23,7 +23,7 @@ using namespace XFILE;
 // Basically the same format as zip.
 // We might want to refactor CZipDirectory someday...
 //////////////////////////////////////////////////////////////////////
-bool CAPKDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CAPKDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   // uses a <fully qualified path>/filename.apk/...
   std::string path = url.GetFileName();
@@ -31,12 +31,11 @@ bool CAPKDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   URIUtils::AddSlashAtEnd(path);
 
   int zip_flags = 0, zip_error = 0;
-  struct zip *zip_archive;
+  struct zip* zip_archive;
   zip_archive = zip_open(host.c_str(), zip_flags, &zip_error);
   if (!zip_archive || zip_error)
   {
-    CLog::Log(LOGERROR, "CAPKDirectory::GetDirectory: Unable to open archive : '%s'",
-      host.c_str());
+    CLog::Log(LOGERROR, "CAPKDirectory::GetDirectory: Unable to open archive : '%s'", host.c_str());
     return false;
   }
 
@@ -58,7 +57,7 @@ bool CAPKDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     if (dir_marker != std::string::npos)
     {
       // return items relative to path
-      test_name=test_name.substr(0, dir_marker);
+      test_name = test_name.substr(0, dir_marker);
 
       if (items.Contains(host + "/" + test_name))
         continue;
@@ -70,9 +69,9 @@ bool CAPKDirectory::GetDirectory(const CURL& url, CFileItemList &items)
     {
       g_charsetConverter.unknownToUTF8(test_name);
       CFileItemPtr pItem(new CFileItem(test_name));
-      pItem->m_dwSize    = sb.size;
-      pItem->m_dateTime  = sb.mtime;
-      pItem->m_bIsFolder = dir_marker > 0 ;
+      pItem->m_dwSize = sb.size;
+      pItem->m_dateTime = sb.mtime;
+      pItem->m_bIsFolder = dir_marker > 0;
       pItem->SetPath(host + "/" + test_name);
       pItem->SetLabel(test_name.substr(path.size()));
       items.Add(pItem);

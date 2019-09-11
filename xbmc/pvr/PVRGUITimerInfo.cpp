@@ -59,7 +59,7 @@ bool CPVRGUITimerInfo::TimerInfoToggle()
   }
 
   if (static_cast<int>(XbmcThreads::SystemClockMillis() - m_iTimerInfoToggleStart) >
-        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_iPVRInfoToggleInterval)
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_iPVRInfoToggleInterval)
   {
     unsigned int iPrevious = m_iTimerInfoToggleCurrent;
     unsigned int iBoundary = m_iRecordingTimerAmount > 0 ? m_iRecordingTimerAmount : m_iTimerAmount;
@@ -96,7 +96,8 @@ void CPVRGUITimerInfo::UpdateTimersToggle()
       strActiveTimerTitle = StringUtils::Format("%s", tag->Title().c_str());
       strActiveTimerChannelName = StringUtils::Format("%s", tag->ChannelName().c_str());
       strActiveTimerChannelIcon = StringUtils::Format("%s", tag->ChannelIcon().c_str());
-      strActiveTimerTime = StringUtils::Format("%s", tag->StartAsLocalTime().GetAsLocalizedDateTime(false, false).c_str());
+      strActiveTimerTime = StringUtils::Format(
+          "%s", tag->StartAsLocalTime().GetAsLocalizedDateTime(false, false).c_str());
     }
   }
 
@@ -136,13 +137,14 @@ void CPVRGUITimerInfo::UpdateNextTimer()
     strNextRecordingTitle = StringUtils::Format("%s", timer->Title().c_str());
     strNextRecordingChannelName = StringUtils::Format("%s", timer->ChannelName().c_str());
     strNextRecordingChannelIcon = StringUtils::Format("%s", timer->ChannelIcon().c_str());
-    strNextRecordingTime = StringUtils::Format("%s", timer->StartAsLocalTime().GetAsLocalizedDateTime(false, false).c_str());
+    strNextRecordingTime = StringUtils::Format(
+        "%s", timer->StartAsLocalTime().GetAsLocalizedDateTime(false, false).c_str());
 
-    strNextTimerInfo = StringUtils::Format("%s %s %s %s",
-        g_localizeStrings.Get(19106).c_str(),
-        timer->StartAsLocalTime().GetAsLocalizedDate(true).c_str(),
-        g_localizeStrings.Get(19107).c_str(),
-        timer->StartAsLocalTime().GetAsLocalizedTime("HH:mm", false).c_str());
+    strNextTimerInfo =
+        StringUtils::Format("%s %s %s %s", g_localizeStrings.Get(19106).c_str(),
+                            timer->StartAsLocalTime().GetAsLocalizedDate(true).c_str(),
+                            g_localizeStrings.Get(19107).c_str(),
+                            timer->StartAsLocalTime().GetAsLocalizedTime("HH:mm", false).c_str());
   }
 
   CSingleLock lock(m_critSection);

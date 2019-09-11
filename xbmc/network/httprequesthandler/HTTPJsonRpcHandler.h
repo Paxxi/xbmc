@@ -21,8 +21,11 @@ public:
   ~CHTTPJsonRpcHandler() override = default;
 
   // implementations of IHTTPRequestHandler
-  IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPJsonRpcHandler(request); }
-  bool CanHandleRequest(const HTTPRequest &request) const override;
+  IHTTPRequestHandler* Create(const HTTPRequest& request) const override
+  {
+    return new CHTTPJsonRpcHandler(request);
+  }
+  bool CanHandleRequest(const HTTPRequest& request) const override;
 
   int HandleRequest() override;
 
@@ -31,11 +34,12 @@ public:
   int GetPriority() const override { return 5; }
 
 protected:
-  explicit CHTTPJsonRpcHandler(const HTTPRequest &request)
+  explicit CHTTPJsonRpcHandler(const HTTPRequest& request)
     : IHTTPRequestHandler(request)
-  { }
+  {
+  }
 
-  bool appendPostData(const char *data, size_t size) override;
+  bool appendPostData(const char* data, size_t size) override;
 
 private:
   std::string m_requestData;
@@ -49,8 +53,8 @@ private:
     ~CHTTPTransportLayer() override = default;
 
     // implementations of JSONRPC::ITransportLayer
-    bool PrepareDownload(const char *path, CVariant &details, std::string &protocol) override;
-    bool Download(const char *path, CVariant &result) override;
+    bool PrepareDownload(const char* path, CVariant& details, std::string& protocol) override;
+    bool Download(const char* path, CVariant& result) override;
     int GetCapabilities() override;
   };
   CHTTPTransportLayer m_transportLayer;

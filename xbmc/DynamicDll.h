@@ -25,12 +25,14 @@
 //  classname: name of the wrapper class to construct
 //  dllname: file including path of the dll to wrap
 
-#define DECLARE_DLL_WRAPPER(classname, dllname) \
-XDECLARE_DLL_WRAPPER(classname,dllname)
+#define DECLARE_DLL_WRAPPER(classname, dllname) XDECLARE_DLL_WRAPPER(classname, dllname)
 
 #define XDECLARE_DLL_WRAPPER(classname, dllname) \
 public: \
-  classname () : DllDynamic( dllname ) {}
+  classname() \
+    : DllDynamic(dllname) \
+  { \
+  }
 
 ///////////////////////////////////////////////////////////
 //
@@ -47,7 +49,7 @@ public: \
 //
 #define DECLARE_DLL_WRAPPER_TEMPLATE(classname) \
 public: \
-  classname () {} \
+  classname() {}
 
 
 ///////////////////////////////////////////////////////////
@@ -56,8 +58,8 @@ public: \
 //
 //  Tells the dllloader to load Debug symbols when possible
 #define LOAD_SYMBOLS() \
-  protected: \
-    virtual bool LoadSymbols() { return true; }
+protected: \
+  virtual bool LoadSymbols() { return true; }
 
 ///////////////////////////////////////////////////////////
 //
@@ -71,28 +73,24 @@ public: \
 //
 
 #define DEFINE_GLOBAL_PTR(type, name) \
-  protected: \
-    union { \
-      type* m_##name; \
-      void* m_##name##_ptr; \
-    }; \
-  public: \
-    virtual type* Get_##name (void) \
-    { \
-      return m_##name; \
-    }
+protected: \
+  union { \
+    type* m_##name; \
+    void* m_##name##_ptr; \
+  }; \
+\
+public: \
+  virtual type* Get_##name(void) { return m_##name; }
 
 #define DEFINE_GLOBAL(type, name) \
-  protected: \
-    union { \
-      type* m_##name; \
-      void* m_##name##_ptr; \
-    }; \
-  public: \
-    virtual type Get_##name (void) \
-    { \
-      return *m_##name; \
-    }
+protected: \
+  union { \
+    type* m_##name; \
+    void* m_##name##_ptr; \
+  }; \
+\
+public: \
+  virtual type Get_##name(void) { return *m_##name; }
 
 ///////////////////////////////////////////////////////////
 //
@@ -108,62 +106,62 @@ public: \
 //  args:    Arguments of the function, enclosed in parentheses
 //
 #define DEFINE_METHOD_LINKAGE_FP(result, linkage, name, args) \
-  protected: \
-    typedef result (linkage * name##_METHOD) args; \
-  public: \
-    union { \
-      name##_METHOD name; \
-      void*         name##_ptr; \
-    };
+protected: \
+  typedef result(linkage* name##_METHOD) args; \
+\
+public: \
+  union { \
+    name##_METHOD name; \
+    void* name##_ptr; \
+  };
 
 #define DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, args2) \
-  protected: \
-    typedef result (linkage * name##_METHOD) args; \
-    union { \
-      name##_METHOD m_##name; \
-      void*         m_##name##_ptr; \
-    }; \
-  public: \
-    virtual result name args override \
-    { \
-      return m_##name ? m_##name args2 : (result) 0; \
-    }
+protected: \
+  typedef result(linkage* name##_METHOD) args; \
+  union { \
+    name##_METHOD m_##name; \
+    void* m_##name##_ptr; \
+  }; \
+\
+public: \
+  virtual result name args override { return m_##name ? m_##name args2 : (result)0; }
 
 #define DEFINE_METHOD_LINKAGE0(result, linkage, name) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, ()  , ())
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, (), ())
 
 #define DEFINE_METHOD_LINKAGE1(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1))
 
 #define DEFINE_METHOD_LINKAGE2(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2))
 
 #define DEFINE_METHOD_LINKAGE3(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3))
 
 #define DEFINE_METHOD_LINKAGE4(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4))
 
 #define DEFINE_METHOD_LINKAGE5(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5))
 
 #define DEFINE_METHOD_LINKAGE6(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6))
 
 #define DEFINE_METHOD_LINKAGE7(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7))
 
 #define DEFINE_METHOD_LINKAGE8(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7, p8))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7, p8))
 
 #define DEFINE_METHOD_LINKAGE9(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7, p8, p9))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7, p8, p9))
 
 #define DEFINE_METHOD_LINKAGE10(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10))
 
 #define DEFINE_METHOD_LINKAGE11(result, linkage, name, args) \
-        DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11))
+  DEFINE_METHOD_LINKAGE_BASE(result, linkage, name, args, \
+                             (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11))
 
 ///////////////////////////////////////////////////////////
 //
@@ -237,98 +235,117 @@ public: \
 //    __asm mov esp,[o];
 //  };
 
-#define ALS(a) ((sizeof(a)+3)&~3)
+#define ALS(a) ((sizeof(a) + 3) & ~3)
 #define DEFINE_FUNC_PART1(result, linkage, name, args) \
-  private:                                             \
-    typedef result (linkage * name##_type)##args;      \
-    union { \
-      name##_type m_##name;                            \
-      void*       m_##name##_ptr;                      \
-    }; \
-  public:                                              \
-    virtual result name##args
+private: \
+  typedef result(linkage* name##_type)##args; \
+  union { \
+    name##_type m_##name; \
+    void* m_##name##_ptr; \
+  }; \
+\
+public: \
+  virtual result name##args
 
 #define DEFINE_FUNC_PART2(size) \
-  {                             \
-    int o,s = size;             \
+  { \
+    int o, s = size; \
     __asm {                     \
       __asm mov [o], esp        \
       __asm sub esp, [s]        \
       __asm and esp, ~15        \
-      __asm add esp, [s]        \
-    }
+      __asm add esp, [s] }
 
-#define DEFINE_FUNC_PART3(name,args) \
-    m_##name##args;                  \
-    __asm {                          \
-      __asm mov esp,[o]              \
-    }                                \
+#define DEFINE_FUNC_PART3(name, args) \
+  m_##name##args; \
+  __asm {                          \
+      __asm mov esp,[o]} \
   }
 
 #define DEFINE_FUNC_ALIGNED0(result, linkage, name) \
-    DEFINE_FUNC_PART1(result, linkage, name, ()) \
-    DEFINE_FUNC_PART2(0) \
-    DEFINE_FUNC_PART3(name,())
+  DEFINE_FUNC_PART1(result, linkage, name, ()) \
+  DEFINE_FUNC_PART2(0) \
+  DEFINE_FUNC_PART3(name, ())
 
 #define DEFINE_FUNC_ALIGNED1(result, linkage, name, t1) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1)) \
-    DEFINE_FUNC_PART2(ALS(p1)) \
-    DEFINE_FUNC_PART3(name,(p1))
+  DEFINE_FUNC_PART1(result, linkage, name, (t1 p1)) \
+  DEFINE_FUNC_PART2(ALS(p1)) \
+  DEFINE_FUNC_PART3(name, (p1))
 
 #define DEFINE_FUNC_ALIGNED2(result, linkage, name, t1, t2) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)) \
-    DEFINE_FUNC_PART3(name,(p1, p2))
+  DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2)) \
+  DEFINE_FUNC_PART3(name, (p1, p2))
 
 #define DEFINE_FUNC_ALIGNED3(result, linkage, name, t1, t2, t3) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)+ALS(p3)) \
-    DEFINE_FUNC_PART3(name,(p1, p2, p3))
+  DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2) + ALS(p3)) \
+  DEFINE_FUNC_PART3(name, (p1, p2, p3))
 
 #define DEFINE_FUNC_ALIGNED4(result, linkage, name, t1, t2, t3, t4) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)+ALS(p3)+ALS(p4)) \
-    DEFINE_FUNC_PART3(name,(p1, p2, p3, p4))
+  DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2) + ALS(p3) + ALS(p4)) \
+  DEFINE_FUNC_PART3(name, (p1, p2, p3, p4))
 
 #define DEFINE_FUNC_ALIGNED5(result, linkage, name, t1, t2, t3, t4, t5) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)+ALS(p3)+ALS(p4)+ALS(p5)) \
-    DEFINE_FUNC_PART3(name,(p1, p2, p3, p4, p5))
+  DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2) + ALS(p3) + ALS(p4) + ALS(p5)) \
+  DEFINE_FUNC_PART3(name, (p1, p2, p3, p4, p5))
 
 #define DEFINE_FUNC_ALIGNED6(result, linkage, name, t1, t2, t3, t4, t5, t6) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)+ALS(p3)+ALS(p4)+ALS(p5)+ALS(p6)) \
-    DEFINE_FUNC_PART3(name,(p1, p2, p3, p4, p5, p6))
+  DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2) + ALS(p3) + ALS(p4) + ALS(p5) + ALS(p6)) \
+  DEFINE_FUNC_PART3(name, (p1, p2, p3, p4, p5, p6))
 
 #define DEFINE_FUNC_ALIGNED7(result, linkage, name, t1, t2, t3, t4, t5, t6, t7) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)+ALS(p3)+ALS(p4)+ALS(p5)+ALS(p6)+ALS(p7)) \
-    DEFINE_FUNC_PART3(name,(p1, p2, p3, p4, p5, p6, p7))
+  DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2) + ALS(p3) + ALS(p4) + ALS(p5) + ALS(p6) + ALS(p7)) \
+  DEFINE_FUNC_PART3(name, (p1, p2, p3, p4, p5, p6, p7))
 
 #define DEFINE_FUNC_ALIGNED8(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)+ALS(p3)+ALS(p4)+ALS(p5)+ALS(p6)+ALS(p7)+ALS(p8)) \
-    DEFINE_FUNC_PART3(name,(p1, p2, p3, p4, p5, p6, p7, p8))
+  DEFINE_FUNC_PART1(result, linkage, name, \
+                    (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2) + ALS(p3) + ALS(p4) + ALS(p5) + ALS(p6) + ALS(p7) + ALS(p8)) \
+  DEFINE_FUNC_PART3(name, (p1, p2, p3, p4, p5, p6, p7, p8))
 
 #define DEFINE_FUNC_ALIGNED9(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8, t9) \
-    DEFINE_FUNC_PART1(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9)) \
-    DEFINE_FUNC_PART2(ALS(p1)+ALS(p2)+ALS(p3)+ALS(p4)+ALS(p5)+ALS(p6)+ALS(p7)+ALS(p8)+ALS(p9)) \
-    DEFINE_FUNC_PART3(name,(p1, p2, p3, p4, p5, p6, p7, p8, p9))
+  DEFINE_FUNC_PART1(result, linkage, name, \
+                    (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9)) \
+  DEFINE_FUNC_PART2(ALS(p1) + ALS(p2) + ALS(p3) + ALS(p4) + ALS(p5) + ALS(p6) + ALS(p7) + \
+                    ALS(p8) + ALS(p9)) \
+  DEFINE_FUNC_PART3(name, (p1, p2, p3, p4, p5, p6, p7, p8, p9))
 
 #else
 
-#define DEFINE_FUNC_ALIGNED0(result, linkage, name)                                            DEFINE_METHOD_LINKAGE0 (result, linkage, name)
-#define DEFINE_FUNC_ALIGNED1(result, linkage, name, t1)                                        DEFINE_METHOD_LINKAGE1 (result, linkage, name, (t1 p1) )
-#define DEFINE_FUNC_ALIGNED2(result, linkage, name, t1, t2)                                    DEFINE_METHOD_LINKAGE2 (result, linkage, name, (t1 p1, t2 p2) )
-#define DEFINE_FUNC_ALIGNED3(result, linkage, name, t1, t2, t3)                                DEFINE_METHOD_LINKAGE3 (result, linkage, name, (t1 p1, t2 p2, t3 p3) )
-#define DEFINE_FUNC_ALIGNED4(result, linkage, name, t1, t2, t3, t4)                            DEFINE_METHOD_LINKAGE4 (result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4) )
-#define DEFINE_FUNC_ALIGNED5(result, linkage, name, t1, t2, t3, t4, t5)                        DEFINE_METHOD_LINKAGE5 (result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5) )
-#define DEFINE_FUNC_ALIGNED6(result, linkage, name, t1, t2, t3, t4, t5, t6)                    DEFINE_METHOD_LINKAGE6 (result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6) )
-#define DEFINE_FUNC_ALIGNED7(result, linkage, name, t1, t2, t3, t4, t5, t6, t7)                DEFINE_METHOD_LINKAGE7 (result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7) )
-#define DEFINE_FUNC_ALIGNED8(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8)            DEFINE_METHOD_LINKAGE8 (result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8) )
-#define DEFINE_FUNC_ALIGNED9(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8, t9)        DEFINE_METHOD_LINKAGE9 (result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9) )
-#define DEFINE_FUNC_ALIGNED10(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8, t10)      DEFINE_METHOD_LINKAGE10(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9, t10 p10) )
-#define DEFINE_FUNC_ALIGNED11(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11) DEFINE_METHOD_LINKAGE11(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9, t10 p10, t11 p11) )
+#define DEFINE_FUNC_ALIGNED0(result, linkage, name) DEFINE_METHOD_LINKAGE0(result, linkage, name)
+#define DEFINE_FUNC_ALIGNED1(result, linkage, name, t1) \
+  DEFINE_METHOD_LINKAGE1(result, linkage, name, (t1 p1))
+#define DEFINE_FUNC_ALIGNED2(result, linkage, name, t1, t2) \
+  DEFINE_METHOD_LINKAGE2(result, linkage, name, (t1 p1, t2 p2))
+#define DEFINE_FUNC_ALIGNED3(result, linkage, name, t1, t2, t3) \
+  DEFINE_METHOD_LINKAGE3(result, linkage, name, (t1 p1, t2 p2, t3 p3))
+#define DEFINE_FUNC_ALIGNED4(result, linkage, name, t1, t2, t3, t4) \
+  DEFINE_METHOD_LINKAGE4(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4))
+#define DEFINE_FUNC_ALIGNED5(result, linkage, name, t1, t2, t3, t4, t5) \
+  DEFINE_METHOD_LINKAGE5(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5))
+#define DEFINE_FUNC_ALIGNED6(result, linkage, name, t1, t2, t3, t4, t5, t6) \
+  DEFINE_METHOD_LINKAGE6(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6))
+#define DEFINE_FUNC_ALIGNED7(result, linkage, name, t1, t2, t3, t4, t5, t6, t7) \
+  DEFINE_METHOD_LINKAGE7(result, linkage, name, (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7))
+#define DEFINE_FUNC_ALIGNED8(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8) \
+  DEFINE_METHOD_LINKAGE8(result, linkage, name, \
+                         (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8))
+#define DEFINE_FUNC_ALIGNED9(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8, t9) \
+  DEFINE_METHOD_LINKAGE9(result, linkage, name, \
+                         (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9))
+#define DEFINE_FUNC_ALIGNED10(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8, t10) \
+  DEFINE_METHOD_LINKAGE10( \
+      result, linkage, name, \
+      (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9, t10 p10))
+#define DEFINE_FUNC_ALIGNED11(result, linkage, name, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11) \
+  DEFINE_METHOD_LINKAGE11( \
+      result, linkage, name, \
+      (t1 p1, t2 p2, t3 p3, t4 p4, t5 p5, t6 p6, t7 p7, t8 p8, t9 p9, t10 p10, t11 p11))
 
 #endif
 
@@ -343,12 +360,12 @@ public: \
 //  block. This block must be followed by an END_METHOD_RESOLVE.
 //
 #define BEGIN_METHOD_RESOLVE() \
-  protected: \
+protected: \
   virtual bool ResolveExports() override \
   {
 
 #define END_METHOD_RESOLVE() \
-    return true; \
+  return true; \
   }
 
 ///////////////////////////////////////////////////////////
@@ -361,11 +378,11 @@ public: \
 //          or DEFINE_METHOD_LINKAGE
 //
 #define RESOLVE_METHOD(method) \
-  if (!m_dll->ResolveExport( #method , & m_##method##_ptr )) \
+  if (!m_dll->ResolveExport(#method, &m_##method##_ptr)) \
     return false;
 
 #define RESOLVE_METHOD_FP(method) \
-  if (!m_dll->ResolveExport( #method , & method##_ptr )) \
+  if (!m_dll->ResolveExport(#method, &method##_ptr)) \
     return false;
 
 
@@ -381,13 +398,12 @@ public: \
 //
 
 #define RESOLVE_METHOD_OPTIONAL(method) \
-   m_##method##_ptr = nullptr; \
-   m_dll->ResolveExport( #method , & m_##method##_ptr, false );
+  m_##method##_ptr = nullptr; \
+  m_dll->ResolveExport(#method, &m_##method##_ptr, false);
 
 #define RESOLVE_METHOD_OPTIONAL_FP(method) \
-   method##_ptr = NULL; \
-   m_dll->ResolveExport( #method , & method##_ptr, false );
-
+  method##_ptr = NULL; \
+  m_dll->ResolveExport(#method, &method##_ptr, false);
 
 
 ///////////////////////////////////////////////////////////
@@ -401,15 +417,15 @@ public: \
 //          or DEFINE_METHOD_LINKAGE
 //
 #define RESOLVE_METHOD_RENAME(dllmethod, method) \
-  if (!m_dll->ResolveExport( #dllmethod , & m_##method##_ptr )) \
+  if (!m_dll->ResolveExport(#dllmethod, &m_##method##_ptr)) \
     return false;
 
 #define RESOLVE_METHOD_RENAME_OPTIONAL(dllmethod, method) \
   m_##method##_ptr = nullptr; \
-  m_dll->ResolveExport( #dllmethod , & m_##method##_ptr, false );
+  m_dll->ResolveExport(#dllmethod, &m_##method##_ptr, false);
 
 #define RESOLVE_METHOD_RENAME_FP(dllmethod, method) \
-  if (!m_dll->ResolveExport( #dllmethod , & method##_ptr )) \
+  if (!m_dll->ResolveExport(#dllmethod, &method##_ptr)) \
     return false;
 
 
@@ -519,16 +535,16 @@ public:
   virtual ~DllDynamic();
   virtual bool Load();
   virtual void Unload();
-  virtual bool IsLoaded() const { return m_dll!=NULL; }
+  virtual bool IsLoaded() const { return m_dll != NULL; }
   bool CanLoad();
   bool EnableDelayedUnload(bool bOnOff);
   bool SetFile(const std::string& strDllName);
-  const std::string &GetFile() const { return m_strDllName; }
+  const std::string& GetFile() const { return m_strDllName; }
 
 protected:
-  virtual bool ResolveExports()=0;
+  virtual bool ResolveExports() = 0;
   virtual bool LoadSymbols() { return false; }
-  bool  m_DelayUnload;
+  bool m_DelayUnload;
   LibraryLoader* m_dll;
   std::string m_strDllName;
 };

@@ -18,9 +18,9 @@
 using namespace KODI::MESSAGING;
 using namespace XFILE;
 
-const CProfileManager *IDirectory::m_profileManager = nullptr;
+const CProfileManager* IDirectory::m_profileManager = nullptr;
 
-void IDirectory::RegisterProfileManager(const CProfileManager &profileManager)
+void IDirectory::RegisterProfileManager(const CProfileManager& profileManager)
 {
   m_profileManager = &profileManager;
 }
@@ -62,9 +62,8 @@ bool IDirectory::IsAllowed(const CURL& url) const
     // Allow filenames of the form video_ts.ifo or vts_##_0.ifo
 
     return StringUtils::EqualsNoCase(fileName, "video_ts.ifo") ||
-          (fileName.length() == 12 &&
-           StringUtils::StartsWithNoCase(fileName, "vts_") &&
-           StringUtils::EndsWithNoCase(fileName, "_0.ifo"));
+           (fileName.length() == 12 && StringUtils::StartsWithNoCase(fileName, "vts_") &&
+            StringUtils::EndsWithNoCase(fileName, "_0.ifo"));
   }
 
   if (URIUtils::HasExtension(url, ".dat"))
@@ -73,8 +72,7 @@ bool IDirectory::IsAllowed(const CURL& url) const
     std::string folder = URIUtils::GetDirectory(fileName);
     URIUtils::RemoveSlashAtEnd(folder);
     folder = URIUtils::GetFileName(folder);
-    if (StringUtils::EqualsNoCase(folder, "vcd") ||
-        StringUtils::EqualsNoCase(folder, "mpegav") ||
+    if (StringUtils::EqualsNoCase(folder, "vcd") || StringUtils::EqualsNoCase(folder, "mpegav") ||
         StringUtils::EqualsNoCase(folder, "cdda"))
     {
       // Allow filenames of the form AVSEQ##(#).DAT, ITEM###(#).DAT
@@ -122,7 +120,8 @@ bool IDirectory::ProcessRequirements()
   if (type == "keyboard")
   {
     std::string input;
-    if (CGUIKeyboardFactory::ShowAndGetInput(input, m_requirements["heading"], false, m_requirements["hidden"].asBoolean()))
+    if (CGUIKeyboardFactory::ShowAndGetInput(input, m_requirements["heading"], false,
+                                             m_requirements["hidden"].asBoolean()))
     {
       m_requirements["input"] = input;
       return true;
@@ -139,13 +138,15 @@ bool IDirectory::ProcessRequirements()
   }
   else if (type == "error")
   {
-    HELPERS::ShowOKDialogLines(CVariant{m_requirements["heading"]}, CVariant{m_requirements["line1"]}, CVariant{m_requirements["line2"]}, CVariant{m_requirements["line3"]});
+    HELPERS::ShowOKDialogLines(CVariant{m_requirements["heading"]},
+                               CVariant{m_requirements["line1"]}, CVariant{m_requirements["line2"]},
+                               CVariant{m_requirements["line3"]});
   }
   m_requirements.clear();
   return false;
 }
 
-bool IDirectory::GetKeyboardInput(const CVariant &heading, std::string &input, bool hiddenInput)
+bool IDirectory::GetKeyboardInput(const CVariant& heading, std::string& input, bool hiddenInput)
 {
   if (!m_requirements["input"].asString().empty())
   {
@@ -159,7 +160,10 @@ bool IDirectory::GetKeyboardInput(const CVariant &heading, std::string &input, b
   return false;
 }
 
-void IDirectory::SetErrorDialog(const CVariant &heading, const CVariant &line1, const CVariant &line2, const CVariant &line3)
+void IDirectory::SetErrorDialog(const CVariant& heading,
+                                const CVariant& line1,
+                                const CVariant& line2,
+                                const CVariant& line3)
 {
   m_requirements.clear();
   m_requirements["type"] = "error";
@@ -169,7 +173,7 @@ void IDirectory::SetErrorDialog(const CVariant &heading, const CVariant &line1, 
   m_requirements["line3"] = line3;
 }
 
-void IDirectory::RequireAuthentication(const CURL &url)
+void IDirectory::RequireAuthentication(const CURL& url)
 {
   m_requirements.clear();
   m_requirements["type"] = "authenticate";

@@ -6,19 +6,20 @@
  *  See LICENSES/README.md for more information.
  */
 
+#include "OverlayRendererDX.h"
+
 #include "Application.h"
-#include "cores/VideoPlayer/DVDCodecs/Overlay/DVDOverlayImage.h"
-#include "cores/VideoPlayer/DVDCodecs/Overlay/DVDOverlaySpu.h"
-#include "cores/VideoPlayer/DVDCodecs/Overlay/DVDOverlaySSA.h"
-#include "guilib/D3DResource.h"
-#include "windowing/GraphicContext.h"
-#include "guilib/GUIShaderDX.h"
 #include "OverlayRenderer.h"
 #include "OverlayRendererUtil.h"
-#include "OverlayRendererDX.h"
-#include "rendering/dx/RenderContext.h"
+#include "cores/VideoPlayer/DVDCodecs/Overlay/DVDOverlayImage.h"
+#include "cores/VideoPlayer/DVDCodecs/Overlay/DVDOverlaySSA.h"
+#include "cores/VideoPlayer/DVDCodecs/Overlay/DVDOverlaySpu.h"
+#include "guilib/D3DResource.h"
+#include "guilib/GUIShaderDX.h"
 #include "rendering/dx/DeviceResources.h"
+#include "rendering/dx/RenderContext.h"
 #include "utils/log.h"
+#include "windowing/GraphicContext.h"
 
 #ifndef ASSERT
 #include <crtdbg.h>
@@ -31,11 +32,14 @@ using namespace DirectX;
 #define USE_PREMULTIPLIED_ALPHA 1
 #define ALPHA_CHANNEL_OFFSET 3
 
-static bool LoadTexture(int width, int height, int stride
-                      , DXGI_FORMAT format
-                      , const void* pixels
-                      , float* u, float* v
-                      , CD3DTexture* texture)
+static bool LoadTexture(int width,
+                        int height,
+                        int stride,
+                        DXGI_FORMAT format,
+                        const void* pixels,
+                        float* u,
+                        float* v,
+                        CD3DTexture* texture)
 {
   if (!texture->Create(width, height, 1, D3D11_USAGE_IMMUTABLE, format, pixels, stride))
   {
@@ -50,7 +54,8 @@ static bool LoadTexture(int width, int height, int stride
     texture->Release();
     return false;
   }
-  ASSERT(format == desc.Format || (format == DXGI_FORMAT_R8_UNORM && desc.Format == DXGI_FORMAT_B8G8R8A8_UNORM));
+  ASSERT(format == desc.Format ||
+         (format == DXGI_FORMAT_R8_UNORM && desc.Format == DXGI_FORMAT_B8G8R8A8_UNORM));
 
   *u = float(width) / desc.Width;
   *v = float(height) / desc.Height;
@@ -60,32 +65,27 @@ static bool LoadTexture(int width, int height, int stride
 
 COverlayQuadsDX::COverlayQuadsDX(ASS_Image* images, int width, int height)
 {
-  m_width  = 1.0;
+  m_width = 1.0;
   m_height = 1.0;
-  m_align  = ALIGN_VIDEO;
-  m_pos    = POSITION_RELATIVE;
-  m_x      = 0.0f;
-  m_y      = 0.0f;
-  m_count  = 0;
+  m_align = ALIGN_VIDEO;
+  m_pos = POSITION_RELATIVE;
+  m_x = 0.0f;
+  m_y = 0.0f;
+  m_count = 0;
 
   SQuads quads;
-  if(!convert_quad(images, quads, width))
+  if (!convert_quad(images, quads, width))
     return;
 
   float u, v;
-  if(!LoadTexture(quads.size_x
-                , quads.size_y
-                , quads.size_x
-                , DXGI_FORMAT_R8_UNORM
-                , quads.data
-                , &u, &v
-                , &m_texture))
+  if (!LoadTexture(quads.size_x, quads.size_y, quads.size_x, DXGI_FORMAT_R8_UNORM, quads.data, &u,
+                   &v, &m_texture))
   {
     return;
   }
 
-  Vertex* vt = new Vertex[6 * quads.count], *vt_orig = vt;
-  SQuad*  vs = quads.quad;
+  Vertex *vt = new Vertex[6 * quads.count], *vt_orig = vt;
+  SQuad* vs = quads.quad;
 
   float scale_u = u / quads.size_x;
   float scale_v = v / quads.size_y;
@@ -134,7 +134,8 @@ COverlayQuadsDX::COverlayQuadsDX(ASS_Image* images, int width, int height)
   vt = vt_orig;
   m_count = quads.count;
 
-  if (!m_vertex.Create(D3D11_BIND_VERTEX_BUFFER, 6 * quads.count, sizeof(Vertex), DXGI_FORMAT_UNKNOWN, D3D11_USAGE_IMMUTABLE, vt))
+  if (!m_vertex.Create(D3D11_BIND_VERTEX_BUFFER, 6 * quads.count, sizeof(Vertex),
+                       DXGI_FORMAT_UNKNOWN, D3D11_USAGE_IMMUTABLE, vt))
   {
     CLog::Log(LOGERROR, "%s - failed to create vertex buffer", __FUNCTION__);
     m_texture.Release();
@@ -147,7 +148,7 @@ COverlayQuadsDX::~COverlayQuadsDX()
 {
 }
 
-void COverlayQuadsDX::Render(SRenderState &state)
+void COverlayQuadsDX::Render(SRenderState& state)
 {
   if (m_count == 0)
     return;
@@ -162,14 +163,16 @@ void COverlayQuadsDX::Render(SRenderState &state)
   XMMATRIX world, view, proj;
   pGUIShader->GetWVP(world, view, proj);
 
-  if (CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() == RENDER_STEREO_MODE_SPLIT_HORIZONTAL
-   || CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() == RENDER_STEREO_MODE_SPLIT_VERTICAL)
+  if (CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() ==
+          RENDER_STEREO_MODE_SPLIT_HORIZONTAL ||
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() ==
+          RENDER_STEREO_MODE_SPLIT_VERTICAL)
   {
     CRect rect;
     DX::Windowing()->GetViewPort(rect);
     DX::Windowing()->SetCameraPosition(CPoint(rect.Width() * 0.5f, rect.Height() * 0.5f),
-                                  static_cast<int>(rect.Width()),
-                                  static_cast<int>(rect.Height()));
+                                       static_cast<int>(rect.Width()),
+                                       static_cast<int>(rect.Height()));
   }
 
   XMMATRIX trans = XMMatrixTranslation(state.x, state.y, 0.0f);
@@ -204,37 +207,37 @@ COverlayImageDX::COverlayImageDX(CDVDOverlayImage* o)
 {
   uint32_t* rgba;
   int stride;
-  if(o->palette)
+  if (o->palette)
   {
-    m_pma  = !!USE_PREMULTIPLIED_ALPHA;
-    rgba   = convert_rgba(o, m_pma);
+    m_pma = !!USE_PREMULTIPLIED_ALPHA;
+    rgba = convert_rgba(o, m_pma);
     stride = o->width * 4;
   }
   else
   {
-    m_pma  = false;
-    rgba   = (uint32_t*)o->data;
+    m_pma = false;
+    rgba = (uint32_t*)o->data;
     stride = o->linesize;
   }
 
-  if(!rgba)
+  if (!rgba)
   {
     CLog::Log(LOGERROR, "COverlayImageDX::COverlayImageDX - failed to convert overlay to rgb");
     return;
   }
 
   Load(rgba, o->width, o->height, stride);
-  if((BYTE*)rgba != o->data)
+  if ((BYTE*)rgba != o->data)
     free(rgba);
 
-  if(o->source_width && o->source_height)
+  if (o->source_width && o->source_height)
   {
-    float center_x = (float)(0.5f * o->width  + o->x) / o->source_width;
+    float center_x = (float)(0.5f * o->width + o->x) / o->source_width;
     float center_y = (float)(0.5f * o->height + o->y) / o->source_height;
 
-    m_width  = (float)o->width  / o->source_width;
+    m_width = (float)o->width / o->source_width;
     m_height = (float)o->height / o->source_height;
-    m_pos    = POSITION_RELATIVE;
+    m_pos = POSITION_RELATIVE;
 
 #if 0
     if(center_x > 0.4 && center_x < 0.6
@@ -249,18 +252,18 @@ COverlayImageDX::COverlayImageDX(CDVDOverlayImage* o)
 #endif
     {
       /* render aligned to screen to avoid cropping problems */
-      m_align  = ALIGN_SCREEN;
-      m_x      = center_x;
-      m_y      = center_y;
+      m_align = ALIGN_SCREEN;
+      m_x = center_x;
+      m_y = center_y;
     }
   }
   else
   {
-    m_align  = ALIGN_VIDEO;
-    m_pos    = POSITION_ABSOLUTE;
-    m_x      = (float)o->x;
-    m_y      = (float)o->y;
-    m_width  = (float)o->width;
+    m_align = ALIGN_VIDEO;
+    m_pos = POSITION_ABSOLUTE;
+    m_x = (float)o->x;
+    m_y = (float)o->y;
+    m_width = (float)o->width;
     m_height = (float)o->height;
   }
 }
@@ -268,9 +271,8 @@ COverlayImageDX::COverlayImageDX(CDVDOverlayImage* o)
 COverlayImageDX::COverlayImageDX(CDVDOverlaySpu* o)
 {
   int min_x, max_x, min_y, max_y;
-  uint32_t* rgba = convert_rgba(o, USE_PREMULTIPLIED_ALPHA
-                              , min_x, max_x, min_y, max_y);
-  if(!rgba)
+  uint32_t* rgba = convert_rgba(o, USE_PREMULTIPLIED_ALPHA, min_x, max_x, min_y, max_y);
+  if (!rgba)
   {
     CLog::Log(LOGERROR, "COverlayImageDX::COverlayImageDX - failed to convert overlay to rgb");
     return;
@@ -278,48 +280,43 @@ COverlayImageDX::COverlayImageDX(CDVDOverlaySpu* o)
   Load(rgba + min_x + min_y * o->width, max_x - min_x, max_y - min_y, o->width * 4);
   free(rgba);
 
-  m_align  = ALIGN_VIDEO;
-  m_pos    = POSITION_ABSOLUTE;
-  m_x      = (float)(min_x + o->x);
-  m_y      = (float)(min_y + o->y);
-  m_width  = (float)(max_x - min_x);
+  m_align = ALIGN_VIDEO;
+  m_pos = POSITION_ABSOLUTE;
+  m_x = (float)(min_x + o->x);
+  m_y = (float)(min_y + o->y);
+  m_width = (float)(max_x - min_x);
   m_height = (float)(max_y - min_y);
 }
 
 void COverlayImageDX::Load(uint32_t* rgba, int width, int height, int stride)
 {
   float u, v;
-  if(!LoadTexture(width
-                , height
-                , stride
-                , DXGI_FORMAT_B8G8R8A8_UNORM
-                , rgba
-                , &u, &v
-                , &m_texture))
+  if (!LoadTexture(width, height, stride, DXGI_FORMAT_B8G8R8A8_UNORM, rgba, &u, &v, &m_texture))
     return;
 
   Vertex vt[4];
 
   vt[0].texCoord = XMFLOAT2(u, 0.0f);
-  vt[0].pos      = XMFLOAT3(1.0f, 0.0f, 0.0f);
+  vt[0].pos = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
   vt[1].texCoord = XMFLOAT2(u, v);
-  vt[1].pos      = XMFLOAT3(1.0f, 1.0f, 0.0f);
+  vt[1].pos = XMFLOAT3(1.0f, 1.0f, 0.0f);
 
   vt[2].texCoord = XMFLOAT2(0.0f, 0.0f);
-  vt[2].pos      = XMFLOAT3(0.0f, 0.0f, 0.0f);
+  vt[2].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
   vt[3].texCoord = XMFLOAT2(0.0f, v);
-  vt[3].pos      = XMFLOAT3(0.0f, 1.0f, 0.0f);
+  vt[3].pos = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
-  if (!m_vertex.Create(D3D11_BIND_VERTEX_BUFFER, 4, sizeof(Vertex), DXGI_FORMAT_UNKNOWN, D3D11_USAGE_IMMUTABLE, vt))
+  if (!m_vertex.Create(D3D11_BIND_VERTEX_BUFFER, 4, sizeof(Vertex), DXGI_FORMAT_UNKNOWN,
+                       D3D11_USAGE_IMMUTABLE, vt))
   {
     CLog::Log(LOGERROR, "%s - failed to create vertex buffer", __FUNCTION__);
     m_texture.Release();
   }
 }
 
-void COverlayImageDX::Render(SRenderState &state)
+void COverlayImageDX::Render(SRenderState& state)
 {
   ID3D11Buffer* vertexBuffer = m_vertex.Get();
   if (vertexBuffer == nullptr)
@@ -331,19 +328,22 @@ void COverlayImageDX::Render(SRenderState &state)
   XMMATRIX world, view, proj;
   pGUIShader->GetWVP(world, view, proj);
 
-  if (CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() == RENDER_STEREO_MODE_SPLIT_HORIZONTAL
-   || CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() == RENDER_STEREO_MODE_SPLIT_VERTICAL)
+  if (CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() ==
+          RENDER_STEREO_MODE_SPLIT_HORIZONTAL ||
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() ==
+          RENDER_STEREO_MODE_SPLIT_VERTICAL)
   {
     CRect rect;
     DX::Windowing()->GetViewPort(rect);
     DX::Windowing()->SetCameraPosition(CPoint(rect.Width() * 0.5f, rect.Height() * 0.5f),
-                                  static_cast<int>(rect.Width()),
-                                  static_cast<int>(rect.Height()));
+                                       static_cast<int>(rect.Width()),
+                                       static_cast<int>(rect.Height()));
   }
 
   XMMATRIX trans = m_pos == POSITION_RELATIVE
-                 ? XMMatrixTranslation(state.x - state.width  * 0.5f, state.y - state.height * 0.5f, 0.0f)
-                 : XMMatrixTranslation(state.x, state.y, 0.0f),
+                       ? XMMatrixTranslation(state.x - state.width * 0.5f,
+                                             state.y - state.height * 0.5f, 0.0f)
+                       : XMMatrixTranslation(state.x, state.y, 0.0f),
            scale = XMMatrixScaling(state.width, state.height, 1.0f);
 
   pGUIShader->SetWorld(XMMatrixMultiply(XMMatrixMultiply(world, scale), trans));

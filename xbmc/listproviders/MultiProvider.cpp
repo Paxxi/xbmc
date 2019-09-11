@@ -11,10 +11,10 @@
 #include "threads/SingleLock.h"
 #include "utils/XBMCTinyXML.h"
 
-CMultiProvider::CMultiProvider(const TiXmlNode *first, int parentID)
- : IListProvider(parentID)
+CMultiProvider::CMultiProvider(const TiXmlNode* first, int parentID)
+  : IListProvider(parentID)
 {
-  for (const TiXmlNode *content = first; content; content = content->NextSiblingElement("content"))
+  for (const TiXmlNode* content = first; content; content = content->NextSiblingElement("content"))
   {
     IListProviderPtr sub(IListProvider::CreateSingle(content, parentID));
     if (sub)
@@ -30,7 +30,7 @@ bool CMultiProvider::Update(bool forceRefresh)
   return result;
 }
 
-void CMultiProvider::Fetch(std::vector<CGUIListItemPtr> &items)
+void CMultiProvider::Fetch(std::vector<CGUIListItemPtr>& items)
 {
   CSingleLock lock(m_section);
   std::vector<CGUIListItemPtr> subItems;
@@ -68,7 +68,7 @@ void CMultiProvider::Reset()
     provider->Reset();
 }
 
-bool CMultiProvider::OnClick(const CGUIListItemPtr &item)
+bool CMultiProvider::OnClick(const CGUIListItemPtr& item)
 {
   CSingleLock lock(m_section);
   auto key = GetItemKey(item);
@@ -79,7 +79,7 @@ bool CMultiProvider::OnClick(const CGUIListItemPtr &item)
     return false;
 }
 
-bool CMultiProvider::OnInfo(const CGUIListItemPtr &item)
+bool CMultiProvider::OnInfo(const CGUIListItemPtr& item)
 {
   CSingleLock lock(m_section);
   auto key = GetItemKey(item);
@@ -90,7 +90,7 @@ bool CMultiProvider::OnInfo(const CGUIListItemPtr &item)
     return false;
 }
 
-bool CMultiProvider::OnContextMenu(const CGUIListItemPtr &item)
+bool CMultiProvider::OnContextMenu(const CGUIListItemPtr& item)
 {
   CSingleLock lock(m_section);
   auto key = GetItemKey(item);
@@ -101,7 +101,7 @@ bool CMultiProvider::OnContextMenu(const CGUIListItemPtr &item)
     return false;
 }
 
-CMultiProvider::item_key_type CMultiProvider::GetItemKey(CGUIListItemPtr const &item)
+CMultiProvider::item_key_type CMultiProvider::GetItemKey(CGUIListItemPtr const& item)
 {
   return reinterpret_cast<item_key_type>(item.get());
 }

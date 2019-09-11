@@ -31,7 +31,7 @@ CSpeed::CSpeed(double value)
   m_valid = true;
 }
 
-bool CSpeed::operator >(const CSpeed& right) const
+bool CSpeed::operator>(const CSpeed& right) const
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -45,12 +45,12 @@ bool CSpeed::operator >(const CSpeed& right) const
   return (m_value > right.m_value);
 }
 
-bool CSpeed::operator >=(const CSpeed& right) const
+bool CSpeed::operator>=(const CSpeed& right) const
 {
-  return operator >(right) || operator ==(right);
+  return operator>(right) || operator==(right);
 }
 
-bool CSpeed::operator <(const CSpeed& right) const
+bool CSpeed::operator<(const CSpeed& right) const
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -64,12 +64,12 @@ bool CSpeed::operator <(const CSpeed& right) const
   return (m_value < right.m_value);
 }
 
-bool CSpeed::operator <=(const CSpeed& right) const
+bool CSpeed::operator<=(const CSpeed& right) const
 {
-  return operator <(right) || operator ==(right);
+  return operator<(right) || operator==(right);
 }
 
-bool CSpeed::operator ==(const CSpeed& right) const
+bool CSpeed::operator==(const CSpeed& right) const
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -83,19 +83,19 @@ bool CSpeed::operator ==(const CSpeed& right) const
   return (m_value == right.m_value);
 }
 
-bool CSpeed::operator !=(const CSpeed& right) const
+bool CSpeed::operator!=(const CSpeed& right) const
 {
-  return !operator ==(right.m_value);
+  return !operator==(right.m_value);
 }
 
-CSpeed& CSpeed::operator =(const CSpeed& right)
+CSpeed& CSpeed::operator=(const CSpeed& right)
 {
   m_valid = right.m_valid;
   m_value = right.m_value;
   return *this;
 }
 
-const CSpeed& CSpeed::operator +=(const CSpeed& right)
+const CSpeed& CSpeed::operator+=(const CSpeed& right)
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -104,7 +104,7 @@ const CSpeed& CSpeed::operator +=(const CSpeed& right)
   return *this;
 }
 
-const CSpeed& CSpeed::operator -=(const CSpeed& right)
+const CSpeed& CSpeed::operator-=(const CSpeed& right)
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -113,7 +113,7 @@ const CSpeed& CSpeed::operator -=(const CSpeed& right)
   return *this;
 }
 
-const CSpeed& CSpeed::operator *=(const CSpeed& right)
+const CSpeed& CSpeed::operator*=(const CSpeed& right)
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -122,7 +122,7 @@ const CSpeed& CSpeed::operator *=(const CSpeed& right)
   return *this;
 }
 
-const CSpeed& CSpeed::operator /=(const CSpeed& right)
+const CSpeed& CSpeed::operator/=(const CSpeed& right)
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -131,7 +131,7 @@ const CSpeed& CSpeed::operator /=(const CSpeed& right)
   return *this;
 }
 
-CSpeed CSpeed::operator +(const CSpeed& right) const
+CSpeed CSpeed::operator+(const CSpeed& right) const
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -146,7 +146,7 @@ CSpeed CSpeed::operator +(const CSpeed& right) const
   return temp;
 }
 
-CSpeed CSpeed::operator -(const CSpeed& right) const
+CSpeed CSpeed::operator-(const CSpeed& right) const
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -160,7 +160,7 @@ CSpeed CSpeed::operator -(const CSpeed& right) const
   return temp;
 }
 
-CSpeed CSpeed::operator *(const CSpeed& right) const
+CSpeed CSpeed::operator*(const CSpeed& right) const
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -173,7 +173,7 @@ CSpeed CSpeed::operator *(const CSpeed& right) const
   return temp;
 }
 
-CSpeed CSpeed::operator /(const CSpeed& right) const
+CSpeed CSpeed::operator/(const CSpeed& right) const
 {
   assert(IsValid());
   assert(right.IsValid());
@@ -186,7 +186,7 @@ CSpeed CSpeed::operator /(const CSpeed& right) const
   return temp;
 }
 
-CSpeed& CSpeed::operator ++()
+CSpeed& CSpeed::operator++()
 {
   assert(IsValid());
 
@@ -194,7 +194,7 @@ CSpeed& CSpeed::operator ++()
   return *this;
 }
 
-CSpeed& CSpeed::operator --()
+CSpeed& CSpeed::operator--()
 {
   assert(IsValid());
 
@@ -202,7 +202,7 @@ CSpeed& CSpeed::operator --()
   return *this;
 }
 
-CSpeed CSpeed::operator ++(int)
+CSpeed CSpeed::operator++(int)
 {
   assert(IsValid());
 
@@ -211,7 +211,7 @@ CSpeed CSpeed::operator ++(int)
   return temp;
 }
 
-CSpeed CSpeed::operator --(int)
+CSpeed CSpeed::operator--(int)
 {
   assert(IsValid());
 
@@ -220,7 +220,7 @@ CSpeed CSpeed::operator --(int)
   return temp;
 }
 
-bool CSpeed::operator >(double right) const
+bool CSpeed::operator>(double right) const
 {
   assert(IsValid());
 
@@ -230,12 +230,12 @@ bool CSpeed::operator >(double right) const
   return (m_value > right);
 }
 
-bool CSpeed::operator >=(double right) const
+bool CSpeed::operator>=(double right) const
 {
-  return operator >(right) || operator ==(right);
+  return operator>(right) || operator==(right);
 }
 
-bool CSpeed::operator <(double right) const
+bool CSpeed::operator<(double right) const
 {
   assert(IsValid());
 
@@ -245,12 +245,12 @@ bool CSpeed::operator <(double right) const
   return (m_value < right);
 }
 
-bool CSpeed::operator <=(double right) const
+bool CSpeed::operator<=(double right) const
 {
-  return operator <(right) || operator ==(right);
+  return operator<(right) || operator==(right);
 }
 
-bool CSpeed::operator ==(double right) const
+bool CSpeed::operator==(double right) const
 {
   if (!IsValid())
     return false;
@@ -258,12 +258,12 @@ bool CSpeed::operator ==(double right) const
   return (m_value == right);
 }
 
-bool CSpeed::operator !=(double right) const
+bool CSpeed::operator!=(double right) const
 {
-  return !operator ==(right);
+  return !operator==(right);
 }
 
-const CSpeed& CSpeed::operator +=(double right)
+const CSpeed& CSpeed::operator+=(double right)
 {
   assert(IsValid());
 
@@ -271,7 +271,7 @@ const CSpeed& CSpeed::operator +=(double right)
   return *this;
 }
 
-const CSpeed& CSpeed::operator -=(double right)
+const CSpeed& CSpeed::operator-=(double right)
 {
   assert(IsValid());
 
@@ -279,7 +279,7 @@ const CSpeed& CSpeed::operator -=(double right)
   return *this;
 }
 
-const CSpeed& CSpeed::operator *=(double right)
+const CSpeed& CSpeed::operator*=(double right)
 {
   assert(IsValid());
 
@@ -287,7 +287,7 @@ const CSpeed& CSpeed::operator *=(double right)
   return *this;
 }
 
-const CSpeed& CSpeed::operator /=(double right)
+const CSpeed& CSpeed::operator/=(double right)
 {
   assert(IsValid());
 
@@ -295,7 +295,7 @@ const CSpeed& CSpeed::operator /=(double right)
   return *this;
 }
 
-CSpeed CSpeed::operator +(double right) const
+CSpeed CSpeed::operator+(double right) const
 {
   assert(IsValid());
 
@@ -304,7 +304,7 @@ CSpeed CSpeed::operator +(double right) const
   return temp;
 }
 
-CSpeed CSpeed::operator -(double right) const
+CSpeed CSpeed::operator-(double right) const
 {
   assert(IsValid());
 
@@ -313,7 +313,7 @@ CSpeed CSpeed::operator -(double right) const
   return temp;
 }
 
-CSpeed CSpeed::operator *(double right) const
+CSpeed CSpeed::operator*(double right) const
 {
   assert(IsValid());
 
@@ -322,7 +322,7 @@ CSpeed CSpeed::operator *(double right) const
   return temp;
 }
 
-CSpeed CSpeed::operator /(double right) const
+CSpeed CSpeed::operator/(double right) const
 {
   assert(IsValid());
 

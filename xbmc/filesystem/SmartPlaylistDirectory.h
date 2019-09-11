@@ -16,18 +16,21 @@ class CSmartPlaylist;
 
 namespace XFILE
 {
-  class CSmartPlaylistDirectory : public IFileDirectory
-  {
-  public:
-    CSmartPlaylistDirectory();
-    ~CSmartPlaylistDirectory() override;
-    bool GetDirectory(const CURL& url, CFileItemList& items) override;
-    bool AllowAll() const override { return true; }
-    bool ContainsFiles(const CURL& url) override;
-    bool Remove(const CURL& url) override;
+class CSmartPlaylistDirectory : public IFileDirectory
+{
+public:
+  CSmartPlaylistDirectory();
+  ~CSmartPlaylistDirectory() override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool AllowAll() const override { return true; }
+  bool ContainsFiles(const CURL& url) override;
+  bool Remove(const CURL& url) override;
 
-    static bool GetDirectory(const CSmartPlaylist &playlist, CFileItemList& items, const std::string &strBaseDir = "", bool filter = false);
+  static bool GetDirectory(const CSmartPlaylist& playlist,
+                           CFileItemList& items,
+                           const std::string& strBaseDir = "",
+                           bool filter = false);
 
-    static std::string GetPlaylistByName(const std::string& name, const std::string& playlistType);
-  };
-}
+  static std::string GetPlaylistByName(const std::string& name, const std::string& playlistType);
+};
+} // namespace XFILE

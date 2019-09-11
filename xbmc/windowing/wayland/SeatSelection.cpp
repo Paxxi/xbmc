@@ -31,13 +31,9 @@ using namespace KODI::WINDOWING::WAYLAND;
 namespace
 {
 
-const std::vector<std::string> MIME_TYPES_PREFERENCE =
-{
-  "text/plain;charset=utf-8",
-  "text/plain;charset=iso-8859-1",
-  "text/plain;charset=us-ascii",
-  "text/plain"
-};
+const std::vector<std::string> MIME_TYPES_PREFERENCE = {
+    "text/plain;charset=utf-8", "text/plain;charset=iso-8859-1", "text/plain;charset=us-ascii",
+    "text/plain"};
 
 }
 
@@ -52,26 +48,24 @@ CSeatSelection::CSeatSelection(CConnection& connection, wayland::seat_t const& s
 
   if (!manager)
   {
-    CLog::Log(LOGWARNING, "No data device manager announced by compositor, clipboard will not be available");
+    CLog::Log(LOGWARNING,
+              "No data device manager announced by compositor, clipboard will not be available");
     return;
   }
 
   m_dataDevice = manager.get_data_device(seat);
 
   // Class is created in response to seat add events - so no events can get lost
-  m_dataDevice.on_data_offer() = [this](wayland::data_offer_t offer)
-  {
+  m_dataDevice.on_data_offer() = [this](wayland::data_offer_t offer) {
     // We don't know yet whether this is drag-and-drop or selection, so collect
     // MIME types in either case
     m_currentOffer = offer;
     m_mimeTypeOffers.clear();
-    m_currentOffer.on_offer() = [this](std::string mime)
-    {
+    m_currentOffer.on_offer() = [this](std::string mime) {
       m_mimeTypeOffers.push_back(std::move(mime));
     };
   };
-  m_dataDevice.on_selection() = [this](wayland::data_offer_t offer)
-  {
+  m_dataDevice.on_selection() = [this](wayland::data_offer_t offer) {
     CSingleLock lock(m_currentSelectionMutex);
     m_matchedMimeType.clear();
 
@@ -88,18 +82,22 @@ CSeatSelection::CSeatSelection(CConnection& connection, wayland::seat_t const& s
       // Match MIME type by priority: Find first preferred MIME type that is in the
       // set of offered types
       // Charset is not case-sensitive in MIME type spec, so match case-insensitively
-      auto mimeIt = std::find_first_of(MIME_TYPES_PREFERENCE.cbegin(), MIME_TYPES_PREFERENCE.cend(),
-                                       m_mimeTypeOffers.cbegin(), m_mimeTypeOffers.cend(),
-                                       // static_cast needed for overload resolution
-                                       static_cast<bool (*)(std::string const&, std::string const&)> (&StringUtils::EqualsNoCase));
+      auto mimeIt =
+          std::find_first_of(MIME_TYPES_PREFERENCE.cbegin(), MIME_TYPES_PREFERENCE.cend(),
+                             m_mimeTypeOffers.cbegin(), m_mimeTypeOffers.cend(),
+                             // static_cast needed for overload resolution
+                             static_cast<bool (*)(std::string const&, std::string const&)>(
+                                 &StringUtils::EqualsNoCase));
       if (mimeIt != MIME_TYPES_PREFERENCE.cend())
       {
         m_matchedMimeType = *mimeIt;
-        CLog::Log(LOGDEBUG, "Chose selection MIME type %s out of offered %s", m_matchedMimeType.c_str(), offers.c_str());
+        CLog::Log(LOGDEBUG, "Chose selection MIME type %s out of offered %s",
+                  m_matchedMimeType.c_str(), offers.c_str());
       }
       else
       {
-        CLog::Log(LOGDEBUG, "Could not find compatible MIME type for selection data (offered: %s)", offers.c_str());
+        CLog::Log(LOGDEBUG, "Could not find compatible MIME type for selection data (offered: %s)",
+                  offers.c_str());
       }
     }
   };
@@ -116,7 +114,8 @@ std::string CSeatSelection::GetSelectionText() const
   std::array<int, 2> fds;
   if (pipe(fds.data()) != 0)
   {
-    CLog::LogF(LOGERROR, "Could not open pipe for selection data transfer: %s", std::strerror(errno));
+    CLog::LogF(LOGERROR, "Could not open pipe for selection data transfer: %s",
+               std::strerror(errno));
     return "";
   }
 
@@ -131,12 +130,7 @@ std::string CSeatSelection::GetSelectionText() const
   // so we get POLLHUP when the other party closes its write fd
   writeFd.reset();
 
-  pollfd fd =
-  {
-    .fd = readFd,
-    .events = POLLIN,
-    .revents = 0
-  };
+  pollfd fd = {.fd = readFd, .events = POLLIN, .revents = 0};
 
   // UI will block in this function when Ctrl+V is pressed, so timeout should be
   // rather short!
@@ -151,7 +145,10 @@ std::string CSeatSelection::GetSelectionText() const
   {
     auto now = std::chrono::steady_clock::now();
     // Do not permit negative timeouts (would cause infinitely long poll)
-    auto remainingTimeout = std::max(std::chrono::milliseconds(0), std::chrono::duration_cast<std::chrono::milliseconds> (TIMEOUT - (now - start))).count();
+    auto remainingTimeout =
+        std::max(std::chrono::milliseconds(0),
+                 std::chrono::duration_cast<std::chrono::milliseconds>(TIMEOUT - (now - start)))
+            .count();
     // poll() for changes until poll signals POLLHUP and the remaining data was read
     int ret{poll(&fd, 1, remainingTimeout)};
     if (ret == 0)
@@ -180,7 +177,8 @@ std::string CSeatSelection::GetSelectionText() const
         CLog::LogF(LOGERROR, "Selection data is too big, aborting read");
         return "";
       }
-      ssize_t readBytes{read(fd.fd, buffer.data() + totalBytesRead, buffer.size() - totalBytesRead)};
+      ssize_t readBytes{
+          read(fd.fd, buffer.data() + totalBytesRead, buffer.size() - totalBytesRead)};
       if (readBytes < 0)
       {
         CLog::LogF(LOGERROR, "read() from selection pipe failed: %s", std::strerror(errno));
@@ -188,8 +186,7 @@ std::string CSeatSelection::GetSelectionText() const
       }
       totalBytesRead += readBytes;
     }
-  }
-  while (!(fd.revents & POLLHUP));
+  } while (!(fd.revents & POLLHUP));
 
   return std::string(buffer.data(), totalBytesRead);
 }

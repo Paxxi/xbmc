@@ -12,12 +12,12 @@
 #include "cores/Cut.h"
 #include "threads/SingleLock.h"
 
-CDataCacheCore::CDataCacheCore() :
-  m_playerVideoInfo {},
-  m_playerAudioInfo {},
-  m_contentInfo {},
-  m_renderInfo {},
-  m_stateInfo {}
+CDataCacheCore::CDataCacheCore()
+  : m_playerVideoInfo{}
+  , m_playerAudioInfo{}
+  , m_contentInfo{}
+  , m_renderInfo{}
+  , m_stateInfo{}
 {
   m_hasAVInfoChanges = false;
 }
@@ -383,7 +383,7 @@ void CDataCacheCore::SetPlayTimes(time_t start, int64_t current, int64_t min, in
   m_timeInfo.m_timeMax = max;
 }
 
-void CDataCacheCore::GetPlayTimes(time_t &start, int64_t &current, int64_t &min, int64_t &max)
+void CDataCacheCore::GetPlayTimes(time_t& start, int64_t& current, int64_t& min, int64_t& max)
 {
   CSingleLock lock(m_stateSection);
   start = m_timeInfo.m_startTime;

@@ -19,17 +19,61 @@ class CDBusError;
 
 template<typename T>
 struct ToDBusType;
-template<> struct ToDBusType<bool> { static constexpr int TYPE = DBUS_TYPE_BOOLEAN; };
-template<> struct ToDBusType<char*> { static constexpr int TYPE = DBUS_TYPE_STRING; };
-template<> struct ToDBusType<const char*> { static constexpr int TYPE = DBUS_TYPE_STRING; };
-template<> struct ToDBusType<std::uint8_t> { static constexpr int TYPE = DBUS_TYPE_BYTE; };
-template<> struct ToDBusType<std::int16_t> { static constexpr int TYPE = DBUS_TYPE_INT16; };
-template<> struct ToDBusType<std::uint16_t> { static constexpr int TYPE = DBUS_TYPE_UINT16; };
-template<> struct ToDBusType<std::int32_t> { static constexpr int TYPE = DBUS_TYPE_INT32; };
-template<> struct ToDBusType<std::uint32_t> { static constexpr int TYPE = DBUS_TYPE_UINT32; };
-template<> struct ToDBusType<std::int64_t> { static constexpr int TYPE = DBUS_TYPE_INT64; };
-template<> struct ToDBusType<std::uint64_t> { static constexpr int TYPE = DBUS_TYPE_UINT64; };
-template<> struct ToDBusType<double> { static constexpr int TYPE = DBUS_TYPE_DOUBLE; };
+template<>
+struct ToDBusType<bool>
+{
+  static constexpr int TYPE = DBUS_TYPE_BOOLEAN;
+};
+template<>
+struct ToDBusType<char*>
+{
+  static constexpr int TYPE = DBUS_TYPE_STRING;
+};
+template<>
+struct ToDBusType<const char*>
+{
+  static constexpr int TYPE = DBUS_TYPE_STRING;
+};
+template<>
+struct ToDBusType<std::uint8_t>
+{
+  static constexpr int TYPE = DBUS_TYPE_BYTE;
+};
+template<>
+struct ToDBusType<std::int16_t>
+{
+  static constexpr int TYPE = DBUS_TYPE_INT16;
+};
+template<>
+struct ToDBusType<std::uint16_t>
+{
+  static constexpr int TYPE = DBUS_TYPE_UINT16;
+};
+template<>
+struct ToDBusType<std::int32_t>
+{
+  static constexpr int TYPE = DBUS_TYPE_INT32;
+};
+template<>
+struct ToDBusType<std::uint32_t>
+{
+  static constexpr int TYPE = DBUS_TYPE_UINT32;
+};
+template<>
+struct ToDBusType<std::int64_t>
+{
+  static constexpr int TYPE = DBUS_TYPE_INT64;
+};
+template<>
+struct ToDBusType<std::uint64_t>
+{
+  static constexpr int TYPE = DBUS_TYPE_UINT64;
+};
+template<>
+struct ToDBusType<double>
+{
+  static constexpr int TYPE = DBUS_TYPE_DOUBLE;
+};
 
 template<typename T>
 using ToDBusTypeFromPointer = ToDBusType<typename std::remove_pointer<T>::type>;
@@ -43,17 +87,23 @@ using DBusMessagePtr = std::unique_ptr<DBusMessage, DBusMessageDeleter>;
 class CDBusMessage
 {
 public:
-  CDBusMessage(const char *destination, const char *object, const char *interface, const char *method);
-  CDBusMessage(std::string const& destination, std::string const& object, std::string const& interface, std::string const& method);
+  CDBusMessage(const char* destination,
+               const char* object,
+               const char* interface,
+               const char* method);
+  CDBusMessage(std::string const& destination,
+               std::string const& object,
+               std::string const& interface,
+               std::string const& method);
 
-  void AppendObjectPath(const char *object);
+  void AppendObjectPath(const char* object);
 
   template<typename T>
   void AppendArgument(const T arg)
   {
     AppendWithType(ToDBusType<T>::TYPE, &arg);
   }
-  void AppendArgument(const char **arrayString, unsigned int length);
+  void AppendArgument(const char** arrayString, unsigned int length);
 
   template<typename TFirst>
   void AppendArguments(const TFirst first)
@@ -68,7 +118,7 @@ public:
     AppendArguments(args...);
   }
 
-  DBusMessageIter * GetArgumentIter();
+  DBusMessageIter* GetArgumentIter();
 
   /**
    * Retrieve simple arguments from DBus reply message
@@ -99,17 +149,18 @@ public:
     return GetReplyArgumentsWithIter(&iter, args...);
   }
 
-  DBusMessage *SendSystem();
-  DBusMessage *SendSession();
-  DBusMessage *SendSystem(CDBusError& error);
-  DBusMessage *SendSession(CDBusError& error);
+  DBusMessage* SendSystem();
+  DBusMessage* SendSession();
+  DBusMessage* SendSystem(CDBusError& error);
+  DBusMessage* SendSession(CDBusError& error);
 
   bool SendAsyncSystem();
   bool SendAsyncSession();
 
-  DBusMessage *Send(DBusBusType type);
-  DBusMessage *Send(DBusBusType type, CDBusError& error);
-  DBusMessage *Send(DBusConnection *con, CDBusError& error);
+  DBusMessage* Send(DBusBusType type);
+  DBusMessage* Send(DBusBusType type, CDBusError& error);
+  DBusMessage* Send(DBusConnection* con, CDBusError& error);
+
 private:
   void AppendWithType(int type, const void* value);
   bool SendAsync(DBusBusType type);

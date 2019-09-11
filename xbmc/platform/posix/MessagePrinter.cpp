@@ -24,10 +24,11 @@ void CMessagePrinter::DisplayWarning(const std::string& warning)
 
 void CMessagePrinter::DisplayError(const std::string& error)
 {
-  fprintf(stderr,"%s\n", error.c_str());
+  fprintf(stderr, "%s\n", error.c_str());
 }
 
-void CMessagePrinter::DisplayHelpMessage(const std::vector<std::pair<std::string, std::string>>& help)
+void CMessagePrinter::DisplayHelpMessage(
+    const std::vector<std::pair<std::string, std::string>>& help)
 {
   //very crude implementation, pretty it up when possible
   std::string message;

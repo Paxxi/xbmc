@@ -10,10 +10,10 @@
 
 @interface OSXTextInputResponder : NSView <NSTextInputClient>
 {
-  NSString *_markedText;
-  NSRange   _markedRange;
-  NSRange   _selectedRange;
-  NSRect    _inputRect;
+  NSString* _markedText;
+  NSRange _markedRange;
+  NSRange _selectedRange;
+  NSRect _inputRect;
 }
-- (void) setInputRect:(NSRect) rect;
+- (void)setInputRect:(NSRect)rect;
 @end

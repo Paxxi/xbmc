@@ -37,8 +37,8 @@ namespace gui
 struct CRenderHelperStub : public IRenderHelper
 {
   bool Init() override { return true; }
-  void Begin() override { }
-  void End() override { }
+  void Begin() override {}
+  void End() override {}
 }; /* class CRenderHelperStub */
 
 using CRenderHelper = CRenderHelperStub;

@@ -10,13 +10,14 @@
 
 #include "utils/CPUInfo.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavcodec/avcodec.h>
+#include <libavfilter/avfilter.h>
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
-#include <libavutil/log.h>
 #include <libavutil/ffversion.h>
-#include <libavfilter/avfilter.h>
+#include <libavutil/log.h>
 #include <libpostproc/postprocess.h>
 }
 
@@ -49,4 +50,3 @@ public:
   static void ClearLogLevel();
   int level;
 };
-

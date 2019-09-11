@@ -14,20 +14,25 @@
 
 namespace PERIPHERALS
 {
-  class CPeripherals;
+class CPeripherals;
 
-  class CPeripheralBusUSB : public CPeripheralBus
-  {
-  public:
-    CPeripheralBusUSB(CPeripherals &manager);
+class CPeripheralBusUSB : public CPeripheralBus
+{
+public:
+  CPeripheralBusUSB(CPeripherals& manager);
 
-    /*!
+  /*!
      * @see PeripheralBus::PerformDeviceScan()
      */
-    bool PerformDeviceScan(PeripheralScanResults &results);
+  bool PerformDeviceScan(PeripheralScanResults& results);
 
-  private:
-    bool PerformDeviceScan(const GUID *guid, const PeripheralType defaultType, PeripheralScanResults &results);
-    bool GetProductAndVendorId(const PeripheralType type, const std::string &strDeviceLocation, int *iVendorId, int *iProductId);
-  };
-}
+private:
+  bool PerformDeviceScan(const GUID* guid,
+                         const PeripheralType defaultType,
+                         PeripheralScanResults& results);
+  bool GetProductAndVendorId(const PeripheralType type,
+                             const std::string& strDeviceLocation,
+                             int* iVendorId,
+                             int* iProductId);
+};
+} // namespace PERIPHERALS

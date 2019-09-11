@@ -7,18 +7,20 @@
  */
 
 #include "DeviceResources.h"
+
 #include "DirectXHelper.h"
 #include "RenderContext.h"
+#include "ServiceBroker.h"
 #include "guilib/GUIComponent.h"
 #include "guilib/GUIWindowManager.h"
-#include "windowing/GraphicContext.h"
 #include "messaging/ApplicationMessenger.h"
-#include "platform/win32/CharsetConverter.h"
-#include "ServiceBroker.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
-#include "utils/log.h"
 #include "utils/SystemInfo.h"
+#include "utils/log.h"
+#include "windowing/GraphicContext.h"
+
+#include "platform/win32/CharsetConverter.h"
 
 #ifdef _DEBUG
 #include <dxgidebug.h>
@@ -30,7 +32,7 @@ using namespace Microsoft::WRL;
 using namespace Concurrency;
 namespace winrt
 {
-  using namespace Windows::Foundation;
+using namespace Windows::Foundation;
 }
 
 #ifdef _DEBUG
@@ -38,9 +40,23 @@ namespace winrt
 #else
 #define breakOnDebug
 #endif
-#define LOG_HR(hr) CLog::LogF(LOGERROR, "function call at line %d ends with error: %s", __LINE__, DX::GetErrorDescription(hr).c_str());
-#define CHECK_ERR() if (FAILED(hr)) { LOG_HR(hr); breakOnDebug; return; }
-#define RETURN_ERR(ret) if (FAILED(hr)) { LOG_HR(hr); breakOnDebug; return (##ret); }
+#define LOG_HR(hr) \
+  CLog::LogF(LOGERROR, "function call at line %d ends with error: %s", __LINE__, \
+             DX::GetErrorDescription(hr).c_str());
+#define CHECK_ERR() \
+  if (FAILED(hr)) \
+  { \
+    LOG_HR(hr); \
+    breakOnDebug; \
+    return; \
+  }
+#define RETURN_ERR(ret) \
+  if (FAILED(hr)) \
+  { \
+    LOG_HR(hr); \
+    breakOnDebug; \
+    return (##ret); \
+  }
 
 bool DX::DeviceResources::CBackBuffer::Acquire(ID3D11Texture2D* pTexture)
 {
@@ -139,8 +155,10 @@ void DX::DeviceResources::GetDisplayMode(DXGI_MODE_DESC* mode) const
 
   memset(mode, 0, sizeof(DXGI_MODE_DESC));
   // desktop coords depend on DPI
-  mode->Width = DX::ConvertDipsToPixels(outDesc.DesktopCoordinates.right - outDesc.DesktopCoordinates.left, m_dpi);
-  mode->Height = DX::ConvertDipsToPixels(outDesc.DesktopCoordinates.bottom - outDesc.DesktopCoordinates.top, m_dpi);
+  mode->Width = DX::ConvertDipsToPixels(
+      outDesc.DesktopCoordinates.right - outDesc.DesktopCoordinates.left, m_dpi);
+  mode->Height = DX::ConvertDipsToPixels(
+      outDesc.DesktopCoordinates.bottom - outDesc.DesktopCoordinates.top, m_dpi);
   mode->Format = scDesc.BufferDesc.Format;
   mode->Scaling = scDesc.BufferDesc.Scaling;
   mode->ScanlineOrdering = scDesc.BufferDesc.ScanlineOrdering;
@@ -153,7 +171,10 @@ void DX::DeviceResources::GetDisplayMode(DXGI_MODE_DESC* mode) const
   // EnumDisplaySettingsW is only one way to detect current refresh rate
   if (EnumDisplaySettingsW(outDesc.DeviceName, ENUM_CURRENT_SETTINGS, &sDevMode))
   {
-    int i = (((sDevMode.dmDisplayFrequency + 1) % 24) == 0 || ((sDevMode.dmDisplayFrequency + 1) % 30) == 0) ? 1 : 0;
+    int i = (((sDevMode.dmDisplayFrequency + 1) % 24) == 0 ||
+             ((sDevMode.dmDisplayFrequency + 1) % 30) == 0)
+                ? 1
+                : 0;
     mode->RefreshRate.Numerator = (sDevMode.dmDisplayFrequency + i) * 1000;
     mode->RefreshRate.Denominator = 1000 + i;
     if (sDevMode.dmDisplayFlags & DM_INTERLACED)
@@ -170,15 +191,8 @@ void DX::DeviceResources::GetDisplayMode(DXGI_MODE_DESC* mode) const
 void DX::DeviceResources::SetViewPort(D3D11_VIEWPORT& viewPort) const
 {
   // convert logical viewport to real
-  D3D11_VIEWPORT realViewPort =
-  {
-    viewPort.TopLeftX,
-    viewPort.TopLeftY,
-    viewPort.Width,
-    viewPort.Height,
-    viewPort.MinDepth,
-    viewPort.MinDepth
-  };
+  D3D11_VIEWPORT realViewPort = {viewPort.TopLeftX, viewPort.TopLeftY, viewPort.Width,
+                                 viewPort.Height,   viewPort.MinDepth, viewPort.MinDepth};
 
   m_deferrContext->RSSetViewports(1, &realViewPort);
 }
@@ -195,9 +209,11 @@ bool DX::DeviceResources::SetFullScreen(bool fullscreen, RESOLUTION_INFO& res)
 
   CLog::LogF(LOGDEBUG, "switching from %s(%.0f x %.0f) to %s(%d x %d)",
              bFullScreen ? "fullscreen " : "", m_outputSize.Width, m_outputSize.Height,
-             fullscreen  ? "fullscreen " : "", res.iWidth, res.iHeight);
+             fullscreen ? "fullscreen " : "", res.iWidth, res.iHeight);
 
-  bool recreate = m_stereoEnabled != (CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() == RENDER_STEREO_MODE_HARDWAREBASED);
+  bool recreate =
+      m_stereoEnabled != (CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() ==
+                          RENDER_STEREO_MODE_HARDWAREBASED);
   if (!!bFullScreen && !fullscreen)
   {
     CLog::LogF(LOGDEBUG, "switching to windowed");
@@ -213,20 +229,22 @@ bool DX::DeviceResources::SetFullScreen(bool fullscreen, RESOLUTION_INFO& res)
       DXGI_SWAP_CHAIN_DESC scDesc;
       m_swapChain->GetDesc(&scDesc);
 
-      bool is_interlaced = scDesc.BufferDesc.ScanlineOrdering > DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
+      bool is_interlaced =
+          scDesc.BufferDesc.ScanlineOrdering > DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
       float refreshRate = res.fRefreshRate;
       if (res.dwFlags & D3DPRESENTFLAG_INTERLACED)
         refreshRate *= 2;
 
-      if (currentMode.Width != res.iWidth
-        || currentMode.Height != res.iHeight
-        || DX::RationalToFloat(currentMode.RefreshRate) != refreshRate
-        || is_interlaced != (res.dwFlags & D3DPRESENTFLAG_INTERLACED ? true : false)
-        // force resolution change for stereo mode
-        // some drivers unable to create stereo swapchain if mode does not match @23.976
-        || CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() == RENDER_STEREO_MODE_HARDWAREBASED)
+      if (currentMode.Width != res.iWidth || currentMode.Height != res.iHeight ||
+          DX::RationalToFloat(currentMode.RefreshRate) != refreshRate ||
+          is_interlaced != (res.dwFlags & D3DPRESENTFLAG_INTERLACED ? true : false)
+          // force resolution change for stereo mode
+          // some drivers unable to create stereo swapchain if mode does not match @23.976
+          || CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode() ==
+                 RENDER_STEREO_MODE_HARDWAREBASED)
       {
-        CLog::Log(LOGDEBUG, __FUNCTION__": changing display mode to %dx%d@%0.3f", res.iWidth, res.iHeight, res.fRefreshRate,
+        CLog::Log(LOGDEBUG, __FUNCTION__ ": changing display mode to %dx%d@%0.3f", res.iWidth,
+                  res.iHeight, res.fRefreshRate,
                   res.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "");
 
         int refresh = static_cast<int>(res.fRefreshRate);
@@ -254,7 +272,7 @@ bool DX::DeviceResources::SetFullScreen(bool fullscreen, RESOLUTION_INFO& res)
           m_swapChain->GetFullscreenState(&bFullScreen, nullptr);
         }
         bool resized = SUCCEEDED(m_swapChain->ResizeTarget(&currentMode));
-        if (resized) 
+        if (resized)
         {
           // some system doesn't inform windowing about desktop size changes
           // so we have to change output size before resizing buffers
@@ -323,19 +341,20 @@ void DX::DeviceResources::CreateDeviceResources()
   ComPtr<ID3D11Device> device;
   ComPtr<ID3D11DeviceContext> context;
 
-  D3D_DRIVER_TYPE drivertType = m_adapter != nullptr ? D3D_DRIVER_TYPE_UNKNOWN : D3D_DRIVER_TYPE_HARDWARE;
+  D3D_DRIVER_TYPE drivertType =
+      m_adapter != nullptr ? D3D_DRIVER_TYPE_UNKNOWN : D3D_DRIVER_TYPE_HARDWARE;
   HRESULT hr = D3D11CreateDevice(
-      m_adapter.Get(),           // Create a device on specified adapter.
-      drivertType,               // Create a device using scepcified driver.
-      nullptr,                   // Should be 0 unless the driver is D3D_DRIVER_TYPE_SOFTWARE.
-      creationFlags,             // Set debug and Direct2D compatibility flags.
-      featureLevels.data(),      // List of feature levels this app can support.
-      featureLevels.size(),      // Size of the list above.
-      D3D11_SDK_VERSION,         // Always set this to D3D11_SDK_VERSION for Windows Store apps.
-      &device,                   // Returns the Direct3D device created.
-      &m_d3dFeatureLevel,        // Returns feature level of device created.
-      &context                   // Returns the device immediate context.
-    );
+      m_adapter.Get(), // Create a device on specified adapter.
+      drivertType, // Create a device using scepcified driver.
+      nullptr, // Should be 0 unless the driver is D3D_DRIVER_TYPE_SOFTWARE.
+      creationFlags, // Set debug and Direct2D compatibility flags.
+      featureLevels.data(), // List of feature levels this app can support.
+      featureLevels.size(), // Size of the list above.
+      D3D11_SDK_VERSION, // Always set this to D3D11_SDK_VERSION for Windows Store apps.
+      &device, // Returns the Direct3D device created.
+      &m_d3dFeatureLevel, // Returns feature level of device created.
+      &context // Returns the device immediate context.
+  );
 
   if (FAILED(hr))
   {
@@ -343,15 +362,8 @@ void DX::DeviceResources::CreateDeviceResources()
     hr = D3D11CreateDevice(
         nullptr,
         D3D_DRIVER_TYPE_WARP, // Create a WARP device instead of a hardware device.
-        nullptr,
-        creationFlags,
-        featureLevels.data(),
-        featureLevels.size(),
-        D3D11_SDK_VERSION,
-        &device,
-        &m_d3dFeatureLevel,
-        &context
-    );
+        nullptr, creationFlags, featureLevels.data(), featureLevels.size(), D3D11_SDK_VERSION,
+        &device, &m_d3dFeatureLevel, &context);
     if (FAILED(hr))
     {
       CLog::LogF(LOGFATAL, "unable to create WARP device. Rendering in not possible.");
@@ -360,11 +372,13 @@ void DX::DeviceResources::CreateDeviceResources()
   }
 
   // Store pointers to the Direct3D 11.1 API device and immediate context.
-  hr = device.As(&m_d3dDevice); CHECK_ERR();
+  hr = device.As(&m_d3dDevice);
+  CHECK_ERR();
 
   // To enable multi-threaded access (optional)
   ComPtr<ID3D10Multithread> d3dMultiThread;
-  hr = m_d3dDevice.As(&d3dMultiThread); CHECK_ERR();
+  hr = m_d3dDevice.As(&d3dMultiThread);
+  CHECK_ERR();
   d3dMultiThread->SetMultithreadProtected(1);
 
 #ifdef _DEBUG
@@ -373,11 +387,10 @@ void DX::DeviceResources::CreateDeviceResources()
     ComPtr<ID3D11InfoQueue> d3dInfoQueue;
     if (SUCCEEDED(m_d3dDebug.As(&d3dInfoQueue)))
     {
-      std::vector<D3D11_MESSAGE_ID> hide =
-      {
-        D3D11_MESSAGE_ID_GETVIDEOPROCESSORFILTERRANGE_UNSUPPORTED,        // avoid GETVIDEOPROCESSORFILTERRANGE_UNSUPPORTED (dx bug)
-        D3D11_MESSAGE_ID_DEVICE_RSSETSCISSORRECTS_NEGATIVESCISSOR         // avoid warning for some labels out of screen
-                                                                          // Add more message IDs here as needed
+      std::vector<D3D11_MESSAGE_ID> hide = {
+          D3D11_MESSAGE_ID_GETVIDEOPROCESSORFILTERRANGE_UNSUPPORTED, // avoid GETVIDEOPROCESSORFILTERRANGE_UNSUPPORTED (dx bug)
+          D3D11_MESSAGE_ID_DEVICE_RSSETSCISSORRECTS_NEGATIVESCISSOR // avoid warning for some labels out of screen
+          // Add more message IDs here as needed
       };
 
       D3D11_INFO_QUEUE_FILTER filter;
@@ -389,16 +402,21 @@ void DX::DeviceResources::CreateDeviceResources()
   }
 #endif
 
-  hr = context.As(&m_d3dContext); CHECK_ERR();
-  hr = m_d3dDevice->CreateDeferredContext1(0, &m_deferrContext); CHECK_ERR();
+  hr = context.As(&m_d3dContext);
+  CHECK_ERR();
+  hr = m_d3dDevice->CreateDeferredContext1(0, &m_deferrContext);
+  CHECK_ERR();
 
   if (!m_adapter)
   {
     ComPtr<IDXGIDevice1> dxgiDevice;
     ComPtr<IDXGIAdapter> adapter;
-    hr = m_d3dDevice.As(&dxgiDevice); CHECK_ERR();
-    hr = dxgiDevice->GetAdapter(&adapter); CHECK_ERR();
-    hr = adapter.As(&m_adapter); CHECK_ERR();
+    hr = m_d3dDevice.As(&dxgiDevice);
+    CHECK_ERR();
+    hr = dxgiDevice->GetAdapter(&adapter);
+    CHECK_ERR();
+    hr = adapter.As(&m_adapter);
+    CHECK_ERR();
   }
 
   DXGI_ADAPTER_DESC aDesc;
@@ -419,7 +437,7 @@ void DX::DeviceResources::ReleaseBackBuffer()
   if (m_deferrContext)
   {
     // Clear the previous window size specific context.
-    ID3D11RenderTargetView* nullViews[] = { nullptr, nullptr, nullptr, nullptr };
+    ID3D11RenderTargetView* nullViews[] = {nullptr, nullptr, nullptr, nullptr};
     m_deferrContext->OMSetRenderTargets(4, nullViews, nullptr);
     FinishCommandList(false);
 
@@ -437,7 +455,8 @@ void DX::DeviceResources::CreateBackBuffer()
 
   // Get swap chain back buffer.
   ComPtr<ID3D11Texture2D> backBuffer;
-  HRESULT hr = m_swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)); CHECK_ERR();
+  HRESULT hr = m_swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
+  CHECK_ERR();
 
   // Create back buffer texture from swap chain texture
   if (!m_backBufferTex.Acquire(backBuffer.Get()))
@@ -447,61 +466,42 @@ void DX::DeviceResources::CreateBackBuffer()
   }
 
   // Create a depth stencil view for use with 3D rendering if needed.
-  CD3D11_TEXTURE2D_DESC depthStencilDesc(
-    DXGI_FORMAT_D24_UNORM_S8_UINT,
-    lround(m_outputSize.Width),
-    lround(m_outputSize.Height),
-    1, // This depth stencil view has only one texture.
-    1, // Use a single mipmap level.
-    D3D11_BIND_DEPTH_STENCIL
-  );
+  CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT, lround(m_outputSize.Width),
+                                         lround(m_outputSize.Height),
+                                         1, // This depth stencil view has only one texture.
+                                         1, // Use a single mipmap level.
+                                         D3D11_BIND_DEPTH_STENCIL);
 
   ComPtr<ID3D11Texture2D> depthStencil;
-  hr = m_d3dDevice->CreateTexture2D(
-    &depthStencilDesc,
-    nullptr,
-    &depthStencil
-  ); CHECK_ERR();
+  hr = m_d3dDevice->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencil);
+  CHECK_ERR();
 
   CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
-  hr = m_d3dDevice->CreateDepthStencilView(
-    depthStencil.Get(),
-    &depthStencilViewDesc,
-    &m_d3dDepthStencilView
-  ); CHECK_ERR();
+  hr = m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc,
+                                           &m_d3dDepthStencilView);
+  CHECK_ERR();
 
   // Set the 3D rendering viewport to target the entire window.
-  m_screenViewport = CD3D11_VIEWPORT(
-    0.0f,
-    0.0f,
-    m_outputSize.Width,
-    m_outputSize.Height
-  );
+  m_screenViewport = CD3D11_VIEWPORT(0.0f, 0.0f, m_outputSize.Width, m_outputSize.Height);
 
   m_deferrContext->RSSetViewports(1, &m_screenViewport);
 }
 
-HRESULT DX::DeviceResources::CreateSwapChain(DXGI_SWAP_CHAIN_DESC1& desc, DXGI_SWAP_CHAIN_FULLSCREEN_DESC& fsDesc, IDXGISwapChain1** ppSwapChain) const
+HRESULT DX::DeviceResources::CreateSwapChain(DXGI_SWAP_CHAIN_DESC1& desc,
+                                             DXGI_SWAP_CHAIN_FULLSCREEN_DESC& fsDesc,
+                                             IDXGISwapChain1** ppSwapChain) const
 {
   HRESULT hr;
 #ifdef TARGET_WINDOWS_DESKTOP
-  hr = m_dxgiFactory->CreateSwapChainForHwnd(
-    m_d3dDevice.Get(),
-    m_window,
-    &desc,
-    &fsDesc,
-    nullptr,
-    ppSwapChain
-  ); RETURN_ERR(hr);
-  hr = m_dxgiFactory->MakeWindowAssociation(m_window, /*DXGI_MWA_NO_WINDOW_CHANGES |*/ DXGI_MWA_NO_ALT_ENTER);
+  hr = m_dxgiFactory->CreateSwapChainForHwnd(m_d3dDevice.Get(), m_window, &desc, &fsDesc, nullptr,
+                                             ppSwapChain);
+  RETURN_ERR(hr);
+  hr = m_dxgiFactory->MakeWindowAssociation(m_window,
+                                            /*DXGI_MWA_NO_WINDOW_CHANGES |*/ DXGI_MWA_NO_ALT_ENTER);
 #else
   hr = m_dxgiFactory->CreateSwapChainForCoreWindow(
-    m_d3dDevice.Get(),
-    winrt::get_unknown(m_coreWindow),
-    &desc,
-    nullptr,
-    ppSwapChain
-  ); RETURN_ERR(hr);
+      m_d3dDevice.Get(), winrt::get_unknown(m_coreWindow), &desc, nullptr, ppSwapChain);
+  RETURN_ERR(hr);
 #endif
   return hr;
 }
@@ -513,11 +513,12 @@ void DX::DeviceResources::ResizeBuffers()
 
   CLog::LogF(LOGDEBUG, "resize buffers.");
 
-  bool bHWStereoEnabled = RENDER_STEREO_MODE_HARDWAREBASED == CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode();
+  bool bHWStereoEnabled = RENDER_STEREO_MODE_HARDWAREBASED ==
+                          CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode();
   bool windowed = true;
   HRESULT hr = E_FAIL;
 
-  DXGI_SWAP_CHAIN_DESC1 scDesc = { 0 };
+  DXGI_SWAP_CHAIN_DESC1 scDesc = {0};
   if (m_swapChain)
   {
     BOOL bFullcreen = 0;
@@ -547,13 +548,9 @@ void DX::DeviceResources::ResizeBuffers()
   {
     // If the swap chain already exists, resize it.
     m_swapChain->GetDesc1(&scDesc);
-    hr = m_swapChain->ResizeBuffers(
-      scDesc.BufferCount,
-      lround(m_outputSize.Width),
-      lround(m_outputSize.Height),
-      scDesc.Format,
-      windowed ? 0 : DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
-    );
+    hr = m_swapChain->ResizeBuffers(scDesc.BufferCount, lround(m_outputSize.Width),
+                                    lround(m_outputSize.Height), scDesc.Format,
+                                    windowed ? 0 : DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
 
     if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
     {
@@ -569,7 +566,7 @@ void DX::DeviceResources::ResizeBuffers()
   else
   {
     // Otherwise, create a new one using the same adapter as the existing Direct3D device.
-    DXGI_SWAP_CHAIN_DESC1 swapChainDesc = { 0 };
+    DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {0};
     swapChainDesc.Width = lround(m_outputSize.Width);
     swapChainDesc.Height = lround(m_outputSize.Height);
     swapChainDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -582,14 +579,13 @@ void DX::DeviceResources::ResizeBuffers()
     swapChainDesc.SampleDesc.Count = 1;
     swapChainDesc.SampleDesc.Quality = 0;
 
-    DXGI_SWAP_CHAIN_FULLSCREEN_DESC scFSDesc = { 0 }; // unused for uwp
+    DXGI_SWAP_CHAIN_FULLSCREEN_DESC scFSDesc = {0}; // unused for uwp
     scFSDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     scFSDesc.Windowed = windowed;
 
     ComPtr<IDXGISwapChain1> swapChain;
-    if ( m_d3dFeatureLevel >= D3D_FEATURE_LEVEL_11_0
-      && !bHWStereoEnabled
-      && CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_bTry10bitOutput)
+    if (m_d3dFeatureLevel >= D3D_FEATURE_LEVEL_11_0 && !bHWStereoEnabled &&
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_bTry10bitOutput)
     {
       swapChainDesc.Format = DXGI_FORMAT_R10G10B10A2_UNORM;
       hr = CreateSwapChain(swapChainDesc, scFSDesc, &swapChain);
@@ -612,10 +608,12 @@ void DX::DeviceResources::ResizeBuffers()
       swapChainDesc.Stereo = false;
       bHWStereoEnabled = false;
 
-      hr = CreateSwapChain(swapChainDesc, scFSDesc, &swapChain); CHECK_ERR();
+      hr = CreateSwapChain(swapChainDesc, scFSDesc, &swapChain);
+      CHECK_ERR();
 
       // fallback to split_horizontal mode.
-      CServiceBroker::GetWinSystem()->GetGfxContext().SetStereoMode(RENDER_STEREO_MODE_SPLIT_HORIZONTAL);
+      CServiceBroker::GetWinSystem()->GetGfxContext().SetStereoMode(
+          RENDER_STEREO_MODE_SPLIT_HORIZONTAL);
     }
 
     if (FAILED(hr))
@@ -624,13 +622,15 @@ void DX::DeviceResources::ResizeBuffers()
       return;
     }
 
-    hr = swapChain.As(&m_swapChain); CHECK_ERR();
+    hr = swapChain.As(&m_swapChain);
+    CHECK_ERR();
     m_stereoEnabled = bHWStereoEnabled;
 
     // Ensure that DXGI does not queue more than one frame at a time. This both reduces latency and
     // ensures that the application will only render after each VSync, minimizing power consumption.
     ComPtr<IDXGIDevice1> dxgiDevice;
-    hr = m_d3dDevice.As(&dxgiDevice); CHECK_ERR();
+    hr = m_d3dDevice.As(&dxgiDevice);
+    CHECK_ERR();
     dxgiDevice->SetMaximumFrameLatency(1);
   }
 }
@@ -661,7 +661,8 @@ void DX::DeviceResources::UpdateRenderTargetSize()
     // When the device is in portrait orientation, height > width. Compare the
     // larger dimension against the width threshold and the smaller dimension
     // against the height threshold.
-    if (std::max(width, height) > DisplayMetrics::WidthThreshold && std::min(width, height) > DisplayMetrics::HeightThreshold)
+    if (std::max(width, height) > DisplayMetrics::WidthThreshold &&
+        std::min(width, height) > DisplayMetrics::HeightThreshold)
     {
       // To scale the app we change the effective DPI. Logical size does not change.
       m_effectiveDpi /= 2.0f;
@@ -712,9 +713,9 @@ void DX::DeviceResources::SetLogicalSize(float width, float height)
 {
   if
 #if defined(TARGET_WINDOWS_DESKTOP)
-  (!m_window)
+      (!m_window)
 #else
-  (!m_coreWindow)
+      (!m_coreWindow)
 #endif
     return;
 
@@ -777,9 +778,8 @@ void DX::DeviceResources::ValidateDevice()
   // If the adapter LUIDs don't match, or if the device reports that it has been removed,
   // a new D3D device must be created.
   HRESULT hr = m_d3dDevice->GetDeviceRemovedReason();
-  if ( previousDesc.AdapterLuid.LowPart != currentDesc.AdapterLuid.LowPart
-    || previousDesc.AdapterLuid.HighPart != currentDesc.AdapterLuid.HighPart
-    || FAILED(hr))
+  if (previousDesc.AdapterLuid.LowPart != currentDesc.AdapterLuid.LowPart ||
+      previousDesc.AdapterLuid.HighPart != currentDesc.AdapterLuid.HighPart || FAILED(hr))
   {
     // Release references to resources related to the old device.
     dxgiDevice = nullptr;
@@ -844,7 +844,8 @@ void DX::DeviceResources::HandleDeviceLost(bool removed)
   OnDeviceRestored();
 
   if (removed)
-    KODI::MESSAGING::CApplicationMessenger::GetInstance().PostMsg(TMSG_EXECUTE_BUILT_IN, -1, -1, nullptr, "ReloadSkin");
+    KODI::MESSAGING::CApplicationMessenger::GetInstance().PostMsg(TMSG_EXECUTE_BUILT_IN, -1, -1,
+                                                                  nullptr, "ReloadSkin");
 }
 
 bool DX::DeviceResources::Begin()
@@ -866,7 +867,8 @@ bool DX::DeviceResources::Begin()
     }
   }
 
-  m_deferrContext->OMSetRenderTargets(1, m_backBufferTex.GetAddressOfRTV(), m_d3dDepthStencilView.Get());
+  m_deferrContext->OMSetRenderTargets(1, m_backBufferTex.GetAddressOfRTV(),
+                                      m_d3dDepthStencilView.Get());
 
   return true;
 }
@@ -879,7 +881,7 @@ void DX::DeviceResources::Present()
   // The first argument instructs DXGI to block until VSync, putting the application
   // to sleep until the next VSync. This ensures we don't waste any cycles rendering
   // frames that will never be displayed to the screen.
-  DXGI_PRESENT_PARAMETERS parameters = { 0 };
+  DXGI_PRESENT_PARAMETERS parameters = {0};
   HRESULT hr = m_swapChain->Present1(1, 0, &parameters);
 
   // If the device was removed either by a disconnection or a driver upgrade, we
@@ -901,13 +903,15 @@ void DX::DeviceResources::Present()
 
   if (m_d3dContext == m_deferrContext)
   {
-    m_deferrContext->OMSetRenderTargets(1, m_backBufferTex.GetAddressOfRTV(), m_d3dDepthStencilView.Get());
+    m_deferrContext->OMSetRenderTargets(1, m_backBufferTex.GetAddressOfRTV(),
+                                        m_d3dDepthStencilView.Get());
   }
 }
 
 void DX::DeviceResources::ClearDepthStencil() const
 {
-  m_deferrContext->ClearDepthStencilView(m_d3dDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0, 0);
+  m_deferrContext->ClearDepthStencilView(m_d3dDepthStencilView.Get(),
+                                         D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0, 0);
 }
 
 void DX::DeviceResources::ClearRenderTarget(ID3D11RenderTargetView* pRTView, float color[4]) const
@@ -917,8 +921,8 @@ void DX::DeviceResources::ClearRenderTarget(ID3D11RenderTargetView* pRTView, flo
 
 void DX::DeviceResources::HandleOutputChange(const std::function<bool(DXGI_OUTPUT_DESC)>& cmpFunc)
 {
-  DXGI_ADAPTER_DESC currentDesc = { 0 };
-  DXGI_ADAPTER_DESC foundDesc = { 0 };
+  DXGI_ADAPTER_DESC currentDesc = {0};
+  DXGI_ADAPTER_DESC foundDesc = {0};
 
   ComPtr<IDXGIFactory1> factory;
   if (m_adapter)
@@ -927,11 +931,13 @@ void DX::DeviceResources::HandleOutputChange(const std::function<bool(DXGI_OUTPU
   CreateDXGIFactory1(IID_IDXGIFactory1, &factory);
 
   ComPtr<IDXGIAdapter1> adapter;
-  for (int i = 0; factory->EnumAdapters1(i, adapter.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; i++)
+  for (int i = 0;
+       factory->EnumAdapters1(i, adapter.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; i++)
   {
     adapter->GetDesc(&foundDesc);
     ComPtr<IDXGIOutput> output;
-    for (int j = 0; adapter->EnumOutputs(j, output.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; j++)
+    for (int j = 0;
+         adapter->EnumOutputs(j, output.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; j++)
     {
       DXGI_OUTPUT_DESC outputDesc;
       output->GetDesc(&outputDesc);
@@ -939,8 +945,8 @@ void DX::DeviceResources::HandleOutputChange(const std::function<bool(DXGI_OUTPU
       {
         output.As(&m_output);
         // check if adapter is changed
-        if (currentDesc.AdapterLuid.HighPart != foundDesc.AdapterLuid.HighPart
-          || currentDesc.AdapterLuid.LowPart != foundDesc.AdapterLuid.LowPart)
+        if (currentDesc.AdapterLuid.HighPart != foundDesc.AdapterLuid.HighPart ||
+            currentDesc.AdapterLuid.LowPart != foundDesc.AdapterLuid.LowPart)
         {
           // adapter is changed
           m_adapter = adapter;
@@ -969,25 +975,29 @@ bool DX::DeviceResources::CreateFactory()
     {
       debugDXGI = true;
 
-      hr = CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf())); RETURN_ERR(false);
+      hr = CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG,
+                              IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf()));
+      RETURN_ERR(false);
 
-      dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
-      dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
+      dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR,
+                                        true);
+      dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION,
+                                        true);
     }
   }
 
   if (!debugDXGI)
 #endif
-  hr = CreateDXGIFactory1(IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf())); RETURN_ERR(false);
+    hr = CreateDXGIFactory1(IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf()));
+  RETURN_ERR(false);
 
   return true;
 }
 
 void DX::DeviceResources::SetMonitor(HMONITOR monitor)
 {
-  HandleOutputChange([monitor](DXGI_OUTPUT_DESC outputDesc) {
-    return outputDesc.Monitor == monitor;
-  });
+  HandleOutputChange(
+      [monitor](DXGI_OUTPUT_DESC outputDesc) { return outputDesc.Monitor == monitor; });
 }
 
 void DX::DeviceResources::RegisterDeviceNotify(IDeviceNotify* deviceNotify)
@@ -1022,15 +1032,19 @@ bool DX::DeviceResources::IsStereoAvailable() const
 bool DX::DeviceResources::DoesTextureSharingWork()
 {
   if (m_d3dFeatureLevel < D3D_FEATURE_LEVEL_10_0 ||
-    CSysInfo::GetWindowsDeviceFamily() != CSysInfo::Desktop)
+      CSysInfo::GetWindowsDeviceFamily() != CSysInfo::Desktop)
     return false;
 
-  if (!CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_allowUseSeparateDeviceForDecoding)
+  if (!CServiceBroker::GetSettingsComponent()
+           ->GetAdvancedSettings()
+           ->m_allowUseSeparateDeviceForDecoding)
   {
     D3D11_FEATURE_DATA_D3D11_OPTIONS options;
-    if (SUCCEEDED(m_d3dDevice->CheckFeatureSupport(D3D11_FEATURE_D3D11_OPTIONS, &options, sizeof(options))))
+    if (SUCCEEDED(m_d3dDevice->CheckFeatureSupport(D3D11_FEATURE_D3D11_OPTIONS, &options,
+                                                   sizeof(options))))
     {
-      CLog::LogF(LOGDEBUG, "extended sharing resource is{}supported", !!options.ExtendedResourceSharing ? " " : " not ");
+      CLog::LogF(LOGDEBUG, "extended sharing resource is{}supported",
+                 !!options.ExtendedResourceSharing ? " " : " not ");
       return !!options.ExtendedResourceSharing;
     }
     return false;
@@ -1056,8 +1070,7 @@ void DX::DeviceResources::SetWindow(const winrt::Windows::UI::Core::CoreWindow& 
 
   m_coreWindow = window;
   auto dispatcher = m_coreWindow.Dispatcher();
-  DispatchedHandler handler([&]()
-  {
+  DispatchedHandler handler([&]() {
     auto coreWindow = CoreWindow::GetForCurrentThread();
     m_logicalSize = winrt::Size(coreWindow.Bounds().Width, coreWindow.Bounds().Height);
     m_dpi = DisplayInformation::GetForCurrentView().LogicalDpi();
@@ -1081,8 +1094,10 @@ void DX::DeviceResources::SetWindowPos(winrt::Rect rect)
 
   HandleOutputChange([centerX, centerY](DXGI_OUTPUT_DESC outputDesc) {
     // DesktopCoordinates depends on the DPI of the desktop
-    return outputDesc.DesktopCoordinates.left <= centerX && outputDesc.DesktopCoordinates.right  >= centerX
-        && outputDesc.DesktopCoordinates.top  <= centerY && outputDesc.DesktopCoordinates.bottom >= centerY;
+    return outputDesc.DesktopCoordinates.left <= centerX &&
+           outputDesc.DesktopCoordinates.right >= centerX &&
+           outputDesc.DesktopCoordinates.top <= centerY &&
+           outputDesc.DesktopCoordinates.bottom >= centerY;
   });
 }
 

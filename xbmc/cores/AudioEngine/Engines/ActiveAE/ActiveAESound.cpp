@@ -6,23 +6,25 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "cores/AudioEngine/Interfaces/AESound.h"
-#include "ActiveAE.h"
 #include "ActiveAESound.h"
+
+#include "ActiveAE.h"
+#include "cores/AudioEngine/Interfaces/AESound.h"
 #include "utils/log.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/avutil.h>
 }
 
 using namespace ActiveAE;
 using namespace XFILE;
 
-CActiveAESound::CActiveAESound(const std::string &filename, CActiveAE *ae) :
-  IAESound         (filename),
-  m_filename       (filename),
-  m_volume         (1.0f    ),
-  m_channel        (AE_CH_NULL)
+CActiveAESound::CActiveAESound(const std::string& filename, CActiveAE* ae)
+  : IAESound(filename)
+  , m_filename(filename)
+  , m_volume(1.0f)
+  , m_channel(AE_CH_NULL)
 {
   m_orig_sound = NULL;
   m_dst_sound = NULL;
@@ -43,7 +45,6 @@ CActiveAESound::~CActiveAESound()
 void CActiveAESound::Play()
 {
   m_activeAE->PlaySound(this);
-
 }
 
 void CActiveAESound::Stop()
@@ -59,7 +60,7 @@ bool CActiveAESound::IsPlaying()
 
 uint8_t** CActiveAESound::InitSound(bool orig, SampleConfig config, int nb_samples)
 {
-  CSoundPacket **info;
+  CSoundPacket** info;
   if (orig)
     info = &m_orig_sound;
   else
@@ -73,9 +74,9 @@ uint8_t** CActiveAESound::InitSound(bool orig, SampleConfig config, int nb_sampl
   return (*info)->data;
 }
 
-bool CActiveAESound::StoreSound(bool orig, uint8_t **buffer, int samples, int linesize)
+bool CActiveAESound::StoreSound(bool orig, uint8_t** buffer, int samples, int linesize)
 {
-  CSoundPacket **info;
+  CSoundPacket** info;
   if (orig)
     info = &m_orig_sound;
   else
@@ -92,16 +93,16 @@ bool CActiveAESound::StoreSound(bool orig, uint8_t **buffer, int samples, int li
   int start = (*info)->nb_samples * (*info)->bytes_per_sample * (*info)->config.channels;
   start /= (*info)->planes;
 
-  for (int i=0; i<(*info)->planes; i++)
+  for (int i = 0; i < (*info)->planes; i++)
   {
-    memcpy((*info)->data[i]+start, buffer[i], bytes_to_copy);
+    memcpy((*info)->data[i] + start, buffer[i], bytes_to_copy);
   }
   (*info)->nb_samples += samples;
 
   return true;
 }
 
-CSoundPacket *CActiveAESound::GetSound(bool orig)
+CSoundPacket* CActiveAESound::GetSound(bool orig)
 {
   if (orig)
     return m_orig_sound;
@@ -136,9 +137,9 @@ int CActiveAESound::GetChunkSize()
   return m_pFile->GetChunkSize();
 }
 
-int CActiveAESound::Read(void *h, uint8_t* buf, int size)
+int CActiveAESound::Read(void* h, uint8_t* buf, int size)
 {
-  CFile *pFile = static_cast<CActiveAESound*>(h)->m_pFile;
+  CFile* pFile = static_cast<CActiveAESound*>(h)->m_pFile;
   int len = pFile->Read(buf, size);
   if (len == 0)
     return AVERROR_EOF;
@@ -146,10 +147,10 @@ int CActiveAESound::Read(void *h, uint8_t* buf, int size)
     return len;
 }
 
-int64_t CActiveAESound::Seek(void *h, int64_t pos, int whence)
+int64_t CActiveAESound::Seek(void* h, int64_t pos, int whence)
 {
   CFile* pFile = static_cast<CActiveAESound*>(h)->m_pFile;
-  if(whence == AVSEEK_SIZE)
+  if (whence == AVSEEK_SIZE)
     return pFile->GetLength();
   else
     return pFile->Seek(pos, whence & ~AVSEEK_FORCE);

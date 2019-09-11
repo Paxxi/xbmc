@@ -15,25 +15,25 @@ class CGUIMessage;
 
 namespace PVR
 {
-  class CGUIDialogPVRRecordingInfo : public CGUIDialog
-  {
-  public:
-    CGUIDialogPVRRecordingInfo(void);
-    ~CGUIDialogPVRRecordingInfo(void) override = default;
-    bool OnMessage(CGUIMessage& message) override;
-    bool OnInfo(int actionID) override;
-    bool HasListItems() const override { return true; }
-    CFileItemPtr GetCurrentListItem(int offset = 0) override;
+class CGUIDialogPVRRecordingInfo : public CGUIDialog
+{
+public:
+  CGUIDialogPVRRecordingInfo(void);
+  ~CGUIDialogPVRRecordingInfo(void) override = default;
+  bool OnMessage(CGUIMessage& message) override;
+  bool OnInfo(int actionID) override;
+  bool HasListItems() const override { return true; }
+  CFileItemPtr GetCurrentListItem(int offset = 0) override;
 
-    void SetRecording(const CFileItem *item);
+  void SetRecording(const CFileItem* item);
 
-    static void ShowFor(const CFileItemPtr& item);
+  static void ShowFor(const CFileItemPtr& item);
 
-  private:
-    bool OnClickButtonFind(CGUIMessage& message);
-    bool OnClickButtonOK(CGUIMessage &message);
-    bool OnClickButtonPlay(CGUIMessage &message);
+private:
+  bool OnClickButtonFind(CGUIMessage& message);
+  bool OnClickButtonOK(CGUIMessage& message);
+  bool OnClickButtonPlay(CGUIMessage& message);
 
-    CFileItemPtr m_recordItem;
-  };
-}
+  CFileItemPtr m_recordItem;
+};
+} // namespace PVR

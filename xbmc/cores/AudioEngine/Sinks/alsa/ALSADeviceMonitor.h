@@ -23,10 +23,10 @@ public:
   void Stop();
 
 private:
-  static void FDEventCallback(int id, int fd, short revents, void *data);
+  static void FDEventCallback(int id, int fd, short revents, void* data);
 
   int m_fdMonitorId = 0;
 
-  struct udev *m_udev;
+  struct udev* m_udev;
   struct udev_monitor* m_udevMonitor;
 };

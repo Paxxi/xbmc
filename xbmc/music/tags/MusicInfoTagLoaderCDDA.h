@@ -12,12 +12,12 @@
 
 namespace MUSIC_INFO
 {
-  class CMusicInfoTagLoaderCDDA: public IMusicInfoTagLoader
-  {
-  public:
-    CMusicInfoTagLoaderCDDA(void);
-    ~CMusicInfoTagLoaderCDDA() override;
+class CMusicInfoTagLoaderCDDA : public IMusicInfoTagLoader
+{
+public:
+  CMusicInfoTagLoaderCDDA(void);
+  ~CMusicInfoTagLoaderCDDA() override;
 
-    bool Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt *art = NULL) override;
-  };
-}
+  bool Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt* art = NULL) override;
+};
+} // namespace MUSIC_INFO

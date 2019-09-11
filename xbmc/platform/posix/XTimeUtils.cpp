@@ -7,6 +7,7 @@
  */
 
 #include "XTimeUtils.h"
+
 #include "PosixTimezone.h"
 
 #if defined(TARGET_DARWIN)
@@ -19,9 +20,10 @@
 
 #include <errno.h>
 #include <time.h>
-#include <unistd.h>
-#include <sys/times.h>
+
 #include <sched.h>
+#include <sys/times.h>
+#include <unistd.h>
 
 #define WIN32_TIME_OFFSET ((unsigned long long)(369 * 365 + 89) * 24 * 3600 * 10000000)
 
@@ -34,7 +36,7 @@
 void WINAPI Sleep(uint32_t dwMilliSeconds)
 {
 #if _POSIX_PRIORITY_SCHEDULING
-  if(dwMilliSeconds == 0)
+  if (dwMilliSeconds == 0)
   {
     sched_yield();
     return;
@@ -80,7 +82,7 @@ int FileTimeToLocalFileTime(const FILETIME* lpFileTime, LPFILETIME lpLocalFileTi
   return 1;
 }
 
-int SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime,  LPFILETIME lpFileTime)
+int SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime, LPFILETIME lpFileTime)
 {
   static const int dayoffset[12] = {0, 31, 59, 90, 120, 151, 182, 212, 243, 273, 304, 334};
 #if defined(TARGET_DARWIN)
@@ -113,7 +115,7 @@ int SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime,  LPFILETIME lpFileTime)
 #endif
 
   LARGE_INTEGER result;
-  result.QuadPart = (long long) t * 10000000 + (long long) lpSystemTime->wMilliseconds * 10000;
+  result.QuadPart = (long long)t * 10000000 + (long long)lpSystemTime->wMilliseconds * 10000;
   result.QuadPart += WIN32_TIME_OFFSET;
 
   lpFileTime->dwLowDateTime = result.u.LowPart;
@@ -133,14 +135,14 @@ long CompareFileTime(const FILETIME* lpFileTime1, const FILETIME* lpFileTime2)
   t2.u.HighPart = lpFileTime2->dwHighDateTime;
 
   if (t1.QuadPart == t2.QuadPart)
-     return 0;
+    return 0;
   else if (t1.QuadPart < t2.QuadPart)
-     return -1;
+    return -1;
   else
-     return 1;
+    return 1;
 }
 
-int FileTimeToSystemTime( const FILETIME* lpFileTime, LPSYSTEMTIME lpSystemTime)
+int FileTimeToSystemTime(const FILETIME* lpFileTime, LPSYSTEMTIME lpSystemTime)
 {
   LARGE_INTEGER fileTime;
   fileTime.u.LowPart = lpFileTime->dwLowDateTime;
@@ -154,7 +156,7 @@ int FileTimeToSystemTime( const FILETIME* lpFileTime, LPSYSTEMTIME lpSystemTime)
   time_t ft = fileTime.QuadPart;
 
   struct tm tm_ft;
-  gmtime_r(&ft,&tm_ft);
+  gmtime_r(&ft, &tm_ft);
 
   lpSystemTime->wYear = tm_ft.tm_year + 1900;
   lpSystemTime->wMonth = tm_ft.tm_mon + 1;
@@ -167,13 +169,13 @@ int FileTimeToSystemTime( const FILETIME* lpFileTime, LPSYSTEMTIME lpSystemTime)
   return 1;
 }
 
-int LocalFileTimeToFileTime( const FILETIME* lpLocalFileTime, LPFILETIME lpFileTime)
+int LocalFileTimeToFileTime(const FILETIME* lpLocalFileTime, LPFILETIME lpFileTime)
 {
   ULARGE_INTEGER l;
   l.u.LowPart = lpLocalFileTime->dwLowDateTime;
   l.u.HighPart = lpLocalFileTime->dwHighDateTime;
 
-  l.QuadPart += (unsigned long long) timezone * 10000000;
+  l.QuadPart += (unsigned long long)timezone * 10000000;
 
   lpFileTime->dwLowDateTime = l.u.LowPart;
   lpFileTime->dwHighDateTime = l.u.HighPart;
@@ -181,13 +183,14 @@ int LocalFileTimeToFileTime( const FILETIME* lpLocalFileTime, LPFILETIME lpFileT
   return 1;
 }
 
-int FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t *pTimeT) {
+int FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t* pTimeT)
+{
 
   if (lpLocalFileTime == NULL || pTimeT == NULL)
-  return false;
+    return false;
 
   ULARGE_INTEGER fileTime;
-  fileTime.u.LowPart  = lpLocalFileTime->dwLowDateTime;
+  fileTime.u.LowPart = lpLocalFileTime->dwLowDateTime;
   fileTime.u.HighPart = lpLocalFileTime->dwHighDateTime;
 
   fileTime.QuadPart -= WIN32_TIME_OFFSET;
@@ -197,22 +200,23 @@ int FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t *pTimeT) {
   time_t ft = fileTime.QuadPart;
 
   struct tm tm_ft;
-  localtime_r(&ft,&tm_ft);
+  localtime_r(&ft, &tm_ft);
 
   *pTimeT = mktime(&tm_ft);
   return 1;
 }
 
-int TimeTToFileTime(time_t timeT, FILETIME* lpLocalFileTime) {
+int TimeTToFileTime(time_t timeT, FILETIME* lpLocalFileTime)
+{
 
   if (lpLocalFileTime == NULL)
-  return false;
+    return false;
 
   ULARGE_INTEGER result;
-  result.QuadPart = (unsigned long long) timeT * 10000000;
+  result.QuadPart = (unsigned long long)timeT * 10000000;
   result.QuadPart += WIN32_TIME_OFFSET;
 
-  lpLocalFileTime->dwLowDateTime  = result.u.LowPart;
+  lpLocalFileTime->dwLowDateTime = result.u.LowPart;
   lpLocalFileTime->dwHighDateTime = result.u.HighPart;
 
   return 1;

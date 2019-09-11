@@ -22,8 +22,8 @@ enum class Action
 struct Cut
 {
   int start = 0; // ms
-  int end = 0;   // ms
+  int end = 0; // ms
   Action action = Action::CUT;
 };
 
-}
+} // namespace EDL

@@ -26,7 +26,7 @@
 using namespace KODI::PLATFORM::WINDOWS10;
 namespace winrt
 {
-  using namespace Windows::Foundation;
+using namespace Windows::Foundation;
 }
 using namespace winrt::Windows::ApplicationModel;
 using namespace winrt::Windows::ApplicationModel::Core;
@@ -42,10 +42,10 @@ void App::Initialize(const CoreApplicationView& applicationView)
 {
   // Register event handlers for app lifecycle. This example includes Activated, so that we
   // can make the CoreWindow active and start rendering on the window.
-  applicationView.Activated({ this, &App::OnActivated });
+  applicationView.Activated({this, &App::OnActivated});
 
-  CoreApplication::Suspending({ this, &App::OnSuspending });
-  CoreApplication::Resuming({ this, &App::OnResuming });
+  CoreApplication::Suspending({this, &App::OnSuspending});
+  CoreApplication::Resuming({this, &App::OnResuming});
   // TODO
   // CoreApplication::UnhandledErrorDetected += ref new EventHandler<UnhandledErrorDetectedEventArgs^>(this, &App::OnUnhandledErrorDetected);
 
@@ -103,11 +103,11 @@ void App::Uninitialize()
 {
 }
 
-void push_back(std::vector<char*> &vec, const std::string &str)
+void push_back(std::vector<char*>& vec, const std::string& str)
 {
   if (!str.empty())
   {
-    char *val = new char[str.length() + 1];
+    char* val = new char[str.length() + 1];
     std::strcpy(val, str.c_str());
     vec.push_back(val);
   }
@@ -165,8 +165,7 @@ void App::OnSuspending(const winrt::IInspectable&, const SuspendingEventArgs& ar
   // the app will be forced to exit.
   SuspendingDeferral deferral = args.SuspendingOperation().GetDeferral();
 
-  Concurrency::create_task([this, deferral]()
-  {
+  Concurrency::create_task([this, deferral]() {
     auto windowing = DX::Windowing();
     if (windowing)
       windowing->TrimDevice();

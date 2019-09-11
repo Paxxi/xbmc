@@ -10,16 +10,16 @@
 
 #include "guilib/GUIDialog.h"
 
-class CGUIDialogBusyNoCancel: public CGUIDialog
+class CGUIDialogBusyNoCancel : public CGUIDialog
 {
 public:
   CGUIDialogBusyNoCancel(void);
   ~CGUIDialogBusyNoCancel(void) override;
-  void DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void DoProcess(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
 
 protected:
-  void Open_Internal(const std::string &param = "") override;
+  void Open_Internal(const std::string& param = "") override;
   bool m_bLastVisible = false;
   float m_progress;
 };

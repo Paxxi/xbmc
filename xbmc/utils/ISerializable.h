@@ -16,6 +16,6 @@ protected:
   /* make sure nobody deletes a pointer to this class */
   ~ISerializable() = default;
 
- public:
+public:
   virtual void Serialize(CVariant& value) const = 0;
 };

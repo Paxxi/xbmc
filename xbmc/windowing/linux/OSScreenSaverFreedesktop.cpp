@@ -21,12 +21,13 @@ namespace
 {
 const std::string SCREENSAVER_OBJECT = "/org/freedesktop/ScreenSaver";
 const std::string SCREENSAVER_INTERFACE = "org.freedesktop.ScreenSaver";
-}
+} // namespace
 
 bool COSScreenSaverFreedesktop::IsAvailable()
 {
   // Test by making a call to a function without side-effects
-  CDBusMessage dummyMessage(SCREENSAVER_INTERFACE, SCREENSAVER_OBJECT, SCREENSAVER_INTERFACE, "GetActive");
+  CDBusMessage dummyMessage(SCREENSAVER_INTERFACE, SCREENSAVER_OBJECT, SCREENSAVER_INTERFACE,
+                            "GetActive");
   CDBusError error;
   dummyMessage.SendSession(error);
   // We do not care whether GetActive() is actually supported, we're just checking for the name to be there
@@ -41,7 +42,8 @@ void COSScreenSaverFreedesktop::Inhibit()
     return;
   }
 
-  CDBusMessage inhibitMessage(SCREENSAVER_INTERFACE, SCREENSAVER_OBJECT, SCREENSAVER_INTERFACE, "Inhibit");
+  CDBusMessage inhibitMessage(SCREENSAVER_INTERFACE, SCREENSAVER_OBJECT, SCREENSAVER_INTERFACE,
+                              "Inhibit");
   inhibitMessage.AppendArguments(KODI::LINUX::DESKTOP_FILE_NAME, g_localizeStrings.Get(14086));
   if (!inhibitMessage.SendSession())
   {
@@ -52,7 +54,8 @@ void COSScreenSaverFreedesktop::Inhibit()
 
   if (!inhibitMessage.GetReplyArguments(&m_cookie))
   {
-    CLog::Log(LOGERROR, "Could not retrieve cookie from org.freedesktop.ScreenSaver Inhibit response");
+    CLog::Log(LOGERROR,
+              "Could not retrieve cookie from org.freedesktop.ScreenSaver Inhibit response");
     return;
   }
 
@@ -66,7 +69,8 @@ void COSScreenSaverFreedesktop::Uninhibit()
     return;
   }
 
-  CDBusMessage uninhibitMessage(SCREENSAVER_INTERFACE, SCREENSAVER_OBJECT, SCREENSAVER_INTERFACE, "UnInhibit");
+  CDBusMessage uninhibitMessage(SCREENSAVER_INTERFACE, SCREENSAVER_OBJECT, SCREENSAVER_INTERFACE,
+                                "UnInhibit");
   uninhibitMessage.AppendArgument(m_cookie);
   if (!uninhibitMessage.SendSession())
   {

@@ -49,14 +49,17 @@ public:
 
   bool Hide() override;
   bool Show(bool raise = true) override;
-  virtual void Register(IDispResource *resource);
-  virtual void Unregister(IDispResource *resource);
+  virtual void Register(IDispResource* resource);
+  virtual void Unregister(IDispResource* resource);
 
   std::shared_ptr<CVideoLayerBridge> GetVideoLayerBridge() const { return m_videoLayerBridge; };
-  void RegisterVideoLayerBridge(std::shared_ptr<CVideoLayerBridge> bridge) { m_videoLayerBridge = bridge; };
+  void RegisterVideoLayerBridge(std::shared_ptr<CVideoLayerBridge> bridge)
+  {
+    m_videoLayerBridge = bridge;
+  };
 
   std::string GetModule() const { return m_DRM->GetModule(); }
-  struct gbm_device *GetGBMDevice() const { return m_GBM->GetDevice(); }
+  struct gbm_device* GetGBMDevice() const { return m_GBM->GetDevice(); }
   std::shared_ptr<CDRMUtils> GetDrm() const { return m_DRM; }
 
 protected:
@@ -67,7 +70,7 @@ protected:
   std::shared_ptr<CVideoLayerBridge> m_videoLayerBridge;
 
   CCriticalSection m_resourceSection;
-  std::vector<IDispResource*>  m_resources;
+  std::vector<IDispResource*> m_resources;
 
   bool m_delayDispReset = false;
   XbmcThreads::EndTime m_dispResetTimer;
@@ -75,6 +78,6 @@ protected:
   std::unique_ptr<CLibInputHandler> m_libinput;
 };
 
-}
-}
-}
+} // namespace GBM
+} // namespace WINDOWING
+} // namespace KODI

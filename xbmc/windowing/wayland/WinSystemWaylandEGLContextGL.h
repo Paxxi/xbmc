@@ -24,7 +24,7 @@ class CWinSystemWaylandEGLContextGL : public CWinSystemWaylandEGLContext, public
 {
 public:
   // Implementation of CWinSystemBase via CWinSystemWaylandEGLContext
-  CRenderSystemBase *GetRenderSystem() override { return this; }
+  CRenderSystemBase* GetRenderSystem() override { return this; }
   bool InitWindowSystem() override;
 
 protected:
@@ -34,11 +34,11 @@ protected:
   void PresentRenderImpl(bool rendered) override;
   struct delete_CVaapiProxy
   {
-    void operator()(CVaapiProxy *p) const;
+    void operator()(CVaapiProxy* p) const;
   };
   std::unique_ptr<CVaapiProxy, delete_CVaapiProxy> m_vaapiProxy;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

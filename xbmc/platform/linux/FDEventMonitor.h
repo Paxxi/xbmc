@@ -23,8 +23,7 @@
 class CFDEventMonitor : private CThread
 {
 public:
-
-  typedef void (*EventCallback)(int id, int fd, short revents, void *data);
+  typedef void (*EventCallback)(int id, int fd, short revents, void* data);
 
   struct MonitoredFD
   {
@@ -32,10 +31,15 @@ public:
     short events = 0; /**< Events to be monitored (see poll(2)) */
 
     EventCallback callback = nullptr; /** Callback to be called on events */
-    void *callbackData = nullptr; /** data parameter for EventCallback */
+    void* callbackData = nullptr; /** data parameter for EventCallback */
 
-    MonitoredFD(int fd_, short events_, EventCallback callback_, void *callbackData_) :
-      fd(fd_), events(events_), callback(callback_), callbackData(callbackData_) {}
+    MonitoredFD(int fd_, short events_, EventCallback callback_, void* callbackData_)
+      : fd(fd_)
+      , events(events_)
+      , callback(callback_)
+      , callbackData(callbackData_)
+    {
+    }
     MonitoredFD() = default;
   };
 

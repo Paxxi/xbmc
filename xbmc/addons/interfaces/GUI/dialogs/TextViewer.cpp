@@ -18,44 +18,49 @@
 
 extern "C"
 {
-namespace ADDON
-{
-
-void Interface_GUIDialogTextViewer::Init(AddonGlobalInterface* addonInterface)
-{
-  addonInterface->toKodi->kodi_gui->dialogTextViewer = static_cast<AddonToKodiFuncTable_kodi_gui_dialogTextViewer*>(malloc(sizeof(AddonToKodiFuncTable_kodi_gui_dialogTextViewer)));
-
-  addonInterface->toKodi->kodi_gui->dialogTextViewer->open = open;
-}
-
-void Interface_GUIDialogTextViewer::DeInit(AddonGlobalInterface* addonInterface)
-{
-  free(addonInterface->toKodi->kodi_gui->dialogTextViewer);
-}
-
-void Interface_GUIDialogTextViewer::open(void* kodiBase, const char *heading, const char *text)
-{
-  CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
-  if (!addon)
+  namespace ADDON
   {
-    CLog::Log(LOGERROR, "Interface_GUIDialogTextViewer::%s - invalid data", __FUNCTION__);
-    return;
+
+  void Interface_GUIDialogTextViewer::Init(AddonGlobalInterface* addonInterface)
+  {
+    addonInterface->toKodi->kodi_gui->dialogTextViewer =
+        static_cast<AddonToKodiFuncTable_kodi_gui_dialogTextViewer*>(
+            malloc(sizeof(AddonToKodiFuncTable_kodi_gui_dialogTextViewer)));
+
+    addonInterface->toKodi->kodi_gui->dialogTextViewer->open = open;
   }
 
-  CGUIDialogTextViewer* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogTextViewer>(WINDOW_DIALOG_TEXT_VIEWER);
-  if (!heading || !text || !dialog)
+  void Interface_GUIDialogTextViewer::DeInit(AddonGlobalInterface* addonInterface)
   {
-    CLog::Log(LOGERROR,
-              "Interface_GUIDialogTextViewer::%s - invalid handler data (heading='%p', text='%p', "
-              "dialog='%p') on addon '%s'",
-              __FUNCTION__, heading, text, static_cast<void*>(dialog), addon->ID().c_str());
-    return;
+    free(addonInterface->toKodi->kodi_gui->dialogTextViewer);
   }
 
-  dialog->SetHeading(heading);
-  dialog->SetText(text);
-  dialog->Open();
-}
+  void Interface_GUIDialogTextViewer::open(void* kodiBase, const char* heading, const char* text)
+  {
+    CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
+    if (!addon)
+    {
+      CLog::Log(LOGERROR, "Interface_GUIDialogTextViewer::%s - invalid data", __FUNCTION__);
+      return;
+    }
 
-} /* namespace ADDON */
+    CGUIDialogTextViewer* dialog =
+        CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogTextViewer>(
+            WINDOW_DIALOG_TEXT_VIEWER);
+    if (!heading || !text || !dialog)
+    {
+      CLog::Log(
+          LOGERROR,
+          "Interface_GUIDialogTextViewer::%s - invalid handler data (heading='%p', text='%p', "
+          "dialog='%p') on addon '%s'",
+          __FUNCTION__, heading, text, static_cast<void*>(dialog), addon->ID().c_str());
+      return;
+    }
+
+    dialog->SetHeading(heading);
+    dialog->SetText(text);
+    dialog->Open();
+  }
+
+  } /* namespace ADDON */
 } /* extern "C" */

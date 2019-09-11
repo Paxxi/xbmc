@@ -21,14 +21,14 @@ public:
   virtual ~CStorageProvider();
 
   void Initialize() override;
-  void Stop() override { }
+  void Stop() override {}
 
-  void GetLocalDrives(VECSOURCES &localDrives) override;
-  void GetRemovableDrives(VECSOURCES &removableDrives) override;
+  void GetLocalDrives(VECSOURCES& localDrives) override;
+  void GetRemovableDrives(VECSOURCES& removableDrives) override;
   std::string GetFirstOpticalDeviceFileName() override;
   bool Eject(const std::string& mountpath) override;
   std::vector<std::string> GetDiskUsage() override;
-  bool PumpDriveChangeEvents(IStorageEventsCallback *callback) override;
+  bool PumpDriveChangeEvents(IStorageEventsCallback* callback) override;
 
 private:
   enum Drive_Types
@@ -38,8 +38,10 @@ private:
     REMOVABLE_DRIVES,
     DVD_DRIVES
   };
-  static void GetDrivesByType(VECSOURCES &localDrives, Drive_Types eDriveType = ALL_DRIVES, bool bonlywithmedia = false);
+  static void GetDrivesByType(VECSOURCES& localDrives,
+                              Drive_Types eDriveType = ALL_DRIVES,
+                              bool bonlywithmedia = false);
 
-  winrt::Windows::Devices::Enumeration::DeviceWatcher m_watcher{ nullptr };
+  winrt::Windows::Devices::Enumeration::DeviceWatcher m_watcher{nullptr};
   std::atomic<bool> m_changed;
 };

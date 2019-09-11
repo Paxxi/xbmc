@@ -13,18 +13,19 @@
 
 namespace XFILE
 {
-  class CMusicFileDirectory : public IFileDirectory
-  {
-    public:
-      CMusicFileDirectory(void);
-      ~CMusicFileDirectory(void) override;
-      bool GetDirectory(const CURL& url, CFileItemList &items) override;
-      bool Exists(const CURL& url) override;
-      bool ContainsFiles(const CURL& url) override;
-      bool AllowAll() const override { return true; }
-    protected:
-      virtual int GetTrackCount(const std::string& strPath) = 0;
-      std::string m_strExt;
-      MUSIC_INFO::CMusicInfoTag m_tag;
-  };
-}
+class CMusicFileDirectory : public IFileDirectory
+{
+public:
+  CMusicFileDirectory(void);
+  ~CMusicFileDirectory(void) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool Exists(const CURL& url) override;
+  bool ContainsFiles(const CURL& url) override;
+  bool AllowAll() const override { return true; }
+
+protected:
+  virtual int GetTrackCount(const std::string& strPath) = 0;
+  std::string m_strExt;
+  MUSIC_INFO::CMusicInfoTag m_tag;
+};
+} // namespace XFILE

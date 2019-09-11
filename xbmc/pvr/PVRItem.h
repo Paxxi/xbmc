@@ -16,22 +16,28 @@ class CFileItem;
 
 namespace PVR
 {
-  class CPVRItem
+class CPVRItem
+{
+public:
+  explicit CPVRItem(const std::shared_ptr<CFileItem>& item)
+    : m_item(item.get())
   {
-  public:
-    explicit CPVRItem(const std::shared_ptr<CFileItem>& item) : m_item(item.get()) {}
-    explicit CPVRItem(const CFileItem* item) : m_item(item) {}
+  }
+  explicit CPVRItem(const CFileItem* item)
+    : m_item(item)
+  {
+  }
 
-    CPVREpgInfoTagPtr GetEpgInfoTag() const;
-    CPVREpgInfoTagPtr GetNextEpgInfoTag() const;
-    CPVRChannelPtr GetChannel() const;
-    CPVRTimerInfoTagPtr GetTimerInfoTag() const;
-    CPVRRecordingPtr GetRecording() const;
+  CPVREpgInfoTagPtr GetEpgInfoTag() const;
+  CPVREpgInfoTagPtr GetNextEpgInfoTag() const;
+  CPVRChannelPtr GetChannel() const;
+  CPVRTimerInfoTagPtr GetTimerInfoTag() const;
+  CPVRRecordingPtr GetRecording() const;
 
-    bool IsRadio() const;
+  bool IsRadio() const;
 
-  private:
-    const CFileItem* m_item;
-  };
+private:
+  const CFileItem* m_item;
+};
 
 } // namespace PVR

@@ -20,11 +20,40 @@ const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
 const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
 const IID IID_IAudioClient = __uuidof(IAudioClient);
 
-DEFINE_PROPERTYKEY(PKEY_Device_FriendlyName, 0xa45c254e, 0xdf1c, 0x4efd, 0x80, 0x20, 0x67, 0xd1, 0x46, 0xa8, 0x50, 0xe0, 14);
-DEFINE_PROPERTYKEY(PKEY_Device_EnumeratorName, 0xa45c254e, 0xdf1c, 0x4efd, 0x80, 0x20, 0x67, 0xd1, 0x46, 0xa8, 0x50, 0xe0, 24);
+DEFINE_PROPERTYKEY(PKEY_Device_FriendlyName,
+                   0xa45c254e,
+                   0xdf1c,
+                   0x4efd,
+                   0x80,
+                   0x20,
+                   0x67,
+                   0xd1,
+                   0x46,
+                   0xa8,
+                   0x50,
+                   0xe0,
+                   14);
+DEFINE_PROPERTYKEY(PKEY_Device_EnumeratorName,
+                   0xa45c254e,
+                   0xdf1c,
+                   0x4efd,
+                   0x80,
+                   0x20,
+                   0x67,
+                   0xd1,
+                   0x46,
+                   0xa8,
+                   0x50,
+                   0xe0,
+                   24);
 
-extern const char *WASAPIErrToStr(HRESULT err);
-#define EXIT_ON_FAILURE(hr, reason) if(FAILED(hr)) {CLog::LogF(LOGERROR, reason " - HRESULT = %li ErrorMessage = %s", hr, WASAPIErrToStr(hr)); goto failed;}
+extern const char* WASAPIErrToStr(HRESULT err);
+#define EXIT_ON_FAILURE(hr, reason) \
+  if (FAILED(hr)) \
+  { \
+    CLog::LogF(LOGERROR, reason " - HRESULT = %li ErrorMessage = %s", hr, WASAPIErrToStr(hr)); \
+    goto failed; \
+  }
 
 using namespace Microsoft::WRL;
 
@@ -38,13 +67,15 @@ std::vector<RendererDetail> CAESinkFactoryWin::GetRendererDetails()
   std::wstring wstrDDID;
   HRESULT hr;
 
-  hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator, reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
+  hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator,
+                        reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
   EXIT_ON_FAILURE(hr, "Could not allocate WASAPI device enumerator.")
 
   UINT uiCount = 0;
 
   // get the default audio endpoint
-  if (pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, pDefaultDevice.GetAddressOf()) == S_OK)
+  if (pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, pDefaultDevice.GetAddressOf()) ==
+      S_OK)
   {
     if (pDefaultDevice->GetId(&pwszID) == S_OK)
     {
@@ -157,14 +188,17 @@ struct AEWASAPIDeviceWin32 : public IAEWASAPIDevice
     try
     {
       ComPtr<IAudioClient> pClient = nullptr;
-      hr = m_pDevice->Activate(IID_IAudioClient, CLSCTX_ALL, NULL, reinterpret_cast<void**>(pClient.GetAddressOf()));
+      hr = m_pDevice->Activate(IID_IAudioClient, CLSCTX_ALL, NULL,
+                               reinterpret_cast<void**>(pClient.GetAddressOf()));
       if (SUCCEEDED(hr) && pClient)
       {
         *ppAudioClient = pClient.Detach();
         return hr;
       }
     }
-    catch (...) {}
+    catch (...)
+    {
+    }
     return hr;
   };
 
@@ -200,7 +234,7 @@ protected:
   }
 
 private:
-  ComPtr<IMMDevice> m_pDevice{ nullptr };
+  ComPtr<IMMDevice> m_pDevice{nullptr};
 };
 
 std::string CAESinkFactoryWin::GetDefaultDeviceId()
@@ -211,10 +245,11 @@ std::string CAESinkFactoryWin::GetDefaultDeviceId()
   LPWSTR pwszID = NULL;
   std::wstring wstrDDID;
 
-  HRESULT hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator, reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
+  HRESULT hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator,
+                                reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
   EXIT_ON_FAILURE(hr, "Could not allocate WASAPI device enumerator.")
 
-    // get the default audio endpoint
+  // get the default audio endpoint
   if (pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, pDevice.GetAddressOf()) == S_OK)
   {
     ComPtr<IPropertyStore> pProperty = nullptr;
@@ -236,14 +271,13 @@ std::string CAESinkFactoryWin::GetDefaultDeviceId()
     }
     strDeviceId = KODI::PLATFORM::WINDOWS::FromW(varName.pwszVal);
     PropVariantClear(&varName);
-
   }
 
 failed:
   return strDeviceId;
 }
 
-HRESULT CAESinkFactoryWin::ActivateWASAPIDevice(std::string &device, IAEWASAPIDevice **ppDevice)
+HRESULT CAESinkFactoryWin::ActivateWASAPIDevice(std::string& device, IAEWASAPIDevice** ppDevice)
 {
   ComPtr<IMMDevice> pDevice = nullptr;
   ComPtr<IMMDeviceEnumerator> pEnumerator = nullptr;
@@ -252,7 +286,8 @@ HRESULT CAESinkFactoryWin::ActivateWASAPIDevice(std::string &device, IAEWASAPIDe
   if (!ppDevice)
     return E_POINTER;
 
-  HRESULT hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator, reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
+  HRESULT hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator,
+                                reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
   EXIT_ON_FAILURE(hr, "Could not allocate WASAPI device enumerator.")
 
   /* Get our device. First try to find the named device. */

@@ -17,16 +17,13 @@
 
 class CRenderBuffer;
 
-namespace DXVA {
+namespace DXVA
+{
 
 // ProcAmp filters d3d11 filters
-const D3D11_VIDEO_PROCESSOR_FILTER PROCAMP_FILTERS[] =
-{
-  D3D11_VIDEO_PROCESSOR_FILTER_BRIGHTNESS,
-  D3D11_VIDEO_PROCESSOR_FILTER_CONTRAST,
-  D3D11_VIDEO_PROCESSOR_FILTER_HUE,
-  D3D11_VIDEO_PROCESSOR_FILTER_SATURATION
-};
+const D3D11_VIDEO_PROCESSOR_FILTER PROCAMP_FILTERS[] = {
+    D3D11_VIDEO_PROCESSOR_FILTER_BRIGHTNESS, D3D11_VIDEO_PROCESSOR_FILTER_CONTRAST,
+    D3D11_VIDEO_PROCESSOR_FILTER_HUE, D3D11_VIDEO_PROCESSOR_FILTER_SATURATION};
 
 const size_t NUM_FILTERS = ARRAYSIZE(PROCAMP_FILTERS);
 
@@ -34,20 +31,32 @@ class CProcessorHD : public ID3DResource
 {
 public:
   explicit CProcessorHD();
- ~CProcessorHD();
+  ~CProcessorHD();
 
   bool PreInit() const;
   void UnInit();
   bool Open(UINT width, UINT height);
   void Close();
-  bool Render(CRect src, CRect dst, ID3D11Resource* target, CRenderBuffer **views, DWORD flags, UINT frameIdx, UINT rotation, float contrast, float brightness);
+  bool Render(CRect src,
+              CRect dst,
+              ID3D11Resource* target,
+              CRenderBuffer** views,
+              DWORD flags,
+              UINT frameIdx,
+              UINT rotation,
+              float contrast,
+              float brightness);
   uint8_t PastRefs() const { return m_max_back_refs; }
   bool IsFormatSupported(DXGI_FORMAT format, D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT support) const;
   bool HasHDR10Support() const { return m_bSupportHDR10; }
 
   // ID3DResource overrides
-  void OnCreateDevice() override  {}
-  void OnDestroyDevice(bool) override { CSingleLock lock(m_section); UnInit(); }
+  void OnCreateDevice() override {}
+  void OnDestroyDevice(bool) override
+  {
+    CSingleLock lock(m_section);
+    UnInit();
+  }
 
   static DXGI_COLOR_SPACE_TYPE GetDXGIColorSpace(CRenderBuffer*, bool);
 
@@ -63,8 +72,8 @@ protected:
 
   uint32_t m_width = 0;
   uint32_t m_height = 0;
-  uint8_t  m_max_back_refs = 0;
-  uint8_t  m_max_fwd_refs = 0;
+  uint8_t m_max_back_refs = 0;
+  uint8_t m_max_fwd_refs = 0;
   uint32_t m_procIndex = 0;
   D3D11_VIDEO_PROCESSOR_CAPS m_vcaps = {};
   D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS m_rateCaps = {};
@@ -82,4 +91,4 @@ protected:
   Microsoft::WRL::ComPtr<ID3D11VideoProcessor> m_pVideoProcessor;
 };
 
-};
+}; // namespace DXVA

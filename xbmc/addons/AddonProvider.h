@@ -14,22 +14,30 @@
 * See Inputstream.cpp/h for an explaric use case
 */
 
-namespace kodi { namespace addon { class IAddonInstance; } }
+namespace kodi
+{
+namespace addon
+{
+class IAddonInstance;
+}
+} // namespace kodi
 
 namespace ADDON
 {
-  class CBinaryAddonBase;
-  typedef std::shared_ptr<CBinaryAddonBase> BinaryAddonBasePtr;
+class CBinaryAddonBase;
+typedef std::shared_ptr<CBinaryAddonBase> BinaryAddonBasePtr;
 
-  class IAddonProvider
+class IAddonProvider
+{
+public:
+  virtual ~IAddonProvider() = default;
+  enum INSTANCE_TYPE
   {
-  public:
-    virtual ~IAddonProvider() = default;
-    enum INSTANCE_TYPE
-    {
-      INSTANCE_VIDEOCODEC
-    };
-    virtual void getAddonInstance(INSTANCE_TYPE instance_type, ADDON::BinaryAddonBasePtr& addonBase, kodi::addon::IAddonInstance*& parentInstance) = 0;
+    INSTANCE_VIDEOCODEC
   };
+  virtual void getAddonInstance(INSTANCE_TYPE instance_type,
+                                ADDON::BinaryAddonBasePtr& addonBase,
+                                kodi::addon::IAddonInstance*& parentInstance) = 0;
+};
 
-  } //Namespace
+} // namespace ADDON

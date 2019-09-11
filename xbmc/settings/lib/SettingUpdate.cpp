@@ -13,7 +13,7 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/log.h"
 
-bool CSettingUpdate::Deserialize(const TiXmlNode *node)
+bool CSettingUpdate::Deserialize(const TiXmlNode* node)
 {
   if (node == nullptr)
     return false;
@@ -33,7 +33,8 @@ bool CSettingUpdate::Deserialize(const TiXmlNode *node)
   {
     if (node->FirstChild() == nullptr || node->FirstChild()->Type() != TiXmlNode::TINYXML_TEXT)
     {
-      CLog::Log(LOGWARNING, "CSettingUpdate: missing or invalid setting id for rename update definition");
+      CLog::Log(LOGWARNING,
+                "CSettingUpdate: missing or invalid setting id for rename update definition");
       return false;
     }
 
@@ -43,7 +44,7 @@ bool CSettingUpdate::Deserialize(const TiXmlNode *node)
   return true;
 }
 
-bool CSettingUpdate::setType(const std::string &type)
+bool CSettingUpdate::setType(const std::string& type)
 {
   if (StringUtils::EqualsNoCase(type, "change"))
     m_type = SettingUpdateType::Change;

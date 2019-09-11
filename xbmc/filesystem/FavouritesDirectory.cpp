@@ -18,7 +18,7 @@
 namespace XFILE
 {
 
-bool CFavouritesDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CFavouritesDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   items.Clear();
   CServiceBroker::GetFavouritesService().GetAll(items);
@@ -32,7 +32,8 @@ bool CFavouritesDirectory::Exists(const CURL& url)
     if (XFILE::CFile::Exists("special://xbmc/system/favourites.xml"))
       return true;
 
-    const std::string favouritesXml = URIUtils::AddFileToFolder(m_profileManager->GetProfileUserDataFolder(), "favourites.xml");
+    const std::string favouritesXml =
+        URIUtils::AddFileToFolder(m_profileManager->GetProfileUserDataFolder(), "favourites.xml");
 
     return XFILE::CFile::Exists(favouritesXml);
   }

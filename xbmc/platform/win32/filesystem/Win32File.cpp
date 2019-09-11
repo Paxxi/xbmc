@@ -25,7 +25,8 @@
 using namespace XFILE;
 
 
-CWin32File::CWin32File() : m_smbFile(false)
+CWin32File::CWin32File()
+  : m_smbFile(false)
 {
   m_hFile = INVALID_HANDLE_VALUE;
   m_filePos = -1;
@@ -33,7 +34,8 @@ CWin32File::CWin32File() : m_smbFile(false)
   m_lastSMBFileErr = ERROR_SUCCESS;
 }
 
-CWin32File::CWin32File(bool asSmbFile) : m_smbFile(asSmbFile)
+CWin32File::CWin32File(bool asSmbFile)
+  : m_smbFile(asSmbFile)
 {
   m_hFile = INVALID_HANDLE_VALUE;
   m_filePos = -1;
@@ -50,9 +52,11 @@ CWin32File::~CWin32File()
 
 bool CWin32File::Open(const CURL& url)
 {
-  assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert((!m_smbFile && url.GetProtocol().empty()) ||
+         (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
   if (m_smbFile)
-    m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
+    m_lastSMBFileErr =
+        ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
   if (m_hFile != INVALID_HANDLE_VALUE)
   {
@@ -71,8 +75,8 @@ bool CWin32File::Open(const CURL& url)
   m_hFile = CreateFile2(pathnameW.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
                         OPEN_EXISTING, NULL);
 #else
-  m_hFile = CreateFileW(pathnameW.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
-                        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  m_hFile = CreateFileW(pathnameW.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
+                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 #endif
   if (m_smbFile)
     m_lastSMBFileErr = GetLastError(); // set real error state
@@ -82,9 +86,11 @@ bool CWin32File::Open(const CURL& url)
 
 bool CWin32File::OpenForWrite(const CURL& url, bool bOverWrite /*= false*/)
 {
-  assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert((!m_smbFile && url.GetProtocol().empty()) ||
+         (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
   if (m_smbFile)
-    m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
+    m_lastSMBFileErr =
+        ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
   if (m_hFile != INVALID_HANDLE_VALUE)
     return false;
@@ -99,8 +105,8 @@ bool CWin32File::OpenForWrite(const CURL& url, bool bOverWrite /*= false*/)
   m_hFile = CreateFile2(pathnameW.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ,
                         bOverWrite ? CREATE_ALWAYS : OPEN_ALWAYS, NULL);
 #else
-  m_hFile = CreateFileW(pathnameW.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ,
-                        NULL, bOverWrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  m_hFile = CreateFileW(pathnameW.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL,
+                        bOverWrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 #endif
   if (m_smbFile)
     m_lastSMBFileErr = GetLastError(); // set real error state
@@ -126,7 +132,9 @@ bool CWin32File::OpenForWrite(const CURL& url, bool bOverWrite /*= false*/)
   { // newly created file
     /* set "hidden" attribute if filename starts with a period */
     size_t lastSlash = pathnameW.rfind(L'\\');
-    if (lastSlash < pathnameW.length() - 1 // is two checks in one: lastSlash != std::string::npos && lastSlash + 1 < pathnameW.length()
+    if (lastSlash <
+            pathnameW.length() -
+                1 // is two checks in one: lastSlash != std::string::npos && lastSlash + 1 < pathnameW.length()
         && pathnameW[lastSlash + 1] == L'.')
     {
       FILE_BASIC_INFO basicInfo;
@@ -138,7 +146,8 @@ bool CWin32File::OpenForWrite(const CURL& url, bool bOverWrite /*= false*/)
         else
         {
           basicInfo.FileAttributes |= FILE_ATTRIBUTE_HIDDEN;
-          hiddenSet = SetFileInformationByHandle(m_hFile, FileBasicInfo, &basicInfo, sizeof(basicInfo)) != 0;
+          hiddenSet = SetFileInformationByHandle(m_hFile, FileBasicInfo, &basicInfo,
+                                                 sizeof(basicInfo)) != 0;
         }
       }
       if (!hiddenSet)
@@ -196,7 +205,8 @@ ssize_t CWin32File::Read(void* lpBuf, size_t uiBufSize)
   while (uiBufSize > 0)
   {
     DWORD lastRead = 0;
-    if (!ReadFile(m_hFile, ((BYTE*)lpBuf) + read, (uiBufSize > DWORD_MAX) ? DWORD_MAX : (DWORD)uiBufSize, &lastRead, NULL))
+    if (!ReadFile(m_hFile, ((BYTE*)lpBuf) + read,
+                  (uiBufSize > DWORD_MAX) ? DWORD_MAX : (DWORD)uiBufSize, &lastRead, NULL))
     {
       m_filePos = -1;
       if (read > 0)
@@ -368,9 +378,11 @@ void CWin32File::Flush()
 
 bool CWin32File::Delete(const CURL& url)
 {
-  assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert((!m_smbFile && url.GetProtocol().empty()) ||
+         (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
   if (m_smbFile)
-    m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
+    m_lastSMBFileErr =
+        ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
   std::wstring pathnameW(CWIN32Util::ConvertPathToWin32Form(url));
   if (pathnameW.empty())
@@ -385,10 +397,15 @@ bool CWin32File::Delete(const CURL& url)
 
 bool CWin32File::Rename(const CURL& urlCurrentName, const CURL& urlNewName)
 {
-  assert((!m_smbFile && urlCurrentName.GetProtocol().empty()) || (m_smbFile && urlCurrentName.IsProtocol("smb"))); // function suitable only for local or SMB files
-  assert((!m_smbFile && urlNewName.GetProtocol().empty()) || (m_smbFile && urlNewName.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert((!m_smbFile && urlCurrentName.GetProtocol().empty()) ||
+         (m_smbFile &&
+          urlCurrentName.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert(
+      (!m_smbFile && urlNewName.GetProtocol().empty()) ||
+      (m_smbFile && urlNewName.IsProtocol("smb"))); // function suitable only for local or SMB files
   if (m_smbFile)
-    m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
+    m_lastSMBFileErr =
+        ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
   //! @todo check whether it's file or directory
   std::wstring curNameW(CWIN32Util::ConvertPathToWin32Form(urlCurrentName));
@@ -408,9 +425,11 @@ bool CWin32File::Rename(const CURL& urlCurrentName, const CURL& urlNewName)
 
 bool CWin32File::SetHidden(const CURL& url, bool hidden)
 {
-  assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert((!m_smbFile && url.GetProtocol().empty()) ||
+         (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
   if (m_smbFile)
-    m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
+    m_lastSMBFileErr =
+        ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
   std::wstring pathnameW(CWIN32Util::ConvertPathToWin32Form(url));
   if (pathnameW.empty())
@@ -437,9 +456,11 @@ bool CWin32File::SetHidden(const CURL& url, bool hidden)
 
 bool CWin32File::Exists(const CURL& url)
 {
-  assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert((!m_smbFile && url.GetProtocol().empty()) ||
+         (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
   if (m_smbFile)
-    m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
+    m_lastSMBFileErr =
+        ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
   std::wstring pathnameW(CWIN32Util::ConvertPathToWin32Form(url));
   if (pathnameW.empty())
@@ -454,9 +475,11 @@ bool CWin32File::Exists(const CURL& url)
 
 int CWin32File::Stat(const CURL& url, struct __stat64* statData)
 {
-  assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
+  assert((!m_smbFile && url.GetProtocol().empty()) ||
+         (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
   if (m_smbFile)
-    m_lastSMBFileErr = ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
+    m_lastSMBFileErr =
+        ERROR_INVALID_DATA; // used to indicate internal errors, cleared by successful file operation
 
   if (!statData)
     return -1;
@@ -476,7 +499,8 @@ int CWin32File::Stat(const CURL& url, struct __stat64* statData)
   // get maximum information about file from search function
   HANDLE hSearch;
   WIN32_FIND_DATAW findData;
-  hSearch = FindFirstFileExW(pathnameW.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, 0);
+  hSearch = FindFirstFileExW(pathnameW.c_str(), FindExInfoBasic, &findData, FindExSearchNameMatch,
+                             NULL, 0);
 
   if (m_smbFile)
     m_lastSMBFileErr = GetLastError(); // set real error state
@@ -505,7 +529,8 @@ int CWin32File::Stat(const CURL& url, struct __stat64* statData)
     assert(pathnameW.length() >= 7); // '7' is the minimal length of "\\?\x:\"
     assert(pathnameW[5] == L':');
     const wchar_t driveLetter = pathnameW[4];
-    assert((driveLetter >= L'A' && driveLetter <= L'Z') || (driveLetter >= L'a' && driveLetter <= L'z'));
+    assert((driveLetter >= L'A' && driveLetter <= L'Z') ||
+           (driveLetter >= L'a' && driveLetter <= L'z'));
     statData->st_dev = (driveLetter >= L'a') ? driveLetter - L'a' : driveLetter - L'A';
   }
   else
@@ -513,10 +538,12 @@ int CWin32File::Stat(const CURL& url, struct __stat64* statData)
   statData->st_rdev = statData->st_dev;
 
 #ifdef TARGET_WINDOWS_STORE
-  const HANDLE hFile = CreateFile2(pathnameW.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
-    OPEN_EXISTING, NULL);
+  const HANDLE hFile = CreateFile2(pathnameW.c_str(), GENERIC_READ | GENERIC_WRITE,
+                                   FILE_SHARE_READ | FILE_SHARE_WRITE, OPEN_EXISTING, NULL);
 #else
-  const HANDLE hFile = CreateFileW(pathnameW.c_str(), FILE_READ_ATTRIBUTES, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  const HANDLE hFile =
+      CreateFileW(pathnameW.c_str(), FILE_READ_ATTRIBUTES, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
+                  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 #endif
   /* set st_nlink */
   statData->st_nlink = 1; // fallback value
@@ -524,7 +551,8 @@ int CWin32File::Stat(const CURL& url, struct __stat64* statData)
   {
     _FILE_STANDARD_INFO stdInfo;
     if (GetFileInformationByHandleEx(hFile, FileStandardInfo, &stdInfo, sizeof(stdInfo)) != 0)
-      statData->st_nlink = (stdInfo.NumberOfLinks > SHORT_MAX) ? SHORT_MAX : short(stdInfo.NumberOfLinks);
+      statData->st_nlink =
+          (stdInfo.NumberOfLinks > SHORT_MAX) ? SHORT_MAX : short(stdInfo.NumberOfLinks);
   }
 
   /* set st_mtime, st_atime, st_ctime */
@@ -578,12 +606,13 @@ int CWin32File::Stat(const CURL& url, struct __stat64* statData)
     { // file has some extension
       const std::wstring fileExt(pathnameW, lastDot);
       XUTILS::auto_buffer buf(32767 * sizeof(wchar_t)); // maximum possible size
-      const DWORD envRes = GetEnvironmentVariableW(L"PATHEXT", (wchar_t*)buf.get(), buf.size() / sizeof(wchar_t));
+      const DWORD envRes =
+          GetEnvironmentVariableW(L"PATHEXT", (wchar_t*)buf.get(), buf.size() / sizeof(wchar_t));
       std::vector<std::wstring> listExts;
       if (envRes == 0 || envRes > (buf.size() / sizeof(wchar_t)))
       {
         buf.clear();
-        static const wchar_t* extArr[] = { L".exe", L".bat", L".cmd", L".com" };
+        static const wchar_t* extArr[] = {L".exe", L".bat", L".cmd", L".com"};
         listExts.assign(extArr, extArr + (sizeof(extArr) / sizeof(extArr[0])));
       }
       else
@@ -658,7 +687,8 @@ int CWin32File::Stat(struct __stat64* statData)
   if (GetFileInformationByHandleEx(m_hFile, FileStandardInfo, &stdInfo, sizeof(stdInfo)) != 0)
   {
     statData->st_size = __int64(stdInfo.EndOfFile.QuadPart);
-    statData->st_nlink = (stdInfo.NumberOfLinks > SHORT_MAX) ? SHORT_MAX : short(stdInfo.NumberOfLinks);
+    statData->st_nlink =
+        (stdInfo.NumberOfLinks > SHORT_MAX) ? SHORT_MAX : short(stdInfo.NumberOfLinks);
   }
   else
   {
@@ -675,7 +705,8 @@ int CWin32File::Stat(struct __stat64* statData)
     assert(m_filepathnameW.length() >= 7); // '7' is the minimal length of "\\?\x:\"
     assert(m_filepathnameW[5] == L':');
     const wchar_t driveLetter = m_filepathnameW[4];
-    assert((driveLetter >= L'A' && driveLetter <= L'Z') || (driveLetter >= L'a' && driveLetter <= L'z'));
+    assert((driveLetter >= L'A' && driveLetter <= L'Z') ||
+           (driveLetter >= L'a' && driveLetter <= L'z'));
     statData->st_dev = (driveLetter >= L'a') ? driveLetter - L'a' : driveLetter - L'A';
   }
   else
@@ -702,7 +733,8 @@ int CWin32File::Stat(struct __stat64* statData)
     // set _S_IEXEC if file has executable extension
     std::wstring pathnameW;
     XUTILS::auto_buffer nameInfoBuf(sizeof(FILE_NAME_INFO) + sizeof(wchar_t) * MAX_PATH * 2);
-    if (GetFileInformationByHandleEx(m_hFile, FileNameInfo, nameInfoBuf.get(), nameInfoBuf.size()) != 0)
+    if (GetFileInformationByHandleEx(m_hFile, FileNameInfo, nameInfoBuf.get(),
+                                     nameInfoBuf.size()) != 0)
     {
       // real path and name without drive
       const PFILE_NAME_INFO pNameInfo = PFILE_NAME_INFO(nameInfoBuf.get());
@@ -714,17 +746,17 @@ int CWin32File::Stat(struct __stat64* statData)
 
     const size_t lastDot = pathnameW.rfind(L'.');
     const size_t lastSlash = pathnameW.rfind(L'\\');
-    if (lastDot != std::wstring::npos &&
-        (lastSlash == std::wstring::npos || lastSlash<lastDot))
+    if (lastDot != std::wstring::npos && (lastSlash == std::wstring::npos || lastSlash < lastDot))
     { // file has some extension
       const std::wstring fileExt(pathnameW, lastDot);
       XUTILS::auto_buffer buf(32767 * sizeof(wchar_t)); // maximum possible size
-      const DWORD envRes = GetEnvironmentVariableW(L"PATHEXT", (wchar_t*)buf.get(), buf.size() / sizeof(wchar_t));
+      const DWORD envRes =
+          GetEnvironmentVariableW(L"PATHEXT", (wchar_t*)buf.get(), buf.size() / sizeof(wchar_t));
       std::vector<std::wstring> listExts;
       if (envRes == 0 || envRes > (buf.size() / sizeof(wchar_t)))
       {
         buf.clear();
-        static const wchar_t* extArr[] = { L".exe", L".bat", L".cmd", L".com" };
+        static const wchar_t* extArr[] = {L".exe", L".bat", L".cmd", L".com"};
         listExts.assign(extArr, extArr + (sizeof(extArr) / sizeof(extArr[0])));
       }
       else

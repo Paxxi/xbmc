@@ -45,11 +45,11 @@ public:
 class CVideoPlayerVideo : public CThread, public IDVDStreamPlayerVideo
 {
 public:
-  CVideoPlayerVideo(CDVDClock* pClock
-                 ,CDVDOverlayContainer* pOverlayContainer
-                 ,CDVDMessageQueue& parent
-                 ,CRenderManager& renderManager,
-                 CProcessInfo &processInfo);
+  CVideoPlayerVideo(CDVDClock* pClock,
+                    CDVDOverlayContainer* pOverlayContainer,
+                    CDVDMessageQueue& parent,
+                    CRenderManager& renderManager,
+                    CProcessInfo& processInfo);
   ~CVideoPlayerVideo() override;
 
   bool OpenStream(CDVDStreamInfo hint) override;
@@ -68,7 +68,8 @@ public:
   bool IsStalled() const override { return m_stalled; }
   bool IsRewindStalled() const override { return m_rewindStalled; }
   double GetCurrentPts() override;
-  double GetOutputDelay() override; /* returns the expected delay, from that a packet is put in queue */
+  double GetOutputDelay()
+      override; /* returns the expected delay, from that a packet is put in queue */
   std::string GetPlayerInfo() override;
   int GetVideoBitrate() override;
   void SetSpeed(int iSpeed) override;
@@ -78,7 +79,6 @@ public:
   CDVDClock* m_pClock;
 
 protected:
-
   enum EOutputState
   {
     OUTPUT_NORMAL,
@@ -90,13 +90,13 @@ protected:
   void OnExit() override;
   void Process() override;
 
-  bool ProcessDecoderOutput(double &frametime, double &pts);
+  bool ProcessDecoderOutput(double& frametime, double& pts);
   void SendMessageBack(CDVDMsg* pMsg, int priority = 0);
-  MsgQueueReturnCode GetMessage(CDVDMsg** pMsg, unsigned int iTimeoutInMilliSeconds, int &priority);
+  MsgQueueReturnCode GetMessage(CDVDMsg** pMsg, unsigned int iTimeoutInMilliSeconds, int& priority);
 
   EOutputState OutputPicture(const VideoPicture* src);
   void ProcessOverlays(const VideoPicture* pSource, double pts);
-  void OpenStream(CDVDStreamInfo &hint, CDVDVideoCodec* codec);
+  void OpenStream(CDVDStreamInfo& hint, CDVDVideoCodec* codec);
 
   void ResetFrameRateCalc();
   void CalcFrameRate();
@@ -108,15 +108,15 @@ protected:
   int m_iDroppedFrames;
   int m_iDroppedRequest;
 
-  double m_fFrameRate;       //framerate of the video currently playing
+  double m_fFrameRate; //framerate of the video currently playing
   double m_fStableFrameRate; //place to store calculated framerates
-  int m_iFrameRateCount;     //how many calculated framerates we stored in m_fStableFrameRate
-  bool m_bAllowDrop;         //we can't drop frames until we've calculated the framerate
-  int m_iFrameRateErr;       //how many frames we couldn't calculate the framerate, we give up after a while
-  int m_iFrameRateLength;    //how many seconds we should measure the framerate
-                             //this is increased exponentially from CVideoPlayerVideo::CalcFrameRate()
+  int m_iFrameRateCount; //how many calculated framerates we stored in m_fStableFrameRate
+  bool m_bAllowDrop; //we can't drop frames until we've calculated the framerate
+  int m_iFrameRateErr; //how many frames we couldn't calculate the framerate, we give up after a while
+  int m_iFrameRateLength; //how many seconds we should measure the framerate
+      //this is increased exponentially from CVideoPlayerVideo::CalcFrameRate()
 
-  bool m_bFpsInvalid;        // needed to ignore fps (e.g. dvd stills)
+  bool m_bFpsInvalid; // needed to ignore fps (e.g. dvd stills)
   bool m_bRenderSubs;
   float m_fForcedAspectRatio;
   int m_speed;

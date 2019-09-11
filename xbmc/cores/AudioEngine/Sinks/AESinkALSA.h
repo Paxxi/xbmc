@@ -9,14 +9,14 @@
 #pragma once
 
 #include "cores/AudioEngine/Interfaces/AESink.h"
-#include "cores/AudioEngine/Utils/AEDeviceInfo.h"
 #include "cores/AudioEngine/Sinks/alsa/ALSADeviceMonitor.h"
 #include "cores/AudioEngine/Sinks/alsa/ALSAHControlMonitor.h"
+#include "cores/AudioEngine/Utils/AEDeviceInfo.h"
+#include "threads/CriticalSection.h"
+
 #include <stdint.h>
 
 #include <alsa/asoundlib.h>
-
-#include "threads/CriticalSection.h"
 
 // ARGH... this is apparently needed to avoid FDEventMonitor
 // being destructed before CALSA*Monitor below.
@@ -27,28 +27,30 @@
 class CAESinkALSA : public IAESink
 {
 public:
-  const char *GetName() override { return "ALSA"; }
+  const char* GetName() override { return "ALSA"; }
 
   CAESinkALSA();
   ~CAESinkALSA() override;
 
   static void Register();
-  static IAESink* Create(std::string &device, AEAudioFormat &desiredFormat);
-  static void EnumerateDevicesEx(AEDeviceInfoList &list, bool force = false);
+  static IAESink* Create(std::string& device, AEAudioFormat& desiredFormat);
+  static void EnumerateDevicesEx(AEDeviceInfoList& list, bool force = false);
   static void Cleanup();
 
-  bool Initialize(AEAudioFormat &format, std::string &device) override;
+  bool Initialize(AEAudioFormat& format, std::string& device) override;
   void Deinitialize() override;
 
-  virtual void Stop ();
+  virtual void Stop();
   void GetDelay(AEDelayStatus& status) override;
   double GetCacheTotal() override;
-  unsigned int AddPackets(uint8_t **data, unsigned int frames, unsigned int offset) override;
+  unsigned int AddPackets(uint8_t** data, unsigned int frames, unsigned int offset) override;
   void Drain() override;
 
 private:
   CAEChannelInfo GetChannelLayoutRaw(const AEAudioFormat& format);
-  CAEChannelInfo GetChannelLayoutLegacy(const AEAudioFormat& format, unsigned int minChannels, unsigned int maxChannels);
+  CAEChannelInfo GetChannelLayoutLegacy(const AEAudioFormat& format,
+                                        unsigned int minChannels,
+                                        unsigned int maxChannels);
   CAEChannelInfo GetChannelLayout(const AEAudioFormat& format, unsigned int channels);
 
   static AEChannel ALSAChannelToAEChannel(unsigned int alsaChannel);
@@ -70,7 +72,7 @@ private:
   double m_formatSampleRateMul = 0.0;
   bool m_passthrough = false;
   std::string m_device;
-  snd_pcm_t *m_pcm;
+  snd_pcm_t* m_pcm;
   int m_timeout = 0;
   // support fragmentation, e.g. looping in the sink to get a certain amount of data onto the device
   bool m_fragmented = false;
@@ -92,20 +94,30 @@ private:
 
   static snd_pcm_format_t AEFormatToALSAFormat(const enum AEDataFormat format);
 
-  bool InitializeHW(const ALSAConfig &inconfig, ALSAConfig &outconfig);
-  bool InitializeSW(const ALSAConfig &inconfig);
+  bool InitializeHW(const ALSAConfig& inconfig, ALSAConfig& outconfig);
+  bool InitializeSW(const ALSAConfig& inconfig);
 
-  static void AppendParams(std::string &device, const std::string &params);
-  static bool TryDevice(const std::string &name, snd_pcm_t **pcmp, snd_config_t *lconf);
-  static bool TryDeviceWithParams(const std::string &name, const std::string &params, snd_pcm_t **pcmp, snd_config_t *lconf);
-  static bool OpenPCMDevice(const std::string &name, const std::string &params, int channels, snd_pcm_t **pcmp, snd_config_t *lconf);
+  static void AppendParams(std::string& device, const std::string& params);
+  static bool TryDevice(const std::string& name, snd_pcm_t** pcmp, snd_config_t* lconf);
+  static bool TryDeviceWithParams(const std::string& name,
+                                  const std::string& params,
+                                  snd_pcm_t** pcmp,
+                                  snd_config_t* lconf);
+  static bool OpenPCMDevice(const std::string& name,
+                            const std::string& params,
+                            int channels,
+                            snd_pcm_t** pcmp,
+                            snd_config_t* lconf);
 
-  static AEDeviceType AEDeviceTypeFromName(const std::string &name);
-  static std::string GetParamFromName(const std::string &name, const std::string &param);
-  static void EnumerateDevice(AEDeviceInfoList &list, const std::string &device, const std::string &description, snd_config_t *config);
+  static AEDeviceType AEDeviceTypeFromName(const std::string& name);
+  static std::string GetParamFromName(const std::string& name, const std::string& param);
+  static void EnumerateDevice(AEDeviceInfoList& list,
+                              const std::string& device,
+                              const std::string& description,
+                              snd_config_t* config);
   static bool SoundDeviceExists(const std::string& device);
-  static bool GetELD(snd_hctl_t *hctl, int device, CAEDeviceInfo& info, bool& badHDMI);
+  static bool GetELD(snd_hctl_t* hctl, int device, CAEDeviceInfo& info, bool& badHDMI);
 
-  static void sndLibErrorHandler(const char *file, int line, const char *function, int err, const char *fmt, ...);
+  static void sndLibErrorHandler(
+      const char* file, int line, const char* function, int err, const char* fmt, ...);
 };
-

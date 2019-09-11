@@ -35,14 +35,16 @@
  * 		   environment update failed, 8 if our runtime environment update failed or, in case of
  * 		   several errors, sum of all errors values; non-zero in case of other errors.
  */
-int CEnvironment::win_setenv(const std::string &name, const std::string &value /* = "" */, enum updateAction action /* = autoDetect */)
+int CEnvironment::win_setenv(const std::string& name,
+                             const std::string& value /* = "" */,
+                             enum updateAction action /* = autoDetect */)
 {
   std::wstring Wname = KODI::PLATFORM::WINDOWS::ToW(name);
   if (Wname.empty() || name.find('=') != std::wstring::npos)
     return -1;
-  if ( (action == addOnly || action == addOrUpdateOnly) && value.empty() )
+  if ((action == addOnly || action == addOrUpdateOnly) && value.empty())
     return -1;
-  if (action == addOnly && !getenv(name).empty() )
+  if (action == addOnly && !getenv(name).empty())
     return 0;
 
   std::wstring Wvalue = KODI::PLATFORM::WINDOWS::ToW(value);
@@ -54,31 +56,29 @@ int CEnvironment::win_setenv(const std::string &name, const std::string &value /
   else
     EnvString = Wname + L"=" + Wvalue;
 
-  #ifdef _DEBUG
-    // Most dependencies are built in release and use non-debug runtime libs,
-    // and so we have to sync environment vars for these during debug because
-    // they don't share environments between themselves
-    typedef int(_cdecl * wputenvPtr) (const wchar_t *envstring);
-    static const wchar_t *modulesList[] =
-    {
-      { L"vcruntime140.dll" },
-      { L"ucrtbase.dll" },
-      { nullptr } // Terminating NULL for list
-    };
+#ifdef _DEBUG
+  // Most dependencies are built in release and use non-debug runtime libs,
+  // and so we have to sync environment vars for these during debug because
+  // they don't share environments between themselves
+  typedef int(_cdecl * wputenvPtr)(const wchar_t* envstring);
+  static const wchar_t* modulesList[] = {
+      {L"vcruntime140.dll"}, {L"ucrtbase.dll"}, {nullptr} // Terminating NULL for list
+  };
 
-    // Check all modules each function run, because modules can be loaded/unloaded at runtime
-    for (int i = 0; modulesList[i]; i++)
-    {
-      HMODULE hModule;
-      if (!GetModuleHandleExW(0, modulesList[i], &hModule) || hModule == nullptr) // Flag 0 ensures that module will be kept loaded until it'll be freed
-         continue; // Module not loaded
+  // Check all modules each function run, because modules can be loaded/unloaded at runtime
+  for (int i = 0; modulesList[i]; i++)
+  {
+    HMODULE hModule;
+    if (!GetModuleHandleExW(0, modulesList[i], &hModule) ||
+        hModule == nullptr) // Flag 0 ensures that module will be kept loaded until it'll be freed
+      continue; // Module not loaded
 
-      wputenvPtr wputenvFunc = (wputenvPtr)GetProcAddress(hModule, "_wputenv");
-      if (wputenvFunc != nullptr && wputenvFunc(EnvString.c_str()) != 0)
-         retValue |= 2; // At lest one external runtime library Environment update failed
-      FreeLibrary(hModule);
-    }
-  #endif
+    wputenvPtr wputenvFunc = (wputenvPtr)GetProcAddress(hModule, "_wputenv");
+    if (wputenvFunc != nullptr && wputenvFunc(EnvString.c_str()) != 0)
+      retValue |= 2; // At lest one external runtime library Environment update failed
+    FreeLibrary(hModule);
+  }
+#endif
 
   // Update process Environment used for current process and for future new child processes
   if (action == deleteVariable || value.empty())
@@ -91,13 +91,13 @@ int CEnvironment::win_setenv(const std::string &name, const std::string &value /
   return retValue;
 }
 
-std::string CEnvironment::win_getenv(const std::string &name)
+std::string CEnvironment::win_getenv(const std::string& name)
 {
   std::wstring Wname = KODI::PLATFORM::WINDOWS::ToW(name);
   if (Wname.empty())
     return "";
 
-  wchar_t * wStr = ::_wgetenv(Wname.c_str());
+  wchar_t* wStr = ::_wgetenv(Wname.c_str());
   if (wStr != nullptr)
     return KODI::PLATFORM::WINDOWS::FromW(wStr);
 
@@ -106,13 +106,13 @@ std::string CEnvironment::win_getenv(const std::string &name)
   unsigned int varSize = GetEnvironmentVariableW(Wname.c_str(), nullptr, 0);
   if (varSize == 0)
     return ""; // Not found
-  wchar_t * valBuf = new wchar_t[varSize];
-  if (GetEnvironmentVariableW(Wname.c_str(), valBuf, varSize) != varSize-1)
+  wchar_t* valBuf = new wchar_t[varSize];
+  if (GetEnvironmentVariableW(Wname.c_str(), valBuf, varSize) != varSize - 1)
   {
     delete[] valBuf;
     return "";
   }
-  std::wstring Wvalue (valBuf);
+  std::wstring Wvalue(valBuf);
   delete[] valBuf;
 
   return KODI::PLATFORM::WINDOWS::FromW(Wvalue);

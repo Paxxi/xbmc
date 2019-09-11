@@ -17,49 +17,42 @@
 namespace XFILE
 {
 
-  /*!
+/*!
   \ingroup windows
   \brief Get access to shares and it's directories.
   */
-  class CVirtualDirectory : public IDirectory
-  {
-  public:
-    CVirtualDirectory(void);
-    ~CVirtualDirectory(void) override;
-    bool GetDirectory(const CURL& url, CFileItemList &items) override;
-    void CancelDirectory() override;
-    bool GetDirectory(const CURL& url, CFileItemList &items, bool bUseFileDirectories, bool keepImpl);
-    void SetSources(const VECSOURCES& vecSources);
-    inline unsigned int GetNumberOfSources()
-    {
-      return static_cast<uint32_t>(m_vecSources.size());
-    }
+class CVirtualDirectory : public IDirectory
+{
+public:
+  CVirtualDirectory(void);
+  ~CVirtualDirectory(void) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  void CancelDirectory() override;
+  bool GetDirectory(const CURL& url, CFileItemList& items, bool bUseFileDirectories, bool keepImpl);
+  void SetSources(const VECSOURCES& vecSources);
+  inline unsigned int GetNumberOfSources() { return static_cast<uint32_t>(m_vecSources.size()); }
 
-    bool IsSource(const std::string& strPath, VECSOURCES *sources = NULL, std::string *name = NULL) const;
-    bool IsInSource(const std::string& strPath) const;
+  bool IsSource(const std::string& strPath,
+                VECSOURCES* sources = NULL,
+                std::string* name = NULL) const;
+  bool IsInSource(const std::string& strPath) const;
 
-    inline const CMediaSource& operator [](const int index) const
-    {
-      return m_vecSources[index];
-    }
+  inline const CMediaSource& operator[](const int index) const { return m_vecSources[index]; }
 
-    inline CMediaSource& operator[](const int index)
-    {
-      return m_vecSources[index];
-    }
+  inline CMediaSource& operator[](const int index) { return m_vecSources[index]; }
 
-    void GetSources(VECSOURCES &sources) const;
+  void GetSources(VECSOURCES& sources) const;
 
-    void AllowNonLocalSources(bool allow) { m_allowNonLocalSources = allow; };
+  void AllowNonLocalSources(bool allow) { m_allowNonLocalSources = allow; };
 
-    std::shared_ptr<IDirectory> GetDirImpl() { return m_pDir; }
-    void ReleaseDirImpl() { m_pDir.reset(); }
+  std::shared_ptr<IDirectory> GetDirImpl() { return m_pDir; }
+  void ReleaseDirImpl() { m_pDir.reset(); }
 
-  protected:
-    void CacheThumbs(CFileItemList &items);
+protected:
+  void CacheThumbs(CFileItemList& items);
 
-    VECSOURCES m_vecSources;
-    bool m_allowNonLocalSources;
-    std::shared_ptr<IDirectory> m_pDir;
-  };
-}
+  VECSOURCES m_vecSources;
+  bool m_allowNonLocalSources;
+  std::shared_ptr<IDirectory> m_pDir;
+};
+} // namespace XFILE

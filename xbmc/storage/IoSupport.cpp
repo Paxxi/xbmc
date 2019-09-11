@@ -13,43 +13,45 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "IoSupport.h"
+
 #include "utils/log.h"
 #ifdef TARGET_WINDOWS
 #include "my_ntddcdrm.h"
+
 #include "platform/win32/CharsetConverter.h"
 #endif
 #if defined(TARGET_LINUX)
-#include <linux/limits.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
 #include <fcntl.h>
 #include <linux/cdrom.h>
+#include <linux/limits.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <unistd.h>
 #endif
 #if defined(TARGET_DARWIN)
-#include <sys/param.h>
 #include <mach-o/dyld.h>
+#include <sys/param.h>
 #if defined(TARGET_DARWIN_OSX)
-#include <IOKit/IOKitLib.h>
 #include <IOKit/IOBSD.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/storage/IOCDMedia.h>
+#include <IOKit/storage/IOCDMediaBSDClient.h>
 #include <IOKit/storage/IOCDTypes.h>
+#include <IOKit/storage/IODVDMedia.h>
+#include <IOKit/storage/IODVDMediaBSDClient.h>
 #include <IOKit/storage/IODVDTypes.h>
 #include <IOKit/storage/IOMedia.h>
-#include <IOKit/storage/IOCDMedia.h>
-#include <IOKit/storage/IODVDMedia.h>
-#include <IOKit/storage/IOCDMediaBSDClient.h>
-#include <IOKit/storage/IODVDMediaBSDClient.h>
 #include <IOKit/storage/IOStorageDeviceCharacteristics.h>
 #endif
 #endif
 #ifdef TARGET_FREEBSD
 #include <sys/syslimits.h>
 #endif
-#include "cdioSupport.h"
 #include "MediaManager.h"
+#include "cdioSupport.h"
 #ifdef TARGET_POSIX
-#include "platform/posix/XHandle.h"
 #include "platform/posix/XFileUtils.h"
+#include "platform/posix/XHandle.h"
 #endif
 
 #ifdef HAS_DVD_DRIVE
@@ -70,14 +72,12 @@ HANDLE CIoSupport::OpenCDROM()
   hDevice->m_bCDROM = true;
 #elif defined(TARGET_WINDOWS)
   auto filename = KODI::PLATFORM::WINDOWS::ToW(g_mediaManager.TranslateDevicePath("", true));
-  hDevice = CreateFile(filename.c_str(), GENERIC_READ, FILE_SHARE_READ,
-                       nullptr, OPEN_EXISTING,
-                       FILE_FLAG_RANDOM_ACCESS, nullptr );
+  hDevice = CreateFile(filename.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+                       FILE_FLAG_RANDOM_ACCESS, nullptr);
 #else
 
-  hDevice = CreateFile("\\\\.\\Cdrom0", GENERIC_READ, FILE_SHARE_READ,
-                       NULL, OPEN_EXISTING,
-                       FILE_FLAG_RANDOM_ACCESS, NULL );
+  hDevice = CreateFile("\\\\.\\Cdrom0", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+                       FILE_FLAG_RANDOM_ACCESS, NULL);
 
 #endif
 #endif
@@ -106,17 +106,17 @@ int CIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, char* lpczBuffer)
 
 #if defined(TARGET_DARWIN) && defined(HAS_DVD_DRIVE)
   dk_cd_read_t cd_read;
-  memset( &cd_read, 0, sizeof(cd_read) );
+  memset(&cd_read, 0, sizeof(cd_read));
 
-  cd_read.sectorArea  = kCDSectorAreaUser;
-  cd_read.buffer      = lpczBuffer;
+  cd_read.sectorArea = kCDSectorAreaUser;
+  cd_read.buffer = lpczBuffer;
 
-  cd_read.sectorType  = kCDSectorTypeMode1;
-  cd_read.offset      = dwSector * kCDSectorSizeMode1;
+  cd_read.sectorType = kCDSectorTypeMode1;
+  cd_read.offset = dwSector * kCDSectorSizeMode1;
 
   cd_read.bufferLength = 2048;
 
-  if( ioctl(hDevice->fd, DKIOCCDREAD, &cd_read ) == -1 )
+  if (ioctl(hDevice->fd, DKIOCCDREAD, &cd_read) == -1)
   {
     return -1;
   }
@@ -157,7 +157,8 @@ int CIoSupport::ReadSector(HANDLE hDevice, DWORD dwSector, char* lpczBuffer)
 
   for (int i = 0; i < 5; i++)
   {
-    if (SetFilePointer(hDevice, Displacement.u.LowPart, &Displacement.u.HighPart, FILE_BEGIN) != (DWORD)-1)
+    if (SetFilePointer(hDevice, Displacement.u.LowPart, &Displacement.u.HighPart, FILE_BEGIN) !=
+        (DWORD)-1)
     {
       if (ReadFile(hDevice, m_rawXferBuffer, dwSectorSize, &dwRead, NULL))
       {
@@ -178,16 +179,16 @@ int CIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, char* lpczBuffer
 #if defined(TARGET_DARWIN)
   dk_cd_read_t cd_read;
 
-  memset( &cd_read, 0, sizeof(cd_read) );
+  memset(&cd_read, 0, sizeof(cd_read));
 
   cd_read.sectorArea = kCDSectorAreaUser;
   cd_read.buffer = lpczBuffer;
 
-  cd_read.offset       = dwSector * kCDSectorSizeMode2Form2;
-  cd_read.sectorType   = kCDSectorTypeMode2Form2;
+  cd_read.offset = dwSector * kCDSectorSizeMode2Form2;
+  cd_read.sectorType = kCDSectorTypeMode2Form2;
   cd_read.bufferLength = kCDSectorSizeMode2Form2;
 
-  if( ioctl( hDevice->fd, DKIOCCDREAD, &cd_read ) == -1 )
+  if (ioctl(hDevice->fd, DKIOCCDREAD, &cd_read) == -1)
   {
     return -1;
   }
@@ -198,10 +199,9 @@ int CIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, char* lpczBuffer
   if (hDevice->m_bCDROM)
   {
     int fd = hDevice->fd;
-    int lba = (dwSector + CD_MSF_OFFSET) ;
-    int m,s,f;
-    union
-    {
+    int lba = (dwSector + CD_MSF_OFFSET);
+    int m, s, f;
+    union {
       struct cdrom_msf msf;
       char buffer[2356];
     } arg;
@@ -219,7 +219,7 @@ int CIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, char* lpczBuffer
     arg.msf.cdmsf_frame0 = f;
 
     int ret = ioctl(fd, CDROMREADMODE2, &arg);
-    if (ret==0)
+    if (ret == 0)
     {
       memcpy(lpczBuffer, arg.buffer, MODE2_DATA_SIZE); // don't think offset is needed here
       return MODE2_DATA_SIZE;
@@ -243,16 +243,10 @@ int CIoSupport::ReadSectorMode2(HANDLE hDevice, DWORD dwSector, char* lpczBuffer
 
   for (int i = 0; i < 5; i++)
   {
-    if ( DeviceIoControl( hDevice,
-                          IOCTL_CDROM_RAW_READ,
-                          &rawRead,
-                          sizeof(RAW_READ_INFO),
-                          m_rawXferBuffer,
-                          RAW_SECTOR_SIZE,
-                          &dwBytesReturned,
-                          NULL ) != 0 )
+    if (DeviceIoControl(hDevice, IOCTL_CDROM_RAW_READ, &rawRead, sizeof(RAW_READ_INFO),
+                        m_rawXferBuffer, RAW_SECTOR_SIZE, &dwBytesReturned, NULL) != 0)
     {
-      memcpy(lpczBuffer, (char*)m_rawXferBuffer+MODE2_DATA_START, MODE2_DATA_SIZE);
+      memcpy(lpczBuffer, (char*)m_rawXferBuffer + MODE2_DATA_START, MODE2_DATA_SIZE);
       return MODE2_DATA_SIZE;
     }
     else
@@ -274,4 +268,3 @@ void CIoSupport::CloseCDROM(HANDLE hDevice)
 {
   CloseHandle(hDevice);
 }
-

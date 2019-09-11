@@ -70,7 +70,7 @@ void CRingBuffer::Clear()
 /* Read in data from the ring buffer to the supplied buffer 'buf'. The amount
  * read in is specified by 'size'.
  */
-bool CRingBuffer::ReadData(char *buf, unsigned int size)
+bool CRingBuffer::ReadData(char* buf, unsigned int size)
 {
   CSingleLock lock(m_critSection);
   if (size > m_fillCount)
@@ -98,7 +98,7 @@ bool CRingBuffer::ReadData(char *buf, unsigned int size)
 /* Read in data from the ring buffer to another ring buffer object specified by
  * 'rBuf'.
  */
-bool CRingBuffer::ReadData(CRingBuffer &rBuf, unsigned int size)
+bool CRingBuffer::ReadData(CRingBuffer& rBuf, unsigned int size)
 {
   CSingleLock lock(m_critSection);
   if (rBuf.getBuffer() == NULL)
@@ -121,7 +121,7 @@ bool CRingBuffer::ReadData(CRingBuffer &rBuf, unsigned int size)
 /* Write data to ring buffer from buffer specified in 'buf'. Amount read in is
  * specified by 'size'.
  */
-bool CRingBuffer::WriteData(const char *buf, unsigned int size)
+bool CRingBuffer::WriteData(const char* buf, unsigned int size)
 {
   CSingleLock lock(m_critSection);
   if (size > m_size - m_fillCount)
@@ -149,7 +149,7 @@ bool CRingBuffer::WriteData(const char *buf, unsigned int size)
 /* Write data to ring buffer from another ring buffer object specified by
  * 'rBuf'.
  */
-bool CRingBuffer::WriteData(CRingBuffer &rBuf, unsigned int size)
+bool CRingBuffer::WriteData(CRingBuffer& rBuf, unsigned int size)
 {
   CSingleLock lock(m_critSection);
   if (m_buffer == NULL)
@@ -198,20 +198,20 @@ bool CRingBuffer::SkipBytes(int skipSize)
 }
 
 /* Append all content from ring buffer 'rBuf' to this ring buffer */
-bool CRingBuffer::Append(CRingBuffer &rBuf)
+bool CRingBuffer::Append(CRingBuffer& rBuf)
 {
   return WriteData(rBuf, rBuf.getMaxReadSize());
 }
 
 /* Copy all content from ring buffer 'rBuf' to this ring buffer overwriting any existing data */
-bool CRingBuffer::Copy(CRingBuffer &rBuf)
+bool CRingBuffer::Copy(CRingBuffer& rBuf)
 {
   Clear();
   return Append(rBuf);
 }
 
 /* Our various 'get' methods */
-char *CRingBuffer::getBuffer()
+char* CRingBuffer::getBuffer()
 {
   return m_buffer;
 }

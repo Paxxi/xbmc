@@ -21,6 +21,6 @@ class CFileDirectoryFactory
 public:
   CFileDirectoryFactory(void);
   virtual ~CFileDirectoryFactory(void);
-  static IFileDirectory* Create(const CURL& url, CFileItem* pItem, const std::string& strMask="");
+  static IFileDirectory* Create(const CURL& url, CFileItem* pItem, const std::string& strMask = "");
 };
-}
+} // namespace XFILE

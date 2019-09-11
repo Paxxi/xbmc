@@ -19,7 +19,7 @@ void CThread::SetThreadInfo()
 
   m_lwpId = m_thread->native_handle();
 
-#pragma pack(push,8)
+#pragma pack(push, 8)
   struct THREADNAME_INFO
   {
     DWORD dwType; // must be 0x1000
@@ -36,13 +36,14 @@ void CThread::SetThreadInfo()
 
   __try
   {
-    RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR *)&info);
+    RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR*)&info);
   }
-  __except(EXCEPTION_EXECUTE_HANDLER)
+  __except (EXCEPTION_EXECUTE_HANDLER)
   {
   }
 
-  CWIN32Util::SetThreadLocalLocale(true); // avoid crashing with setlocale(), see https://connect.microsoft.com/VisualStudio/feedback/details/794122
+  CWIN32Util::SetThreadLocalLocale(
+      true); // avoid crashing with setlocale(), see https://connect.microsoft.com/VisualStudio/feedback/details/794122
 }
 
 std::uintptr_t CThread::GetCurrentThreadNativeHandle()
@@ -52,17 +53,17 @@ std::uintptr_t CThread::GetCurrentThreadNativeHandle()
 
 int CThread::GetMinPriority(void)
 {
-  return(THREAD_PRIORITY_IDLE);
+  return (THREAD_PRIORITY_IDLE);
 }
 
 int CThread::GetMaxPriority(void)
 {
-  return(THREAD_PRIORITY_HIGHEST);
+  return (THREAD_PRIORITY_HIGHEST);
 }
 
 int CThread::GetNormalPriority(void)
 {
-  return(THREAD_PRIORITY_NORMAL);
+  return (THREAD_PRIORITY_NORMAL);
 }
 
 bool CThread::SetPriority(const int iPriority)
@@ -104,7 +105,7 @@ int64_t CThread::GetAbsoluteUsage()
 
   uint64_t time = 0;
   FILETIME CreationTime, ExitTime, UserTime, KernelTime;
-  if( GetThreadTimes(tid, &CreationTime, &ExitTime, &KernelTime, &UserTime ) )
+  if (GetThreadTimes(tid, &CreationTime, &ExitTime, &KernelTime, &UserTime))
   {
     time = (((uint64_t)UserTime.dwHighDateTime) << 32) + ((uint64_t)UserTime.dwLowDateTime);
     time += (((uint64_t)KernelTime.dwHighDateTime) << 32) + ((uint64_t)KernelTime.dwLowDateTime);

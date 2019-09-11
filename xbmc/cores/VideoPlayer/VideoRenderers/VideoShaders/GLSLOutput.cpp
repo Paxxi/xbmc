@@ -17,23 +17,28 @@
 
 using namespace Shaders;
 
-GLSLOutput::GLSLOutput(int texunit, bool useDithering, unsigned int ditherDepth, bool fullrange, GLuint clutTex, int clutSize)
+GLSLOutput::GLSLOutput(int texunit,
+                       bool useDithering,
+                       unsigned int ditherDepth,
+                       bool fullrange,
+                       GLuint clutTex,
+                       int clutSize)
 {
   // set member variable initial values
   m_1stTexUnit = texunit;
-  m_uDither = m_1stTexUnit+0;
-  m_uCLUT = m_1stTexUnit+1;
+  m_uDither = m_1stTexUnit + 0;
+  m_uCLUT = m_1stTexUnit + 1;
 
   //   textures
-  m_tDitherTex  = 0;
-  m_tCLUTTex  = clutTex;
+  m_tDitherTex = 0;
+  m_tCLUTTex = clutTex;
 
   //   shader attribute handles
-  m_hDither      = -1;
+  m_hDither = -1;
   m_hDitherQuant = -1;
-  m_hDitherSize  = -1;
-  m_hCLUT        = -1;
-  m_hCLUTSize    = -1;
+  m_hDitherSize = -1;
+  m_hCLUT = -1;
+  m_hCLUTSize = -1;
 
   m_dither = useDithering;
   m_ditherDepth = ditherDepth;
@@ -71,8 +76,8 @@ void GLSLOutput::OnCompiledAndLinked(GLuint programHandle)
   //   3DLUT
   if (m_3DLUT)
   {
-    m_hCLUT        = glGetUniformLocation(programHandle, "m_CLUT");
-    m_hCLUTSize    = glGetUniformLocation(programHandle, "m_CLUTsize");
+    m_hCLUT = glGetUniformLocation(programHandle, "m_CLUT");
+    m_hCLUTSize = glGetUniformLocation(programHandle, "m_CLUTsize");
   }
 
   if (m_dither)
@@ -81,7 +86,7 @@ void GLSLOutput::OnCompiledAndLinked(GLuint programHandle)
 
     // create a dither texture
     glGenTextures(1, &m_tDitherTex);
-    if ( m_tDitherTex <= 0 )
+    if (m_tDitherTex <= 0)
     {
       CLog::Log(LOGERROR, "Error creating dither texture");
       return;
@@ -97,7 +102,8 @@ void GLSLOutput::OnCompiledAndLinked(GLuint programHandle)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // load dither texture data
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R16, dither_size, dither_size, 0, GL_RED, GL_UNSIGNED_SHORT, dither_matrix);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R16, dither_size, dither_size, 0, GL_RED, GL_UNSIGNED_SHORT,
+                 dither_matrix);
   }
 
   glActiveTexture(GL_TEXTURE0);
@@ -121,7 +127,7 @@ bool GLSLOutput::OnEnabled()
     VerifyGLState();
 
     // dither settings
-    glUniform1f(m_hDitherQuant, (1<<m_ditherDepth)-1.0);
+    glUniform1f(m_hDitherQuant, (1 << m_ditherDepth) - 1.0);
     VerifyGLState();
     glUniform2f(m_hDitherSize, dither_size, dither_size);
     VerifyGLState();
@@ -174,4 +180,3 @@ void GLSLOutput::FreeTextures()
     m_tDitherTex = 0;
   }
 }
-

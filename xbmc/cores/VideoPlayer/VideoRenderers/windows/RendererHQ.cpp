@@ -23,19 +23,20 @@ bool CRendererHQ::Supports(ESCALINGMETHOD method)
   if (method == VS_SCALINGMETHOD_AUTO)
     return true;
 
-  if (DX::DeviceResources::Get()->GetDeviceFeatureLevel() >= D3D_FEATURE_LEVEL_9_3 && !m_renderOrientation)
+  if (DX::DeviceResources::Get()->GetDeviceFeatureLevel() >= D3D_FEATURE_LEVEL_9_3 &&
+      !m_renderOrientation)
   {
-    if (method == VS_SCALINGMETHOD_CUBIC ||
-        method == VS_SCALINGMETHOD_LANCZOS2 ||
-        method == VS_SCALINGMETHOD_SPLINE36_FAST ||
-        method == VS_SCALINGMETHOD_LANCZOS3_FAST ||
-        method == VS_SCALINGMETHOD_SPLINE36 ||
-        method == VS_SCALINGMETHOD_LANCZOS3)
+    if (method == VS_SCALINGMETHOD_CUBIC || method == VS_SCALINGMETHOD_LANCZOS2 ||
+        method == VS_SCALINGMETHOD_SPLINE36_FAST || method == VS_SCALINGMETHOD_LANCZOS3_FAST ||
+        method == VS_SCALINGMETHOD_SPLINE36 || method == VS_SCALINGMETHOD_LANCZOS3)
     {
       // if scaling is below level, avoid hq scaling
-      const float scaleX = fabs((static_cast<float>(m_sourceWidth) - m_viewWidth) / m_sourceWidth) * 100;
-      const float scaleY = fabs((static_cast<float>(m_sourceHeight) - m_viewHeight) / m_sourceHeight) * 100;
-      const int minScale = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_VIDEOPLAYER_HQSCALERS);
+      const float scaleX =
+          fabs((static_cast<float>(m_sourceWidth) - m_viewWidth) / m_sourceWidth) * 100;
+      const float scaleY =
+          fabs((static_cast<float>(m_sourceHeight) - m_viewHeight) / m_sourceHeight) * 100;
+      const int minScale = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+          CSettings::SETTING_VIDEOPLAYER_HQSCALERS);
 
       return scaleX >= minScale || scaleY >= minScale;
     }
@@ -70,7 +71,10 @@ void CRendererHQ::SelectPSVideoFilter()
   {
     const bool scaleSD = m_sourceHeight < 720 && m_sourceWidth < 1280;
     const bool scaleUp = m_sourceHeight < m_viewHeight && m_sourceWidth < m_viewWidth;
-    const bool scaleFps = m_fps < CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoAutoScaleMaxFps + 0.01f;
+    const bool scaleFps =
+        m_fps <
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoAutoScaleMaxFps +
+            0.01f;
 
     if (scaleSD && scaleUp && scaleFps && Supports(VS_SCALINGMETHOD_LANCZOS3_FAST))
     {
@@ -98,7 +102,8 @@ void CRendererHQ::CheckVideoParameters()
 
     if (!Supports(m_scalingMethod))
     {
-      CLog::LogF(LOGWARNING, "chosen scaling method %d is not supported by renderer", static_cast<int>(m_scalingMethod));
+      CLog::LogF(LOGWARNING, "chosen scaling method %d is not supported by renderer",
+                 static_cast<int>(m_scalingMethod));
       m_scalingMethod = VS_SCALINGMETHOD_AUTO;
     }
 
@@ -132,22 +137,28 @@ void CRendererHQ::UpdateVideoFilters()
         // we are in a big trouble
         m_scalerShader.reset();
         m_bUseHQScaler = false;
-        CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, g_localizeStrings.Get(34400), g_localizeStrings.Get(34401));
+        CGUIDialogKaiToast::QueueNotification(
+            CGUIDialogKaiToast::Error, g_localizeStrings.Get(34400), g_localizeStrings.Get(34401));
       }
     }
   }
 }
 
-void CRendererHQ::FinalOutput(CD3DTexture& source, CD3DTexture& target, const CRect& sourceRect, const CPoint(&destPoints)[4])
+void CRendererHQ::FinalOutput(CD3DTexture& source,
+                              CD3DTexture& target,
+                              const CRect& sourceRect,
+                              const CPoint (&destPoints)[4])
 {
   if (HasHQScaler())
   {
-    const CRect destRect = CServiceBroker::GetWinSystem()->GetGfxContext().StereoCorrection(CRect(destPoints[0], destPoints[2]));
+    const CRect destRect = CServiceBroker::GetWinSystem()->GetGfxContext().StereoCorrection(
+        CRect(destPoints[0], destPoints[2]));
     m_scalerShader->Render(source, target, sourceRect, destRect, false);
   }
   else
   {
-    CD3D11_VIEWPORT viewPort(0.f, 0.f, static_cast<float>(target.GetWidth()), static_cast<float>(target.GetHeight()));
+    CD3D11_VIEWPORT viewPort(0.f, 0.f, static_cast<float>(target.GetWidth()),
+                             static_cast<float>(target.GetHeight()));
     // restore view port
     DX::DeviceResources::Get()->GetD3DContext()->RSSetViewports(1, &viewPort);
     // restore scissors

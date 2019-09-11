@@ -13,17 +13,17 @@
 class CBitstreamReader
 {
 public:
-  CBitstreamReader(const uint8_t *buf, int len);
-  uint32_t   ReadBits(int nbits);
-  void       SkipBits(int nbits);
-  uint32_t   GetBits(int nbits);
+  CBitstreamReader(const uint8_t* buf, int len);
+  uint32_t ReadBits(int nbits);
+  void SkipBits(int nbits);
+  uint32_t GetBits(int nbits);
 
 private:
   const uint8_t *buffer, *start;
-  int      offbits, length, oflow;
+  int offbits, length, oflow;
 };
 
-const uint8_t* find_start_code(const uint8_t *p, const uint8_t *end, uint32_t *state);
+const uint8_t* find_start_code(const uint8_t* p, const uint8_t* end, uint32_t* state);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //! @todo refactor this so as not to need these ffmpeg routines.
@@ -46,4 +46,3 @@ constexpr uint32_t BS_RB32(const uint8_t* x)
 {
   return (x[1] << 24) | (x[1] << 16) | (x[2] << 8) | x[3];
 }
-

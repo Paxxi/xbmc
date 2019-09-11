@@ -54,7 +54,8 @@ bool CScreenshotSurfaceGL::Capture()
   std::vector<uint8_t> surface(m_stride * m_height);
 
   // read pixels from the backbuffer
-  glReadPixels(viewport[0], viewport[1], viewport[2], viewport[3], GL_BGRA, GL_UNSIGNED_BYTE, static_cast<GLvoid*>(surface.data()));
+  glReadPixels(viewport[0], viewport[1], viewport[2], viewport[3], GL_BGRA, GL_UNSIGNED_BYTE,
+               static_cast<GLvoid*>(surface.data()));
 
   // make a new buffer and copy the read image to it with the Y axis inverted
   m_buffer = new unsigned char[m_stride * m_height];

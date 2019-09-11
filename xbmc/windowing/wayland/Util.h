@@ -25,7 +25,8 @@ struct WaylandCPtrCompare
 {
   bool operator()(wayland::proxy_t const& p1, wayland::proxy_t const& p2) const
   {
-    return reinterpret_cast<std::uintptr_t>(p1.c_ptr()) < reinterpret_cast<std::uintptr_t>(p2.c_ptr());
+    return reinterpret_cast<std::uintptr_t>(p1.c_ptr()) <
+           reinterpret_cast<std::uintptr_t>(p2.c_ptr());
   }
 };
 
@@ -46,9 +47,10 @@ public:
    * \param name CSS cursor name to load
    * \return requested cursor
    */
-  static wayland::cursor_t LoadFromTheme(wayland::cursor_theme_t const& theme, std::string const& name);
+  static wayland::cursor_t LoadFromTheme(wayland::cursor_theme_t const& theme,
+                                         std::string const& name);
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

@@ -29,8 +29,8 @@
 #include <EGL/egl.h>
 #include <EGL/eglplatform.h>
 
-CWinSystemRpi::CWinSystemRpi() :
-  m_libinput(new CLibInputHandler)
+CWinSystemRpi::CWinSystemRpi()
+  : m_libinput(new CLibInputHandler)
 {
   m_nativeDisplay = EGL_NO_DISPLAY;
   m_nativeWindow = EGL_NO_SURFACE;
@@ -66,7 +66,7 @@ CWinSystemRpi::CWinSystemRpi() :
 
 CWinSystemRpi::~CWinSystemRpi()
 {
-  if(m_nativeWindow)
+  if (m_nativeWindow)
   {
     m_nativeWindow = nullptr;
   }
@@ -87,32 +87,33 @@ bool CWinSystemRpi::DestroyWindowSystem()
   return true;
 }
 
-bool CWinSystemRpi::CreateNewWindow(const std::string& name,
-                                    bool fullScreen,
-                                    RESOLUTION_INFO& res)
+bool CWinSystemRpi::CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res)
 {
   RESOLUTION_INFO current_resolution;
   current_resolution.iWidth = current_resolution.iHeight = 0;
   RENDER_STEREO_MODE stereo_mode = CServiceBroker::GetWinSystem()->GetGfxContext().GetStereoMode();
 
-  m_nWidth        = res.iWidth;
-  m_nHeight       = res.iHeight;
-  m_displayWidth  = res.iScreenWidth;
+  m_nWidth = res.iWidth;
+  m_nHeight = res.iHeight;
+  m_displayWidth = res.iScreenWidth;
   m_displayHeight = res.iScreenHeight;
-  m_fRefreshRate  = res.fRefreshRate;
+  m_fRefreshRate = res.fRefreshRate;
 
   if ((m_bWindowCreated && m_rpi->GetNativeResolution(&current_resolution)) &&
-    current_resolution.iWidth == res.iWidth && current_resolution.iHeight == res.iHeight &&
-    current_resolution.iScreenWidth == res.iScreenWidth && current_resolution.iScreenHeight == res.iScreenHeight &&
-    m_bFullScreen == fullScreen && current_resolution.fRefreshRate == res.fRefreshRate &&
-    (current_resolution.dwFlags & D3DPRESENTFLAG_MODEMASK) == (res.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
-    m_stereo_mode == stereo_mode)
+      current_resolution.iWidth == res.iWidth && current_resolution.iHeight == res.iHeight &&
+      current_resolution.iScreenWidth == res.iScreenWidth &&
+      current_resolution.iScreenHeight == res.iScreenHeight && m_bFullScreen == fullScreen &&
+      current_resolution.fRefreshRate == res.fRefreshRate &&
+      (current_resolution.dwFlags & D3DPRESENTFLAG_MODEMASK) ==
+          (res.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
+      m_stereo_mode == stereo_mode)
   {
     CLog::Log(LOGDEBUG, "CWinSystemEGL::CreateNewWindow: No need to create a new window");
     return true;
   }
 
-  int delay = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt("videoscreen.delayrefreshchange");
+  int delay = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+      "videoscreen.delayrefreshchange");
   if (delay > 0)
   {
     m_delayDispReset = true;
@@ -121,7 +122,7 @@ bool CWinSystemRpi::CreateNewWindow(const std::string& name,
 
   {
     CSingleLock lock(m_resourceSection);
-    for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
+    for (std::vector<IDispResource*>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
     {
       (*i)->OnLostDisplay();
     }
@@ -138,7 +139,7 @@ bool CWinSystemRpi::CreateNewWindow(const std::string& name,
   {
     CSingleLock lock(m_resourceSection);
     // tell any shared resources
-    for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
+    for (std::vector<IDispResource*>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
     {
       (*i)->OnResetDisplay();
     }
@@ -164,7 +165,7 @@ void CWinSystemRpi::UpdateResolutions()
 
   if (!m_rpi->ProbeResolutions(resolutions) || resolutions.empty())
   {
-    CLog::Log(LOGWARNING, "%s: ProbeResolutions failed.",__FUNCTION__);
+    CLog::Log(LOGWARNING, "%s: ProbeResolutions failed.", __FUNCTION__);
   }
 
   /* ProbeResolutions includes already all resolutions.
@@ -176,7 +177,7 @@ void CWinSystemRpi::UpdateResolutions()
   }
 
   RESOLUTION ResDesktop = RES_INVALID;
-  RESOLUTION res_index  = RES_DESKTOP;
+  RESOLUTION res_index = RES_DESKTOP;
 
   for (size_t i = 0; i < resolutions.size(); i++)
   {
@@ -191,20 +192,18 @@ void CWinSystemRpi::UpdateResolutions()
     CServiceBroker::GetWinSystem()->GetGfxContext().ResetOverscan(resolutions[i]);
     CDisplaySettings::GetInstance().GetResolutionInfo(res_index) = resolutions[i];
 
-    CLog::Log(LOGNOTICE, "Found resolution %d x %d with %d x %d%s @ %f Hz\n",
-      resolutions[i].iWidth,
-      resolutions[i].iHeight,
-      resolutions[i].iScreenWidth,
-      resolutions[i].iScreenHeight,
-      resolutions[i].dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "",
-      resolutions[i].fRefreshRate);
+    CLog::Log(LOGNOTICE, "Found resolution %d x %d with %d x %d%s @ %f Hz\n", resolutions[i].iWidth,
+              resolutions[i].iHeight, resolutions[i].iScreenWidth, resolutions[i].iScreenHeight,
+              resolutions[i].dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "",
+              resolutions[i].fRefreshRate);
 
-    if(resDesktop.iWidth == resolutions[i].iWidth &&
-       resDesktop.iHeight == resolutions[i].iHeight &&
-       resDesktop.iScreenWidth == resolutions[i].iScreenWidth &&
-       resDesktop.iScreenHeight == resolutions[i].iScreenHeight &&
-       (resDesktop.dwFlags & D3DPRESENTFLAG_MODEMASK) == (resolutions[i].dwFlags & D3DPRESENTFLAG_MODEMASK) &&
-       fabs(resDesktop.fRefreshRate - resolutions[i].fRefreshRate) < FLT_EPSILON)
+    if (resDesktop.iWidth == resolutions[i].iWidth &&
+        resDesktop.iHeight == resolutions[i].iHeight &&
+        resDesktop.iScreenWidth == resolutions[i].iScreenWidth &&
+        resDesktop.iScreenHeight == resolutions[i].iScreenHeight &&
+        (resDesktop.dwFlags & D3DPRESENTFLAG_MODEMASK) ==
+            (resolutions[i].dwFlags & D3DPRESENTFLAG_MODEMASK) &&
+        fabs(resDesktop.fRefreshRate - resolutions[i].fRefreshRate) < FLT_EPSILON)
     {
       ResDesktop = res_index;
     }
@@ -216,12 +215,12 @@ void CWinSystemRpi::UpdateResolutions()
   if (ResDesktop != RES_INVALID)
   {
     CLog::Log(LOGNOTICE, "Found (%dx%d%s@%f) at %d, setting to RES_DESKTOP at %d",
-      resDesktop.iWidth, resDesktop.iHeight,
-      resDesktop.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "",
-      resDesktop.fRefreshRate,
-      (int)ResDesktop, (int)RES_DESKTOP);
+              resDesktop.iWidth, resDesktop.iHeight,
+              resDesktop.dwFlags & D3DPRESENTFLAG_INTERLACED ? "i" : "", resDesktop.fRefreshRate,
+              (int)ResDesktop, (int)RES_DESKTOP);
 
-    CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP) = CDisplaySettings::GetInstance().GetResolutionInfo(ResDesktop);
+    CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP) =
+        CDisplaySettings::GetInstance().GetResolutionInfo(ResDesktop);
   }
 }
 
@@ -240,13 +239,13 @@ void CWinSystemRpi::SetVisible(bool visible)
   m_rpi->SetVisible(visible);
 }
 
-void CWinSystemRpi::Register(IDispResource *resource)
+void CWinSystemRpi::Register(IDispResource* resource)
 {
   CSingleLock lock(m_resourceSection);
   m_resources.push_back(resource);
 }
 
-void CWinSystemRpi::Unregister(IDispResource *resource)
+void CWinSystemRpi::Unregister(IDispResource* resource)
 {
   CSingleLock lock(m_resourceSection);
   std::vector<IDispResource*>::iterator i = find(m_resources.begin(), m_resources.end(), resource);

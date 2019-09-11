@@ -24,7 +24,8 @@ public:
     : sources(sources)
     , reached(0)
     , timeout(timeout)
-  {}
+  {
+  }
   unsigned int sources;
   unsigned int reached;
   CCriticalSection section;
@@ -35,9 +36,9 @@ public:
 /**
  * CDVDMsgGeneralSynchronize --- GENERAL_SYNCRONIZR
  */
-CDVDMsgGeneralSynchronize::CDVDMsgGeneralSynchronize(unsigned int timeout, unsigned int sources) :
-  CDVDMsg(GENERAL_SYNCHRONIZE),
-  m_p(new CDVDMsgGeneralSynchronizePriv(timeout, sources))
+CDVDMsgGeneralSynchronize::CDVDMsgGeneralSynchronize(unsigned int timeout, unsigned int sources)
+  : CDVDMsg(GENERAL_SYNCHRONIZE)
+  , m_p(new CDVDMsgGeneralSynchronizePriv(timeout, sources))
 {
 }
 
@@ -67,7 +68,7 @@ bool CDVDMsgGeneralSynchronize::Wait(unsigned int milliseconds, unsigned int sou
     if (m_p->timeout.IsTimePast())
     {
       CLog::Log(LOGDEBUG, "CDVDMsgGeneralSynchronize - global timeout");
-      return true;  // global timeout, we are done
+      return true; // global timeout, we are done
     }
     if (timeout.IsTimePast())
     {
@@ -79,7 +80,8 @@ bool CDVDMsgGeneralSynchronize::Wait(unsigned int milliseconds, unsigned int sou
 
 void CDVDMsgGeneralSynchronize::Wait(std::atomic<bool>& abort, unsigned int source)
 {
-  while(!Wait(100, source) && !abort);
+  while (!Wait(100, source) && !abort)
+    ;
 }
 
 long CDVDMsgGeneralSynchronize::Release()
@@ -96,10 +98,11 @@ long CDVDMsgGeneralSynchronize::Release()
 /**
  * CDVDMsgDemuxerPacket --- DEMUXER_PACKET
  */
-CDVDMsgDemuxerPacket::CDVDMsgDemuxerPacket(DemuxPacket* packet, bool drop) : CDVDMsg(DEMUXER_PACKET)
+CDVDMsgDemuxerPacket::CDVDMsgDemuxerPacket(DemuxPacket* packet, bool drop)
+  : CDVDMsg(DEMUXER_PACKET)
 {
   m_packet = packet;
-  m_drop   = drop;
+  m_drop = drop;
 }
 
 CDVDMsgDemuxerPacket::~CDVDMsgDemuxerPacket()

@@ -33,7 +33,7 @@ bool CMusicLibraryCleaningJob::operator==(const CJob* job) const
   return true;
 }
 
-bool CMusicLibraryCleaningJob::Work(CMusicDatabase &db)
+bool CMusicLibraryCleaningJob::Work(CMusicDatabase& db)
 {
   db.Cleanup(GetProgressDialog());
   return true;

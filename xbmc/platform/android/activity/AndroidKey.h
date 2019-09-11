@@ -17,10 +17,10 @@
 class CAndroidKey
 {
 public:
-  CAndroidKey() {};
- ~CAndroidKey() {};
+  CAndroidKey(){};
+  ~CAndroidKey(){};
 
-  bool onKeyboardEvent(AInputEvent *event);
+  bool onKeyboardEvent(AInputEvent* event);
 
   static void SetHandleMediaKeys(bool enable) { m_handleMediaKeys = enable; }
   static void SetHandleSearchKeys(bool enable) { m_handleSearchKeys = enable; }

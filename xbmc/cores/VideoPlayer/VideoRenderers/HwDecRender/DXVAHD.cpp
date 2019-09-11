@@ -12,29 +12,32 @@
 #define DEFAULT_STREAM_INDEX (0)
 
 #include "DXVAHD.h"
-#include "platform/win32/WIN32Util.h"
-#include "rendering/dx/RenderContext.h"
-#include "rendering/dx/DeviceResources.h"
-#include "VideoRenderers/RenderManager.h"
+
 #include "VideoRenderers/RenderFlags.h"
+#include "VideoRenderers/RenderManager.h"
 #include "VideoRenderers/windows/RendererBase.h"
+#include "rendering/dx/DeviceResources.h"
+#include "rendering/dx/RenderContext.h"
 #include "utils/log.h"
 
+#include "platform/win32/WIN32Util.h"
+
 #include <Windows.h>
-#include <dxgi1_5.h>
 #include <d3d11_4.h>
+#include <dxgi1_5.h>
 
 using namespace DXVA;
 using namespace Microsoft::WRL;
 
 #define LOGIFERROR(a) \
-do { \
-  HRESULT res = a; \
-  if(FAILED(res)) \
+  do \
   { \
-    CLog::LogF(LOGERROR, "failed executing "#a" at line %d with error %x", __LINE__, res); \
-  } \
-} while(0);
+    HRESULT res = a; \
+    if (FAILED(res)) \
+    { \
+      CLog::LogF(LOGERROR, "failed executing " #a " at line %d with error %x", __LINE__, res); \
+    } \
+  } while (0);
 
 template<typename T>
 T from_rational(uint64_t default_factor, AVRational rat)
@@ -104,7 +107,8 @@ bool CProcessorHD::InitProcessor()
   m_pVideoContext = nullptr;
   m_pEnumerator = nullptr;
 
-  ComPtr<ID3D11DeviceContext1> pD3DDeviceContext = DX::DeviceResources::Get()->GetImmediateContext();
+  ComPtr<ID3D11DeviceContext1> pD3DDeviceContext =
+      DX::DeviceResources::Get()->GetImmediateContext();
   ComPtr<ID3D11Device> pD3DDevice = DX::DeviceResources::Get()->GetD3DDevice();
 
   if (FAILED(pD3DDeviceContext.As(&m_pVideoContext)))
@@ -128,9 +132,11 @@ bool CProcessorHD::InitProcessor()
   contentDesc.OutputHeight = m_height;
   contentDesc.Usage = D3D11_VIDEO_USAGE_PLAYBACK_NORMAL;
 
-  if (FAILED(m_pVideoDevice->CreateVideoProcessorEnumerator(&contentDesc, m_pEnumerator.ReleaseAndGetAddressOf())))
+  if (FAILED(m_pVideoDevice->CreateVideoProcessorEnumerator(
+          &contentDesc, m_pEnumerator.ReleaseAndGetAddressOf())))
   {
-    CLog::LogF(LOGWARNING, "failed to init video enumerator with params: %dx%d.", m_width, m_height);
+    CLog::LogF(LOGWARNING, "failed to init video enumerator with params: %dx%d.", m_width,
+               m_height);
     return false;
   }
 
@@ -174,17 +180,18 @@ bool CProcessorHD::InitProcessor()
   CLog::LogF(LOGDEBUG, "selected video processor index: %d.", m_procIndex);
 
   LOGIFERROR(m_pEnumerator->GetVideoProcessorRateConversionCaps(m_procIndex, &m_rateCaps))
-  m_max_fwd_refs  = std::min(m_rateCaps.FutureFrames, 2u);
-  m_max_back_refs = std::min(m_rateCaps.PastFrames,  4u);
+  m_max_fwd_refs = std::min(m_rateCaps.FutureFrames, 2u);
+  m_max_back_refs = std::min(m_rateCaps.PastFrames, 4u);
 
   CLog::LogF(LOGNOTICE, "supported deinterlace methods: blend:%s, bob:%s, adaptive:%s, mocomp:%s.",
-    (m_rateCaps.ProcessorCaps & 0x1) != 0 ? "yes" : "no", // BLEND
-    (m_rateCaps.ProcessorCaps & 0x2) != 0 ? "yes" : "no", // BOB
-    (m_rateCaps.ProcessorCaps & 0x4) != 0 ? "yes" : "no", // ADAPTIVE
-    (m_rateCaps.ProcessorCaps & 0x8) != 0 ? "yes" : "no"  // MOTION_COMPENSATION
-    );
+             (m_rateCaps.ProcessorCaps & 0x1) != 0 ? "yes" : "no", // BLEND
+             (m_rateCaps.ProcessorCaps & 0x2) != 0 ? "yes" : "no", // BOB
+             (m_rateCaps.ProcessorCaps & 0x4) != 0 ? "yes" : "no", // ADAPTIVE
+             (m_rateCaps.ProcessorCaps & 0x8) != 0 ? "yes" : "no" // MOTION_COMPENSATION
+  );
 
-  CLog::LogF(LOGDEBUG, "selected video processor allows %d future frames and %d past frames.", m_rateCaps.FutureFrames, m_rateCaps.PastFrames);
+  CLog::LogF(LOGDEBUG, "selected video processor allows %d future frames and %d past frames.",
+             m_rateCaps.FutureFrames, m_rateCaps.PastFrames);
 
   //m_size = m_max_back_refs + 1 + m_max_fwd_refs;  // refs + 1 display
 
@@ -194,12 +201,14 @@ bool CProcessorHD::InitProcessor()
     if (m_vcaps.FilterCaps & (1 << i))
     {
       m_Filters[i].Range = {};
-      m_Filters[i].bSupported = SUCCEEDED(m_pEnumerator->GetVideoProcessorFilterRange(PROCAMP_FILTERS[i], &m_Filters[i].Range));
+      m_Filters[i].bSupported = SUCCEEDED(
+          m_pEnumerator->GetVideoProcessorFilterRange(PROCAMP_FILTERS[i], &m_Filters[i].Range));
 
       if (m_Filters[i].bSupported)
       {
         CLog::LogF(LOGDEBUG, "filter %d has following params - max: %d, min: %d, default: %d",
-          PROCAMP_FILTERS[i], m_Filters[i].Range.Maximum, m_Filters[i].Range.Minimum, m_Filters[i].Range.Default);
+                   PROCAMP_FILTERS[i], m_Filters[i].Range.Maximum, m_Filters[i].Range.Minimum,
+                   m_Filters[i].Range.Default);
       }
     }
     else
@@ -212,7 +221,8 @@ bool CProcessorHD::InitProcessor()
   return true;
 }
 
-bool CProcessorHD::IsFormatSupported(DXGI_FORMAT format, D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT support) const
+bool CProcessorHD::IsFormatSupported(DXGI_FORMAT format,
+                                     D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT support) const
 {
   UINT uiFlags;
   if (S_OK == m_pEnumerator->CheckVideoProcessorFormat(format, &uiFlags))
@@ -228,7 +238,8 @@ bool CProcessorHD::IsFormatSupported(DXGI_FORMAT format, D3D11_VIDEO_PROCESSOR_F
 bool CProcessorHD::CheckFormats() const
 {
   // check default output format (as render target)
-  return IsFormatSupported(DX::Windowing()->GetBackBuffer().GetFormat(), D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT_OUTPUT);
+  return IsFormatSupported(DX::Windowing()->GetBackBuffer().GetFormat(),
+                           D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT_OUTPUT);
 }
 
 bool CProcessorHD::Open(UINT width, UINT height)
@@ -274,7 +285,8 @@ bool CProcessorHD::OpenProcessor()
   CLog::LogF(LOGDEBUG, "creating processor.");
 
   // create processor
-  HRESULT hr = m_pVideoDevice->CreateVideoProcessor(m_pEnumerator.Get(), m_procIndex, m_pVideoProcessor.ReleaseAndGetAddressOf());
+  HRESULT hr = m_pVideoDevice->CreateVideoProcessor(m_pEnumerator.Get(), m_procIndex,
+                                                    m_pVideoProcessor.ReleaseAndGetAddressOf());
   if (FAILED(hr))
   {
     CLog::LogF(LOGDEBUG, "failed creating video processor with error %x.", hr);
@@ -283,13 +295,14 @@ bool CProcessorHD::OpenProcessor()
 
   // Output background color (black)
   D3D11_VIDEO_COLOR color;
-  color.YCbCr = { 0.0625f, 0.5f, 0.5f, 1.0f }; // black color
+  color.YCbCr = {0.0625f, 0.5f, 0.5f, 1.0f}; // black color
   m_pVideoContext->VideoProcessorSetOutputBackgroundColor(m_pVideoProcessor.Get(), TRUE, &color);
 
   return true;
 }
 
-void CProcessorHD::ApplyFilter(D3D11_VIDEO_PROCESSOR_FILTER filter, int value, int min, int max, int def) const
+void CProcessorHD::ApplyFilter(
+    D3D11_VIDEO_PROCESSOR_FILTER filter, int value, int min, int max, int def) const
 {
   if (filter >= static_cast<D3D11_VIDEO_PROCESSOR_FILTER>(NUM_FILTERS))
     return;
@@ -301,14 +314,15 @@ void CProcessorHD::ApplyFilter(D3D11_VIDEO_PROCESSOR_FILTER filter, int value, i
   D3D11_VIDEO_PROCESSOR_FILTER_RANGE range = m_Filters[filter].Range;
   int val;
 
-  if(value > def)
+  if (value > def)
     val = range.Default + (range.Maximum - range.Default) * (value - def) / (max - def);
-  else if(value < def)
+  else if (value < def)
     val = range.Default + (range.Minimum - range.Default) * (value - def) / (min - def);
   else
     val = range.Default;
 
-  m_pVideoContext->VideoProcessorSetStreamFilter(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, filter, val != range.Default, val);
+  m_pVideoContext->VideoProcessorSetStreamFilter(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX,
+                                                 filter, val != range.Default, val);
 }
 
 ID3D11VideoProcessorInputView* CProcessorHD::GetInputView(CRenderBuffer* view) const
@@ -322,7 +336,8 @@ ID3D11VideoProcessorInputView* CProcessorHD::GetInputView(CRenderBuffer* view) c
   if (SUCCEEDED(hr))
   {
     vpivd.Texture2D.ArraySlice = arrayIdx;
-    hr = m_pVideoDevice->CreateVideoProcessorInputView(resource.Get(), m_pEnumerator.Get(), &vpivd, inputView.GetAddressOf());
+    hr = m_pVideoDevice->CreateVideoProcessorInputView(resource.Get(), m_pEnumerator.Get(), &vpivd,
+                                                       inputView.GetAddressOf());
   }
 
   if (FAILED(hr) || hr == S_FALSE)
@@ -355,8 +370,7 @@ DXGI_COLOR_SPACE_TYPE CProcessorHD::GetDXGIColorSpace(CRenderBuffer* view, bool 
 
       return DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P2020;
     }
-    if (view->color_transfer == AVCOL_TRC_LINEAR ||
-        view->color_transfer == AVCOL_TRC_LOG)
+    if (view->color_transfer == AVCOL_TRC_LINEAR || view->color_transfer == AVCOL_TRC_LOG)
       return DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709;
 
     return DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
@@ -377,8 +391,7 @@ DXGI_COLOR_SPACE_TYPE CProcessorHD::GetDXGIColorSpace(CRenderBuffer* view, bool 
     return DXGI_COLOR_SPACE_YCBCR_STUDIO_G22_LEFT_P2020;
   }
   // SDTV
-  if (view->primaries == AVCOL_PRI_BT470BG ||
-      view->primaries == AVCOL_PRI_SMPTE170M)
+  if (view->primaries == AVCOL_PRI_BT470BG || view->primaries == AVCOL_PRI_SMPTE170M)
   {
     if (view->full_range)
       return DXGI_COLOR_SPACE_YCBCR_FULL_G22_LEFT_P601;
@@ -397,7 +410,15 @@ DXGI_COLOR_SPACE_TYPE CProcessorHD::GetDXGIColorSpace(CRenderBuffer* view, bool 
   return DXGI_COLOR_SPACE_YCBCR_STUDIO_G22_LEFT_P709;
 }
 
-bool CProcessorHD::Render(CRect src, CRect dst, ID3D11Resource* target, CRenderBuffer** views, DWORD flags, UINT frameIdx, UINT rotation, float contrast, float brightness)
+bool CProcessorHD::Render(CRect src,
+                          CRect dst,
+                          ID3D11Resource* target,
+                          CRenderBuffer** views,
+                          DWORD flags,
+                          UINT frameIdx,
+                          UINT rotation,
+                          float contrast,
+                          float brightness)
 {
   CSingleLock lock(m_section);
 
@@ -408,8 +429,8 @@ bool CProcessorHD::Render(CRect src, CRect dst, ID3D11Resource* target, CRenderB
   if (!views[2])
     return false;
 
-  RECT sourceRECT = { src.x1, src.y1, src.x2, src.y2 };
-  RECT dstRECT    = { dst.x1, dst.y1, dst.x2, dst.y2 };
+  RECT sourceRECT = {src.x1, src.y1, src.x2, src.y2};
+  RECT dstRECT = {dst.x1, dst.y1, dst.x2, dst.y2};
 
   D3D11_VIDEO_FRAME_FORMAT dxvaFrameFormat = D3D11_VIDEO_FRAME_FORMAT_PROGRESSIVE;
 
@@ -493,11 +514,14 @@ bool CProcessorHD::Render(CRect src, CRect dst, ID3D11Resource* target, CRenderB
   stream_data.OutputIndex = flags & RENDER_FLAG_FIELD1 && !frameProgressive ? 1 : 0;
 
   // input format
-  m_pVideoContext->VideoProcessorSetStreamFrameFormat(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, dxvaFrameFormat);
+  m_pVideoContext->VideoProcessorSetStreamFrameFormat(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX,
+                                                      dxvaFrameFormat);
   // Source rect
-  m_pVideoContext->VideoProcessorSetStreamSourceRect(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, TRUE, &sourceRECT);
+  m_pVideoContext->VideoProcessorSetStreamSourceRect(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX,
+                                                     TRUE, &sourceRECT);
   // Stream dest rect
-  m_pVideoContext->VideoProcessorSetStreamDestRect(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, TRUE, &dstRECT);
+  m_pVideoContext->VideoProcessorSetStreamDestRect(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX,
+                                                   TRUE, &dstRECT);
   // Output rect
   m_pVideoContext->VideoProcessorSetOutputTargetRect(m_pVideoProcessor.Get(), TRUE, &dstRECT);
 
@@ -505,11 +529,12 @@ bool CProcessorHD::Render(CRect src, CRect dst, ID3D11Resource* target, CRenderB
   if (SUCCEEDED(m_pVideoContext.As(&videoCtx1)))
   {
     const DXGI_COLOR_SPACE_TYPE source_color = GetDXGIColorSpace(views[2], m_bSupportHDR10);
-    const DXGI_COLOR_SPACE_TYPE target_color = DX::Windowing()->UseLimitedColor() 
-                                               ? DXGI_COLOR_SPACE_RGB_STUDIO_G22_NONE_P709 
-                                               : DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
+    const DXGI_COLOR_SPACE_TYPE target_color = DX::Windowing()->UseLimitedColor()
+                                                   ? DXGI_COLOR_SPACE_RGB_STUDIO_G22_NONE_P709
+                                                   : DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
 
-    videoCtx1->VideoProcessorSetStreamColorSpace1(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, source_color);
+    videoCtx1->VideoProcessorSetStreamColorSpace1(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX,
+                                                  source_color);
     videoCtx1->VideoProcessorSetOutputColorSpace1(m_pVideoProcessor.Get(), target_color);
     // makes target available for processing in shaders
     videoCtx1->VideoProcessorSetOutputShaderUsage(m_pVideoProcessor.Get(), 1);
@@ -520,52 +545,66 @@ bool CProcessorHD::Render(CRect src, CRect dst, ID3D11Resource* target, CRenderB
       if (SUCCEEDED(m_pVideoContext.As(&videoCtx2)) && views[2]->hasDisplayMetadata)
       {
         DXGI_HDR_METADATA_HDR10 hdr10 = {};
-        hdr10.WhitePoint[0] = from_rational<uint16_t>(50000, views[2]->displayMetadata.white_point[0]);
-        hdr10.WhitePoint[1] = from_rational<uint16_t>(50000, views[2]->displayMetadata.white_point[1]);
+        hdr10.WhitePoint[0] =
+            from_rational<uint16_t>(50000, views[2]->displayMetadata.white_point[0]);
+        hdr10.WhitePoint[1] =
+            from_rational<uint16_t>(50000, views[2]->displayMetadata.white_point[1]);
         if (views[2]->displayMetadata.has_primaries)
         {
-          hdr10.RedPrimary[0] = from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[0][0]);
-          hdr10.RedPrimary[1] = from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[0][1]);
-          hdr10.GreenPrimary[0] = from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[1][0]);
-          hdr10.GreenPrimary[1] = from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[1][1]);
-          hdr10.BluePrimary[0] = from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[2][0]);
-          hdr10.BluePrimary[1] = from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[2][1]);
+          hdr10.RedPrimary[0] =
+              from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[0][0]);
+          hdr10.RedPrimary[1] =
+              from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[0][1]);
+          hdr10.GreenPrimary[0] =
+              from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[1][0]);
+          hdr10.GreenPrimary[1] =
+              from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[1][1]);
+          hdr10.BluePrimary[0] =
+              from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[2][0]);
+          hdr10.BluePrimary[1] =
+              from_rational<uint16_t>(50000, views[2]->displayMetadata.display_primaries[2][1]);
         }
         if (views[2]->displayMetadata.has_luminance)
         {
-          hdr10.MinMasteringLuminance = from_rational<uint32_t>(10000, views[2]->displayMetadata.min_luminance);
-          hdr10.MaxMasteringLuminance = from_rational<uint32_t>(10000, views[2]->displayMetadata.max_luminance);
+          hdr10.MinMasteringLuminance =
+              from_rational<uint32_t>(10000, views[2]->displayMetadata.min_luminance);
+          hdr10.MaxMasteringLuminance =
+              from_rational<uint32_t>(10000, views[2]->displayMetadata.max_luminance);
         }
         if (views[2]->hasLightMetadata)
         {
           hdr10.MaxContentLightLevel = static_cast<uint16_t>(views[2]->lightMetadata.MaxCLL);
           hdr10.MaxFrameAverageLightLevel = static_cast<uint16_t>(views[2]->lightMetadata.MaxFALL);
         }
-        videoCtx2->VideoProcessorSetStreamHDRMetaData(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, 
-                                                      DXGI_HDR_METADATA_TYPE_HDR10, sizeof(hdr10), &hdr10);
+        videoCtx2->VideoProcessorSetStreamHDRMetaData(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX,
+                                                      DXGI_HDR_METADATA_TYPE_HDR10, sizeof(hdr10),
+                                                      &hdr10);
       }
     }
   }
   else
   {
     // input colorspace
-    bool isBT601 = views[2]->color_space == AVCOL_SPC_BT470BG || views[2]->color_space == AVCOL_SPC_SMPTE170M;
-    D3D11_VIDEO_PROCESSOR_COLOR_SPACE colorSpace
-    {
-      0,                            // 0 - Playback, 1 - Processing
-      views[2]->full_range ? 0 : 1, // 0 - Full (0-255), 1 - Limited (16-235) (RGB)
-      isBT601 ? 1 : 0,              // 0 - BT.601, 1 - BT.709
-      0,                            // 0 - Conventional YCbCr, 1 - xvYCC
-      views[2]->full_range ? 2 : 1  // 0 - driver defaults, 2 - Full range [0-255], 1 - Studio range [16-235] (YUV)
+    bool isBT601 =
+        views[2]->color_space == AVCOL_SPC_BT470BG || views[2]->color_space == AVCOL_SPC_SMPTE170M;
+    D3D11_VIDEO_PROCESSOR_COLOR_SPACE colorSpace{
+        0, // 0 - Playback, 1 - Processing
+        views[2]->full_range ? 0 : 1, // 0 - Full (0-255), 1 - Limited (16-235) (RGB)
+        isBT601 ? 1 : 0, // 0 - BT.601, 1 - BT.709
+        0, // 0 - Conventional YCbCr, 1 - xvYCC
+        views[2]->full_range
+            ? 2
+            : 1 // 0 - driver defaults, 2 - Full range [0-255], 1 - Studio range [16-235] (YUV)
     };
-    m_pVideoContext->VideoProcessorSetStreamColorSpace(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, &colorSpace);
+    m_pVideoContext->VideoProcessorSetStreamColorSpace(m_pVideoProcessor.Get(),
+                                                       DEFAULT_STREAM_INDEX, &colorSpace);
     // Output color space
     // don't apply any color range conversion, this will be fixed at later stage.
-    colorSpace.Usage = 0;  // 0 - playback, 1 - video processing
-    colorSpace.RGB_Range = DX::Windowing()->UseLimitedColor() ? 1 : 0;  // 0 - 0-255, 1 - 16-235
-    colorSpace.YCbCr_Matrix = 1;  // 0 - BT.601, 1 = BT.709
-    colorSpace.YCbCr_xvYCC = 1;  // 0 - Conventional YCbCr, 1 - xvYCC
-    colorSpace.Nominal_Range = 0;  // 2 - 0-255, 1 = 16-235, 0 - undefined
+    colorSpace.Usage = 0; // 0 - playback, 1 - video processing
+    colorSpace.RGB_Range = DX::Windowing()->UseLimitedColor() ? 1 : 0; // 0 - 0-255, 1 - 16-235
+    colorSpace.YCbCr_Matrix = 1; // 0 - BT.601, 1 = BT.709
+    colorSpace.YCbCr_xvYCC = 1; // 0 - Conventional YCbCr, 1 - xvYCC
+    colorSpace.Nominal_Range = 0; // 2 - 0-255, 1 = 16-235, 0 - undefined
     m_pVideoContext->VideoProcessorSetOutputColorSpace(m_pVideoProcessor.Get(), &colorSpace);
   }
 
@@ -577,22 +616,27 @@ bool CProcessorHD::Render(CRect src, CRect dst, ID3D11Resource* target, CRenderB
   ApplyFilter(D3D11_VIDEO_PROCESSOR_FILTER_HUE, 50, 0, 100, 50);
   ApplyFilter(D3D11_VIDEO_PROCESSOR_FILTER_SATURATION, 50, 0, 100, 50);
   // Rotation
-  m_pVideoContext->VideoProcessorSetStreamRotation(m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, rotation != 0,
-                                                   static_cast<D3D11_VIDEO_PROCESSOR_ROTATION>(rotation / 90));
+  m_pVideoContext->VideoProcessorSetStreamRotation(
+      m_pVideoProcessor.Get(), DEFAULT_STREAM_INDEX, rotation != 0,
+      static_cast<D3D11_VIDEO_PROCESSOR_ROTATION>(rotation / 90));
 
   // create output view for surface.
-  D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC OutputViewDesc = { D3D11_VPOV_DIMENSION_TEXTURE2D, { 0 }};
+  D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC OutputViewDesc = {D3D11_VPOV_DIMENSION_TEXTURE2D, {0}};
   ComPtr<ID3D11VideoProcessorOutputView> pOutputView;
-  HRESULT hr = m_pVideoDevice->CreateVideoProcessorOutputView(target, m_pEnumerator.Get(), &OutputViewDesc, &pOutputView);
+  HRESULT hr = m_pVideoDevice->CreateVideoProcessorOutputView(target, m_pEnumerator.Get(),
+                                                              &OutputViewDesc, &pOutputView);
   if (S_OK != hr)
-    CLog::LogF(FAILED(hr) ? LOGERROR : LOGWARNING, "video device returns result '%x' while creating processor output view.", hr);
+    CLog::LogF(FAILED(hr) ? LOGERROR : LOGWARNING,
+               "video device returns result '%x' while creating processor output view.", hr);
 
   if (SUCCEEDED(hr))
   {
-    hr = m_pVideoContext->VideoProcessorBlt(m_pVideoProcessor.Get(), pOutputView.Get(), frameIdx, 1, &stream_data);
+    hr = m_pVideoContext->VideoProcessorBlt(m_pVideoProcessor.Get(), pOutputView.Get(), frameIdx, 1,
+                                            &stream_data);
     if (S_OK != hr)
     {
-      CLog::LogF(FAILED(hr) ? LOGERROR : LOGWARNING, "video device returns result '%x' while VideoProcessorBlt execution.", hr);
+      CLog::LogF(FAILED(hr) ? LOGERROR : LOGWARNING,
+                 "video device returns result '%x' while VideoProcessorBlt execution.", hr);
     }
   }
 

@@ -29,14 +29,15 @@ CDAVDirectory::~CDAVDirectory(void) = default;
  * <!ELEMENT propstat (prop, status, responsedescription?) >
  *
  */
-void CDAVDirectory::ParseResponse(const TiXmlElement *pElement, CFileItem &item)
+void CDAVDirectory::ParseResponse(const TiXmlElement* pElement, CFileItem& item)
 {
-  const TiXmlElement *pResponseChild;
-  const TiXmlNode *pPropstatChild;
-  const TiXmlElement *pPropChild;
+  const TiXmlElement* pResponseChild;
+  const TiXmlNode* pPropstatChild;
+  const TiXmlElement* pPropChild;
 
   /* Iterate response children elements */
-  for (pResponseChild = pElement->FirstChildElement(); pResponseChild != 0; pResponseChild = pResponseChild->NextSiblingElement())
+  for (pResponseChild = pElement->FirstChildElement(); pResponseChild != 0;
+       pResponseChild = pResponseChild->NextSiblingElement())
   {
     if (CDAVCommon::ValueWithoutNamespace(pResponseChild, "href") && !pResponseChild->NoChildren())
     {
@@ -44,44 +45,46 @@ void CDAVDirectory::ParseResponse(const TiXmlElement *pElement, CFileItem &item)
       URIUtils::RemoveSlashAtEnd(path);
       item.SetPath(path);
     }
-    else
-    if (CDAVCommon::ValueWithoutNamespace(pResponseChild, "propstat"))
+    else if (CDAVCommon::ValueWithoutNamespace(pResponseChild, "propstat"))
     {
       if (CDAVCommon::GetStatusTag(pResponseChild->ToElement()).find("200 OK") != std::string::npos)
       {
         /* Iterate propstat children elements */
-        for (pPropstatChild = pResponseChild->FirstChild(); pPropstatChild != 0; pPropstatChild = pPropstatChild->NextSibling())
+        for (pPropstatChild = pResponseChild->FirstChild(); pPropstatChild != 0;
+             pPropstatChild = pPropstatChild->NextSibling())
         {
           if (CDAVCommon::ValueWithoutNamespace(pPropstatChild, "prop"))
           {
             /* Iterate all properties available */
-            for (pPropChild = pPropstatChild->FirstChildElement(); pPropChild != 0; pPropChild = pPropChild->NextSiblingElement())
+            for (pPropChild = pPropstatChild->FirstChildElement(); pPropChild != 0;
+                 pPropChild = pPropChild->NextSiblingElement())
             {
-              if (CDAVCommon::ValueWithoutNamespace(pPropChild, "getcontentlength") && !pPropChild->NoChildren())
+              if (CDAVCommon::ValueWithoutNamespace(pPropChild, "getcontentlength") &&
+                  !pPropChild->NoChildren())
               {
                 item.m_dwSize = strtoll(pPropChild->FirstChild()->Value(), NULL, 10);
               }
-              else
-              if (CDAVCommon::ValueWithoutNamespace(pPropChild, "getlastmodified") && !pPropChild->NoChildren())
+              else if (CDAVCommon::ValueWithoutNamespace(pPropChild, "getlastmodified") &&
+                       !pPropChild->NoChildren())
               {
                 struct tm timeDate = {0};
                 strptime(pPropChild->FirstChild()->Value(), "%a, %d %b %Y %T", &timeDate);
                 item.m_dateTime = mktime(&timeDate);
               }
-              else
-              if (CDAVCommon::ValueWithoutNamespace(pPropChild, "displayname") && !pPropChild->NoChildren())
+              else if (CDAVCommon::ValueWithoutNamespace(pPropChild, "displayname") &&
+                       !pPropChild->NoChildren())
               {
                 item.SetLabel(CURL::Decode(pPropChild->FirstChild()->ValueStr()));
               }
-              else
-              if (!item.m_dateTime.IsValid() && CDAVCommon::ValueWithoutNamespace(pPropChild, "creationdate") && !pPropChild->NoChildren())
+              else if (!item.m_dateTime.IsValid() &&
+                       CDAVCommon::ValueWithoutNamespace(pPropChild, "creationdate") &&
+                       !pPropChild->NoChildren())
               {
                 struct tm timeDate = {0};
                 strptime(pPropChild->FirstChild()->Value(), "%Y-%m-%dT%T", &timeDate);
                 item.m_dateTime = mktime(&timeDate);
               }
-              else
-              if (CDAVCommon::ValueWithoutNamespace(pPropChild, "resourcetype"))
+              else if (CDAVCommon::ValueWithoutNamespace(pPropChild, "resourcetype"))
               {
                 if (CDAVCommon::ValueWithoutNamespace(pPropChild->FirstChild(), "collection"))
                 {
@@ -96,7 +99,7 @@ void CDAVDirectory::ParseResponse(const TiXmlElement *pElement, CFileItem &item)
   }
 }
 
-bool CDAVDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CDAVDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   CCurlFile dav;
   std::string strRequest = "PROPFIND";
@@ -104,21 +107,21 @@ bool CDAVDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   dav.SetCustomRequest(strRequest);
   dav.SetMimeType("text/xml; charset=\"utf-8\"");
   dav.SetRequestHeader("depth", 1);
-  dav.SetPostData(
-    "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"
-    " <D:propfind xmlns:D=\"DAV:\">"
-    "   <D:prop>"
-    "     <D:resourcetype/>"
-    "     <D:getcontentlength/>"
-    "     <D:getlastmodified/>"
-    "     <D:creationdate/>"
-    "     <D:displayname/>"
-    "    </D:prop>"
-    "  </D:propfind>");
+  dav.SetPostData("<?xml version=\"1.0\" encoding=\"utf-8\" ?>"
+                  " <D:propfind xmlns:D=\"DAV:\">"
+                  "   <D:prop>"
+                  "     <D:resourcetype/>"
+                  "     <D:getcontentlength/>"
+                  "     <D:getlastmodified/>"
+                  "     <D:creationdate/>"
+                  "     <D:displayname/>"
+                  "    </D:prop>"
+                  "  </D:propfind>");
 
   if (!dav.Open(url))
   {
-    CLog::Log(LOGERROR, "%s - Unable to get dav directory (%s)", __FUNCTION__, url.GetRedacted().c_str());
+    CLog::Log(LOGERROR, "%s - Unable to get dav directory (%s)", __FUNCTION__,
+              url.GetRedacted().c_str());
     return false;
   }
 
@@ -131,14 +134,16 @@ bool CDAVDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
   if (!davResponse.Parse(strResponse))
   {
-    CLog::Log(LOGERROR, "%s - Unable to process dav directory (%s)", __FUNCTION__, url.GetRedacted().c_str());
+    CLog::Log(LOGERROR, "%s - Unable to process dav directory (%s)", __FUNCTION__,
+              url.GetRedacted().c_str());
     dav.Close();
     return false;
   }
 
-  TiXmlNode *pChild;
+  TiXmlNode* pChild;
   // Iterate over all responses
-  for (pChild = davResponse.RootElement()->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+  for (pChild = davResponse.RootElement()->FirstChild(); pChild != 0;
+       pChild = pChild->NextSibling())
   {
     if (CDAVCommon::ValueWithoutNamespace(pChild, "response"))
     {
@@ -147,7 +152,8 @@ bool CDAVDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       CURL url2(url);
       CURL url3(item.GetPath());
 
-      std::string itemPath(URIUtils::AddFileToFolder(url2.GetWithoutFilename(), url3.GetFileName()));
+      std::string itemPath(
+          URIUtils::AddFileToFolder(url2.GetWithoutFilename(), url3.GetFileName()));
 
       if (item.GetLabel().empty())
       {
@@ -186,7 +192,8 @@ bool CDAVDirectory::Create(const CURL& url)
 
   if (!dav.Execute(url))
   {
-    CLog::Log(LOGERROR, "%s - Unable to create dav directory (%s) - %d", __FUNCTION__, url.GetRedacted().c_str(), dav.GetLastResponseCode());
+    CLog::Log(LOGERROR, "%s - Unable to create dav directory (%s) - %d", __FUNCTION__,
+              url.GetRedacted().c_str(), dav.GetLastResponseCode());
     return false;
   }
 
@@ -217,7 +224,8 @@ bool CDAVDirectory::Remove(const CURL& url)
 
   if (!dav.Execute(url))
   {
-    CLog::Log(LOGERROR, "%s - Unable to delete dav directory (%s) - %d", __FUNCTION__, url.GetRedacted().c_str(), dav.GetLastResponseCode());
+    CLog::Log(LOGERROR, "%s - Unable to delete dav directory (%s) - %d", __FUNCTION__,
+              url.GetRedacted().c_str(), dav.GetLastResponseCode());
     return false;
   }
 

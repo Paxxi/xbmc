@@ -41,7 +41,7 @@ public:
    \param item a music CFileItem
    \return true if we fill art, false if there is no art found
    */
-  bool FillLibraryArt(CFileItem &item) override;
+  bool FillLibraryArt(CFileItem& item) override;
 
   /*! \brief Fill the thumb of a music file/folder item
    First uses a cached thumb from a previous run, then checks for a local thumb
@@ -49,12 +49,12 @@ public:
    \param item the CFileItem object to fill
    \return true if we fill the thumb, false otherwise
    */
-  virtual bool FillThumb(CFileItem &item, bool folderThumbs = true);
+  virtual bool FillThumb(CFileItem& item, bool folderThumbs = true);
 
-  static bool GetEmbeddedThumb(const std::string &path, EmbeddedArt &art);
+  static bool GetEmbeddedThumb(const std::string& path, EmbeddedArt& art);
 
 protected:
-  CMusicDatabase *m_musicDatabase;
-  typedef std::map<int, std::map<std::string, std::string> > ArtCache;
+  CMusicDatabase* m_musicDatabase;
+  typedef std::map<int, std::map<std::string, std::string>> ArtCache;
   ArtCache m_albumArt;
 };

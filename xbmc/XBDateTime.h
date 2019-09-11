@@ -47,25 +47,30 @@
    - \link ListItem_NextDuration_format `ListItem.NextDuration(format)` \endlink
   <p>
  */
-enum TIME_FORMAT { TIME_FORMAT_GUESS       =  0, ///< usually used as the fallback value if the format value is empty
-                   TIME_FORMAT_SS          =  1, ///< <b>ss</b> - seconds only
-                   TIME_FORMAT_MM          =  2, ///< <b>mm</b> - minutes only (2-digit)
-                   TIME_FORMAT_MM_SS       =  3, ///< <b>mm:ss</b> - minutes and seconds
-                   TIME_FORMAT_HH          =  4, ///< <b>hh</b> - hours only (2-digit)
-                   TIME_FORMAT_HH_SS       =  5, ///< <b>hh:ss</b> - hours and seconds (this is not particularly useful)
-                   TIME_FORMAT_HH_MM       =  6, ///< <b>hh:mm</b> - hours and minutes
-                   TIME_FORMAT_HH_MM_SS    =  7, ///< <b>hh:mm:ss</b> - hours, minutes and seconds
-                   TIME_FORMAT_XX          =  8, ///<  <b>xx</b> - returns AM/PM for a 12-hour clock
-                   TIME_FORMAT_HH_MM_XX    = 14, ///< <b>hh:mm xx</b> - returns hours and minutes in a 12-hour clock format (AM/PM)
-                   TIME_FORMAT_HH_MM_SS_XX = 15, ///< <b>hh:mm:ss xx</b> - returns hours (2-digit), minutes and seconds in a 12-hour clock format (AM/PM) 
-                   TIME_FORMAT_H           = 16, ///< <b>h</b> - hours only (1-digit)
-                   TIME_FORMAT_H_MM_SS     = 19, ///< <b>hh:mm:ss</b> - hours, minutes and seconds
-                   TIME_FORMAT_H_MM_SS_XX  = 27, ///< <b>hh:mm:ss xx</b> - returns hours (1-digit), minutes and seconds in a 12-hour clock format (AM/PM) 
-                   TIME_FORMAT_SECS        = 32, ///<  <b>secs</b> - total time in seconds
-                   TIME_FORMAT_MINS        = 64, ///<  <b>mins</b> - total time in minutes
-                   TIME_FORMAT_HOURS       = 128, ///< <b>hours</b> - total time in hours
-                   TIME_FORMAT_M           = 256 ///< <b>m</b> - minutes only (1-digit)
-                   };
+enum TIME_FORMAT
+{
+  TIME_FORMAT_GUESS = 0, ///< usually used as the fallback value if the format value is empty
+  TIME_FORMAT_SS = 1, ///< <b>ss</b> - seconds only
+  TIME_FORMAT_MM = 2, ///< <b>mm</b> - minutes only (2-digit)
+  TIME_FORMAT_MM_SS = 3, ///< <b>mm:ss</b> - minutes and seconds
+  TIME_FORMAT_HH = 4, ///< <b>hh</b> - hours only (2-digit)
+  TIME_FORMAT_HH_SS = 5, ///< <b>hh:ss</b> - hours and seconds (this is not particularly useful)
+  TIME_FORMAT_HH_MM = 6, ///< <b>hh:mm</b> - hours and minutes
+  TIME_FORMAT_HH_MM_SS = 7, ///< <b>hh:mm:ss</b> - hours, minutes and seconds
+  TIME_FORMAT_XX = 8, ///<  <b>xx</b> - returns AM/PM for a 12-hour clock
+  TIME_FORMAT_HH_MM_XX =
+      14, ///< <b>hh:mm xx</b> - returns hours and minutes in a 12-hour clock format (AM/PM)
+  TIME_FORMAT_HH_MM_SS_XX =
+      15, ///< <b>hh:mm:ss xx</b> - returns hours (2-digit), minutes and seconds in a 12-hour clock format (AM/PM)
+  TIME_FORMAT_H = 16, ///< <b>h</b> - hours only (1-digit)
+  TIME_FORMAT_H_MM_SS = 19, ///< <b>hh:mm:ss</b> - hours, minutes and seconds
+  TIME_FORMAT_H_MM_SS_XX =
+      27, ///< <b>hh:mm:ss xx</b> - returns hours (1-digit), minutes and seconds in a 12-hour clock format (AM/PM)
+  TIME_FORMAT_SECS = 32, ///<  <b>secs</b> - total time in seconds
+  TIME_FORMAT_MINS = 64, ///<  <b>mins</b> - total time in minutes
+  TIME_FORMAT_HOURS = 128, ///< <b>hours</b> - total time in hours
+  TIME_FORMAT_M = 256 ///< <b>m</b> - minutes only (1-digit)
+};
 
 class CDateTime;
 
@@ -76,21 +81,21 @@ public:
   CDateTimeSpan(const CDateTimeSpan& span);
   CDateTimeSpan(int day, int hour, int minute, int second);
 
-  bool operator >(const CDateTimeSpan& right) const;
-  bool operator >=(const CDateTimeSpan& right) const;
-  bool operator <(const CDateTimeSpan& right) const;
-  bool operator <=(const CDateTimeSpan& right) const;
-  bool operator ==(const CDateTimeSpan& right) const;
-  bool operator !=(const CDateTimeSpan& right) const;
+  bool operator>(const CDateTimeSpan& right) const;
+  bool operator>=(const CDateTimeSpan& right) const;
+  bool operator<(const CDateTimeSpan& right) const;
+  bool operator<=(const CDateTimeSpan& right) const;
+  bool operator==(const CDateTimeSpan& right) const;
+  bool operator!=(const CDateTimeSpan& right) const;
 
-  CDateTimeSpan operator +(const CDateTimeSpan& right) const;
-  CDateTimeSpan operator -(const CDateTimeSpan& right) const;
+  CDateTimeSpan operator+(const CDateTimeSpan& right) const;
+  CDateTimeSpan operator-(const CDateTimeSpan& right) const;
 
-  const CDateTimeSpan& operator +=(const CDateTimeSpan& right);
-  const CDateTimeSpan& operator -=(const CDateTimeSpan& right);
+  const CDateTimeSpan& operator+=(const CDateTimeSpan& right);
+  const CDateTimeSpan& operator-=(const CDateTimeSpan& right);
 
   void SetDateTimeSpan(int day, int hour, int minute, int second);
-  void SetFromPeriod(const std::string &period);
+  void SetFromPeriod(const std::string& period);
   void SetFromTimeString(const std::string& time);
 
   int GetDays() const;
@@ -125,63 +130,63 @@ public:
   static CDateTime GetUTCDateTime();
   static int MonthStringToMonthNum(const std::string& month);
 
-  static CDateTime FromDBDateTime(const std::string &dateTime);
-  static CDateTime FromDateString(const std::string &date);
-  static CDateTime FromDBDate(const std::string &date);
-  static CDateTime FromDBTime(const std::string &time);
-  static CDateTime FromW3CDate(const std::string &date);
-  static CDateTime FromW3CDateTime(const std::string &date, bool ignoreTimezone = false);
-  static CDateTime FromUTCDateTime(const CDateTime &dateTime);
-  static CDateTime FromUTCDateTime(const time_t &dateTime);
-  static CDateTime FromRFC1123DateTime(const std::string &dateTime);
+  static CDateTime FromDBDateTime(const std::string& dateTime);
+  static CDateTime FromDateString(const std::string& date);
+  static CDateTime FromDBDate(const std::string& date);
+  static CDateTime FromDBTime(const std::string& time);
+  static CDateTime FromW3CDate(const std::string& date);
+  static CDateTime FromW3CDateTime(const std::string& date, bool ignoreTimezone = false);
+  static CDateTime FromUTCDateTime(const CDateTime& dateTime);
+  static CDateTime FromUTCDateTime(const time_t& dateTime);
+  static CDateTime FromRFC1123DateTime(const std::string& dateTime);
 
-  const CDateTime& operator =(const SYSTEMTIME& right);
-  const CDateTime& operator =(const FILETIME& right);
-  const CDateTime& operator =(const time_t& right);
-  const CDateTime& operator =(const tm& right);
+  const CDateTime& operator=(const SYSTEMTIME& right);
+  const CDateTime& operator=(const FILETIME& right);
+  const CDateTime& operator=(const time_t& right);
+  const CDateTime& operator=(const tm& right);
 
-  bool operator >(const CDateTime& right) const;
-  bool operator >=(const CDateTime& right) const;
-  bool operator <(const CDateTime& right) const;
-  bool operator <=(const CDateTime& right) const;
-  bool operator ==(const CDateTime& right) const;
-  bool operator !=(const CDateTime& right) const;
+  bool operator>(const CDateTime& right) const;
+  bool operator>=(const CDateTime& right) const;
+  bool operator<(const CDateTime& right) const;
+  bool operator<=(const CDateTime& right) const;
+  bool operator==(const CDateTime& right) const;
+  bool operator!=(const CDateTime& right) const;
 
-  bool operator >(const FILETIME& right) const;
-  bool operator >=(const FILETIME& right) const;
-  bool operator <(const FILETIME& right) const;
-  bool operator <=(const FILETIME& right) const;
-  bool operator ==(const FILETIME& right) const;
-  bool operator !=(const FILETIME& right) const;
+  bool operator>(const FILETIME& right) const;
+  bool operator>=(const FILETIME& right) const;
+  bool operator<(const FILETIME& right) const;
+  bool operator<=(const FILETIME& right) const;
+  bool operator==(const FILETIME& right) const;
+  bool operator!=(const FILETIME& right) const;
 
-  bool operator >(const SYSTEMTIME& right) const;
-  bool operator >=(const SYSTEMTIME& right) const;
-  bool operator <(const SYSTEMTIME& right) const;
-  bool operator <=(const SYSTEMTIME& right) const;
-  bool operator ==(const SYSTEMTIME& right) const;
-  bool operator !=(const SYSTEMTIME& right) const;
+  bool operator>(const SYSTEMTIME& right) const;
+  bool operator>=(const SYSTEMTIME& right) const;
+  bool operator<(const SYSTEMTIME& right) const;
+  bool operator<=(const SYSTEMTIME& right) const;
+  bool operator==(const SYSTEMTIME& right) const;
+  bool operator!=(const SYSTEMTIME& right) const;
 
-  bool operator >(const time_t& right) const;
-  bool operator >=(const time_t& right) const;
-  bool operator <(const time_t& right) const;
-  bool operator <=(const time_t& right) const;
-  bool operator ==(const time_t& right) const;
-  bool operator !=(const time_t& right) const;
+  bool operator>(const time_t& right) const;
+  bool operator>=(const time_t& right) const;
+  bool operator<(const time_t& right) const;
+  bool operator<=(const time_t& right) const;
+  bool operator==(const time_t& right) const;
+  bool operator!=(const time_t& right) const;
 
-  bool operator >(const tm& right) const;
-  bool operator >=(const tm& right) const;
-  bool operator <(const tm& right) const;
-  bool operator <=(const tm& right) const;
-  bool operator ==(const tm& right) const;
-  bool operator !=(const tm& right) const;
+  bool operator>(const tm& right) const;
+  bool operator>=(const tm& right) const;
+  bool operator<(const tm& right) const;
+  bool operator<=(const tm& right) const;
+  bool operator==(const tm& right) const;
+  bool operator!=(const tm& right) const;
 
-  CDateTime operator +(const CDateTimeSpan& right) const;
-  CDateTime operator -(const CDateTimeSpan& right) const;
+  CDateTime operator+(const CDateTimeSpan& right) const;
+  CDateTime operator-(const CDateTimeSpan& right) const;
 
-  const CDateTime& operator +=(const CDateTimeSpan& right);
-  const CDateTime& operator -=(const CDateTimeSpan& right);
+  const CDateTime& operator+=(const CDateTimeSpan& right);
+  const CDateTime& operator-=(const CDateTimeSpan& right);
 
-  CDateTimeSpan operator -(const CDateTime& right) const;
+  CDateTimeSpan operator-(const CDateTime& right) const;
 
   operator FILETIME() const;
 
@@ -202,19 +207,19 @@ public:
   bool SetDate(int year, int month, int day);
   bool SetTime(int hour, int minute, int second);
 
-  bool SetFromDateString(const std::string &date);
-  bool SetFromDBDate(const std::string &date);
-  bool SetFromDBTime(const std::string &time);
-  bool SetFromW3CDate(const std::string &date);
-  bool SetFromW3CDateTime(const std::string &date, bool ignoreTimezone = false);
-  bool SetFromUTCDateTime(const CDateTime &dateTime);
-  bool SetFromUTCDateTime(const time_t &dateTime);
-  bool SetFromRFC1123DateTime(const std::string &dateTime);
+  bool SetFromDateString(const std::string& date);
+  bool SetFromDBDate(const std::string& date);
+  bool SetFromDBTime(const std::string& time);
+  bool SetFromW3CDate(const std::string& date);
+  bool SetFromW3CDateTime(const std::string& date, bool ignoreTimezone = false);
+  bool SetFromUTCDateTime(const CDateTime& dateTime);
+  bool SetFromUTCDateTime(const time_t& dateTime);
+  bool SetFromRFC1123DateTime(const std::string& dateTime);
 
   /*! \brief set from a database datetime format YYYY-MM-DD HH:MM:SS
    \sa GetAsDBDateTime()
    */
-  bool SetFromDBDateTime(const std::string &dateTime);
+  bool SetFromDBDateTime(const std::string& dateTime);
 
   void GetAsSystemTime(SYSTEMTIME& time) const;
   void GetAsTime(time_t& time) const;
@@ -226,10 +231,10 @@ public:
   std::string GetAsDBDateTime() const;
   std::string GetAsDBDate() const;
   std::string GetAsDBTime() const;
-  std::string GetAsLocalizedDate(bool longDate=false) const;
-  std::string GetAsLocalizedDate(const std::string &strFormat) const;
-  std::string GetAsLocalizedTime(const std::string &format, bool withSeconds=true) const;
-  std::string GetAsLocalizedDateTime(bool longDate=false, bool withSeconds=true) const;
+  std::string GetAsLocalizedDate(bool longDate = false) const;
+  std::string GetAsLocalizedDate(const std::string& strFormat) const;
+  std::string GetAsLocalizedTime(const std::string& format, bool withSeconds = true) const;
+  std::string GetAsLocalizedDateTime(bool longDate = false, bool withSeconds = true) const;
   std::string GetAsLocalizedTime(TIME_FORMAT format, bool withSeconds = false) const;
   std::string GetAsRFC1123DateTime() const;
   std::string GetAsW3CDate() const;
@@ -254,7 +259,7 @@ private:
 
   typedef enum _STATE
   {
-    invalid=0,
+    invalid = 0,
     valid
   } STATE;
 

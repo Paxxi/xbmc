@@ -28,7 +28,7 @@ struct RESOLUTION_WHR
 struct REFRESHRATE
 {
   float RefreshRate;
-  int   ResInfo_Index;
+  int ResInfo_Index;
 };
 
 class CDPMSSupport;
@@ -47,26 +47,29 @@ public:
   static std::unique_ptr<CWinSystemBase> CreateWinSystem();
 
   // Access render system interface
-  virtual CRenderSystemBase *GetRenderSystem() { return nullptr; }
+  virtual CRenderSystemBase* GetRenderSystem() { return nullptr; }
 
   // windowing interfaces
   virtual bool InitWindowSystem();
   virtual bool DestroyWindowSystem();
   virtual bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) = 0;
-  virtual bool DestroyWindow(){ return false; }
+  virtual bool DestroyWindow() { return false; }
   virtual bool ResizeWindow(int newWidth, int newHeight, int newLeft, int newTop) = 0;
   virtual bool SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays) = 0;
-  virtual bool MoveWindow(int topLeft, int topRight){return false;}
-  virtual void FinishModeChange(RESOLUTION res){}
-  virtual void FinishWindowResize(int newWidth, int newHeight) {ResizeWindow(newWidth, newHeight, -1, -1);}
-  virtual bool CenterWindow(){return false;}
-  virtual bool IsCreated(){ return m_bWindowCreated; }
+  virtual bool MoveWindow(int topLeft, int topRight) { return false; }
+  virtual void FinishModeChange(RESOLUTION res) {}
+  virtual void FinishWindowResize(int newWidth, int newHeight)
+  {
+    ResizeWindow(newWidth, newHeight, -1, -1);
+  }
+  virtual bool CenterWindow() { return false; }
+  virtual bool IsCreated() { return m_bWindowCreated; }
   virtual void NotifyAppFocusChange(bool bGaining) {}
   virtual void NotifyAppActiveChange(bool bActivated) {}
-  virtual void ShowOSMouse(bool show) {};
-  virtual bool HasCursor(){ return true; }
+  virtual void ShowOSMouse(bool show){};
+  virtual bool HasCursor() { return true; }
   //some platforms have api for gesture inertial scrolling - default to false and use the InertialScrollingHandler
-  virtual bool HasInertialGestures(){ return false; }
+  virtual bool HasInertialGestures() { return false; }
   //does the output expect limited color range (ie 16-235)
   virtual bool UseLimitedColor();
   //the number of presentation buffers
@@ -97,7 +100,7 @@ public:
   virtual bool Show(bool raise = true) { return false; }
 
   // videosync
-  virtual std::unique_ptr<CVideoSync> GetVideoSync(void *clock) { return nullptr; }
+  virtual std::unique_ptr<CVideoSync> GetVideoSync(void* clock) { return nullptr; }
 
   // notifications
   virtual void OnMove(int x, int y) {}
@@ -123,18 +126,18 @@ public:
   std::vector<RESOLUTION_WHR> ScreenResolutions(float refreshrate);
   std::vector<REFRESHRATE> RefreshRates(int width, int height, uint32_t dwFlags);
   REFRESHRATE DefaultRefreshRate(std::vector<REFRESHRATE> rates);
-  virtual bool HasCalibration(const RESOLUTION_INFO &resInfo) { return true; };
+  virtual bool HasCalibration(const RESOLUTION_INFO& resInfo) { return true; };
 
   // text input interface
   virtual std::string GetClipboardText(void);
 
   // Display event callback
-  virtual void Register(IDispResource *resource) = 0;
-  virtual void Unregister(IDispResource *resource) = 0;
+  virtual void Register(IDispResource* resource) = 0;
+  virtual void Unregister(IDispResource* resource) = 0;
 
   // render loop
-  void RegisterRenderLoop(IRenderLoop *client);
-  void UnregisterRenderLoop(IRenderLoop *client);
+  void RegisterRenderLoop(IRenderLoop* client);
+  void UnregisterRenderLoop(IRenderLoop* client);
   void DriveRenderLoop();
 
   // winsystem events
@@ -161,8 +164,16 @@ public:
   static const char* SETTING_WINSYSTEM_IS_HDR_DISPLAY;
 
 protected:
-  void UpdateDesktopResolution(RESOLUTION_INFO& newRes, const std::string &output, int width, int height, float refreshRate, uint32_t dwFlags);
-  virtual std::unique_ptr<KODI::WINDOWING::IOSScreenSaver> GetOSScreenSaverImpl() { return nullptr; }
+  void UpdateDesktopResolution(RESOLUTION_INFO& newRes,
+                               const std::string& output,
+                               int width,
+                               int height,
+                               float refreshRate,
+                               uint32_t dwFlags);
+  virtual std::unique_ptr<KODI::WINDOWING::IOSScreenSaver> GetOSScreenSaverImpl()
+  {
+    return nullptr;
+  }
 
   int m_nWidth = 0;
   int m_nHeight = 0;

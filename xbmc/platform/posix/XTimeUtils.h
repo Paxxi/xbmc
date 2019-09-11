@@ -15,10 +15,10 @@ void GetLocalTime(LPSYSTEMTIME);
 void WINAPI Sleep(uint32_t dwMilliSeconds);
 
 int FileTimeToLocalFileTime(const FILETIME* lpFileTime, LPFILETIME lpLocalFileTime);
-int SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime,  LPFILETIME lpFileTime);
+int SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime, LPFILETIME lpFileTime);
 long CompareFileTime(const FILETIME* lpFileTime1, const FILETIME* lpFileTime2);
-int FileTimeToSystemTime( const FILETIME* lpFileTime, LPSYSTEMTIME lpSystemTime);
-int LocalFileTimeToFileTime( const FILETIME* lpLocalFileTime, LPFILETIME lpFileTime);
+int FileTimeToSystemTime(const FILETIME* lpFileTime, LPSYSTEMTIME lpSystemTime);
+int LocalFileTimeToFileTime(const FILETIME* lpLocalFileTime, LPFILETIME lpFileTime);
 
-int FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t *pTimeT);
+int FileTimeToTimeT(const FILETIME* lpLocalFileTime, time_t* pTimeT);
 int TimeTToFileTime(time_t timeT, FILETIME* lpLocalFileTime);

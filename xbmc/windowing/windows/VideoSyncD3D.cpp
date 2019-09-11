@@ -91,7 +91,9 @@ void CVideoSyncD3D::Run(CEvent& stopEvent)
 
     // because we had a vblank, sleep until half the refreshrate period because i think WaitForVBlank block any rendering stuf
     // without sleeping we have freeze rendering
-    int SleepTime = (int)((LastVBlankTime + (systemFrequency / MathUtils::round_int(m_fps) / 2) - Now) * 1000 / systemFrequency);
+    int SleepTime =
+        (int)((LastVBlankTime + (systemFrequency / MathUtils::round_int(m_fps) / 2) - Now) * 1000 /
+              systemFrequency);
     if (SleepTime > 50)
       SleepTime = 50; //failsafe
     if (SleepTime > 0)
@@ -118,7 +120,10 @@ float CVideoSyncD3D::GetFps()
   DXGI_MODE_DESC DisplayMode;
   DX::DeviceResources::Get()->GetDisplayMode(&DisplayMode);
 
-  m_fps = (DisplayMode.RefreshRate.Denominator != 0) ? (float)DisplayMode.RefreshRate.Numerator / (float)DisplayMode.RefreshRate.Denominator : 0.0f;
+  m_fps =
+      (DisplayMode.RefreshRate.Denominator != 0)
+          ? (float)DisplayMode.RefreshRate.Numerator / (float)DisplayMode.RefreshRate.Denominator
+          : 0.0f;
 
   if (m_fps == 0.0)
     m_fps = 60.0f;
@@ -132,4 +137,3 @@ float CVideoSyncD3D::GetFps()
   }
   return m_fps;
 }
-

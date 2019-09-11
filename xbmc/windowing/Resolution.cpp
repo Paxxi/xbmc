@@ -20,31 +20,35 @@
 
 #include <cstdlib>
 
-RESOLUTION_INFO::RESOLUTION_INFO(int width, int height, float aspect, const std::string &mode) :
-  strMode(mode)
+RESOLUTION_INFO::RESOLUTION_INFO(int width, int height, float aspect, const std::string& mode)
+  : strMode(mode)
 {
   iWidth = width;
   iHeight = height;
   iBlanking = 0;
   iScreenWidth = width;
   iScreenHeight = height;
-  fPixelRatio = aspect ? ((float)width)/height / aspect : 1.0f;
+  fPixelRatio = aspect ? ((float)width) / height / aspect : 1.0f;
   bFullScreen = true;
   fRefreshRate = 0;
   dwFlags = iSubtitles = 0;
 }
 
-RESOLUTION_INFO::RESOLUTION_INFO(const RESOLUTION_INFO& res) :
-  Overscan(res.Overscan),
-  strMode(res.strMode),
-  strOutput(res.strOutput),
-  strId(res.strId)
+RESOLUTION_INFO::RESOLUTION_INFO(const RESOLUTION_INFO& res)
+  : Overscan(res.Overscan)
+  , strMode(res.strMode)
+  , strOutput(res.strOutput)
+  , strId(res.strId)
 {
   bFullScreen = res.bFullScreen;
-  iWidth = res.iWidth; iHeight = res.iHeight;
-  iScreenWidth = res.iScreenWidth; iScreenHeight = res.iScreenHeight;
-  iSubtitles = res.iSubtitles; dwFlags = res.dwFlags;
-  fPixelRatio = res.fPixelRatio; fRefreshRate = res.fRefreshRate;
+  iWidth = res.iWidth;
+  iHeight = res.iHeight;
+  iScreenWidth = res.iScreenWidth;
+  iScreenHeight = res.iScreenHeight;
+  iSubtitles = res.iSubtitles;
+  dwFlags = res.dwFlags;
+  fPixelRatio = res.fPixelRatio;
+  fRefreshRate = res.fRefreshRate;
   iBlanking = res.iBlanking;
 }
 
@@ -58,26 +62,32 @@ RESOLUTION CResolutionUtils::ChooseBestResolution(float fps, int width, int heig
   RESOLUTION res = CServiceBroker::GetWinSystem()->GetGfxContext().GetVideoResolution();
   float weight;
 
-  if (!FindResolutionFromOverride(fps, width, is3D, res, weight, false)) //find a refreshrate from overrides
+  if (!FindResolutionFromOverride(fps, width, is3D, res, weight,
+                                  false)) //find a refreshrate from overrides
   {
-    if (!FindResolutionFromOverride(fps, width, is3D, res, weight, true)) //if that fails find it from a fallback
+    if (!FindResolutionFromOverride(fps, width, is3D, res, weight,
+                                    true)) //if that fails find it from a fallback
     {
-      FindResolutionFromWhitelist(fps, width, height, is3D, res); //find a refreshrate from whitelist
+      FindResolutionFromWhitelist(fps, width, height, is3D,
+                                  res); //find a refreshrate from whitelist
     }
   }
 
   CLog::Log(LOGNOTICE, "Display resolution ADJUST : %s (%d) (weight: %.3f)",
-            CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(res).strMode.c_str(), res, weight);
+            CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(res).strMode.c_str(), res,
+            weight);
   return res;
 }
 
-void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int height, bool is3D, RESOLUTION &resolution)
+void CResolutionUtils::FindResolutionFromWhitelist(
+    float fps, int width, int height, bool is3D, RESOLUTION& resolution)
 {
   RESOLUTION_INFO curr = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(resolution);
-  CLog::Log(LOGNOTICE, "Whitelist search for: width: %d, height: %d, fps: %0.3f, 3D: %s",
-    width, height, fps, is3D ? "true" : "false");
+  CLog::Log(LOGNOTICE, "Whitelist search for: width: %d, height: %d, fps: %0.3f, 3D: %s", width,
+            height, fps, is3D ? "true" : "false");
 
-  std::vector<CVariant> indexList = CServiceBroker::GetSettingsComponent()->GetSettings()->GetList(CSettings::SETTING_VIDEOSCREEN_WHITELIST);
+  std::vector<CVariant> indexList = CServiceBroker::GetSettingsComponent()->GetSettings()->GetList(
+      CSettings::SETTING_VIDEOSCREEN_WHITELIST);
   if (indexList.empty())
   {
     CLog::Log(LOGDEBUG, "Whitelist is empty using default one");
@@ -164,12 +174,13 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
     }
   }
 
-  CLog::Log(LOGDEBUG, "No 3:2 pullback refresh rate whitelisted resolution matched, trying current resolution");
+  CLog::Log(
+      LOGDEBUG,
+      "No 3:2 pullback refresh rate whitelisted resolution matched, trying current resolution");
 
-  if (width <= curr.iScreenWidth
-    && height <= curr.iScreenHeight
-    && (MathUtils::FloatEquals(curr.fRefreshRate, fps, 0.01f)
-      || MathUtils::FloatEquals(curr.fRefreshRate, fps * 2, 0.01f)))
+  if (width <= curr.iScreenWidth && height <= curr.iScreenHeight &&
+      (MathUtils::FloatEquals(curr.fRefreshRate, fps, 0.01f) ||
+       MathUtils::FloatEquals(curr.fRefreshRate, fps * 2, 0.01f)))
   {
     CLog::Log(LOGDEBUG, "Matched current Resolution %s (%d)", curr.strMode.c_str(), resolution);
     return;
@@ -177,7 +188,8 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
 
   CLog::Log(LOGDEBUG, "Current resolution doesn't match, trying default resolution");
 
-  const RESOLUTION_INFO desktop_info = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(CDisplaySettings::GetInstance().GetCurrentResolution());
+  const RESOLUTION_INFO desktop_info = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(
+      CDisplaySettings::GetInstance().GetCurrentResolution());
 
   for (const auto& mode : indexList)
   {
@@ -186,7 +198,8 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
 
     // allow resolutions that are desktop resolution but have the correct refresh rate
     if (info.iScreenWidth == desktop_info.iScreenWidth &&
-        (info.dwFlags & D3DPRESENTFLAG_MODEMASK) == (desktop_info.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
+        (info.dwFlags & D3DPRESENTFLAG_MODEMASK) ==
+            (desktop_info.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
         MathUtils::FloatEquals(info.fRefreshRate, fps, 0.01f))
     {
       CLog::Log(LOGDEBUG, "Matched fuzzy whitelisted Resolution %s (%d)", info.strMode.c_str(), i);
@@ -195,7 +208,8 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
     }
   }
 
-  CLog::Log(LOGDEBUG, "Default resolution doesn't provide reqired refreshrate, trying default resolution with double refreshrate");
+  CLog::Log(LOGDEBUG, "Default resolution doesn't provide reqired refreshrate, trying default "
+                      "resolution with double refreshrate");
 
   for (const auto& mode : indexList)
   {
@@ -204,7 +218,8 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
 
     // allow resolutions that are desktop resolution but have double the refresh rate
     if (info.iScreenWidth == desktop_info.iScreenWidth &&
-        (info.dwFlags & D3DPRESENTFLAG_MODEMASK) == (desktop_info.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
+        (info.dwFlags & D3DPRESENTFLAG_MODEMASK) ==
+            (desktop_info.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
         MathUtils::FloatEquals(info.fRefreshRate, fps * 2, 0.01f))
     {
       CLog::Log(LOGDEBUG, "Matched fuzzy whitelisted Resolution %s (%d)", info.strMode.c_str(), i);
@@ -213,7 +228,8 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
     }
   }
 
-  CLog::Log(LOGDEBUG, "Default resolution doesn't provide reqired refreshrate, trying default resolution with 3:2 pullback");
+  CLog::Log(LOGDEBUG, "Default resolution doesn't provide reqired refreshrate, trying default "
+                      "resolution with 3:2 pullback");
 
   for (const auto& mode : indexList)
   {
@@ -222,7 +238,8 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
 
     // allow resolutions that are desktop resolution but have 2.5 times the refresh rate
     if (info.iScreenWidth == desktop_info.iScreenWidth &&
-        (info.dwFlags & D3DPRESENTFLAG_MODEMASK) == (desktop_info.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
+        (info.dwFlags & D3DPRESENTFLAG_MODEMASK) ==
+            (desktop_info.dwFlags & D3DPRESENTFLAG_MODEMASK) &&
         MathUtils::FloatEquals(info.fRefreshRate, fps * 2.5f, 0.01f))
     {
       CLog::Log(LOGDEBUG, "Matched fuzzy whitelisted Resolution %s (%d)", info.strMode.c_str(), i);
@@ -234,14 +251,20 @@ void CResolutionUtils::FindResolutionFromWhitelist(float fps, int width, int hei
   CLog::Log(LOGDEBUG, "No whitelisted resolution matched");
 }
 
-bool CResolutionUtils::FindResolutionFromOverride(float fps, int width, bool is3D, RESOLUTION &resolution, float& weight, bool fallback)
+bool CResolutionUtils::FindResolutionFromOverride(
+    float fps, int width, bool is3D, RESOLUTION& resolution, float& weight, bool fallback)
 {
   RESOLUTION_INFO curr = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(resolution);
 
   //try to find a refreshrate from the override
-  for (int i = 0; i < (int)CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoAdjustRefreshOverrides.size(); i++)
+  for (int i = 0; i < (int)CServiceBroker::GetSettingsComponent()
+                          ->GetAdvancedSettings()
+                          ->m_videoAdjustRefreshOverrides.size();
+       i++)
   {
-    RefreshOverride& override = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoAdjustRefreshOverrides[i];
+    RefreshOverride& override = CServiceBroker::GetSettingsComponent()
+                                    ->GetAdvancedSettings()
+                                    ->m_videoAdjustRefreshOverrides[i];
 
     if (override.fallback != fallback)
       continue;
@@ -252,28 +275,29 @@ bool CResolutionUtils::FindResolutionFromOverride(float fps, int width, bool is3
 
     for (size_t j = (int)RES_DESKTOP; j < CDisplaySettings::GetInstance().ResolutionInfoSize(); j++)
     {
-      RESOLUTION_INFO info = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo((RESOLUTION)j);
+      RESOLUTION_INFO info =
+          CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo((RESOLUTION)j);
 
-      if (info.iScreenWidth  == curr.iScreenWidth &&
-          info.iScreenHeight == curr.iScreenHeight &&
+      if (info.iScreenWidth == curr.iScreenWidth && info.iScreenHeight == curr.iScreenHeight &&
           (info.dwFlags & D3DPRESENTFLAG_MODEMASK) == (curr.dwFlags & D3DPRESENTFLAG_MODEMASK))
       {
-        if (info.fRefreshRate <= override.refreshmax &&
-            info.fRefreshRate >= override.refreshmin)
+        if (info.fRefreshRate <= override.refreshmax && info.fRefreshRate >= override.refreshmin)
         {
           resolution = (RESOLUTION)j;
 
           if (fallback)
           {
-            CLog::Log(LOGDEBUG, "Found Resolution %s (%d) from fallback (refreshmin:%.3f refreshmax:%.3f)",
-                      info.strMode.c_str(), resolution,
-                      override.refreshmin, override.refreshmax);
+            CLog::Log(LOGDEBUG,
+                      "Found Resolution %s (%d) from fallback (refreshmin:%.3f refreshmax:%.3f)",
+                      info.strMode.c_str(), resolution, override.refreshmin, override.refreshmax);
           }
           else
           {
-            CLog::Log(LOGDEBUG, "Found Resolution %s (%d) from override of fps %.3f (fpsmin:%.3f fpsmax:%.3f refreshmin:%.3f refreshmax:%.3f)",
-                      info.strMode.c_str(), resolution, fps,
-                      override.fpsmin, override.fpsmax, override.refreshmin, override.refreshmax);
+            CLog::Log(LOGDEBUG,
+                      "Found Resolution %s (%d) from override of fps %.3f (fpsmin:%.3f fpsmax:%.3f "
+                      "refreshmin:%.3f refreshmax:%.3f)",
+                      info.strMode.c_str(), resolution, fps, override.fpsmin, override.fpsmax,
+                      override.refreshmin, override.refreshmax);
           }
 
           weight = RefreshWeight(info.fRefreshRate, fps);
@@ -290,8 +314,8 @@ bool CResolutionUtils::FindResolutionFromOverride(float fps, int width, bool is3
 //distance of refresh to the closest multiple of fps (multiple is 1 or higher), as a multiplier of fps
 float CResolutionUtils::RefreshWeight(float refresh, float fps)
 {
-  float div   = refresh / fps;
-  int   round = MathUtils::round_int(div);
+  float div = refresh / fps;
+  int round = MathUtils::round_int(div);
 
   float weight = 0.0f;
 
@@ -314,6 +338,7 @@ float CResolutionUtils::RefreshWeight(float refresh, float fps)
 
 bool CResolutionUtils::HasWhitelist()
 {
-  std::vector<CVariant> indexList = CServiceBroker::GetSettingsComponent()->GetSettings()->GetList(CSettings::SETTING_VIDEOSCREEN_WHITELIST);
+  std::vector<CVariant> indexList = CServiceBroker::GetSettingsComponent()->GetSettings()->GetList(
+      CSettings::SETTING_VIDEOSCREEN_WHITELIST);
   return !indexList.empty();
 }

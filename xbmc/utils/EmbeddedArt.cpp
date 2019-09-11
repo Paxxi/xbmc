@@ -10,13 +10,12 @@
 
 #include "Archive.h"
 
-EmbeddedArtInfo::EmbeddedArtInfo(size_t size,
-                                 const std::string &mime, const std::string& type)
+EmbeddedArtInfo::EmbeddedArtInfo(size_t size, const std::string& mime, const std::string& type)
 {
   Set(size, mime, type);
 }
 
-void EmbeddedArtInfo::Set(size_t size, const std::string &mime, const std::string& type)
+void EmbeddedArtInfo::Set(size_t size, const std::string& mime, const std::string& type)
 {
   m_size = size;
   m_mime = mime;
@@ -34,14 +33,12 @@ bool EmbeddedArtInfo::Empty() const
   return m_size == 0;
 }
 
-bool EmbeddedArtInfo::Matches(const EmbeddedArtInfo &right) const
+bool EmbeddedArtInfo::Matches(const EmbeddedArtInfo& right) const
 {
-  return (m_size == right.m_size &&
-          m_mime == right.m_mime &&
-          m_type == right.m_type);
+  return (m_size == right.m_size && m_mime == right.m_mime && m_type == right.m_type);
 }
 
-void EmbeddedArtInfo::Archive(CArchive &ar)
+void EmbeddedArtInfo::Archive(CArchive& ar)
 {
   if (ar.IsStoring())
   {
@@ -57,16 +54,20 @@ void EmbeddedArtInfo::Archive(CArchive &ar)
   }
 }
 
-EmbeddedArt::EmbeddedArt(const uint8_t *data, size_t size,
-                         const std::string &mime, const std::string& type)
+EmbeddedArt::EmbeddedArt(const uint8_t* data,
+                         size_t size,
+                         const std::string& mime,
+                         const std::string& type)
 {
   Set(data, size, mime, type);
 }
 
-void EmbeddedArt::Set(const uint8_t *data, size_t size,
-                      const std::string &mime, const std::string& type)
+void EmbeddedArt::Set(const uint8_t* data,
+                      size_t size,
+                      const std::string& mime,
+                      const std::string& type)
 {
   EmbeddedArtInfo::Set(size, mime, type);
   m_data.resize(size);
-  m_data.assign(data, data+size);
+  m_data.assign(data, data + size);
 }

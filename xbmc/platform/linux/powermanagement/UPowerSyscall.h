@@ -17,12 +17,12 @@
 class CUPowerSource
 {
 public:
-  CUPowerSource(const char *powerSource);
+  CUPowerSource(const char* powerSource);
   ~CUPowerSource();
 
-  void    Update();
-  bool    IsRechargeable();
-  double  BatteryLevel();
+  void Update();
+  bool IsRechargeable();
+  double BatteryLevel();
 
 private:
   std::string m_powerSource;
@@ -42,9 +42,10 @@ public:
   bool CanSuspend() override;
   bool CanHibernate() override;
   bool CanReboot() override;
-  int  BatteryLevel() override;
-  bool PumpPowerEvents(IPowerEventsCallback *callback) override;
+  int BatteryLevel() override;
+  bool PumpPowerEvents(IPowerEventsCallback* callback) override;
   static bool HasUPower();
+
 protected:
   bool m_CanPowerdown;
   bool m_CanSuspend;
@@ -52,6 +53,7 @@ protected:
   bool m_CanReboot;
 
   void UpdateCapabilities();
+
 private:
   std::list<CUPowerSource> m_powerSources;
   CDBusConnection m_connection;

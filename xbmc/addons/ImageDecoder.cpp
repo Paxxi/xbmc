@@ -9,10 +9,10 @@
 
 #include "guilib/TextureFormats.h"
 
-static const std::map<int,int> KodiToAddonFormat = {{XB_FMT_A8R8G8B8, ADDON_IMG_FMT_A8R8G8B8},
-                                                    {XB_FMT_A8,       ADDON_IMG_FMT_A8},
-                                                    {XB_FMT_RGBA8,    ADDON_IMG_FMT_RGBA8},
-                                                    {XB_FMT_RGB8,     ADDON_IMG_FMT_RGB8}};
+static const std::map<int, int> KodiToAddonFormat = {{XB_FMT_A8R8G8B8, ADDON_IMG_FMT_A8R8G8B8},
+                                                     {XB_FMT_A8, ADDON_IMG_FMT_A8},
+                                                     {XB_FMT_RGBA8, ADDON_IMG_FMT_RGBA8},
+                                                     {XB_FMT_RGB8, ADDON_IMG_FMT_RGB8}};
 
 namespace ADDON
 {
@@ -27,8 +27,10 @@ CImageDecoder::~CImageDecoder()
   DestroyInstance();
 }
 
-bool CImageDecoder::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSize,
-                                        unsigned int width, unsigned int height)
+bool CImageDecoder::LoadImageFromMemory(unsigned char* buffer,
+                                        unsigned int bufSize,
+                                        unsigned int width,
+                                        unsigned int height)
 {
   if (!m_struct.toAddon.load_image_from_memory)
     return false;
@@ -38,8 +40,10 @@ bool CImageDecoder::LoadImageFromMemory(unsigned char* buffer, unsigned int bufS
   return m_struct.toAddon.load_image_from_memory(&m_struct, buffer, bufSize, &m_width, &m_height);
 }
 
-bool CImageDecoder::Decode(unsigned char* const pixels, unsigned int width,
-                           unsigned int height, unsigned int pitch,
+bool CImageDecoder::Decode(unsigned char* const pixels,
+                           unsigned int width,
+                           unsigned int height,
+                           unsigned int pitch,
                            unsigned int format)
 {
   if (!m_struct.toAddon.decode)

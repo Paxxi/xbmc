@@ -10,50 +10,86 @@
 
 
 #include "AESinkDirectSound.h"
+
 #include "cores/AudioEngine/AESinkFactory.h"
 #include "cores/AudioEngine/Sinks/windows/AESinkFactoryWin.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"
-#include "platform/win32/CharsetConverter.h"
 #include "threads/SingleLock.h"
 #include "threads/SystemClock.h"
-#include "utils/log.h"
 #include "utils/StringUtils.h"
+#include "utils/log.h"
+
+#include "platform/win32/CharsetConverter.h"
 
 #include <algorithm>
-#include <Audioclient.h>
-#include <initguid.h>
 #include <list>
-#include <Mmreg.h>
-#include <mmdeviceapi.h>
+
+#include <Audioclient.h>
 #include <Functiondiscoverykeys_devpkey.h>
+#include <Mmreg.h>
 #include <Rpc.h>
+#include <initguid.h>
+#include <mmdeviceapi.h>
 
 #pragma comment(lib, "Rpcrt4.lib")
 
 extern HWND g_hWnd;
 
-DEFINE_GUID( _KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, WAVE_FORMAT_IEEE_FLOAT, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 );
-DEFINE_GUID( _KSDATAFORMAT_SUBTYPE_DOLBY_AC3_SPDIF, WAVE_FORMAT_DOLBY_AC3_SPDIF, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 );
+DEFINE_GUID(_KSDATAFORMAT_SUBTYPE_IEEE_FLOAT,
+            WAVE_FORMAT_IEEE_FLOAT,
+            0x0000,
+            0x0010,
+            0x80,
+            0x00,
+            0x00,
+            0xaa,
+            0x00,
+            0x38,
+            0x9b,
+            0x71);
+DEFINE_GUID(_KSDATAFORMAT_SUBTYPE_DOLBY_AC3_SPDIF,
+            WAVE_FORMAT_DOLBY_AC3_SPDIF,
+            0x0000,
+            0x0010,
+            0x80,
+            0x00,
+            0x00,
+            0xaa,
+            0x00,
+            0x38,
+            0x9b,
+            0x71);
 
-extern const char *WASAPIErrToStr(HRESULT err);
-#define EXIT_ON_FAILURE(hr, reason) if(FAILED(hr)) {CLog::LogF(LOGERROR, reason " - HRESULT = %li ErrorMessage = %s", hr, WASAPIErrToStr(hr)); goto failed;}
+extern const char* WASAPIErrToStr(HRESULT err);
+#define EXIT_ON_FAILURE(hr, reason) \
+  if (FAILED(hr)) \
+  { \
+    CLog::LogF(LOGERROR, reason " - HRESULT = %li ErrorMessage = %s", hr, WASAPIErrToStr(hr)); \
+    goto failed; \
+  }
 
 #define DS_SPEAKER_COUNT 8
-static const unsigned int DSChannelOrder[] = {SPEAKER_FRONT_LEFT, SPEAKER_FRONT_RIGHT, SPEAKER_FRONT_CENTER, SPEAKER_LOW_FREQUENCY, SPEAKER_BACK_LEFT, SPEAKER_BACK_RIGHT, SPEAKER_SIDE_LEFT, SPEAKER_SIDE_RIGHT};
-static const enum AEChannel AEChannelNamesDS[] = {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_LFE, AE_CH_BL, AE_CH_BR, AE_CH_SL, AE_CH_SR, AE_CH_NULL};
+static const unsigned int DSChannelOrder[] = {
+    SPEAKER_FRONT_LEFT, SPEAKER_FRONT_RIGHT, SPEAKER_FRONT_CENTER, SPEAKER_LOW_FREQUENCY,
+    SPEAKER_BACK_LEFT,  SPEAKER_BACK_RIGHT,  SPEAKER_SIDE_LEFT,    SPEAKER_SIDE_RIGHT};
+static const enum AEChannel AEChannelNamesDS[] = {AE_CH_FL, AE_CH_FR, AE_CH_FC, AE_CH_LFE, AE_CH_BL,
+                                                  AE_CH_BR, AE_CH_SL, AE_CH_SR, AE_CH_NULL};
 
 using namespace Microsoft::WRL;
 
 struct DSDevice
 {
   std::string name;
-  LPGUID     lpGuid;
+  LPGUID lpGuid;
 };
 
-static BOOL CALLBACK DSEnumCallback(LPGUID lpGuid, LPCTSTR lpcstrDescription, LPCTSTR lpcstrModule, LPVOID lpContext)
+static BOOL CALLBACK DSEnumCallback(LPGUID lpGuid,
+                                    LPCTSTR lpcstrDescription,
+                                    LPCTSTR lpcstrModule,
+                                    LPVOID lpContext)
 {
   DSDevice dev;
-  std::list<DSDevice> &enumerator = *static_cast<std::list<DSDevice>*>(lpContext);
+  std::list<DSDevice>& enumerator = *static_cast<std::list<DSDevice>*>(lpContext);
 
   dev.name = KODI::PLATFORM::WINDOWS::FromW(lpcstrDescription);
 
@@ -65,21 +101,21 @@ static BOOL CALLBACK DSEnumCallback(LPGUID lpGuid, LPCTSTR lpcstrDescription, LP
   return TRUE;
 }
 
-CAESinkDirectSound::CAESinkDirectSound() :
-  m_pBuffer       (nullptr),
-  m_pDSound       (nullptr),
-  m_encodedFormat (AE_FMT_INVALID),
-  m_AvgBytesPerSec(0    ),
-  m_dwChunkSize   (0    ),
-  m_dwFrameSize   (0    ),
-  m_dwBufferLen   (0    ),
-  m_BufferOffset  (0    ),
-  m_CacheLen      (0    ),
-  m_LastCacheCheck(0    ),
-  m_BufferTimeouts(0    ),
-  m_running       (false),
-  m_initialized   (false),
-  m_isDirtyDS     (false)
+CAESinkDirectSound::CAESinkDirectSound()
+  : m_pBuffer(nullptr)
+  , m_pDSound(nullptr)
+  , m_encodedFormat(AE_FMT_INVALID)
+  , m_AvgBytesPerSec(0)
+  , m_dwChunkSize(0)
+  , m_dwFrameSize(0)
+  , m_dwBufferLen(0)
+  , m_BufferOffset(0)
+  , m_CacheLen(0)
+  , m_LastCacheCheck(0)
+  , m_BufferTimeouts(0)
+  , m_running(false)
+  , m_initialized(false)
+  , m_isDirtyDS(false)
 {
   m_channelLayout.Reset();
 }
@@ -98,9 +134,9 @@ void CAESinkDirectSound::Register()
   AE::CAESinkFactory::RegisterSink(reg);
 }
 
-IAESink* CAESinkDirectSound::Create(std::string &device, AEAudioFormat &desiredFormat)
+IAESink* CAESinkDirectSound::Create(std::string& device, AEAudioFormat& desiredFormat)
 {
-  IAESink *sink = new CAESinkDirectSound();
+  IAESink* sink = new CAESinkDirectSound();
   if (sink->Initialize(desiredFormat, device))
     return sink;
 
@@ -108,20 +144,20 @@ IAESink* CAESinkDirectSound::Create(std::string &device, AEAudioFormat &desiredF
   return nullptr;
 }
 
-bool CAESinkDirectSound::Initialize(AEAudioFormat &format, std::string &device)
+bool CAESinkDirectSound::Initialize(AEAudioFormat& format, std::string& device)
 {
   if (m_initialized)
     return false;
 
   LPGUID deviceGUID = nullptr;
-  RPC_WSTR wszUuid  = nullptr;
+  RPC_WSTR wszUuid = nullptr;
   HRESULT hr = E_FAIL;
   std::string strDeviceGUID = device;
   std::list<DSDevice> DSDeviceList;
   std::string deviceFriendlyName;
   DirectSoundEnumerate(DSEnumCallback, &DSDeviceList);
 
-  if(StringUtils::EndsWithNoCase(device, std::string("default")))
+  if (StringUtils::EndsWithNoCase(device, std::string("default")))
     strDeviceGUID = GetDefaultDevice();
 
   for (std::list<DSDevice>::iterator itt = DSDeviceList.begin(); itt != DSDeviceList.end(); ++itt)
@@ -138,7 +174,8 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat &format, std::string &device)
         break;
       }
     }
-    if (hr == RPC_S_OK) RpcStringFree(&wszUuid);
+    if (hr == RPC_S_OK)
+      RpcStringFree(&wszUuid);
   }
 
   hr = DirectSoundCreate(deviceGUID, m_pDSound.ReleaseAndGetAddressOf(), nullptr);
@@ -184,28 +221,28 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat &format, std::string &device)
 
   //fill waveformatex
   ZeroMemory(&wfxex, sizeof(WAVEFORMATEXTENSIBLE));
-  wfxex.Format.cbSize          = sizeof(WAVEFORMATEXTENSIBLE)-sizeof(WAVEFORMATEX);
-  wfxex.Format.nChannels       = format.m_channelLayout.Count();
-  wfxex.Format.nSamplesPerSec  = format.m_sampleRate;
+  wfxex.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+  wfxex.Format.nChannels = format.m_channelLayout.Count();
+  wfxex.Format.nSamplesPerSec = format.m_sampleRate;
   if (format.m_dataFormat == AE_FMT_RAW)
   {
-    wfxex.dwChannelMask          = SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT;
-    wfxex.Format.wFormatTag      = WAVE_FORMAT_DOLBY_AC3_SPDIF;
-    wfxex.SubFormat              = _KSDATAFORMAT_SUBTYPE_DOLBY_AC3_SPDIF;
-    wfxex.Format.wBitsPerSample  = 16;
-    wfxex.Format.nChannels       = 2;
+    wfxex.dwChannelMask = SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT;
+    wfxex.Format.wFormatTag = WAVE_FORMAT_DOLBY_AC3_SPDIF;
+    wfxex.SubFormat = _KSDATAFORMAT_SUBTYPE_DOLBY_AC3_SPDIF;
+    wfxex.Format.wBitsPerSample = 16;
+    wfxex.Format.nChannels = 2;
   }
   else
   {
-    wfxex.dwChannelMask          = SpeakerMaskFromAEChannels(format.m_channelLayout);
-    wfxex.Format.wFormatTag      = WAVE_FORMAT_EXTENSIBLE;
-    wfxex.SubFormat              = _KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
-    wfxex.Format.wBitsPerSample  = 32;
+    wfxex.dwChannelMask = SpeakerMaskFromAEChannels(format.m_channelLayout);
+    wfxex.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
+    wfxex.SubFormat = _KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
+    wfxex.Format.wBitsPerSample = 32;
   }
 
   wfxex.Samples.wValidBitsPerSample = wfxex.Format.wBitsPerSample;
-  wfxex.Format.nBlockAlign          = wfxex.Format.nChannels * (wfxex.Format.wBitsPerSample >> 3);
-  wfxex.Format.nAvgBytesPerSec      = wfxex.Format.nSamplesPerSec * wfxex.Format.nBlockAlign;
+  wfxex.Format.nBlockAlign = wfxex.Format.nChannels * (wfxex.Format.wBitsPerSample >> 3);
+  wfxex.Format.nAvgBytesPerSec = wfxex.Format.nSamplesPerSec * wfxex.Format.nBlockAlign;
 
   m_AvgBytesPerSec = wfxex.Format.nAvgBytesPerSec;
 
@@ -219,11 +256,11 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat &format, std::string &device)
   memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));
   dsbdesc.dwSize = sizeof(DSBUFFERDESC);
   dsbdesc.dwFlags = DSBCAPS_GETCURRENTPOSITION2 /** Better position accuracy */
-                  | DSBCAPS_TRUEPLAYPOSITION    /** Vista+ accurate position */
-                  | DSBCAPS_GLOBALFOCUS;         /** Allows background playing */
+                    | DSBCAPS_TRUEPLAYPOSITION /** Vista+ accurate position */
+                    | DSBCAPS_GLOBALFOCUS; /** Allows background playing */
 
   dsbdesc.dwBufferBytes = m_dwBufferLen;
-  dsbdesc.lpwfxFormat = (WAVEFORMATEX *)&wfxex;
+  dsbdesc.lpwfxFormat = (WAVEFORMATEX*)&wfxex;
 
   // now create the stream buffer
   HRESULT res = m_pDSound->CreateSoundBuffer(&dsbdesc, m_pBuffer.ReleaseAndGetAddressOf(), nullptr);
@@ -252,7 +289,9 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat &format, std::string &device)
   format.m_channelLayout = m_channelLayout;
   m_encodedFormat = format.m_dataFormat;
   format.m_frames = uiFrameCount;
-  format.m_frameSize =  ((format.m_dataFormat == AE_FMT_RAW) ? (wfxex.Format.wBitsPerSample >> 3) : sizeof(float)) * format.m_channelLayout.Count();
+  format.m_frameSize =
+      ((format.m_dataFormat == AE_FMT_RAW) ? (wfxex.Format.wBitsPerSample >> 3) : sizeof(float)) *
+      format.m_channelLayout.Count();
   format.m_dataFormat = (format.m_dataFormat == AE_FMT_RAW) ? AE_FMT_S16NE : AE_FMT_FLOAT;
 
   m_format = format;
@@ -304,14 +343,16 @@ void CAESinkDirectSound::Deinitialize()
   m_dwBufferLen = 0;
 }
 
-unsigned int CAESinkDirectSound::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
+unsigned int CAESinkDirectSound::AddPackets(uint8_t** data,
+                                            unsigned int frames,
+                                            unsigned int offset)
 {
   if (!m_initialized)
     return 0;
 
   DWORD total = m_dwFrameSize * frames;
   DWORD len = total;
-  unsigned char* pBuffer = (unsigned char*)data[0]+offset*m_format.m_frameSize;
+  unsigned char* pBuffer = (unsigned char*)data[0] + offset * m_format.m_frameSize;
 
   DWORD bufferStatus = 0;
   if (m_pBuffer->GetStatus(&bufferStatus) != DS_OK)
@@ -327,7 +368,7 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t **data, unsigned int frames,
 
   while (GetSpace() < total)
   {
-    if(m_isDirtyDS)
+    if (m_isDirtyDS)
       return INT_MAX;
     else
     {
@@ -337,15 +378,17 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t **data, unsigned int frames,
 
   while (len)
   {
-    void* start = nullptr, *startWrap = nullptr;
+    void *start = nullptr, *startWrap = nullptr;
     DWORD size = 0, sizeWrap = 0;
     if (m_BufferOffset >= m_dwBufferLen) // Wrap-around manually
       m_BufferOffset = 0;
     DWORD dwWriteBytes = std::min((int)m_dwChunkSize, (int)len);
-    HRESULT res = m_pBuffer->Lock(m_BufferOffset, dwWriteBytes, &start, &size, &startWrap, &sizeWrap, 0);
+    HRESULT res =
+        m_pBuffer->Lock(m_BufferOffset, dwWriteBytes, &start, &size, &startWrap, &sizeWrap, 0);
     if (DS_OK != res)
     {
-      CLog::LogF(LOGERROR, "Unable to lock buffer at offset %u. HRESULT: 0x%08x", m_BufferOffset, res);
+      CLog::LogF(LOGERROR, "Unable to lock buffer at offset %u. HRESULT: 0x%08x", m_BufferOffset,
+                 res);
       m_isDirtyDS = true;
       return INT_MAX;
     }
@@ -353,7 +396,7 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t **data, unsigned int frames,
     memcpy(start, pBuffer, size);
 
     pBuffer += size;
-    len     -= size;
+    len -= size;
 
     m_BufferOffset += size;
     if (startWrap) // Write-region wraps to beginning of buffer
@@ -362,7 +405,7 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t **data, unsigned int frames,
       m_BufferOffset = sizeWrap;
 
       pBuffer += sizeWrap;
-      len     -= sizeWrap;
+      len -= sizeWrap;
     }
 
     m_CacheLen += size + sizeWrap; // This data is now in the cache
@@ -421,19 +464,20 @@ double CAESinkDirectSound::GetCacheTotal()
   return (double)m_dwBufferLen / (double)m_AvgBytesPerSec;
 }
 
-void CAESinkDirectSound::EnumerateDevicesEx(AEDeviceInfoList &deviceInfoList, bool force)
+void CAESinkDirectSound::EnumerateDevicesEx(AEDeviceInfoList& deviceInfoList, bool force)
 {
-  CAEDeviceInfo        deviceInfo;
+  CAEDeviceInfo deviceInfo;
 
   ComPtr<IMMDeviceEnumerator> pEnumerator = nullptr;
   ComPtr<IMMDeviceCollection> pEnumDevices = nullptr;
 
-  HRESULT                hr;
+  HRESULT hr;
 
   std::string strDD = GetDefaultDevice();
 
   /* Windows Vista or later - supporting WASAPI device probing */
-  hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator, reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
+  hr = CoCreateInstance(CLSID_MMDeviceEnumerator, NULL, CLSCTX_ALL, IID_IMMDeviceEnumerator,
+                        reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
   EXIT_ON_FAILURE(hr, "Could not allocate WASAPI device enumerator.")
 
   UINT uiCount = 0;
@@ -502,7 +546,8 @@ void CAESinkDirectSound::EnumerateDevicesEx(AEDeviceInfoList &deviceInfoList, bo
 
     /* In shared mode Windows tells us what format the audio must be in. */
     ComPtr<IAudioClient> pClient;
-    hr = pDevice->Activate(IID_IAudioClient, CLSCTX_ALL, nullptr, reinterpret_cast<void**>(pClient.GetAddressOf()));
+    hr = pDevice->Activate(IID_IAudioClient, CLSCTX_ALL, nullptr,
+                           reinterpret_cast<void**>(pClient.GetAddressOf()));
     EXIT_ON_FAILURE(hr, "Activate device failed.")
 
     //hr = pClient->GetMixFormat(&pwfxex);
@@ -510,7 +555,8 @@ void CAESinkDirectSound::EnumerateDevicesEx(AEDeviceInfoList &deviceInfoList, bo
     if (SUCCEEDED(hr) && varName.blob.cbSize > 0)
     {
       WAVEFORMATEX* smpwfxex = (WAVEFORMATEX*)varName.blob.pBlobData;
-      deviceInfo.m_channels = layoutsByChCount[std::max(std::min(smpwfxex->nChannels, (WORD) DS_SPEAKER_COUNT), (WORD) 2)];
+      deviceInfo.m_channels = layoutsByChCount[std::max(
+          std::min(smpwfxex->nChannels, (WORD)DS_SPEAKER_COUNT), (WORD)2)];
       deviceInfo.m_dataFormats.push_back(AEDataFormat(AE_FMT_FLOAT));
       if (aeDeviceType != AE_DEVTYPE_PCM)
       {
@@ -523,23 +569,23 @@ void CAESinkDirectSound::EnumerateDevicesEx(AEDeviceInfoList &deviceInfoList, bo
         // signal that we can doe AE_FMT_RAW
         deviceInfo.m_dataFormats.push_back(AE_FMT_RAW);
       }
-      deviceInfo.m_sampleRates.push_back(std::min(smpwfxex->nSamplesPerSec, (DWORD) 192000));
+      deviceInfo.m_sampleRates.push_back(std::min(smpwfxex->nSamplesPerSec, (DWORD)192000));
     }
     else
     {
       CLog::LogF(LOGERROR, "Getting DeviceFormat failed (%s)", WASAPIErrToStr(hr));
     }
 
-    deviceInfo.m_deviceName       = strDevName;
-    deviceInfo.m_displayName      = strWinDevType.append(strFriendlyName);
+    deviceInfo.m_deviceName = strDevName;
+    deviceInfo.m_displayName = strWinDevType.append(strFriendlyName);
     deviceInfo.m_displayNameExtra = std::string("DIRECTSOUND: ").append(strFriendlyName);
-    deviceInfo.m_deviceType       = aeDeviceType;
+    deviceInfo.m_deviceType = aeDeviceType;
 
     deviceInfo.m_wantsIECPassthrough = true;
     deviceInfoList.push_back(deviceInfo);
 
     // add the default device with m_deviceName = default
-    if(strDD == strDevName)
+    if (strDD == strDevName)
     {
       deviceInfo.m_deviceName = std::string("default");
       deviceInfo.m_displayName = std::string("default");
@@ -568,7 +614,8 @@ void CAESinkDirectSound::CheckPlayStatus()
     return;
   }
 
-  if (!(status & DSBSTATUS_PLAYING) && m_CacheLen != 0) // If we have some data, see if we can start playback
+  if (!(status & DSBSTATUS_PLAYING) &&
+      m_CacheLen != 0) // If we have some data, see if we can start playback
   {
     HRESULT hr = m_pBuffer->Play(0, 0, DSBPLAY_LOOPING);
     CLog::LogF(LOGDEBUG, "Resuming Playback");
@@ -579,10 +626,11 @@ void CAESinkDirectSound::CheckPlayStatus()
 
 bool CAESinkDirectSound::UpdateCacheStatus()
 {
-  CSingleLock lock (m_runLock);
+  CSingleLock lock(m_runLock);
 
   DWORD playCursor = 0, writeCursor = 0;
-  HRESULT res = m_pBuffer->GetCurrentPosition(&playCursor, &writeCursor); // Get the current playback and safe write positions
+  HRESULT res = m_pBuffer->GetCurrentPosition(
+      &playCursor, &writeCursor); // Get the current playback and safe write positions
   if (DS_OK != res)
   {
     CLog::LogF(LOGERROR,
@@ -609,9 +657,9 @@ bool CAESinkDirectSound::UpdateCacheStatus()
   // ***O----P****W*****              P < W && O < P (6)
 
   // Check for underruns
-  if ((playCursor > writeCursor && m_BufferOffset < writeCursor) ||    // (1)
+  if ((playCursor > writeCursor && m_BufferOffset < writeCursor) || // (1)
       (playCursor < m_BufferOffset && m_BufferOffset < writeCursor) || // (2)
-      (playCursor > writeCursor && playCursor <  m_BufferOffset))      // (3)
+      (playCursor > writeCursor && playCursor < m_BufferOffset)) // (3)
   {
     CLog::Log(LOGWARNING, "CWin32DirectSound::GetSpace - buffer underrun - W:%u, P:%u, O:%u.",
               writeCursor, playCursor, m_BufferOffset);
@@ -628,7 +676,8 @@ bool CAESinkDirectSound::UpdateCacheStatus()
     m_BufferTimeouts = 0;
 
   // Calculate available space in the ring buffer
-  if (playCursor == m_BufferOffset && m_BufferOffset ==  writeCursor) // Playback is stopped and we are all at the same place
+  if (playCursor == m_BufferOffset &&
+      m_BufferOffset == writeCursor) // Playback is stopped and we are all at the same place
     m_CacheLen = 0;
   else if (m_BufferOffset > playCursor)
     m_CacheLen = m_BufferOffset - playCursor;
@@ -640,7 +689,7 @@ bool CAESinkDirectSound::UpdateCacheStatus()
 
 unsigned int CAESinkDirectSound::GetSpace()
 {
-  CSingleLock lock (m_runLock);
+  CSingleLock lock(m_runLock);
   if (!UpdateCacheStatus())
     m_isDirtyDS = true;
   unsigned int space = m_dwBufferLen - m_CacheLen;
@@ -665,7 +714,7 @@ void CAESinkDirectSound::AEChannelsFromSpeakerMask(DWORD speakers)
   }
 }
 
-DWORD CAESinkDirectSound::SpeakerMaskFromAEChannels(const CAEChannelInfo &channels)
+DWORD CAESinkDirectSound::SpeakerMaskFromAEChannels(const CAEChannelInfo& channels)
 {
   DWORD mask = 0;
 
@@ -679,36 +728,62 @@ DWORD CAESinkDirectSound::SpeakerMaskFromAEChannels(const CAEChannelInfo &channe
   return mask;
 }
 
-const char *CAESinkDirectSound::dserr2str(int err)
+const char* CAESinkDirectSound::dserr2str(int err)
 {
   switch (err)
   {
-    case DS_OK: return "DS_OK";
-    case DS_NO_VIRTUALIZATION: return "DS_NO_VIRTUALIZATION";
-    case DSERR_ALLOCATED: return "DS_NO_VIRTUALIZATION";
-    case DSERR_CONTROLUNAVAIL: return "DSERR_CONTROLUNAVAIL";
-    case DSERR_INVALIDPARAM: return "DSERR_INVALIDPARAM";
-    case DSERR_INVALIDCALL: return "DSERR_INVALIDCALL";
-    case DSERR_GENERIC: return "DSERR_GENERIC";
-    case DSERR_PRIOLEVELNEEDED: return "DSERR_PRIOLEVELNEEDED";
-    case DSERR_OUTOFMEMORY: return "DSERR_OUTOFMEMORY";
-    case DSERR_BADFORMAT: return "DSERR_BADFORMAT";
-    case DSERR_UNSUPPORTED: return "DSERR_UNSUPPORTED";
-    case DSERR_NODRIVER: return "DSERR_NODRIVER";
-    case DSERR_ALREADYINITIALIZED: return "DSERR_ALREADYINITIALIZED";
-    case DSERR_NOAGGREGATION: return "DSERR_NOAGGREGATION";
-    case DSERR_BUFFERLOST: return "DSERR_BUFFERLOST";
-    case DSERR_OTHERAPPHASPRIO: return "DSERR_OTHERAPPHASPRIO";
-    case DSERR_UNINITIALIZED: return "DSERR_UNINITIALIZED";
-    case DSERR_NOINTERFACE: return "DSERR_NOINTERFACE";
-    case DSERR_ACCESSDENIED: return "DSERR_ACCESSDENIED";
-    case DSERR_BUFFERTOOSMALL: return "DSERR_BUFFERTOOSMALL";
-    case DSERR_DS8_REQUIRED: return "DSERR_DS8_REQUIRED";
-    case DSERR_SENDLOOP: return "DSERR_SENDLOOP";
-    case DSERR_BADSENDBUFFERGUID: return "DSERR_BADSENDBUFFERGUID";
-    case DSERR_OBJECTNOTFOUND: return "DSERR_OBJECTNOTFOUND";
-    case DSERR_FXUNAVAILABLE: return "DSERR_FXUNAVAILABLE";
-    default: return "unknown";
+  case DS_OK:
+    return "DS_OK";
+  case DS_NO_VIRTUALIZATION:
+    return "DS_NO_VIRTUALIZATION";
+  case DSERR_ALLOCATED:
+    return "DS_NO_VIRTUALIZATION";
+  case DSERR_CONTROLUNAVAIL:
+    return "DSERR_CONTROLUNAVAIL";
+  case DSERR_INVALIDPARAM:
+    return "DSERR_INVALIDPARAM";
+  case DSERR_INVALIDCALL:
+    return "DSERR_INVALIDCALL";
+  case DSERR_GENERIC:
+    return "DSERR_GENERIC";
+  case DSERR_PRIOLEVELNEEDED:
+    return "DSERR_PRIOLEVELNEEDED";
+  case DSERR_OUTOFMEMORY:
+    return "DSERR_OUTOFMEMORY";
+  case DSERR_BADFORMAT:
+    return "DSERR_BADFORMAT";
+  case DSERR_UNSUPPORTED:
+    return "DSERR_UNSUPPORTED";
+  case DSERR_NODRIVER:
+    return "DSERR_NODRIVER";
+  case DSERR_ALREADYINITIALIZED:
+    return "DSERR_ALREADYINITIALIZED";
+  case DSERR_NOAGGREGATION:
+    return "DSERR_NOAGGREGATION";
+  case DSERR_BUFFERLOST:
+    return "DSERR_BUFFERLOST";
+  case DSERR_OTHERAPPHASPRIO:
+    return "DSERR_OTHERAPPHASPRIO";
+  case DSERR_UNINITIALIZED:
+    return "DSERR_UNINITIALIZED";
+  case DSERR_NOINTERFACE:
+    return "DSERR_NOINTERFACE";
+  case DSERR_ACCESSDENIED:
+    return "DSERR_ACCESSDENIED";
+  case DSERR_BUFFERTOOSMALL:
+    return "DSERR_BUFFERTOOSMALL";
+  case DSERR_DS8_REQUIRED:
+    return "DSERR_DS8_REQUIRED";
+  case DSERR_SENDLOOP:
+    return "DSERR_SENDLOOP";
+  case DSERR_BADSENDBUFFERGUID:
+    return "DSERR_BADSENDBUFFERGUID";
+  case DSERR_OBJECTNOTFOUND:
+    return "DSERR_OBJECTNOTFOUND";
+  case DSERR_FXUNAVAILABLE:
+    return "DSERR_FXUNAVAILABLE";
+  default:
+    return "unknown";
   }
 }
 
@@ -721,7 +796,8 @@ std::string CAESinkDirectSound::GetDefaultDevice()
   PROPVARIANT varName;
   std::string strDevName = "default";
 
-  hr = CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_ALL, IID_IMMDeviceEnumerator, reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
+  hr = CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_ALL, IID_IMMDeviceEnumerator,
+                        reinterpret_cast<void**>(pEnumerator.GetAddressOf()));
   EXIT_ON_FAILURE(hr, "Could not allocate WASAPI device enumerator")
 
   hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eMultimedia, pDevice.GetAddressOf());

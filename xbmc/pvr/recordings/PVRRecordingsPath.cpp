@@ -18,26 +18,27 @@
 
 using namespace PVR;
 
-const std::string CPVRRecordingsPath::PATH_RECORDINGS               = "pvr://recordings/";
-const std::string CPVRRecordingsPath::PATH_ACTIVE_TV_RECORDINGS     = "pvr://recordings/tv/active/";
-const std::string CPVRRecordingsPath::PATH_ACTIVE_RADIO_RECORDINGS  = "pvr://recordings/radio/active/";
-const std::string CPVRRecordingsPath::PATH_DELETED_TV_RECORDINGS    = "pvr://recordings/tv/deleted/";
-const std::string CPVRRecordingsPath::PATH_DELETED_RADIO_RECORDINGS = "pvr://recordings/radio/deleted/";
+const std::string CPVRRecordingsPath::PATH_RECORDINGS = "pvr://recordings/";
+const std::string CPVRRecordingsPath::PATH_ACTIVE_TV_RECORDINGS = "pvr://recordings/tv/active/";
+const std::string CPVRRecordingsPath::PATH_ACTIVE_RADIO_RECORDINGS =
+    "pvr://recordings/radio/active/";
+const std::string CPVRRecordingsPath::PATH_DELETED_TV_RECORDINGS = "pvr://recordings/tv/deleted/";
+const std::string CPVRRecordingsPath::PATH_DELETED_RADIO_RECORDINGS =
+    "pvr://recordings/radio/deleted/";
 
-CPVRRecordingsPath::CPVRRecordingsPath(const std::string &strPath)
+CPVRRecordingsPath::CPVRRecordingsPath(const std::string& strPath)
 {
   std::string strVarPath(TrimSlashes(strPath));
   const std::vector<std::string> segments = URIUtils::SplitPath(strVarPath);
 
-  m_bValid  = ((segments.size() >= 4) && // at least pvr://recordings/[tv|radio]/[active|deleted]
-               StringUtils::StartsWith(strVarPath, "pvr://") &&
-               (segments.at(1) == "recordings") &&
-               ((segments.at(2) == "tv") || (segments.at(2) == "radio")) &&
-               ((segments.at(3) == "active") || (segments.at(3) == "deleted")));
+  m_bValid = ((segments.size() >= 4) && // at least pvr://recordings/[tv|radio]/[active|deleted]
+              StringUtils::StartsWith(strVarPath, "pvr://") && (segments.at(1) == "recordings") &&
+              ((segments.at(2) == "tv") || (segments.at(2) == "radio")) &&
+              ((segments.at(3) == "active") || (segments.at(3) == "deleted")));
   if (m_bValid)
   {
-    m_bRoot   = (m_bValid && (segments.size() == 4));
-    m_bRadio  = (m_bValid && (segments.at(2) == "radio"));
+    m_bRoot = (m_bValid && (segments.size() == 4));
+    m_bRadio = (m_bValid && (segments.at(2) == "radio"));
     m_bActive = (m_bValid && (segments.at(3) == "active"));
 
     if (m_bRoot)
@@ -66,23 +67,30 @@ CPVRRecordingsPath::CPVRRecordingsPath(const std::string &strPath)
 }
 
 CPVRRecordingsPath::CPVRRecordingsPath(bool bDeleted, bool bRadio)
-: m_bValid(true),
-  m_bRoot(true),
-  m_bActive(!bDeleted),
-  m_bRadio(bRadio),
-  m_path(StringUtils::Format("pvr://recordings/%s/%s/", bRadio ? "radio" : "tv", bDeleted ? "deleted" : "active"))
+  : m_bValid(true)
+  , m_bRoot(true)
+  , m_bActive(!bDeleted)
+  , m_bRadio(bRadio)
+  , m_path(StringUtils::Format(
+        "pvr://recordings/%s/%s/", bRadio ? "radio" : "tv", bDeleted ? "deleted" : "active"))
 {
 }
 
-CPVRRecordingsPath::CPVRRecordingsPath(bool bDeleted, bool bRadio,
-                       const std::string &strDirectory, const std::string &strTitle,
-                       int iSeason, int iEpisode, int iYear,
-                       const std::string &strSubtitle, const std::string &strChannelName,
-                       const CDateTime &recordingTime, const std::string &strId)
-: m_bValid(true),
-  m_bRoot(false),
-  m_bActive(!bDeleted),
-  m_bRadio(bRadio)
+CPVRRecordingsPath::CPVRRecordingsPath(bool bDeleted,
+                                       bool bRadio,
+                                       const std::string& strDirectory,
+                                       const std::string& strTitle,
+                                       int iSeason,
+                                       int iEpisode,
+                                       int iYear,
+                                       const std::string& strSubtitle,
+                                       const std::string& strChannelName,
+                                       const CDateTime& recordingTime,
+                                       const std::string& strId)
+  : m_bValid(true)
+  , m_bRoot(false)
+  , m_bActive(!bDeleted)
+  , m_bRadio(bRadio)
 {
   std::string strDirectoryN(TrimSlashes(strDirectory));
   if (!strDirectoryN.empty())
@@ -113,11 +121,14 @@ CPVRRecordingsPath::CPVRRecordingsPath(bool bDeleted, bool bRadio,
     strChannelNameN = CURL::Encode(strChannelNameN);
   }
 
-  m_directoryPath = StringUtils::Format("%s%s%s%s%s",
-                                        strDirectoryN.c_str(), strTitleN.c_str(), strSeasonEpisodeN.c_str(),
-                                        strYearN.c_str(), strSubtitleN.c_str());
-  m_params = StringUtils::Format(", TV%s, %s, %s.pvr", strChannelNameN.c_str(), recordingTime.GetAsSaveString().c_str(), strId.c_str());
-  m_path   = StringUtils::Format("pvr://recordings/%s/%s/%s%s", bRadio ? "radio" : "tv", bDeleted ? "deleted" : "active", m_directoryPath.c_str(), m_params.c_str());
+  m_directoryPath =
+      StringUtils::Format("%s%s%s%s%s", strDirectoryN.c_str(), strTitleN.c_str(),
+                          strSeasonEpisodeN.c_str(), strYearN.c_str(), strSubtitleN.c_str());
+  m_params = StringUtils::Format(", TV%s, %s, %s.pvr", strChannelNameN.c_str(),
+                                 recordingTime.GetAsSaveString().c_str(), strId.c_str());
+  m_path = StringUtils::Format("pvr://recordings/%s/%s/%s%s", bRadio ? "radio" : "tv",
+                               bDeleted ? "deleted" : "active", m_directoryPath.c_str(),
+                               m_params.c_str());
 }
 
 std::string CPVRRecordingsPath::GetUnescapedDirectoryPath() const
@@ -125,7 +136,7 @@ std::string CPVRRecordingsPath::GetUnescapedDirectoryPath() const
   return CURL::Decode(m_directoryPath);
 }
 
-std::string CPVRRecordingsPath::GetUnescapedSubDirectoryPath(const std::string &strPath) const
+std::string CPVRRecordingsPath::GetUnescapedSubDirectoryPath(const std::string& strPath) const
 {
   // note: strPath must be unescaped.
 
@@ -136,7 +147,8 @@ std::string CPVRRecordingsPath::GetUnescapedSubDirectoryPath(const std::string &
 
   /* adding "/" to make sure that base matches the complete folder name and not only parts of it */
   if (!strUnescapedDirectoryPath.empty() &&
-      (strUsePath.size() <= strUnescapedDirectoryPath.size() || !URIUtils::PathHasParent(strUsePath, strUnescapedDirectoryPath)))
+      (strUsePath.size() <= strUnescapedDirectoryPath.size() ||
+       !URIUtils::PathHasParent(strUsePath, strUnescapedDirectoryPath)))
     return strReturn;
 
   strUsePath.erase(0, strUnescapedDirectoryPath.size());
@@ -158,7 +170,8 @@ const std::string CPVRRecordingsPath::GetTitle() const
   {
     CRegExp reg(true);
     if (reg.RegComp("pvr://recordings/(.*/)*(.*), TV( \\(.*\\))?, "
-                    "(19[0-9][0-9]|20[0-9][0-9])[0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9], (.*).pvr"))
+                    "(19[0-9][0-9]|20[0-9][0-9])[0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]"
+                    ", (.*).pvr"))
     {
       if (reg.RegFind(m_path.c_str()) >= 0)
         return reg.GetMatch(2);
@@ -167,7 +180,7 @@ const std::string CPVRRecordingsPath::GetTitle() const
   return "";
 }
 
-void CPVRRecordingsPath::AppendSegment(const std::string &strSegment)
+void CPVRRecordingsPath::AppendSegment(const std::string& strSegment)
 {
   if (!m_bValid || strSegment.empty() || strSegment == "/")
     return;
@@ -201,7 +214,7 @@ void CPVRRecordingsPath::AppendSegment(const std::string &strSegment)
   m_bRoot = false;
 }
 
-std::string CPVRRecordingsPath::TrimSlashes(const std::string &strString)
+std::string CPVRRecordingsPath::TrimSlashes(const std::string& strString)
 {
   std::string strTrimmed(strString);
   while (!strTrimmed.empty() && strTrimmed.front() == '/')

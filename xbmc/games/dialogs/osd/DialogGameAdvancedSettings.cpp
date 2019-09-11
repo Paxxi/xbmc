@@ -19,12 +19,12 @@
 using namespace KODI;
 using namespace GAME;
 
-CDialogGameAdvancedSettings::CDialogGameAdvancedSettings() :
-  CGUIDialog(WINDOW_DIALOG_GAME_ADVANCED_SETTINGS, "")
+CDialogGameAdvancedSettings::CDialogGameAdvancedSettings()
+  : CGUIDialog(WINDOW_DIALOG_GAME_ADVANCED_SETTINGS, "")
 {
 }
 
-bool CDialogGameAdvancedSettings::OnMessage(CGUIMessage &message)
+bool CDialogGameAdvancedSettings::OnMessage(CGUIMessage& message)
 {
   switch (message.GetMessage())
   {
@@ -34,7 +34,8 @@ bool CDialogGameAdvancedSettings::OnMessage(CGUIMessage &message)
     if (gameSettingsHandle)
     {
       ADDON::AddonPtr addon;
-      if (CServiceBroker::GetAddonMgr().GetAddon(gameSettingsHandle->GameClientID(), addon, ADDON::ADDON_GAMEDLL))
+      if (CServiceBroker::GetAddonMgr().GetAddon(gameSettingsHandle->GameClientID(), addon,
+                                                 ADDON::ADDON_GAMEDLL))
       {
         gameSettingsHandle.reset();
         CGUIDialogAddonSettings::ShowForAddon(addon);

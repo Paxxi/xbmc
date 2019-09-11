@@ -14,24 +14,28 @@
 
 #include "platform/win32/CharsetConverter.h"
 
-const static GUID USB_RAW_GUID = { 0xA5DCBF10, 0x6530, 0x11D2, { 0x90, 0x1F, 0x00, 0xC0, 0x4F, 0xB9, 0x51, 0xED } };
-const static GUID USB_HID_GUID = { 0x4D1E55B2, 0xF16F, 0x11CF, { 0x88, 0xCB, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30 } };
-const static GUID USB_DISK_GUID = { 0x53F56307, 0xB6BF, 0x11D0, { 0x94, 0xF2, 0x00, 0xA0, 0xC9, 0x1E, 0xFB, 0x8B } };
-const static GUID USB_NIC_GUID = { 0xAD498944, 0x762F, 0x11D0, { 0x8D, 0xCB, 0x00, 0xC0, 0x4F, 0xC3, 0x35, 0x8C } };
+const static GUID USB_RAW_GUID = {
+    0xA5DCBF10, 0x6530, 0x11D2, {0x90, 0x1F, 0x00, 0xC0, 0x4F, 0xB9, 0x51, 0xED}};
+const static GUID USB_HID_GUID = {
+    0x4D1E55B2, 0xF16F, 0x11CF, {0x88, 0xCB, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30}};
+const static GUID USB_DISK_GUID = {
+    0x53F56307, 0xB6BF, 0x11D0, {0x94, 0xF2, 0x00, 0xA0, 0xC9, 0x1E, 0xFB, 0x8B}};
+const static GUID USB_NIC_GUID = {
+    0xAD498944, 0x762F, 0x11D0, {0x8D, 0xCB, 0x00, 0xC0, 0x4F, 0xC3, 0x35, 0x8C}};
 
 using namespace PERIPHERALS;
 
 // Only to avoid endless loops while scanning for devices
 #define MAX_BUS_DEVICES 2000
 
-CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals& manager) :
-    CPeripheralBus("PeripBusUSB", manager, PERIPHERAL_BUS_USB)
+CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals& manager)
+  : CPeripheralBus("PeripBusUSB", manager, PERIPHERAL_BUS_USB)
 {
   /* device removals aren't always triggering OnDeviceRemoved events, so poll for changes every 5 seconds to be sure we don't miss anything */
   m_iRescanTime = 5000;
 }
 
-bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults &results)
+bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults& results)
 {
   /* XXX we'll just scan the RAW guid and find all devices. they'll show up as type 'unknown' in the UI,
      but the other option is that they're detected more than once, because RAW will return all devices.
@@ -39,13 +43,15 @@ bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults &results)
   return PerformDeviceScan(&USB_RAW_GUID, PERIPHERAL_UNKNOWN, results);
 }
 
-bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType defaultType, PeripheralScanResults &results)
+bool CPeripheralBusUSB::PerformDeviceScan(const GUID* guid,
+                                          const PeripheralType defaultType,
+                                          PeripheralScanResults& results)
 {
   using KODI::PLATFORM::WINDOWS::FromW;
 
-  bool     bReturn(false);
-  DWORD    required = 0, iMemberIndex = 0;
-  int      nBufferSize = 200;  // Just initial guess, will be increased if required
+  bool bReturn(false);
+  DWORD required = 0, iMemberIndex = 0;
+  int nBufferSize = 200; // Just initial guess, will be increased if required
 
   SP_DEVICE_INTERFACE_DATA deviceInterfaceData;
   deviceInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -53,14 +59,16 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
   SP_DEVINFO_DATA devInfoData;
   devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
-  HDEVINFO const hDevHandle = SetupDiGetClassDevs(guid, 0, 0, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
+  HDEVINFO const hDevHandle =
+      SetupDiGetClassDevs(guid, 0, 0, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
   if (hDevHandle == INVALID_HANDLE_VALUE)
   {
     CLog::Log(LOGWARNING, "%s - cannot query USB devices: invalid handle", __FUNCTION__);
     return bReturn;
   }
 
-  PSP_DEVICE_INTERFACE_DETAIL_DATA devicedetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)malloc(nBufferSize);
+  PSP_DEVICE_INTERFACE_DETAIL_DATA devicedetailData =
+      (PSP_DEVICE_INTERFACE_DETAIL_DATA)malloc(nBufferSize);
   int nPropertyBufferSize = 100; // Just initial guess, will be increased if required
   char* deviceProperty = (char*)malloc(nPropertyBufferSize);
   if (!devicedetailData || !deviceProperty)
@@ -78,7 +86,8 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
     bReturn = SetupDiEnumDeviceInfo(hDevHandle, iMemberIndex, &devInfoData) == TRUE;
 
     if (bReturn)
-      bReturn = SetupDiEnumDeviceInterfaces(hDevHandle, 0, guid, iMemberIndex, &deviceInterfaceData) == TRUE;
+      bReturn = SetupDiEnumDeviceInterfaces(hDevHandle, 0, guid, iMemberIndex,
+                                            &deviceInterfaceData) == TRUE;
     else
     {
       bReturn = true;
@@ -93,7 +102,8 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
       devicedetailData->cbSize = sizeof(SP_INTERFACE_DEVICE_DETAIL_DATA);
       deviceInfo.cbSize = sizeof(SP_DEVINFO_DATA);
 
-      BOOL bDetailResult = SetupDiGetDeviceInterfaceDetail(hDevHandle, &deviceInterfaceData, devicedetailData, nBufferSize , &required, &deviceInfo);
+      BOOL bDetailResult = SetupDiGetDeviceInterfaceDetail(
+          hDevHandle, &deviceInterfaceData, devicedetailData, nBufferSize, &required, &deviceInfo);
       if (!bDetailResult && GetLastError() == ERROR_INSUFFICIENT_BUFFER)
       {
         free(devicedetailData);
@@ -106,12 +116,16 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
         }
         devicedetailData->cbSize = sizeof(SP_INTERFACE_DEVICE_DETAIL_DATA);
         nBufferSize = required;
-        bDetailResult = SetupDiGetDeviceInterfaceDetail(hDevHandle, &deviceInterfaceData, devicedetailData, nBufferSize , &required, &deviceInfo);
+        bDetailResult =
+            SetupDiGetDeviceInterfaceDetail(hDevHandle, &deviceInterfaceData, devicedetailData,
+                                            nBufferSize, &required, &deviceInfo);
       }
 
       if (bDetailResult)
       {
-        bDetailResult = SetupDiGetDeviceRegistryProperty(hDevHandle, &deviceInfo, SPDRP_HARDWAREID, NULL, (PBYTE)deviceProperty, nPropertyBufferSize, &required);
+        bDetailResult =
+            SetupDiGetDeviceRegistryProperty(hDevHandle, &deviceInfo, SPDRP_HARDWAREID, NULL,
+                                             (PBYTE)deviceProperty, nPropertyBufferSize, &required);
         if (!bDetailResult && GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
           free(deviceProperty);
@@ -123,7 +137,9 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
             return false;
           }
           nPropertyBufferSize = required;
-          bDetailResult = SetupDiGetDeviceRegistryProperty(hDevHandle, &deviceInfo, SPDRP_HARDWAREID, NULL, (PBYTE)deviceProperty, nPropertyBufferSize, &required);
+          bDetailResult = SetupDiGetDeviceRegistryProperty(
+              hDevHandle, &deviceInfo, SPDRP_HARDWAREID, NULL, (PBYTE)deviceProperty,
+              nPropertyBufferSize, &required);
         }
       }
 
@@ -133,8 +149,10 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
 
         StringUtils::ToLower(strTmp);
         size_t posVid, posPid;
-        if (((posVid=strTmp.find("\\vid_")) != std::string::npos || (posVid=strTmp.find("&vid_")) != std::string::npos) &&
-              ((posPid=strTmp.find("\\pid_")) != std::string::npos || (posPid=strTmp.find("&pid_")) != std::string::npos))
+        if (((posVid = strTmp.find("\\vid_")) != std::string::npos ||
+             (posVid = strTmp.find("&vid_")) != std::string::npos) &&
+            ((posPid = strTmp.find("\\pid_")) != std::string::npos ||
+             (posPid = strTmp.find("&pid_")) != std::string::npos))
         {
           std::string strVendorId(strTmp, posVid + 5, 4);
           std::string strProductId(strTmp, posPid + 5, 4);
@@ -142,13 +160,16 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
           if (!results.GetDeviceOnLocation(FromW(devicedetailData->DevicePath), &prevDevice))
           {
             PeripheralScanResult result(m_type);
-            result.m_strLocation  = FromW(devicedetailData->DevicePath);
-            result.m_iVendorId    = PeripheralTypeTranslator::HexStringToInt(strVendorId.c_str());
-            result.m_iProductId   = PeripheralTypeTranslator::HexStringToInt(strProductId.c_str());
-            result.m_iSequence    = GetNumberOfPeripheralsWithId(result.m_iVendorId, result.m_iProductId);
+            result.m_strLocation = FromW(devicedetailData->DevicePath);
+            result.m_iVendorId = PeripheralTypeTranslator::HexStringToInt(strVendorId.c_str());
+            result.m_iProductId = PeripheralTypeTranslator::HexStringToInt(strProductId.c_str());
+            result.m_iSequence =
+                GetNumberOfPeripheralsWithId(result.m_iVendorId, result.m_iProductId);
 
             // Assume that buffer is more then enough (we need only 8 chars, initial allocation is 100 chars). If not - just skip type detection.
-            if (SetupDiGetDeviceRegistryProperty(hDevHandle, &devInfoData, SPDRP_CLASS, NULL, (PBYTE)deviceProperty, nPropertyBufferSize, &required) &&
+            if (SetupDiGetDeviceRegistryProperty(hDevHandle, &devInfoData, SPDRP_CLASS, NULL,
+                                                 (PBYTE)deviceProperty, nPropertyBufferSize,
+                                                 &required) &&
                 strcmp("HIDClass", deviceProperty) == 0)
               result.m_type = PERIPHERAL_HID;
             else

@@ -27,8 +27,8 @@ class CEngineStats;
 struct SinkConfig
 {
   AEAudioFormat format;
-  CEngineStats *stats;
-  const std::string *device;
+  CEngineStats* stats;
+  const std::string* device;
 };
 
 struct SinkReply
@@ -42,7 +42,8 @@ struct SinkReply
 class CSinkControlProtocol : public Protocol
 {
 public:
-  CSinkControlProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
+  CSinkControlProtocol(std::string name, CEvent* inEvent, CEvent* outEvent)
+    : Protocol(name, inEvent, outEvent){};
   enum OutSignal
   {
     CONFIGURE,
@@ -66,7 +67,8 @@ public:
 class CSinkDataProtocol : public Protocol
 {
 public:
-  CSinkDataProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
+  CSinkDataProtocol(std::string name, CEvent* inEvent, CEvent* outEvent)
+    : Protocol(name, inEvent, outEvent){};
   enum OutSignal
   {
     SAMPLE = 0,
@@ -82,22 +84,22 @@ public:
 class CActiveAESink : private CThread
 {
 public:
-  explicit CActiveAESink(CEvent *inMsgEvent);
+  explicit CActiveAESink(CEvent* inMsgEvent);
   void EnumerateSinkList(bool force);
-  void EnumerateOutputDevices(AEDeviceList &devices, bool passthrough);
+  void EnumerateOutputDevices(AEDeviceList& devices, bool passthrough);
   void Start();
   void Dispose();
-  AEDeviceType GetDeviceType(const std::string &device);
+  AEDeviceType GetDeviceType(const std::string& device);
   bool HasPassthroughDevice();
-  bool SupportsFormat(const std::string &device, AEAudioFormat &format);
+  bool SupportsFormat(const std::string& device, AEAudioFormat& format);
   CSinkControlProtocol m_controlPort;
   CSinkDataProtocol m_dataPort;
 
 protected:
   void Process() override;
-  void StateMachine(int signal, Protocol *port, Message *msg);
+  void StateMachine(int signal, Protocol* port, Message* msg);
   void PrintSinks();
-  void GetDeviceFriendlyName(std::string &device);
+  void GetDeviceFriendlyName(std::string& device);
   void OpenSink();
   void ReturnBuffers();
   void SetSilenceTimer();
@@ -109,7 +111,7 @@ protected:
   void GenerateNoise();
 
   CEvent m_outMsgEvent;
-  CEvent *m_inMsgEvent;
+  CEvent* m_inMsgEvent;
   int m_state;
   bool m_bStateMachineSelfTrigger;
   int m_extTimeout;
@@ -132,14 +134,14 @@ protected:
   std::string m_deviceFriendlyName;
   std::string m_device;
   std::vector<AE::AESinkInfo> m_sinkInfoList;
-  IAESink *m_sink;
+  IAESink* m_sink;
   AEAudioFormat m_sinkFormat, m_requestedFormat;
-  CEngineStats *m_stats;
+  CEngineStats* m_stats;
   float m_volume;
   int m_sinkLatency;
-  CAEBitstreamPacker *m_packer;
+  CAEBitstreamPacker* m_packer;
   bool m_needIecPack;
   bool m_streamNoise;
 };
 
-}
+} // namespace ActiveAE

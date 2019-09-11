@@ -30,9 +30,7 @@ public:
   bool InitWindowSystem() override;
   bool DestroyWindowSystem() override;
 
-  bool CreateNewWindow(const std::string& name,
-                       bool fullScreen,
-                       RESOLUTION_INFO& res) override;
+  bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
 
   bool DestroyWindow() override;
   void UpdateResolutions() override;
@@ -40,10 +38,11 @@ public:
   bool Hide() override;
   bool Show(bool raise = true) override;
   void SetVisible(bool visible);
-  virtual void Register(IDispResource *resource);
-  virtual void Unregister(IDispResource *resource);
+  virtual void Register(IDispResource* resource);
+  virtual void Unregister(IDispResource* resource);
+
 protected:
-  CRPIUtils *m_rpi;
+  CRPIUtils* m_rpi;
   EGLDisplay m_nativeDisplay;
   EGLSurface m_nativeWindow;
 

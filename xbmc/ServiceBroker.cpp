@@ -21,7 +21,8 @@ std::shared_ptr<ANNOUNCEMENT::CAnnouncementManager> CServiceBroker::GetAnnouncem
 {
   return m_pAnnouncementManager;
 }
-void CServiceBroker::RegisterAnnouncementManager(std::shared_ptr<ANNOUNCEMENT::CAnnouncementManager> port)
+void CServiceBroker::RegisterAnnouncementManager(
+    std::shared_ptr<ANNOUNCEMENT::CAnnouncementManager> port)
 {
   m_pAnnouncementManager = port;
 }
@@ -30,22 +31,22 @@ void CServiceBroker::UnregisterAnnouncementManager()
   m_pAnnouncementManager.reset();
 }
 
-ADDON::CAddonMgr &CServiceBroker::GetAddonMgr()
+ADDON::CAddonMgr& CServiceBroker::GetAddonMgr()
 {
   return g_application.m_ServiceManager->GetAddonMgr();
 }
 
-ADDON::CBinaryAddonManager &CServiceBroker::GetBinaryAddonManager()
+ADDON::CBinaryAddonManager& CServiceBroker::GetBinaryAddonManager()
 {
   return g_application.m_ServiceManager->GetBinaryAddonManager();
 }
 
-ADDON::CBinaryAddonCache &CServiceBroker::GetBinaryAddonCache()
+ADDON::CBinaryAddonCache& CServiceBroker::GetBinaryAddonCache()
 {
   return g_application.m_ServiceManager->GetBinaryAddonCache();
 }
 
-ADDON::CVFSAddonCache &CServiceBroker::GetVFSAddonCache()
+ADDON::CVFSAddonCache& CServiceBroker::GetVFSAddonCache()
 {
   return g_application.m_ServiceManager->GetVFSAddonCache();
 }
@@ -57,7 +58,7 @@ XBPython& CServiceBroker::GetXBPython()
 }
 #endif
 
-PVR::CPVRManager &CServiceBroker::GetPVRManager()
+PVR::CPVRManager& CServiceBroker::GetPVRManager()
 {
   return g_application.m_ServiceManager->GetPVRManager();
 }
@@ -67,19 +68,19 @@ CContextMenuManager& CServiceBroker::GetContextMenuManager()
   return g_application.m_ServiceManager->GetContextMenuManager();
 }
 
-CDataCacheCore &CServiceBroker::GetDataCacheCore()
+CDataCacheCore& CServiceBroker::GetDataCacheCore()
 {
   return g_application.m_ServiceManager->GetDataCacheCore();
 }
 
-PLAYLIST::CPlayListPlayer &CServiceBroker::GetPlaylistPlayer()
+PLAYLIST::CPlayListPlayer& CServiceBroker::GetPlaylistPlayer()
 {
   return g_application.m_ServiceManager->GetPlaylistPlayer();
 }
 
 CSettingsComponent* CServiceBroker::m_pSettingsComponent = nullptr;
 
-void CServiceBroker::RegisterSettingsComponent(CSettingsComponent *settings)
+void CServiceBroker::RegisterSettingsComponent(CSettingsComponent* settings)
 {
   m_pSettingsComponent = settings;
 }
@@ -146,14 +147,12 @@ CNetworkBase& CServiceBroker::GetNetwork()
 
 bool CServiceBroker::IsBinaryAddonCacheUp()
 {
-  return g_application.m_ServiceManager &&
-         g_application.m_ServiceManager->init_level > 1;
+  return g_application.m_ServiceManager && g_application.m_ServiceManager->init_level > 1;
 }
 
 bool CServiceBroker::IsServiceManagerUp()
 {
-  return g_application.m_ServiceManager &&
-         g_application.m_ServiceManager->init_level == 3;
+  return g_application.m_ServiceManager && g_application.m_ServiceManager->init_level == 3;
 }
 
 CWinSystemBase* CServiceBroker::m_pWinSystem = nullptr;
@@ -163,7 +162,7 @@ CWinSystemBase* CServiceBroker::GetWinSystem()
   return m_pWinSystem;
 }
 
-void CServiceBroker::RegisterWinSystem(CWinSystemBase *winsystem)
+void CServiceBroker::RegisterWinSystem(CWinSystemBase* winsystem)
 {
   m_pWinSystem = winsystem;
 }
@@ -213,7 +212,7 @@ CGUIComponent* CServiceBroker::GetGUI()
   return m_pGUI;
 }
 
-void CServiceBroker::RegisterGUI(CGUIComponent *gui)
+void CServiceBroker::RegisterGUI(CGUIComponent* gui)
 {
   m_pGUI = gui;
 }
@@ -229,7 +228,7 @@ IAE* CServiceBroker::GetActiveAE()
 {
   return m_pActiveAE;
 }
-void CServiceBroker::RegisterAE(IAE *ae)
+void CServiceBroker::RegisterAE(IAE* ae)
 {
   m_pActiveAE = ae;
 }

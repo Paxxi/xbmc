@@ -10,8 +10,7 @@
 
 #include "guilib/GUIDialog.h"
 
-class CGUIDialogTextViewer :
-      public CGUIDialog
+class CGUIDialogTextViewer : public CGUIDialog
 {
 public:
   CGUIDialogTextViewer(void);
@@ -25,9 +24,10 @@ public:
   //! \param path Path to file
   //! \param useMonoFont True to use monospace font
   static void ShowForFile(const std::string& path, bool useMonoFont);
+
 protected:
   void OnDeinitWindow(int nextWindowID) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
   std::string m_strText;
   std::string m_strHeading;
@@ -36,4 +36,3 @@ protected:
   void SetText();
   void SetHeading();
 };
-

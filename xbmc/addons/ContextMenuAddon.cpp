@@ -21,7 +21,7 @@ namespace ADDON
 {
 
 CContextMenuAddon::CContextMenuAddon(const AddonInfoPtr& addonInfo)
-    : CAddon(addonInfo, ADDON_CONTEXT_ITEM)
+  : CAddon(addonInfo, ADDON_CONTEXT_ITEM)
 {
   std::vector<CContextMenuItem> items;
 
@@ -42,24 +42,25 @@ CContextMenuAddon::CContextMenuAddon(const AddonInfoPtr& addonInfo)
         visCondition = "false";
 
       std::string parent = elem->GetValue("parent").asString() == "kodi.core.manage"
-          ? CContextMenuManager::MANAGE.m_groupId : CContextMenuManager::MAIN.m_groupId;
+                               ? CContextMenuManager::MANAGE.m_groupId
+                               : CContextMenuManager::MAIN.m_groupId;
 
       auto label = elem->GetValue("label").asString();
       if (StringUtils::IsNaturalNumber(label))
         label = g_localizeStrings.GetAddonString(ID(), atoi(label.c_str()));
 
-      CContextMenuItem menuItem = CContextMenuItem::CreateItem(label, parent,
-          URIUtils::AddFileToFolder(Path(), Type(ADDON_CONTEXT_ITEM)->LibName()), visCondition, ID());
+      CContextMenuItem menuItem = CContextMenuItem::CreateItem(
+          label, parent, URIUtils::AddFileToFolder(Path(), Type(ADDON_CONTEXT_ITEM)->LibName()),
+          visCondition, ID());
 
       m_items.push_back(menuItem);
     }
   }
 }
 
-void CContextMenuAddon::ParseMenu(
-    const CAddonExtensions* elem,
-    const std::string& parent,
-    int& anonGroupCount)
+void CContextMenuAddon::ParseMenu(const CAddonExtensions* elem,
+                                  const std::string& parent,
+                                  int& anonGroupCount)
 {
   auto menuId = elem->GetValue("@id").asString();
   auto menuLabel = elem->GetValue("label").asString();
@@ -89,11 +90,11 @@ void CContextMenuAddon::ParseMenu(
 
     if (!label.empty() && !library.empty() && !visCondition.empty())
     {
-      auto menu = CContextMenuItem::CreateItem(label, menuId,
-          URIUtils::AddFileToFolder(Path(), library), visCondition, ID());
+      auto menu = CContextMenuItem::CreateItem(
+          label, menuId, URIUtils::AddFileToFolder(Path(), library), visCondition, ID());
       m_items.push_back(menu);
     }
   }
 }
 
-}
+} // namespace ADDON

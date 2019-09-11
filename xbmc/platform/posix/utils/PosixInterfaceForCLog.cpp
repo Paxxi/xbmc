@@ -7,8 +7,10 @@
  */
 
 #include "PosixInterfaceForCLog.h"
+
 #include <stdio.h>
 #include <time.h>
+
 #include <sys/time.h>
 
 #if defined(TARGET_DARWIN)
@@ -18,12 +20,14 @@
 #endif // TARGET_ANDROID
 
 struct FILEWRAP : public FILE
-{};
+{
+};
 
 
-CPosixInterfaceForCLog::CPosixInterfaceForCLog() :
-  m_file(NULL)
-{ }
+CPosixInterfaceForCLog::CPosixInterfaceForCLog()
+  : m_file(NULL)
+{
+}
 
 CPosixInterfaceForCLog::~CPosixInterfaceForCLog()
 {
@@ -32,19 +36,21 @@ CPosixInterfaceForCLog::~CPosixInterfaceForCLog()
   m_file = NULL;
 }
 
-bool CPosixInterfaceForCLog::OpenLogFile(const std::string &logFilename, const std::string &backupOldLogToFilename)
+bool CPosixInterfaceForCLog::OpenLogFile(const std::string& logFilename,
+                                         const std::string& backupOldLogToFilename)
 {
   if (m_file)
     return false; // file was already opened
 
   (void)remove(backupOldLogToFilename.c_str()); // if it's failed, try to continue
-  (void)rename(logFilename.c_str(), backupOldLogToFilename.c_str()); // if it's failed, try to continue
+  (void)rename(logFilename.c_str(),
+               backupOldLogToFilename.c_str()); // if it's failed, try to continue
 
   m_file = (FILEWRAP*)fopen(logFilename.c_str(), "wb");
   if (!m_file)
     return false; // error, can't open log file
 
-  static const unsigned char BOM[3] = { 0xEF, 0xBB, 0xBF };
+  static const unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
   (void)fwrite(BOM, sizeof(BOM), 1, m_file); // write BOM, ignore possible errors
 
   return true;
@@ -59,7 +65,7 @@ void CPosixInterfaceForCLog::CloseLogFile()
   }
 }
 
-bool CPosixInterfaceForCLog::WriteStringToLog(const std::string &logString)
+bool CPosixInterfaceForCLog::WriteStringToLog(const std::string& logString)
 {
   if (!m_file)
     return false;
@@ -71,7 +77,7 @@ bool CPosixInterfaceForCLog::WriteStringToLog(const std::string &logString)
   return ret;
 }
 
-void CPosixInterfaceForCLog::PrintDebugString(const std::string &debugString)
+void CPosixInterfaceForCLog::PrintDebugString(const std::string& debugString)
 {
 #ifdef _DEBUG
 #if defined(TARGET_DARWIN)
@@ -83,17 +89,18 @@ void CPosixInterfaceForCLog::PrintDebugString(const std::string &debugString)
 #endif // _DEBUG
 }
 
-void CPosixInterfaceForCLog::GetCurrentLocalTime(int& year, int& month, int& day, int &hour, int& minute, int& second, double& milliseconds)
+void CPosixInterfaceForCLog::GetCurrentLocalTime(
+    int& year, int& month, int& day, int& hour, int& minute, int& second, double& milliseconds)
 {
   struct tm localTime;
   struct timeval tv;
 
   if (gettimeofday(&tv, nullptr) != -1 && localtime_r(&tv.tv_sec, &localTime) != NULL)
   {
-    year   = localTime.tm_year + 1900;
-    month  = localTime.tm_mon + 1;
-    day    = localTime.tm_mday;
-    hour   = localTime.tm_hour;
+    year = localTime.tm_year + 1900;
+    month = localTime.tm_mon + 1;
+    day = localTime.tm_mday;
+    hour = localTime.tm_hour;
     minute = localTime.tm_min;
     second = localTime.tm_sec;
     milliseconds = static_cast<double>(tv.tv_usec) / 1000;

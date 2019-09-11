@@ -13,7 +13,10 @@
 #include "settings/SettingPath.h"
 #include "utils/StringUtils.h"
 
-std::shared_ptr<CSetting> CSettingCreator::CreateSetting(const std::string &settingType, const std::string &settingId, CSettingsManager *settingsManager /* = nullptr */) const
+std::shared_ptr<CSetting> CSettingCreator::CreateSetting(
+    const std::string& settingType,
+    const std::string& settingId,
+    CSettingsManager* settingsManager /* = nullptr */) const
 {
   if (StringUtils::EqualsNoCase(settingType, "addon"))
     return std::make_shared<CSettingAddon>(settingId, settingsManager);

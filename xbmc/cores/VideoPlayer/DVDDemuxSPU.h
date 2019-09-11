@@ -20,8 +20,7 @@ typedef struct SPUData
   unsigned int iNeededSize; // wanted packet size
   unsigned int iAllocatedSize;
   double pts;
-}
-SPUData;
+} SPUData;
 
 // upto 32 streams can exist
 #define DVD_MAX_SPUSTREAMS 32
@@ -32,7 +31,9 @@ public:
   CDVDDemuxSPU();
   ~CDVDDemuxSPU();
 
-  CDVDOverlaySpu* AddData(uint8_t* data, int iSize, double pts); // returns a packet from ParsePacket if possible
+  CDVDOverlaySpu* AddData(uint8_t* data,
+                          int iSize,
+                          double pts); // returns a packet from ParsePacket if possible
 
   CDVDOverlaySpu* ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedData);
   static void FindSubtitleColor(int last_color, int stats[4], CDVDOverlaySpu* pSPU);

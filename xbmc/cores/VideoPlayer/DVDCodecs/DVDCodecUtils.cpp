@@ -7,11 +7,13 @@
  */
 
 #include "DVDCodecUtils.h"
-#include "cores/VideoPlayer/Interface/Addon/TimingConstants.h"
-#include "cores/FFmpeg.h"
-#include "Util.h"
 
-extern "C" {
+#include "Util.h"
+#include "cores/FFmpeg.h"
+#include "cores/VideoPlayer/Interface/Addon/TimingConstants.h"
+
+extern "C"
+{
 #include <libswscale/swscale.h>
 }
 
@@ -31,15 +33,16 @@ bool CDVDCodecUtils::IsVP3CompatibleWidth(int width)
   return true;
 }
 
-double CDVDCodecUtils::NormalizeFrameduration(double frameduration, bool *match)
+double CDVDCodecUtils::NormalizeFrameduration(double frameduration, bool* match)
 {
   //if the duration is within 20 microseconds of a common duration, use that
-  const double durations[] = {DVD_TIME_BASE * 1.001 / 24.0, DVD_TIME_BASE / 24.0, DVD_TIME_BASE / 25.0,
-                              DVD_TIME_BASE * 1.001 / 30.0, DVD_TIME_BASE / 30.0, DVD_TIME_BASE / 50.0,
+  const double durations[] = {DVD_TIME_BASE * 1.001 / 24.0, DVD_TIME_BASE / 24.0,
+                              DVD_TIME_BASE / 25.0,         DVD_TIME_BASE * 1.001 / 30.0,
+                              DVD_TIME_BASE / 30.0,         DVD_TIME_BASE / 50.0,
                               DVD_TIME_BASE * 1.001 / 60.0, DVD_TIME_BASE / 60.0};
 
   double lowestdiff = DVD_TIME_BASE;
-  int    selected   = -1;
+  int selected = -1;
   for (size_t i = 0; i < ARRAY_SIZE(durations); i++)
   {
     double diff = fabs(frameduration - durations[i]);
@@ -63,4 +66,3 @@ double CDVDCodecUtils::NormalizeFrameduration(double frameduration, bool *match)
     return frameduration;
   }
 }
-

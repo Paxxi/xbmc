@@ -13,10 +13,11 @@
 //! @todo - once we're at OpenSSL 1.1 this class and its .cpp file should be deleted.
 #if (OPENSSL_VERSION_NUMBER < 0x10100000L)
 
+#include "threads/CriticalSection.h"
+#include "utils/GlobalsHandling.h"
+
 #include <memory>
 #include <vector>
-#include "utils/GlobalsHandling.h"
-#include "threads/CriticalSection.h"
 
 class CryptThreadingInitializer
 {
@@ -35,11 +36,11 @@ public:
   unsigned long GetCurrentCryptThreadId();
 
 private:
-  CryptThreadingInitializer(const CryptThreadingInitializer &rhs) = delete;
+  CryptThreadingInitializer(const CryptThreadingInitializer& rhs) = delete;
   CryptThreadingInitializer& operator=(const CryptThreadingInitializer&) = delete;
 };
 
-XBMC_GLOBAL_REF(CryptThreadingInitializer,g_cryptThreadingInitializer);
+XBMC_GLOBAL_REF(CryptThreadingInitializer, g_cryptThreadingInitializer);
 #define g_cryptThreadingInitializer XBMC_GLOBAL_USE(CryptThreadingInitializer)
 
 #endif

@@ -29,7 +29,7 @@ class IPlayerCallback;
 class CPlayerCoreFactory : public ISettingsHandler
 {
 public:
-  CPlayerCoreFactory(const CProfileManager &profileManager);
+  CPlayerCoreFactory(const CProfileManager& profileManager);
   CPlayerCoreFactory(const CPlayerCoreFactory&) = delete;
   CPlayerCoreFactory& operator=(CPlayerCoreFactory const&) = delete;
   ~CPlayerCoreFactory() override;
@@ -37,17 +37,23 @@ public:
   void OnSettingsLoaded() override;
 
   IPlayer* CreatePlayer(const std::string& nameId, IPlayerCallback& callback) const;
-  void GetPlayers(const CFileItem& item, std::vector<std::string>&players) const;   //Players supporting the specified file
-  void GetPlayers(std::vector<std::string>&players, bool audio, bool video) const;  //All audio players and/or video players
-  void GetPlayers(std::vector<std::string>&players) const;                          //All players
-  void GetPlayers(std::vector<std::string>&players, std::string &type) const;
-  void GetRemotePlayers(std::vector<std::string>&players) const;                    //All remote players we can attach to
-  std::string GetPlayerType(const std::string &player) const;
-  bool PlaysAudio(const std::string &player) const;
-  bool PlaysVideo(const std::string &player) const;
+  void GetPlayers(const CFileItem& item,
+                  std::vector<std::string>& players) const; //Players supporting the specified file
+  void GetPlayers(std::vector<std::string>& players,
+                  bool audio,
+                  bool video) const; //All audio players and/or video players
+  void GetPlayers(std::vector<std::string>& players) const; //All players
+  void GetPlayers(std::vector<std::string>& players, std::string& type) const;
+  void GetRemotePlayers(
+      std::vector<std::string>& players) const; //All remote players we can attach to
+  std::string GetPlayerType(const std::string& player) const;
+  bool PlaysAudio(const std::string& player) const;
+  bool PlaysVideo(const std::string& player) const;
 
   std::string GetDefaultPlayer(const CFileItem& item) const;
-  std::string SelectPlayerDialog(const std::vector<std::string>&players, float posX = 0, float posY = 0) const;
+  std::string SelectPlayerDialog(const std::vector<std::string>& players,
+                                 float posX = 0,
+                                 float posY = 0) const;
   std::string SelectPlayerDialog(float posX, float posY) const;
   void OnPlayerDiscovered(const std::string& id, const std::string& name);
   void OnPlayerRemoved(const std::string& id);
@@ -55,14 +61,14 @@ public:
 private:
   // Construction parameters
   std::shared_ptr<CSettings> m_settings;
-  const CProfileManager &m_profileManager;
+  const CProfileManager& m_profileManager;
 
   int GetPlayerIndex(const std::string& strCoreName) const;
   std::string GetPlayerName(size_t idx) const;
 
-  bool LoadConfiguration(const std::string &file, bool clear);
+  bool LoadConfiguration(const std::string& file, bool clear);
 
-  std::vector<CPlayerCoreConfig *> m_vecPlayerConfigs;
-  std::vector<CPlayerSelectionRule *> m_vecCoreSelectionRules;
+  std::vector<CPlayerCoreConfig*> m_vecPlayerConfigs;
+  std::vector<CPlayerSelectionRule*> m_vecCoreSelectionRules;
   mutable CCriticalSection m_section;
 };

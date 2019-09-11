@@ -8,17 +8,17 @@
 
 #pragma once
 
-#include <memory>
-#include <vector>
-
 #include "network/Zeroconf.h"
 #include "threads/CriticalSection.h"
 
+#include <memory>
+#include <vector>
+
 #include <CoreFoundation/CoreFoundation.h>
 #if defined(TARGET_DARWIN_OSX)
-  #include <CoreServices/CoreServices.h>
+#include <CoreServices/CoreServices.h>
 #else
-  #include <CFNetwork/CFNetServices.h>
+#include <CFNetwork/CFNetServices.h>
 #endif
 
 class CZeroconfDarwin : public CZeroconf
@@ -26,13 +26,14 @@ class CZeroconfDarwin : public CZeroconf
 public:
   CZeroconfDarwin();
   ~CZeroconfDarwin();
+
 protected:
   //implement base CZeroConf interface
   bool doPublishService(const std::string& fcr_identifier,
                         const std::string& fcr_type,
                         const std::string& fcr_name,
                         unsigned int f_port,
-                        const std::vector<std::pair<std::string, std::string> >& txt);
+                        const std::vector<std::pair<std::string, std::string>>& txt);
 
   bool doForceReAnnounceService(const std::string& fcr_identifier);
 

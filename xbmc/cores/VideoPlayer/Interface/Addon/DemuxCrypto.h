@@ -13,7 +13,7 @@
 
 //CryptoSession is usually obtained once per stream, but could change if an key expires
 
-enum CryptoSessionSystem :uint8_t
+enum CryptoSessionSystem : uint8_t
 {
   CRYPTO_SESSION_SYSTEM_NONE,
   CRYPTO_SESSION_SYSTEM_WIDEVINE,
@@ -22,7 +22,10 @@ enum CryptoSessionSystem :uint8_t
 
 struct DemuxCryptoSession
 {
-  DemuxCryptoSession(const CryptoSessionSystem sys, const uint16_t sSize, const char *sData, const uint8_t flags)
+  DemuxCryptoSession(const CryptoSessionSystem sys,
+                     const uint16_t sSize,
+                     const char* sData,
+                     const uint8_t flags)
     : sessionId(new char[sSize])
     , sessionIdSize(sSize)
     , keySystem(sys)
@@ -31,25 +34,22 @@ struct DemuxCryptoSession
     memcpy(sessionId, sData, sSize);
   };
 
-  ~DemuxCryptoSession()
-  {
-    delete[] sessionId;
-  }
+  ~DemuxCryptoSession() { delete[] sessionId; }
 
-  bool operator == (const DemuxCryptoSession &other) const
+  bool operator==(const DemuxCryptoSession& other) const
   {
-    return sessionIdSize == other.sessionIdSize &&
-      keySystem == other.keySystem &&
-      memcmp(sessionId, other.sessionId, sessionIdSize) == 0;
+    return sessionIdSize == other.sessionIdSize && keySystem == other.keySystem &&
+           memcmp(sessionId, other.sessionId, sessionIdSize) == 0;
   };
 
   // encryped stream infos
-  char * sessionId;
+  char* sessionId;
   uint16_t sessionIdSize;
   CryptoSessionSystem keySystem;
 
   static const uint8_t FLAG_SECURE_DECODER = 1;
   uint8_t flags;
+
 private:
   DemuxCryptoSession(const DemuxCryptoSession&) = delete;
   DemuxCryptoSession& operator=(const DemuxCryptoSession&) = delete;
@@ -63,8 +63,7 @@ struct DemuxCryptoInfo
     : numSubSamples(numSubs)
     , flags(0)
     , clearBytes(new uint16_t[numSubs])
-    , cipherBytes(new uint32_t[numSubs])
-  {};
+    , cipherBytes(new uint32_t[numSubs]){};
 
   ~DemuxCryptoInfo()
   {
@@ -75,8 +74,10 @@ struct DemuxCryptoInfo
   uint16_t numSubSamples; //number of subsamples
   uint16_t flags; //flags for later use
 
-  uint16_t *clearBytes; // numSubSamples uint16_t's wich define the size of clear size of a subsample
-  uint32_t *cipherBytes; // numSubSamples uint32_t's wich define the size of cipher size of a subsample
+  uint16_t*
+      clearBytes; // numSubSamples uint16_t's wich define the size of clear size of a subsample
+  uint32_t*
+      cipherBytes; // numSubSamples uint32_t's wich define the size of cipher size of a subsample
 
   uint8_t iv[16]; // initialization vector
   uint8_t kid[16]; // key id

@@ -12,28 +12,29 @@
 
 #include <stdio.h>
 
-#if defined(TARGET_POSIX) && !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD) && !defined(TARGET_ANDROID) && !defined(__UCLIBC__)
+#if defined(TARGET_POSIX) && !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD) && \
+    !defined(TARGET_ANDROID) && !defined(__UCLIBC__)
 #define _file _fileno
 #elif defined(__UCLIBC__)
 #define _file __filedes
 #endif
 
-#define MAX_EMULATED_FILES    50
-#define FILE_WRAPPER_OFFSET   0x00000200
+#define MAX_EMULATED_FILES 50
+#define FILE_WRAPPER_OFFSET 0x00000200
 
 namespace XFILE
 {
-  class CFile;
+class CFile;
 }
 
 typedef struct stEmuFileObject
 {
-  XFILE::CFile*  file_xbmc;
-  CCriticalSection *file_lock;
+  XFILE::CFile* file_xbmc;
+  CCriticalSection* file_lock;
   int mode;
   //Stick this last to avoid 3-7 bytes of padding
-  bool    used;
-  int     fd;
+  bool used;
+  int fd;
 } EmuFileObject;
 
 class CEmuFileWrapper
@@ -64,10 +65,10 @@ public:
     return fd >= FILE_WRAPPER_OFFSET && fd < FILE_WRAPPER_OFFSET + MAX_EMULATED_FILES;
   }
   static bool StreamIsEmulatedFile(FILE* stream);
+
 private:
   EmuFileObject m_files[MAX_EMULATED_FILES];
   CCriticalSection m_criticalSection;
 };
 
 extern CEmuFileWrapper g_emuFileWrapper;
-

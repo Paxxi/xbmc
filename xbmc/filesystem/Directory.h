@@ -32,39 +32,35 @@ public:
     int flags = DIR_FLAG_DEFAULTS;
   };
 
-  static bool GetDirectory(const CURL& url
-                           , CFileItemList &items
-                           , const std::string &strMask
-                           , int flags);
+  static bool GetDirectory(const CURL& url,
+                           CFileItemList& items,
+                           const std::string& strMask,
+                           int flags);
 
   static bool GetDirectory(const CURL& url,
                            std::shared_ptr<IDirectory> pDirectory,
-                           CFileItemList &items,
-                           const CHints &hints);
+                           CFileItemList& items,
+                           const CHints& hints);
 
-  static bool GetDirectory(const CURL& url
-                           , CFileItemList &items
-                           , const CHints &hints);
+  static bool GetDirectory(const CURL& url, CFileItemList& items, const CHints& hints);
 
   static bool Create(const CURL& url);
   static bool Exists(const CURL& url, bool bUseCache = true);
   static bool Remove(const CURL& url);
   static bool RemoveRecursive(const CURL& url);
 
-  static bool GetDirectory(const std::string& strPath
-                           , CFileItemList &items
-                           , const std::string &strMask
-                           , int flags);
+  static bool GetDirectory(const std::string& strPath,
+                           CFileItemList& items,
+                           const std::string& strMask,
+                           int flags);
 
   static bool GetDirectory(const std::string& strPath,
                            std::shared_ptr<IDirectory> pDirectory,
-                           CFileItemList &items,
-                           const std::string &strMask,
+                           CFileItemList& items,
+                           const std::string& strMask,
                            int flags);
 
-  static bool GetDirectory(const std::string& strPath
-                           , CFileItemList &items
-                           , const CHints &hints);
+  static bool GetDirectory(const std::string& strPath, CFileItemList& items, const CHints& hints);
 
   static bool Create(const std::string& strPath);
   static bool Exists(const std::string& strPath, bool bUseCache = true);
@@ -76,7 +72,8 @@ public:
    \param mask  The mask to apply when filtering files
    \param expandImages True to include disc images in file directory expansion
   */
-  static void FilterFileDirectories(CFileItemList &items, const std::string &mask,
-                                    bool expandImages=false);
+  static void FilterFileDirectories(CFileItemList& items,
+                                    const std::string& mask,
+                                    bool expandImages = false);
 };
-}
+} // namespace XFILE

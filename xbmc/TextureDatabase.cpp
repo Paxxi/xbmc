@@ -41,59 +41,70 @@ typedef struct
 } translateField;
 
 static const translateField fields[] = {
-  { "none",          TF_None,          CDatabaseQueryRule::TEXT_FIELD    },
-  { "textureid",     TF_Id,            CDatabaseQueryRule::REAL_FIELD    },
-  { "url",           TF_Url,           CDatabaseQueryRule::TEXT_FIELD    },
-  { "cachedurl",     TF_CachedUrl,     CDatabaseQueryRule::TEXT_FIELD    },
-  { "lasthashcheck", TF_LastHashCheck, CDatabaseQueryRule::TEXT_FIELD    },
-  { "imagehash",     TF_ImageHash,     CDatabaseQueryRule::TEXT_FIELD    },
-  { "width",         TF_Width,         CDatabaseQueryRule::REAL_FIELD    },
-  { "height",        TF_Height,        CDatabaseQueryRule::REAL_FIELD    },
-  { "usecount",      TF_UseCount,      CDatabaseQueryRule::REAL_FIELD    },
-  { "lastused",      TF_LastUsed,      CDatabaseQueryRule::TEXT_FIELD    }
-};
+    {"none", TF_None, CDatabaseQueryRule::TEXT_FIELD},
+    {"textureid", TF_Id, CDatabaseQueryRule::REAL_FIELD},
+    {"url", TF_Url, CDatabaseQueryRule::TEXT_FIELD},
+    {"cachedurl", TF_CachedUrl, CDatabaseQueryRule::TEXT_FIELD},
+    {"lasthashcheck", TF_LastHashCheck, CDatabaseQueryRule::TEXT_FIELD},
+    {"imagehash", TF_ImageHash, CDatabaseQueryRule::TEXT_FIELD},
+    {"width", TF_Width, CDatabaseQueryRule::REAL_FIELD},
+    {"height", TF_Height, CDatabaseQueryRule::REAL_FIELD},
+    {"usecount", TF_UseCount, CDatabaseQueryRule::REAL_FIELD},
+    {"lastused", TF_LastUsed, CDatabaseQueryRule::TEXT_FIELD}};
 
 static const size_t NUM_FIELDS = sizeof(fields) / sizeof(translateField);
 
-int CTextureRule::TranslateField(const char *field) const
+int CTextureRule::TranslateField(const char* field) const
 {
   for (const translateField& f : fields)
-    if (StringUtils::EqualsNoCase(field, f.string)) return f.field;
+    if (StringUtils::EqualsNoCase(field, f.string))
+      return f.field;
   return FieldNone;
 }
 
 std::string CTextureRule::TranslateField(int field) const
 {
   for (const translateField& f : fields)
-    if (field == f.field) return f.string;
+    if (field == f.field)
+      return f.string;
   return "none";
 }
 
-std::string CTextureRule::GetField(int field, const std::string &type) const
+std::string CTextureRule::GetField(int field, const std::string& type) const
 {
-  if (field == TF_Id) return "texture.id";
-  else if (field == TF_Url) return "texture.url";
-  else if (field == TF_CachedUrl) return "texture.cachedurl";
-  else if (field == TF_LastHashCheck) return "texture.lasthashcheck";
-  else if (field == TF_ImageHash) return "texture.imagehash";
-  else if (field == TF_Width) return "sizes.width";
-  else if (field == TF_Height) return "sizes.height";
-  else if (field == TF_UseCount) return "sizes.usecount";
-  else if (field == TF_LastUsed) return "sizes.lastusetime";
+  if (field == TF_Id)
+    return "texture.id";
+  else if (field == TF_Url)
+    return "texture.url";
+  else if (field == TF_CachedUrl)
+    return "texture.cachedurl";
+  else if (field == TF_LastHashCheck)
+    return "texture.lasthashcheck";
+  else if (field == TF_ImageHash)
+    return "texture.imagehash";
+  else if (field == TF_Width)
+    return "sizes.width";
+  else if (field == TF_Height)
+    return "sizes.height";
+  else if (field == TF_UseCount)
+    return "sizes.usecount";
+  else if (field == TF_LastUsed)
+    return "sizes.lastusetime";
   return "";
 }
 
 CDatabaseQueryRule::FIELD_TYPE CTextureRule::GetFieldType(int field) const
 {
   for (const translateField& f : fields)
-    if (field == f.field) return f.type;
+    if (field == f.field)
+      return f.type;
   return TEXT_FIELD;
 }
 
-std::string CTextureRule::FormatParameter(const std::string &operatorString,
-                                          const std::string &param,
-                                          const CDatabase &db,
-                                          const std::string &strType) const
+std::string CTextureRule::FormatParameter(const std::string& operatorString,
+                                          const std::string& param,
+                                          const CDatabase& db,
+                                          const std::string& strType) const
 {
   std::string parameter(param);
   if (m_field == TF_Url)
@@ -101,14 +112,16 @@ std::string CTextureRule::FormatParameter(const std::string &operatorString,
   return CDatabaseQueryRule::FormatParameter(operatorString, parameter, db, strType);
 }
 
-void CTextureRule::GetAvailableFields(std::vector<std::string> &fieldList)
+void CTextureRule::GetAvailableFields(std::vector<std::string>& fieldList)
 {
   // start at 1 to skip TF_None
   for (unsigned int i = 1; i < NUM_FIELDS; i++)
     fieldList.push_back(fields[i].string);
 }
 
-std::string CTextureUtils::GetWrappedImageURL(const std::string &image, const std::string &type, const std::string &options)
+std::string CTextureUtils::GetWrappedImageURL(const std::string& image,
+                                              const std::string& type,
+                                              const std::string& options)
 {
   if (StringUtils::StartsWith(image, "image://"))
     return image; // already wrapped
@@ -125,12 +138,12 @@ std::string CTextureUtils::GetWrappedImageURL(const std::string &image, const st
   return url.Get();
 }
 
-std::string CTextureUtils::GetWrappedThumbURL(const std::string &image)
+std::string CTextureUtils::GetWrappedThumbURL(const std::string& image)
 {
   return GetWrappedImageURL(image, "", "size=thumb");
 }
 
-std::string CTextureUtils::UnwrapImageURL(const std::string &image)
+std::string CTextureUtils::UnwrapImageURL(const std::string& image)
 {
   if (StringUtils::StartsWith(image, "image://"))
   {
@@ -153,10 +166,12 @@ bool CTextureDatabase::Open()
 void CTextureDatabase::CreateTables()
 {
   CLog::Log(LOGINFO, "create texture table");
-  m_pDS->exec("CREATE TABLE texture (id integer primary key, url text, cachedurl text, imagehash text, lasthashcheck text)");
+  m_pDS->exec("CREATE TABLE texture (id integer primary key, url text, cachedurl text, imagehash "
+              "text, lasthashcheck text)");
 
   CLog::Log(LOGINFO, "create sizes table, index,  and trigger");
-  m_pDS->exec("CREATE TABLE sizes (idtexture integer, size integer, width integer, height integer, usecount integer, lastusetime text)");
+  m_pDS->exec("CREATE TABLE sizes (idtexture integer, size integer, width integer, height integer, "
+              "usecount integer, lastusetime text)");
 
   CLog::Log(LOGINFO, "create path table");
   m_pDS->exec("CREATE TABLE path (id integer primary key, url text, type text, texture text)\n");
@@ -172,7 +187,8 @@ void CTextureDatabase::CreateAnalytics()
   m_pDS->exec("CREATE INDEX idxPath ON path(url, type)");
 
   CLog::Log(LOGINFO, "%s creating triggers", __FUNCTION__);
-  m_pDS->exec("CREATE TRIGGER textureDelete AFTER delete ON texture FOR EACH ROW BEGIN delete from sizes where sizes.idtexture=old.id; END");
+  m_pDS->exec("CREATE TRIGGER textureDelete AFTER delete ON texture FOR EACH ROW BEGIN delete from "
+              "sizes where sizes.idtexture=old.id; END");
 }
 
 void CTextureDatabase::UpdateTables(int version)
@@ -184,7 +200,8 @@ void CTextureDatabase::UpdateTables(int version)
     {
       unsigned int id = m_pDS->fv(0).get_asInt();
       CURL url(m_pDS->fv(1).get_asString());
-      m_pDS2->exec(PrepareSQL("update path set texture='image://%s?size=thumb' where id=%u", url.GetHostName().c_str(), id));
+      m_pDS2->exec(PrepareSQL("update path set texture='image://%s?size=thumb' where id=%u",
+                              url.GetHostName().c_str(), id));
       m_pDS->next();
     }
     m_pDS->query("select id, url from texture where url like 'thumb://%'");
@@ -192,7 +209,9 @@ void CTextureDatabase::UpdateTables(int version)
     {
       unsigned int id = m_pDS->fv(0).get_asInt();
       CURL url(m_pDS->fv(1).get_asString());
-      m_pDS2->exec(PrepareSQL("update texture set url='image://%s?size=thumb', urlhash=0 where id=%u", url.GetHostName().c_str(), id));
+      m_pDS2->exec(
+          PrepareSQL("update texture set url='image://%s?size=thumb', urlhash=0 where id=%u",
+                     url.GetHostName().c_str(), id));
       m_pDS->next();
     }
     m_pDS->close();
@@ -204,17 +223,21 @@ void CTextureDatabase::UpdateTables(int version)
   if (version < 9)
   { // get rid of the old path table and add the type column
     m_pDS->exec("DROP TABLE IF EXISTS path");
-    m_pDS->exec("CREATE TABLE path (id integer primary key, urlhash integer, url text, type text, texture text)\n");
+    m_pDS->exec("CREATE TABLE path (id integer primary key, urlhash integer, url text, type text, "
+                "texture text)\n");
   }
   if (version < 10)
   { // get rid of urlhash in both tables...
     m_pDS->exec("DROP TABLE IF EXISTS path");
     m_pDS->exec("CREATE TABLE path (id integer primary key, url text, type text, texture text)\n");
 
-    m_pDS->exec("CREATE TEMPORARY TABLE texture_backup(id,url,cachedurl,usecount,lastusetime,imagehash,lasthashcheck)");
-    m_pDS->exec("INSERT INTO texture_backup SELECT id,url,cachedurl,usecount,lastusetime,imagehash,lasthashcheck FROM texture");
+    m_pDS->exec("CREATE TEMPORARY TABLE "
+                "texture_backup(id,url,cachedurl,usecount,lastusetime,imagehash,lasthashcheck)");
+    m_pDS->exec("INSERT INTO texture_backup SELECT "
+                "id,url,cachedurl,usecount,lastusetime,imagehash,lasthashcheck FROM texture");
     m_pDS->exec("DROP TABLE texture");
-    m_pDS->exec("CREATE TABLE texture (id integer primary key, url text, cachedurl text, usecount integer, lastusetime text, imagehash text, lasthashcheck text)");
+    m_pDS->exec("CREATE TABLE texture (id integer primary key, url text, cachedurl text, usecount "
+                "integer, lastusetime text, imagehash text, lasthashcheck text)");
     m_pDS->exec("INSERT INTO texture SELECT * FROM texture_backup");
     m_pDS->exec("DROP TABLE texture_backup");
   }
@@ -225,18 +248,23 @@ void CTextureDatabase::UpdateTables(int version)
   if (version < 12)
   { // create new sizes table and move usecount info to it.
     m_pDS->exec("DROP TABLE IF EXISTS texture");
-    m_pDS->exec("CREATE TABLE texture (id integer primary key, url text, cachedurl text, imagehash text, lasthashcheck text)");
-    m_pDS->exec("CREATE TABLE sizes (idtexture integer, size integer, width integer, height integer, usecount integer, lastusetime text)");
+    m_pDS->exec("CREATE TABLE texture (id integer primary key, url text, cachedurl text, imagehash "
+                "text, lasthashcheck text)");
+    m_pDS->exec("CREATE TABLE sizes (idtexture integer, size integer, width integer, height "
+                "integer, usecount integer, lastusetime text)");
   }
 }
 
-bool CTextureDatabase::IncrementUseCount(const CTextureDetails &details)
+bool CTextureDatabase::IncrementUseCount(const CTextureDetails& details)
 {
-  std::string sql = PrepareSQL("UPDATE sizes SET usecount=usecount+1, lastusetime=CURRENT_TIMESTAMP WHERE idtexture=%u AND width=%u AND height=%u", details.id, details.width, details.height);
+  std::string sql =
+      PrepareSQL("UPDATE sizes SET usecount=usecount+1, lastusetime=CURRENT_TIMESTAMP WHERE "
+                 "idtexture=%u AND width=%u AND height=%u",
+                 details.id, details.width, details.height);
   return ExecuteQuery(sql);
 }
 
-bool CTextureDatabase::GetCachedTexture(const std::string &url, CTextureDetails &details)
+bool CTextureDatabase::GetCachedTexture(const std::string& url, CTextureDetails& details)
 {
   try
   {
@@ -245,15 +273,19 @@ bool CTextureDatabase::GetCachedTexture(const std::string &url, CTextureDetails 
     if (!m_pDS)
       return false;
 
-    std::string sql = PrepareSQL("SELECT id, cachedurl, lasthashcheck, imagehash, width, height FROM texture JOIN sizes ON (texture.id=sizes.idtexture AND sizes.size=1) WHERE url='%s'", url.c_str());
+    std::string sql =
+        PrepareSQL("SELECT id, cachedurl, lasthashcheck, imagehash, width, height FROM texture "
+                   "JOIN sizes ON (texture.id=sizes.idtexture AND sizes.size=1) WHERE url='%s'",
+                   url.c_str());
     m_pDS->query(sql);
     if (!m_pDS->eof())
     { // have some information
       details.id = m_pDS->fv(0).get_asInt();
-      details.file  = m_pDS->fv(1).get_asString();
+      details.file = m_pDS->fv(1).get_asString();
       CDateTime lastCheck;
       lastCheck.SetFromDBDateTime(m_pDS->fv(2).get_asString());
-      if (lastCheck.IsValid() && lastCheck + CDateTimeSpan(1,0,0,0) < CDateTime::GetCurrentDateTime())
+      if (lastCheck.IsValid() &&
+          lastCheck + CDateTimeSpan(1, 0, 0, 0) < CDateTime::GetCurrentDateTime())
         details.hash = m_pDS->fv(3).get_asString();
       details.width = m_pDS->fv(4).get_asInt();
       details.height = m_pDS->fv(5).get_asInt();
@@ -269,7 +301,7 @@ bool CTextureDatabase::GetCachedTexture(const std::string &url, CTextureDetails 
   return false;
 }
 
-bool CTextureDatabase::GetTextures(CVariant &items, const Filter &filter)
+bool CTextureDatabase::GetTextures(CVariant& items, const Filter& filter)
 {
   try
   {
@@ -278,7 +310,8 @@ bool CTextureDatabase::GetTextures(CVariant &items, const Filter &filter)
     if (!m_pDS)
       return false;
 
-    std::string sql = "SELECT %s FROM texture JOIN sizes ON (texture.id=sizes.idtexture AND sizes.size=1)";
+    std::string sql =
+        "SELECT %s FROM texture JOIN sizes ON (texture.id=sizes.idtexture AND sizes.size=1)";
     std::string sqlFilter;
     if (!CDatabase::BuildSQL("", filter, sqlFilter))
       return false;
@@ -297,7 +330,7 @@ bool CTextureDatabase::GetTextures(CVariant &items, const Filter &filter)
       texture["lasthashcheck"] = m_pDS->fv(4).get_asString();
       CVariant size(CVariant::VariantTypeObject);
       // 5 is sizes.idtexture
-      size["size"]  = m_pDS->fv(6).get_asInt();
+      size["size"] = m_pDS->fv(6).get_asInt();
       size["width"] = m_pDS->fv(7).get_asInt();
       size["height"] = m_pDS->fv(8).get_asInt();
       size["usecount"] = m_pDS->fv(9).get_asInt();
@@ -317,14 +350,15 @@ bool CTextureDatabase::GetTextures(CVariant &items, const Filter &filter)
   return false;
 }
 
-bool CTextureDatabase::SetCachedTextureValid(const std::string &url, bool updateable)
+bool CTextureDatabase::SetCachedTextureValid(const std::string& url, bool updateable)
 {
   std::string date = updateable ? CDateTime::GetCurrentDateTime().GetAsDBDateTime() : "";
-  std::string sql = PrepareSQL("UPDATE texture SET lasthashcheck='%s' WHERE url='%s'", date.c_str(), url.c_str());
+  std::string sql =
+      PrepareSQL("UPDATE texture SET lasthashcheck='%s' WHERE url='%s'", date.c_str(), url.c_str());
   return ExecuteQuery(sql);
 }
 
-bool CTextureDatabase::AddCachedTexture(const std::string &url, const CTextureDetails &details)
+bool CTextureDatabase::AddCachedTexture(const std::string& url, const CTextureDetails& details)
 {
   try
   {
@@ -337,12 +371,16 @@ bool CTextureDatabase::AddCachedTexture(const std::string &url, const CTextureDe
     m_pDS->exec(sql);
 
     std::string date = details.updateable ? CDateTime::GetCurrentDateTime().GetAsDBDateTime() : "";
-    sql = PrepareSQL("INSERT INTO texture (id, url, cachedurl, imagehash, lasthashcheck) VALUES(NULL, '%s', '%s', '%s', '%s')", url.c_str(), details.file.c_str(), details.hash.c_str(), date.c_str());
+    sql = PrepareSQL("INSERT INTO texture (id, url, cachedurl, imagehash, lasthashcheck) "
+                     "VALUES(NULL, '%s', '%s', '%s', '%s')",
+                     url.c_str(), details.file.c_str(), details.hash.c_str(), date.c_str());
     m_pDS->exec(sql);
     int textureID = (int)m_pDS->lastinsertid();
 
     // set the size information
-    sql = PrepareSQL("INSERT INTO sizes (idtexture, size, usecount, lastusetime, width, height) VALUES(%u, 1, 1, CURRENT_TIMESTAMP, %u, %u)", textureID, details.width, details.height);
+    sql = PrepareSQL("INSERT INTO sizes (idtexture, size, usecount, lastusetime, width, height) "
+                     "VALUES(%u, 1, 1, CURRENT_TIMESTAMP, %u, %u)",
+                     textureID, details.width, details.height);
     m_pDS->exec(sql);
   }
   catch (...)
@@ -352,13 +390,13 @@ bool CTextureDatabase::AddCachedTexture(const std::string &url, const CTextureDe
   return true;
 }
 
-bool CTextureDatabase::ClearCachedTexture(const std::string &url, std::string &cacheFile)
+bool CTextureDatabase::ClearCachedTexture(const std::string& url, std::string& cacheFile)
 {
   std::string id = GetSingleValue(PrepareSQL("select id from texture where url='%s'", url.c_str()));
   return !id.empty() ? ClearCachedTexture(strtol(id.c_str(), NULL, 10), cacheFile) : false;
 }
 
-bool CTextureDatabase::ClearCachedTexture(int id, std::string &cacheFile)
+bool CTextureDatabase::ClearCachedTexture(int id, std::string& cacheFile)
 {
   try
   {
@@ -388,14 +426,16 @@ bool CTextureDatabase::ClearCachedTexture(int id, std::string &cacheFile)
   return false;
 }
 
-bool CTextureDatabase::InvalidateCachedTexture(const std::string &url)
+bool CTextureDatabase::InvalidateCachedTexture(const std::string& url)
 {
-  std::string date = (CDateTime::GetCurrentDateTime() - CDateTimeSpan(2, 0, 0, 0)).GetAsDBDateTime();
-  std::string sql = PrepareSQL("UPDATE texture SET lasthashcheck='%s' WHERE url='%s'", date.c_str(), url.c_str());
+  std::string date =
+      (CDateTime::GetCurrentDateTime() - CDateTimeSpan(2, 0, 0, 0)).GetAsDBDateTime();
+  std::string sql =
+      PrepareSQL("UPDATE texture SET lasthashcheck='%s' WHERE url='%s'", date.c_str(), url.c_str());
   return ExecuteQuery(sql);
 }
 
-std::string CTextureDatabase::GetTextureForPath(const std::string &url, const std::string &type)
+std::string CTextureDatabase::GetTextureForPath(const std::string& url, const std::string& type)
 {
   try
   {
@@ -407,7 +447,8 @@ std::string CTextureDatabase::GetTextureForPath(const std::string &url, const st
     if (url.empty())
       return "";
 
-    std::string sql = PrepareSQL("select texture from path where url='%s' and type='%s'", url.c_str(), type.c_str());
+    std::string sql = PrepareSQL("select texture from path where url='%s' and type='%s'",
+                                 url.c_str(), type.c_str());
     m_pDS->query(sql);
 
     if (!m_pDS->eof())
@@ -425,7 +466,9 @@ std::string CTextureDatabase::GetTextureForPath(const std::string &url, const st
   return "";
 }
 
-void CTextureDatabase::SetTextureForPath(const std::string &url, const std::string &type, const std::string &texture)
+void CTextureDatabase::SetTextureForPath(const std::string& url,
+                                         const std::string& type,
+                                         const std::string& texture)
 {
   try
   {
@@ -437,7 +480,8 @@ void CTextureDatabase::SetTextureForPath(const std::string &url, const std::stri
     if (url.empty())
       return;
 
-    std::string sql = PrepareSQL("select id from path where url='%s' and type='%s'", url.c_str(), type.c_str());
+    std::string sql =
+        PrepareSQL("select id from path where url='%s' and type='%s'", url.c_str(), type.c_str());
     m_pDS->query(sql);
     if (!m_pDS->eof())
     { // update
@@ -449,7 +493,8 @@ void CTextureDatabase::SetTextureForPath(const std::string &url, const std::stri
     else
     { // add the texture
       m_pDS->close();
-      sql = PrepareSQL("insert into path (id, url, type, texture) values(NULL, '%s', '%s', '%s')", url.c_str(), type.c_str(), texture.c_str());
+      sql = PrepareSQL("insert into path (id, url, type, texture) values(NULL, '%s', '%s', '%s')",
+                       url.c_str(), type.c_str(), texture.c_str());
       m_pDS->exec(sql);
     }
   }
@@ -459,7 +504,7 @@ void CTextureDatabase::SetTextureForPath(const std::string &url, const std::stri
   }
 }
 
-void CTextureDatabase::ClearTextureForPath(const std::string &url, const std::string &type)
+void CTextureDatabase::ClearTextureForPath(const std::string& url, const std::string& type)
 {
   try
   {
@@ -468,7 +513,8 @@ void CTextureDatabase::ClearTextureForPath(const std::string &url, const std::st
     if (!m_pDS)
       return;
 
-    std::string sql = PrepareSQL("DELETE FROM path WHERE url='%s' and type='%s'", url.c_str(), type.c_str());
+    std::string sql =
+        PrepareSQL("DELETE FROM path WHERE url='%s' and type='%s'", url.c_str(), type.c_str());
     m_pDS->exec(sql);
   }
   catch (...)
@@ -477,12 +523,12 @@ void CTextureDatabase::ClearTextureForPath(const std::string &url, const std::st
   }
 }
 
-CDatabaseQueryRule *CTextureDatabase::CreateRule() const
+CDatabaseQueryRule* CTextureDatabase::CreateRule() const
 {
   return new CTextureRule();
 }
 
-CDatabaseQueryRuleCombination *CTextureDatabase::CreateCombination() const
+CDatabaseQueryRuleCombination* CTextureDatabase::CreateCombination() const
 {
   return new CDatabaseQueryRuleCombination();
 }

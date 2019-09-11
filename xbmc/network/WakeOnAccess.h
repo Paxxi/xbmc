@@ -21,21 +21,21 @@
 class CWakeOnAccess : private IJobCallback, public ISettingCallback, public ISettingsHandler
 {
 public:
-  static CWakeOnAccess &GetInstance();
+  static CWakeOnAccess& GetInstance();
 
-  bool WakeUpHost (const CURL& fileUrl);
-  bool WakeUpHost (const std::string& hostName, const std::string& customMessage);
+  bool WakeUpHost(const CURL& fileUrl);
+  bool WakeUpHost(const std::string& hostName, const std::string& customMessage);
 
   void QueueMACDiscoveryForAllRemotes();
 
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
   void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
   void OnSettingsLoaded() override;
 
   // struct to keep per host settings
   struct WakeUpEntry
   {
-    explicit WakeUpEntry (bool isAwake = false);
+    explicit WakeUpEntry(bool isAwake = false);
 
     std::string host;
     std::string mac;

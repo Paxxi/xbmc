@@ -13,7 +13,7 @@
 #include "utils/XBMCTinyXML.h"
 #include "utils/log.h"
 
-bool ISettingControl::Deserialize(const TiXmlNode *node, bool update /* = false */)
+bool ISettingControl::Deserialize(const TiXmlNode* node, bool update /* = false */)
 {
   if (node == nullptr)
     return false;

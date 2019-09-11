@@ -19,12 +19,11 @@ class CDebugRenderer
 public:
   CDebugRenderer();
   virtual ~CDebugRenderer();
-  void SetInfo(std::string &info1, std::string &info2, std::string &info3, std::string &info4);
-  void Render(CRect &src, CRect &dst, CRect &view);
+  void SetInfo(std::string& info1, std::string& info2, std::string& info3, std::string& info4);
+  void Render(CRect& src, CRect& dst, CRect& view);
   void Flush();
 
 protected:
-
   class CRenderer : public OVERLAY::CRenderer
   {
   public:
@@ -33,6 +32,6 @@ protected:
   };
 
   std::string m_strDebug[4];
-  CDVDOverlayText *m_overlay[4];
+  CDVDOverlayText* m_overlay[4];
   CRenderer m_overlayRenderer;
 };

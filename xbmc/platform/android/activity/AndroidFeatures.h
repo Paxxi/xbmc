@@ -12,9 +12,8 @@
 
 class CAndroidFeatures
 {
-  public:
-
-  static bool         HasNeon();
-  static int          GetVersion();
-  static int          GetCPUCount();
+public:
+  static bool HasNeon();
+  static int GetVersion();
+  static int GetCPUCount();
 };

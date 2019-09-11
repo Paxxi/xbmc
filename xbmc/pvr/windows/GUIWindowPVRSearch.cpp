@@ -38,54 +38,57 @@ using namespace KODI::MESSAGING;
 
 namespace
 {
-  class AsyncSearchAction : private IRunnable
+class AsyncSearchAction : private IRunnable
+{
+public:
+  AsyncSearchAction() = delete;
+  AsyncSearchAction(CFileItemList* items, CPVREpgSearchFilter* filter)
+    : m_items(items)
+    , m_filter(filter)
   {
-  public:
-    AsyncSearchAction() = delete;
-    AsyncSearchAction(CFileItemList* items, CPVREpgSearchFilter* filter) : m_items(items), m_filter(filter) {}
-    bool Execute();
+  }
+  bool Execute();
 
-  private:
-    // IRunnable implementation
-    void Run() override;
+private:
+  // IRunnable implementation
+  void Run() override;
 
-    CFileItemList* m_items;
-    CPVREpgSearchFilter* m_filter;
-  };
+  CFileItemList* m_items;
+  CPVREpgSearchFilter* m_filter;
+};
 
-  bool AsyncSearchAction::Execute()
+bool AsyncSearchAction::Execute()
+{
+  CGUIDialogBusy::Wait(this, 100, false);
+  return true;
+}
+
+void AsyncSearchAction::Run()
+{
+  std::vector<std::shared_ptr<CPVREpgInfoTag>> results =
+      CServiceBroker::GetPVRManager().EpgContainer().GetAllTags();
+  for (auto it = results.begin(); it != results.end();)
   {
-    CGUIDialogBusy::Wait(this, 100, false);
-    return true;
+    it = results.erase(std::remove_if(results.begin(), results.end(),
+                                      [this](const std::shared_ptr<CPVREpgInfoTag>& entry) {
+                                        return !m_filter->FilterEntry(entry);
+                                      }),
+                       results.end());
   }
 
-  void AsyncSearchAction::Run()
+  if (m_filter->ShouldRemoveDuplicates())
+    m_filter->RemoveDuplicates(results);
+
+  for (const auto& tag : results)
   {
-    std::vector<std::shared_ptr<CPVREpgInfoTag>> results = CServiceBroker::GetPVRManager().EpgContainer().GetAllTags();
-    for (auto it = results.begin(); it != results.end();)
-    {
-      it = results.erase(std::remove_if(results.begin(),
-                                        results.end(),
-                                        [this](const std::shared_ptr<CPVREpgInfoTag>& entry)
-                                        {
-                                          return !m_filter->FilterEntry(entry);
-                                        }),
-                         results.end());
-    }
-
-    if (m_filter->ShouldRemoveDuplicates())
-      m_filter->RemoveDuplicates(results);
-
-    for (const auto& tag : results)
-    {
-      m_items->Add(std::make_shared<CFileItem>(tag));
-    }
+    m_items->Add(std::make_shared<CFileItem>(tag));
   }
+}
 } // unnamed namespace
 
-CGUIWindowPVRSearchBase::CGUIWindowPVRSearchBase(bool bRadio, int id, const std::string &xmlFile) :
-  CGUIWindowPVRBase(bRadio, id, xmlFile),
-  m_bSearchConfirmed(false)
+CGUIWindowPVRSearchBase::CGUIWindowPVRSearchBase(bool bRadio, int id, const std::string& xmlFile)
+  : CGUIWindowPVRBase(bRadio, id, xmlFile)
+  , m_bSearchConfirmed(false)
 {
 }
 
@@ -93,7 +96,7 @@ CGUIWindowPVRSearchBase::~CGUIWindowPVRSearchBase()
 {
 }
 
-void CGUIWindowPVRSearchBase::GetContextButtons(int itemNumber, CContextButtons &buttons)
+void CGUIWindowPVRSearchBase::GetContextButtons(int itemNumber, CContextButtons& buttons)
 {
   if (itemNumber < 0 || itemNumber >= m_vecItems->Size())
     return;
@@ -110,10 +113,10 @@ bool CGUIWindowPVRSearchBase::OnContextButton(int itemNumber, CONTEXT_BUTTON but
   CFileItemPtr pItem = m_vecItems->Get(itemNumber);
 
   return OnContextButtonClear(pItem.get(), button) ||
-      CGUIMediaWindow::OnContextButton(itemNumber, button);
+         CGUIMediaWindow::OnContextButton(itemNumber, button);
 }
 
-void CGUIWindowPVRSearchBase::SetItemToSearch(const CFileItemPtr &item)
+void CGUIWindowPVRSearchBase::SetItemToSearch(const CFileItemPtr& item)
 {
   m_searchfilter.reset(new CPVREpgSearchFilter(m_bRadio));
 
@@ -134,7 +137,7 @@ void CGUIWindowPVRSearchBase::SetItemToSearch(const CFileItemPtr &item)
     Refresh(true);
 }
 
-void CGUIWindowPVRSearchBase::OnPrepareFileItems(CFileItemList &items)
+void CGUIWindowPVRSearchBase::OnPrepareFileItems(CFileItemList& items)
 {
   bool bAddSpecialSearchItem = items.IsEmpty();
 
@@ -161,7 +164,7 @@ void CGUIWindowPVRSearchBase::OnPrepareFileItems(CFileItemList &items)
   }
 }
 
-bool CGUIWindowPVRSearchBase::OnMessage(CGUIMessage &message)
+bool CGUIWindowPVRSearchBase::OnMessage(CGUIMessage& message)
 {
   if (message.GetMessage() == GUI_MSG_CLICKED)
   {
@@ -175,25 +178,25 @@ bool CGUIWindowPVRSearchBase::OnMessage(CGUIMessage &message)
         /* process actions */
         switch (message.GetParam1())
         {
-          case ACTION_SHOW_INFO:
-          case ACTION_SELECT_ITEM:
-          case ACTION_MOUSE_LEFT_CLICK:
-          {
-            if (URIUtils::PathEquals(pItem->GetPath(), "pvr://guide/searchresults/search/"))
-              OpenDialogSearch();
-            else
-               CServiceBroker::GetPVRManager().GUIActions()->ShowEPGInfo(pItem);
-            return true;
-          }
+        case ACTION_SHOW_INFO:
+        case ACTION_SELECT_ITEM:
+        case ACTION_MOUSE_LEFT_CLICK:
+        {
+          if (URIUtils::PathEquals(pItem->GetPath(), "pvr://guide/searchresults/search/"))
+            OpenDialogSearch();
+          else
+            CServiceBroker::GetPVRManager().GUIActions()->ShowEPGInfo(pItem);
+          return true;
+        }
 
-          case ACTION_CONTEXT_MENU:
-          case ACTION_MOUSE_RIGHT_CLICK:
-            OnPopupMenu(iItem);
-            return true;
+        case ACTION_CONTEXT_MENU:
+        case ACTION_MOUSE_RIGHT_CLICK:
+          OnPopupMenu(iItem);
+          return true;
 
-          case ACTION_RECORD:
-            CServiceBroker::GetPVRManager().GUIActions()->ToggleTimer(pItem);
-            return true;
+        case ACTION_RECORD:
+          CServiceBroker::GetPVRManager().GUIActions()->ToggleTimer(pItem);
+          return true;
         }
       }
     }
@@ -202,7 +205,7 @@ bool CGUIWindowPVRSearchBase::OnMessage(CGUIMessage &message)
   return CGUIWindowPVRBase::OnMessage(message);
 }
 
-bool CGUIWindowPVRSearchBase::OnContextButtonClear(CFileItem *item, CONTEXT_BUTTON button)
+bool CGUIWindowPVRSearchBase::OnContextButtonClear(CFileItem* item, CONTEXT_BUTTON button)
 {
   bool bReturn = false;
 
@@ -221,7 +224,9 @@ bool CGUIWindowPVRSearchBase::OnContextButtonClear(CFileItem *item, CONTEXT_BUTT
 
 void CGUIWindowPVRSearchBase::OpenDialogSearch()
 {
-  CGUIDialogPVRGuideSearch* dlgSearch = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogPVRGuideSearch>(WINDOW_DIALOG_PVR_GUIDE_SEARCH);
+  CGUIDialogPVRGuideSearch* dlgSearch =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogPVRGuideSearch>(
+          WINDOW_DIALOG_PVR_GUIDE_SEARCH);
 
   if (!dlgSearch)
     return;

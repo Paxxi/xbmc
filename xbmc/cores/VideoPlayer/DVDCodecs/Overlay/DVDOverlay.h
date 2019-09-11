@@ -14,12 +14,12 @@
 
 enum DVDOverlayType
 {
-  DVDOVERLAY_TYPE_NONE    = -1,
-  DVDOVERLAY_TYPE_SPU     = 1,
-  DVDOVERLAY_TYPE_TEXT    = 2,
-  DVDOVERLAY_TYPE_IMAGE   = 3,
-  DVDOVERLAY_TYPE_SSA     = 4,
-  DVDOVERLAY_TYPE_GROUP   = 5,
+  DVDOVERLAY_TYPE_NONE = -1,
+  DVDOVERLAY_TYPE_SPU = 1,
+  DVDOVERLAY_TYPE_TEXT = 2,
+  DVDOVERLAY_TYPE_IMAGE = 3,
+  DVDOVERLAY_TYPE_SSA = 4,
+  DVDOVERLAY_TYPE_GROUP = 5,
 };
 
 class CDVDOverlay
@@ -39,19 +39,16 @@ public:
 
   CDVDOverlay(const CDVDOverlay& src)
   {
-    m_type        = src.m_type;
+    m_type = src.m_type;
     iPTSStartTime = src.iPTSStartTime;
-    iPTSStopTime  = src.iPTSStopTime;
-    bForced       = src.bForced;
-    replace       = src.replace;
-    m_references  = 1;
+    iPTSStopTime = src.iPTSStopTime;
+    bForced = src.bForced;
+    replace = src.replace;
+    m_references = 1;
     m_textureid = 0;
   }
 
-  virtual ~CDVDOverlay()
-  {
-    assert(m_references == 0);
-  }
+  virtual ~CDVDOverlay() { assert(m_references == 0); }
 
   /**
   * increase the reference counter by one.
@@ -77,10 +74,7 @@ public:
   /**
    * static release function for use with shared ptr for example
    */
-  static void Release(CDVDOverlay* ov)
-  {
-    ov->Release();
-  }
+  static void Release(CDVDOverlay* ov) { ov->Release(); }
 
   bool IsOverlayType(DVDOverlayType type) { return (m_type == type); }
 
@@ -95,6 +89,7 @@ public:
   bool bForced; // display, no matter what
   bool replace; // replace by next nomatter what stoptime it has
   unsigned long m_textureid;
+
 protected:
   DVDOverlayType m_type;
 
@@ -112,7 +107,7 @@ class CDVDOverlayGroup : public CDVDOverlay
 public:
   ~CDVDOverlayGroup() override
   {
-    for(VecOverlaysIter it = m_overlays.begin(); it != m_overlays.end(); ++it)
+    for (VecOverlaysIter it = m_overlays.begin(); it != m_overlays.end(); ++it)
       (*it)->Release();
     m_overlays.clear();
   }
@@ -125,7 +120,7 @@ public:
   CDVDOverlayGroup(CDVDOverlayGroup& src)
     : CDVDOverlay(src)
   {
-    for(VecOverlaysIter it = src.m_overlays.begin(); it != src.m_overlays.end(); ++it)
+    for (VecOverlaysIter it = src.m_overlays.begin(); it != src.m_overlays.end(); ++it)
       m_overlays.push_back((*it)->Clone());
   }
   VecOverlays m_overlays;

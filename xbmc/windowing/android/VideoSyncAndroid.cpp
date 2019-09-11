@@ -62,8 +62,8 @@ void CVideoSyncAndroid::OnResetDisplay()
 
 void CVideoSyncAndroid::FrameCallback(int64_t frameTimeNanos)
 {
-  int           NrVBlanks;
-  double        VBlankTime;
+  int NrVBlanks;
+  double VBlankTime;
 
   //calculate how many vblanks happened
   VBlankTime = (double)(frameTimeNanos - m_LastVBlankTime) / (double)CurrentHostFrequency();

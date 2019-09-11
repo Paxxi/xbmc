@@ -18,15 +18,15 @@
 
 namespace ADDON
 {
-  class CContextMenuAddon : public CAddon
-  {
-  public:
-    explicit CContextMenuAddon(const AddonInfoPtr& addonInfo);
+class CContextMenuAddon : public CAddon
+{
+public:
+  explicit CContextMenuAddon(const AddonInfoPtr& addonInfo);
 
-    const std::vector<CContextMenuItem>& GetItems() const { return m_items; };
+  const std::vector<CContextMenuItem>& GetItems() const { return m_items; };
 
-  private:
-    void ParseMenu(const CAddonExtensions* elem, const std::string& parent, int& anonGroupCount);
-    std::vector<CContextMenuItem> m_items;
-  };
-}
+private:
+  void ParseMenu(const CAddonExtensions* elem, const std::string& parent, int& anonGroupCount);
+  std::vector<CContextMenuItem> m_items;
+};
+} // namespace ADDON

@@ -22,27 +22,30 @@
 using namespace TagLib;
 using namespace MUSIC_INFO;
 
-template <typename T>
-class TestTagParser : public ::testing::Test, public CTagLoaderTagLib {
-   public:
-     T value_;
+template<typename T>
+class TestTagParser : public ::testing::Test, public CTagLoaderTagLib
+{
+public:
+  T value_;
 };
 
 
-typedef ::testing::Types<ID3v2::Tag, ID3v1::Tag, ASF::Tag, APE::Tag, Ogg::XiphComment, MP4::Tag> TagTypes;
+typedef ::testing::Types<ID3v2::Tag, ID3v1::Tag, ASF::Tag, APE::Tag, Ogg::XiphComment, MP4::Tag>
+    TagTypes;
 TYPED_TEST_CASE(TestTagParser, TagTypes);
 
-TYPED_TEST(TestTagParser, ParsesBasicTag) {
+TYPED_TEST(TestTagParser, ParsesBasicTag)
+{
   // Create a basic tag
-  TypeParam *tg  = &this->value_;
+  TypeParam* tg = &this->value_;
   // Configure a basic tag..
-  tg->setTitle ("title");
-  tg->setArtist ("artist");
-  tg->setAlbum ("album");
+  tg->setTitle("title");
+  tg->setArtist("artist");
+  tg->setAlbum("album");
   tg->setComment("comment");
   tg->setGenre("Jazz");
-  tg->setYear (1985);
-  tg->setTrack (2);
+  tg->setYear(1985);
+  tg->setTrack(2);
 
   CMusicInfoTag tag;
   EXPECT_TRUE(CTagLoaderTagLib::ParseTag<TypeParam>(tg, NULL, tag));
@@ -65,54 +68,154 @@ TYPED_TEST(TestTagParser, ParsesBasicTag) {
 }
 
 
-TYPED_TEST(TestTagParser, HandleNullTag) {
+TYPED_TEST(TestTagParser, HandleNullTag)
+{
   // A Null tag should not parse, and not break us either
   CMusicInfoTag tag;
   EXPECT_FALSE(CTagLoaderTagLib::ParseTag<TypeParam>(NULL, NULL, tag));
 }
 
 template<typename T, size_t N>
-T * end(T (&ra)[N]) {
-      return ra + N;
+T* end(T (&ra)[N])
+{
+  return ra + N;
 }
 
-const char *tags[] = { "APIC", "ASPI", "COMM", "COMR", "ENCR", "EQU2",
-  "ETCO", "GEOB", "GRID", "LINK", "MCDI", "MLLT", "OWNE", "PRIV", "PCNT",
-  "POPM", "POSS", "RBUF", "RVA2", "RVRB", "SEEK", "SIGN", "SYLT",
-  "SYTC", "TALB", "TBPM", "TCOM", "TCON", "TCOP", "TDEN", "TDLY", "TDOR",
-  "TDRC", "TDRL", "TDTG", "TENC", "TEXT", "TFLT", "TIPL", "TIT1", "TIT2",
-  "TIT3", "TKEY", "TLAN", "TLEN", "TMCL", "TMED", "TMOO", "TOAL", "TOFN",
-  "TOLY", "TOPE", "TOWN", "TPE1", "TPE2", "TPE3", "TPE4", "TPOS", "TPRO",
-  "TPUB", "TRCK", "TRSN", "TRSO", "TSOA", "TSOP", "TSOT", "TSRC", "TSSE",
-  "TSST", "TXXX", "UFID", "USER", "USLT", "WCOM", "WCOP", "WOAF", "WOAR",
-  "WOAS", "WORS", "WPAY", "WPUB", "WXXX",  "ARTIST", "ARTISTS",
-  "ALBUMARTIST" , "ALBUM ARTIST", "ALBUMARTISTS" , "ALBUM ARTISTS", "ALBUM",
-  "TITLE", "TRACKNUMBER" "TRACK", "DISCNUMBER" "DISC", "YEAR", "GENRE",
-  "COMMENT", "CUESHEET", "ENCODEDBY", "COMPILATION", "LYRICS",
-  "REPLAYGAIN_TRACK_GAIN", "REPLAYGAIN_ALBUM_GAIN", "REPLAYGAIN_TRACK_PEAK",
-  "REPLAYGAIN_ALBUM_PEAK", "MUSICBRAINZ_ARTISTID",
-  "MUSICBRAINZ_ALBUMARTISTID", "RATING", "MUSICBRAINZ_ALBUMARTIST",
-  "MUSICBRAINZ_ALBUMID", "MUSICBRAINZ_TRACKID", "METADATA_BLOCK_PICTURE",
-  "COVERART"
-};
+const char* tags[] = {"APIC",
+                      "ASPI",
+                      "COMM",
+                      "COMR",
+                      "ENCR",
+                      "EQU2",
+                      "ETCO",
+                      "GEOB",
+                      "GRID",
+                      "LINK",
+                      "MCDI",
+                      "MLLT",
+                      "OWNE",
+                      "PRIV",
+                      "PCNT",
+                      "POPM",
+                      "POSS",
+                      "RBUF",
+                      "RVA2",
+                      "RVRB",
+                      "SEEK",
+                      "SIGN",
+                      "SYLT",
+                      "SYTC",
+                      "TALB",
+                      "TBPM",
+                      "TCOM",
+                      "TCON",
+                      "TCOP",
+                      "TDEN",
+                      "TDLY",
+                      "TDOR",
+                      "TDRC",
+                      "TDRL",
+                      "TDTG",
+                      "TENC",
+                      "TEXT",
+                      "TFLT",
+                      "TIPL",
+                      "TIT1",
+                      "TIT2",
+                      "TIT3",
+                      "TKEY",
+                      "TLAN",
+                      "TLEN",
+                      "TMCL",
+                      "TMED",
+                      "TMOO",
+                      "TOAL",
+                      "TOFN",
+                      "TOLY",
+                      "TOPE",
+                      "TOWN",
+                      "TPE1",
+                      "TPE2",
+                      "TPE3",
+                      "TPE4",
+                      "TPOS",
+                      "TPRO",
+                      "TPUB",
+                      "TRCK",
+                      "TRSN",
+                      "TRSO",
+                      "TSOA",
+                      "TSOP",
+                      "TSOT",
+                      "TSRC",
+                      "TSSE",
+                      "TSST",
+                      "TXXX",
+                      "UFID",
+                      "USER",
+                      "USLT",
+                      "WCOM",
+                      "WCOP",
+                      "WOAF",
+                      "WOAR",
+                      "WOAS",
+                      "WORS",
+                      "WPAY",
+                      "WPUB",
+                      "WXXX",
+                      "ARTIST",
+                      "ARTISTS",
+                      "ALBUMARTIST",
+                      "ALBUM ARTIST",
+                      "ALBUMARTISTS",
+                      "ALBUM ARTISTS",
+                      "ALBUM",
+                      "TITLE",
+                      "TRACKNUMBER"
+                      "TRACK",
+                      "DISCNUMBER"
+                      "DISC",
+                      "YEAR",
+                      "GENRE",
+                      "COMMENT",
+                      "CUESHEET",
+                      "ENCODEDBY",
+                      "COMPILATION",
+                      "LYRICS",
+                      "REPLAYGAIN_TRACK_GAIN",
+                      "REPLAYGAIN_ALBUM_GAIN",
+                      "REPLAYGAIN_TRACK_PEAK",
+                      "REPLAYGAIN_ALBUM_PEAK",
+                      "MUSICBRAINZ_ARTISTID",
+                      "MUSICBRAINZ_ALBUMARTISTID",
+                      "RATING",
+                      "MUSICBRAINZ_ALBUMARTIST",
+                      "MUSICBRAINZ_ALBUMID",
+                      "MUSICBRAINZ_TRACKID",
+                      "METADATA_BLOCK_PICTURE",
+                      "COVERART"};
 
 
 // This test exposes a bug in taglib library (#670) so for now we will not run it for all tag types
 // See https://github.com/taglib/taglib/issues/670 for details.
-typedef ::testing::Types<ID3v2::Tag, ID3v1::Tag, ASF::Tag, APE::Tag, Ogg::XiphComment> EmptyPropertiesTagTypes;
-template <typename T>
-class EmptyTagParser : public ::testing::Test, public CTagLoaderTagLib {
-  public:
-    T value_;
+typedef ::testing::Types<ID3v2::Tag, ID3v1::Tag, ASF::Tag, APE::Tag, Ogg::XiphComment>
+    EmptyPropertiesTagTypes;
+template<typename T>
+class EmptyTagParser : public ::testing::Test, public CTagLoaderTagLib
+{
+public:
+  T value_;
 };
 TYPED_TEST_CASE(EmptyTagParser, EmptyPropertiesTagTypes);
 
-TYPED_TEST(EmptyTagParser, EmptyProperties) {
-  TypeParam *tg  = &this->value_;
+TYPED_TEST(EmptyTagParser, EmptyProperties)
+{
+  TypeParam* tg = &this->value_;
   CMusicInfoTag tag;
   PropertyMap props;
   int tagcount = end(tags) - tags;
-  for(int i = 0; i < tagcount; i++) {
+  for (int i = 0; i < tagcount; i++)
+  {
     props.insert(tags[i], StringList());
   }
 
@@ -122,13 +225,14 @@ TYPED_TEST(EmptyTagParser, EmptyProperties) {
 }
 
 
-
-TYPED_TEST(TestTagParser, FooProperties) {
-  TypeParam *tg  = &this->value_;
+TYPED_TEST(TestTagParser, FooProperties)
+{
+  TypeParam* tg = &this->value_;
   CMusicInfoTag tag;
   PropertyMap props;
   int tagcount = end(tags) - tags;
-  for(int i = 0; i < tagcount; i++) {
+  for (int i = 0; i < tagcount; i++)
+  {
     props.insert(tags[i], String("foo"));
   }
   tg->setProperties(props);
@@ -150,12 +254,14 @@ TYPED_TEST(TestTagParser, FooProperties) {
   EXPECT_EQ("foo", tag.GetTitle());
 }
 
-class TestTagLoaderTagLib : public ::testing::Test, public CTagLoaderTagLib {};
+class TestTagLoaderTagLib : public ::testing::Test, public CTagLoaderTagLib
+{
+};
 TEST_F(TestTagLoaderTagLib, SetGenre)
 {
   CMusicInfoTag tag, tag2;
-  const char *genre_nr[] = {"0", "2", "4"};
-  const char *names[] = { "Jazz", "Funk", "Ska" };
+  const char* genre_nr[] = {"0", "2", "4"};
+  const char* names[] = {"Jazz", "Funk", "Ska"};
   std::vector<std::string> genres(genre_nr, end(genre_nr));
   std::vector<std::string> named_genre(names, end(names));
 
@@ -167,9 +273,8 @@ TEST_F(TestTagLoaderTagLib, SetGenre)
 
   CTagLoaderTagLib::SetGenre(tag2, named_genre);
   EXPECT_EQ(3u, tag2.GetGenre().size());
-  for(int i = 0; i < 3; i++)
+  for (int i = 0; i < 3; i++)
     EXPECT_EQ(names[i], tag2.GetGenre()[i]);
-
 }
 
 TEST_F(TestTagLoaderTagLib, SplitMBID)

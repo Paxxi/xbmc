@@ -16,14 +16,14 @@ public:
   //! \brief A structure encapsulating properties of a supported protocol.
   struct Protocol
   {
-    bool supportPath;      //!< Protocol has path in addition to server name
-    bool supportUsername;  //!< Protocol uses logins
-    bool supportPassword;  //!< Protocol supports passwords
-    bool supportPort;      //!< Protocol supports port customization
-    bool supportBrowsing;  //!< Protocol supports server browsing
-    int defaultPort;       //!< Default port to use for protocol
-    std::string type;      //!< URL type for protocol
-    int label;             //!< String ID to use as label in dialog
+    bool supportPath; //!< Protocol has path in addition to server name
+    bool supportUsername; //!< Protocol uses logins
+    bool supportPassword; //!< Protocol supports passwords
+    bool supportPort; //!< Protocol supports port customization
+    bool supportBrowsing; //!< Protocol supports server browsing
+    int defaultPort; //!< Default port to use for protocol
+    std::string type; //!< URL type for protocol
+    int label; //!< String ID to use as label in dialog
   };
 
   CGUIDialogNetworkSetup(void);
@@ -33,10 +33,10 @@ public:
   void OnInitWindow() override;
   void OnDeinitWindow(int nextWindowID) override;
 
-  static bool ShowAndGetNetworkAddress(std::string &path);
+  static bool ShowAndGetNetworkAddress(std::string& path);
 
   std::string ConstructPath() const;
-  bool SetPath(const std::string &path);
+  bool SetPath(const std::string& path);
   bool IsConfirmed() const override { return m_confirmed; };
 
 protected:
@@ -46,7 +46,7 @@ protected:
 
   // specialization of CGUIDialogSettingsBase
   bool AllowResettingSettings() const override { return false; }
-  void Save() override { }
+  void Save() override {}
   void SetupView() override;
 
   // specialization of CGUIDialogSettingsManualBase

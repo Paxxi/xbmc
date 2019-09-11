@@ -22,11 +22,9 @@ class CNfoFile
 public:
   virtual ~CNfoFile() { Close(); }
 
-  CInfoScanner::INFO_TYPE Create(const std::string&,
-                                 const ADDON::ScraperPtr&, int episode=-1);
+  CInfoScanner::INFO_TYPE Create(const std::string&, const ADDON::ScraperPtr&, int episode = -1);
   template<class T>
-    bool GetDetails(T& details, const char* document=NULL,
-                    bool prioritise=false)
+  bool GetDetails(T& details, const char* document = NULL, bool prioritise = false)
   {
     CXBMCTinyXML doc;
     if (document)
@@ -42,10 +40,9 @@ public:
   void Close();
   void SetScraperInfo(ADDON::ScraperPtr info) { m_info = info; }
   ADDON::ScraperPtr GetScraperInfo() { return m_info; }
-  const CScraperUrl &ScraperUrl() const { return m_scurl; }
+  const CScraperUrl& ScraperUrl() const { return m_scurl; }
 
-  static int Scrape(ADDON::ScraperPtr& scraper, CScraperUrl& url,
-                    const std::string& content);
+  static int Scrape(ADDON::ScraperPtr& scraper, CScraperUrl& url, const std::string& content);
 
   static std::vector<ADDON::ScraperPtr> GetScrapers(ADDON::TYPE type,
                                                     ADDON::ScraperPtr selectedScraper);

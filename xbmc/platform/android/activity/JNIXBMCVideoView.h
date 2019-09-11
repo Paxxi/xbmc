@@ -17,10 +17,12 @@
 #include <androidjni/Surface.h>
 #include <androidjni/SurfaceHolder.h>
 
-class CJNIXBMCVideoView : virtual public CJNIBase, public CJNISurfaceHolderCallback, public CJNIInterfaceImplem<CJNIXBMCVideoView>
+class CJNIXBMCVideoView : virtual public CJNIBase,
+                          public CJNISurfaceHolderCallback,
+                          public CJNIInterfaceImplem<CJNIXBMCVideoView>
 {
 public:
-  CJNIXBMCVideoView(const jni::jhobject &object);
+  CJNIXBMCVideoView(const jni::jhobject& object);
   ~CJNIXBMCVideoView();
 
   static void RegisterNatives(JNIEnv* env);
@@ -32,7 +34,8 @@ public:
   void surfaceCreated(CJNISurfaceHolder holder);
   void surfaceDestroyed(CJNISurfaceHolder holder);
 
-  static void _surfaceChanged(JNIEnv* env, jobject thiz, jobject holder, jint format, jint width, jint height);
+  static void _surfaceChanged(
+      JNIEnv* env, jobject thiz, jobject holder, jint format, jint width, jint height);
   static void _surfaceCreated(JNIEnv* env, jobject thiz, jobject holder);
   static void _surfaceDestroyed(JNIEnv* env, jobject thiz, jobject holder);
 
@@ -53,4 +56,4 @@ protected:
 
 private:
   CJNIXBMCVideoView();
-  };
+};

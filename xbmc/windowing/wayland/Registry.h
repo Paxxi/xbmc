@@ -53,7 +53,10 @@ public:
    *                 by the compositor - exception is thrown in \ref Bind
    */
   template<typename T>
-  void RequestSingleton(T& target, std::uint32_t minVersion, std::uint32_t maxVersion, bool required = true)
+  void RequestSingleton(T& target,
+                        std::uint32_t minVersion,
+                        std::uint32_t maxVersion,
+                        bool required = true)
   {
     RequestSingletonInternal(target, T::interface_name, minVersion, maxVersion, required);
   }
@@ -79,9 +82,13 @@ public:
    *                      type is removed
    */
   template<typename T>
-  void Request(std::uint32_t minVersion, std::uint32_t maxVersion, AddHandler addHandler, RemoveHandler removeHandler)
+  void Request(std::uint32_t minVersion,
+               std::uint32_t maxVersion,
+               AddHandler addHandler,
+               RemoveHandler removeHandler)
   {
-    RequestInternal([]{ return T(); }, T::interface_name, minVersion, maxVersion, addHandler, removeHandler);
+    RequestInternal([] { return T(); }, T::interface_name, minVersion, maxVersion, addHandler,
+                    removeHandler);
   }
 
   /**
@@ -108,8 +115,17 @@ private:
   CRegistry(CRegistry const& other) = delete;
   CRegistry& operator=(CRegistry const& other) = delete;
 
-  void RequestSingletonInternal(wayland::proxy_t& target, std::string const& interfaceName, std::uint32_t minVersion, std::uint32_t maxVersion, bool required);
-  void RequestInternal(std::function<wayland::proxy_t()> constructor, std::string const& interfaceName, std::uint32_t minVersion, std::uint32_t maxVersion, AddHandler addHandler, RemoveHandler removeHandler);
+  void RequestSingletonInternal(wayland::proxy_t& target,
+                                std::string const& interfaceName,
+                                std::uint32_t minVersion,
+                                std::uint32_t maxVersion,
+                                bool required);
+  void RequestInternal(std::function<wayland::proxy_t()> constructor,
+                       std::string const& interfaceName,
+                       std::uint32_t minVersion,
+                       std::uint32_t maxVersion,
+                       AddHandler addHandler,
+                       RemoveHandler removeHandler);
   void CheckRequired();
 
   CConnection& m_connection;
@@ -123,9 +139,16 @@ private:
     // Limit bind version to the minimum of this and compositor version
     std::uint32_t maxVersion;
     bool required;
-    SingletonBindInfo(wayland::proxy_t& target, std::uint32_t minVersion, std::uint32_t maxVersion, bool required)
-    : target{target}, minVersion{minVersion}, maxVersion{maxVersion}, required{required}
-    {}
+    SingletonBindInfo(wayland::proxy_t& target,
+                      std::uint32_t minVersion,
+                      std::uint32_t maxVersion,
+                      bool required)
+      : target{target}
+      , minVersion{minVersion}
+      , maxVersion{maxVersion}
+      , required{required}
+    {
+    }
   };
   std::map<std::string, SingletonBindInfo> m_singletonBinds;
 
@@ -136,15 +159,24 @@ private:
     std::uint32_t maxVersion;
     AddHandler addHandler;
     RemoveHandler removeHandler;
-    BindInfo(std::function<wayland::proxy_t()> constructor, std::uint32_t minVersion, std::uint32_t maxVersion, AddHandler addHandler, RemoveHandler removeHandler)
-    : constructor{constructor}, minVersion{minVersion}, maxVersion{maxVersion}, addHandler{addHandler}, removeHandler{removeHandler}
-    {}
+    BindInfo(std::function<wayland::proxy_t()> constructor,
+             std::uint32_t minVersion,
+             std::uint32_t maxVersion,
+             AddHandler addHandler,
+             RemoveHandler removeHandler)
+      : constructor{constructor}
+      , minVersion{minVersion}
+      , maxVersion{maxVersion}
+      , addHandler{addHandler}
+      , removeHandler{removeHandler}
+    {
+    }
   };
   std::map<std::string, BindInfo> m_binds;
 
   std::map<std::uint32_t, std::reference_wrapper<BindInfo>> m_boundNames;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

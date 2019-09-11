@@ -43,17 +43,22 @@ void CSeekHandler::Configure()
   const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
 
   m_seekDelays.clear();
-  m_seekDelays.insert(std::make_pair(SEEK_TYPE_VIDEO, settings->GetInt(CSettings::SETTING_VIDEOPLAYER_SEEKDELAY)));
-  m_seekDelays.insert(std::make_pair(SEEK_TYPE_MUSIC, settings->GetInt(CSettings::SETTING_MUSICPLAYER_SEEKDELAY)));
+  m_seekDelays.insert(
+      std::make_pair(SEEK_TYPE_VIDEO, settings->GetInt(CSettings::SETTING_VIDEOPLAYER_SEEKDELAY)));
+  m_seekDelays.insert(
+      std::make_pair(SEEK_TYPE_MUSIC, settings->GetInt(CSettings::SETTING_MUSICPLAYER_SEEKDELAY)));
 
   m_forwardSeekSteps.clear();
   m_backwardSeekSteps.clear();
 
   std::map<SeekType, std::string> seekTypeSettingMap;
-  seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_VIDEO, CSettings::SETTING_VIDEOPLAYER_SEEKSTEPS));
-  seekTypeSettingMap.insert(std::make_pair(SEEK_TYPE_MUSIC, CSettings::SETTING_MUSICPLAYER_SEEKSTEPS));
+  seekTypeSettingMap.insert(
+      std::make_pair(SEEK_TYPE_VIDEO, CSettings::SETTING_VIDEOPLAYER_SEEKSTEPS));
+  seekTypeSettingMap.insert(
+      std::make_pair(SEEK_TYPE_MUSIC, CSettings::SETTING_MUSICPLAYER_SEEKSTEPS));
 
-  for (std::map<SeekType, std::string>::iterator it = seekTypeSettingMap.begin(); it!=seekTypeSettingMap.end(); ++it)
+  for (std::map<SeekType, std::string>::iterator it = seekTypeSettingMap.begin();
+       it != seekTypeSettingMap.end(); ++it)
   {
     std::vector<int> forwardSeekSteps;
     std::vector<int> backwardSeekSteps;
@@ -92,7 +97,8 @@ int CSeekHandler::GetSeekStepSize(SeekType type, int step)
   if (seekSteps.empty())
   {
     CLog::Log(LOGERROR, "SeekHandler - %s - No %s %s seek steps configured.", __FUNCTION__,
-              (type == SeekType::SEEK_TYPE_VIDEO ? "video" : "music"), (step > 0 ? "forward" : "backward"));
+              (type == SeekType::SEEK_TYPE_VIDEO ? "video" : "music"),
+              (step > 0 ? "forward" : "backward"));
     return 0;
   }
 
@@ -107,7 +113,11 @@ int CSeekHandler::GetSeekStepSize(SeekType type, int step)
   return seconds;
 }
 
-void CSeekHandler::Seek(bool forward, float amount, float duration /* = 0 */, bool analogSeek /* = false */, SeekType type /* = SEEK_TYPE_VIDEO */)
+void CSeekHandler::Seek(bool forward,
+                        float amount,
+                        float duration /* = 0 */,
+                        bool analogSeek /* = false */,
+                        SeekType type /* = SEEK_TYPE_VIDEO */)
 {
   CSingleLock lock(m_critSection);
 
@@ -131,7 +141,7 @@ void CSeekHandler::Seek(bool forward, float amount, float duration /* = 0 */, bo
   {
     //100% over 1 second.
     float speed = 100.0f;
-    if( duration )
+    if (duration)
       speed *= duration;
     else
       speed /= CServiceBroker::GetWinSystem()->GetGfxContext().GetFPS();
@@ -191,9 +201,7 @@ void CSeekHandler::SetSeekSize(double seekSize)
   double minSeekSize = (player.GetMinTime() - playTime) / 1000.0;
   double maxSeekSize = (player.GetMaxTime() - playTime) / 1000.0;
 
-  m_seekSize = seekSize > 0
-    ? std::min(seekSize, maxSeekSize)
-    : std::max(seekSize, minSeekSize);
+  m_seekSize = seekSize > 0 ? std::min(seekSize, maxSeekSize) : std::max(seekSize, minSeekSize);
 }
 
 bool CSeekHandler::InProgress() const
@@ -223,11 +231,15 @@ void CSeekHandler::FrameMove()
   if (m_seekChanged)
   {
     m_seekChanged = false;
-    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_STATE_CHANGED);
+    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_NOTIFY_ALL, 0, 0,
+                                                             GUI_MSG_STATE_CHANGED);
   }
 }
 
-void CSeekHandler::SettingOptionsSeekStepsFiller(SettingConstPtr setting, std::vector<IntegerSettingOption> &list, int &current, void *data)
+void CSeekHandler::SettingOptionsSeekStepsFiller(SettingConstPtr setting,
+                                                 std::vector<IntegerSettingOption>& list,
+                                                 int& current,
+                                                 void* data)
 {
   std::string label;
   for (int seconds : CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_seekSteps)
@@ -254,7 +266,7 @@ void CSeekHandler::OnSettingChanged(std::shared_ptr<const CSetting> setting)
     Configure();
 }
 
-bool CSeekHandler::OnAction(const CAction &action)
+bool CSeekHandler::OnAction(const CAction& action)
 {
   if (!g_application.GetAppPlayer().IsPlaying() || !g_application.GetAppPlayer().CanSeek())
     return false;
@@ -266,115 +278,118 @@ bool CSeekHandler::OnAction(const CAction &action)
 
   switch (action.GetID())
   {
-    case ACTION_SMALL_STEP_BACK:
-    case ACTION_STEP_BACK:
+  case ACTION_SMALL_STEP_BACK:
+  case ACTION_STEP_BACK:
+  {
+    Seek(false, action.GetAmount(), action.GetRepeat(), false, type);
+    return true;
+  }
+  case ACTION_STEP_FORWARD:
+  {
+    Seek(true, action.GetAmount(), action.GetRepeat(), false, type);
+    return true;
+  }
+  case ACTION_BIG_STEP_BACK:
+  case ACTION_CHAPTER_OR_BIG_STEP_BACK:
+  {
+    g_application.GetAppPlayer().Seek(false, true,
+                                      action.GetID() == ACTION_CHAPTER_OR_BIG_STEP_BACK);
+    return true;
+  }
+  case ACTION_BIG_STEP_FORWARD:
+  case ACTION_CHAPTER_OR_BIG_STEP_FORWARD:
+  {
+    g_application.GetAppPlayer().Seek(true, true,
+                                      action.GetID() == ACTION_CHAPTER_OR_BIG_STEP_FORWARD);
+    return true;
+  }
+  case ACTION_NEXT_SCENE:
+  {
+    g_application.GetAppPlayer().SeekScene(true);
+    return true;
+  }
+  case ACTION_PREV_SCENE:
+  {
+    g_application.GetAppPlayer().SeekScene(false);
+    return true;
+  }
+  case ACTION_ANALOG_SEEK_FORWARD:
+  case ACTION_ANALOG_SEEK_BACK:
+  {
+    if (action.GetAmount())
+      Seek(action.GetID() == ACTION_ANALOG_SEEK_FORWARD, action.GetAmount(), action.GetRepeat(),
+           true);
+    return true;
+  }
+  case REMOTE_0:
+  case REMOTE_1:
+  case REMOTE_2:
+  case REMOTE_3:
+  case REMOTE_4:
+  case REMOTE_5:
+  case REMOTE_6:
+  case REMOTE_7:
+  case REMOTE_8:
+  case REMOTE_9:
+  case ACTION_JUMP_SMS2:
+  case ACTION_JUMP_SMS3:
+  case ACTION_JUMP_SMS4:
+  case ACTION_JUMP_SMS5:
+  case ACTION_JUMP_SMS6:
+  case ACTION_JUMP_SMS7:
+  case ACTION_JUMP_SMS8:
+  case ACTION_JUMP_SMS9:
+  {
+    if (!g_application.CurrentFileItem().IsLiveTV())
     {
-      Seek(false, action.GetAmount(), action.GetRepeat(), false, type);
+      ChangeTimeCode(action.GetID());
       return true;
     }
-    case ACTION_STEP_FORWARD:
-    {
-      Seek(true, action.GetAmount(), action.GetRepeat(), false, type);
-      return true;
-    }
-    case ACTION_BIG_STEP_BACK:
-    case ACTION_CHAPTER_OR_BIG_STEP_BACK:
-    {
-      g_application.GetAppPlayer().Seek(false, true, action.GetID() == ACTION_CHAPTER_OR_BIG_STEP_BACK);
-      return true;
-    }
-    case ACTION_BIG_STEP_FORWARD:
-    case ACTION_CHAPTER_OR_BIG_STEP_FORWARD:
-    {
-      g_application.GetAppPlayer().Seek(true, true, action.GetID() == ACTION_CHAPTER_OR_BIG_STEP_FORWARD);
-      return true;
-    }
-    case ACTION_NEXT_SCENE:
-    {
-      g_application.GetAppPlayer().SeekScene(true);
-      return true;
-    }
-    case ACTION_PREV_SCENE:
-    {
-      g_application.GetAppPlayer().SeekScene(false);
-      return true;
-    }
-    case ACTION_ANALOG_SEEK_FORWARD:
-    case ACTION_ANALOG_SEEK_BACK:
-    {
-      if (action.GetAmount())
-        Seek(action.GetID() == ACTION_ANALOG_SEEK_FORWARD, action.GetAmount(), action.GetRepeat(), true);
-      return true;
-    }
-    case REMOTE_0:
-    case REMOTE_1:
-    case REMOTE_2:
-    case REMOTE_3:
-    case REMOTE_4:
-    case REMOTE_5:
-    case REMOTE_6:
-    case REMOTE_7:
-    case REMOTE_8:
-    case REMOTE_9:
-    case ACTION_JUMP_SMS2:
-    case ACTION_JUMP_SMS3:
-    case ACTION_JUMP_SMS4:
-    case ACTION_JUMP_SMS5:
-    case ACTION_JUMP_SMS6:
-    case ACTION_JUMP_SMS7:
-    case ACTION_JUMP_SMS8:
-    case ACTION_JUMP_SMS9:
-    {
-      if (!g_application.CurrentFileItem().IsLiveTV())
-      {
-        ChangeTimeCode(action.GetID());
-        return true;
-      }
-    }
+  }
+  break;
+  default:
     break;
-    default:
-      break;
   }
 
   return false;
 }
 
-bool CSeekHandler::SeekTimeCode(const CAction &action)
+bool CSeekHandler::SeekTimeCode(const CAction& action)
 {
   if (m_timeCodePosition <= 0)
     return false;
 
   switch (action.GetID())
   {
-    case ACTION_SELECT_ITEM:
-    case ACTION_PLAYER_PLAY:
-    case ACTION_PAUSE:
-    {
-      CSingleLock lock(m_critSection);
+  case ACTION_SELECT_ITEM:
+  case ACTION_PLAYER_PLAY:
+  case ACTION_PAUSE:
+  {
+    CSingleLock lock(m_critSection);
 
-      g_application.SeekTime(GetTimeCodeSeconds());
-      Reset();
-      return true;
-    }
-    case ACTION_SMALL_STEP_BACK:
-    case ACTION_STEP_BACK:
-    case ACTION_BIG_STEP_BACK:
-    case ACTION_CHAPTER_OR_BIG_STEP_BACK:
-    case ACTION_MOVE_LEFT:
-    {
-      SeekSeconds(-GetTimeCodeSeconds());
-      return true;
-    }
-    case ACTION_STEP_FORWARD:
-    case ACTION_BIG_STEP_FORWARD:
-    case ACTION_CHAPTER_OR_BIG_STEP_FORWARD:
-    case ACTION_MOVE_RIGHT:
-    {
-      SeekSeconds(GetTimeCodeSeconds());
-      return true;
-    }
-    default:
-      break;
+    g_application.SeekTime(GetTimeCodeSeconds());
+    Reset();
+    return true;
+  }
+  case ACTION_SMALL_STEP_BACK:
+  case ACTION_STEP_BACK:
+  case ACTION_BIG_STEP_BACK:
+  case ACTION_CHAPTER_OR_BIG_STEP_BACK:
+  case ACTION_MOVE_LEFT:
+  {
+    SeekSeconds(-GetTimeCodeSeconds());
+    return true;
+  }
+  case ACTION_STEP_FORWARD:
+  case ACTION_BIG_STEP_FORWARD:
+  case ACTION_CHAPTER_OR_BIG_STEP_FORWARD:
+  case ACTION_MOVE_RIGHT:
+  {
+    SeekSeconds(GetTimeCodeSeconds());
+    return true;
+  }
+  default:
+    break;
   }
   return false;
 }
@@ -399,8 +414,8 @@ void CSeekHandler::ChangeTimeCode(int remote)
         m_timeCodeStamp[i] = m_timeCodeStamp[i + 1];
       m_timeCodeStamp[5] = remote - REMOTE_0;
     }
-   }
- }
+  }
+}
 
 int CSeekHandler::GetTimeCodeSeconds() const
 {
@@ -412,8 +427,10 @@ int CSeekHandler::GetTimeCodeSeconds() const
       tot = tot * 10 + m_timeCodeStamp[i];
 
     // Interpret result as HHMMSS
-    int s = tot % 100; tot /= 100;
-    int m = tot % 100; tot /= 100;
+    int s = tot % 100;
+    tot /= 100;
+    int m = tot % 100;
+    tot /= 100;
     int h = tot % 100;
 
     return h * 3600 + m * 60 + s;

@@ -14,13 +14,14 @@
 
 #include <memory>
 
-#define PLAYLIST_NONE    -1
-#define PLAYLIST_MUSIC   0
-#define PLAYLIST_VIDEO   1
+#define PLAYLIST_NONE -1
+#define PLAYLIST_MUSIC 0
+#define PLAYLIST_VIDEO 1
 #define PLAYLIST_PICTURE 2
 
 class CAction;
-class CFileItem; typedef std::shared_ptr<CFileItem> CFileItemPtr;
+class CFileItem;
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 class CFileItemList;
 
 class CVariant;
@@ -31,18 +32,22 @@ namespace PLAYLIST
  \ingroup windows
  \brief Manages playlist playing.
  */
-enum REPEAT_STATE { REPEAT_NONE = 0, REPEAT_ONE, REPEAT_ALL };
+enum REPEAT_STATE
+{
+  REPEAT_NONE = 0,
+  REPEAT_ONE,
+  REPEAT_ALL
+};
 
 class CPlayList;
 
-class CPlayListPlayer : public IMsgTargetCallback,
-                        public KODI::MESSAGING::IMessageTarget
+class CPlayListPlayer : public IMsgTargetCallback, public KODI::MESSAGING::IMessageTarget
 {
 
 public:
   CPlayListPlayer(void);
   ~CPlayListPlayer(void) override;
-  bool OnMessage(CGUIMessage &message) override;
+  bool OnMessage(CGUIMessage& message) override;
 
   int GetMessageMask() override;
   void OnApplicationMessage(KODI::MESSAGING::ThreadMessage* pMsg) override;
@@ -63,7 +68,7 @@ public:
   /*! \brief Creates a new playlist for an item and starts playing it
    \param pItem The item to play.
    */
-  bool Play(const CFileItemPtr &pItem, std::string player);
+  bool Play(const CFileItemPtr& pItem, std::string player);
 
   /*! \brief Start playing a particular entry in the current playlist
    \param index the index of the item to play. This value is modified to ensure it lies within the current playlist.
@@ -160,17 +165,18 @@ public:
 
   // add items via the playlist player
   void Add(int iPlaylist, const CPlayList& playlist);
-  void Add(int iPlaylist, const CFileItemPtr &pItem);
+  void Add(int iPlaylist, const CFileItemPtr& pItem);
   void Add(int iPlaylist, const CFileItemList& items);
   void Insert(int iPlaylist, const CPlayList& playlist, int iIndex);
-  void Insert(int iPlaylist, const CFileItemPtr &pItem, int iIndex);
+  void Insert(int iPlaylist, const CFileItemPtr& pItem, int iIndex);
   void Insert(int iPlaylist, const CFileItemList& items, int iIndex);
   void Remove(int iPlaylist, int iPosition);
   void Swap(int iPlaylist, int indexItem1, int indexItem2);
 
   bool IsSingleItemNonRepeatPlaylist() const;
 
-  bool OnAction(const CAction &action);
+  bool OnAction(const CAction& action);
+
 protected:
   /*! \brief Returns true if the given is set to repeat all
    \param playlist Playlist to be query
@@ -186,7 +192,9 @@ protected:
 
   void ReShuffle(int iPlaylist, int iPosition);
 
-  void AnnouncePropertyChanged(int iPlaylist, const std::string &strProperty, const CVariant &value);
+  void AnnouncePropertyChanged(int iPlaylist,
+                               const std::string& strProperty,
+                               const CVariant& value);
 
   bool m_bPlayedFirstFile;
   bool m_bPlaybackStarted;
@@ -200,4 +208,4 @@ protected:
   REPEAT_STATE m_repeatState[2];
 };
 
-}
+} // namespace PLAYLIST

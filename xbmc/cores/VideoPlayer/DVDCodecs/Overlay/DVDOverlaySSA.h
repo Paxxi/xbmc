@@ -16,10 +16,10 @@
 class CDVDOverlaySSA : public CDVDOverlay
 {
 public:
-
   CDVDSubtitlesLibass* m_libass;
 
-  explicit CDVDOverlaySSA(CDVDSubtitlesLibass* libass) : CDVDOverlay(DVDOVERLAY_TYPE_SSA)
+  explicit CDVDOverlaySSA(CDVDSubtitlesLibass* libass)
+    : CDVDOverlay(DVDOVERLAY_TYPE_SSA)
   {
     replace = true;
     m_libass = libass;
@@ -35,12 +35,9 @@ public:
 
   ~CDVDOverlaySSA() override
   {
-    if(m_libass)
+    if (m_libass)
       SAFE_RELEASE(m_libass);
   }
 
-  CDVDOverlaySSA* Clone() override
-  {
-    return new CDVDOverlaySSA(*this);
-  }
+  CDVDOverlaySSA* Clone() override { return new CDVDOverlaySSA(*this); }
 };

@@ -31,7 +31,7 @@ protected:
 
   // specialization of CGUIDialogSettingsBase
   bool AllowResettingSettings() const override { return false; }
-  void Save() override { }
+  void Save() override {}
   void OnCancel() override;
   void SetupView() override;
 
@@ -43,7 +43,7 @@ protected:
    \param isDefault whether this is the default profile or not
    \return true if the profile path has been changed, false otherwise.
    */
-  static bool GetProfilePath(std::string &directory, bool isDefault);
+  static bool GetProfilePath(std::string& directory, bool isDefault);
 
   void UpdateProfileImage();
   void updateProfileDirectory();

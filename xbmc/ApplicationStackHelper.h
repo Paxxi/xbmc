@@ -40,56 +40,83 @@ public:
   /*!
   \brief Returns true if Application is currently playing an ISO stack
   */
-  bool IsPlayingISOStack() const { return m_currentStack->Size() > 0 && m_currentStackIsDiscImageStack; }
+  bool IsPlayingISOStack() const
+  {
+    return m_currentStack->Size() > 0 && m_currentStackIsDiscImageStack;
+  }
 
   /*!
   \brief Returns true if Application is currently playing a Regular (non-ISO) stack
   */
-  bool IsPlayingRegularStack() const { return m_currentStack->Size() > 0 && !m_currentStackIsDiscImageStack; }
+  bool IsPlayingRegularStack() const
+  {
+    return m_currentStack->Size() > 0 && !m_currentStackIsDiscImageStack;
+  }
 
   /*!
   \brief Returns a FileItem part of a (non-ISO) stack playback
   \param partNumber the requested part number in the stack
   */
-  CFileItem& GetStackPartFileItem(int partNumber) const { return  *(*m_currentStack)[partNumber]; }
+  CFileItem& GetStackPartFileItem(int partNumber) const { return *(*m_currentStack)[partNumber]; }
 
   /*!
   \brief returns true if there is a next part available
   */
-  bool HasNextStackPartFileItem() const { return m_currentStackPosition < m_currentStack->Size() - 1; }
+  bool HasNextStackPartFileItem() const
+  {
+    return m_currentStackPosition < m_currentStack->Size() - 1;
+  }
 
   /*!
   \brief sets the next stack part as the current and returns a reference to it
   */
-  CFileItem& SetNextStackPartCurrentFileItem() { return  GetStackPartFileItem(++m_currentStackPosition); }
+  CFileItem& SetNextStackPartCurrentFileItem()
+  {
+    return GetStackPartFileItem(++m_currentStackPosition);
+  }
 
   /*!
   \brief sets a given stack part as the current and returns a reference to it
   \param partNumber the number of the part that needs to become the current one
   */
-  CFileItem& SetStackPartCurrentFileItem(int partNumber) { return  GetStackPartFileItem(m_currentStackPosition = partNumber); }
+  CFileItem& SetStackPartCurrentFileItem(int partNumber)
+  {
+    return GetStackPartFileItem(m_currentStackPosition = partNumber);
+  }
 
   /*!
   \brief Returns the FileItem currently playing back as part of a (non-ISO) stack playback
   */
-  CFileItem& GetCurrentStackPartFileItem() const { return GetStackPartFileItem(m_currentStackPosition); }
+  CFileItem& GetCurrentStackPartFileItem() const
+  {
+    return GetStackPartFileItem(m_currentStackPosition);
+  }
 
   /*!
   \brief Returns the end time of a FileItem part of a (non-ISO) stack playback
   \param partNumber the requested part number in the stack
   */
-  uint64_t GetStackPartEndTimeMs(int partNumber) const { return GetStackPartFileItem(partNumber).m_lEndOffset; }
+  uint64_t GetStackPartEndTimeMs(int partNumber) const
+  {
+    return GetStackPartFileItem(partNumber).m_lEndOffset;
+  }
 
   /*!
   \brief Returns the start time of a FileItem part of a (non-ISO) stack playback
   \param partNumber the requested part number in the stack
   */
-  uint64_t GetStackPartStartTimeMs(int partNumber) const { return (partNumber > 0) ? GetStackPartEndTimeMs(partNumber - 1) : 0; }
+  uint64_t GetStackPartStartTimeMs(int partNumber) const
+  {
+    return (partNumber > 0) ? GetStackPartEndTimeMs(partNumber - 1) : 0;
+  }
 
   /*!
   \brief Returns the start time of the current FileItem part of a (non-ISO) stack playback
   */
-  uint64_t GetCurrentStackPartStartTimeMs() const { return GetStackPartStartTimeMs(m_currentStackPosition); }
+  uint64_t GetCurrentStackPartStartTimeMs() const
+  {
+    return GetStackPartStartTimeMs(m_currentStackPosition);
+  }
 
   /*!
   \brief Returns the total time of a (non-ISO) stack playback
@@ -169,7 +196,6 @@ public:
   CCriticalSection m_critSection;
 
 protected:
-
   class StackPartInformation
   {
   public:

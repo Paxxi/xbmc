@@ -8,14 +8,16 @@
 
 #pragma once
 
-#include "threads/CriticalSection.h"
-#include "PlatformDefs.h"
-
-#include "cores/AudioEngine/Utils/AEChannelInfo.h"
 #include "cores/AudioEngine/Interfaces/AEStream.h"
+#include "cores/AudioEngine/Utils/AEChannelInfo.h"
+#include "threads/CriticalSection.h"
+
 #include <atomic>
 
-extern "C" {
+#include "PlatformDefs.h"
+
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 }
 
@@ -27,17 +29,17 @@ class CDVDClock;
 class CAudioSinkAE : IAEClockCallback
 {
 public:
-  explicit CAudioSinkAE(CDVDClock *clock);
+  explicit CAudioSinkAE(CDVDClock* clock);
   ~CAudioSinkAE();
 
   void SetVolume(float fVolume);
   void SetDynamicRangeCompression(long drc);
   void Pause();
   void Resume();
-  bool Create(const DVDAudioFrame &audioframe, AVCodecID codec, bool needresampler);
-  bool IsValidFormat(const DVDAudioFrame &audioframe);
+  bool Create(const DVDAudioFrame& audioframe, AVCodecID codec, bool needresampler);
+  bool IsValidFormat(const DVDAudioFrame& audioframe);
   void Destroy(bool finish);
-  unsigned int AddPackets(const DVDAudioFrame &audioframe);
+  unsigned int AddPackets(const DVDAudioFrame& audioframe);
   double GetPlayingPts();
   double GetCacheTime();
   double GetCacheTotal(); // returns total time a stream can buffer
@@ -62,8 +64,7 @@ public:
   CAEStreamInfo::DataType GetPassthroughStreamType(AVCodecID codecId, int samplerate);
 
 protected:
-
-  IAEStream *m_pAudioStream;
+  IAEStream* m_pAudioStream;
   double m_playingPts;
   double m_timeOfPts;
   double m_syncError;
@@ -80,5 +81,5 @@ protected:
   bool m_bPaused;
 
   std::atomic_bool m_bAbort;
-  CDVDClock *m_pClock;
+  CDVDClock* m_pClock;
 };

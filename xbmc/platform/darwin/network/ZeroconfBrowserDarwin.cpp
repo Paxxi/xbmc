@@ -23,93 +23,90 @@
 
 namespace
 {
-  //helper for getting a the txt-records list
-  //returns true on success, false if nothing found or error
-  CZeroconfBrowser::ZeroconfService::tTxtRecordMap GetTxtRecords(CFNetServiceRef serviceRef)
+//helper for getting a the txt-records list
+//returns true on success, false if nothing found or error
+CZeroconfBrowser::ZeroconfService::tTxtRecordMap GetTxtRecords(CFNetServiceRef serviceRef)
+{
+  CFIndex idx = 0;
+  CZeroconfBrowser::ZeroconfService::tTxtRecordMap recordMap;
+  CFDataRef data = NULL;
+
+  data = CFNetServiceGetTXTData(serviceRef);
+  if (data != NULL)
   {
-    CFIndex idx = 0;
-    CZeroconfBrowser::ZeroconfService::tTxtRecordMap recordMap;
-    CFDataRef data = NULL;
-
-    data=CFNetServiceGetTXTData(serviceRef);
-    if (data != NULL)
+    CFDictionaryRef dict = CFNetServiceCreateDictionaryWithTXTData(kCFAllocatorDefault, data);
+    if (dict != NULL)
     {
-      CFDictionaryRef dict = CFNetServiceCreateDictionaryWithTXTData(kCFAllocatorDefault, data);
-      if (dict != NULL)
+      CFIndex numValues = 0;
+      numValues = CFDictionaryGetCount(dict);
+      if (numValues > 0)
       {
-        CFIndex numValues = 0;
-        numValues = CFDictionaryGetCount(dict);
-        if (numValues > 0)
+        CFStringRef keys[numValues];
+        CFDataRef values[numValues];
+
+        CFDictionaryGetKeysAndValues(dict, (const void**)&keys, (const void**)&values);
+
+        for (idx = 0; idx < numValues; idx++)
         {
-          CFStringRef keys[numValues];
-          CFDataRef values[numValues];
-
-          CFDictionaryGetKeysAndValues(dict, (const void **)&keys,  (const void **)&values);
-
-          for(idx = 0; idx < numValues; idx++)
+          std::string key;
+          if (CDarwinUtils::CFStringRefToUTF8String(keys[idx], key))
           {
-            std::string key;
-            if (CDarwinUtils::CFStringRefToUTF8String(keys[idx], key))
-            {
-              recordMap.insert(
-                std::make_pair(
-                  key,
-                  std::string((const char *)CFDataGetBytePtr(values[idx]))
-                )
-              );
-            }
-          }
-        }
-        CFRelease(dict);
-      }
-    }
-    return recordMap;
-  }
-
-  //helper to get (first) IP and port from a resolved service
-  //returns true on success, false on if none was found
-  bool CopyFirstIPv4Address(CFNetServiceRef serviceRef, std::string &fr_address, int &fr_port)
-  {
-    CFIndex idx;
-    struct sockaddr_in address;
-    char buffer[256];
-    CFArrayRef addressResults = CFNetServiceGetAddressing( (CFNetServiceRef)serviceRef );
-
-    if ( addressResults != NULL )
-    {
-      CFIndex numAddressResults = CFArrayGetCount( addressResults );
-      CFDataRef sockAddrRef = NULL;
-      struct sockaddr sockHdr;
-
-      for ( idx = 0; idx < numAddressResults; idx++ )
-      {
-        sockAddrRef = (CFDataRef)CFArrayGetValueAtIndex( addressResults, idx );
-        if ( sockAddrRef != NULL )
-        {
-          CFDataGetBytes( sockAddrRef, CFRangeMake(0, sizeof(sockHdr)), (UInt8*)&sockHdr );
-          switch ( sockHdr.sa_family )
-          {
-            case AF_INET:
-              CFDataGetBytes( sockAddrRef, CFRangeMake(0, sizeof(address)), (UInt8*)&address );
-              if ( inet_ntop(sockHdr.sa_family, &address.sin_addr, buffer, sizeof(buffer)) != NULL )
-              {
-                fr_address = buffer;
-                fr_port = ntohs(address.sin_port);
-                return true;
-              }
-              break;
-            case AF_INET6:
-            default:
-              break;
+            recordMap.insert(
+                std::make_pair(key, std::string((const char*)CFDataGetBytePtr(values[idx]))));
           }
         }
       }
+      CFRelease(dict);
     }
-    return false;
   }
+  return recordMap;
 }
 
-CZeroconfBrowserDarwin::CZeroconfBrowserDarwin():m_runloop(0)
+//helper to get (first) IP and port from a resolved service
+//returns true on success, false on if none was found
+bool CopyFirstIPv4Address(CFNetServiceRef serviceRef, std::string& fr_address, int& fr_port)
+{
+  CFIndex idx;
+  struct sockaddr_in address;
+  char buffer[256];
+  CFArrayRef addressResults = CFNetServiceGetAddressing((CFNetServiceRef)serviceRef);
+
+  if (addressResults != NULL)
+  {
+    CFIndex numAddressResults = CFArrayGetCount(addressResults);
+    CFDataRef sockAddrRef = NULL;
+    struct sockaddr sockHdr;
+
+    for (idx = 0; idx < numAddressResults; idx++)
+    {
+      sockAddrRef = (CFDataRef)CFArrayGetValueAtIndex(addressResults, idx);
+      if (sockAddrRef != NULL)
+      {
+        CFDataGetBytes(sockAddrRef, CFRangeMake(0, sizeof(sockHdr)), (UInt8*)&sockHdr);
+        switch (sockHdr.sa_family)
+        {
+        case AF_INET:
+          CFDataGetBytes(sockAddrRef, CFRangeMake(0, sizeof(address)), (UInt8*)&address);
+          if (inet_ntop(sockHdr.sa_family, &address.sin_addr, buffer, sizeof(buffer)) != NULL)
+          {
+            fr_address = buffer;
+            fr_port = ntohs(address.sin_port);
+            return true;
+          }
+          break;
+        case AF_INET6:
+        default:
+          break;
+        }
+      }
+    }
+  }
+  return false;
+}
+} // namespace
+
+CZeroconfBrowserDarwin::CZeroconfBrowserDarwin()
+  : m_runloop(0)
 {
   //acquire the main threads event loop
   m_runloop = CFRunLoopGetMain();
@@ -123,14 +120,18 @@ CZeroconfBrowserDarwin::~CZeroconfBrowserDarwin()
     doRemoveServiceType(it.first);
 }
 
-void CZeroconfBrowserDarwin::BrowserCallback(CFNetServiceBrowserRef browser, CFOptionFlags flags, CFTypeRef domainOrService, CFStreamError *error, void *info)
+void CZeroconfBrowserDarwin::BrowserCallback(CFNetServiceBrowserRef browser,
+                                             CFOptionFlags flags,
+                                             CFTypeRef domainOrService,
+                                             CFStreamError* error,
+                                             void* info)
 {
   assert(info);
 
   if (error->error == noErr)
   {
     //make sure we receive a service
-    assert(!(flags&kCFNetServiceFlagIsDomain));
+    assert(!(flags & kCFNetServiceFlagIsDomain));
     CFNetServiceRef service = (CFNetServiceRef)domainOrService;
     assert(service);
     //get our instance
@@ -142,7 +143,8 @@ void CZeroconfBrowserDarwin::BrowserCallback(CFNetServiceBrowserRef browser, CFO
         !CDarwinUtils::CFStringRefToUTF8String(CFNetServiceGetType(service), type) ||
         !CDarwinUtils::CFStringRefToUTF8String(CFNetServiceGetDomain(service), domain))
     {
-      CLog::Log(LOGWARNING, "CZeroconfBrowserDarwin::BrowserCallback failed to convert service strings.");
+      CLog::Log(LOGWARNING,
+                "CZeroconfBrowserDarwin::BrowserCallback failed to convert service strings.");
       return;
     }
 
@@ -150,45 +152,58 @@ void CZeroconfBrowserDarwin::BrowserCallback(CFNetServiceBrowserRef browser, CFO
 
     if (flags & kCFNetServiceFlagRemove)
     {
-      CLog::Log(LOGDEBUG, "CZeroconfBrowserDarwin::BrowserCallback service named: %s, type: %s, domain: %s disappeared",
-        s.GetName().c_str(), s.GetType().c_str(), s.GetDomain().c_str());
+      CLog::Log(LOGDEBUG,
+                "CZeroconfBrowserDarwin::BrowserCallback service named: %s, type: %s, domain: %s "
+                "disappeared",
+                s.GetName().c_str(), s.GetType().c_str(), s.GetDomain().c_str());
       p_this->removeDiscoveredService(browser, flags, s);
     }
     else
     {
-      CLog::Log(LOGDEBUG, "CZeroconfBrowserDarwin::BrowserCallback found service named: %s, type: %s, domain: %s",
-        s.GetName().c_str(), s.GetType().c_str(), s.GetDomain().c_str());
+      CLog::Log(
+          LOGDEBUG,
+          "CZeroconfBrowserDarwin::BrowserCallback found service named: %s, type: %s, domain: %s",
+          s.GetName().c_str(), s.GetType().c_str(), s.GetDomain().c_str());
       p_this->addDiscoveredService(browser, flags, s);
     }
-    if (! (flags & kCFNetServiceFlagMoreComing) )
+    if (!(flags & kCFNetServiceFlagMoreComing))
     {
       CGUIMessage message(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE_PATH);
       message.SetStringParam("zeroconf://");
       CServiceBroker::GetGUI()->GetWindowManager().SendThreadMessage(message);
-      CLog::Log(LOGDEBUG, "CZeroconfBrowserDarwin::BrowserCallback sent gui update for path zeroconf://");
+      CLog::Log(LOGDEBUG,
+                "CZeroconfBrowserDarwin::BrowserCallback sent gui update for path zeroconf://");
     }
-  } else
+  }
+  else
   {
-    CLog::Log(LOGERROR, "CZeroconfBrowserDarwin::BrowserCallback returned"
-      "(domain = %d, error = %" PRId64")", (int)error->domain, (int64_t)error->error);
+    CLog::Log(LOGERROR,
+              "CZeroconfBrowserDarwin::BrowserCallback returned"
+              "(domain = %d, error = %" PRId64 ")",
+              (int)error->domain, (int64_t)error->error);
   }
 }
 
 /// adds the service to list of found services
-void CZeroconfBrowserDarwin::
-addDiscoveredService(CFNetServiceBrowserRef browser, CFOptionFlags flags, CZeroconfBrowser::ZeroconfService const &fcr_service)
+void CZeroconfBrowserDarwin::addDiscoveredService(
+    CFNetServiceBrowserRef browser,
+    CFOptionFlags flags,
+    CZeroconfBrowser::ZeroconfService const& fcr_service)
 {
   CSingleLock lock(m_data_guard);
   tDiscoveredServicesMap::iterator browserIt = m_discovered_services.find(browser);
   if (browserIt == m_discovered_services.end())
   {
-     //first service by this browser
-     browserIt = m_discovered_services.insert(make_pair(browser, std::vector<std::pair<ZeroconfService, unsigned int> >())).first;
+    //first service by this browser
+    browserIt =
+        m_discovered_services
+            .insert(make_pair(browser, std::vector<std::pair<ZeroconfService, unsigned int>>()))
+            .first;
   }
   //search this service
-  std::vector<std::pair<ZeroconfService, unsigned int> >& services = browserIt->second;
-  std::vector<std::pair<ZeroconfService, unsigned int> >::iterator serviceIt = services.begin();
-  for( ; serviceIt != services.end(); ++serviceIt)
+  std::vector<std::pair<ZeroconfService, unsigned int>>& services = browserIt->second;
+  std::vector<std::pair<ZeroconfService, unsigned int>>::iterator serviceIt = services.begin();
+  for (; serviceIt != services.end(); ++serviceIt)
   {
     if (serviceIt->first == fcr_service)
       break;
@@ -199,16 +214,18 @@ addDiscoveredService(CFNetServiceBrowserRef browser, CFOptionFlags flags, CZeroc
     ++serviceIt->second;
 }
 
-void CZeroconfBrowserDarwin::
-removeDiscoveredService(CFNetServiceBrowserRef browser, CFOptionFlags flags, CZeroconfBrowser::ZeroconfService const &fcr_service)
+void CZeroconfBrowserDarwin::removeDiscoveredService(
+    CFNetServiceBrowserRef browser,
+    CFOptionFlags flags,
+    CZeroconfBrowser::ZeroconfService const& fcr_service)
 {
   CSingleLock lock(m_data_guard);
   tDiscoveredServicesMap::iterator browserIt = m_discovered_services.find(browser);
   assert(browserIt != m_discovered_services.end());
   //search this service
-  std::vector<std::pair<ZeroconfService, unsigned int> >& services = browserIt->second;
-  std::vector<std::pair<ZeroconfService, unsigned int> >::iterator serviceIt = services.begin();
-  for( ; serviceIt != services.end(); ++serviceIt)
+  std::vector<std::pair<ZeroconfService, unsigned int>>& services = browserIt->second;
+  std::vector<std::pair<ZeroconfService, unsigned int>>::iterator serviceIt = services.begin();
+  for (; serviceIt != services.end(); ++serviceIt)
     if (serviceIt->first == fcr_service)
       break;
   if (serviceIt != services.end())
@@ -230,16 +247,17 @@ removeDiscoveredService(CFNetServiceBrowserRef browser, CFOptionFlags flags, CZe
 
 bool CZeroconfBrowserDarwin::doAddServiceType(const std::string& fcr_service_type)
 {
-  CFNetServiceClientContext clientContext = { 0, this, NULL, NULL, NULL };
+  CFNetServiceClientContext clientContext = {0, this, NULL, NULL, NULL};
   CFStringRef domain = CFSTR("");
-  CFNetServiceBrowserRef p_browser = CFNetServiceBrowserCreate(kCFAllocatorDefault,
-    CZeroconfBrowserDarwin::BrowserCallback, &clientContext);
+  CFNetServiceBrowserRef p_browser = CFNetServiceBrowserCreate(
+      kCFAllocatorDefault, CZeroconfBrowserDarwin::BrowserCallback, &clientContext);
   assert(p_browser != NULL);
 
   //schedule the browser
   CFNetServiceBrowserScheduleWithRunLoop(p_browser, m_runloop, kCFRunLoopCommonModes);
   CFStreamError error;
-  CFStringRef type = CFStringCreateWithCString(NULL, fcr_service_type.c_str(), kCFStringEncodingUTF8);
+  CFStringRef type =
+      CFStringCreateWithCString(NULL, fcr_service_type.c_str(), kCFStringEncodingUTF8);
 
   assert(type != NULL);
   Boolean result = CFNetServiceBrowserSearchForServices(p_browser, domain, type, &error);
@@ -250,8 +268,10 @@ bool CZeroconfBrowserDarwin::doAddServiceType(const std::string& fcr_service_typ
     CFNetServiceBrowserUnscheduleFromRunLoop(p_browser, m_runloop, kCFRunLoopCommonModes);
     CFRelease(p_browser);
     p_browser = NULL;
-    CLog::Log(LOGERROR, "CFNetServiceBrowserSearchForServices returned"
-      "(domain = %d, error = %" PRId64")", (int)error.domain, (int64_t)error.error);
+    CLog::Log(LOGERROR,
+              "CFNetServiceBrowserSearchForServices returned"
+              "(domain = %d, error = %" PRId64 ")",
+              (int)error.domain, (int64_t)error.error);
   }
   else
   {
@@ -263,7 +283,7 @@ bool CZeroconfBrowserDarwin::doAddServiceType(const std::string& fcr_service_typ
   return result;
 }
 
-bool CZeroconfBrowserDarwin::doRemoveServiceType(const std::string &fcr_service_type)
+bool CZeroconfBrowserDarwin::doRemoveServiceType(const std::string& fcr_service_type)
 {
   //search for this browser and remove it from the map
   CFNetServiceBrowserRef browser = 0;
@@ -302,7 +322,7 @@ std::vector<CZeroconfBrowser::ZeroconfService> CZeroconfBrowserDarwin::doGetFoun
   for (const auto& it : m_discovered_services)
   {
     const auto& services = it.second;
-    for(unsigned int i = 0; i < services.size(); ++i)
+    for (unsigned int i = 0; i < services.size(); ++i)
     {
       ret.push_back(services[i].first);
     }
@@ -311,17 +331,21 @@ std::vector<CZeroconfBrowser::ZeroconfService> CZeroconfBrowserDarwin::doGetFoun
   return ret;
 }
 
-bool CZeroconfBrowserDarwin::doResolveService(CZeroconfBrowser::ZeroconfService &fr_service, double f_timeout)
+bool CZeroconfBrowserDarwin::doResolveService(CZeroconfBrowser::ZeroconfService& fr_service,
+                                              double f_timeout)
 {
   bool ret = false;
-  CFStringRef type = CFStringCreateWithCString(NULL, fr_service.GetType().c_str(), kCFStringEncodingUTF8);
+  CFStringRef type =
+      CFStringCreateWithCString(NULL, fr_service.GetType().c_str(), kCFStringEncodingUTF8);
 
-  CFStringRef name = CFStringCreateWithCString(NULL, fr_service.GetName().c_str(), kCFStringEncodingUTF8);
+  CFStringRef name =
+      CFStringCreateWithCString(NULL, fr_service.GetName().c_str(), kCFStringEncodingUTF8);
 
-  CFStringRef domain = CFStringCreateWithCString(NULL, fr_service.GetDomain().c_str(), kCFStringEncodingUTF8);
+  CFStringRef domain =
+      CFStringCreateWithCString(NULL, fr_service.GetDomain().c_str(), kCFStringEncodingUTF8);
 
-  CFNetServiceRef service = CFNetServiceCreate (NULL, domain, type, name, 0);
-  if (CFNetServiceResolveWithTimeout(service, f_timeout, NULL) )
+  CFNetServiceRef service = CFNetServiceCreate(NULL, domain, type, name, 0);
+  if (CFNetServiceResolveWithTimeout(service, f_timeout, NULL))
   {
     std::string ip;
     int port = 0;

@@ -23,9 +23,9 @@
 #include "platform/Environment.h"
 #endif
 #include "profiles/ProfileManager.h"
-#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#include "utils/log.h"
 #ifdef TARGET_WINDOWS
 #include "win32util.h"
 #endif
@@ -42,7 +42,7 @@ CSettingsComponent::~CSettingsComponent()
   Deinit();
 }
 
-void CSettingsComponent::Init(const CAppParamParser &params)
+void CSettingsComponent::Init(const CAppParamParser& params)
 {
   if (m_state == State::DEINITED)
   {
@@ -236,7 +236,6 @@ bool CSettingsComponent::InitDirectoriesLinux(bool bPlatformDirectories)
     CSpecialProtocol::SetLogPath(strTempPath);
 
     CreateUserDirs();
-
   }
   else
   {
@@ -246,7 +245,8 @@ bool CSettingsComponent::InitDirectoriesLinux(bool bPlatformDirectories)
     CSpecialProtocol::SetXBMCAltBinAddonPath(binaddonAltDir);
     CSpecialProtocol::SetXBMCPath(appPath);
     CSpecialProtocol::SetHomePath(URIUtils::AddFileToFolder(appPath, "portable_data"));
-    CSpecialProtocol::SetMasterProfilePath(URIUtils::AddFileToFolder(appPath, "portable_data/userdata"));
+    CSpecialProtocol::SetMasterProfilePath(
+        URIUtils::AddFileToFolder(appPath, "portable_data/userdata"));
 
     std::string strTempPath = appPath;
     strTempPath = URIUtils::AddFileToFolder(strTempPath, "portable_data/temp");
@@ -305,19 +305,23 @@ bool CSettingsComponent::InitDirectoriesOSX(bool bPlatformDirectories)
     CSpecialProtocol::SetXBMCPath(appPath);
 #if defined(TARGET_DARWIN_EMBEDDED)
     std::string appName = CCompileInfo::GetAppName();
-    CSpecialProtocol::SetHomePath(userHome + "/" + CDarwinUtils::GetAppRootFolder() + "/" + appName);
-    CSpecialProtocol::SetMasterProfilePath(userHome + "/" + CDarwinUtils::GetAppRootFolder() + "/" + appName + "/userdata");
+    CSpecialProtocol::SetHomePath(userHome + "/" + CDarwinUtils::GetAppRootFolder() + "/" +
+                                  appName);
+    CSpecialProtocol::SetMasterProfilePath(userHome + "/" + CDarwinUtils::GetAppRootFolder() + "/" +
+                                           appName + "/userdata");
 #else
     std::string appName = CCompileInfo::GetAppName();
     CSpecialProtocol::SetHomePath(userHome + "/Library/Application Support/" + appName);
-    CSpecialProtocol::SetMasterProfilePath(userHome + "/Library/Application Support/" + appName + "/userdata");
+    CSpecialProtocol::SetMasterProfilePath(userHome + "/Library/Application Support/" + appName +
+                                           "/userdata");
 #endif
 
     std::string dotLowerAppName = "." + appName;
     StringUtils::ToLower(dotLowerAppName);
     // location for temp files
 #if defined(TARGET_DARWIN_EMBEDDED)
-    std::string strTempPath = URIUtils::AddFileToFolder(userHome,  std::string(CDarwinUtils::GetAppRootFolder()) + "/" + appName + "/temp");
+    std::string strTempPath = URIUtils::AddFileToFolder(
+        userHome, std::string(CDarwinUtils::GetAppRootFolder()) + "/" + appName + "/temp");
 #else
     std::string strTempPath = URIUtils::AddFileToFolder(userHome, dotLowerAppName + "/");
     XFILE::CDirectory::Create(strTempPath);
@@ -342,7 +346,8 @@ bool CSettingsComponent::InitDirectoriesOSX(bool bPlatformDirectories)
     CSpecialProtocol::SetXBMCAltBinAddonPath(binaddonAltDir);
     CSpecialProtocol::SetXBMCPath(appPath);
     CSpecialProtocol::SetHomePath(URIUtils::AddFileToFolder(appPath, "portable_data"));
-    CSpecialProtocol::SetMasterProfilePath(URIUtils::AddFileToFolder(appPath, "portable_data/userdata"));
+    CSpecialProtocol::SetMasterProfilePath(
+        URIUtils::AddFileToFolder(appPath, "portable_data/userdata"));
 
     std::string strTempPath = URIUtils::AddFileToFolder(appPath, "portable_data/temp");
     CSpecialProtocol::SetTempPath(strTempPath);
@@ -368,9 +373,10 @@ bool CSettingsComponent::InitDirectoriesWin32(bool bPlatformDirectories)
   CSpecialProtocol::SetLogPath(strWin32UserFolder);
   CSpecialProtocol::SetHomePath(strWin32UserFolder);
   CSpecialProtocol::SetMasterProfilePath(URIUtils::AddFileToFolder(strWin32UserFolder, "userdata"));
-  CSpecialProtocol::SetTempPath(URIUtils::AddFileToFolder(strWin32UserFolder,"cache"));
+  CSpecialProtocol::SetTempPath(URIUtils::AddFileToFolder(strWin32UserFolder, "cache"));
 
-  CEnvironment::setenv("KODI_PROFILE_USERDATA", CSpecialProtocol::TranslatePath("special://masterprofile/"));
+  CEnvironment::setenv("KODI_PROFILE_USERDATA",
+                       CSpecialProtocol::TranslatePath("special://masterprofile/"));
 
   CreateUserDirs();
 
@@ -399,5 +405,4 @@ void CSettingsComponent::CreateUserDirs() const
     if (!XFILE::CDirectory::RemoveRecursive(archiveCachePath))
       CLog::Log(LOGWARNING, "Failed to remove the archive cache at %s", archiveCachePath.c_str());
   XFILE::CDirectory::Create(archiveCachePath);
-
 }

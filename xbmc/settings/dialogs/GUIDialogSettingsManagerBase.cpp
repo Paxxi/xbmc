@@ -12,13 +12,15 @@
 
 #include <cassert>
 
-CGUIDialogSettingsManagerBase::CGUIDialogSettingsManagerBase(int windowId, const std::string &xmlFile)
-    : CGUIDialogSettingsBase(windowId, xmlFile)
-{ }
+CGUIDialogSettingsManagerBase::CGUIDialogSettingsManagerBase(int windowId,
+                                                             const std::string& xmlFile)
+  : CGUIDialogSettingsBase(windowId, xmlFile)
+{
+}
 
 CGUIDialogSettingsManagerBase::~CGUIDialogSettingsManagerBase() = default;
 
-std::shared_ptr<CSetting> CGUIDialogSettingsManagerBase::GetSetting(const std::string &settingId)
+std::shared_ptr<CSetting> CGUIDialogSettingsManagerBase::GetSetting(const std::string& settingId)
 {
   assert(GetSettingsManager() != nullptr);
 
@@ -52,7 +54,8 @@ void CGUIDialogSettingsManagerBase::FreeSettingsControls()
     GetSettingsManager()->UnregisterCallback(this);
 }
 
-std::shared_ptr<ISettingControl> CGUIDialogSettingsManagerBase::CreateControl(const std::string &controlType) const
+std::shared_ptr<ISettingControl> CGUIDialogSettingsManagerBase::CreateControl(
+    const std::string& controlType) const
 {
   assert(GetSettingsManager() != nullptr);
 

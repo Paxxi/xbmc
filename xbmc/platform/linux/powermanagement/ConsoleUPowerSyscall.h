@@ -18,6 +18,7 @@ public:
   bool Powerdown() override;
   bool Reboot() override;
   static bool HasConsoleKitAndUPower();
+
 private:
-  static bool ConsoleKitMethodCall(const char *method);
+  static bool ConsoleKitMethodCall(const char* method);
 };

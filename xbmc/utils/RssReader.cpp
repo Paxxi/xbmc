@@ -6,28 +6,29 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "network/Network.h"
-#include "threads/SystemClock.h"
 #include "RssReader.h"
-#include "ServiceBroker.h"
-#include "utils/HTMLUtil.h"
+
 #include "CharsetConverter.h"
+#include "ServiceBroker.h"
 #include "URL.h"
-#include "filesystem/File.h"
 #include "filesystem/CurlFile.h"
+#include "filesystem/File.h"
+#include "guilib/GUIRSSControl.h"
+#include "guilib/LocalizeStrings.h"
+#include "log.h"
+#include "network/Network.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
-#include "guilib/LocalizeStrings.h"
-#include "guilib/GUIRSSControl.h"
 #include "threads/SingleLock.h"
-#include "log.h"
+#include "threads/SystemClock.h"
+#include "utils/HTMLUtil.h"
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
 #endif
 
-#define RSS_COLOR_BODY      0
-#define RSS_COLOR_HEADLINE  1
-#define RSS_COLOR_CHANNEL   2
+#define RSS_COLOR_BODY 0
+#define RSS_COLOR_HEADLINE 1
+#define RSS_COLOR_CHANNEL 2
 
 using namespace XFILE;
 
@@ -35,7 +36,8 @@ using namespace XFILE;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CRssReader::CRssReader() : CThread("RSSReader")
+CRssReader::CRssReader()
+  : CThread("RSSReader")
 {
   m_pObserver = NULL;
   m_spacesBetweenFeeds = 0;
@@ -54,7 +56,11 @@ CRssReader::~CRssReader()
     delete m_vecTimeStamps[i];
 }
 
-void CRssReader::Create(IRssObserver* aObserver, const std::vector<std::string>& aUrls, const std::vector<int> &times, int spacesBetweenFeeds, bool rtl)
+void CRssReader::Create(IRssObserver* aObserver,
+                        const std::vector<std::string>& aUrls,
+                        const std::vector<int>& times,
+                        int spacesBetweenFeeds,
+                        bool rtl)
 {
   CSingleLock lock(m_critical);
 
@@ -135,7 +141,7 @@ void CRssReader::Process()
         !CServiceBroker::GetNetwork().IsAvailable())
     {
       CLog::Log(LOGWARNING, "RSS: No network connection");
-      strXML = "<rss><item><title>"+g_localizeStrings.Get(15301)+"</title></item></rss>";
+      strXML = "<rss><item><title>" + g_localizeStrings.Get(15301) + "</title></item></rss>";
     }
     else
     {
@@ -198,7 +204,7 @@ void CRssReader::Process()
   UpdateObserver();
 }
 
-void CRssReader::getFeed(vecText &text)
+void CRssReader::getFeed(vecText& text)
 {
   text.clear();
   // double the spaces at the start of the set
@@ -217,7 +223,7 @@ void CRssReader::getFeed(vecText &text)
   }
 }
 
-void CRssReader::AddTag(const std::string &aString)
+void CRssReader::AddTag(const std::string& aString)
 {
   m_tagSet.push_back(aString);
 }
@@ -231,7 +237,7 @@ void CRssReader::AddString(std::wstring aString, int aColour, int iFeed)
 
   size_t nStringLength = aString.size();
 
-  for (size_t i = 0;i < nStringLength;i++)
+  for (size_t i = 0; i < nStringLength; i++)
     aString[i] = static_cast<char>(48 + aColour);
 
   if (m_rtlText)
@@ -244,7 +250,7 @@ void CRssReader::GetNewsItems(TiXmlElement* channelXmlNode, int iFeed)
 {
   HTML::CHTMLUtil html;
 
-  TiXmlElement * itemNode = channelXmlNode->FirstChildElement("item");
+  TiXmlElement* itemNode = channelXmlNode->FirstChildElement("item");
   std::map<std::string, std::wstring> mTagElements;
   typedef std::pair<std::string, std::wstring> StrPair;
   std::list<std::string>::iterator i;
@@ -326,8 +332,7 @@ bool CRssReader::Parse(int iFeed)
   TiXmlElement* rssXmlNode = NULL;
 
   std::string strValue = rootXmlNode->ValueStr();
-  if (strValue.find("rss") != std::string::npos ||
-      strValue.find("rdf") != std::string::npos)
+  if (strValue.find("rss") != std::string::npos || strValue.find("rdf") != std::string::npos)
     rssXmlNode = rootXmlNode;
   else
   {
@@ -350,10 +355,10 @@ bool CRssReader::Parse(int iFeed)
       AddString(L" ", RSS_COLOR_CHANNEL, iFeed);
     }
 
-    GetNewsItems(channelXmlNode,iFeed);
+    GetNewsItems(channelXmlNode, iFeed);
   }
 
-  GetNewsItems(rssXmlNode,iFeed);
+  GetNewsItems(rssXmlNode, iFeed);
 
   // avoid trailing ' - '
   if (m_strFeed[iFeed].size() > 3 && m_strFeed[iFeed].substr(m_strFeed[iFeed].size() - 3) == L" - ")
@@ -372,7 +377,7 @@ bool CRssReader::Parse(int iFeed)
   return true;
 }
 
-void CRssReader::SetObserver(IRssObserver *observer)
+void CRssReader::SetObserver(IRssObserver* observer)
 {
   m_pObserver = observer;
 }
@@ -397,10 +402,13 @@ void CRssReader::CheckForUpdates()
   SYSTEMTIME time;
   GetLocalTime(&time);
 
-  for (unsigned int i = 0;i < m_vecUpdateTimes.size(); ++i )
+  for (unsigned int i = 0; i < m_vecUpdateTimes.size(); ++i)
   {
     if (m_requestRefresh ||
-       ((time.wDay * 24 * 60) + (time.wHour * 60) + time.wMinute) - ((m_vecTimeStamps[i]->wDay * 24 * 60) + (m_vecTimeStamps[i]->wHour * 60) + m_vecTimeStamps[i]->wMinute) > m_vecUpdateTimes[i])
+        ((time.wDay * 24 * 60) + (time.wHour * 60) + time.wMinute) -
+                ((m_vecTimeStamps[i]->wDay * 24 * 60) + (m_vecTimeStamps[i]->wHour * 60) +
+                 m_vecTimeStamps[i]->wMinute) >
+            m_vecUpdateTimes[i])
     {
       CLog::Log(LOGDEBUG, "Updating RSS");
       GetLocalTime(m_vecTimeStamps[i]);

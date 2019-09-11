@@ -13,7 +13,11 @@
 class CGUIViewStateWindowMusic : public CGUIViewState
 {
 public:
-  explicit CGUIViewStateWindowMusic(const CFileItemList& items) : CGUIViewState(items) {}
+  explicit CGUIViewStateWindowMusic(const CFileItemList& items)
+    : CGUIViewState(items)
+  {
+  }
+
 protected:
   VECSOURCES& GetSources() override;
   int GetPlaylist() const override;

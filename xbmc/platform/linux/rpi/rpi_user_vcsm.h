@@ -91,69 +91,69 @@ extern "C"
 {
 #endif
 
-/* Different status that can be dumped.
+  /* Different status that can be dumped.
 */
-typedef enum
-{
-   VCSM_STATUS_VC_WALK_ALLOC = 0,   // Walks *all* the allocation on videocore.
-                                    // Result of the walk is seen in the videocore
-                                    // log.
-   VCSM_STATUS_HOST_WALK_MAP,       // Walks the *full* mapping allocation on host
-                                    // driver (ie for all processes).  Result of
-                                    // the walk is seen in the kernel log.
-   VCSM_STATUS_HOST_WALK_PID_MAP,   // Walks the per process mapping allocation on host
-                                    // driver (for current process).  Result of
-                                    // the walk is seen in the kernel log.
-   VCSM_STATUS_HOST_WALK_PID_ALLOC, // Walks the per process host allocation on host
-                                    // driver (for current process).  Result of
-                                    // the walk is seen in the kernel log.
-   VCSM_STATUS_VC_MAP_ALL,          // Equivalent to both VCSM_STATUS_VC_WALK_ALLOC and
-                                    // VCSM_STATUS_HOST_WALK_MAP.
-                                    //
-   VCSM_STATUS_NONE,                // Must be last - invalid.
+  typedef enum
+  {
+    VCSM_STATUS_VC_WALK_ALLOC = 0, // Walks *all* the allocation on videocore.
+    // Result of the walk is seen in the videocore
+    // log.
+    VCSM_STATUS_HOST_WALK_MAP, // Walks the *full* mapping allocation on host
+    // driver (ie for all processes).  Result of
+    // the walk is seen in the kernel log.
+    VCSM_STATUS_HOST_WALK_PID_MAP, // Walks the per process mapping allocation on host
+    // driver (for current process).  Result of
+    // the walk is seen in the kernel log.
+    VCSM_STATUS_HOST_WALK_PID_ALLOC, // Walks the per process host allocation on host
+    // driver (for current process).  Result of
+    // the walk is seen in the kernel log.
+    VCSM_STATUS_VC_MAP_ALL, // Equivalent to both VCSM_STATUS_VC_WALK_ALLOC and
+    // VCSM_STATUS_HOST_WALK_MAP.
+    //
+    VCSM_STATUS_NONE, // Must be last - invalid.
 
-} VCSM_STATUS_T;
+  } VCSM_STATUS_T;
 
-/* Different kind of cache behavior.
+  /* Different kind of cache behavior.
 */
-typedef enum
-{
-   VCSM_CACHE_TYPE_NONE = 0,        // No caching applies.
-   VCSM_CACHE_TYPE_HOST,            // Allocation is cached on host (user space).
-   VCSM_CACHE_TYPE_VC,              // Allocation is cached on videocore.
-   VCSM_CACHE_TYPE_HOST_AND_VC,     // Allocation is cached on both host and videocore.
+  typedef enum
+  {
+    VCSM_CACHE_TYPE_NONE = 0, // No caching applies.
+    VCSM_CACHE_TYPE_HOST, // Allocation is cached on host (user space).
+    VCSM_CACHE_TYPE_VC, // Allocation is cached on videocore.
+    VCSM_CACHE_TYPE_HOST_AND_VC, // Allocation is cached on both host and videocore.
 
-} VCSM_CACHE_TYPE_T;
+  } VCSM_CACHE_TYPE_T;
 
-/* Initialize the vcsm processing.
+  /* Initialize the vcsm processing.
 **
 ** Must be called once before attempting to do anything else.
 **
 ** Returns 0 on success, -1 on error.
 */
-int vcsm_init( void );
+  int vcsm_init(void);
 
 
-/* Terminates the vcsm processing.
+  /* Terminates the vcsm processing.
 **
 ** Must be called vcsm services are no longer needed, it will
 ** take care of removing any allocation under the current process
 ** control if deemed necessary.
 */
-void vcsm_exit( void );
+  void vcsm_exit(void);
 
 
-/* Queries the status of the the vcsm.
+  /* Queries the status of the the vcsm.
 **
 ** Triggers dump of various kind of information, see the
 ** different variants specified in VCSM_STATUS_T.
 **
 ** Pid is optional.
 */
-void vcsm_status( VCSM_STATUS_T status, int pid );
+  void vcsm_status(VCSM_STATUS_T status, int pid);
 
 
-/* Allocates a non-cached block of memory of size 'size' via the vcsm memory
+  /* Allocates a non-cached block of memory of size 'size' via the vcsm memory
 ** allocator.
 **
 ** Returns:        0 on error
@@ -168,10 +168,10 @@ void vcsm_status( VCSM_STATUS_T status, int pid );
 ** only for the duration it needs to access the memory data associated with
 ** the opaque handle.
 */
-unsigned int vcsm_malloc( unsigned int size, char *name );
+  unsigned int vcsm_malloc(unsigned int size, char* name);
 
 
-/* Allocates a cached block of memory of size 'size' via the vcsm memory
+  /* Allocates a cached block of memory of size 'size' via the vcsm memory
 ** allocator, the type of caching requested is passed as argument of the
 ** function call.
 **
@@ -187,10 +187,10 @@ unsigned int vcsm_malloc( unsigned int size, char *name );
 ** only for the duration it needs to access the memory data associated with
 ** the opaque handle.
 */
-unsigned int vcsm_malloc_cache( unsigned int size, VCSM_CACHE_TYPE_T cache, char *name );
+  unsigned int vcsm_malloc_cache(unsigned int size, VCSM_CACHE_TYPE_T cache, char* name);
 
 
-/* Shares an allocated block of memory via the vcsm memory allocator.
+  /* Shares an allocated block of memory via the vcsm memory allocator.
 **
 ** Returns:        0 on error
 **                 a non-zero opaque handle on success.
@@ -204,10 +204,10 @@ unsigned int vcsm_malloc_cache( unsigned int size, VCSM_CACHE_TYPE_T cache, char
 ** only for the duration it needs to access the memory data associated with
 ** the opaque handle.
 */
-unsigned int vcsm_malloc_share( unsigned int handle );
+  unsigned int vcsm_malloc_share(unsigned int handle);
 
 
-/* Resizes a block of memory allocated previously by vcsm_alloc.
+  /* Resizes a block of memory allocated previously by vcsm_alloc.
 **
 ** Returns:        0 on success
 **                 -errno on error.
@@ -219,10 +219,10 @@ unsigned int vcsm_malloc_share( unsigned int handle );
 ** remains available the same way it would be following a
 ** successful vcsm_malloc.
 */
-int vcsm_resize( unsigned int handle, unsigned int new_size );
+  int vcsm_resize(unsigned int handle, unsigned int new_size);
 
 
-/* Frees a block of memory that was successfully allocated by
+  /* Frees a block of memory that was successfully allocated by
 ** a prior call the vcms_alloc.
 **
 ** The handle should be considered invalid upon return from this
@@ -234,10 +234,10 @@ int vcsm_resize( unsigned int handle, unsigned int new_size );
 ** being freed up as part of the vcsm_exit process.  In the end the
 ** memory is guaranteed to be freed one way or another.
 */
-void vcsm_free( unsigned int handle );
+  void vcsm_free(unsigned int handle);
 
 
-/* Retrieves a videocore opaque handle from a mapped user address
+  /* Retrieves a videocore opaque handle from a mapped user address
 ** pointer.  The videocore handle will correspond to the actual
 ** memory mapped in videocore.
 **
@@ -251,10 +251,10 @@ void vcsm_free( unsigned int handle );
 **       use since nothing can be done with it (in particular
 **       for safety reason it cannot be used to map anything).
 */
-unsigned int vcsm_vc_hdl_from_ptr( void *usr_ptr );
+  unsigned int vcsm_vc_hdl_from_ptr(void* usr_ptr);
 
 
-/* Retrieves a videocore opaque handle from a opaque handle
+  /* Retrieves a videocore opaque handle from a opaque handle
 ** pointer.  The videocore handle will correspond to the actual
 ** memory mapped in videocore.
 **
@@ -268,19 +268,19 @@ unsigned int vcsm_vc_hdl_from_ptr( void *usr_ptr );
 **       use since nothing can be done with it (in particular
 **       for safety reason it cannot be used to map anything).
 */
-unsigned int vcsm_vc_hdl_from_hdl( unsigned int handle );
+  unsigned int vcsm_vc_hdl_from_hdl(unsigned int handle);
 
 
-/* Retrieves a user opaque handle from a mapped user address
+  /* Retrieves a user opaque handle from a mapped user address
 ** pointer.
 **
 ** Returns:        0 on error
 **                 a non-zero opaque handle on success.
 */
-unsigned int vcsm_usr_handle( void *usr_ptr );
+  unsigned int vcsm_usr_handle(void* usr_ptr);
 
 
-/* Retrieves a mapped user address from an opaque user
+  /* Retrieves a mapped user address from an opaque user
 ** handle.
 **
 ** Returns:        0 on error
@@ -290,10 +290,10 @@ unsigned int vcsm_usr_handle( void *usr_ptr );
 ** which can access the data allocated via the vcsm_malloc
 ** call.
 */
-void *vcsm_usr_address( unsigned int handle );
+  void* vcsm_usr_address(unsigned int handle);
 
 
-/* Locks the memory associated with this opaque handle.
+  /* Locks the memory associated with this opaque handle.
 **
 ** Returns:        NULL on error
 **                 a valid pointer on success.
@@ -305,10 +305,10 @@ void *vcsm_usr_address( unsigned int handle );
 ** the lock content (ie until a corresponding vcsm_unlock_xx
 ** is invoked).
 */
-void *vcsm_lock( unsigned int handle );
+  void* vcsm_lock(unsigned int handle);
 
 
-/* Locks the memory associated with this opaque handle.  The lock
+  /* Locks the memory associated with this opaque handle.  The lock
 ** also gives a chance to update the *host* cache behavior of the
 ** allocated buffer if so desired.  The *videocore* cache behavior
 ** of the allocated buffer cannot be changed by this call and such
@@ -335,12 +335,12 @@ void *vcsm_lock( unsigned int handle );
 ** the lock content (ie until a corresponding vcsm_unlock_xx
 ** is invoked).
 */
-void *vcsm_lock_cache( unsigned int handle,
-                       VCSM_CACHE_TYPE_T cache_update,
-                       VCSM_CACHE_TYPE_T *cache_result );
+  void* vcsm_lock_cache(unsigned int handle,
+                        VCSM_CACHE_TYPE_T cache_update,
+                        VCSM_CACHE_TYPE_T* cache_result);
 
 
-/* Unlocks the memory associated with this user mapped address.
+  /* Unlocks the memory associated with this user mapped address.
 **
 ** Returns:        0 on success
 **                 -errno on error.
@@ -348,10 +348,10 @@ void *vcsm_lock_cache( unsigned int handle,
 ** After unlocking a mapped address, the user should no longer
 ** attempt to reference it.
 */
-int vcsm_unlock_ptr( void *usr_ptr );
+  int vcsm_unlock_ptr(void* usr_ptr);
 
 
-/* Unlocks the memory associated with this user mapped address.
+  /* Unlocks the memory associated with this user mapped address.
 ** Apply special processing that would override the otherwise
 ** default behavior.
 **
@@ -365,10 +365,10 @@ int vcsm_unlock_ptr( void *usr_ptr );
 ** After unlocking a mapped address, the user should no longer
 ** attempt to reference it.
 */
-int vcsm_unlock_ptr_sp( void *usr_ptr, int cache_no_flush );
+  int vcsm_unlock_ptr_sp(void* usr_ptr, int cache_no_flush);
 
 
-/* Unlocks the memory associated with this user opaque handle.
+  /* Unlocks the memory associated with this user opaque handle.
 **
 ** Returns:        0 on success
 **                 -errno on error.
@@ -377,10 +377,10 @@ int vcsm_unlock_ptr_sp( void *usr_ptr, int cache_no_flush );
 ** attempt to reference the mapped addressed once associated
 ** with it.
 */
-int vcsm_unlock_hdl( unsigned int handle );
+  int vcsm_unlock_hdl(unsigned int handle);
 
 
-/* Unlocks the memory associated with this user opaque handle.
+  /* Unlocks the memory associated with this user opaque handle.
 ** Apply special processing that would override the otherwise
 ** default behavior.
 **
@@ -395,9 +395,9 @@ int vcsm_unlock_hdl( unsigned int handle );
 ** attempt to reference the mapped addressed once associated
 ** with it.
 */
-int vcsm_unlock_hdl_sp( unsigned int handle, int cache_no_flush );
+  int vcsm_unlock_hdl_sp(unsigned int handle, int cache_no_flush);
 
-/* Clean and/or invalidate the memory associated with this user opaque handle
+  /* Clean and/or invalidate the memory associated with this user opaque handle
 **
 ** Returns:        non-zero on error
 **
@@ -408,18 +408,19 @@ int vcsm_unlock_hdl_sp( unsigned int handle, int cache_no_flush );
 ** 3: clean+invalidate given virtual range in L1/L2
 ** 4: flush all L1/L2
 */
-struct vcsm_user_clean_invalid_s {
-   struct {
+  struct vcsm_user_clean_invalid_s
+  {
+    struct
+    {
       unsigned int cmd;
       unsigned int handle;
       unsigned int addr;
       unsigned int size;
-   } s[8];
-};
+    } s[8];
+  };
 
-int vcsm_clean_invalid( struct vcsm_user_clean_invalid_s *s );
+  int vcsm_clean_invalid(struct vcsm_user_clean_invalid_s* s);
 
 #ifdef __cplusplus
 }
 #endif
-

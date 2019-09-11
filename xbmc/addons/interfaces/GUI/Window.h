@@ -14,11 +14,11 @@
 extern "C"
 {
 
-struct AddonGlobalInterface;
-struct gui_context_menu_pair;
+  struct AddonGlobalInterface;
+  struct gui_context_menu_pair;
 
-namespace ADDON
-{
+  namespace ADDON
+  {
   class CAddonDll;
 
   /*!
@@ -46,17 +46,22 @@ namespace ADDON
      */
     //@{
     /* Window creation functions */
-    static void* create(void* kodiBase, const char* xml_filename, const char* default_skin, bool as_dialog, bool is_media);
+    static void* create(void* kodiBase,
+                        const char* xml_filename,
+                        const char* default_skin,
+                        bool as_dialog,
+                        bool is_media);
     static void destroy(void* kodiBase, void* handle);
-    static void set_callbacks(void* kodiBase,
-                              void* handle,
-                              void* clienthandle,
-                              bool (*CBInit)(void*),
-                              bool (*CBFocus)(void*, int),
-                              bool (*CBClick)(void*, int),
-                              bool (*CBOnAction)(void*, int, uint32_t, wchar_t),
-                              void (*CBGetContextButtons)(void* , int, gui_context_menu_pair*, unsigned int*),
-                              bool (*CBOnContextButton)(void*, int, unsigned int));
+    static void set_callbacks(
+        void* kodiBase,
+        void* handle,
+        void* clienthandle,
+        bool (*CBInit)(void*),
+        bool (*CBFocus)(void*, int),
+        bool (*CBClick)(void*, int),
+        bool (*CBOnAction)(void*, int, uint32_t, wchar_t),
+        void (*CBGetContextButtons)(void*, int, gui_context_menu_pair*, unsigned int*),
+        bool (*CBOnContextButton)(void*, int, unsigned int));
     static bool show(void* kodiBase, void* handle);
     static bool close(void* kodiBase, void* handle);
     static bool do_modal(void* kodiBase, void* handle);
@@ -89,7 +94,10 @@ namespace ADDON
     static void set_current_list_position(void* kodiBase, void* handle, int list_position);
     static int get_current_list_position(void* kodiBase, void* handle);
     static int get_list_size(void* kodiBase, void* handle);
-    static void set_container_property(void* kodiBase, void* handle, const char* key, const char* value);
+    static void set_container_property(void* kodiBase,
+                                       void* handle,
+                                       const char* key,
+                                       const char* value);
     static void set_container_content(void* kodiBase, void* handle, const char* value);
     static int get_current_container_id(void* kodiBase, void* handle);
 
@@ -112,20 +120,25 @@ namespace ADDON
     //@}
 
   private:
-    static void* GetControl(void* kodiBase, void* handle, int control_id, const char* function, CGUIControl::GUICONTROLTYPES type, const std::string& typeName);
+    static void* GetControl(void* kodiBase,
+                            void* handle,
+                            int control_id,
+                            const char* function,
+                            CGUIControl::GUICONTROLTYPES type,
+                            const std::string& typeName);
     static int GetNextAvailableWindowId();
   };
 
   class CGUIAddonWindow : public CGUIMediaWindow
   {
-  friend struct Interface_GUIWindow;
+    friend struct Interface_GUIWindow;
 
   public:
     CGUIAddonWindow(int id, const std::string& strXML, ADDON::CAddonDll* addon, bool isMedia);
     ~CGUIAddonWindow() override = default;
 
     bool OnMessage(CGUIMessage& message) override;
-    bool OnAction(const CAction &action) override;
+    bool OnAction(const CAction& action) override;
     void AllocResources(bool forceLoad = false) override;
     void Render() override;
     bool IsMediaWindow() const override { return m_isMedia; }
@@ -143,10 +156,12 @@ namespace ADDON
     void SetContainerProperty(const std::string& key, const std::string& value);
     void SetContainerContent(const std::string& value);
     int GetCurrentContainerControlId();
-    CGUIControl* GetAddonControl(int controlId, CGUIControl::GUICONTROLTYPES type, const std::string& typeName);
+    CGUIControl* GetAddonControl(int controlId,
+                                 CGUIControl::GUICONTROLTYPES type,
+                                 const std::string& typeName);
 
   protected:
-    void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
+    void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
     bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
     void SetupShares() override;
 
@@ -156,7 +171,10 @@ namespace ADDON
     bool (*CBOnFocus)(void* cbhdl, int controlId);
     bool (*CBOnClick)(void* cbhdl, int controlId);
     bool (*CBOnAction)(void* cbhdl, int actionId, uint32_t buttoncode, wchar_t unicode);
-    void (*CBGetContextButtons)(void* cbhdl, int itemNumber, gui_context_menu_pair* buttons, unsigned int* size);
+    void (*CBGetContextButtons)(void* cbhdl,
+                                int itemNumber,
+                                gui_context_menu_pair* buttons,
+                                unsigned int* size);
     bool (*CBOnContextButton)(void* cbhdl, int itemNumber, unsigned int button);
 
     const int m_windowId;
@@ -178,7 +196,7 @@ namespace ADDON
 
     bool IsDialogRunning() const override { return m_bRunning; }
     bool IsDialog() const override { return true; };
-    bool IsModalDialog() const  override { return true; };
+    bool IsModalDialog() const override { return true; };
 
     void Show(bool show = true, bool modal = true);
     void Show_Internal(bool show = true);
@@ -187,5 +205,5 @@ namespace ADDON
     bool m_bRunning;
   };
 
-} /* namespace ADDON */
+  } /* namespace ADDON */
 } /* extern "C" */

@@ -11,8 +11,9 @@
 #include "cores/IPlayer.h"
 #include "cores/VideoPlayer/Process/ProcessInfo.h"
 
-namespace MMAL {
-  class CMMALYUVBuffer;
+namespace MMAL
+{
+class CMMALYUVBuffer;
 }
 
 //-----------------------------------------------------------------------------
@@ -41,5 +42,5 @@ public:
   EINTERLACEMETHOD GetFallbackDeintMethod() override;
   bool AllowDTSHDDecode() override;
 
-//protected:
+  //protected:
 };

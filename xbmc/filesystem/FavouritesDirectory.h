@@ -16,13 +16,13 @@ class CFileItem;
 namespace XFILE
 {
 
-  class CFavouritesDirectory : public IDirectory
-  {
-  public:
-    CFavouritesDirectory() = default;
+class CFavouritesDirectory : public IDirectory
+{
+public:
+  CFavouritesDirectory() = default;
 
-    bool GetDirectory(const CURL& url, CFileItemList &items) override;
-    bool Exists(const CURL& url) override;
-  };
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool Exists(const CURL& url) override;
+};
 
-}
+} // namespace XFILE

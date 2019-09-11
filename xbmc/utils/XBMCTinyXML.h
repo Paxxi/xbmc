@@ -10,17 +10,18 @@
 
 #ifndef TARGET_WINDOWS
 //compile fix for TinyXml < 2.6.0
-#define DOCUMENT    TINYXML_DOCUMENT
-#define ELEMENT     TINYXML_ELEMENT
-#define COMMENT     TINYXML_COMMENT
-#define UNKNOWN     TINYXML_UNKNOWN
-#define TEXT        TINYXML_TEXT
+#define DOCUMENT TINYXML_DOCUMENT
+#define ELEMENT TINYXML_ELEMENT
+#define COMMENT TINYXML_COMMENT
+#define UNKNOWN TINYXML_UNKNOWN
+#define TEXT TINYXML_TEXT
 #define DECLARATION TINYXML_DECLARATION
-#define TYPECOUNT   TINYXML_TYPECOUNT
+#define TYPECOUNT TINYXML_TYPECOUNT
 #endif
 
-#include <tinyxml.h>
 #include <string>
+
+#include <tinyxml.h>
 
 #undef DOCUMENT
 #undef ELEMENT
@@ -47,8 +48,9 @@ public:
   bool Parse(const std::string& data, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING);
   bool Parse(const std::string& data, const std::string& dataCharset);
   inline std::string GetSuggestedCharset(void) const { return m_SuggestedCharset; }
-  inline std::string GetUsedCharset(void) const      { return m_UsedCharset; }
+  inline std::string GetUsedCharset(void) const { return m_UsedCharset; }
   static bool Test();
+
 protected:
   using TiXmlDocument::Parse;
   bool TryParse(const std::string& data, const std::string& tryDataCharset);

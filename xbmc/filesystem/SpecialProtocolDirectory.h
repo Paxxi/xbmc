@@ -12,14 +12,14 @@
 
 namespace XFILE
 {
-  class CSpecialProtocolDirectory : public COverrideDirectory
-  {
-  public:
-    CSpecialProtocolDirectory(void);
-    ~CSpecialProtocolDirectory(void) override;
-    bool GetDirectory(const CURL& url, CFileItemList &items) override;
+class CSpecialProtocolDirectory : public COverrideDirectory
+{
+public:
+  CSpecialProtocolDirectory(void);
+  ~CSpecialProtocolDirectory(void) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
 
-  protected:
-    std::string TranslatePath(const CURL &url) override;
-  };
-}
+protected:
+  std::string TranslatePath(const CURL& url) override;
+};
+} // namespace XFILE

@@ -13,13 +13,13 @@
 class CGUIDialogVideoOSD : public CGUIDialog
 {
 public:
-
   CGUIDialogVideoOSD(void);
   ~CGUIDialogVideoOSD(void) override;
 
   void FrameMove() override;
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
+
 protected:
-  EVENT_RESULT OnMouseEvent(const CPoint &point, const CMouseEvent &event) override;
+  EVENT_RESULT OnMouseEvent(const CPoint& point, const CMouseEvent& event) override;
 };

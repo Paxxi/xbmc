@@ -19,7 +19,10 @@
 namespace XFILE
 {
 
-static CFileItemPtr XBTFFileToFileItem(const CXBTFFile& entry, const std::string& label, const std::string& path, bool isFolder)
+static CFileItemPtr XBTFFileToFileItem(const CXBTFFile& entry,
+                                       const std::string& label,
+                                       const std::string& path,
+                                       bool isFolder)
 {
   CFileItemPtr item(new CFileItem(label));
   if (!isFolder)
@@ -64,4 +67,4 @@ bool CXbtDirectory::ContainsFiles(const CURL& url)
   return CXbtManager::GetInstance().HasFiles(url);
 }
 
-}
+} // namespace XFILE

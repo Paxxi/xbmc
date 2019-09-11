@@ -6,15 +6,16 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
 #include <math.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
 #ifndef TARGET_POSIX
-#include <io.h>
-#include <direct.h>
-#include <process.h>
 #include <errno.h>
+
+#include <direct.h>
+#include <io.h>
+#include <process.h>
 #else
 #if !defined(TARGET_DARWIN) && !defined(TARGET_FREEBSD)
 #include <mntent.h>
@@ -26,38 +27,39 @@
 #include <sys/timeb.h>
 #endif
 #ifdef HAS_DVD_DRIVE
-  #ifdef TARGET_POSIX
-    #include <sys/ioctl.h>
-    #if defined(TARGET_DARWIN)
-      #include <IOKit/storage/IODVDMediaBSDClient.h>
-    #elif !defined(TARGET_FREEBSD)
-      #include <linux/cdrom.h>
-    #endif
-  #endif
-#endif
-#include <fcntl.h>
-#include <time.h>
-#include <signal.h>
 #ifdef TARGET_POSIX
-#include "PlatformDefs.h" // for __stat64
+#include <sys/ioctl.h>
+#if defined(TARGET_DARWIN)
+#include <IOKit/storage/IODVDMediaBSDClient.h>
+#elif !defined(TARGET_FREEBSD)
+#include <linux/cdrom.h>
+#endif
+#endif
+#endif
+#include <signal.h>
+#include <time.h>
+
+#include <fcntl.h>
+#ifdef TARGET_POSIX
 #include "platform/posix/XFileUtils.h"
 #include "platform/posix/XTimeUtils.h"
+
+#include "PlatformDefs.h" // for __stat64
 #endif
+#include "FileItem.h"
 #include "ServiceBroker.h"
-#include "Util.h"
-#include "filesystem/SpecialProtocol.h"
 #include "URL.h"
+#include "Util.h"
+#include "emu_dummy.h"
+#include "emu_msvcrt.h"
+#include "filesystem/Directory.h"
 #include "filesystem/File.h"
+#include "filesystem/SpecialProtocol.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "FileItem.h"
-#include "filesystem/Directory.h"
-
-#include "emu_msvcrt.h"
-#include "emu_dummy.h"
+#include "threads/SingleLock.h"
 #include "util/EmuFileWrapper.h"
 #include "utils/log.h"
-#include "threads/SingleLock.h"
 #ifndef TARGET_POSIX
 #include "utils/CharsetConverter.h"
 #include "utils/URIUtils.h"
@@ -78,7 +80,7 @@ struct SDirData
 {
   CFileItemList items;
   int curr_index;
-  struct dirent *last_entry;
+  struct dirent* last_entry;
   SDirData()
   {
     curr_index = -1;
@@ -92,9 +94,9 @@ bool bVecDirsInited = false;
 extern void update_cache_dialog(const char* tmp);
 
 #define EMU_MAX_ENVIRONMENT_ITEMS 100
-static char *dll__environ_imp[EMU_MAX_ENVIRONMENT_ITEMS + 1];
-extern "C" char **dll__environ;
-char **dll__environ = dll__environ_imp;
+static char* dll__environ_imp[EMU_MAX_ENVIRONMENT_ITEMS + 1];
+extern "C" char** dll__environ;
+char** dll__environ = dll__environ_imp;
 
 CCriticalSection dll_cs_environ;
 
@@ -111,7 +113,7 @@ extern "C" void __stdcall init_emu_environ()
   lpvEnv = GetEnvironmentStrings();
   if (lpvEnv != NULL)
   {
-    lpszVariable = (LPTSTR) lpvEnv;
+    lpszVariable = (LPTSTR)lpvEnv;
     while (*lpszVariable)
     {
       dll_putenv(FromW(lpszVariable).c_str());
@@ -135,23 +137,23 @@ extern "C" void __stdcall init_emu_environ()
   {
     // using external python, it's build looking for xxx/lib/python2.7
     // so point it to frameworks which is where python2.7 is located
-    dll_putenv(("PYTHONPATH=" +
-      CSpecialProtocol::TranslatePath("special://frameworks")).c_str());
-    dll_putenv(("PYTHONHOME=" +
-      CSpecialProtocol::TranslatePath("special://frameworks")).c_str());
-    dll_putenv(("PATH=.;" +
-      CSpecialProtocol::TranslatePath("special://xbmc") + ";" +
-      CSpecialProtocol::TranslatePath("special://frameworks")).c_str());
+    dll_putenv(("PYTHONPATH=" + CSpecialProtocol::TranslatePath("special://frameworks")).c_str());
+    dll_putenv(("PYTHONHOME=" + CSpecialProtocol::TranslatePath("special://frameworks")).c_str());
+    dll_putenv(("PATH=.;" + CSpecialProtocol::TranslatePath("special://xbmc") + ";" +
+                CSpecialProtocol::TranslatePath("special://frameworks"))
+                   .c_str());
   }
   else
   {
-    dll_putenv(("PYTHONPATH=" +
-      CSpecialProtocol::TranslatePath("special://xbmc/system/python/DLLs") + ";" +
-      CSpecialProtocol::TranslatePath("special://xbmc/system/python/Lib")).c_str());
-    dll_putenv(("PYTHONHOME=" +
-      CSpecialProtocol::TranslatePath("special://xbmc/system/python")).c_str());
+    dll_putenv(
+        ("PYTHONPATH=" + CSpecialProtocol::TranslatePath("special://xbmc/system/python/DLLs") +
+         ";" + CSpecialProtocol::TranslatePath("special://xbmc/system/python/Lib"))
+            .c_str());
+    dll_putenv(
+        ("PYTHONHOME=" + CSpecialProtocol::TranslatePath("special://xbmc/system/python")).c_str());
     dll_putenv(("PATH=.;" + CSpecialProtocol::TranslatePath("special://xbmc") + ";" +
-      CSpecialProtocol::TranslatePath("special://xbmc/system/python")).c_str());
+                CSpecialProtocol::TranslatePath("special://xbmc/system/python"))
+                   .c_str());
   }
 
 #if defined(TARGET_ANDROID)
@@ -190,32 +192,33 @@ extern "C" void __stdcall update_emu_environ()
   const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
 
   // Use a proxy, if the GUI was configured as such
-  if (settings->GetBool(CSettings::SETTING_NETWORK_USEHTTPPROXY)
-      && !settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYSERVER).empty()
-      && settings->GetInt(CSettings::SETTING_NETWORK_HTTPPROXYPORT) > 0
-      && settings->GetInt(CSettings::SETTING_NETWORK_HTTPPROXYTYPE) == 0)
+  if (settings->GetBool(CSettings::SETTING_NETWORK_USEHTTPPROXY) &&
+      !settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYSERVER).empty() &&
+      settings->GetInt(CSettings::SETTING_NETWORK_HTTPPROXYPORT) > 0 &&
+      settings->GetInt(CSettings::SETTING_NETWORK_HTTPPROXYTYPE) == 0)
   {
     std::string strProxy;
     if (!settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYUSERNAME).empty() &&
         !settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYPASSWORD).empty())
     {
-      strProxy = StringUtils::Format("%s:%s@",
-                                     settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYUSERNAME).c_str(),
-                                     settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYPASSWORD).c_str());
+      strProxy = StringUtils::Format(
+          "%s:%s@", settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYUSERNAME).c_str(),
+          settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYPASSWORD).c_str());
     }
 
     strProxy += settings->GetString(CSettings::SETTING_NETWORK_HTTPPROXYSERVER);
-    strProxy += StringUtils::Format(":%d", settings->GetInt(CSettings::SETTING_NETWORK_HTTPPROXYPORT));
+    strProxy +=
+        StringUtils::Format(":%d", settings->GetInt(CSettings::SETTING_NETWORK_HTTPPROXYPORT));
 
-    CEnvironment::setenv( "HTTP_PROXY", "http://" + strProxy, true );
-    CEnvironment::setenv( "HTTPS_PROXY", "http://" + strProxy, true );
+    CEnvironment::setenv("HTTP_PROXY", "http://" + strProxy, true);
+    CEnvironment::setenv("HTTPS_PROXY", "http://" + strProxy, true);
   }
   else
   {
     // is there a better way to delete an environment variable?
     // this works but leaves the variable
-    dll_putenv( "HTTP_PROXY=" );
-    dll_putenv( "HTTPS_PROXY=" );
+    dll_putenv("HTTP_PROXY=");
+    dll_putenv("HTTPS_PROXY=");
   }
 }
 
@@ -238,12 +241,12 @@ static int convert_fmode(const char* mode)
   if (strstr(mode, "w+"))
     iMode |= O_RDWR | _O_TRUNC;
   else if (strchr(mode, 'w'))
-    iMode |= _O_WRONLY  | O_CREAT;
+    iMode |= _O_WRONLY | O_CREAT;
   return iMode;
 }
 
 #ifdef TARGET_WINDOWS
-static void to_finddata64i32(_wfinddata64i32_t *wdata, _finddata64i32_t *data)
+static void to_finddata64i32(_wfinddata64i32_t* wdata, _finddata64i32_t* data)
 {
   std::string strname;
   g_charsetConverter.wToUTF8(wdata->name, strname);
@@ -258,7 +261,7 @@ static void to_finddata64i32(_wfinddata64i32_t *wdata, _finddata64i32_t *data)
   data->size = wdata->size;
 }
 
-static void to_wfinddata64i32(_finddata64i32_t *data, _wfinddata64i32_t *wdata)
+static void to_wfinddata64i32(_finddata64i32_t* data, _wfinddata64i32_t* wdata)
 {
   std::wstring strwname;
   g_charsetConverter.utf8ToW(data->name, strwname, false);
@@ -276,13 +279,10 @@ static void to_wfinddata64i32(_finddata64i32_t *data, _wfinddata64i32_t *wdata)
 
 extern "C"
 {
-  void dll_sleep(unsigned long imSec)
-  {
-    Sleep(imSec);
-  }
+  void dll_sleep(unsigned long imSec) { Sleep(imSec); }
 
   // FIXME, XXX, !!!!!!
-  void dllReleaseAll( )
+  void dllReleaseAll()
   {
     // close all open dirs...
     if (bVecDirsInited)
@@ -305,10 +305,7 @@ extern "C"
     return pBlock;
   }
 
-  void dllfree( void* pPtr )
-  {
-    free(pPtr);
-  }
+  void dllfree(void* pPtr) { free(pPtr); }
 
   void* dllcalloc(size_t num, size_t size)
   {
@@ -320,9 +317,9 @@ extern "C"
     return pBlock;
   }
 
-  void* dllrealloc( void *memblock, size_t size )
+  void* dllrealloc(void* memblock, size_t size)
   {
-    void* pBlock =  realloc(memblock, size);
+    void* pBlock = realloc(memblock, size);
     if (!pBlock)
     {
       CLog::Log(LOGSEVERE, "realloc {0} bytes failed, crash imminent", size);
@@ -332,18 +329,18 @@ extern "C"
 
   void dllexit(int iCode)
   {
-    not_implement("msvcrt.dll fake function exit() called\n");      //warning
+    not_implement("msvcrt.dll fake function exit() called\n"); //warning
   }
 
   void dllabort()
   {
-    not_implement("msvcrt.dll fake function abort() called\n");     //warning
+    not_implement("msvcrt.dll fake function abort() called\n"); //warning
   }
 
-  void* dll__dllonexit(PFV input, PFV ** start, PFV ** end)
+  void* dll__dllonexit(PFV input, PFV** start, PFV** end)
   {
     //ported from WINE code
-    PFV *tmp;
+    PFV* tmp;
     int len;
 
     if (!start || !*start || !end || !*end)
@@ -357,13 +354,13 @@ extern "C"
     if (++len <= 0)
       return NULL;
 
-    tmp = (PFV*) realloc (*start, len * sizeof(tmp) );
+    tmp = (PFV*)realloc(*start, len * sizeof(tmp));
     if (!tmp)
       return NULL;
     *start = tmp;
     *end = tmp + len;
     tmp[len - 1] = input;
-    return (void *)input;
+    return (void*)input;
 
     //wrong handling, this function is used for register functions
     //that called before exit use _initterm functions.
@@ -383,17 +380,18 @@ extern "C"
 
   int dllputs(const char* szLine)
   {
-    if (!szLine[0]) return EOF;
+    if (!szLine[0])
+      return EOF;
     if (szLine[strlen(szLine) - 1] != '\n')
-      CLog::Log(LOGDEBUG,"  msg: %s", szLine);
+      CLog::Log(LOGDEBUG, "  msg: %s", szLine);
     else
-      CLog::Log(LOGDEBUG,"  msg: %s\n", szLine);
+      CLog::Log(LOGDEBUG, "  msg: %s\n", szLine);
 
     // return a non negative value
     return 0;
   }
 
-  int dllprintf(const char *format, ...)
+  int dllprintf(const char* format, ...)
   {
     va_list va;
     static char tmp[2048];
@@ -406,47 +404,50 @@ extern "C"
     return strlen(tmp);
   }
 
-  char *dll_fullpath(char *absPath, const char *relPath, size_t maxLength)
+  char* dll_fullpath(char* absPath, const char* relPath, size_t maxLength)
   {
     unsigned int len = strlen(relPath);
-    if (len > maxLength && absPath != NULL) return NULL;
+    if (len > maxLength && absPath != NULL)
+      return NULL;
 
     // dll has to make sure it uses the correct path for now
     if (len > 1 && relPath[1] == ':')
     {
-      if (absPath == NULL) absPath = dll_strdup(relPath);
+      if (absPath == NULL)
+        absPath = dll_strdup(relPath);
       else
       {
         strncpy(absPath, relPath, maxLength);
         if (maxLength != 0)
-          absPath[maxLength-1] = '\0';
+          absPath[maxLength - 1] = '\0';
       }
       return absPath;
     }
     if (!strncmp(relPath, "\\Device\\Cdrom0", 14))
     {
       // needed?
-      if (absPath == NULL) absPath = strdup(relPath);
+      if (absPath == NULL)
+        absPath = strdup(relPath);
       else
       {
         strncpy(absPath, relPath, maxLength);
         if (maxLength != 0)
-          absPath[maxLength-1] = '\0';
+          absPath[maxLength - 1] = '\0';
       }
       return absPath;
     }
 
-    not_implement("msvcrt.dll incomplete function _fullpath(...) called\n");      //warning
+    not_implement("msvcrt.dll incomplete function _fullpath(...) called\n"); //warning
     return NULL;
   }
 
-  FILE* dll_popen(const char *command, const char *mode)
+  FILE* dll_popen(const char* command, const char* mode)
   {
     not_implement("msvcrt.dll fake function _popen(...) called\n"); //warning
     return NULL;
   }
 
-  void *dll_dlopen(const char *filename, int flag)
+  void* dll_dlopen(const char* filename, int flag)
   {
 #if !defined(TARGET_WINDOWS)
     return dlopen(filename, flag);
@@ -455,9 +456,9 @@ extern "C"
 #endif
   }
 
-  int dll_pclose(FILE *stream)
+  int dll_pclose(FILE* stream)
   {
-    not_implement("msvcrt.dll fake function _pclose(...) called\n");        //warning
+    not_implement("msvcrt.dll fake function _pclose(...) called\n"); //warning
     return 0;
   }
 
@@ -466,11 +467,11 @@ extern "C"
     EmuFileObject* o = g_emuFileWrapper.GetFileObjectByDescriptor(fd);
     if (o)
     {
-      if(!o->used)
+      if (!o->used)
         return NULL;
 
       int nmode = convert_fmode(mode);
-      if( (o->mode & nmode) != nmode)
+      if ((o->mode & nmode) != nmode)
         CLog::Log(LOGWARNING, "dll_fdopen - mode 0x%x differs from fd mode 0x%x", nmode, o->mode);
       return reinterpret_cast<FILE*>(o);
     }
@@ -496,7 +497,7 @@ extern "C"
       strncpy(str, "D:", size);
       if (size)
       {
-        str[size-1] = '\0';
+        str[size - 1] = '\0';
         strncat(str, szFileName + 14, size - strlen(str));
       }
     }
@@ -504,14 +505,14 @@ extern "C"
     {
       strncpy(str, szFileName, size);
       if (size)
-        str[size-1] = '\0';
+        str[size - 1] = '\0';
     }
 
     CFile* pFile = new CFile();
     bool bWrite = false;
     if ((iMode & O_RDWR) || (iMode & O_WRONLY))
       bWrite = true;
-    bool bOverwrite=false;
+    bool bOverwrite = false;
     if ((iMode & _O_TRUNC) || (iMode & O_CREAT))
       bOverwrite = true;
     // currently always overwrites
@@ -542,7 +543,7 @@ extern "C"
     return -1;
   }
 
-  FILE* dll_freopen(const char *path, const char *mode, FILE *stream)
+  FILE* dll_freopen(const char* path, const char* mode, FILE* stream)
   {
     if (g_emuFileWrapper.StreamIsEmulatedFile(stream))
     {
@@ -566,10 +567,9 @@ extern "C"
       if (ret < 0)
       {
         const int err = errno; // help compiler to optimize, "errno" can be macro
-        if (err == 0 ||
-            (err != EAGAIN && err != EINTR && err != EIO && err != EOVERFLOW && err != EWOULDBLOCK &&
-             err != ECONNRESET && err != ENOTCONN && err != ETIMEDOUT &&
-             err != ENOBUFS && err != ENOMEM && err != ENXIO))
+        if (err == 0 || (err != EAGAIN && err != EINTR && err != EIO && err != EOVERFLOW &&
+                         err != EWOULDBLOCK && err != ECONNRESET && err != ENOTCONN &&
+                         err != ETIMEDOUT && err != ENOBUFS && err != ENOMEM && err != ENXIO))
           errno = EIO; // exact errno is unknown or incorrect, use default error number
 
         return -1;
@@ -582,7 +582,7 @@ extern "C"
       // let the operating system handle it
       return read(fd, buffer, uiSize);
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     errno = EBADF;
     return -1;
   }
@@ -598,10 +598,9 @@ extern "C"
       {
         const int err = errno; // help compiler to optimize, "errno" can be macro
         if (err == 0 ||
-            (err != EAGAIN && err != EFBIG && err != EINTR && err != EIO && err != ENOSPC && err != EPIPE && err != EWOULDBLOCK &&
-             err != ECONNRESET &&
-             err != ENOBUFS && err != ENXIO &&
-             err != EACCES && err != ENETDOWN && err != ENETUNREACH))
+            (err != EAGAIN && err != EFBIG && err != EINTR && err != EIO && err != ENOSPC &&
+             err != EPIPE && err != EWOULDBLOCK && err != ECONNRESET && err != ENOBUFS &&
+             err != ENXIO && err != EACCES && err != ENETDOWN && err != ENETUNREACH))
           errno = EIO; // exact errno is unknown or incorrect, use default error number
 
         return -1;
@@ -614,19 +613,19 @@ extern "C"
       // let the operating system handle it
       return write(fd, buffer, uiSize);
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     errno = EBADF;
     return -1;
   }
 
-  int dll_fstat64(int fd, struct __stat64 *buf)
+  int dll_fstat64(int fd, struct __stat64* buf)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != NULL)
       return pFile->Stat(buf);
     else if (IS_STD_DESCRIPTOR(fd))
       return _fstat64(fd, buf);
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
@@ -647,7 +646,7 @@ extern "C"
       // let the operating system handle it
       return close(fd);
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
@@ -664,10 +663,12 @@ extern "C"
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
       // not supported: return lseeki64(fd, lPos, iWhence);
-      CLog::Log(LOGWARNING, "msvcrt.dll: dll_lseeki64 called, TODO: add 'int64 -> long' type checking");      //warning
+      CLog::Log(
+          LOGWARNING,
+          "msvcrt.dll: dll_lseeki64 called, TODO: add 'int64 -> long' type checking"); //warning
       return static_cast<long long>(lseek(fd, (long)lPos, iWhence));
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1ll;
   }
 
@@ -683,7 +684,7 @@ extern "C"
       // let the operating system handle it
       return lseek(fd, lPos, iWhence);
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
@@ -696,12 +697,12 @@ extern "C"
     }
     else
     {
-      CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+      CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     }
   }
 
   //---------------------------------------------------------------------------------------------------------
-  void dll_flockfile(FILE *stream)
+  void dll_flockfile(FILE* stream)
   {
     int fd = g_emuFileWrapper.GetDescriptorByStream(stream);
     if (fd >= 0)
@@ -709,10 +710,10 @@ extern "C"
       g_emuFileWrapper.LockFileObjectByDescriptor(fd);
       return;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
   }
 
-  int dll_ftrylockfile(FILE *stream)
+  int dll_ftrylockfile(FILE* stream)
   {
     int fd = g_emuFileWrapper.GetDescriptorByStream(stream);
     if (fd >= 0)
@@ -721,11 +722,11 @@ extern "C"
         return 0;
       return -1;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
-  void dll_funlockfile(FILE *stream)
+  void dll_funlockfile(FILE* stream)
   {
     int fd = g_emuFileWrapper.GetDescriptorByStream(stream);
     if (fd >= 0)
@@ -733,23 +734,23 @@ extern "C"
       g_emuFileWrapper.UnlockFileObjectByDescriptor(fd);
       return;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
   }
 
-  int dll_fclose(FILE * stream)
+  int dll_fclose(FILE* stream)
   {
     int fd = g_emuFileWrapper.GetDescriptorByStream(stream);
     if (fd >= 0)
     {
       return dll_close(fd) == 0 ? 0 : EOF;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EOF;
   }
 
 #ifndef TARGET_POSIX
   // should be moved to CFile classes
-  intptr_t dll_findfirst(const char *file, struct _finddata_t *data)
+  intptr_t dll_findfirst(const char* file, struct _finddata_t* data)
   {
     struct _finddata64i32_t data64i32;
     intptr_t ret = dll_findfirst64i32(file, &data64i32);
@@ -766,7 +767,7 @@ extern "C"
     return ret;
   }
 
-  intptr_t dll_findfirst64i32(const char *file, struct _finddata64i32_t *data)
+  intptr_t dll_findfirst64i32(const char* file, struct _finddata64i32_t* data)
   {
     char str[1024];
     int size = sizeof(str);
@@ -794,7 +795,8 @@ extern "C"
       // Make sure the slashes are correct & translate the path
       struct _wfinddata64i32_t wdata;
       std::wstring strwfile;
-      g_charsetConverter.utf8ToW(CUtil::ValidatePath(CSpecialProtocol::TranslatePath(str)), strwfile, false);
+      g_charsetConverter.utf8ToW(CUtil::ValidatePath(CSpecialProtocol::TranslatePath(str)),
+                                 strwfile, false);
       intptr_t ret = _wfindfirst64i32(strwfile.c_str(), &wdata);
       if (ret != -1)
         to_finddata64i32(&wdata, data);
@@ -806,7 +808,7 @@ extern "C"
     if (url.GetFileName().find("*.*") != std::string::npos)
     {
       std::string strReplaced = url.GetFileName();
-      StringUtils::Replace(strReplaced, "*.*","");
+      StringUtils::Replace(strReplaced, "*.*", "");
       url.SetFileName(strReplaced);
     }
     else if (url.GetFileName().find("*.") != std::string::npos)
@@ -817,21 +819,23 @@ extern "C"
     else if (url.GetFileName().find("*") != std::string::npos)
     {
       std::string strReplaced = url.GetFileName();
-      StringUtils::Replace(strReplaced, "*","");
+      StringUtils::Replace(strReplaced, "*", "");
       url.SetFileName(strReplaced);
     }
-    int iDirSlot=0; // locate next free directory
-    while ((iDirSlot < MAX_OPEN_DIRS) && (vecDirsOpen[iDirSlot].curr_index != -1)) iDirSlot++;
+    int iDirSlot = 0; // locate next free directory
+    while ((iDirSlot < MAX_OPEN_DIRS) && (vecDirsOpen[iDirSlot].curr_index != -1))
+      iDirSlot++;
     if (iDirSlot >= MAX_OPEN_DIRS)
       return -1; // no free slots
     strURL = url.Get();
     bVecDirsInited = true;
     vecDirsOpen[iDirSlot].items.Clear();
-    XFILE::CDirectory::GetDirectory(strURL, vecDirsOpen[iDirSlot].items, strMask, DIR_FLAG_DEFAULTS);
+    XFILE::CDirectory::GetDirectory(strURL, vecDirsOpen[iDirSlot].items, strMask,
+                                    DIR_FLAG_DEFAULTS);
     if (vecDirsOpen[iDirSlot].items.Size())
     {
       int size = sizeof(data->name);
-      strncpy(data->name,vecDirsOpen[iDirSlot].items[0]->GetLabel().c_str(), size);
+      strncpy(data->name, vecDirsOpen[iDirSlot].items[0]->GetLabel().c_str(), size);
       if (size)
         data->name[size - 1] = '\0';
       data->size = static_cast<_fsize_t>(vecDirsOpen[iDirSlot].items[0]->m_dwSize);
@@ -885,13 +889,13 @@ extern "C"
 
     // we have a valid data struture. get next item!
     int iItem = vecDirsOpen[found].curr_index;
-    if (iItem+1 < vecDirsOpen[found].items.Size()) // we have a winner!
+    if (iItem + 1 < vecDirsOpen[found].items.Size()) // we have a winner!
     {
       int size = sizeof(data->name);
-      strncpy(data->name,vecDirsOpen[found].items[iItem+1]->GetLabel().c_str(), size);
+      strncpy(data->name, vecDirsOpen[found].items[iItem + 1]->GetLabel().c_str(), size);
       if (size)
         data->name[size - 1] = '\0';
-      data->size = static_cast<_fsize_t>(vecDirsOpen[found].items[iItem+1]->m_dwSize);
+      data->size = static_cast<_fsize_t>(vecDirsOpen[found].items[iItem + 1]->m_dwSize);
       vecDirsOpen[found].curr_index++;
       return 0;
     }
@@ -919,7 +923,7 @@ extern "C"
     return 0;
   }
 
-  void dll__security_error_handler(int code, void *data)
+  void dll__security_error_handler(int code, void* data)
   {
     //NOTE: __security_error_handler has been removed in VS2005 and up
     CLog::Log(LOGERROR, "security_error, code %i", code);
@@ -927,7 +931,7 @@ extern "C"
 
 #endif
 
-  DIR *dll_opendir(const char *file)
+  DIR* dll_opendir(const char* file)
   {
     CURL url(CSpecialProtocol::TranslatePath(file));
     if (url.IsLocal())
@@ -936,8 +940,9 @@ extern "C"
     }
 
     // locate next free directory
-    int iDirSlot=0;
-    while ((iDirSlot<MAX_OPEN_DIRS) && (vecDirsOpen[iDirSlot].curr_index != -1)) iDirSlot++;
+    int iDirSlot = 0;
+    while ((iDirSlot < MAX_OPEN_DIRS) && (vecDirsOpen[iDirSlot].curr_index != -1))
+      iDirSlot++;
     if (iDirSlot >= MAX_OPEN_DIRS)
     {
       CLog::Log(LOGDEBUG, "Dll: Max open dirs reached");
@@ -947,16 +952,17 @@ extern "C"
     bVecDirsInited = true;
     vecDirsOpen[iDirSlot].items.Clear();
 
-    if (XFILE::CDirectory::GetDirectory(url.Get(), vecDirsOpen[iDirSlot].items, "", DIR_FLAG_DEFAULTS))
+    if (XFILE::CDirectory::GetDirectory(url.Get(), vecDirsOpen[iDirSlot].items, "",
+                                        DIR_FLAG_DEFAULTS))
     {
       vecDirsOpen[iDirSlot].curr_index = 0;
-      return (DIR *)&vecDirsOpen[iDirSlot];
+      return (DIR*)&vecDirsOpen[iDirSlot];
     }
     else
       return NULL;
   }
 
-  struct dirent *dll_readdir(DIR *dirp)
+  struct dirent* dll_readdir(DIR* dirp)
   {
     if (!dirp)
       return NULL;
@@ -977,8 +983,8 @@ extern "C"
     SDirData* dirData = reinterpret_cast<SDirData*>(dirp);
     if (dirData->last_entry)
       free(dirData->last_entry);
-    struct dirent *entry = NULL;
-    entry = (dirent*) malloc(sizeof(*entry));
+    struct dirent* entry = NULL;
+    entry = (dirent*)malloc(sizeof(*entry));
     if (dirData->curr_index < dirData->items.Size() + 2)
     { // simulate the '.' and '..' dir entries
       if (dirData->curr_index == 0)
@@ -987,8 +993,9 @@ extern "C"
         strncpy(entry->d_name, "..\0", 3);
       else
       {
-        strncpy(entry->d_name, dirData->items[dirData->curr_index - 2]->GetLabel().c_str(), sizeof(entry->d_name));
-        entry->d_name[sizeof(entry->d_name)-1] = '\0'; // null-terminate any truncated paths
+        strncpy(entry->d_name, dirData->items[dirData->curr_index - 2]->GetLabel().c_str(),
+                sizeof(entry->d_name));
+        entry->d_name[sizeof(entry->d_name) - 1] = '\0'; // null-terminate any truncated paths
       }
       dirData->last_entry = entry;
       dirData->curr_index++;
@@ -998,7 +1005,7 @@ extern "C"
     return NULL;
   }
 
-  int dll_closedir(DIR *dirp)
+  int dll_closedir(DIR* dirp)
   {
     bool emulated(false);
     for (const SDirData& dir : vecDirsOpen)
@@ -1022,7 +1029,7 @@ extern "C"
     return 0;
   }
 
-  void dll_rewinddir(DIR *dirp)
+  void dll_rewinddir(DIR* dirp)
   {
     bool emulated(false);
     for (const SDirData& dir : vecDirsOpen)
@@ -1047,7 +1054,7 @@ extern "C"
     dirData->curr_index = 0;
   }
 
-  char* dll_fgets(char* pszString, int num ,FILE * stream)
+  char* dll_fgets(char* pszString, int num, FILE* stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
     if (pFile != NULL)
@@ -1060,25 +1067,28 @@ extern "C"
           return pszString;
         }
       }
-      else return NULL; //eof
+      else
+        return NULL; //eof
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return NULL;
   }
 
-  int dll_feof(FILE * stream)
+  int dll_feof(FILE* stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
     if (pFile != NULL)
     {
-      if (pFile->GetPosition() < pFile->GetLength()) return 0;
-      else return 1;
+      if (pFile->GetPosition() < pFile->GetLength())
+        return 0;
+      else
+        return 1;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return 1; // eof by default
   }
 
-  int dll_fread(void * buffer, size_t size, size_t count, FILE * stream)
+  int dll_fread(void* buffer, size_t size, size_t count, FILE* stream)
   {
     if (size == 0 || count == 0)
       return 0;
@@ -1097,7 +1107,7 @@ extern "C"
       } while (bufSize > read);
       return read / size;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return 0;
   }
 
@@ -1113,7 +1123,7 @@ extern "C"
 
       return (int)buf;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EOF;
   }
 
@@ -1124,7 +1134,7 @@ extern "C"
       // This routine is normally implemented as a macro with the same result as fgetc().
       return dll_fgetc(stream);
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EOF;
   }
 
@@ -1132,10 +1142,11 @@ extern "C"
   {
     FILE* file = NULL;
 #if defined(TARGET_LINUX) && !defined(TARGET_ANDROID)
-    if (strcmp(filename, _PATH_MOUNTED) == 0
-    ||  strcmp(filename, _PATH_MNTTAB) == 0)
+    if (strcmp(filename, _PATH_MOUNTED) == 0 || strcmp(filename, _PATH_MNTTAB) == 0)
     {
-      CLog::Log(LOGINFO, "%s - something opened the mount file, let's hope it knows what it's doing", __FUNCTION__);
+      CLog::Log(LOGINFO,
+                "%s - something opened the mount file, let's hope it knows what it's doing",
+                __FUNCTION__);
       return fopen(filename, mode);
     }
 #endif
@@ -1148,7 +1159,7 @@ extern "C"
     return file;
   }
 
-  int dll_fopen_s(FILE** pFile, const char * filename, const char * mode)
+  int dll_fopen_s(FILE** pFile, const char* filename, const char* mode)
   {
     if (pFile == NULL || filename == NULL || mode == NULL)
       return EINVAL;
@@ -1160,7 +1171,7 @@ extern "C"
     return 0;
   }
 
-  int dll_putc(int c, FILE *stream)
+  int dll_putc(int c, FILE* stream)
   {
     if (g_emuFileWrapper.StreamIsEmulatedFile(stream) || IS_STD_STREAM(stream))
     {
@@ -1169,17 +1180,14 @@ extern "C"
     return EOF;
   }
 
-  int dll_putchar(int c)
-  {
-    return dll_putc(c, stdout);
-  }
+  int dll_putchar(int c) { return dll_putc(c, stdout); }
 
   int dll_fputc(int character, FILE* stream)
   {
     if (IS_STDOUT_STREAM(stream) || IS_STDERR_STREAM(stream) || !IS_VALID_STREAM(stream))
     {
-      unsigned char tmp[2] = { (unsigned char)character, 0 };
-      dllputs((char *)tmp);
+      unsigned char tmp[2] = {(unsigned char)character, 0};
+      dllputs((char*)tmp);
       return character;
     }
     else
@@ -1196,11 +1204,11 @@ extern "C"
         }
       }
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EOF;
   }
 
-  int dll_fputs(const char * szLine, FILE* stream)
+  int dll_fputs(const char* szLine, FILE* stream)
   {
     if (IS_STDOUT_STREAM(stream) || IS_STDERR_STREAM(stream) || !IS_VALID_STREAM(stream))
     {
@@ -1216,7 +1224,7 @@ extern "C"
       }
     }
 
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EOF;
   }
 
@@ -1229,13 +1237,14 @@ extern "C"
       {
         return 0;
       }
-      else return -1;
+      else
+        return -1;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
-  int dll_fseek(FILE *stream, long offset, int origin)
+  int dll_fseek(FILE* stream, long offset, int origin)
   {
     return dll_fseek64(stream, offset, origin);
   }
@@ -1246,7 +1255,7 @@ extern "C"
     {
       // it is a emulated file
       int d;
-      if (dll_fseek(stream, -1, SEEK_CUR)!=0)
+      if (dll_fseek(stream, -1, SEEK_CUR) != 0)
         return EOF;
       d = dll_fgetc(stream);
       if (d == EOF)
@@ -1255,32 +1264,29 @@ extern "C"
       dll_fseek(stream, -1, SEEK_CUR);
       if (c != d)
       {
-        CLog::Log(LOGWARNING, "%s: c != d",  __FUNCTION__);
+        CLog::Log(LOGWARNING, "%s: c != d", __FUNCTION__);
         d = fputc(c, stream);
         if (d != c)
-          CLog::Log(LOGERROR, "%s: Write failed!",  __FUNCTION__);
+          CLog::Log(LOGERROR, "%s: Write failed!", __FUNCTION__);
         else
           dll_fseek(stream, -1, SEEK_CUR);
       }
       return d;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EOF;
   }
 
-  long dll_ftell(FILE *stream)
-  {
-    return (long)dll_ftell64(stream);
-  }
+  long dll_ftell(FILE* stream) { return (long)dll_ftell64(stream); }
 
-  off64_t dll_ftell64(FILE *stream)
+  off64_t dll_ftell64(FILE* stream)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
     if (pFile != NULL)
     {
-       return (off64_t)pFile->GetPosition();
+      return (off64_t)pFile->GetPosition();
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
@@ -1289,7 +1295,7 @@ extern "C"
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != NULL)
     {
-       return (long)pFile->GetPosition();
+      return (long)pFile->GetPosition();
     }
     else if (!IS_STD_DESCRIPTOR(fd))
     {
@@ -1301,7 +1307,7 @@ extern "C"
       return lseek(fd, 0, SEEK_CUR);
 #endif
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
@@ -1310,14 +1316,16 @@ extern "C"
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != NULL)
     {
-       return static_cast<long long>(pFile->GetPosition());
+      return static_cast<long long>(pFile->GetPosition());
     }
     else if (!IS_STD_DESCRIPTOR(fd))
     {
       // it might be something else than a file, or the file is not emulated
       // let the operating system handle it
       // not supported return telli64(fd);
-      CLog::Log(LOGWARNING, "msvcrt.dll: dll_telli64 called, TODO: add 'int64 -> long' type checking");      //warning
+      CLog::Log(
+          LOGWARNING,
+          "msvcrt.dll: dll_telli64 called, TODO: add 'int64 -> long' type checking"); //warning
 #ifndef TARGET_POSIX
       return static_cast<long long>(tell(fd));
 #elif defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_ANDROID)
@@ -1326,11 +1334,11 @@ extern "C"
       return lseek64(fd, 0, SEEK_CUR);
 #endif
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return -1;
   }
 
-  size_t dll_fwrite(const void * buffer, size_t size, size_t count, FILE* stream)
+  size_t dll_fwrite(const void* buffer, size_t size, size_t count, FILE* stream)
   {
     if (size == 0 || count == 0)
       return 0;
@@ -1366,7 +1374,7 @@ extern "C"
         return written / size;
       }
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return 0;
   }
 
@@ -1397,14 +1405,14 @@ extern "C"
       return ferror(stream);
   }
 
-  int dllvprintf(const char *format, va_list va)
+  int dllvprintf(const char* format, va_list va)
   {
     std::string buffer = StringUtils::FormatV(format, va);
     CLog::Log(LOGDEBUG, "  msg: %s", buffer.c_str());
     return buffer.length();
   }
 
-  int dll_vfprintf(FILE *stream, const char *format, va_list va)
+  int dll_vfprintf(FILE* stream, const char* format, va_list va)
   {
     static char tmp[2048];
 
@@ -1432,11 +1440,11 @@ extern "C"
         {
           if (j == 2047)
           { // out of space
-            if (i != len-1)
+            if (i != len - 1)
               CLog::Log(LOGWARNING, "dll_fprintf: Data lost due to undersized buffer");
             break;
           }
-          if (tmp[i] == '\n' && ((i > 0 && tmp[i-1] != '\r') || i == 0) && j < 2047 - 2)
+          if (tmp[i] == '\n' && ((i > 0 && tmp[i - 1] != '\r') || i == 0) && j < 2047 - 2)
           { // need to add a \r
             tmp2[j++] = '\r';
             tmp2[j++] = '\n';
@@ -1454,13 +1462,13 @@ extern "C"
       }
     }
 
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return strlen(tmp);
   }
 
   int dll_fscanf(FILE* stream, const char* format, ...)
   {
-    CLog::Log(LOGERROR, "%s is not implemented",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s is not implemented", __FUNCTION__);
     return -1;
   }
 
@@ -1480,7 +1488,8 @@ extern "C"
     int ret;
 
     ret = dll_fgetpos64(stream, &tmpPos);
-#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_ANDROID)
+#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || \
+    defined(TARGET_ANDROID)
     *pos = (fpos_t)tmpPos;
 #else
     pos->__pos = (off_t)tmpPos.__pos;
@@ -1488,19 +1497,20 @@ extern "C"
     return ret;
   }
 
-  int dll_fgetpos64(FILE *stream, fpos64_t *pos)
+  int dll_fgetpos64(FILE* stream, fpos64_t* pos)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
     if (pFile != NULL)
     {
-#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_ANDROID)
+#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || \
+    defined(TARGET_ANDROID)
       *pos = pFile->GetPosition();
 #else
       pos->__pos = pFile->GetPosition();
 #endif
       return 0;
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EINVAL;
   }
 
@@ -1509,7 +1519,8 @@ extern "C"
     int fd = g_emuFileWrapper.GetDescriptorByStream(stream);
     if (fd >= 0)
     {
-#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_ANDROID)
+#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || \
+    defined(TARGET_ANDROID)
       if (dll_lseeki64(fd, *pos, SEEK_SET) >= 0)
 #else
       if (dll_lseeki64(fd, (__off64_t)pos->__pos, SEEK_SET) >= 0)
@@ -1517,12 +1528,9 @@ extern "C"
       {
         return 0;
       }
-      else
-      {
-        return EINVAL;
-      }
+      else { return EINVAL; }
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EINVAL;
   }
 
@@ -1532,14 +1540,15 @@ extern "C"
     if (fd >= 0)
     {
       fpos64_t tmpPos;
-#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || defined(TARGET_ANDROID)
-      tmpPos= *pos;
+#if !defined(TARGET_POSIX) || defined(TARGET_DARWIN) || defined(TARGET_FREEBSD) || \
+    defined(TARGET_ANDROID)
+      tmpPos = *pos;
 #else
       tmpPos.__pos = (off64_t)(pos->__pos);
 #endif
       return dll_fsetpos64(stream, &tmpPos);
     }
-    CLog::Log(LOGERROR, "%s emulated function failed",  __FUNCTION__);
+    CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return EINVAL;
   }
 
@@ -1578,7 +1587,7 @@ extern "C"
     }
   }
 
-  char* dll_strdup( const char* str)
+  char* dll_strdup(const char* str)
   {
     char* pdup;
     pdup = strdup(str);
@@ -1587,17 +1596,17 @@ extern "C"
 
   //Critical Section has been fixed in EMUkernel32.cpp
 
-  int dll_initterm(PFV * start, PFV * end)        //pncrt.dll
+  int dll_initterm(PFV* start, PFV* end) //pncrt.dll
   {
-    PFV * temp;
-    for (temp = start; temp < end; temp ++)
+    PFV* temp;
+    for (temp = start; temp < end; temp++)
       if (*temp)
         (*temp)(); //call initial function table.
     return 0;
   }
 
   //SLOW CODE SHOULD BE REVISED
-  int dll_stat(const char *path, struct stat *buffer)
+  int dll_stat(const char* path, struct stat* buffer)
   {
     if (!strnicmp(path, "shout://", 8)) // don't stat shoutcast
       return -1;
@@ -1627,12 +1636,12 @@ extern "C"
     return -1;
   }
 
-  int dll_stati64(const char *path, struct _stati64 *buffer)
+  int dll_stati64(const char* path, struct _stati64* buffer)
   {
     struct __stat64 a;
     memset(&a, 0, sizeof(a));
 
-    if(dll_stat64(path, &a) == 0)
+    if (dll_stat64(path, &a) == 0)
     {
       CUtil::Stat64ToStatI64(buffer, &a);
       return 0;
@@ -1640,7 +1649,7 @@ extern "C"
     return -1;
   }
 
-  int dll_stat64(const char *path, struct __stat64 *buffer)
+  int dll_stat64(const char* path, struct __stat64* buffer)
   {
     if (!strnicmp(path, "shout://", 8)) // don't stat shoutcast
       return -1;
@@ -1664,10 +1673,10 @@ extern "C"
   }
 
 #ifdef TARGET_WINDOWS
-  int dll_stat64i32(const char *path, struct _stat64i32 *buffer)
+  int dll_stat64i32(const char* path, struct _stat64i32* buffer)
   {
     struct __stat64 a;
-    if(dll_stat64(path, &a) == 0)
+    if (dll_stat64(path, &a) == 0)
     {
       CUtil::Stat64ToStat64i32(buffer, &a);
       return 0;
@@ -1698,7 +1707,7 @@ extern "C"
     return -1;
   }
 
-  int dll_fstati64(int fd, struct _stati64 *buffer)
+  int dll_fstati64(int fd, struct _stati64* buffer)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != NULL)
@@ -1711,7 +1720,9 @@ extern "C"
     }
     else if (!IS_STD_DESCRIPTOR(fd))
     {
-      CLog::Log(LOGWARNING, "msvcrt.dll: dll_fstati64 called, TODO: add 'int64 <-> long' type checking");      //warning
+      CLog::Log(
+          LOGWARNING,
+          "msvcrt.dll: dll_fstati64 called, TODO: add 'int64 <-> long' type checking"); //warning
       // need to use fstat and convert everything
       struct stat temp;
       int res = fstat(fd, &temp);
@@ -1728,7 +1739,7 @@ extern "C"
   }
 
 #ifdef TARGET_WINDOWS
-  int dll_fstat64i32(int fd, struct _stat64i32 *buffer)
+  int dll_fstat64i32(int fd, struct _stat64i32* buffer)
   {
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != NULL)
@@ -1743,7 +1754,9 @@ extern "C"
     }
     else if (!IS_STD_DESCRIPTOR(fd))
     {
-      CLog::Log(LOGWARNING, "msvcrt.dll: dll_fstati64 called, TODO: add 'int64 <-> long' type checking");      //warning
+      CLog::Log(
+          LOGWARNING,
+          "msvcrt.dll: dll_fstati64 called, TODO: add 'int64 <-> long' type checking"); //warning
       // need to use fstat and convert everything
       struct __stat64 temp;
       int res = _fstat64(fd, &temp);
@@ -1760,7 +1773,7 @@ extern "C"
   }
 #endif
 
-  int dll_setmode ( int handle, int mode )
+  int dll_setmode(int handle, int mode)
   {
     not_implement("msvcrt.dll fake function dll_setmode() called\n");
     return -1;
@@ -1783,7 +1796,8 @@ extern "C"
 
   int dll_mkdir(const char* dir)
   {
-    if (!dir) return -1;
+    if (!dir)
+      return -1;
 
     // Make sure the slashes are correct & translate the path
     std::string strPath = CUtil::ValidatePath(CSpecialProtocol::TranslatePath(dir));
@@ -1796,7 +1810,7 @@ extern "C"
 #endif
   }
 
-  const char* dll_getcwd(char *buffer, int maxlen)
+  const char* dll_getcwd(char* buffer, int maxlen)
   {
     not_implement("msvcrt.dll fake function dll_getcwd() called\n");
     return "special://xbmc/";
@@ -1808,13 +1822,13 @@ extern "C"
 
     if (envstring != NULL)
     {
-      const char *value_start = strchr(envstring, '=');
+      const char* value_start = strchr(envstring, '=');
 
       if (value_start != NULL)
       {
         char var[64];
         int size = strlen(envstring) + 1;
-        char *value = (char*)malloc(size);
+        char* value = (char*)malloc(size);
 
         if (!value)
           return -1;
@@ -1870,7 +1884,6 @@ extern "C"
               added = true;
             }
           }
-
         }
 
         free(value);
@@ -1887,7 +1900,7 @@ extern "C"
     {
       CSingleLock lock(dll_cs_environ);
 
-      update_emu_environ();//apply any changes
+      update_emu_environ(); //apply any changes
 
       for (int i = 0; i < EMU_MAX_ENVIRONMENT_ITEMS && value == NULL; i++)
       {
@@ -1916,26 +1929,24 @@ extern "C"
     return 0;
   }
 
-  int dll_system(const char *command)
+  int dll_system(const char* command)
   {
     not_implement("msvcrt.dll fake function dll_system() called\n");
     return 0; //system(command);
   }
 
-  void (__cdecl * dll_signal(int sig, void (__cdecl *func)(int)))(int)
+  void(__cdecl* dll_signal(int sig, void(__cdecl* func)(int)))(int)
   {
 #if defined(TARGET_WINDOWS)
     //vs2008 asserts for known signals, return err for everything unknown to windows.
-    if (sig == 5 || sig == 7 || sig == 9 || sig == 10 || sig == 12 || sig == 14 || sig == 18 || sig == 19 || sig == 20)
+    if (sig == 5 || sig == 7 || sig == 9 || sig == 10 || sig == 12 || sig == 14 || sig == 18 ||
+        sig == 19 || sig == 20)
       return SIG_ERR;
 #endif
     return signal(sig, func);
   }
 
-  int dll_getpid()
-  {
-    return 1;
-  }
+  int dll_getpid() { return 1; }
 
   int dll__commit(int fd)
   {
@@ -1968,38 +1979,34 @@ extern "C"
 
 #ifdef TARGET_POSIX
 #if defined(TARGET_ANDROID)
-  volatile int * __cdecl dll_errno(void)
-  {
-    return &errno;
-  }
+  volatile int* __cdecl dll_errno(void) { return &errno; }
 #else
-  int * __cdecl dll_errno(void)
-  {
-    return &errno;
-  }
+  int* __cdecl dll_errno(void) { return &errno; }
 #endif
 
   int __cdecl dll_ioctl(int fd, unsigned long int request, va_list va)
   {
-     int ret;
-     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
-     if (!pFile)
-       return -1;
+    int ret;
+    CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
+    if (!pFile)
+      return -1;
 
 #if defined(HAS_DVD_DRIVE) && !defined(TARGET_FREEBSD)
 #if !defined(TARGET_DARWIN)
-    if(request == DVD_READ_STRUCT || request == DVD_AUTH)
+    if (request == DVD_READ_STRUCT || request == DVD_AUTH)
 #else
-    if(request == DKIOCDVDSENDKEY || request == DKIOCDVDREPORTKEY || request == DKIOCDVDREADSTRUCTURE)
+    if (request == DKIOCDVDSENDKEY || request == DKIOCDVDREPORTKEY ||
+        request == DKIOCDVDREADSTRUCTURE)
 #endif
     {
-      void *p1 = va_arg(va, void*);
+      void* p1 = va_arg(va, void*);
       SNativeIoControl d;
       d.request = request;
-      d.param   = p1;
+      d.param = p1;
       ret = pFile->IoControl(IOCTRL_NATIVE, &d);
-      if(ret<0)
-        CLog::Log(LOGWARNING, "%s - %ld request failed with error [%d] %s", __FUNCTION__, request, errno, strerror(errno));
+      if (ret < 0)
+        CLog::Log(LOGWARNING, "%s - %ld request failed with error [%d] %s", __FUNCTION__, request,
+                  errno, strerror(errno));
     }
     else
 #endif
@@ -2011,14 +2018,13 @@ extern "C"
   }
 #endif
 
-  int dll_setvbuf(FILE *stream, char *buf, int type, size_t size)
+  int dll_setvbuf(FILE* stream, char* buf, int type, size_t size)
   {
-    CLog::Log(LOGWARNING, "%s - May not be implemented correctly",
-              __FUNCTION__);
+    CLog::Log(LOGWARNING, "%s - May not be implemented correctly", __FUNCTION__);
     return 0;
   }
 
-  struct mntent *dll_getmntent(FILE *fp)
+  struct mntent* dll_getmntent(FILE* fp)
   {
     if (fp == NULL)
       return NULL;
@@ -2026,7 +2032,8 @@ extern "C"
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(fp);
     if (pFile)
     {
-      CLog::Log(LOGERROR, "%s - getmntent is not implemented for our virtual filesystem", __FUNCTION__);
+      CLog::Log(LOGERROR, "%s - getmntent is not implemented for our virtual filesystem",
+                __FUNCTION__);
       return NULL;
     }
 #if defined(TARGET_LINUX)
@@ -2047,5 +2054,4 @@ extern "C"
     return -1;
 #endif
   }
-
 }

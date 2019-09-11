@@ -8,8 +8,19 @@
 
 #pragma once
 
-enum ANIMATION_PROCESS { ANIM_PROCESS_NONE = 0, ANIM_PROCESS_NORMAL, ANIM_PROCESS_REVERSE };
-enum ANIMATION_STATE { ANIM_STATE_NONE = 0, ANIM_STATE_DELAYED, ANIM_STATE_IN_PROCESS, ANIM_STATE_APPLIED };
+enum ANIMATION_PROCESS
+{
+  ANIM_PROCESS_NONE = 0,
+  ANIM_PROCESS_NORMAL,
+  ANIM_PROCESS_REVERSE
+};
+enum ANIMATION_STATE
+{
+  ANIM_STATE_NONE = 0,
+  ANIM_STATE_DELAYED,
+  ANIM_STATE_IN_PROCESS,
+  ANIM_STATE_APPLIED
+};
 
 // forward definitions
 
@@ -17,11 +28,11 @@ class TiXmlElement;
 class Tweener;
 class CGUIListItem;
 
-#include "utils/TransformMatrix.h"  // needed for the TransformMatrix member
-#include "utils/Geometry.h"         // for CPoint, CRect
-#include <memory>
 #include "interfaces/info/InfoBool.h"
+#include "utils/Geometry.h" // for CPoint, CRect
+#include "utils/TransformMatrix.h" // needed for the TransformMatrix member
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -34,36 +45,46 @@ enum ANIMATION_TYPE
   ANIM_TYPE_WINDOW_OPEN,
   ANIM_TYPE_VISIBLE,
   ANIM_TYPE_FOCUS,
-  ANIM_TYPE_CONDITIONAL       // for animations triggered by a condition change
+  ANIM_TYPE_CONDITIONAL // for animations triggered by a condition change
 };
 
 class CAnimEffect
 {
 public:
-  enum EFFECT_TYPE { EFFECT_TYPE_NONE = 0, EFFECT_TYPE_FADE, EFFECT_TYPE_SLIDE, EFFECT_TYPE_ROTATE_X, EFFECT_TYPE_ROTATE_Y, EFFECT_TYPE_ROTATE_Z, EFFECT_TYPE_ZOOM };
+  enum EFFECT_TYPE
+  {
+    EFFECT_TYPE_NONE = 0,
+    EFFECT_TYPE_FADE,
+    EFFECT_TYPE_SLIDE,
+    EFFECT_TYPE_ROTATE_X,
+    EFFECT_TYPE_ROTATE_Y,
+    EFFECT_TYPE_ROTATE_Z,
+    EFFECT_TYPE_ZOOM
+  };
 
-  CAnimEffect(const TiXmlElement *node, EFFECT_TYPE effect);
+  CAnimEffect(const TiXmlElement* node, EFFECT_TYPE effect);
   CAnimEffect(unsigned int delay, unsigned int length, EFFECT_TYPE effect);
-  CAnimEffect(const CAnimEffect &src);
+  CAnimEffect(const CAnimEffect& src);
 
   virtual ~CAnimEffect();
-  CAnimEffect& operator=(const CAnimEffect &src);
+  CAnimEffect& operator=(const CAnimEffect& src);
 
-  void Calculate(unsigned int time, const CPoint &center);
-  void ApplyState(ANIMATION_STATE state, const CPoint &center);
+  void Calculate(unsigned int time, const CPoint& center);
+  void ApplyState(ANIMATION_STATE state, const CPoint& center);
 
   unsigned int GetDelay() const { return m_delay; };
   unsigned int GetLength() const { return m_delay + m_length; };
-  const TransformMatrix &GetTransform() const { return m_matrix; };
+  const TransformMatrix& GetTransform() const { return m_matrix; };
   EFFECT_TYPE GetType() const { return m_effect; };
 
-  static std::shared_ptr<Tweener> GetTweener(const TiXmlElement *pAnimationNode);
+  static std::shared_ptr<Tweener> GetTweener(const TiXmlElement* pAnimationNode);
+
 protected:
   TransformMatrix m_matrix;
   EFFECT_TYPE m_effect;
 
 private:
-  virtual void ApplyEffect(float offset, const CPoint &center)=0;
+  virtual void ApplyEffect(float offset, const CPoint& center) = 0;
 
   // timing variables
   unsigned int m_length;
@@ -75,11 +96,12 @@ private:
 class CFadeEffect : public CAnimEffect
 {
 public:
-  CFadeEffect(const TiXmlElement *node, bool reverseDefaults);
+  CFadeEffect(const TiXmlElement* node, bool reverseDefaults);
   CFadeEffect(float start, float end, unsigned int delay, unsigned int length);
   ~CFadeEffect() override = default;
+
 private:
-  void ApplyEffect(float offset, const CPoint &center) override;
+  void ApplyEffect(float offset, const CPoint& center) override;
 
   float m_startAlpha;
   float m_endAlpha;
@@ -88,10 +110,11 @@ private:
 class CSlideEffect : public CAnimEffect
 {
 public:
-  explicit CSlideEffect(const TiXmlElement *node);
+  explicit CSlideEffect(const TiXmlElement* node);
   ~CSlideEffect() override = default;
+
 private:
-  void ApplyEffect(float offset, const CPoint &center) override;
+  void ApplyEffect(float offset, const CPoint& center) override;
 
   float m_startX;
   float m_startY;
@@ -102,10 +125,11 @@ private:
 class CRotateEffect : public CAnimEffect
 {
 public:
-  CRotateEffect(const TiXmlElement *node, EFFECT_TYPE effect);
+  CRotateEffect(const TiXmlElement* node, EFFECT_TYPE effect);
   ~CRotateEffect() override = default;
+
 private:
-  void ApplyEffect(float offset, const CPoint &center) override;
+  void ApplyEffect(float offset, const CPoint& center) override;
 
   float m_startAngle;
   float m_endAngle;
@@ -117,10 +141,11 @@ private:
 class CZoomEffect : public CAnimEffect
 {
 public:
-  CZoomEffect(const TiXmlElement *node, const CRect &rect);
+  CZoomEffect(const TiXmlElement* node, const CRect& rect);
   ~CZoomEffect() override = default;
+
 private:
-  void ApplyEffect(float offset, const CPoint &center) override;
+  void ApplyEffect(float offset, const CPoint& center) override;
 
   float m_startX;
   float m_startY;
@@ -135,24 +160,25 @@ class CAnimation
 {
 public:
   CAnimation();
-  CAnimation(const CAnimation &src);
+  CAnimation(const CAnimation& src);
 
   virtual ~CAnimation();
 
-  CAnimation& operator=(const CAnimation &src);
+  CAnimation& operator=(const CAnimation& src);
 
-  static CAnimation CreateFader(float start, float end, unsigned int delay, unsigned int length, ANIMATION_TYPE type = ANIM_TYPE_NONE);
+  static CAnimation CreateFader(float start,
+                                float end,
+                                unsigned int delay,
+                                unsigned int length,
+                                ANIMATION_TYPE type = ANIM_TYPE_NONE);
 
-  void Create(const TiXmlElement *node, const CRect &rect, int context);
+  void Create(const TiXmlElement* node, const CRect& rect, int context);
 
   void Animate(unsigned int time, bool startAnim);
   void ResetAnimation();
   void ApplyAnimation();
-  inline void RenderAnimation(TransformMatrix &matrix)
-  {
-    RenderAnimation(matrix, CPoint());
-  }
-  void RenderAnimation(TransformMatrix &matrix, const CPoint &center);
+  inline void RenderAnimation(TransformMatrix& matrix) { RenderAnimation(matrix, CPoint()); }
+  void RenderAnimation(TransformMatrix& matrix, const CPoint& center);
   void QueueAnimation(ANIMATION_PROCESS process);
 
   inline bool IsReversible() const { return m_reversible; };
@@ -162,14 +188,19 @@ public:
   inline ANIMATION_PROCESS GetQueuedProcess() const { return m_queuedProcess; };
 
   bool CheckCondition();
-  void UpdateCondition(const CGUIListItem *item = NULL);
+  void UpdateCondition(const CGUIListItem* item = NULL);
   void SetInitialCondition();
 
 private:
-  void Calculate(const CPoint &point);
-  void AddEffect(const std::string &type, const TiXmlElement *node, const CRect &rect);
+  void Calculate(const CPoint& point);
+  void AddEffect(const std::string& type, const TiXmlElement* node, const CRect& rect);
 
-  enum ANIM_REPEAT { ANIM_REPEAT_NONE = 0, ANIM_REPEAT_PULSE, ANIM_REPEAT_LOOP };
+  enum ANIM_REPEAT
+  {
+    ANIM_REPEAT_NONE = 0,
+    ANIM_REPEAT_PULSE,
+    ANIM_REPEAT_LOOP
+  };
 
   // type of animation
   ANIMATION_TYPE m_type;
@@ -191,7 +222,7 @@ private:
   unsigned int m_delay;
   unsigned int m_amount;
 
-  std::vector<CAnimEffect *> m_effects;
+  std::vector<CAnimEffect*> m_effects;
 };
 
 /**
@@ -204,9 +235,10 @@ private:
 class CScroller
 {
 public:
-  CScroller(unsigned int duration = 200, std::shared_ptr<Tweener> tweener = std::shared_ptr<Tweener>());
+  CScroller(unsigned int duration = 200,
+            std::shared_ptr<Tweener> tweener = std::shared_ptr<Tweener>());
   CScroller(const CScroller& right);
-  CScroller& operator=(const CScroller &src);
+  CScroller& operator=(const CScroller& src);
   ~CScroller();
 
   /**
@@ -237,15 +269,16 @@ public:
   bool IsScrollingDown() const { return m_delta > 0; };
 
   unsigned int GetDuration() const { return m_duration; };
+
 private:
   float Tween(float progress);
 
-  float        m_scrollValue;
-  float        m_delta;                   //!< Brief distance that we have to travel during scroll
-  float        m_startPosition;           //!< Brief starting position of scroll
-  bool         m_hasResumePoint;          //!< Brief check if we should tween from middle of the tween
-  unsigned int m_startTime;               //!< Brief starting time of scroll
+  float m_scrollValue;
+  float m_delta; //!< Brief distance that we have to travel during scroll
+  float m_startPosition; //!< Brief starting position of scroll
+  bool m_hasResumePoint; //!< Brief check if we should tween from middle of the tween
+  unsigned int m_startTime; //!< Brief starting time of scroll
 
-  unsigned int m_duration;                //!< Brief duration of scroll
+  unsigned int m_duration; //!< Brief duration of scroll
   std::shared_ptr<Tweener> m_pTweener;
 };

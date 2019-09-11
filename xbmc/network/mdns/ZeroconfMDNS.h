@@ -19,14 +19,13 @@
 
 #include <dns_sd.h>
 
-class CZeroconfMDNS : public CZeroconf,public CThread
+class CZeroconfMDNS : public CZeroconf, public CThread
 {
 public:
   CZeroconfMDNS();
   ~CZeroconfMDNS();
 
 protected:
-
   //CThread interface
   void Process();
 
@@ -35,7 +34,7 @@ protected:
                         const std::string& fcr_type,
                         const std::string& fcr_name,
                         unsigned int f_port,
-                        const std::vector<std::pair<std::string, std::string> >& txt);
+                        const std::vector<std::pair<std::string, std::string>>& txt);
 
   bool doForceReAnnounceService(const std::string& fcr_identifier);
   bool doRemoveService(const std::string& fcr_ident);
@@ -47,14 +46,13 @@ protected:
   void ProcessResults();
 
 private:
-
   static void DNSSD_API registerCallback(DNSServiceRef sdref,
                                          const DNSServiceFlags flags,
                                          DNSServiceErrorType errorCode,
-                                         const char *name,
-                                         const char *regtype,
-                                         const char *domain,
-                                         void *context);
+                                         const char* name,
+                                         const char* regtype,
+                                         const char* domain,
+                                         void* context);
 
 
   //lock + data (accessed from runloop(main thread) + the rest)

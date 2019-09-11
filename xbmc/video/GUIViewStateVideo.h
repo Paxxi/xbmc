@@ -13,7 +13,10 @@
 class CGUIViewStateWindowVideo : public CGUIViewState
 {
 public:
-  explicit CGUIViewStateWindowVideo(const CFileItemList& items) : CGUIViewState(items) {}
+  explicit CGUIViewStateWindowVideo(const CFileItemList& items)
+    : CGUIViewState(items)
+  {
+  }
 
 protected:
   VECSOURCES& GetSources() override;
@@ -50,6 +53,7 @@ class CGUIViewStateVideoMovies : public CGUIViewStateWindowVideo
 {
 public:
   explicit CGUIViewStateVideoMovies(const CFileItemList& items);
+
 protected:
   void SaveViewState() override;
 };
@@ -58,6 +62,7 @@ class CGUIViewStateVideoMusicVideos : public CGUIViewStateWindowVideo
 {
 public:
   explicit CGUIViewStateVideoMusicVideos(const CFileItemList& items);
+
 protected:
   void SaveViewState() override;
 };
@@ -66,6 +71,7 @@ class CGUIViewStateVideoTVShows : public CGUIViewStateWindowVideo
 {
 public:
   explicit CGUIViewStateVideoTVShows(const CFileItemList& items);
+
 protected:
   void SaveViewState() override;
 };
@@ -74,7 +80,7 @@ class CGUIViewStateVideoEpisodes : public CGUIViewStateWindowVideo
 {
 public:
   explicit CGUIViewStateVideoEpisodes(const CFileItemList& items);
+
 protected:
   void SaveViewState() override;
 };
-

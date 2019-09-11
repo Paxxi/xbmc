@@ -10,7 +10,7 @@
 
 #include "threads/Thread.h"
 
-class CWHelper: public CThread
+class CWHelper : public CThread
 {
 public:
   CWHelper(void);
@@ -24,9 +24,8 @@ public:
   void SetHANDLE(HANDLE hProcess);
 
 private:
-  HWND  m_hwnd;
+  HWND m_hwnd;
   HANDLE m_hProcess;
-
 };
 
 extern CWHelper g_windowHelper;

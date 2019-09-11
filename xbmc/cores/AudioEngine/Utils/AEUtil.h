@@ -9,10 +9,13 @@
 #pragma once
 
 #include "AEAudioFormat.h"
-#include "PlatformDefs.h"
+
 #include <math.h>
 
-extern "C" {
+#include "PlatformDefs.h"
+
+extern "C"
+{
 #include <libavutil/samplefmt.h>
 }
 
@@ -27,9 +30,9 @@ extern "C" {
 #endif
 
 #ifdef __GNUC__
-  #define MEMALIGN(b, x) x __attribute__((aligned(b)))
+#define MEMALIGN(b, x) x __attribute__((aligned(b)))
 #else
-  #define MEMALIGN(b, x) __declspec(align(b)) x
+#define MEMALIGN(b, x) __declspec(align(b)) x
 #endif
 
 // AV sync options
@@ -41,12 +44,12 @@ enum AVSync
 
 struct AEDelayStatus
 {
-  void   SetDelay(double d);
+  void SetDelay(double d);
   double GetDelay() const;
 
-  double delay = 0.0;  // delay in sink currently
+  double delay = 0.0; // delay in sink currently
   double maxcorrection = 0.0; // time correction must not be greater than sink delay
-  int64_t tick = 0;  // timestamp when delay was calculated
+  int64_t tick = 0; // timestamp when delay was calculated
 };
 
 /**
@@ -82,14 +85,14 @@ class CAESpinLock
 {
 public:
   explicit CAESpinLock(CAESpinSection& section)
-  : m_section(section)
-  , m_begin(section.m_enter)
-  {}
+    : m_section(section)
+    , m_begin(section.m_enter)
+  {
+  }
 
   bool retry()
   {
-    if(m_section.m_enter != m_begin
-    || m_section.m_enter != m_section.m_leave)
+    if (m_section.m_enter != m_begin || m_section.m_enter != m_section.m_leave)
     {
       m_begin = m_section.m_enter;
       return true;
@@ -100,26 +103,26 @@ public:
 
 private:
   CAESpinSection& m_section;
-  unsigned int    m_begin;
+  unsigned int m_begin;
 };
 
 class CAEUtil
 {
 private:
   static unsigned int m_seed;
-  #if defined(HAVE_SSE2) && defined(__SSE2__)
-    static __m128i m_sseSeed;
-  #endif
+#if defined(HAVE_SSE2) && defined(__SSE2__)
+  static __m128i m_sseSeed;
+#endif
 
   static float SoftClamp(const float x);
 
 public:
-  static CAEChannelInfo          GuessChLayout     (const unsigned int channels);
-  static const char*             GetStdChLayoutName(const enum AEStdChLayout layout);
-  static unsigned int      DataFormatToBits  (const enum AEDataFormat dataFormat);
-  static unsigned int      DataFormatToUsedBits (const enum AEDataFormat dataFormat);
-  static unsigned int      DataFormatToDitherBits(const enum AEDataFormat dataFormat);
-  static const char*             DataFormatToStr   (const enum AEDataFormat dataFormat);
+  static CAEChannelInfo GuessChLayout(const unsigned int channels);
+  static const char* GetStdChLayoutName(const enum AEStdChLayout layout);
+  static unsigned int DataFormatToBits(const enum AEDataFormat dataFormat);
+  static unsigned int DataFormatToUsedBits(const enum AEDataFormat dataFormat);
+  static unsigned int DataFormatToDitherBits(const enum AEDataFormat dataFormat);
+  static const char* DataFormatToStr(const enum AEDataFormat dataFormat);
   static const char* StreamTypeToStr(const enum CAEStreamInfo::DataType dataType);
 
   /*! \brief convert a volume percentage (as a proportion) to a dB gain
@@ -132,7 +135,7 @@ public:
   static inline float PercentToGain(const float value)
   {
     static const float db_range = 60.0f;
-    return (value - 1)*db_range;
+    return (value - 1) * db_range;
   }
 
   /*! \brief convert a dB gain to volume percentage (as a proportion)
@@ -145,7 +148,7 @@ public:
   static inline float GainToPercent(const float gain)
   {
     static const float db_range = 60.0f;
-    return 1+(gain/db_range);
+    return 1 + (gain / db_range);
   }
 
   /*! \brief convert a dB gain to a scale factor for audio manipulation
@@ -159,7 +162,7 @@ public:
     float val = 0.0f;
     // we need to make sure that our lowest db returns plain zero
     if (dB > -60.0f)
-      val = pow(10.0f, dB/20);
+      val = pow(10.0f, dB / 20);
 
     // in order to not introduce computing overhead for nearly zero
     // values of dB e.g. -0.01 or -0.001 we clamp to top
@@ -175,20 +178,17 @@ public:
    \return dB the gain in decibels.
    \sa GainToScale
    */
-  static inline float ScaleToGain(const float scale)
-  {
-    return 20*log10(scale);
-  }
+  static inline float ScaleToGain(const float scale) { return 20 * log10(scale); }
 
-  #if defined(HAVE_SSE) && defined(__SSE__)
-  static void SSEMulArray     (float *data, const float mul, uint32_t count);
-  static void SSEMulAddArray  (float *data, float *add, const float mul, uint32_t count);
-  #endif
-  static void ClampArray(float *data, uint32_t count);
+#if defined(HAVE_SSE) && defined(__SSE__)
+  static void SSEMulArray(float* data, const float mul, uint32_t count);
+  static void SSEMulAddArray(float* data, float* add, const float mul, uint32_t count);
+#endif
+  static void ClampArray(float* data, uint32_t count);
 
   static bool S16NeedsByteSwap(AEDataFormat in, AEDataFormat out);
 
-  static uint64_t GetAVChannelLayout(const CAEChannelInfo &info);
+  static uint64_t GetAVChannelLayout(const CAEChannelInfo& info);
   static CAEChannelInfo GetAEChannelLayout(uint64_t layout);
   static AVSampleFormat GetAVSampleFormat(AEDataFormat format);
   static uint64_t GetAVChannel(enum AEChannel aechannel);

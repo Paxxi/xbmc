@@ -11,8 +11,8 @@
 #include "GL.h"
 
 #include <stdio.h>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <kodi/AddonBase.h>
 #include <kodi/Filesystem.h>
@@ -34,8 +34,7 @@ class ATTRIBUTE_HIDDEN CShader
 public:
   CShader() = default;
   virtual ~CShader() = default;
-  virtual bool Compile(const std::string& extraBegin = "",
-                       const std::string& extraEnd = "") = 0;
+  virtual bool Compile(const std::string& extraBegin = "", const std::string& extraEnd = "") = 0;
   virtual void Free() = 0;
   virtual GLuint Handle() = 0;
 
@@ -46,7 +45,8 @@ public:
     kodi::vfs::CFile source;
     if (!source.OpenFile(file))
     {
-      kodi::Log(ADDON_LOG_ERROR, "CShader::%s: Failed to open file '%s'", __FUNCTION__, file.c_str());
+      kodi::Log(ADDON_LOG_ERROR, "CShader::%s: Failed to open file '%s'", __FUNCTION__,
+                file.c_str());
       return false;
     }
     size_t len = source.Read(buffer, sizeof(buffer));
@@ -80,8 +80,7 @@ public:
     m_vertexShader = 0;
   }
 
-  bool Compile(const std::string& extraBegin = "",
-               const std::string& extraEnd = "") override
+  bool Compile(const std::string& extraBegin = "", const std::string& extraEnd = "") override
   {
     GLint params[4];
 
@@ -90,7 +89,7 @@ public:
     m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     GLsizei count = 0;
-    const char *sources[3];
+    const char* sources[3];
     if (!extraBegin.empty())
       sources[count++] = extraBegin.c_str();
     if (!m_source.empty())
@@ -141,8 +140,7 @@ public:
     m_pixelShader = 0;
   }
 
-  bool Compile(const std::string& extraBegin = "",
-               const std::string& extraEnd = "") override
+  bool Compile(const std::string& extraBegin = "", const std::string& extraEnd = "") override
   {
     GLint params[4];
 
@@ -151,7 +149,7 @@ public:
     m_pixelShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     GLsizei count = 0;
-    const char *sources[3];
+    const char* sources[3];
     if (!extraBegin.empty())
       sources[count++] = extraBegin.c_str();
     if (!m_source.empty())
@@ -299,10 +297,7 @@ public:
   /// @param[in] vert Path to used GL vertext shader
   /// @param[in] frag Path to used GL fragment shader
   ///
-  CShaderProgram(const std::string& vert, const std::string& frag)
-  {
-    LoadShaderFiles(vert, frag);
-  }
+  CShaderProgram(const std::string& vert, const std::string& frag) { LoadShaderFiles(vert, frag); }
   //--------------------------------------------------------------------------
 
   //==========================================================================
@@ -310,10 +305,7 @@ public:
   /// \ingroup cpp_kodi_gui_gl_CShaderProgram
   /// @brief Destructor
   ///
-  virtual ~CShaderProgram()
-  {
-    ShaderFree();
-  }
+  virtual ~CShaderProgram() { ShaderFree(); }
   //--------------------------------------------------------------------------
 
   //==========================================================================
@@ -549,7 +541,7 @@ public:
   /// \ingroup cpp_kodi_gui_gl_CShaderProgram_child
   /// @brief Mandatory child function to set the necessary CPU to GPU data
   ///
-  virtual void OnCompiledAndLinked() {};
+  virtual void OnCompiledAndLinked(){};
   //--------------------------------------------------------------------------
 
   //==========================================================================
@@ -568,7 +560,7 @@ public:
   /// \ingroup cpp_kodi_gui_gl_CShaderProgram_child
   /// @brief Optional child function that may have to be performed when
   /// switching off the shader
-  virtual void OnDisabled() {};
+  virtual void OnDisabled(){};
   //--------------------------------------------------------------------------
   //@}
 

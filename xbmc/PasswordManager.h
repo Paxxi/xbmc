@@ -27,11 +27,11 @@ class CURL;
 class CPasswordManager
 {
 public:
- /*!
+  /*!
    \brief The only way through which the global instance of the CPasswordManager should be accessed.
    \return the global instance.
    */
-  static CPasswordManager &GetInstance();
+  static CPasswordManager& GetInstance();
 
   /*!
    \brief Authenticate a URL by looking the URL up in the temporary and permanent caches
@@ -41,7 +41,7 @@ public:
    \return true if we have details in the cache, false otherwise.
    \sa CURL
    */
-  bool AuthenticateURL(CURL &url);
+  bool AuthenticateURL(CURL& url);
 
   /*!
    \brief Prompt for a username and password for the particular URL.
@@ -55,7 +55,7 @@ public:
    \return true if the user entered details, false if the user cancelled the dialog.
    \sa CURL, SaveAuthenticatedURL
    */
-  bool PromptToAuthenticateURL(CURL &url);
+  bool PromptToAuthenticateURL(CURL& url);
 
   /*!
    \brief Save an authenticated URL.
@@ -67,7 +67,7 @@ public:
    \param saveToProfile whether to save in the users profile, defaults to true.
    \sa CURL, PromptToAuthenticateURL
    */
-  void SaveAuthenticatedURL(const CURL &url, bool saveToProfile = true);
+  void SaveAuthenticatedURL(const CURL& url, bool saveToProfile = true);
 
   /*!
    \brief Is an URL is supported (by the manager)
@@ -78,7 +78,7 @@ public:
    \return true if the URL is supported
    \sa CURL, IsURLSupported
    */
-  bool IsURLSupported(const CURL &url);
+  bool IsURLSupported(const CURL& url);
 
   /*!
    \brief Clear any previously cached passwords
@@ -94,11 +94,11 @@ private:
 
   void Load();
   void Save() const;
-  std::string GetLookupPath(const CURL &url) const;
-  std::string GetServerLookup(const std::string &path) const;
+  std::string GetLookupPath(const CURL& url) const;
+  std::string GetServerLookup(const std::string& path) const;
 
-  std::map<std::string, std::string>  m_temporaryCache;
-  std::map<std::string, std::string>  m_permanentCache;
+  std::map<std::string, std::string> m_temporaryCache;
+  std::map<std::string, std::string> m_permanentCache;
   bool m_loaded;
 
   CCriticalSection m_critSection;

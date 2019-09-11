@@ -6,9 +6,9 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "utils/AliasShortcutUtils.h"
 #include "filesystem/File.h"
 #include "test/TestUtils.h"
+#include "utils/AliasShortcutUtils.h"
 
 #if defined(TARGET_DARWIN_OSX)
 #include "platform/darwin/DarwinUtils.h"
@@ -17,11 +17,11 @@
 
 TEST(TestAliasShortcutUtils, IsAliasShortcut)
 {
-  XFILE::CFile *tmpFile = XBMC_CREATETEMPFILE("noaliastest");
+  XFILE::CFile* tmpFile = XBMC_CREATETEMPFILE("noaliastest");
   std::string noalias = XBMC_TEMPFILEPATH(tmpFile);
 
 #if defined(TARGET_DARWIN_OSX)
-  XFILE::CFile *aliasDestFile = XBMC_CREATETEMPFILE("aliastest");
+  XFILE::CFile* aliasDestFile = XBMC_CREATETEMPFILE("aliastest");
   std::string alias = XBMC_TEMPFILEPATH(aliasDestFile);
 
   //we only need the path here so delete the alias file
@@ -46,18 +46,18 @@ TEST(TestAliasShortcutUtils, IsAliasShortcut)
   EXPECT_FALSE(IsAliasShortcut(emptyString, false));
 
   // non-existent file is no alias
-  std::string nonExistingFile="/IDontExistsNormally/somefile.txt";
+  std::string nonExistingFile = "/IDontExistsNormally/somefile.txt";
   EXPECT_FALSE(IsAliasShortcut(nonExistingFile, false));
 }
 
 TEST(TestAliasShortcutUtils, TranslateAliasShortcut)
 {
-  XFILE::CFile *tmpFile = XBMC_CREATETEMPFILE("noaliastest");
+  XFILE::CFile* tmpFile = XBMC_CREATETEMPFILE("noaliastest");
   std::string noalias = XBMC_TEMPFILEPATH(tmpFile);
   std::string noaliastemp = noalias;
 
 #if defined(TARGET_DARWIN_OSX)
-  XFILE::CFile *aliasDestFile = XBMC_CREATETEMPFILE("aliastest");
+  XFILE::CFile* aliasDestFile = XBMC_CREATETEMPFILE("aliastest");
   std::string alias = XBMC_TEMPFILEPATH(aliasDestFile);
 
   //we only need the path here so delete the alias file
@@ -84,8 +84,8 @@ TEST(TestAliasShortcutUtils, TranslateAliasShortcut)
   EXPECT_STREQ("", emptyString.c_str());
 
   // translate non-existent file should result in no change...
-  std::string nonExistingFile="/IDontExistsNormally/somefile.txt";
-  std::string resolvedNonExistingFile=nonExistingFile;
+  std::string nonExistingFile = "/IDontExistsNormally/somefile.txt";
+  std::string resolvedNonExistingFile = nonExistingFile;
   TranslateAliasShortcut(resolvedNonExistingFile);
   EXPECT_STREQ(resolvedNonExistingFile.c_str(), nonExistingFile.c_str());
 }

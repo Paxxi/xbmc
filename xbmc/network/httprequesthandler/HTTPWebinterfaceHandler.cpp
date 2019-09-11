@@ -20,7 +20,7 @@
 
 #define WEBSERVER_DIRECTORY_SEPARATOR "/"
 
-CHTTPWebinterfaceHandler::CHTTPWebinterfaceHandler(const HTTPRequest &request)
+CHTTPWebinterfaceHandler::CHTTPWebinterfaceHandler(const HTTPRequest& request)
   : CHTTPFileHandler(request)
 {
   // resolve the URL into a file path and a HTTP response status
@@ -31,18 +31,20 @@ CHTTPWebinterfaceHandler::CHTTPWebinterfaceHandler(const HTTPRequest &request)
   SetFile(file, responseStatus);
 }
 
-bool CHTTPWebinterfaceHandler::CanHandleRequest(const HTTPRequest &request) const
+bool CHTTPWebinterfaceHandler::CanHandleRequest(const HTTPRequest& request) const
 {
   return true;
 }
 
-int CHTTPWebinterfaceHandler::ResolveUrl(const std::string &url, std::string &path)
+int CHTTPWebinterfaceHandler::ResolveUrl(const std::string& url, std::string& path)
 {
   ADDON::AddonPtr dummyAddon;
   return ResolveUrl(url, path, dummyAddon);
 }
 
-int CHTTPWebinterfaceHandler::ResolveUrl(const std::string &url, std::string &path, ADDON::AddonPtr &addon)
+int CHTTPWebinterfaceHandler::ResolveUrl(const std::string& url,
+                                         std::string& path,
+                                         ADDON::AddonPtr& addon)
 {
   // determine the addon and addon's path
   if (!ResolveAddon(url, addon, path))
@@ -72,13 +74,15 @@ int CHTTPWebinterfaceHandler::ResolveUrl(const std::string &url, std::string &pa
   return MHD_HTTP_OK;
 }
 
-bool CHTTPWebinterfaceHandler::ResolveAddon(const std::string &url, ADDON::AddonPtr &addon)
+bool CHTTPWebinterfaceHandler::ResolveAddon(const std::string& url, ADDON::AddonPtr& addon)
 {
   std::string addonPath;
   return ResolveAddon(url, addon, addonPath);
 }
 
-bool CHTTPWebinterfaceHandler::ResolveAddon(const std::string &url, ADDON::AddonPtr &addon, std::string &addonPath)
+bool CHTTPWebinterfaceHandler::ResolveAddon(const std::string& url,
+                                            ADDON::AddonPtr& addon,
+                                            std::string& addonPath)
 {
   std::string path = url;
 
@@ -103,7 +107,9 @@ bool CHTTPWebinterfaceHandler::ResolveAddon(const std::string &url, ADDON::Addon
     // determine the path within the addon
     path = StringUtils::Join(components, WEBSERVER_DIRECTORY_SEPARATOR);
   }
-  else if (!ADDON::CAddonSystemSettings::GetInstance().GetActive(ADDON::ADDON_WEB_INTERFACE, addon) || addon == NULL)
+  else if (!ADDON::CAddonSystemSettings::GetInstance().GetActive(ADDON::ADDON_WEB_INTERFACE,
+                                                                 addon) ||
+           addon == NULL)
     return false;
 
   // get the path of the addon

@@ -21,4 +21,4 @@ public:
   // Implementation of CPlayList
   bool Load(const std::string& strFileName) override;
 };
-}
+} // namespace PLAYLIST

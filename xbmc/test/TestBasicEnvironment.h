@@ -23,6 +23,7 @@ public:
 
   void SetUp() override;
   void TearDown() override;
+
 private:
   void SetUpError();
   std::string m_tempPath;

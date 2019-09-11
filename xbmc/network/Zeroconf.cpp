@@ -7,8 +7,6 @@
  */
 #include "Zeroconf.h"
 
-#include <cassert>
-
 #include "ServiceBroker.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
@@ -16,6 +14,8 @@
 #include "threads/CriticalSection.h"
 #include "threads/SingleLock.h"
 #include "utils/JobManager.h"
+
+#include <cassert>
 
 #if defined(HAS_AVAHI)
 #include "platform/linux/network/ZeroconfAvahi.h"
@@ -33,21 +33,26 @@
 //should be optimized away
 class CZeroconfDummy : public CZeroconf
 {
-  virtual bool doPublishService(const std::string&, const std::string&, const std::string&, unsigned int, const std::vector<std::pair<std::string, std::string> >&)
+  virtual bool doPublishService(const std::string&,
+                                const std::string&,
+                                const std::string&,
+                                unsigned int,
+                                const std::vector<std::pair<std::string, std::string>>&)
   {
     return false;
   }
 
-  virtual bool doForceReAnnounceService(const std::string&){return false;}
-  virtual bool doRemoveService(const std::string& fcr_ident){return false;}
-  virtual void doStop(){}
+  virtual bool doForceReAnnounceService(const std::string&) { return false; }
+  virtual bool doRemoveService(const std::string& fcr_ident) { return false; }
+  virtual void doStop() {}
 };
 #endif
 
 std::atomic_flag CZeroconf::sm_singleton_guard = ATOMIC_FLAG_INIT;
 CZeroconf* CZeroconf::smp_instance = 0;
 
-CZeroconf::CZeroconf():mp_crit_sec(new CCriticalSection)
+CZeroconf::CZeroconf()
+  : mp_crit_sec(new CCriticalSection)
 {
 }
 
@@ -60,14 +65,16 @@ bool CZeroconf::PublishService(const std::string& fcr_identifier,
                                const std::string& fcr_type,
                                const std::string& fcr_name,
                                unsigned int f_port,
-                               std::vector<std::pair<std::string, std::string> > txt /* = std::vector<std::pair<std::string, std::string> >() */)
+                               std::vector<std::pair<std::string, std::string>>
+                                   txt /* = std::vector<std::pair<std::string, std::string> >() */)
 {
   CSingleLock lock(*mp_crit_sec);
   CZeroconf::PublishInfo info = {fcr_type, fcr_name, f_port, txt};
-  std::pair<tServiceMap::const_iterator, bool> ret = m_service_map.insert(std::make_pair(fcr_identifier, info));
-  if(!ret.second) //identifier exists
+  std::pair<tServiceMap::const_iterator, bool> ret =
+      m_service_map.insert(std::make_pair(fcr_identifier, info));
+  if (!ret.second) //identifier exists
     return false;
-  if(m_started)
+  if (m_started)
     CJobManager::GetInstance().AddJob(new CPublish(fcr_identifier, info), NULL);
 
   //not yet started, so its just queued
@@ -78,10 +85,10 @@ bool CZeroconf::RemoveService(const std::string& fcr_identifier)
 {
   CSingleLock lock(*mp_crit_sec);
   tServiceMap::iterator it = m_service_map.find(fcr_identifier);
-  if(it == m_service_map.end())
+  if (it == m_service_map.end())
     return false;
   m_service_map.erase(it);
-  if(m_started)
+  if (m_started)
     return doRemoveService(fcr_identifier);
   else
     return true;
@@ -104,15 +111,16 @@ bool CZeroconf::HasService(const std::string& fcr_identifier) const
 bool CZeroconf::Start()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(!IsZCdaemonRunning())
+  if (!IsZCdaemonRunning())
   {
-    const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
+    const std::shared_ptr<CSettings> settings =
+        CServiceBroker::GetSettingsComponent()->GetSettings();
     settings->SetBool(CSettings::SETTING_SERVICES_ZEROCONF, false);
     if (settings->GetBool(CSettings::SETTING_SERVICES_AIRPLAY))
       settings->SetBool(CSettings::SETTING_SERVICES_AIRPLAY, false);
     return false;
   }
-  if(m_started)
+  if (m_started)
     return true;
   m_started = true;
 
@@ -123,16 +131,16 @@ bool CZeroconf::Start()
 void CZeroconf::Stop()
 {
   CSingleLock lock(*mp_crit_sec);
-  if(!m_started)
+  if (!m_started)
     return;
   doStop();
   m_started = false;
 }
 
-CZeroconf*  CZeroconf::GetInstance()
+CZeroconf* CZeroconf::GetInstance()
 {
   CAtomicSpinLock lock(sm_singleton_guard);
-  if(!smp_instance)
+  if (!smp_instance)
   {
 #ifndef HAS_ZEROCONF
     smp_instance = new CZeroconfDummy;
@@ -140,11 +148,11 @@ CZeroconf*  CZeroconf::GetInstance()
 #if defined(TARGET_DARWIN)
     smp_instance = new CZeroconfDarwin;
 #elif defined(HAS_AVAHI)
-    smp_instance  = new CZeroconfAvahi;
+    smp_instance = new CZeroconfAvahi;
 #elif defined(TARGET_ANDROID)
-    smp_instance  = new CZeroconfAndroid;
+    smp_instance = new CZeroconfAndroid;
 #elif defined(HAS_MDNS)
-    smp_instance  = new CZeroconfMDNS;
+    smp_instance = new CZeroconfMDNS;
 #endif
 #endif
   }

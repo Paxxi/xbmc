@@ -12,12 +12,11 @@
 
 namespace PLAYLIST
 {
-class CPlayListURL :
-      public CPlayList
+class CPlayListURL : public CPlayList
 {
 public:
   CPlayListURL(void);
   ~CPlayListURL(void) override;
   bool Load(const std::string& strFileName) override;
 };
-}
+} // namespace PLAYLIST

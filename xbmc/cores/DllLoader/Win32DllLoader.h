@@ -18,7 +18,7 @@ public:
   class Import
   {
   public:
-    void *table;
+    void* table;
     uintptr_t function;
   };
 
@@ -34,11 +34,11 @@ public:
   virtual bool HasSymbols();
 
 private:
-  void OverrideImports(const std::string &dll);
+  void OverrideImports(const std::string& dll);
   void RestoreImports();
-  static bool ResolveImport(const char *dllName, const char *functionName, void **fixup);
-  static bool ResolveOrdinal(const char *dllName, unsigned long ordinal, void **fixup);
-  bool NeedsHooking(const char *dllName);
+  static bool ResolveImport(const char* dllName, const char* functionName, void** fixup);
+  static bool ResolveOrdinal(const char* dllName, unsigned long ordinal, void** fixup);
+  bool NeedsHooking(const char* dllName);
 
   HMODULE m_dllHandle;
   bool bIsSystemDll;
@@ -46,4 +46,3 @@ private:
   std::vector<Import> m_overriddenImports;
   std::vector<HMODULE> m_referencedDlls;
 };
-

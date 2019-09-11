@@ -12,25 +12,26 @@ class CVector
 {
 public:
   CVector() = default;
-  constexpr CVector(float xCoord, float yCoord):x(xCoord), y(yCoord) {}
+  constexpr CVector(float xCoord, float yCoord)
+    : x(xCoord)
+    , y(yCoord)
+  {
+  }
 
-  constexpr CVector operator+(const CVector &other) const
+  constexpr CVector operator+(const CVector& other) const
   {
     return CVector(x + other.x, y + other.y);
   }
 
-  constexpr CVector operator-(const CVector &other) const
+  constexpr CVector operator-(const CVector& other) const
   {
     return CVector(x - other.x, y - other.y);
   }
 
-  CVector& operator+=(const CVector &other);
-  CVector& operator-=(const CVector &other);
+  CVector& operator+=(const CVector& other);
+  CVector& operator-=(const CVector& other);
 
-  constexpr float scalar(const CVector &other) const
-  {
-    return x * other.x + y * other.y;
-  }
+  constexpr float scalar(const CVector& other) const { return x * other.x + y * other.y; }
 
   float length() const;
 

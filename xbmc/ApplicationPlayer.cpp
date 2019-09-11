@@ -21,7 +21,6 @@
 
 CApplicationPlayer::CApplicationPlayer()
 {
-
 }
 
 std::shared_ptr<IPlayer> CApplicationPlayer::GetInternal() const
@@ -57,7 +56,9 @@ void CApplicationPlayer::CloseFile(bool reopen)
   }
 }
 
-void CApplicationPlayer::CreatePlayer(const CPlayerCoreFactory &factory, const std::string &player, IPlayerCallback& callback)
+void CApplicationPlayer::CreatePlayer(const CPlayerCoreFactory& factory,
+                                      const std::string& player,
+                                      IPlayerCallback& callback)
 {
   CSingleLock lock(m_playerLock);
   if (!m_pPlayer)
@@ -77,9 +78,11 @@ std::string CApplicationPlayer::GetCurrentPlayer()
   return "";
 }
 
-bool CApplicationPlayer::OpenFile(const CFileItem& item, const CPlayerOptions& options,
-                                  const CPlayerCoreFactory &factory,
-                                  const std::string &playerName, IPlayerCallback& callback)
+bool CApplicationPlayer::OpenFile(const CFileItem& item,
+                                  const CPlayerOptions& options,
+                                  const CPlayerCoreFactory& factory,
+                                  const std::string& playerName,
+                                  IPlayerCallback& callback)
 {
   // get player type
   std::string newPlayer;
@@ -150,13 +153,12 @@ bool CApplicationPlayer::OpenFile(const CFileItem& item, const CPlayerOptions& o
   return ret;
 }
 
-void CApplicationPlayer::OpenNext(const CPlayerCoreFactory &factory)
+void CApplicationPlayer::OpenNext(const CPlayerCoreFactory& factory)
 {
   if (m_nextItem.pItem)
   {
-    OpenFile(*m_nextItem.pItem, m_nextItem.options,
-             factory,
-             m_nextItem.playerName, *m_nextItem.callback);
+    OpenFile(*m_nextItem.pItem, m_nextItem.options, factory, m_nextItem.playerName,
+             *m_nextItem.callback);
     m_nextItem.pItem.reset();
   }
 }
@@ -185,8 +187,7 @@ int CApplicationPlayer::GetChapterCount()
     return 0;
 }
 
-void CApplicationPlayer::GetChapterName(std::string& strChapterName,
-                                        int chapterIdx)
+void CApplicationPlayer::GetChapterName(std::string& strChapterName, int chapterIdx)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -390,7 +391,8 @@ int64_t CApplicationPlayer::GetTotalTime() const
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
   {
-    int64_t total = CDataCacheCore::GetInstance().GetMaxTime() - CDataCacheCore::GetInstance().GetMinTime();
+    int64_t total =
+        CDataCacheCore::GetInstance().GetMaxTime() - CDataCacheCore::GetInstance().GetMinTime();
     return total;
   }
   else
@@ -553,7 +555,7 @@ std::string CApplicationPlayer::GetPlayerState()
     return "";
 }
 
-bool CApplicationPlayer::QueueNextFile(const CFileItem &file)
+bool CApplicationPlayer::QueueNextFile(const CFileItem& file)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   return (player && player->QueueNextFile(file));
@@ -572,21 +574,21 @@ void CApplicationPlayer::OnNothingToQueueNotify()
     player->OnNothingToQueueNotify();
 }
 
-void CApplicationPlayer::GetVideoStreamInfo(int streamId, VideoStreamInfo &info)
+void CApplicationPlayer::GetVideoStreamInfo(int streamId, VideoStreamInfo& info)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
     player->GetVideoStreamInfo(streamId, info);
 }
 
-void CApplicationPlayer::GetAudioStreamInfo(int index, AudioStreamInfo &info)
+void CApplicationPlayer::GetAudioStreamInfo(int index, AudioStreamInfo& info)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
     player->GetAudioStreamInfo(index, info);
 }
 
-int CApplicationPlayer::GetPrograms(std::vector<ProgramInfo> &programs)
+int CApplicationPlayer::GetPrograms(std::vector<ProgramInfo>& programs)
 {
   int ret = 0;
   std::shared_ptr<IPlayer> player = GetInternal();
@@ -611,13 +613,13 @@ int CApplicationPlayer::GetProgramsCount()
   return ret;
 }
 
-bool CApplicationPlayer::OnAction(const CAction &action)
+bool CApplicationPlayer::OnAction(const CAction& action)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   return (player && player->OnAction(action));
 }
 
-int  CApplicationPlayer::GetAudioStreamCount()
+int CApplicationPlayer::GetAudioStreamCount()
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -662,7 +664,7 @@ void CApplicationPlayer::SetAudioStream(int iStream)
   }
 }
 
-void CApplicationPlayer::GetSubtitleStreamInfo(int index, SubtitleStreamInfo &info)
+void CApplicationPlayer::GetSubtitleStreamInfo(int index, SubtitleStreamInfo& info)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -749,21 +751,21 @@ void CApplicationPlayer::LoadPage(int p, int sp, unsigned char* buffer)
     player->LoadPage(p, sp, buffer);
 }
 
-void CApplicationPlayer::GetAudioCapabilities(std::vector<int> &audioCaps)
+void CApplicationPlayer::GetAudioCapabilities(std::vector<int>& audioCaps)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
     player->GetAudioCapabilities(audioCaps);
 }
 
-void CApplicationPlayer::GetSubtitleCapabilities(std::vector<int> &subCaps)
+void CApplicationPlayer::GetSubtitleCapabilities(std::vector<int>& subCaps)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
     player->GetSubtitleCapabilities(subCaps);
 }
 
-int  CApplicationPlayer::SeekChapter(int iChapter)
+int CApplicationPlayer::SeekChapter(int iChapter)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -779,7 +781,7 @@ void CApplicationPlayer::SetPlaySpeed(float speed)
     return;
 
   if (!IsPlayingAudio() && !IsPlayingVideo())
-    return ;
+    return;
 
   SetSpeed(speed);
 }
@@ -822,7 +824,8 @@ void CApplicationPlayer::FrameMove()
   {
     if (CDataCacheCore::GetInstance().IsPlayerStateChanged())
       // CApplicationMessenger would be overhead because we are already in gui thread
-      CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_STATE_CHANGED);
+      CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_NOTIFY_ALL, 0, 0,
+                                                               GUI_MSG_STATE_CHANGED);
   }
 }
 
@@ -840,7 +843,8 @@ void CApplicationPlayer::FlushRenderer()
     player->FlushRenderer();
 }
 
-void CApplicationPlayer::SetRenderViewMode(int mode, float zoom, float par, float shift, bool stretch)
+void CApplicationPlayer::SetRenderViewMode(
+    int mode, float zoom, float par, float shift, bool stretch)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -935,7 +939,10 @@ unsigned int CApplicationPlayer::RenderCaptureAlloc()
     return 0;
 }
 
-void CApplicationPlayer::RenderCapture(unsigned int captureId, unsigned int width, unsigned int height, int flags)
+void CApplicationPlayer::RenderCapture(unsigned int captureId,
+                                       unsigned int width,
+                                       unsigned int height,
+                                       int flags)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)
@@ -949,7 +956,10 @@ void CApplicationPlayer::RenderCaptureRelease(unsigned int captureId)
     player->RenderCaptureRelease(captureId);
 }
 
-bool CApplicationPlayer::RenderCaptureGetPixels(unsigned int captureId, unsigned int millis, uint8_t *buffer, unsigned int size)
+bool CApplicationPlayer::RenderCaptureGetPixels(unsigned int captureId,
+                                                unsigned int millis,
+                                                uint8_t* buffer,
+                                                unsigned int size)
 {
   std::shared_ptr<IPlayer> player = GetInternal();
   if (player)

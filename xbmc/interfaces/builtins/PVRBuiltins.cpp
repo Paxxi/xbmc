@@ -46,14 +46,15 @@ static int SeekPercentage(const std::vector<std::string>& params)
 {
   if (params.empty())
   {
-    CLog::Log(LOGERROR,"PVR.SeekPercentage(n) - No argument given");
+    CLog::Log(LOGERROR, "PVR.SeekPercentage(n) - No argument given");
   }
   else
   {
     const float fTimeshiftPercentage = static_cast<float>(std::atof(params.front().c_str()));
     if (fTimeshiftPercentage < 0 || fTimeshiftPercentage > 100)
     {
-      CLog::Log(LOGERROR,"PVR.SeekPercentage(n) - Invalid argument (%f), must be in range 0-100", fTimeshiftPercentage);
+      CLog::Log(LOGERROR, "PVR.SeekPercentage(n) - Invalid argument (%f), must be in range 0-100",
+                fTimeshiftPercentage);
     }
     else if (g_application.GetAppPlayer().IsPlaying())
     {
@@ -65,7 +66,9 @@ static int SeekPercentage(const std::vector<std::string>& params)
       int iTimeshiftBufferStart = 0;
       infoMgr.GetInt(iTimeshiftBufferStart, PVR_TIMESHIFT_PROGRESS_BUFFER_START);
 
-      float fPlayerPercentage = static_cast<float>(iTimeshiftProgressDuration) / g_application.GetTotalTime() * (fTimeshiftPercentage - iTimeshiftBufferStart);
+      float fPlayerPercentage = static_cast<float>(iTimeshiftProgressDuration) /
+                                g_application.GetTotalTime() *
+                                (fTimeshiftPercentage - iTimeshiftBufferStart);
       fPlayerPercentage = std::max(0.0f, std::min(fPlayerPercentage, 100.0f));
 
       g_application.SeekPercentage(fPlayerPercentage);
@@ -106,8 +109,11 @@ static int SeekPercentage(const std::vector<std::string>& params)
 CBuiltins::CommandMap CPVRBuiltins::GetOperations() const
 {
   return {
-           {"pvr.searchmissingchannelicons",  {"Search for missing channel icons", 0, SearchMissingIcons}},
-           {"pvr.togglerecordplayingchannel", {"Toggle recording on playing channel", 0, ToggleRecordPlayingChannel}},
-           {"pvr.seekpercentage",             {"Performs a seek to the given percentage in timeshift buffer", 1, SeekPercentage}},
-         };
+      {"pvr.searchmissingchannelicons",
+       {"Search for missing channel icons", 0, SearchMissingIcons}},
+      {"pvr.togglerecordplayingchannel",
+       {"Toggle recording on playing channel", 0, ToggleRecordPlayingChannel}},
+      {"pvr.seekpercentage",
+       {"Performs a seek to the given percentage in timeshift buffer", 1, SeekPercentage}},
+  };
 }

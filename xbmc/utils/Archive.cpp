@@ -27,7 +27,7 @@ using namespace XFILE;
 //arbitrarily chosen, should be plenty big enough for our strings
 //without causing random bad things happening
 //not very bad, just tiny bad
-#define MAX_STRING_SIZE 100*1024*1024
+#define MAX_STRING_SIZE 100 * 1024 * 1024
 
 CArchive::CArchive(CFile* pFile, int mode)
 {
@@ -395,7 +395,8 @@ void CArchive::FlushBuffer()
 {
   if (m_iMode == store && m_BufferPos != m_pBuffer.get())
   {
-    if (m_pFile->Write(m_pBuffer.get(), m_BufferPos - m_pBuffer.get()) != m_BufferPos - m_pBuffer.get())
+    if (m_pFile->Write(m_pBuffer.get(), m_BufferPos - m_pBuffer.get()) !=
+        m_BufferPos - m_pBuffer.get())
       CLog::Log(LOGERROR, "%s: Error flushing buffer", __FUNCTION__);
     else
     {
@@ -405,7 +406,7 @@ void CArchive::FlushBuffer()
   }
 }
 
-CArchive &CArchive::streamout_bufferwrap(const uint8_t *ptr, size_t size)
+CArchive& CArchive::streamout_bufferwrap(const uint8_t* ptr, size_t size)
 {
   do
   {
@@ -433,7 +434,7 @@ void CArchive::FillBuffer()
   }
 }
 
-CArchive &CArchive::streamin_bufferwrap(uint8_t *ptr, size_t size)
+CArchive& CArchive::streamin_bufferwrap(uint8_t* ptr, size_t size)
 {
   auto orig_ptr = ptr;
   auto orig_size = size;
@@ -444,8 +445,9 @@ CArchive &CArchive::streamin_bufferwrap(uint8_t *ptr, size_t size)
       FillBuffer();
       if (m_BufferRemain < CARCHIVE_BUFFER_MAX && m_BufferRemain < size)
       {
-        CLog::Log(LOGERROR, "%s: can't stream in: requested %lu bytes, was read %lu bytes", __FUNCTION__,
-            static_cast<unsigned long>(orig_size), static_cast<unsigned long>(ptr - orig_ptr + m_BufferRemain));
+        CLog::Log(LOGERROR, "%s: can't stream in: requested %lu bytes, was read %lu bytes",
+                  __FUNCTION__, static_cast<unsigned long>(orig_size),
+                  static_cast<unsigned long>(ptr - orig_ptr + m_BufferRemain));
 
         memset(orig_ptr, 0, orig_size);
         return *this;

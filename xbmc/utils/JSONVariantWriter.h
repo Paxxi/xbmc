@@ -17,5 +17,5 @@ class CJSONVariantWriter
 public:
   CJSONVariantWriter() = delete;
 
-  static bool Write(const CVariant &value, std::string& output, bool compact);
+  static bool Write(const CVariant& value, std::string& output, bool compact);
 };

@@ -53,10 +53,7 @@ protected:
     addons.push_back(addon);
   }
 
-  void TearDown() override
-  {
-    database.Close();
-  }
+  void TearDown() override { database.Close(); }
 };
 
 

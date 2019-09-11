@@ -6,28 +6,29 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "utils/URIUtils.h"
 #include "FileDirectoryFactory.h"
-#include "UDFDirectory.h"
+
 #include "RSSDirectory.h"
+#include "UDFDirectory.h"
+#include "utils/URIUtils.h"
 #if defined(TARGET_ANDROID)
 #include "platform/android/filesystem/APKDirectory.h"
 #endif
-#include "XbtDirectory.h"
-#include "ZipDirectory.h"
-#include "SmartPlaylistDirectory.h"
-#include "playlists/SmartPlayList.h"
-#include "PlaylistFileDirectory.h"
-#include "playlists/PlayListFactory.h"
+#include "AudioBookFileDirectory.h"
 #include "Directory.h"
 #include "FileItem.h"
-#include "utils/StringUtils.h"
-#include "URL.h"
+#include "PlaylistFileDirectory.h"
 #include "ServiceBroker.h"
+#include "SmartPlaylistDirectory.h"
+#include "URL.h"
+#include "XbtDirectory.h"
+#include "ZipDirectory.h"
 #include "addons/AudioDecoder.h"
 #include "addons/VFSEntry.h"
 #include "addons/binary-addons/BinaryAddonBase.h"
-#include "AudioBookFileDirectory.h"
+#include "playlists/PlayListFactory.h"
+#include "playlists/SmartPlayList.h"
+#include "utils/StringUtils.h"
 
 using namespace ADDON;
 using namespace XFILE;
@@ -38,12 +39,14 @@ CFileDirectoryFactory::CFileDirectoryFactory(void) = default;
 CFileDirectoryFactory::~CFileDirectoryFactory(void) = default;
 
 // return NULL + set pItem->m_bIsFolder to remove it completely from list.
-IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem, const std::string& strMask)
+IFileDirectory* CFileDirectoryFactory::Create(const CURL& url,
+                                              CFileItem* pItem,
+                                              const std::string& strMask)
 {
   if (url.IsProtocol("stack")) // disqualify stack as we need to work with each of the parts instead
     return NULL;
 
-  std::string strExtension=URIUtils::GetExtension(url);
+  std::string strExtension = URIUtils::GetExtension(url);
   StringUtils::ToLower(strExtension);
   if (!strExtension.empty() && CServiceBroker::IsBinaryAddonCacheUp())
   {
@@ -159,7 +162,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       pItem->SetLabel(playlist.GetName());
       pItem->SetLabelPreformatted(true);
     }
-    IFileDirectory* pDir=new CSmartPlaylistDirectory;
+    IFileDirectory* pDir = new CSmartPlaylistDirectory;
     return pDir; // treat as directory
   }
   if (CPlayListFactory::IsPlaylist(url))
@@ -167,7 +170,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     // currently we only return the directory if it contains
     // more than one file.  Reason is that .pls and .m3u may be used
     // for links to http streams etc.
-    IFileDirectory *pDir = new CPlaylistFileDirectory();
+    IFileDirectory* pDir = new CPlaylistFileDirectory();
     CFileItemList items;
     if (pDir->GetDirectory(url, items))
     {
@@ -190,4 +193,3 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   }
   return NULL;
 }
-

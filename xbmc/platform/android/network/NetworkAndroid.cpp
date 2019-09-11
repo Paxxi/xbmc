@@ -25,7 +25,9 @@
 #include <netinet/in.h>
 #include <sys/wait.h>
 
-CNetworkInterfaceAndroid::CNetworkInterfaceAndroid(CJNINetwork network, CJNILinkProperties lp, CJNINetworkInterface intf)
+CNetworkInterfaceAndroid::CNetworkInterfaceAndroid(CJNINetwork network,
+                                                   CJNILinkProperties lp,
+                                                   CJNINetworkInterface intf)
   : m_network(network)
   , m_lp(lp)
   , m_intf(intf)
@@ -38,7 +40,7 @@ std::vector<std::string> CNetworkInterfaceAndroid::GetNameServers()
   std::vector<std::string> ret;
 
   CJNIList<CJNIInetAddress> lia = m_lp.getDnsServers();
-  for (int i=0; i < lia.size(); ++i)
+  for (int i = 0; i < lia.size(); ++i)
   {
     ret.push_back(lia.get(i).getHostAddress());
   }
@@ -77,13 +79,10 @@ std::string CNetworkInterfaceAndroid::GetMacAddress() const
   }
   if (interfaceMacAddrRaw.size() >= 6)
   {
-    return (StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X",
-                                      (uint8_t)interfaceMacAddrRaw[0],
-                                      (uint8_t)interfaceMacAddrRaw[1],
-                                      (uint8_t)interfaceMacAddrRaw[2],
-                                      (uint8_t)interfaceMacAddrRaw[3],
-                                      (uint8_t)interfaceMacAddrRaw[4],
-                                      (uint8_t)interfaceMacAddrRaw[5]));
+    return (StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X", (uint8_t)interfaceMacAddrRaw[0],
+                                (uint8_t)interfaceMacAddrRaw[1], (uint8_t)interfaceMacAddrRaw[2],
+                                (uint8_t)interfaceMacAddrRaw[3], (uint8_t)interfaceMacAddrRaw[4],
+                                (uint8_t)interfaceMacAddrRaw[5]));
   }
   return "";
 }
@@ -108,20 +107,20 @@ bool CNetworkInterfaceAndroid::GetHostMacAddress(unsigned long host_ip, std::str
 
   memset(&areq, 0x0, sizeof(areq));
 
-  sin = (struct sockaddr_in *) &areq.arp_pa;
+  sin = (struct sockaddr_in*)&areq.arp_pa;
   sin->sin_family = AF_INET;
   sin->sin_addr.s_addr = host_ip;
 
-  sin = (struct sockaddr_in *) &areq.arp_ha;
+  sin = (struct sockaddr_in*)&areq.arp_ha;
   sin->sin_family = ARPHRD_ETHER;
 
   strncpy(areq.arp_dev, m_name.c_str(), sizeof(areq.arp_dev));
-  areq.arp_dev[sizeof(areq.arp_dev)-1] = '\0';
+  areq.arp_dev[sizeof(areq.arp_dev) - 1] = '\0';
 
   int sock = socket(AF_INET, SOCK_DGRAM, 0);
   if (sock != -1)
   {
-    int result = ioctl (sock, SIOCGARP, (caddr_t) &areq);
+    int result = ioctl(sock, SIOCGARP, (caddr_t)&areq);
     close(sock);
 
     if (result != 0)
@@ -134,11 +133,12 @@ bool CNetworkInterfaceAndroid::GetHostMacAddress(unsigned long host_ip, std::str
     return false;
 
   struct sockaddr* res = &areq.arp_ha;
-  mac = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X",
-    (uint8_t) res->sa_data[0], (uint8_t) res->sa_data[1], (uint8_t) res->sa_data[2],
-    (uint8_t) res->sa_data[3], (uint8_t) res->sa_data[4], (uint8_t) res->sa_data[5]);
+  mac = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X", (uint8_t)res->sa_data[0],
+                            (uint8_t)res->sa_data[1], (uint8_t)res->sa_data[2],
+                            (uint8_t)res->sa_data[3], (uint8_t)res->sa_data[4],
+                            (uint8_t)res->sa_data[5]);
 
-  for (int i=0; i<6; ++i)
+  for (int i = 0; i < 6; ++i)
     if (res->sa_data[i])
       return true;
 
@@ -152,9 +152,9 @@ std::string CNetworkInterfaceAndroid::GetCurrentIPAddress() const
     return "";
 
   int i = 0;
-  for (;i < lla.size(); ++i)
+  for (; i < lla.size(); ++i)
   {
-    if (lla.get(i).getAddress().getAddress().size() > 4)  // IPV4 only
+    if (lla.get(i).getAddress().getAddress().size() > 4) // IPV4 only
       continue;
     break;
   }
@@ -172,9 +172,9 @@ std::string CNetworkInterfaceAndroid::GetCurrentNetmask() const
     return "";
 
   int i = 0;
-  for (;i < lla.size(); ++i)
+  for (; i < lla.size(); ++i)
   {
-    if (lla.get(i).getAddress().getAddress().size() > 4)  // IPV4 only
+    if (lla.get(i).getAddress().getAddress().size() > 4) // IPV4 only
       continue;
     break;
   }
@@ -185,7 +185,8 @@ std::string CNetworkInterfaceAndroid::GetCurrentNetmask() const
 
   int prefix = la.getPrefixLength();
   unsigned long mask = (0xFFFFFFFF << (32 - prefix)) & 0xFFFFFFFF;
-  return StringUtils::Format("%lu.%lu.%lu.%lu", mask >> 24, (mask >> 16) & 0xFF, (mask >> 8) & 0xFF, mask & 0xFF);
+  return StringUtils::Format("%lu.%lu.%lu.%lu", mask >> 24, (mask >> 16) & 0xFF, (mask >> 8) & 0xFF,
+                             mask & 0xFF);
 }
 
 std::string CNetworkInterfaceAndroid::GetCurrentDefaultGateway() const
@@ -211,9 +212,9 @@ std::string CNetworkInterfaceAndroid::GetHostName()
     return "";
 
   int i = 0;
-  for (;i < lla.size(); ++i)
+  for (; i < lla.size(); ++i)
   {
-    if (lla.get(i).getAddress().getAddress().size() > 4)  // IPV4 only
+    if (lla.get(i).getAddress().getAddress().size() > 4) // IPV4 only
       continue;
     break;
   }
@@ -228,7 +229,7 @@ std::string CNetworkInterfaceAndroid::GetHostName()
 /*************************/
 
 CNetworkAndroid::CNetworkAndroid()
- : CNetworkBase()
+  : CNetworkBase()
 {
   RetrieveInterfaces();
 }
@@ -243,7 +244,8 @@ CNetworkAndroid::~CNetworkAndroid()
 
 bool CNetworkAndroid::GetHostName(std::string& hostname)
 {
-  CNetworkInterfaceAndroid* intf = dynamic_cast<CNetworkInterfaceAndroid*>(GetFirstConnectedInterface());
+  CNetworkInterfaceAndroid* intf =
+      dynamic_cast<CNetworkInterfaceAndroid*>(GetFirstConnectedInterface());
   if (intf)
   {
     hostname = intf->GetHostName();
@@ -262,7 +264,7 @@ CNetworkInterface* CNetworkAndroid::GetFirstConnectedInterface()
 {
   CSingleLock lock(m_refreshMutex);
 
-  for(CNetworkInterface* intf : m_interfaces)
+  for (CNetworkInterface* intf : m_interfaces)
   {
     if (intf->IsEnabled() && intf->IsConnected() && !intf->GetCurrentDefaultGateway().empty())
       return intf;
@@ -273,7 +275,8 @@ CNetworkInterface* CNetworkAndroid::GetFirstConnectedInterface()
 
 std::vector<std::string> CNetworkAndroid::GetNameServers()
 {
-  CNetworkInterfaceAndroid* intf = static_cast<CNetworkInterfaceAndroid*>(GetFirstConnectedInterface());
+  CNetworkInterfaceAndroid* intf =
+      static_cast<CNetworkInterfaceAndroid*>(GetFirstConnectedInterface());
   if (intf)
     return intf->GetNameServers();
 
@@ -282,14 +285,15 @@ std::vector<std::string> CNetworkAndroid::GetNameServers()
 
 bool CNetworkAndroid::PingHost(unsigned long remote_ip, unsigned int timeout_ms)
 {
-  char cmd_line [64];
+  char cmd_line[64];
 
   struct in_addr host_ip;
   host_ip.s_addr = remote_ip;
 
-  sprintf(cmd_line, "ping -c 1 -w %d %s", timeout_ms / 1000 + (timeout_ms % 1000) != 0, inet_ntoa(host_ip));
+  sprintf(cmd_line, "ping -c 1 -w %d %s", timeout_ms / 1000 + (timeout_ms % 1000) != 0,
+          inet_ntoa(host_ip));
 
-  int status = system (cmd_line);
+  int status = system(cmd_line);
 
   int result = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
 
@@ -326,15 +330,19 @@ void CNetworkAndroid::RetrieveInterfaces()
       if (xbmc_jnienv()->ExceptionCheck())
       {
         xbmc_jnienv()->ExceptionClear();
-        CLog::Log(LOGERROR, "CNetworkAndroid::RetrieveInterfaces Cannot get interface by name: %s", lp.getInterfaceName().c_str());
+        CLog::Log(LOGERROR, "CNetworkAndroid::RetrieveInterfaces Cannot get interface by name: %s",
+                  lp.getInterfaceName().c_str());
         continue;
       }
       if (intf)
         m_interfaces.push_back(new CNetworkInterfaceAndroid(n, lp, intf));
       else
-        CLog::Log(LOGERROR, "CNetworkAndroid::RetrieveInterfaces Cannot get interface by name: %s", lp.getInterfaceName().c_str());
+        CLog::Log(LOGERROR, "CNetworkAndroid::RetrieveInterfaces Cannot get interface by name: %s",
+                  lp.getInterfaceName().c_str());
     }
     else
-      CLog::Log(LOGERROR, "CNetworkAndroid::RetrieveInterfaces Cannot get link properties for network: %s", n.toString().c_str());
+      CLog::Log(LOGERROR,
+                "CNetworkAndroid::RetrieveInterfaces Cannot get link properties for network: %s",
+                n.toString().c_str());
   }
 }

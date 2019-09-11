@@ -16,6 +16,6 @@ public:
   IFileItemListModifier() = default;
   virtual ~IFileItemListModifier() = default;
 
-  virtual bool CanModify(const CFileItemList &items) const = 0;
-  virtual bool Modify(CFileItemList &items) const = 0;
+  virtual bool CanModify(const CFileItemList& items) const = 0;
+  virtual bool Modify(CFileItemList& items) const = 0;
 };

@@ -6,11 +6,13 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include "cores/AudioEngine/Utils/AEUtil.h"
 #include "ActiveAEResampleFFMPEG.h"
+
+#include "cores/AudioEngine/Utils/AEUtil.h"
 #include "utils/log.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/channel_layout.h>
 #include <libavutil/opt.h>
 #include <libswresample/swresample.h>
@@ -29,8 +31,14 @@ CActiveAEResampleFFMPEG::~CActiveAEResampleFFMPEG()
   swr_free(&m_pContext);
 }
 
-bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfig, bool upmix, bool normalize, double centerMix,
-                                   CAEChannelInfo *remapLayout, AEQuality quality, bool force_resample)
+bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig,
+                                   SampleConfig srcConfig,
+                                   bool upmix,
+                                   bool normalize,
+                                   double centerMix,
+                                   CAEChannelInfo* remapLayout,
+                                   AEQuality quality,
+                                   bool force_resample)
 {
   m_dst_chan_layout = dstConfig.channel_layout;
   m_dst_channels = dstConfig.channels;
@@ -53,9 +61,8 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
   if (m_src_chan_layout == 0)
     m_src_chan_layout = av_get_default_channel_layout(m_src_channels);
 
-  m_pContext = swr_alloc_set_opts(NULL, m_dst_chan_layout, m_dst_fmt, m_dst_rate,
-                                                        m_src_chan_layout, m_src_fmt, m_src_rate,
-                                                        0, NULL);
+  m_pContext = swr_alloc_set_opts(NULL, m_dst_chan_layout, m_dst_fmt, m_dst_rate, m_src_chan_layout,
+                                  m_src_fmt, m_src_rate, 0, NULL);
 
   if (!m_pContext)
   {
@@ -63,21 +70,21 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
     return false;
   }
 
-  if(quality == AE_QUALITY_HIGH)
+  if (quality == AE_QUALITY_HIGH)
   {
     av_opt_set_double(m_pContext, "cutoff", 1.0, 0);
-    av_opt_set_int(m_pContext,"filter_size", 256, 0);
+    av_opt_set_int(m_pContext, "filter_size", 256, 0);
   }
-  else if(quality == AE_QUALITY_MID)
+  else if (quality == AE_QUALITY_MID)
   {
     // 0.97 is default cutoff so use (1.0 - 0.97) / 2.0 + 0.97
     av_opt_set_double(m_pContext, "cutoff", 0.985, 0);
-    av_opt_set_int(m_pContext,"filter_size", 64, 0);
+    av_opt_set_int(m_pContext, "filter_size", 64, 0);
   }
-  else if(quality == AE_QUALITY_LOW)
+  else if (quality == AE_QUALITY_LOW)
   {
     av_opt_set_double(m_pContext, "cutoff", 0.97, 0);
-    av_opt_set_int(m_pContext,"filter_size", 32, 0);
+    av_opt_set_int(m_pContext, "filter_size", 32, 0);
   }
 
   if (m_dst_fmt == AV_SAMPLE_FMT_S32 || m_dst_fmt == AV_SAMPLE_FMT_S32P)
@@ -88,10 +95,10 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
   // tell resampler to clamp float values
   // not required for sink stage (remapLayout == true)
   if ((m_dst_fmt == AV_SAMPLE_FMT_FLT || m_dst_fmt == AV_SAMPLE_FMT_FLTP) &&
-      (m_src_fmt == AV_SAMPLE_FMT_FLT || m_src_fmt == AV_SAMPLE_FMT_FLTP) &&
-      !remapLayout && normalize)
+      (m_src_fmt == AV_SAMPLE_FMT_FLT || m_src_fmt == AV_SAMPLE_FMT_FLTP) && !remapLayout &&
+      normalize)
   {
-     av_opt_set_double(m_pContext, "rematrix_maxval", 1.0, 0);
+    av_opt_set_double(m_pContext, "rematrix_maxval", 1.0, 0);
   }
 
   av_opt_set_double(m_pContext, "center_mix_level", centerMix, 0);
@@ -103,7 +110,7 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
     // the channel is mapped by setting coef 1.0
     memset(m_rematrix, 0, sizeof(m_rematrix));
     m_dst_chan_layout = 0;
-    for (unsigned int out=0; out<remapLayout->Count(); out++)
+    for (unsigned int out = 0; out < remapLayout->Count(); out++)
     {
       m_dst_chan_layout += ((uint64_t)1) << out;
       int idx = CAEUtil::GetAVChannelIndex((*remapLayout)[out], m_src_chan_layout);
@@ -126,31 +133,31 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
   else if (upmix && m_src_channels == 2 && m_dst_channels > 2)
   {
     memset(m_rematrix, 0, sizeof(m_rematrix));
-    for (int out=0; out<m_dst_channels; out++)
+    for (int out = 0; out < m_dst_channels; out++)
     {
       uint64_t out_chan = av_channel_layout_extract_channel(m_dst_chan_layout, out);
-      switch(out_chan)
+      switch (out_chan)
       {
-        case AV_CH_FRONT_LEFT:
-        case AV_CH_BACK_LEFT:
-        case AV_CH_SIDE_LEFT:
-          m_rematrix[out][0] = 1.0;
-          break;
-        case AV_CH_FRONT_RIGHT:
-        case AV_CH_BACK_RIGHT:
-        case AV_CH_SIDE_RIGHT:
-          m_rematrix[out][1] = 1.0;
-          break;
-        case AV_CH_FRONT_CENTER:
-          m_rematrix[out][0] = 0.5;
-          m_rematrix[out][1] = 0.5;
-          break;
-        case AV_CH_LOW_FREQUENCY:
-          m_rematrix[out][0] = 0.5;
-          m_rematrix[out][1] = 0.5;
-          break;
-        default:
-          break;
+      case AV_CH_FRONT_LEFT:
+      case AV_CH_BACK_LEFT:
+      case AV_CH_SIDE_LEFT:
+        m_rematrix[out][0] = 1.0;
+        break;
+      case AV_CH_FRONT_RIGHT:
+      case AV_CH_BACK_RIGHT:
+      case AV_CH_SIDE_RIGHT:
+        m_rematrix[out][1] = 1.0;
+        break;
+      case AV_CH_FRONT_CENTER:
+        m_rematrix[out][0] = 0.5;
+        m_rematrix[out][1] = 0.5;
+        break;
+      case AV_CH_LOW_FREQUENCY:
+        m_rematrix[out][0] = 0.5;
+        m_rematrix[out][1] = 0.5;
+        break;
+      default:
+        break;
       }
     }
 
@@ -161,7 +168,7 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
     }
   }
 
-  if(swr_init(m_pContext) < 0)
+  if (swr_init(m_pContext) < 0)
   {
     CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - init resampler failed");
     return false;
@@ -169,14 +176,15 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
   return true;
 }
 
-int CActiveAEResampleFFMPEG::Resample(uint8_t **dst_buffer, int dst_samples, uint8_t **src_buffer, int src_samples, double ratio)
+int CActiveAEResampleFFMPEG::Resample(
+    uint8_t** dst_buffer, int dst_samples, uint8_t** src_buffer, int src_samples, double ratio)
 {
   int delta = 0;
   int distance = 0;
   if (ratio != 1.0)
   {
-    delta = (src_samples*ratio-src_samples)*m_dst_rate/m_src_rate;
-    distance = src_samples*m_dst_rate/m_src_rate;
+    delta = (src_samples * ratio - src_samples) * m_dst_rate / m_src_rate;
+    distance = src_samples * m_dst_rate / m_src_rate;
     m_doesResample = true;
   }
 
@@ -190,7 +198,8 @@ int CActiveAEResampleFFMPEG::Resample(uint8_t **dst_buffer, int dst_samples, uin
   }
 
   //! @bug libavresample isn't const correct
-  int ret = swr_convert(m_pContext, dst_buffer, dst_samples, const_cast<const uint8_t**>(src_buffer), src_samples);
+  int ret = swr_convert(m_pContext, dst_buffer, dst_samples,
+                        const_cast<const uint8_t**>(src_buffer), src_samples);
   if (ret < 0)
   {
     CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Resample - resample failed");
@@ -206,10 +215,10 @@ int CActiveAEResampleFFMPEG::Resample(uint8_t **dst_buffer, int dst_samples, uin
       int planes = av_sample_fmt_is_planar(m_dst_fmt) ? m_dst_channels : 1;
       int samples = ret * m_dst_channels / planes;
       uint8_t *src, *dst;
-      for (int i=0; i<planes; i++)
+      for (int i = 0; i < planes; i++)
       {
         src = dst = dst_buffer[i];
-        for (int j=0; j<samples; j++)
+        for (int j = 0; j < samples; j++)
         {
 #ifndef WORDS_BIGENDIAN
           src++;
@@ -236,10 +245,10 @@ int CActiveAEResampleFFMPEG::Resample(uint8_t **dst_buffer, int dst_samples, uin
     {
       int planes = av_sample_fmt_is_planar(m_dst_fmt) ? m_dst_channels : 1;
       int samples = ret * m_dst_channels / planes;
-      for (int i=0; i<planes; i++)
+      for (int i = 0; i < planes; i++)
       {
         uint32_t* buf = (uint32_t*)dst_buffer[i];
-        for (int j=0; j<samples; j++)
+        for (int j = 0; j < samples; j++)
         {
           *buf = *buf >> (32 - m_dst_bits - m_dst_dither_bits);
           buf++;
@@ -257,8 +266,7 @@ int64_t CActiveAEResampleFFMPEG::GetDelay(int64_t base)
 
 int CActiveAEResampleFFMPEG::GetBufferedSamples()
 {
-  return av_rescale_rnd(swr_get_delay(m_pContext, m_src_rate),
-                                    m_dst_rate, m_src_rate, AV_ROUND_UP);
+  return av_rescale_rnd(swr_get_delay(m_pContext, m_src_rate), m_dst_rate, m_src_rate, AV_ROUND_UP);
 }
 
 int CActiveAEResampleFFMPEG::CalcDstSampleCount(int src_samples, int dst_rate, int src_rate)

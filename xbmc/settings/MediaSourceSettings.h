@@ -27,19 +27,25 @@ public:
   void OnSettingsUnloaded() override;
 
   bool Load();
-  bool Load(const std::string &file);
+  bool Load(const std::string& file);
   bool Save();
-  bool Save(const std::string &file) const;
+  bool Save(const std::string& file) const;
   void Clear();
 
-  VECSOURCES* GetSources(const std::string &type);
-  const std::string& GetDefaultSource(const std::string &type) const;
-  void SetDefaultSource(const std::string &type, const std::string &source);
+  VECSOURCES* GetSources(const std::string& type);
+  const std::string& GetDefaultSource(const std::string& type) const;
+  void SetDefaultSource(const std::string& type, const std::string& source);
 
-  bool UpdateSource(const std::string &strType, const std::string &strOldName, const std::string &strUpdateChild, const std::string &strUpdateValue);
-  bool DeleteSource(const std::string &strType, const std::string &strName, const std::string &strPath, bool virtualSource = false);
-  bool AddShare(const std::string &type, const CMediaSource &share);
-  bool UpdateShare(const std::string &type, const std::string &oldName, const CMediaSource &share);
+  bool UpdateSource(const std::string& strType,
+                    const std::string& strOldName,
+                    const std::string& strUpdateChild,
+                    const std::string& strUpdateValue);
+  bool DeleteSource(const std::string& strType,
+                    const std::string& strName,
+                    const std::string& strPath,
+                    bool virtualSource = false);
+  bool AddShare(const std::string& type, const CMediaSource& share);
+  bool UpdateShare(const std::string& type, const std::string& oldName, const CMediaSource& share);
 
 protected:
   CMediaSourceSettings();
@@ -48,9 +54,15 @@ protected:
   ~CMediaSourceSettings() override;
 
 private:
-  bool GetSource(const std::string &category, const TiXmlNode *source, CMediaSource &share);
-  void GetSources(const TiXmlNode* pRootElement, const std::string& strTagName, VECSOURCES& items, std::string& strDefault);
-  bool SetSources(TiXmlNode *root, const char *section, const VECSOURCES &shares, const std::string &defaultPath) const;
+  bool GetSource(const std::string& category, const TiXmlNode* source, CMediaSource& share);
+  void GetSources(const TiXmlNode* pRootElement,
+                  const std::string& strTagName,
+                  VECSOURCES& items,
+                  std::string& strDefault);
+  bool SetSources(TiXmlNode* root,
+                  const char* section,
+                  const VECSOURCES& shares,
+                  const std::string& defaultPath) const;
 
   VECSOURCES m_programSources;
   VECSOURCES m_pictureSources;

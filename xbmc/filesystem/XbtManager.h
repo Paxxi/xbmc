@@ -55,4 +55,4 @@ private:
 
   mutable XBTFReaders m_readers;
 };
-}
+} // namespace XFILE

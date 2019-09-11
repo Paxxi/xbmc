@@ -16,7 +16,7 @@ extern "C"
 #endif
   // DisplayLink
   //
-  bool Cocoa_CVDisplayLinkCreate(void *displayLinkcallback, void *displayLinkContext);
+  bool Cocoa_CVDisplayLinkCreate(void* displayLinkcallback, void* displayLinkContext);
   void Cocoa_CVDisplayLinkRelease(void);
   void Cocoa_CVDisplayLinkUpdate(void);
 
@@ -27,17 +27,16 @@ extern "C"
 
   // Devices
   //
-  char* Cocoa_MountPoint2DeviceName(char *path);
-  bool Cocoa_GetVolumeNameFromMountPoint(const std::string &mountPoint, std::string &volumeName);
+  char* Cocoa_MountPoint2DeviceName(char* path);
+  bool Cocoa_GetVolumeNameFromMountPoint(const std::string& mountPoint, std::string& volumeName);
 
   // Mouse.
   //
   void Cocoa_HideMouse();
   void Cocoa_ShowMouse();
 
-  const char *Cocoa_Paste() ;
+  const char* Cocoa_Paste();
 
 #ifdef __cplusplus
 }
 #endif
-

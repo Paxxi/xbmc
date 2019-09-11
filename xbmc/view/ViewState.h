@@ -21,7 +21,10 @@
 class CViewState
 {
 public:
-  CViewState(int viewMode, SortBy sortMethod, SortOrder sortOrder, SortAttribute sortAttributes = SortAttributeNone)
+  CViewState(int viewMode,
+             SortBy sortMethod,
+             SortOrder sortOrder,
+             SortAttribute sortAttributes = SortAttributeNone)
   {
     m_viewMode = viewMode;
     m_sortDescription.sortBy = sortMethod;

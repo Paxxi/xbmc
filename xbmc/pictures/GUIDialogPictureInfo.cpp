@@ -22,7 +22,7 @@
 #define SLIDESHOW_STRING_BASE 21800 - SLIDESHOW_LABELS_START
 
 CGUIDialogPictureInfo::CGUIDialogPictureInfo(void)
-    : CGUIDialog(WINDOW_DIALOG_PICTURE_INFO, "DialogPictureInfo.xml")
+  : CGUIDialog(WINDOW_DIALOG_PICTURE_INFO, "DialogPictureInfo.xml")
 {
   m_pictureInfo = new CFileItemList;
   m_loadType = KEEP_IN_MEMORY;
@@ -33,9 +33,13 @@ CGUIDialogPictureInfo::~CGUIDialogPictureInfo(void)
   delete m_pictureInfo;
 }
 
-void CGUIDialogPictureInfo::SetPicture(CFileItem *item)
+void CGUIDialogPictureInfo::SetPicture(CFileItem* item)
 {
-  CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPicturesInfoProvider().SetCurrentSlide(item);
+  CServiceBroker::GetGUI()
+      ->GetInfoManager()
+      .GetInfoProviders()
+      .GetPicturesInfoProvider()
+      .SetCurrentSlide(item);
 }
 
 void CGUIDialogPictureInfo::OnInitWindow()
@@ -48,28 +52,33 @@ bool CGUIDialogPictureInfo::OnAction(const CAction& action)
 {
   switch (action.GetID())
   {
-    // if we're running from slideshow mode, drop the "next picture" and "previous picture" actions through.
-    case ACTION_NEXT_PICTURE:
-    case ACTION_PREV_PICTURE:
-    case ACTION_PLAYER_PLAY:
-    case ACTION_PAUSE:
-      if (CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow() == WINDOW_SLIDESHOW)
-      {
-        CGUIWindow* pWindow = CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_SLIDESHOW);
-        return pWindow->OnAction(action);
-      }
-      break;
+  // if we're running from slideshow mode, drop the "next picture" and "previous picture" actions through.
+  case ACTION_NEXT_PICTURE:
+  case ACTION_PREV_PICTURE:
+  case ACTION_PLAYER_PLAY:
+  case ACTION_PAUSE:
+    if (CServiceBroker::GetGUI()->GetWindowManager().GetActiveWindow() == WINDOW_SLIDESHOW)
+    {
+      CGUIWindow* pWindow =
+          CServiceBroker::GetGUI()->GetWindowManager().GetWindow(WINDOW_SLIDESHOW);
+      return pWindow->OnAction(action);
+    }
+    break;
 
-    case ACTION_SHOW_INFO:
-      Close();
-      return true;
+  case ACTION_SHOW_INFO:
+    Close();
+    return true;
   };
   return CGUIDialog::OnAction(action);
 }
 
 void CGUIDialogPictureInfo::FrameMove()
 {
-  const CFileItem* item = CServiceBroker::GetGUI()->GetInfoManager().GetInfoProviders().GetPicturesInfoProvider().GetCurrentSlide();
+  const CFileItem* item = CServiceBroker::GetGUI()
+                              ->GetInfoManager()
+                              .GetInfoProviders()
+                              .GetPicturesInfoProvider()
+                              .GetCurrentSlide();
   if (item && item->GetPath() != m_currentPicture)
   {
     UpdatePictureInfo();
@@ -88,7 +97,8 @@ void CGUIDialogPictureInfo::UpdatePictureInfo()
   {
     // we only want to add SLIDESHOW_EXIF_DATE_TIME
     // so we skip the other date formats
-    if (info == SLIDESHOW_EXIF_DATE || info == SLIDESHOW_EXIF_LONG_DATE || info == SLIDESHOW_EXIF_LONG_DATE_TIME )
+    if (info == SLIDESHOW_EXIF_DATE || info == SLIDESHOW_EXIF_LONG_DATE ||
+        info == SLIDESHOW_EXIF_LONG_DATE_TIME)
       continue;
 
     std::string picInfo = CServiceBroker::GetGUI()->GetInfoManager().GetLabel(info);

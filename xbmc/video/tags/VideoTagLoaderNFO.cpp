@@ -57,48 +57,49 @@ CInfoScanner::INFO_TYPE CVideoTagLoaderNFO::Load(CVideoInfoTag& tag,
   }
 
   std::string type;
-  switch(result)
+  switch (result)
   {
-    case CInfoScanner::COMBINED_NFO:
-      type = "mixed";
-      break;
-    case CInfoScanner::FULL_NFO:
-      type = "full";
-      break;
-    case CInfoScanner::URL_NFO:
-      type = "URL";
-      break;
-    case CInfoScanner::NO_NFO:
-      type = "";
-      break;
-    case CInfoScanner::OVERRIDE_NFO:
-      type = "override";
-      break;
-    default:
-      type = "malformed";
+  case CInfoScanner::COMBINED_NFO:
+    type = "mixed";
+    break;
+  case CInfoScanner::FULL_NFO:
+    type = "full";
+    break;
+  case CInfoScanner::URL_NFO:
+    type = "URL";
+    break;
+  case CInfoScanner::NO_NFO:
+    type = "";
+    break;
+  case CInfoScanner::OVERRIDE_NFO:
+    type = "override";
+    break;
+  default:
+    type = "malformed";
   }
   if (result != CInfoScanner::NO_NFO)
-    CLog::Log(LOGDEBUG, "VideoInfoScanner: Found matching %s NFO file: %s", type.c_str(), CURL::GetRedacted(m_path).c_str());
+    CLog::Log(LOGDEBUG, "VideoInfoScanner: Found matching %s NFO file: %s", type.c_str(),
+              CURL::GetRedacted(m_path).c_str());
   else
-    CLog::Log(LOGDEBUG, "VideoInfoScanner: No NFO file found. Using title search for '%s'", CURL::GetRedacted(m_item.GetPath()).c_str());
+    CLog::Log(LOGDEBUG, "VideoInfoScanner: No NFO file found. Using title search for '%s'",
+              CURL::GetRedacted(m_item.GetPath()).c_str());
 
   return result;
 }
 
-std::string CVideoTagLoaderNFO::FindNFO(const CFileItem& item,
-                                        bool movieFolder) const
+std::string CVideoTagLoaderNFO::FindNFO(const CFileItem& item, bool movieFolder) const
 {
   std::string nfoFile;
   // Find a matching .nfo file
   if (!item.m_bIsFolder)
   {
-    if (URIUtils::IsInRAR(item.GetPath())) // we have a rarred item - we want to check outside the rars
+    if (URIUtils::IsInRAR(
+            item.GetPath())) // we have a rarred item - we want to check outside the rars
     {
       CFileItem item2(item);
       CURL url(m_item.GetPath());
       std::string strPath = URIUtils::GetDirectory(url.GetHostName());
-      item2.SetPath(URIUtils::AddFileToFolder(strPath,
-                                            URIUtils::GetFileName(item.GetPath())));
+      item2.SetPath(URIUtils::AddFileToFolder(strPath, URIUtils::GetFileName(item.GetPath())));
       return FindNFO(item2, movieFolder);
     }
 
@@ -196,4 +197,3 @@ std::string CVideoTagLoaderNFO::FindNFO(const CFileItem& item,
 
   return nfoFile;
 }
-

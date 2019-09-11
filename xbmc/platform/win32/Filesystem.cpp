@@ -48,7 +48,7 @@ space_info space(const std::string& path, std::error_code& ec)
   return sp;
 }
 
-std::string temp_directory_path(std::error_code &ec)
+std::string temp_directory_path(std::error_code& ec)
 {
   wchar_t lpTempPathBuffer[MAX_PATH + 1];
 
@@ -62,7 +62,7 @@ std::string temp_directory_path(std::error_code &ec)
   return win::FromW(lpTempPathBuffer);
 }
 
-std::string create_temp_directory(std::error_code &ec)
+std::string create_temp_directory(std::error_code& ec)
 {
   wchar_t lpTempPathBuffer[MAX_PATH + 1];
 
@@ -89,7 +89,7 @@ std::string create_temp_directory(std::error_code &ec)
   return win::FromW(lpTempPathBuffer);
 }
 
-std::string temp_file_path(std::string, std::error_code &ec)
+std::string temp_file_path(std::string, std::error_code& ec)
 {
   wchar_t lpTempPathBuffer[MAX_PATH + 1];
 
@@ -110,6 +110,6 @@ std::string temp_file_path(std::string, std::error_code &ec)
   return win::FromW(lpTempPathBuffer);
 }
 
-}
-}
-}
+} // namespace FILESYSTEM
+} // namespace PLATFORM
+} // namespace KODI

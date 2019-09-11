@@ -20,7 +20,8 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-CLirc::CLirc() : CThread("Lirc")
+CLirc::CLirc()
+  : CThread("Lirc")
 {
 }
 
@@ -73,7 +74,7 @@ void CLirc::Process()
       }
     }
 
-    char *code;
+    char* code;
     while (!m_bStop)
     {
       int ret = lirc_nextcode(&code);
@@ -85,7 +86,8 @@ void CLirc::Process()
       }
       if (code != nullptr)
       {
-        int profileId = CServiceBroker::GetSettingsComponent()->GetProfileManager()->GetCurrentProfileId();
+        int profileId =
+            CServiceBroker::GetSettingsComponent()->GetProfileManager()->GetCurrentProfileId();
         if (m_profileId != profileId)
         {
           m_profileId = profileId;
@@ -100,7 +102,7 @@ void CLirc::Process()
   lirc_deinit();
 }
 
-void CLirc::ProcessCode(char *buf)
+void CLirc::ProcessCode(char* buf)
 {
   // Parse the result. Sample line:
   // 000000037ff07bdd 00 OK mceusb
@@ -113,9 +115,8 @@ void CLirc::ProcessCode(char *buf)
   // Some template LIRC configuration have button names in apostrophes or quotes.
   // If we got a quoted button name, strip 'em
   unsigned int buttonNameLen = strlen(buttonName);
-  if (buttonNameLen > 2 &&
-      ((buttonName[0] == '\'' && buttonName[buttonNameLen-1] == '\'') ||
-      ((buttonName[0] == '"' && buttonName[buttonNameLen-1] == '"'))))
+  if (buttonNameLen > 2 && ((buttonName[0] == '\'' && buttonName[buttonNameLen - 1] == '\'') ||
+                            ((buttonName[0] == '"' && buttonName[buttonNameLen - 1] == '"'))))
   {
     memmove(buttonName, buttonName + 1, buttonNameLen - 2);
     buttonName[buttonNameLen - 2] = '\0';
@@ -123,14 +124,15 @@ void CLirc::ProcessCode(char *buf)
 
   int button = m_irTranslator.TranslateButton(deviceName, buttonName);
 
-  char *end = nullptr;
+  char* end = nullptr;
   long repeat = strtol(repeatStr, &end, 16);
   if (!end || *end != 0)
     CLog::Log(LOGERROR, "LIRC: invalid non-numeric character in expression %s", repeatStr);
 
   if (repeat == 0)
   {
-    CLog::Log(LOGDEBUG, "LIRC: - NEW %s %s %s %s (%s)", &scanCode[0], &repeatStr[0], &buttonName[0], &deviceName[0], buttonName);
+    CLog::Log(LOGDEBUG, "LIRC: - NEW %s %s %s %s (%s)", &scanCode[0], &repeatStr[0], &buttonName[0],
+              &deviceName[0], buttonName);
     m_firstClickTime = XbmcThreads::SystemClockMillis();
 
     XBMC_Event newEvent;

@@ -17,16 +17,18 @@
 #include <sys/syscall.h>
 #endif
 
+#include "utils/log.h"
+
 #include <cerrno>
 #include <cstdlib>
 #include <system_error>
 
-#include "utils/log.h"
-
 using namespace KODI::UTILS::POSIX;
 
 CSharedMemory::CSharedMemory(std::size_t size)
-: m_size{size}, m_fd{Open()}, m_mmap(nullptr, m_size, PROT_READ | PROT_WRITE, MAP_SHARED, m_fd, 0)
+  : m_size{size}
+  , m_fd{Open()}
+  , m_mmap(nullptr, m_size, PROT_READ | PROT_WRITE, MAP_SHARED, m_fd, 0)
 {
 }
 

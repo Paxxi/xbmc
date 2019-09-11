@@ -87,7 +87,7 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
     if (ierr == WSANOTINITIALISED)
     {
       WSADATA wd;
-      if (WSAStartup(MAKEWORD(2,2), &wd) != 0)
+      if (WSAStartup(MAKEWORD(2, 2), &wd) != 0)
         CLog::Log(LOGERROR, "UDP: WSAStartup failed");
     }
 #else
@@ -99,11 +99,11 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
 
   // make sure we can reuse the address
 #ifdef WINSOCK_VERSION
-  const char yes=1;
+  const char yes = 1;
 #else
   int yes = 1;
 #endif
-  if (setsockopt(m_iSock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int))==-1)
+  if (setsockopt(m_iSock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
   {
     CLog::Log(LOGWARNING, "UDP: Could not enable the address reuse options");
     CLog::Log(LOGWARNING, "UDP: %s", strerror(errno));
@@ -135,12 +135,14 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
 
     if (bind(m_iSock, (struct sockaddr*)&m_addr.saddr, m_addr.size) != 0)
     {
-      CLog::Log(LOGWARNING, "UDP: Error binding socket on port %d (ipv6 : %s)", m_iPort, m_ipv6Socket ? "true" : "false" );
+      CLog::Log(LOGWARNING, "UDP: Error binding socket on port %d (ipv6 : %s)", m_iPort,
+                m_ipv6Socket ? "true" : "false");
       CLog::Log(LOGWARNING, "UDP: %s", strerror(errno));
     }
     else
     {
-      CLog::Log(LOGNOTICE, "UDP: Listening on port %d (ipv6 : %s)", m_iPort, m_ipv6Socket ? "true" : "false");
+      CLog::Log(LOGNOTICE, "UDP: Listening on port %d (ipv6 : %s)", m_iPort,
+                m_ipv6Socket ? "true" : "false");
       SetBound();
       SetReady();
       break;
@@ -160,7 +162,7 @@ bool CPosixUDPSocket::Bind(bool localOnly, int port, int range)
 
 void CPosixUDPSocket::Close()
 {
-  if (m_iSock>=0)
+  if (m_iSock >= 0)
   {
     close(m_iSock);
     m_iSock = INVALID_SOCKET;
@@ -169,18 +171,17 @@ void CPosixUDPSocket::Close()
   SetReady(false);
 }
 
-int CPosixUDPSocket::Read(CAddress& addr, const int buffersize, void *buffer)
+int CPosixUDPSocket::Read(CAddress& addr, const int buffersize, void* buffer)
 {
   if (m_ipv6Socket)
     addr.SetAddress("::");
-  return (int)recvfrom(m_iSock, (char*)buffer, (size_t)buffersize, 0,
-                       (struct sockaddr*)&addr.saddr, &addr.size);
+  return (int)recvfrom(m_iSock, (char*)buffer, (size_t)buffersize, 0, (struct sockaddr*)&addr.saddr,
+                       &addr.size);
 }
 
-int CPosixUDPSocket::SendTo(const CAddress& addr, const int buffersize,
-                          const void *buffer)
+int CPosixUDPSocket::SendTo(const CAddress& addr, const int buffersize, const void* buffer)
 {
-  return (int)sendto(m_iSock, (const char *)buffer, (size_t)buffersize, 0,
+  return (int)sendto(m_iSock, (const char*)buffer, (size_t)buffersize, 0,
                      (const struct sockaddr*)&addr.saddr, addr.size);
 }
 
@@ -202,7 +203,7 @@ CSocketListener::CSocketListener()
   Clear();
 }
 
-void CSocketListener::AddSocket(CBaseSocket *sock)
+void CSocketListener::AddSocket(CBaseSocket* sock)
 {
   // WARNING: not threadsafe (which is ok for now)
 
@@ -219,7 +220,7 @@ void CSocketListener::AddSocket(CBaseSocket *sock)
 
 bool CSocketListener::Listen(int timeout)
 {
-  if (m_sockets.size()==0)
+  if (m_sockets.size() == 0)
   {
     CLog::Log(LOGERROR, "SOCK: No sockets to listen for");
     throw LISTENEMPTY;
@@ -229,7 +230,7 @@ bool CSocketListener::Listen(int timeout)
   m_iCurrentSocket = 0;
 
   FD_ZERO(&m_fdset);
-  for (unsigned int i = 0 ; i<m_sockets.size() ; i++)
+  for (unsigned int i = 0; i < m_sockets.size(); i++)
   {
     FD_SET(m_sockets[i]->Socket(), &m_fdset);
   }
@@ -240,9 +241,9 @@ bool CSocketListener::Listen(int timeout)
   tv.tv_usec = rem * 1000;
   tv.tv_sec = timeout / 1000;
 
-  m_iReadyCount = select(m_iMaxSockets+1, &m_fdset, NULL, NULL, (timeout < 0 ? NULL : &tv));
+  m_iReadyCount = select(m_iMaxSockets + 1, &m_fdset, NULL, NULL, (timeout < 0 ? NULL : &tv));
 
-  if (m_iReadyCount<0)
+  if (m_iReadyCount < 0)
   {
     CLog::Log(LOGERROR, "SOCK: Error selecting socket(s)");
     Clear();
@@ -251,7 +252,7 @@ bool CSocketListener::Listen(int timeout)
   else
   {
     m_iCurrentSocket = 0;
-    return (m_iReadyCount>0);
+    return (m_iReadyCount > 0);
   }
 }
 
@@ -266,10 +267,10 @@ void CSocketListener::Clear()
 
 CBaseSocket* CSocketListener::GetFirstReadySocket()
 {
-  if (m_iReadyCount<=0)
+  if (m_iReadyCount <= 0)
     return NULL;
 
-  for (int i = 0 ; i < (int)m_sockets.size() ; i++)
+  for (int i = 0; i < (int)m_sockets.size(); i++)
   {
     if (FD_ISSET((m_sockets[i])->Socket(), &m_fdset))
     {
@@ -282,10 +283,10 @@ CBaseSocket* CSocketListener::GetFirstReadySocket()
 
 CBaseSocket* CSocketListener::GetNextReadySocket()
 {
-  if (m_iReadyCount<=0)
+  if (m_iReadyCount <= 0)
     return NULL;
 
-  for (int i = m_iCurrentSocket+1 ; i<(int)m_sockets.size() ; i++)
+  for (int i = m_iCurrentSocket + 1; i < (int)m_sockets.size(); i++)
   {
     if (FD_ISSET(m_sockets[i]->Socket(), &m_fdset))
     {

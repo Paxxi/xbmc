@@ -16,21 +16,21 @@
 
 #include <math.h>
 
-#define POPUP_SEEK_PROGRESS           401
+#define POPUP_SEEK_PROGRESS 401
 #define POPUP_SEEK_EPG_EVENT_PROGRESS 402
 #define POPUP_SEEK_TIMESHIFT_PROGRESS 403
 
 CGUIDialogSeekBar::CGUIDialogSeekBar(void)
   : CGUIDialog(WINDOW_DIALOG_SEEK_BAR, "DialogSeekBar.xml", DialogModalityType::MODELESS)
 {
-  m_loadType = LOAD_ON_GUI_INIT;    // the application class handles our resources
+  m_loadType = LOAD_ON_GUI_INIT; // the application class handles our resources
 }
 
 CGUIDialogSeekBar::~CGUIDialogSeekBar(void) = default;
 
 bool CGUIDialogSeekBar::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_INIT:
   case GUI_MSG_WINDOW_DEINIT:

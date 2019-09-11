@@ -26,71 +26,59 @@ public:
     NONE = 1000,
 
     // messages used in the whole system
-    GENERAL_RESYNC,                 //
-    GENERAL_FLUSH,                  // flush all buffers
-    GENERAL_RESET,                  // reset codecs for new data
+    GENERAL_RESYNC, //
+    GENERAL_FLUSH, // flush all buffers
+    GENERAL_RESET, // reset codecs for new data
     GENERAL_PAUSE,
-    GENERAL_STREAMCHANGE,           //
-    GENERAL_SYNCHRONIZE,            //
-    GENERAL_GUI_ACTION,             // gui action of some sort
-    GENERAL_EOF,                    // eof of stream
+    GENERAL_STREAMCHANGE, //
+    GENERAL_SYNCHRONIZE, //
+    GENERAL_GUI_ACTION, // gui action of some sort
+    GENERAL_EOF, // eof of stream
 
     // player core related messages (cVideoPlayer.cpp)
-    PLAYER_SET_AUDIOSTREAM,         //
-    PLAYER_SET_VIDEOSTREAM,         //
-    PLAYER_SET_SUBTITLESTREAM,      //
+    PLAYER_SET_AUDIOSTREAM, //
+    PLAYER_SET_VIDEOSTREAM, //
+    PLAYER_SET_SUBTITLESTREAM, //
     PLAYER_SET_SUBTITLESTREAM_VISIBLE, //
-    PLAYER_SET_STATE,               // restore the VideoPlayer to a certain state
+    PLAYER_SET_STATE, // restore the VideoPlayer to a certain state
     PLAYER_SET_PROGRAM,
     PLAYER_SET_UPDATE_STREAM_DETAILS, // player should update file item stream details with its current streams
-    PLAYER_SEEK,                    //
-    PLAYER_SEEK_CHAPTER,            //
-    PLAYER_SETSPEED,                // set the playback speed
+    PLAYER_SEEK, //
+    PLAYER_SEEK_CHAPTER, //
+    PLAYER_SETSPEED, // set the playback speed
     PLAYER_REQUEST_STATE,
     PLAYER_OPENFILE,
-    PLAYER_STARTED,                 // sent whenever a sub player has finished it's first frame after open
-    PLAYER_AVCHANGE,                // signal a change in audio, video or subtitle parameters
+    PLAYER_STARTED, // sent whenever a sub player has finished it's first frame after open
+    PLAYER_AVCHANGE, // signal a change in audio, video or subtitle parameters
     PLAYER_ABORT,
     PLAYER_REPORT_STATE,
     PLAYER_FRAME_ADVANCE,
 
     // demuxer related messages
-    DEMUXER_PACKET,                 // data packet
-    DEMUXER_RESET,                  // reset the demuxer
+    DEMUXER_PACKET, // data packet
+    DEMUXER_RESET, // reset the demuxer
 
     // video related messages
-    VIDEO_SET_ASPECT,               // set aspectratio of video
-    VIDEO_DRAIN,                    // wait for decoder to output last frame
+    VIDEO_SET_ASPECT, // set aspectratio of video
+    VIDEO_DRAIN, // wait for decoder to output last frame
 
     // subtitle related messages
     SUBTITLE_CLUTCHANGE,
     SUBTITLE_ADDFILE
   };
 
-  explicit CDVDMsg(Message msg)
-  {
-    m_message = msg;
-  }
+  explicit CDVDMsg(Message msg) { m_message = msg; }
 
   ~CDVDMsg() override = default;
 
   /**
    * checks for message type
    */
-  inline bool IsType(Message msg)
-  {
-    return (m_message == msg);
-  }
+  inline bool IsType(Message msg) { return (m_message == msg); }
 
-  inline Message GetMessageType()
-  {
-    return m_message;
-  }
+  inline Message GetMessageType() { return m_message; }
 
-  long GetNrOfReferences()
-  {
-    return m_refs;
-  }
+  long GetNrOfReferences() { return m_refs; }
 
 private:
   Message m_message;
@@ -102,17 +90,17 @@ private:
 //////
 ////////////////////////////////////////////////////////////////////////////////
 
-#define SYNCSOURCE_AUDIO  0x01
-#define SYNCSOURCE_VIDEO  0x02
+#define SYNCSOURCE_AUDIO 0x01
+#define SYNCSOURCE_VIDEO 0x02
 #define SYNCSOURCE_PLAYER 0x04
-#define SYNCSOURCE_ANY    0x08
+#define SYNCSOURCE_ANY 0x08
 
 class CDVDMsgGeneralSynchronizePriv;
 class CDVDMsgGeneralSynchronize : public CDVDMsg
 {
 public:
   CDVDMsgGeneralSynchronize(unsigned int timeout, unsigned int sources);
- ~CDVDMsgGeneralSynchronize() override;
+  ~CDVDMsgGeneralSynchronize() override;
   long Release() override;
 
   // waits until all threads waiting, released the object
@@ -124,14 +112,15 @@ private:
   class CDVDMsgGeneralSynchronizePriv* m_p;
 };
 
-template <typename T>
+template<typename T>
 class CDVDMsgType : public CDVDMsg
 {
 public:
-  CDVDMsgType(Message type, const T &value)
+  CDVDMsgType(Message type, const T& value)
     : CDVDMsg(type)
     , m_value(value)
-  {}
+  {
+  }
   operator T() { return m_value; }
   T m_value;
 };
@@ -149,8 +138,13 @@ typedef CDVDMsgType<double> CDVDMsgDouble;
 class CDVDMsgPlayerSetAudioStream : public CDVDMsg
 {
 public:
-  explicit CDVDMsgPlayerSetAudioStream(int streamId) : CDVDMsg(PLAYER_SET_AUDIOSTREAM) { m_streamId = streamId; }
+  explicit CDVDMsgPlayerSetAudioStream(int streamId)
+    : CDVDMsg(PLAYER_SET_AUDIOSTREAM)
+  {
+    m_streamId = streamId;
+  }
   int GetStreamId() { return m_streamId; }
+
 private:
   int m_streamId;
 };
@@ -158,8 +152,13 @@ private:
 class CDVDMsgPlayerSetVideoStream : public CDVDMsg
 {
 public:
-  explicit CDVDMsgPlayerSetVideoStream(int streamId) : CDVDMsg(PLAYER_SET_VIDEOSTREAM) { m_streamId = streamId; }
+  explicit CDVDMsgPlayerSetVideoStream(int streamId)
+    : CDVDMsg(PLAYER_SET_VIDEOSTREAM)
+  {
+    m_streamId = streamId;
+  }
   int GetStreamId() const { return m_streamId; }
+
 private:
   int m_streamId;
 };
@@ -167,8 +166,13 @@ private:
 class CDVDMsgPlayerSetSubtitleStream : public CDVDMsg
 {
 public:
-  explicit CDVDMsgPlayerSetSubtitleStream(int streamId) : CDVDMsg(PLAYER_SET_SUBTITLESTREAM) { m_streamId = streamId; }
+  explicit CDVDMsgPlayerSetSubtitleStream(int streamId)
+    : CDVDMsg(PLAYER_SET_SUBTITLESTREAM)
+  {
+    m_streamId = streamId;
+  }
   int GetStreamId() { return m_streamId; }
+
 private:
   int m_streamId;
 };
@@ -176,8 +180,13 @@ private:
 class CDVDMsgPlayerSetState : public CDVDMsg
 {
 public:
-  explicit CDVDMsgPlayerSetState(const std::string& state) : CDVDMsg(PLAYER_SET_STATE), m_state(state) {}
+  explicit CDVDMsgPlayerSetState(const std::string& state)
+    : CDVDMsg(PLAYER_SET_STATE)
+    , m_state(state)
+  {
+  }
   std::string GetState() { return m_state; }
+
 private:
   std::string m_state;
 };
@@ -196,9 +205,11 @@ public:
     bool trickplay = false;
   };
 
-  explicit CDVDMsgPlayerSeek(CDVDMsgPlayerSeek::CMode mode) : CDVDMsg(PLAYER_SEEK),
-    m_mode(mode)
-  {}
+  explicit CDVDMsgPlayerSeek(CDVDMsgPlayerSeek::CMode mode)
+    : CDVDMsg(PLAYER_SEEK)
+    , m_mode(mode)
+  {
+  }
   double GetTime() { return m_mode.time; }
   bool GetRelative() { return m_mode.relative; }
   bool GetBackward() { return m_mode.backward; }
@@ -213,17 +224,17 @@ private:
 
 class CDVDMsgPlayerSeekChapter : public CDVDMsg
 {
-  public:
-    explicit CDVDMsgPlayerSeekChapter(int iChapter)
-      : CDVDMsg(PLAYER_SEEK_CHAPTER)
-      , m_iChapter(iChapter)
-    {}
+public:
+  explicit CDVDMsgPlayerSeekChapter(int iChapter)
+    : CDVDMsg(PLAYER_SEEK_CHAPTER)
+    , m_iChapter(iChapter)
+  {
+  }
 
-    int GetChapter() const { return m_iChapter; }
+  int GetChapter() const { return m_iChapter; }
 
-  private:
-
-    int m_iChapter;
+private:
+  int m_iChapter;
 };
 
 class CDVDMsgPlayerSetSpeed : public CDVDMsg
@@ -236,17 +247,16 @@ public:
   };
 
   explicit CDVDMsgPlayerSetSpeed(SpeedParams params)
-  : CDVDMsg(PLAYER_SETSPEED)
-  , m_params(params)
-  {}
+    : CDVDMsg(PLAYER_SETSPEED)
+    , m_params(params)
+  {
+  }
 
   int GetSpeed() const { return m_params.m_speed; }
   bool IsTempo() const { return m_params.m_isTempo; }
 
 private:
-
   SpeedParams m_params;
-
 };
 
 class CDVDMsgOpenFile : public CDVDMsg
@@ -258,16 +268,16 @@ public:
     CPlayerOptions m_options;
   };
 
-  explicit CDVDMsgOpenFile(const FileParams &params)
-  : CDVDMsg(PLAYER_OPENFILE)
-  , m_params(params)
-  {}
+  explicit CDVDMsgOpenFile(const FileParams& params)
+    : CDVDMsg(PLAYER_OPENFILE)
+    , m_params(params)
+  {
+  }
 
   CFileItem& GetItem() { return m_params.m_item; }
   CPlayerOptions& GetOptions() { return m_params.m_options; }
 
 private:
-
   FileParams m_params;
 };
 
@@ -292,9 +302,11 @@ public:
 class CDVDMsgDemuxerReset : public CDVDMsg
 {
 public:
-  CDVDMsgDemuxerReset() : CDVDMsg(DEMUXER_RESET)  {}
+  CDVDMsgDemuxerReset()
+    : CDVDMsg(DEMUXER_RESET)
+  {
+  }
 };
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -313,7 +325,12 @@ public:
 class CDVDMsgSubtitleClutChange : public CDVDMsg
 {
 public:
-  explicit CDVDMsgSubtitleClutChange(uint8_t* data) : CDVDMsg(SUBTITLE_CLUTCHANGE) { memcpy(m_data, data, 16*4); }
+  explicit CDVDMsgSubtitleClutChange(uint8_t* data)
+    : CDVDMsg(SUBTITLE_CLUTCHANGE)
+  {
+    memcpy(m_data, data, 16 * 4);
+  }
   uint8_t m_data[16][4];
+
 private:
 };

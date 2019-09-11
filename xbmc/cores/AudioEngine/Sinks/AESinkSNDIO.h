@@ -19,31 +19,31 @@
 class CAESinkSNDIO : public IAESink
 {
 public:
-  const char *GetName() override { return "sndio"; }
+  const char* GetName() override { return "sndio"; }
 
   CAESinkSNDIO();
   ~CAESinkSNDIO() override;
 
   static void Register();
-  static IAESink* Create(std::string &device, AEAudioFormat &desiredFormat);
-  static void EnumerateDevicesEx(AEDeviceInfoList &list, bool force = false);
+  static IAESink* Create(std::string& device, AEAudioFormat& desiredFormat);
+  static void EnumerateDevicesEx(AEDeviceInfoList& list, bool force = false);
 
-  bool Initialize(AEAudioFormat &format, std::string &device) override;
+  bool Initialize(AEAudioFormat& format, std::string& device) override;
   void Deinitialize() override;
 
   virtual void Stop();
   void GetDelay(AEDelayStatus& status) override;
   double GetCacheTotal() override { return 0.0; }
-  unsigned int AddPackets(uint8_t **data, unsigned int frames, unsigned int offset) override;
+  unsigned int AddPackets(uint8_t** data, unsigned int frames, unsigned int offset) override;
   void Drain() override;
+
 private:
   void AudioFormatToPar(AEAudioFormat& format);
   bool ParToAudioFormat(AEAudioFormat& format);
-  static void OnmoveCb(void *arg, int delta);
+  static void OnmoveCb(void* arg, int delta);
 
-  struct sio_hdl *m_hdl;
+  struct sio_hdl* m_hdl;
   struct sio_par m_par;
   ssize_t m_played;
   ssize_t m_written;
 };
-

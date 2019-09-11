@@ -27,8 +27,12 @@ class IWindowDecorationHandler
 {
 public:
   virtual void OnWindowMove(wayland::seat_t const& seat, std::uint32_t serial) = 0;
-  virtual void OnWindowResize(wayland::seat_t const& seat, std::uint32_t serial, wayland::shell_surface_resize edge) = 0;
-  virtual void OnWindowShowContextMenu(wayland::seat_t const& seat, std::uint32_t serial, CPointInt position) = 0;
+  virtual void OnWindowResize(wayland::seat_t const& seat,
+                              std::uint32_t serial,
+                              wayland::shell_surface_resize edge) = 0;
+  virtual void OnWindowShowContextMenu(wayland::seat_t const& seat,
+                                       std::uint32_t serial,
+                                       CPointInt position) = 0;
   virtual void OnWindowMinimize() = 0;
   virtual void OnWindowMaximize() = 0;
   virtual void OnWindowClose() = 0;
@@ -36,6 +40,6 @@ public:
   virtual ~IWindowDecorationHandler() = default;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

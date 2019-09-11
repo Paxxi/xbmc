@@ -42,7 +42,8 @@ namespace ADDON
 
 void Interface_General::Init(AddonGlobalInterface* addonInterface)
 {
-  addonInterface->toKodi->kodi = static_cast<AddonToKodiFuncTable_kodi*>(malloc(sizeof(AddonToKodiFuncTable_kodi)));
+  addonInterface->toKodi->kodi =
+      static_cast<AddonToKodiFuncTable_kodi*>(malloc(sizeof(AddonToKodiFuncTable_kodi)));
 
   addonInterface->toKodi->kodi->get_addon_info = get_addon_info;
   addonInterface->toKodi->kodi->open_settings_dialog = open_settings_dialog;
@@ -111,7 +112,7 @@ char* Interface_General::get_addon_info(void* kodiBase, const char* id)
   else
   {
     CLog::Log(LOGERROR, "Interface_General::%s -  add-on '%s' requests invalid id '%s'",
-                          __FUNCTION__, addon->Name().c_str(), id);
+              __FUNCTION__, addon->Name().c_str(), id);
     return nullptr;
   }
 
@@ -124,7 +125,8 @@ bool Interface_General::open_settings_dialog(void* kodiBase)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__, kodiBase);
+    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__,
+              kodiBase);
     return false;
   }
 
@@ -132,7 +134,8 @@ bool Interface_General::open_settings_dialog(void* kodiBase)
   AddonPtr addonInfo;
   if (CServiceBroker::GetAddonMgr().GetAddon(addon->ID(), addonInfo))
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - Could not get addon information for '%s'", __FUNCTION__, addon->ID().c_str());
+    CLog::Log(LOGERROR, "Interface_General::%s - Could not get addon information for '%s'",
+              __FUNCTION__, addon->ID().c_str());
     return false;
   }
 
@@ -144,7 +147,8 @@ char* Interface_General::get_localized_string(void* kodiBase, long label_id)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (!addon)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__, kodiBase);
+    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__,
+              kodiBase);
     return nullptr;
   }
 
@@ -158,7 +162,10 @@ char* Interface_General::get_localized_string(void* kodiBase, long label_id)
   return buffer;
 }
 
-char* Interface_General::unknown_to_utf8(void* kodiBase, const char* source, bool* ret, bool failOnBadChar)
+char* Interface_General::unknown_to_utf8(void* kodiBase,
+                                         const char* source,
+                                         bool* ret,
+                                         bool failOnBadChar)
 {
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (!addon || !source || !ret)
@@ -179,57 +186,62 @@ char* Interface_General::get_language(void* kodiBase, int format, bool region)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (!addon)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__, kodiBase);
+    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__,
+              kodiBase);
     return nullptr;
   }
 
   std::string string = g_langInfo.GetEnglishLanguageName();
   switch (format)
   {
-    case LANG_FMT_ISO_639_1:
+  case LANG_FMT_ISO_639_1:
+  {
+    std::string langCode;
+    g_LangCodeExpander.ConvertToISO6391(string, langCode);
+    string = langCode;
+    if (region)
     {
-      std::string langCode;
-      g_LangCodeExpander.ConvertToISO6391(string, langCode);
-      string = langCode;
-      if (region)
-      {
-        std::string region2Code;
-        g_LangCodeExpander.ConvertToISO6391(g_langInfo.GetRegionLocale(), region2Code);
-        if (!region2Code.empty())
-          string += "-" + region2Code;
-      }
-      break;
+      std::string region2Code;
+      g_LangCodeExpander.ConvertToISO6391(g_langInfo.GetRegionLocale(), region2Code);
+      if (!region2Code.empty())
+        string += "-" + region2Code;
     }
-    case LANG_FMT_ISO_639_2:
+    break;
+  }
+  case LANG_FMT_ISO_639_2:
+  {
+    std::string langCode;
+    g_LangCodeExpander.ConvertToISO6392B(string, langCode);
+    string = langCode;
+    if (region)
     {
-      std::string langCode;
-      g_LangCodeExpander.ConvertToISO6392B(string, langCode);
-      string = langCode;
-      if (region)
-      {
-        std::string region3Code;
-        g_LangCodeExpander.ConvertToISO6392B(g_langInfo.GetRegionLocale(), region3Code);
-        if (!region3Code.empty())
-          string += "-" + region3Code;
-      }
-      break;
+      std::string region3Code;
+      g_LangCodeExpander.ConvertToISO6392B(g_langInfo.GetRegionLocale(), region3Code);
+      if (!region3Code.empty())
+        string += "-" + region3Code;
     }
-    case LANG_FMT_ENGLISH_NAME:
-    default:
-    {
-      if (region)
-        string += "-" + g_langInfo.GetCurrentRegion();
-      break;
-    }
+    break;
+  }
+  case LANG_FMT_ENGLISH_NAME:
+  default:
+  {
+    if (region)
+      string += "-" + g_langInfo.GetCurrentRegion();
+    break;
+  }
   }
 
   char* buffer = strdup(string.c_str());
   return buffer;
 }
 
-bool Interface_General::queue_notification(void* kodiBase, int type, const char* header,
-                                           const char* message, const char* imageFile,
-                                           unsigned int displayTime, bool withSound,
+bool Interface_General::queue_notification(void* kodiBase,
+                                           int type,
+                                           const char* header,
+                                           const char* message,
+                                           const char* imageFile,
+                                           unsigned int displayTime,
+                                           bool withSound,
                                            unsigned int messageTime)
 {
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
@@ -256,31 +268,38 @@ bool Interface_General::queue_notification(void* kodiBase, int type, const char*
     case QueueMsg::QUEUE_WARNING:
       usedType = CGUIDialogKaiToast::Warning;
       withSound = true;
-      CLog::Log(LOGDEBUG, "Interface_General::%s - %s - Warning Message: '%s'", __FUNCTION__, addon->Name().c_str(), message);
+      CLog::Log(LOGDEBUG, "Interface_General::%s - %s - Warning Message: '%s'", __FUNCTION__,
+                addon->Name().c_str(), message);
       break;
     case QueueMsg::QUEUE_ERROR:
       usedType = CGUIDialogKaiToast::Error;
       withSound = true;
-      CLog::Log(LOGDEBUG, "Interface_General::%s - %s - Error Message : '%s'", __FUNCTION__, addon->Name().c_str(), message);
+      CLog::Log(LOGDEBUG, "Interface_General::%s - %s - Error Message : '%s'", __FUNCTION__,
+                addon->Name().c_str(), message);
       break;
     case QueueMsg::QUEUE_INFO:
     default:
       usedType = CGUIDialogKaiToast::Info;
       withSound = false;
-      CLog::Log(LOGDEBUG, "Interface_General::%s - %s - Info Message : '%s'", __FUNCTION__, addon->Name().c_str(), message);
+      CLog::Log(LOGDEBUG, "Interface_General::%s - %s - Info Message : '%s'", __FUNCTION__,
+                addon->Name().c_str(), message);
       break;
     }
 
     if (imageFile && strlen(imageFile) > 0)
     {
-      CLog::Log(LOGERROR, "Interface_General::%s - To use given image file '%s' must be type value set to 'QUEUE_OWN_STYLE'", __FUNCTION__, imageFile);
+      CLog::Log(LOGERROR,
+                "Interface_General::%s - To use given image file '%s' must be type value set to "
+                "'QUEUE_OWN_STYLE'",
+                __FUNCTION__, imageFile);
     }
 
     CGUIDialogKaiToast::QueueNotification(usedType, usedHeader, message, 3000, withSound);
   }
   else
   {
-    CGUIDialogKaiToast::QueueNotification(imageFile, usedHeader, message, displayTime, withSound, messageTime);
+    CGUIDialogKaiToast::QueueNotification(imageFile, usedHeader, message, displayTime, withSound,
+                                          messageTime);
   }
   return true;
 }
@@ -304,11 +323,13 @@ char* Interface_General::get_temp_path(void* kodiBase)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - called with empty kodi instance pointer", __FUNCTION__);
+    CLog::Log(LOGERROR, "Interface_General::%s - called with empty kodi instance pointer",
+              __FUNCTION__);
     return nullptr;
   }
 
-  std::string tempPath = URIUtils::AddFileToFolder(CServiceBroker::GetBinaryAddonManager().GetTempAddonBasePath(), addon->ID());
+  std::string tempPath = URIUtils::AddFileToFolder(
+      CServiceBroker::GetBinaryAddonManager().GetTempAddonBasePath(), addon->ID());
   tempPath += "-temp";
   XFILE::CDirectory::Create(tempPath);
 
@@ -362,13 +383,12 @@ char* Interface_General::get_region(void* kodiBase, const char* id)
     StringUtils::Replace(result, "xx", "%p");
   }
   else if (strcmpi(id, "meridiem") == 0)
-    result = StringUtils::Format("%s/%s",
-                                  g_langInfo.GetMeridiemSymbol(MeridiemSymbolAM).c_str(),
-                                  g_langInfo.GetMeridiemSymbol(MeridiemSymbolPM).c_str());
+    result = StringUtils::Format("%s/%s", g_langInfo.GetMeridiemSymbol(MeridiemSymbolAM).c_str(),
+                                 g_langInfo.GetMeridiemSymbol(MeridiemSymbolPM).c_str());
   else
   {
     CLog::Log(LOGERROR, "Interface_General::%s -  add-on '%s' requests invalid id '%s'",
-                          __FUNCTION__, addon->Name().c_str(), id);
+              __FUNCTION__, addon->Name().c_str(), id);
     return nullptr;
   }
 
@@ -392,8 +412,8 @@ void Interface_General::get_free_mem(void* kodiBase, long* free, long* total, bo
   *total = static_cast<long>(stat.totalPhys);
   if (!as_bytes)
   {
-    *free = *free / ( 1024 * 1024 );
-    *total = *total / ( 1024 * 1024 );
+    *free = *free / (1024 * 1024);
+    *total = *total / (1024 * 1024);
   }
 }
 
@@ -402,18 +422,25 @@ int Interface_General::get_global_idle_time(void* kodiBase)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__, kodiBase);
+    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__,
+              kodiBase);
     return -1;
   }
 
   return g_application.GlobalIdleTime();
 }
 
-void Interface_General::kodi_version(void* kodiBase, char** compile_name, int* major, int* minor, char** revision, char** tag, char** tagversion)
+void Interface_General::kodi_version(void* kodiBase,
+                                     char** compile_name,
+                                     int* major,
+                                     int* minor,
+                                     char** revision,
+                                     char** tag,
+                                     char** tagversion)
 {
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr || compile_name == nullptr || major == nullptr || minor == nullptr ||
-     revision == nullptr || tag == nullptr || tagversion == nullptr)
+      revision == nullptr || tag == nullptr || tagversion == nullptr)
   {
     CLog::Log(LOGERROR,
               "Interface_General::%s - invalid data (addon='%p', compile_name='%p', major='%p', "
@@ -423,7 +450,7 @@ void Interface_General::kodi_version(void* kodiBase, char** compile_name, int* m
               static_cast<void*>(tagversion));
     return;
   }
-    
+
   *compile_name = strdup(CCompileInfo::GetAppName());
   *major = CCompileInfo::GetMajor();
   *minor = CCompileInfo::GetMinor();
@@ -455,24 +482,34 @@ char* Interface_General::get_current_skin_id(void* kodiBase)
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__, kodiBase);
+    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p')", __FUNCTION__,
+              kodiBase);
     return nullptr;
   }
 
-  return strdup(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOOKANDFEEL_SKIN).c_str());
+  return strdup(CServiceBroker::GetSettingsComponent()
+                    ->GetSettings()
+                    ->GetString(CSettings::SETTING_LOOKANDFEEL_SKIN)
+                    .c_str());
 }
 
-bool Interface_General::get_keyboard_layout(void* kodiBase, char** layout_name, int modifier_key, AddonKeyboardKeyTable* c_layout)
+bool Interface_General::get_keyboard_layout(void* kodiBase,
+                                            char** layout_name,
+                                            int modifier_key,
+                                            AddonKeyboardKeyTable* c_layout)
 {
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr || c_layout == nullptr || layout_name == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p', c_layout='%p', layout_name='%p')",
-              __FUNCTION__, kodiBase, static_cast<void*>(c_layout), static_cast<void*>(layout_name));
+    CLog::Log(LOGERROR,
+              "Interface_General::%s - invalid data (addon='%p', c_layout='%p', layout_name='%p')",
+              __FUNCTION__, kodiBase, static_cast<void*>(c_layout),
+              static_cast<void*>(layout_name));
     return false;
   }
 
-  std::string activeLayout = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_LOCALE_ACTIVEKEYBOARDLAYOUT);
+  std::string activeLayout = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+      CSettings::SETTING_LOCALE_ACTIVEKEYBOARDLAYOUT);
 
   CKeyboardLayout layout;
   if (!CKeyboardLayoutManager::GetInstance().GetLayout(activeLayout, layout))
@@ -503,7 +540,8 @@ bool Interface_General::change_keyboard_layout(void* kodiBase, char** layout_nam
   CAddonDll* addon = static_cast<CAddonDll*>(kodiBase);
   if (addon == nullptr || layout_name == nullptr)
   {
-    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p', layout_name='%p')", __FUNCTION__, kodiBase, static_cast<void*>(layout_name));
+    CLog::Log(LOGERROR, "Interface_General::%s - invalid data (addon='%p', layout_name='%p')",
+              __FUNCTION__, kodiBase, static_cast<void*>(layout_name));
     return false;
   }
 
@@ -530,7 +568,8 @@ bool Interface_General::change_keyboard_layout(void* kodiBase, char** layout_nam
   if (currentLayout >= layouts.size())
     currentLayout = 0;
   CKeyboardLayout layout = layouts.empty() ? CKeyboardLayout() : layouts[currentLayout];
-  CServiceBroker::GetSettingsComponent()->GetSettings()->SetString(CSettings::SETTING_LOCALE_ACTIVEKEYBOARDLAYOUT, layout.GetName());
+  CServiceBroker::GetSettingsComponent()->GetSettings()->SetString(
+      CSettings::SETTING_LOCALE_ACTIVEKEYBOARDLAYOUT, layout.GetName());
 
   *layout_name = strdup(layout.GetName().c_str());
   return true;

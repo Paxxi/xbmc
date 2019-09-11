@@ -10,17 +10,17 @@
 
 #include "guilib/GUIMessage.h"
 
-#define CONTROL_BUTTON_LABEL  3100
+#define CONTROL_BUTTON_LABEL 3100
 
-CGUIDialogButtonMenu::CGUIDialogButtonMenu(int id, const std::string &xmlFile)
-: CGUIDialog(id, xmlFile.c_str())
+CGUIDialogButtonMenu::CGUIDialogButtonMenu(int id, const std::string& xmlFile)
+  : CGUIDialog(id, xmlFile.c_str())
 {
   m_loadType = KEEP_IN_MEMORY;
 }
 
 CGUIDialogButtonMenu::~CGUIDialogButtonMenu(void) = default;
 
-bool CGUIDialogButtonMenu::OnMessage(CGUIMessage &message)
+bool CGUIDialogButtonMenu::OnMessage(CGUIMessage& message)
 {
   bool bRet = CGUIDialog::OnMessage(message);
   if (message.GetMessage() == GUI_MSG_CLICKED)
@@ -35,8 +35,9 @@ bool CGUIDialogButtonMenu::OnMessage(CGUIMessage &message)
 void CGUIDialogButtonMenu::FrameMove()
 {
   // get the active control, and put it's label into the label control
-  const CGUIControl *pControl = GetFocusedControl();
-  if (pControl && (pControl->GetControlType() == CGUIControl::GUICONTROL_BUTTON || pControl->GetControlType() == CGUIControl::GUICONTROL_TOGGLEBUTTON))
+  const CGUIControl* pControl = GetFocusedControl();
+  if (pControl && (pControl->GetControlType() == CGUIControl::GUICONTROL_BUTTON ||
+                   pControl->GetControlType() == CGUIControl::GUICONTROL_TOGGLEBUTTON))
   {
     SET_CONTROL_LABEL(CONTROL_BUTTON_LABEL, pControl->GetDescription());
   }

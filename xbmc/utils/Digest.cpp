@@ -23,24 +23,24 @@ namespace UTILITY
 namespace
 {
 
-EVP_MD const * TypeToEVPMD(CDigest::Type type)
+EVP_MD const* TypeToEVPMD(CDigest::Type type)
 {
   switch (type)
   {
-    case CDigest::Type::MD5:
-      return EVP_md5();
-    case CDigest::Type::SHA1:
-      return EVP_sha1();
-    case CDigest::Type::SHA256:
-      return EVP_sha256();
-    case CDigest::Type::SHA512:
-      return EVP_sha512();
-    default:
-      throw std::invalid_argument("Unknown digest type");
+  case CDigest::Type::MD5:
+    return EVP_md5();
+  case CDigest::Type::SHA1:
+    return EVP_sha1();
+  case CDigest::Type::SHA256:
+    return EVP_sha256();
+  case CDigest::Type::SHA512:
+    return EVP_sha512();
+  default:
+    throw std::invalid_argument("Unknown digest type");
   }
 }
 
-}
+} // namespace
 
 std::ostream& operator<<(std::ostream& os, TypedDigest const& digest)
 {
@@ -51,18 +51,18 @@ std::string CDigest::TypeToString(Type type)
 {
   switch (type)
   {
-    case Type::MD5:
-      return "md5";
-    case Type::SHA1:
-      return "sha1";
-    case Type::SHA256:
-      return "sha256";
-    case Type::SHA512:
-      return "sha512";
-    case Type::INVALID:
-      return "invalid";
-    default:
-      throw std::invalid_argument("Unknown digest type");
+  case Type::MD5:
+    return "md5";
+  case Type::SHA1:
+    return "sha1";
+  case Type::SHA256:
+    return "sha256";
+  case Type::SHA512:
+    return "sha512";
+  case Type::INVALID:
+    return "invalid";
+  default:
+    throw std::invalid_argument("Unknown digest type");
   }
 }
 
@@ -98,7 +98,8 @@ void CDigest::MdCtxDeleter::operator()(EVP_MD_CTX* context)
 }
 
 CDigest::CDigest(Type type)
-: m_context{EVP_MD_CTX_create()}, m_md(TypeToEVPMD(type))
+  : m_context{EVP_MD_CTX_create()}
+  , m_md(TypeToEVPMD(type))
 {
   if (1 != EVP_DigestInit_ex(m_context.get(), m_md, nullptr))
   {
@@ -143,7 +144,7 @@ std::string CDigest::FinalizeRaw()
   {
     throw std::runtime_error("EVP_DigestFinal_ex failed");
   }
-  return {reinterpret_cast<char*> (digest.data()), size};
+  return {reinterpret_cast<char*>(digest.data()), size};
 }
 
 std::string CDigest::Finalize()
@@ -165,5 +166,5 @@ std::string CDigest::Calculate(Type type, void const* data, std::size_t size)
   return digest.Finalize();
 }
 
-}
-}
+} // namespace UTILITY
+} // namespace KODI

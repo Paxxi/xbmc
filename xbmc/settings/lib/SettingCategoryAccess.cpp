@@ -34,8 +34,9 @@ bool CSettingCategoryAccessConditionCombination::Check() const
   return CSettingConditionCombination::Check();
 }
 
-CSettingCategoryAccess::CSettingCategoryAccess(CSettingsManager *settingsManager /* = nullptr */)
+CSettingCategoryAccess::CSettingCategoryAccess(CSettingsManager* settingsManager /* = nullptr */)
   : CSettingCondition(settingsManager)
 {
-  m_operation = CBooleanLogicOperationPtr(new CSettingCategoryAccessConditionCombination(m_settingsManager));
+  m_operation =
+      CBooleanLogicOperationPtr(new CSettingCategoryAccessConditionCombination(m_settingsManager));
 }

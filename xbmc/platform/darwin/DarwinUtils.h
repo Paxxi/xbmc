@@ -13,27 +13,26 @@
 // We forward declare CFStringRef in order to avoid
 // pulling in tons of Objective-C headers.
 struct __CFString;
-typedef const struct __CFString * CFStringRef;
+typedef const struct __CFString* CFStringRef;
 
 class CDarwinUtils
 {
 public:
-  static const char *getIosPlatformString(void);
-  static bool        DeviceHasRetina(double &scale);
-  static const char *GetOSReleaseString(void);
-  static const char *GetOSVersionString(void);
+  static const char* getIosPlatformString(void);
+  static bool DeviceHasRetina(double& scale);
+  static const char* GetOSReleaseString(void);
+  static const char* GetOSVersionString(void);
   static const char* GetVersionString();
   static std::string GetFrameworkPath(bool forPython);
-  static int         GetExecutablePath(char* path, size_t *pathsize);
-  static const char *GetAppRootFolder(void);
-  static bool        IsIosSandboxed(void);
-  static void        SetScheduling(bool realtime);
-  static void        PrintDebugString(std::string debugString);
-  static bool        CFStringRefToString(CFStringRef source, std::string& destination);
-  static bool        CFStringRefToUTF8String(CFStringRef source, std::string& destination);
-  static const std::string&  GetManufacturer(void);
-  static bool        IsAliasShortcut(const std::string& path, bool isdirectory);
-  static void        TranslateAliasShortcut(std::string& path);
-  static bool        CreateAliasShortcut(const std::string& fromPath, const std::string& toPath);
+  static int GetExecutablePath(char* path, size_t* pathsize);
+  static const char* GetAppRootFolder(void);
+  static bool IsIosSandboxed(void);
+  static void SetScheduling(bool realtime);
+  static void PrintDebugString(std::string debugString);
+  static bool CFStringRefToString(CFStringRef source, std::string& destination);
+  static bool CFStringRefToUTF8String(CFStringRef source, std::string& destination);
+  static const std::string& GetManufacturer(void);
+  static bool IsAliasShortcut(const std::string& path, bool isdirectory);
+  static void TranslateAliasShortcut(std::string& path);
+  static bool CreateAliasShortcut(const std::string& fromPath, const std::string& toPath);
 };
-

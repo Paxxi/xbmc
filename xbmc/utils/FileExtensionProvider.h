@@ -14,15 +14,15 @@
 
 namespace ADDON
 {
-  class CAddonMgr;
-  class CBinaryAddonManager;
-}
+class CAddonMgr;
+class CBinaryAddonManager;
+} // namespace ADDON
 
 class CFileExtensionProvider
 {
 public:
-  CFileExtensionProvider(ADDON::CAddonMgr &addonManager,
-                         ADDON::CBinaryAddonManager &binaryAddonManager);
+  CFileExtensionProvider(ADDON::CAddonMgr& addonManager,
+                         ADDON::CBinaryAddonManager& binaryAddonManager);
   ~CFileExtensionProvider();
 
   /*!
@@ -61,17 +61,17 @@ public:
   bool EncodedHostName(const std::string& protocol) const;
 
 private:
-  std::string GetAddonExtensions(const ADDON::TYPE &type) const;
-  std::string GetAddonFileFolderExtensions(const ADDON::TYPE &type) const;
+  std::string GetAddonExtensions(const ADDON::TYPE& type) const;
+  std::string GetAddonFileFolderExtensions(const ADDON::TYPE& type) const;
   void SetAddonExtensions();
-  void SetAddonExtensions(const ADDON::TYPE &type);
+  void SetAddonExtensions(const ADDON::TYPE& type);
 
   void OnAddonEvent(const ADDON::AddonEvent& event);
 
   // Construction properties
   std::shared_ptr<CAdvancedSettings> m_advancedSettings;
-  ADDON::CAddonMgr &m_addonManager;
-  ADDON::CBinaryAddonManager &m_binaryAddonManager;
+  ADDON::CAddonMgr& m_addonManager;
+  ADDON::CBinaryAddonManager& m_binaryAddonManager;
 
   // File extension properties
   std::map<ADDON::TYPE, std::string> m_addonExtensions;

@@ -17,7 +17,7 @@ public:
   CRendererVTB();
   virtual ~CRendererVTB();
 
-  static CBaseRenderer* Create(CVideoBuffer *buffer);
+  static CBaseRenderer* Create(CVideoBuffer* buffer);
   static bool Register();
 
   // Player functions
@@ -34,4 +34,3 @@ protected:
   virtual void DeleteTexture(int index) override;
   virtual bool CreateTexture(int index) override;
 };
-

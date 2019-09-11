@@ -27,7 +27,6 @@ class CWinSystemOSXImpl;
 class CWinSystemOSX : public CWinSystemBase, public ITimerCallback
 {
 public:
-
   CWinSystemOSX();
   virtual ~CWinSystemOSX();
 
@@ -37,10 +36,14 @@ public:
   // CWinSystemBase
   virtual bool InitWindowSystem() override;
   virtual bool DestroyWindowSystem() override;
-  virtual bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
+  virtual bool CreateNewWindow(const std::string& name,
+                               bool fullScreen,
+                               RESOLUTION_INFO& res) override;
   virtual bool DestroyWindow() override;
   virtual bool ResizeWindow(int newWidth, int newHeight, int newLeft, int newTop) override;
-  virtual bool SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays) override;
+  virtual bool SetFullScreen(bool fullScreen,
+                             RESOLUTION_INFO& res,
+                             bool blankOtherDisplays) override;
   virtual void UpdateResolutions() override;
   virtual void NotifyAppFocusChange(bool bGaining) override;
   virtual void ShowOSMouse(bool show) override;
@@ -52,18 +55,18 @@ public:
 
   virtual std::string GetClipboardText(void) override;
 
-  void Register(IDispResource *resource) override;
-  void Unregister(IDispResource *resource) override;
+  void Register(IDispResource* resource) override;
+  void Unregister(IDispResource* resource) override;
 
-  virtual std::unique_ptr<CVideoSync> GetVideoSync(void *clock) override;
+  virtual std::unique_ptr<CVideoSync> GetVideoSync(void* clock) override;
 
-  void        WindowChangedScreen();
+  void WindowChangedScreen();
 
-  void        AnnounceOnLostDevice();
-  void        AnnounceOnResetDevice();
-  void        HandleOnResetDevice();
-  void        StartLostDeviceTimer();
-  void        StopLostDeviceTimer();
+  void AnnounceOnLostDevice();
+  void AnnounceOnResetDevice();
+  void HandleOnResetDevice();
+  void StartLostDeviceTimer();
+  void StopLostDeviceTimer();
 
   void* GetCGLContextObj();
 #ifdef __OBJC__
@@ -71,7 +74,7 @@ public:
 #else
   void* GetNSOpenGLContext();
 #endif
-  void GetConnectedOutputs(std::vector<std::string> *outputs);
+  void GetConnectedOutputs(std::vector<std::string>* outputs);
 
   // winevents override
   bool MessagePump() override;
@@ -79,30 +82,30 @@ public:
 protected:
   virtual std::unique_ptr<KODI::WINDOWING::IOSScreenSaver> GetOSScreenSaverImpl() override;
 
-  void  HandlePossibleRefreshrateChange();
-  void  GetScreenResolution(int* w, int* h, double* fps, int screenIdx);
-  void  EnableVSync(bool enable);
-  bool  SwitchToVideoMode(int width, int height, double refreshrate);
-  void  FillInVideoModes();
-  bool  FlushBuffer(void);
-  bool  IsObscured(void);
-  void  StartTextInput();
-  void  StopTextInput();
+  void HandlePossibleRefreshrateChange();
+  void GetScreenResolution(int* w, int* h, double* fps, int screenIdx);
+  void EnableVSync(bool enable);
+  bool SwitchToVideoMode(int width, int height, double refreshrate);
+  void FillInVideoModes();
+  bool FlushBuffer(void);
+  bool IsObscured(void);
+  void StartTextInput();
+  void StopTextInput();
 
   std::unique_ptr<CWinSystemOSXImpl> m_impl;
   SDL_Surface* m_SDLSurface;
-  CWinEventsOSX *m_osx_events;
-  bool                         m_obscured;
-  unsigned int                 m_obscured_timecheck;
+  CWinEventsOSX* m_osx_events;
+  bool m_obscured;
+  unsigned int m_obscured_timecheck;
 
-  bool                         m_movedToOtherScreen;
-  int                          m_lastDisplayNr;
-  double                       m_refreshRate;
+  bool m_movedToOtherScreen;
+  int m_lastDisplayNr;
+  double m_refreshRate;
 
-  CCriticalSection             m_resourceSection;
-  std::vector<IDispResource*>  m_resources;
-  CTimer                       m_lostDeviceTimer;
-  bool                         m_delayDispReset;
-  XbmcThreads::EndTime         m_dispResetTimer;
+  CCriticalSection m_resourceSection;
+  std::vector<IDispResource*> m_resources;
+  CTimer m_lostDeviceTimer;
+  bool m_delayDispReset;
+  XbmcThreads::EndTime m_dispResetTimer;
   int m_updateGLContext = 0;
 };

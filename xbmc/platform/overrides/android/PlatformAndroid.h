@@ -12,12 +12,12 @@
 
 class CPlatformAndroid : public CPlatformPosix
 {
-  public:
-    /**\brief C'tor */
-    CPlatformAndroid();
+public:
+  /**\brief C'tor */
+  CPlatformAndroid();
 
-    /**\brief D'tor */
-    virtual ~CPlatformAndroid();
+  /**\brief D'tor */
+  virtual ~CPlatformAndroid();
 
-    void Init() override;
+  void Init() override;
 };

@@ -14,20 +14,23 @@
 class CSettingAddon : public CSettingString
 {
 public:
-  CSettingAddon(const std::string &id, CSettingsManager *settingsManager = nullptr);
-  CSettingAddon(const std::string &id, int label, const std::string &value, CSettingsManager *settingsManager = nullptr);
-  CSettingAddon(const std::string &id, const CSettingAddon &setting);
+  CSettingAddon(const std::string& id, CSettingsManager* settingsManager = nullptr);
+  CSettingAddon(const std::string& id,
+                int label,
+                const std::string& value,
+                CSettingsManager* settingsManager = nullptr);
+  CSettingAddon(const std::string& id, const CSettingAddon& setting);
   ~CSettingAddon() override = default;
 
-  SettingPtr Clone(const std::string &id) const override;
+  SettingPtr Clone(const std::string& id) const override;
 
-  bool Deserialize(const TiXmlNode *node, bool update = false) override;
+  bool Deserialize(const TiXmlNode* node, bool update = false) override;
 
   ADDON::TYPE GetAddonType() const { return m_addonType; }
   void SetAddonType(ADDON::TYPE addonType) { m_addonType = addonType; }
 
 private:
-  void copyaddontype(const CSettingAddon &setting);
+  void copyaddontype(const CSettingAddon& setting);
 
   ADDON::TYPE m_addonType = ADDON::ADDON_UNKNOWN;
 };

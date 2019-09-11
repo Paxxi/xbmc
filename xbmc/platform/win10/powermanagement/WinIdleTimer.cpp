@@ -27,14 +27,13 @@ void CWinIdleTimer::StartZero()
         // this may throw an exception
         displayRequest = DisplayRequest();
       }
-      catch (const winrt::hresult_error&) 
+      catch (const winrt::hresult_error&)
       {
         return;
       }
     }
 
-    auto workItem = DispatchedHandler([&]()
-    {
+    auto workItem = DispatchedHandler([&]() {
       try
       {
         // this couple of calls activate and deactivate a display-required
@@ -42,7 +41,9 @@ void CWinIdleTimer::StartZero()
         displayRequest.RequestActive();
         displayRequest.RequestRelease();
       }
-      catch (const winrt::hresult_error&) { }
+      catch (const winrt::hresult_error&)
+      {
+      }
     });
     CoreWindow window = CoreApplication::MainView().CoreWindow();
     window.Dispatcher().RunAsync(CoreDispatcherPriority::High, workItem);

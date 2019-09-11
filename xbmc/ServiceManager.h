@@ -16,22 +16,22 @@ class CAppParamParser;
 
 namespace ADDON
 {
-  class CAddonMgr;
-  class CBinaryAddonManager;
-  class CBinaryAddonCache;
-  class CVFSAddonCache;
-  class CServiceAddonManager;
-  class CRepositoryUpdater;
-}
+class CAddonMgr;
+class CBinaryAddonManager;
+class CBinaryAddonCache;
+class CVFSAddonCache;
+class CServiceAddonManager;
+class CRepositoryUpdater;
+} // namespace ADDON
 
 namespace PVR
 {
-  class CPVRManager;
+class CPVRManager;
 }
 
 namespace PLAYLIST
 {
-  class CPlayListPlayer;
+class CPlayListPlayer;
 }
 
 class CContextMenuManager;
@@ -49,19 +49,19 @@ namespace KODI
 {
 namespace GAME
 {
-  class CControllerManager;
-  class CGameServices;
-}
+class CControllerManager;
+class CGameServices;
+} // namespace GAME
 
 namespace RETRO
 {
-  class CGUIGameRenderManager;
+class CGUIGameRenderManager;
 }
-}
+} // namespace KODI
 
 namespace PERIPHERALS
 {
-  class CPeripherals;
+class CPeripherals;
 }
 
 class CInputManager;
@@ -79,7 +79,7 @@ public:
 
   bool InitForTesting();
   bool InitStageOne();
-  bool InitStageTwo(const CAppParamParser &params, const std::string& profilesUserDataFolder);
+  bool InitStageTwo(const CAppParamParser& params, const std::string& profilesUserDataFolder);
   bool InitStageThree(const std::shared_ptr<CProfileManager>& profileManager);
   void DeinitTesting();
   void DeinitStageThree();
@@ -111,31 +111,31 @@ public:
   int init_level = 0;
 
   CFavouritesService& GetFavouritesService();
-  CInputManager &GetInputManager();
-  CFileExtensionProvider &GetFileExtensionProvider();
+  CInputManager& GetInputManager();
+  CFileExtensionProvider& GetFileExtensionProvider();
 
-  CPowerManager &GetPowerManager();
+  CPowerManager& GetPowerManager();
 
-  CWeatherManager &GetWeatherManager();
+  CWeatherManager& GetWeatherManager();
 
-  CPlayerCoreFactory &GetPlayerCoreFactory();
+  CPlayerCoreFactory& GetPlayerCoreFactory();
 
-  CDatabaseManager &GetDatabaseManager();
+  CDatabaseManager& GetDatabaseManager();
 
 protected:
   struct delete_dataCacheCore
   {
-    void operator()(CDataCacheCore *p) const;
+    void operator()(CDataCacheCore* p) const;
   };
 
   struct delete_contextMenuManager
   {
-    void operator()(CContextMenuManager *p) const;
+    void operator()(CContextMenuManager* p) const;
   };
 
   struct delete_favouritesService
   {
-    void operator()(CFavouritesService *p) const;
+    void operator()(CFavouritesService* p) const;
   };
 
   std::unique_ptr<ADDON::CAddonMgr> m_addonMgr;

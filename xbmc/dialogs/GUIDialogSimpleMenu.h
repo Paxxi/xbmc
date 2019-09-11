@@ -16,11 +16,12 @@
 class CGUIDialogSimpleMenu
 {
 public:
-
   /*! \brief Show dialog allowing selection of wanted playback item */
   static bool ShowPlaySelection(CFileItem& item);
   static bool ShowPlaySelection(CFileItem& item, const std::string& directory);
 
 protected:
-  static bool GetDirectoryItems(const std::string &path, CFileItemList &items, const XFILE::CDirectory::CHints &hints);
+  static bool GetDirectoryItems(const std::string& path,
+                                CFileItemList& items,
+                                const XFILE::CDirectory::CHints& hints);
 };

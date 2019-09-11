@@ -18,12 +18,13 @@ struct D3D10DDIARG_CREATERESOURCE;
 class CWinSystemWin32DX : public CWinSystemWin32, public CRenderSystemDX
 {
   friend interface DX::IDeviceNotify;
+
 public:
   CWinSystemWin32DX();
   ~CWinSystemWin32DX();
 
   // Implementation of CWinSystemBase via CWinSystemWin32
-  CRenderSystemBase *GetRenderSystem() override { return this; }
+  CRenderSystemBase* GetRenderSystem() override { return this; }
   bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
   bool ResizeWindow(int newWidth, int newHeight, int newLeft, int newTop) override;
   bool SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays) override;
@@ -47,22 +48,16 @@ public:
    where any resources dependent on the DirectX device should be destroyed and recreated.
    \sa Unregister, ID3DResource
   */
-  void Register(ID3DResource *resource) const
-  {
-    m_deviceResources->Register(resource);
-  };
+  void Register(ID3DResource* resource) const { m_deviceResources->Register(resource); };
   /*!
    \brief Unregister as a dependent of the DirectX Render System
    Resources should call this on destruction if they're a dependent on the Render System
    \sa Register, ID3DResource
   */
-  void Unregister(ID3DResource *resource) const
-  {
-    m_deviceResources->Unregister(resource);
-  };
+  void Unregister(ID3DResource* resource) const { m_deviceResources->Unregister(resource); };
 
-  void Register(IDispResource *resource) override { CWinSystemWin32::Register(resource); };
-  void Unregister(IDispResource *resource) override { CWinSystemWin32::Unregister(resource); };
+  void Register(IDispResource* resource) override { CWinSystemWin32::Register(resource); };
+  void Unregister(IDispResource* resource) override { CWinSystemWin32::Unregister(resource); };
 
   void FixRefreshRateIfNecessary(const D3D10DDIARG_CREATERESOURCE* pResource) const;
 
@@ -78,4 +73,3 @@ protected:
   HMODULE m_hDriverModule;
   TRACED_HOOK_HANDLE m_hHook;
 };
-

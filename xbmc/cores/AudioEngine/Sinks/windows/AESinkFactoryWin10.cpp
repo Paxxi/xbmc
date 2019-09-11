@@ -24,15 +24,21 @@ using namespace Microsoft::WRL;
 
 static winrt::hstring PKEY_Device_FriendlyName = L"System.ItemNameDisplay";
 static winrt::hstring PKEY_AudioEndpoint_FormFactor = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 0";
-static winrt::hstring PKEY_AudioEndpoint_ControlPanelPageProvider = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 1";
+static winrt::hstring PKEY_AudioEndpoint_ControlPanelPageProvider =
+    L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 1";
 static winrt::hstring PKEY_AudioEndpoint_Association = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 2";
-static winrt::hstring PKEY_AudioEndpoint_PhysicalSpeakers = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 3";
+static winrt::hstring PKEY_AudioEndpoint_PhysicalSpeakers =
+    L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 3";
 static winrt::hstring PKEY_AudioEndpoint_GUID = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 4";
-static winrt::hstring PKEY_AudioEndpoint_Disable_SysFx = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 5";
-static winrt::hstring PKEY_AudioEndpoint_FullRangeSpeakers = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 6";
-static winrt::hstring PKEY_AudioEndpoint_Supports_EventDriven_Mode = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 7";
+static winrt::hstring PKEY_AudioEndpoint_Disable_SysFx =
+    L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 5";
+static winrt::hstring PKEY_AudioEndpoint_FullRangeSpeakers =
+    L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 6";
+static winrt::hstring PKEY_AudioEndpoint_Supports_EventDriven_Mode =
+    L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 7";
 static winrt::hstring PKEY_AudioEndpoint_JackSubType = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 8";
-static winrt::hstring PKEY_AudioEndpoint_Default_VolumeInDb = L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 9";
+static winrt::hstring PKEY_AudioEndpoint_Default_VolumeInDb =
+    L"{1da5d803-d492-4edd-8c23-e0c0ffee7f0e} 9";
 static winrt::hstring PKEY_AudioEngine_DeviceFormat = L"{f19f064d-082c-4e27-bc73-6882a1bb8e4c} 0";
 static winrt::hstring PKEY_Device_EnumeratorName = L"{a45c254e-df1c-4efd-8020-67d146a850e0} 24";
 
@@ -46,14 +52,10 @@ std::vector<RendererDetail> CAESinkFactoryWin::GetRendererDetails()
     auto audioSelector = MediaDevice::GetAudioRenderSelector();
 
     // Add custom properties to the query
-    DeviceInformationCollection devInfocollection = Wait(DeviceInformation::FindAllAsync(audioSelector,
-      {
-          PKEY_AudioEndpoint_FormFactor,
-          PKEY_AudioEndpoint_GUID,
-          PKEY_AudioEndpoint_PhysicalSpeakers,
-          PKEY_AudioEngine_DeviceFormat,
-          PKEY_Device_EnumeratorName
-      }));
+    DeviceInformationCollection devInfocollection = Wait(DeviceInformation::FindAllAsync(
+        audioSelector, {PKEY_AudioEndpoint_FormFactor, PKEY_AudioEndpoint_GUID,
+                        PKEY_AudioEndpoint_PhysicalSpeakers, PKEY_AudioEngine_DeviceFormat,
+                        PKEY_Device_EnumeratorName}));
     if (devInfocollection == nullptr || devInfocollection.Size() == 0)
       goto failed;
 
@@ -71,8 +73,10 @@ std::vector<RendererDetail> CAESinkFactoryWin::GetRendererDetails()
       if (!propObj)
         goto failed;
 
-      details.strWinDevType = winEndpoints[propObj.as<winrt::IPropertyValue>().GetUInt32()].winEndpointType;
-      details.eDeviceType = winEndpoints[propObj.as<winrt::IPropertyValue>().GetUInt32()].aeDeviceType;
+      details.strWinDevType =
+          winEndpoints[propObj.as<winrt::IPropertyValue>().GetUInt32()].winEndpointType;
+      details.eDeviceType =
+          winEndpoints[propObj.as<winrt::IPropertyValue>().GetUInt32()].aeDeviceType;
 
       unsigned long ulChannelMask = 0;
       unsigned int nChannels = 0;
@@ -95,7 +99,8 @@ std::vector<RendererDetail> CAESinkFactoryWin::GetRendererDetails()
       }
 
       propObj = devInfo.Properties().Lookup(PKEY_AudioEndpoint_PhysicalSpeakers);
-      details.uiChannelMask = propObj ? propObj.as<winrt::IPropertyValue>().GetUInt32() : ulChannelMask;
+      details.uiChannelMask =
+          propObj ? propObj.as<winrt::IPropertyValue>().GetUInt32() : ulChannelMask;
       details.nChannels = nChannels;
 
       details.strDescription = KODI::PLATFORM::WINDOWS::FromW(devInfo.Name().c_str());
@@ -112,15 +117,16 @@ std::vector<RendererDetail> CAESinkFactoryWin::GetRendererDetails()
   }
 
 failed:
-  CLog::Log(LOGERROR, __FUNCTION__": Failed to enumerate audio renderer devices.");
+  CLog::Log(LOGERROR, __FUNCTION__ ": Failed to enumerate audio renderer devices.");
   return list;
 }
 
-class CAudioInterfaceActivator : public winrt::implements<CAudioInterfaceActivator, IActivateAudioInterfaceCompletionHandler>
+class CAudioInterfaceActivator
+  : public winrt::implements<CAudioInterfaceActivator, IActivateAudioInterfaceCompletionHandler>
 {
   Concurrency::task_completion_event<IAudioClient*> m_ActivateCompleted;
 
-  STDMETHODIMP ActivateCompleted(IActivateAudioInterfaceAsyncOperation *pAsyncOp)
+  STDMETHODIMP ActivateCompleted(IActivateAudioInterfaceAsyncOperation* pAsyncOp)
   {
     HRESULT hr = S_OK, hr2 = S_OK;
     ComPtr<IUnknown> clientUnk;
@@ -157,27 +163,23 @@ class CAudioInterfaceActivator : public winrt::implements<CAudioInterfaceActivat
 
   exit:
     return hr;
-
   }
+
 public:
   static Concurrency::task<IAudioClient*> ActivateAsync(LPCWCHAR pszDeviceId)
   {
-    winrt::com_ptr<CAudioInterfaceActivator> activator = winrt::make_self<CAudioInterfaceActivator>();
+    winrt::com_ptr<CAudioInterfaceActivator> activator =
+        winrt::make_self<CAudioInterfaceActivator>();
     ComPtr<IActivateAudioInterfaceAsyncOperation> asyncOp;
 
-    HRESULT hr = ActivateAudioInterfaceAsync(
-      pszDeviceId,
-      __uuidof(IAudioClient2),
-      nullptr,
-      activator.get(),
-      &asyncOp);
+    HRESULT hr = ActivateAudioInterfaceAsync(pszDeviceId, __uuidof(IAudioClient2), nullptr,
+                                             activator.get(), &asyncOp);
 
     if (FAILED(hr))
       throw winrt::hresult_error(hr);
 
     // Wait for the activate completed event and return result
     return Concurrency::create_task(activator->m_ActivateCompleted);
-
   }
 };
 
@@ -190,19 +192,20 @@ struct AEWASAPIDeviceWin10 : public IAEWASAPIDevice
 
     HRESULT hr;
     std::wstring deviceIdW = KODI::PLATFORM::WINDOWS::ToW(deviceId);
-    IAudioClient* pClient = CAudioInterfaceActivator::ActivateAsync(deviceIdW.c_str())
-      .then([&hr](Concurrency::task<IAudioClient*> task) -> IAudioClient*
-    {
-      try
-      {
-        return task.get();
-      }
-      catch (const winrt::hresult_error& ex)
-      {
-        hr = ex.code();
-        return nullptr;
-      }
-    }).get();
+    IAudioClient* pClient =
+        CAudioInterfaceActivator::ActivateAsync(deviceIdW.c_str())
+            .then([&hr](Concurrency::task<IAudioClient*> task) -> IAudioClient* {
+              try
+              {
+                return task.get();
+              }
+              catch (const winrt::hresult_error& ex)
+              {
+                hr = ex.code();
+                return nullptr;
+              }
+            })
+            .get();
 
     if (pClient)
     {
@@ -232,7 +235,7 @@ std::string CAESinkFactoryWin::GetDefaultDeviceId()
   return KODI::PLATFORM::WINDOWS::FromW(defaultId.c_str());
 }
 
-HRESULT CAESinkFactoryWin::ActivateWASAPIDevice(std::string &device, IAEWASAPIDevice** ppDevice)
+HRESULT CAESinkFactoryWin::ActivateWASAPIDevice(std::string& device, IAEWASAPIDevice** ppDevice)
 {
   if (!ppDevice)
     return E_POINTER;

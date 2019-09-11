@@ -20,33 +20,33 @@
 namespace CONTEXTMENU
 {
 
-  bool CEjectDisk::IsVisible(const CFileItem& item) const
-  {
+bool CEjectDisk::IsVisible(const CFileItem& item) const
+{
 #ifdef HAS_DVD_DRIVE
-    return item.IsRemovable() && (item.IsDVD() || item.IsCDDA());
+  return item.IsRemovable() && (item.IsDVD() || item.IsCDDA());
 #else
-    return false;
+  return false;
 #endif
-  }
+}
 
-  bool CEjectDisk::Execute(const CFileItemPtr& item) const
-  {
+bool CEjectDisk::Execute(const CFileItemPtr& item) const
+{
 #ifdef HAS_DVD_DRIVE
-    g_mediaManager.ToggleTray(g_mediaManager.TranslateDevicePath(item->GetPath())[0]);
+  g_mediaManager.ToggleTray(g_mediaManager.TranslateDevicePath(item->GetPath())[0]);
 #endif
-    return true;
-  }
+  return true;
+}
 
-  bool CEjectDrive::IsVisible(const CFileItem& item) const
-  {
-    // Must be HDD
-    return item.IsRemovable() && !item.IsDVD() && !item.IsCDDA();
-  }
+bool CEjectDrive::IsVisible(const CFileItem& item) const
+{
+  // Must be HDD
+  return item.IsRemovable() && !item.IsDVD() && !item.IsCDDA();
+}
 
-  bool CEjectDrive::Execute(const CFileItemPtr& item) const
-  {
-    return g_mediaManager.Eject(item->GetPath());
-  }
+bool CEjectDrive::Execute(const CFileItemPtr& item) const
+{
+  return g_mediaManager.Eject(item->GetPath());
+}
 
 namespace
 {
@@ -68,16 +68,15 @@ int GetTargetWindowID(const CFileItem& item)
 
 std::string CAddRemoveFavourite::GetLabel(const CFileItem& item) const
 {
-  return g_localizeStrings.Get(CServiceBroker::GetFavouritesService().IsFavourited(item, GetTargetWindowID(item))
-                               ? 14077   /* Remove from favourites */
-                               : 14076); /* Add to favourites */
+  return g_localizeStrings.Get(
+      CServiceBroker::GetFavouritesService().IsFavourited(item, GetTargetWindowID(item))
+          ? 14077 /* Remove from favourites */
+          : 14076); /* Add to favourites */
 }
 
 bool CAddRemoveFavourite::IsVisible(const CFileItem& item) const
 {
-  return !item.IsParentFolder() &&
-         !item.IsPath("add") &&
-         !item.IsPath("newplaylist://") &&
+  return !item.IsParentFolder() && !item.IsPath("add") && !item.IsPath("newplaylist://") &&
          !URIUtils::IsProtocol(item.GetPath(), "favourites") &&
          !URIUtils::IsProtocol(item.GetPath(), "newsmartplaylist") &&
          !URIUtils::IsProtocol(item.GetPath(), "newtag") &&

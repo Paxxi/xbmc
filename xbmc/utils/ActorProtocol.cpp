@@ -27,7 +27,7 @@ void Message::Release()
 
   // free data buffer
   if (data != buffer)
-    delete [] data;
+    delete[] data;
 
   payloadObj.reset();
 
@@ -37,7 +37,7 @@ void Message::Release()
   origin.ReturnMessage(this);
 }
 
-bool Message::Reply(int sig, void *data /* = NULL*/, size_t size /* = 0 */)
+bool Message::Reply(int sig, void* data /* = NULL*/, size_t size /* = 0 */)
 {
   if (!isSync)
   {
@@ -51,7 +51,7 @@ bool Message::Reply(int sig, void *data /* = NULL*/, size_t size /* = 0 */)
 
   if (!isSyncTimeout)
   {
-    Message *msg = origin.GetMessage();
+    Message* msg = origin.GetMessage();
     msg->signal = sig;
     msg->isOut = !isOut;
     replyMessage = msg;
@@ -75,7 +75,7 @@ bool Message::Reply(int sig, void *data /* = NULL*/, size_t size /* = 0 */)
 
 Protocol::~Protocol()
 {
-  Message *msg;
+  Message* msg;
   Purge();
   while (!freeMessageQueue.empty())
   {
@@ -85,9 +85,9 @@ Protocol::~Protocol()
   }
 }
 
-Message *Protocol::GetMessage()
+Message* Protocol::GetMessage()
 {
-  Message *msg;
+  Message* msg;
 
   CSingleLock lock(criticalSection);
 
@@ -110,16 +110,19 @@ Message *Protocol::GetMessage()
   return msg;
 }
 
-void Protocol::ReturnMessage(Message *msg)
+void Protocol::ReturnMessage(Message* msg)
 {
   CSingleLock lock(criticalSection);
 
   freeMessageQueue.push(msg);
 }
 
-bool Protocol::SendOutMessage(int signal, void *data /* = NULL */, size_t size /* = 0 */, Message *outMsg /* = NULL */)
+bool Protocol::SendOutMessage(int signal,
+                              void* data /* = NULL */,
+                              size_t size /* = 0 */,
+                              Message* outMsg /* = NULL */)
 {
-  Message *msg;
+  Message* msg;
   if (outMsg)
     msg = outMsg;
   else
@@ -137,7 +140,8 @@ bool Protocol::SendOutMessage(int signal, void *data /* = NULL */, size_t size /
     memcpy(msg->data, data, size);
   }
 
-  { CSingleLock lock(criticalSection);
+  {
+    CSingleLock lock(criticalSection);
     outMessages.push(msg);
   }
   if (containerOutEvent)
@@ -146,9 +150,9 @@ bool Protocol::SendOutMessage(int signal, void *data /* = NULL */, size_t size /
   return true;
 }
 
-bool Protocol::SendOutMessage(int signal, CPayloadWrapBase *payload, Message *outMsg)
+bool Protocol::SendOutMessage(int signal, CPayloadWrapBase* payload, Message* outMsg)
 {
-  Message *msg;
+  Message* msg;
   if (outMsg)
     msg = outMsg;
   else
@@ -159,7 +163,8 @@ bool Protocol::SendOutMessage(int signal, CPayloadWrapBase *payload, Message *ou
 
   msg->payloadObj.reset(payload);
 
-  { CSingleLock lock(criticalSection);
+  {
+    CSingleLock lock(criticalSection);
     outMessages.push(msg);
   }
   if (containerOutEvent)
@@ -168,9 +173,12 @@ bool Protocol::SendOutMessage(int signal, CPayloadWrapBase *payload, Message *ou
   return true;
 }
 
-bool Protocol::SendInMessage(int signal, void *data /* = NULL */, size_t size /* = 0 */, Message *outMsg /* = NULL */)
+bool Protocol::SendInMessage(int signal,
+                             void* data /* = NULL */,
+                             size_t size /* = 0 */,
+                             Message* outMsg /* = NULL */)
 {
-  Message *msg;
+  Message* msg;
   if (outMsg)
     msg = outMsg;
   else
@@ -188,7 +196,8 @@ bool Protocol::SendInMessage(int signal, void *data /* = NULL */, size_t size /*
     memcpy(msg->data, data, size);
   }
 
-  { CSingleLock lock(criticalSection);
+  {
+    CSingleLock lock(criticalSection);
     inMessages.push(msg);
   }
   if (containerInEvent)
@@ -197,9 +206,9 @@ bool Protocol::SendInMessage(int signal, void *data /* = NULL */, size_t size /*
   return true;
 }
 
-bool Protocol::SendInMessage(int signal, CPayloadWrapBase *payload, Message *outMsg)
+bool Protocol::SendInMessage(int signal, CPayloadWrapBase* payload, Message* outMsg)
 {
-  Message *msg;
+  Message* msg;
   if (outMsg)
     msg = outMsg;
   else
@@ -210,7 +219,8 @@ bool Protocol::SendInMessage(int signal, CPayloadWrapBase *payload, Message *out
 
   msg->payloadObj.reset(payload);
 
-  { CSingleLock lock(criticalSection);
+  {
+    CSingleLock lock(criticalSection);
     inMessages.push(msg);
   }
   if (containerInEvent)
@@ -219,9 +229,10 @@ bool Protocol::SendInMessage(int signal, CPayloadWrapBase *payload, Message *out
   return true;
 }
 
-bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, void *data /* = NULL */, size_t size /* = 0 */)
+bool Protocol::SendOutMessageSync(
+    int signal, Message** retMsg, int timeout, void* data /* = NULL */, size_t size /* = 0 */)
 {
-  Message *msg = GetMessage();
+  Message* msg = GetMessage();
   msg->isOut = true;
   msg->isSync = true;
   msg->event = new CEvent;
@@ -250,9 +261,12 @@ bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, voi
     return false;
 }
 
-bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, CPayloadWrapBase *payload)
+bool Protocol::SendOutMessageSync(int signal,
+                                  Message** retMsg,
+                                  int timeout,
+                                  CPayloadWrapBase* payload)
 {
-  Message *msg = GetMessage();
+  Message* msg = GetMessage();
   msg->isOut = true;
   msg->isSync = true;
   msg->event = new CEvent;
@@ -281,7 +295,7 @@ bool Protocol::SendOutMessageSync(int signal, Message **retMsg, int timeout, CPa
     return false;
 }
 
-bool Protocol::ReceiveOutMessage(Message **msg)
+bool Protocol::ReceiveOutMessage(Message** msg)
 {
   CSingleLock lock(criticalSection);
 
@@ -294,7 +308,7 @@ bool Protocol::ReceiveOutMessage(Message **msg)
   return true;
 }
 
-bool Protocol::ReceiveInMessage(Message **msg)
+bool Protocol::ReceiveInMessage(Message** msg)
 {
   CSingleLock lock(criticalSection);
 
@@ -310,7 +324,7 @@ bool Protocol::ReceiveInMessage(Message **msg)
 
 void Protocol::Purge()
 {
-  Message *msg;
+  Message* msg;
 
   while (ReceiveInMessage(&msg))
     msg->Release();
@@ -321,7 +335,7 @@ void Protocol::Purge()
 
 void Protocol::PurgeIn(int signal)
 {
-  Message *msg;
+  Message* msg;
   std::queue<Message*> msgs;
 
   CSingleLock lock(criticalSection);
@@ -343,7 +357,7 @@ void Protocol::PurgeIn(int signal)
 
 void Protocol::PurgeOut(int signal)
 {
-  Message *msg;
+  Message* msg;
   std::queue<Message*> msgs;
 
   CSingleLock lock(criticalSection);

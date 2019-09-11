@@ -15,7 +15,8 @@
 #include <map>
 #include <vector>
 
-namespace ADDON {
+namespace ADDON
+{
 
 class CBinaryAddonCache
 {
@@ -36,4 +37,4 @@ protected:
   std::multimap<TYPE, VECADDONS> m_addons;
 };
 
-}
+} // namespace ADDON

@@ -28,22 +28,23 @@ namespace ADDON
 {
 
 CAddonInterfaces::CAddonInterfaces(CAddon* addon)
-  : m_callbacks(new AddonCB),
-    m_addon(addon),
-    m_helperAddOn(nullptr),
-    m_helperGUI(nullptr)
+  : m_callbacks(new AddonCB)
+  , m_addon(addon)
+  , m_helperAddOn(nullptr)
+  , m_helperGUI(nullptr)
 {
-  m_callbacks->libBasePath                  = strdup(CSpecialProtocol::TranslatePath("special://xbmcbinaddons").c_str());
-  m_callbacks->addonData                    = this;
+  m_callbacks->libBasePath =
+      strdup(CSpecialProtocol::TranslatePath("special://xbmcbinaddons").c_str());
+  m_callbacks->addonData = this;
 
-  m_callbacks->AddOnLib_RegisterMe          = CAddonInterfaces::AddOnLib_RegisterMe;
-  m_callbacks->AddOnLib_UnRegisterMe        = CAddonInterfaces::AddOnLib_UnRegisterMe;
-  m_callbacks->GUILib_RegisterMe            = CAddonInterfaces::GUILib_RegisterMe;
-  m_callbacks->GUILib_UnRegisterMe          = CAddonInterfaces::GUILib_UnRegisterMe;
-  m_callbacks->PVRLib_RegisterMe            = CAddonInterfaces::PVRLib_RegisterMe;
-  m_callbacks->PVRLib_UnRegisterMe          = CAddonInterfaces::PVRLib_UnRegisterMe;
-  m_callbacks->GameLib_RegisterMe           = CAddonInterfaces::GameLib_RegisterMe;
-  m_callbacks->GameLib_UnRegisterMe         = CAddonInterfaces::GameLib_UnRegisterMe;
+  m_callbacks->AddOnLib_RegisterMe = CAddonInterfaces::AddOnLib_RegisterMe;
+  m_callbacks->AddOnLib_UnRegisterMe = CAddonInterfaces::AddOnLib_UnRegisterMe;
+  m_callbacks->GUILib_RegisterMe = CAddonInterfaces::GUILib_RegisterMe;
+  m_callbacks->GUILib_UnRegisterMe = CAddonInterfaces::GUILib_UnRegisterMe;
+  m_callbacks->PVRLib_RegisterMe = CAddonInterfaces::PVRLib_RegisterMe;
+  m_callbacks->PVRLib_UnRegisterMe = CAddonInterfaces::PVRLib_UnRegisterMe;
+  m_callbacks->GameLib_RegisterMe = CAddonInterfaces::GameLib_RegisterMe;
+  m_callbacks->GameLib_UnRegisterMe = CAddonInterfaces::GameLib_UnRegisterMe;
 }
 
 CAddonInterfaces::~CAddonInterfaces()
@@ -58,7 +59,7 @@ CAddonInterfaces::~CAddonInterfaces()
 /*\_____________________________________________________________________________
 \*/
 
-void* CAddonInterfaces::AddOnLib_RegisterMe(void *addonData)
+void* CAddonInterfaces::AddOnLib_RegisterMe(void* addonData)
 {
   CAddonInterfaces* addon = static_cast<CAddonInterfaces*>(addonData);
   if (addon == nullptr)
@@ -71,7 +72,7 @@ void* CAddonInterfaces::AddOnLib_RegisterMe(void *addonData)
   return static_cast<KodiAPI::AddOn::CAddonCallbacksAddon*>(addon->m_helperAddOn)->GetCallbacks();
 }
 
-void CAddonInterfaces::AddOnLib_UnRegisterMe(void *addonData, void *cbTable)
+void CAddonInterfaces::AddOnLib_UnRegisterMe(void* addonData, void* cbTable)
 {
   CAddonInterfaces* addon = static_cast<CAddonInterfaces*>(addonData);
   if (addon == nullptr)
@@ -85,7 +86,7 @@ void CAddonInterfaces::AddOnLib_UnRegisterMe(void *addonData, void *cbTable)
 }
 /*\_____________________________________________________________________________
 \*/
-void* CAddonInterfaces::GUILib_RegisterMe(void *addonData)
+void* CAddonInterfaces::GUILib_RegisterMe(void* addonData)
 {
   CAddonInterfaces* addon = static_cast<CAddonInterfaces*>(addonData);
   if (addon == nullptr)
@@ -98,7 +99,7 @@ void* CAddonInterfaces::GUILib_RegisterMe(void *addonData)
   return static_cast<KodiAPI::GUI::CAddonCallbacksGUI*>(addon->m_helperGUI)->GetCallbacks();
 }
 
-void CAddonInterfaces::GUILib_UnRegisterMe(void *addonData, void *cbTable)
+void CAddonInterfaces::GUILib_UnRegisterMe(void* addonData, void* cbTable)
 {
   CAddonInterfaces* addon = static_cast<CAddonInterfaces*>(addonData);
   if (addon == nullptr)
@@ -112,7 +113,7 @@ void CAddonInterfaces::GUILib_UnRegisterMe(void *addonData, void *cbTable)
 }
 /*\_____________________________________________________________________________
 \*/
-void* CAddonInterfaces::PVRLib_RegisterMe(void *addonData)
+void* CAddonInterfaces::PVRLib_RegisterMe(void* addonData)
 {
   CAddonInterfaces* addon = static_cast<CAddonInterfaces*>(addonData);
   if (addon == nullptr)
@@ -124,12 +125,12 @@ void* CAddonInterfaces::PVRLib_RegisterMe(void *addonData)
   return dynamic_cast<PVR::CPVRClient*>(addon->m_addon)->GetInstanceInterface();
 }
 
-void CAddonInterfaces::PVRLib_UnRegisterMe(void *addonData, void *cbTable)
+void CAddonInterfaces::PVRLib_UnRegisterMe(void* addonData, void* cbTable)
 {
 }
 /*\_____________________________________________________________________________
 \*/
-void* CAddonInterfaces::GameLib_RegisterMe(void *addonData)
+void* CAddonInterfaces::GameLib_RegisterMe(void* addonData)
 {
   CAddonInterfaces* addon = static_cast<CAddonInterfaces*>(addonData);
   if (addon == nullptr)
@@ -141,7 +142,7 @@ void* CAddonInterfaces::GameLib_RegisterMe(void *addonData)
   return dynamic_cast<GAME::CGameClient*>(addon->m_addon)->GetInstanceInterface();
 }
 
-void CAddonInterfaces::GameLib_UnRegisterMe(void *addonData, void *cbTable)
+void CAddonInterfaces::GameLib_UnRegisterMe(void* addonData, void* cbTable)
 {
 }
 /*\_____________________________________________________________________________
@@ -160,7 +161,8 @@ void CAddonInterfaces::OnApplicationMessage(ThreadMessage* pMsg)
         static_cast<ADDON::CGUIAddonWindowDialog*>(pMsg->lpVoid)->Show_Internal(pMsg->param2 > 0);
         break;
       case 1:
-        static_cast<KodiAPI::GUI::CGUIAddonWindowDialog*>(pMsg->lpVoid)->Show_Internal(pMsg->param2 > 0);
+        static_cast<KodiAPI::GUI::CGUIAddonWindowDialog*>(pMsg->lpVoid)
+            ->Show_Internal(pMsg->param2 > 0);
         break;
       };
     }

@@ -30,8 +30,9 @@ bool CSettingRequirementConditionCombination::Check() const
   return CSettingConditionCombination::Check();
 }
 
-CSettingRequirement::CSettingRequirement(CSettingsManager *settingsManager /* = nullptr */)
+CSettingRequirement::CSettingRequirement(CSettingsManager* settingsManager /* = nullptr */)
   : CSettingCondition(settingsManager)
 {
-  m_operation = CBooleanLogicOperationPtr(new CSettingRequirementConditionCombination(m_settingsManager));
+  m_operation =
+      CBooleanLogicOperationPtr(new CSettingRequirementConditionCombination(m_settingsManager));
 }

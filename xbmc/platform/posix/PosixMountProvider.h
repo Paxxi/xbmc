@@ -20,18 +20,21 @@ public:
   ~CPosixMountProvider() override = default;
 
   void Initialize() override;
-  void Stop() override { }
+  void Stop() override {}
 
-  void GetLocalDrives(VECSOURCES &localDrives) override { GetDrives(localDrives); }
-  void GetRemovableDrives(VECSOURCES &removableDrives) override { /*GetDrives(removableDrives);*/ }
+  void GetLocalDrives(VECSOURCES& localDrives) override { GetDrives(localDrives); }
+  void GetRemovableDrives(VECSOURCES& removableDrives) override
+  { /*GetDrives(removableDrives);*/
+  }
 
   std::vector<std::string> GetDiskUsage() override;
 
   bool Eject(const std::string& mountpath) override;
 
-  bool PumpDriveChangeEvents(IStorageEventsCallback *callback) override;
+  bool PumpDriveChangeEvents(IStorageEventsCallback* callback) override;
+
 private:
-  void GetDrives(VECSOURCES &drives);
+  void GetDrives(VECSOURCES& drives);
 
   unsigned int m_removableLength;
 };

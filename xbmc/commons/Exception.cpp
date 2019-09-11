@@ -12,11 +12,10 @@
 
 namespace XbmcCommons
 {
-  Exception::~Exception() = default;
+Exception::~Exception() = default;
 
-  void Exception::LogThrowMessage(const char* prefix) const
-  {
-    CLog::Log(LOGERROR,"EXCEPTION Thrown (%s) : %s", classname.c_str(), message.c_str());
-  }
+void Exception::LogThrowMessage(const char* prefix) const
+{
+  CLog::Log(LOGERROR, "EXCEPTION Thrown (%s) : %s", classname.c_str(), message.c_str());
 }
-
+} // namespace XbmcCommons

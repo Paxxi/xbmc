@@ -32,19 +32,19 @@ using namespace ADDON;
 using namespace KODI::MESSAGING;
 
 
-#define CONTROL_OK              28
-#define CONTROL_CANCEL          29
+#define CONTROL_OK 28
+#define CONTROL_CANCEL 29
 
-#define SETTING_PROTOCOL        "protocol"
-#define SETTING_SERVER_ADDRESS  "serveraddress"
-#define SETTING_SERVER_BROWSE   "serverbrowse"
-#define SETTING_PORT_NUMBER     "portnumber"
-#define SETTING_USERNAME        "username"
-#define SETTING_PASSWORD        "password"
-#define SETTING_REMOTE_PATH     "remotepath"
+#define SETTING_PROTOCOL "protocol"
+#define SETTING_SERVER_ADDRESS "serveraddress"
+#define SETTING_SERVER_BROWSE "serverbrowse"
+#define SETTING_PORT_NUMBER "portnumber"
+#define SETTING_USERNAME "username"
+#define SETTING_PASSWORD "password"
+#define SETTING_REMOTE_PATH "remotepath"
 
 CGUIDialogNetworkSetup::CGUIDialogNetworkSetup(void)
-    : CGUIDialogSettingsManualBase(WINDOW_DIALOG_NETWORK_SETUP, "DialogSettings.xml")
+  : CGUIDialogSettingsManualBase(WINDOW_DIALOG_NETWORK_SETUP, "DialogSettings.xml")
 {
   m_protocol = 0;
   m_confirmed = false;
@@ -61,23 +61,23 @@ bool CGUIDialogNetworkSetup::OnBack(int actionID)
 
 bool CGUIDialogNetworkSetup::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+    if (iControl == CONTROL_OK)
     {
-      int iControl = message.GetSenderId();
-      if (iControl == CONTROL_OK)
-      {
-        OnOK();
-        return true;
-      }
-      else if (iControl == CONTROL_CANCEL)
-      {
-        OnCancel();
-        return true;
-      }
+      OnOK();
+      return true;
     }
-    break;
+    else if (iControl == CONTROL_CANCEL)
+    {
+      OnCancel();
+      return true;
+    }
+  }
+  break;
   }
   return CGUIDialogSettingsManualBase::OnMessage(message);
 }
@@ -89,7 +89,7 @@ void CGUIDialogNetworkSetup::OnSettingChanged(std::shared_ptr<const CSetting> se
 
   CGUIDialogSettingsManualBase::OnSettingChanged(setting);
 
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
 
   if (settingId == SETTING_PROTOCOL)
   {
@@ -118,7 +118,7 @@ void CGUIDialogNetworkSetup::OnSettingAction(std::shared_ptr<const CSetting> set
 
   CGUIDialogSettingsManualBase::OnSettingAction(setting);
 
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
 
   if (settingId == SETTING_SERVER_BROWSE)
     OnServerBrowse();
@@ -126,14 +126,17 @@ void CGUIDialogNetworkSetup::OnSettingAction(std::shared_ptr<const CSetting> set
 
 // \brief Show CGUIDialogNetworkSetup dialog and prompt for a new network address.
 // \return True if the network address is valid, false otherwise.
-bool CGUIDialogNetworkSetup::ShowAndGetNetworkAddress(std::string &path)
+bool CGUIDialogNetworkSetup::ShowAndGetNetworkAddress(std::string& path)
 {
-  CGUIDialogNetworkSetup *dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogNetworkSetup>(WINDOW_DIALOG_NETWORK_SETUP);
-  if (!dialog) return false;
+  CGUIDialogNetworkSetup* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogNetworkSetup>(
+          WINDOW_DIALOG_NETWORK_SETUP);
+  if (!dialog)
+    return false;
   dialog->Initialize();
   if (!dialog->SetPath(path))
   {
-    HELPERS::ShowOKDialogText(CVariant{ 10218 }, CVariant{ 39103 });
+    HELPERS::ShowOKDialogText(CVariant{10218}, CVariant{39103});
     return false;
   }
 
@@ -200,7 +203,8 @@ void CGUIDialogNetworkSetup::InitializeSettings()
 
   AddSpinner(group, SETTING_PROTOCOL, 1008, SettingLevel::Basic, m_protocol, labels);
   AddEdit(group, SETTING_SERVER_ADDRESS, 1010, SettingLevel::Basic, m_server, true);
-  std::shared_ptr<CSettingAction> subsetting = AddButton(group, SETTING_SERVER_BROWSE, 1024, SettingLevel::Basic, "", false);
+  std::shared_ptr<CSettingAction> subsetting =
+      AddButton(group, SETTING_SERVER_BROWSE, 1024, SettingLevel::Basic, "", false);
   if (subsetting != NULL)
     subsetting->SetParent(SETTING_SERVER_ADDRESS);
 
@@ -271,11 +275,11 @@ void CGUIDialogNetworkSetup::UpdateButtons()
     SET_CONTROL_LABEL2(addressControlID, m_server);
     if (m_protocols[m_protocol].type == "smb")
     {
-      SET_CONTROL_LABEL(addressControlID, 1010);  // Server name
+      SET_CONTROL_LABEL(addressControlID, 1010); // Server name
     }
     else
     {
-      SET_CONTROL_LABEL(addressControlID, 1009);  // Server Address
+      SET_CONTROL_LABEL(addressControlID, 1009); // Server Address
     }
     SendMessage(GUI_MSG_SET_TYPE, addressControlID, CGUIEditControl::INPUT_TYPE_TEXT, 1016);
   }
@@ -289,11 +293,11 @@ void CGUIDialogNetworkSetup::UpdateButtons()
     CONTROL_ENABLE_ON_CONDITION(pathControlID, m_protocols[m_protocol].supportPath);
     if (m_protocols[m_protocol].type != "smb")
     {
-      SET_CONTROL_LABEL(pathControlID, 1011);  // Remote Path
+      SET_CONTROL_LABEL(pathControlID, 1011); // Remote Path
     }
     else
     {
-      SET_CONTROL_LABEL(pathControlID, 1012);  // Shared Folder
+      SET_CONTROL_LABEL(pathControlID, 1012); // Shared Folder
     }
     SendMessage(GUI_MSG_SET_TYPE, pathControlID, CGUIEditControl::INPUT_TYPE_TEXT, 1017);
   }
@@ -304,8 +308,7 @@ void CGUIDialogNetworkSetup::UpdateButtons()
   {
     int userControlID = userControl->GetID();
     SET_CONTROL_LABEL2(userControlID, m_username);
-    CONTROL_ENABLE_ON_CONDITION(userControlID,
-                                m_protocols[m_protocol].supportUsername);
+    CONTROL_ENABLE_ON_CONDITION(userControlID, m_protocols[m_protocol].supportUsername);
 
     SendMessage(GUI_MSG_SET_TYPE, userControlID, CGUIEditControl::INPUT_TYPE_TEXT, 1019);
   }
@@ -327,8 +330,7 @@ void CGUIDialogNetworkSetup::UpdateButtons()
   {
     int passControlID = passControl->GetID();
     SET_CONTROL_LABEL2(passControlID, m_password);
-    CONTROL_ENABLE_ON_CONDITION(passControlID,
-                                m_protocols[m_protocol].supportPassword);
+    CONTROL_ENABLE_ON_CONDITION(passControlID, m_protocols[m_protocol].supportPassword);
 
     SendMessage(GUI_MSG_SET_TYPE, passControlID, CGUIEditControl::INPUT_TYPE_PASSWORD, 12326);
   }
@@ -338,8 +340,7 @@ void CGUIDialogNetworkSetup::UpdateButtons()
   if (browseControl != NULL && browseControl->GetControl() != NULL)
   {
     int browseControlID = browseControl->GetID();
-    CONTROL_ENABLE_ON_CONDITION(browseControlID,
-                                m_protocols[m_protocol].supportBrowsing);
+    CONTROL_ENABLE_ON_CONDITION(browseControlID, m_protocols[m_protocol].supportBrowsing);
   }
 }
 
@@ -369,8 +370,7 @@ std::string CGUIDialogNetworkSetup::ConstructPath() const
   if (!m_server.empty())
     url.SetHostName(m_server);
 
-  if (m_protocols[m_protocol].supportPort &&
-      !m_port.empty() && atoi(m_port.c_str()) > 0)
+  if (m_protocols[m_protocol].supportPort && !m_port.empty() && atoi(m_port.c_str()) > 0)
   {
     url.SetPort(atoi(m_port.c_str()));
   }
@@ -381,7 +381,7 @@ std::string CGUIDialogNetworkSetup::ConstructPath() const
   return url.Get();
 }
 
-bool CGUIDialogNetworkSetup::SetPath(const std::string &path)
+bool CGUIDialogNetworkSetup::SetPath(const std::string& path)
 {
   UpdateAvailableProtocols();
 
@@ -403,7 +403,8 @@ bool CGUIDialogNetworkSetup::SetPath(const std::string &path)
   }
   if (m_protocol == -1)
   {
-    CLog::Log(LOGERROR, "__PRETTY_FUNCTION__: Asked to initialize for unknown path %s", path.c_str());
+    CLog::Log(LOGERROR, "__PRETTY_FUNCTION__: Asked to initialize for unknown path %s",
+              path.c_str());
     Reset();
     return false;
   }
@@ -436,7 +437,7 @@ void CGUIDialogNetworkSetup::UpdateAvailableProtocols()
   m_protocols.clear();
 #ifdef HAS_FILESYSTEM_SMB
   // most popular protocol at the first place
-  m_protocols.emplace_back(Protocol{ true, true, true, false, true, 0, "smb", 20171 });
+  m_protocols.emplace_back(Protocol{true, true, true, false, true, 0, "smb", 20171});
 #endif
   // protocols from vfs addon next
   if (CServiceBroker::IsBinaryAddonCacheUp())
@@ -448,24 +449,22 @@ void CGUIDialogNetworkSetup::UpdateAvailableProtocols()
       {
         // only use first protocol
         auto prots = StringUtils::Split(info.type, "|");
-        m_protocols.emplace_back(Protocol{ info.supportPath, info.supportUsername,
-          info.supportPassword, info.supportPort,
-          info.supportBrowsing, info.defaultPort,
-          prots.front(), info.label });
+        m_protocols.emplace_back(
+            Protocol{info.supportPath, info.supportUsername, info.supportPassword, info.supportPort,
+                     info.supportBrowsing, info.defaultPort, prots.front(), info.label});
       }
     }
   }
   // internals
-  const std::vector<Protocol> defaults =
-        {{ true,  true,  true,  true, false, 443, "https", 20301},
-         { true,  true,  true,  true, false,  80,  "http", 20300},
-         { true,  true,  true,  true, false, 443,  "davs", 20254},
-         { true,  true,  true,  true, false,  80,   "dav", 20253},
-         { true,  true,  true,  true, false,  21,   "ftp", 20173},
-         { true,  true,  true,  true, false, 990,  "ftps", 20174},
-         {false, false, false, false,  true,   0,  "upnp", 20175},
-         { true,  true,  true,  true, false,  80,   "rss", 20304},
-         { true,  true,  true,  true, false, 443,  "rsss", 20305}};
+  const std::vector<Protocol> defaults = {{true, true, true, true, false, 443, "https", 20301},
+                                          {true, true, true, true, false, 80, "http", 20300},
+                                          {true, true, true, true, false, 443, "davs", 20254},
+                                          {true, true, true, true, false, 80, "dav", 20253},
+                                          {true, true, true, true, false, 21, "ftp", 20173},
+                                          {true, true, true, true, false, 990, "ftps", 20174},
+                                          {false, false, false, false, true, 0, "upnp", 20175},
+                                          {true, true, true, true, false, 80, "rss", 20304},
+                                          {true, true, true, true, false, 443, "rsss", 20305}};
 
   m_protocols.insert(m_protocols.end(), defaults.begin(), defaults.end());
 #ifdef HAS_FILESYSTEM_NFS

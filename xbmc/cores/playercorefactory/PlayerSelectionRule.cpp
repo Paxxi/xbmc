@@ -65,11 +65,15 @@ void CPlayerSelectionRule::Initialize(TiXmlElement* pRule)
   m_videoAspect = XMLUtils::GetAttribute(pRule, "videoaspect");
 
   m_bStreamDetails = m_audioCodec.length() > 0 || m_audioChannels.length() > 0 ||
-    m_videoCodec.length() > 0 || m_videoResolution.length() > 0 || m_videoAspect.length() > 0;
+                     m_videoCodec.length() > 0 || m_videoResolution.length() > 0 ||
+                     m_videoAspect.length() > 0;
 
-  if (m_bStreamDetails && !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYVIDEOS_EXTRACTFLAGS))
+  if (m_bStreamDetails && !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                              CSettings::SETTING_MYVIDEOS_EXTRACTFLAGS))
   {
-      CLog::Log(LOGWARNING, "CPlayerSelectionRule::Initialize: rule: %s needs media flagging, which is disabled", m_name.c_str());
+    CLog::Log(LOGWARNING,
+              "CPlayerSelectionRule::Initialize: rule: %s needs media flagging, which is disabled",
+              m_name.c_str());
   }
 
   m_playerName = XMLUtils::GetAttribute(pRule, "player");
@@ -86,8 +90,10 @@ int CPlayerSelectionRule::GetTristate(const char* szValue)
 {
   if (szValue)
   {
-    if (stricmp(szValue, "true") == 0) return 1;
-    if (stricmp(szValue, "false") == 0) return 0;
+    if (stricmp(szValue, "true") == 0)
+      return 1;
+    if (stricmp(szValue, "false") == 0)
+      return 0;
   }
   return -1;
 }
@@ -102,7 +108,9 @@ bool CPlayerSelectionRule::MatchesRegExp(const std::string& str, CRegExp& regExp
   return regExp.RegFind(str, 0) == 0;
 }
 
-void CPlayerSelectionRule::GetPlayers(const CFileItem& item, std::vector<std::string>&validPlayers, std::vector<std::string>&players)
+void CPlayerSelectionRule::GetPlayers(const CFileItem& item,
+                                      std::vector<std::string>& validPlayers,
+                                      std::vector<std::string>& players)
 {
   CLog::Log(LOGDEBUG, "CPlayerSelectionRule::GetPlayers: considering rule: %s", m_name.c_str());
 
@@ -132,13 +140,16 @@ void CPlayerSelectionRule::GetPlayers(const CFileItem& item, std::vector<std::st
   {
     if (!item.GetVideoInfoTag()->HasStreamDetails())
     {
-      CLog::Log(LOGDEBUG, "CPlayerSelectionRule::GetPlayers: cannot check rule: %s, no StreamDetails", m_name.c_str());
+      CLog::Log(LOGDEBUG,
+                "CPlayerSelectionRule::GetPlayers: cannot check rule: %s, no StreamDetails",
+                m_name.c_str());
       return;
     }
 
     CStreamDetails streamDetails = item.GetVideoInfoTag()->m_streamDetails;
 
-    if (CompileRegExp(m_audioCodec, regExp) && !MatchesRegExp(streamDetails.GetAudioCodec(), regExp))
+    if (CompileRegExp(m_audioCodec, regExp) &&
+        !MatchesRegExp(streamDetails.GetAudioCodec(), regExp))
       return;
 
     std::stringstream itoa;
@@ -148,15 +159,19 @@ void CPlayerSelectionRule::GetPlayers(const CFileItem& item, std::vector<std::st
     if (CompileRegExp(m_audioChannels, regExp) && !MatchesRegExp(audioChannelsstr, regExp))
       return;
 
-    if (CompileRegExp(m_videoCodec, regExp) && !MatchesRegExp(streamDetails.GetVideoCodec(), regExp))
+    if (CompileRegExp(m_videoCodec, regExp) &&
+        !MatchesRegExp(streamDetails.GetVideoCodec(), regExp))
       return;
 
     if (CompileRegExp(m_videoResolution, regExp) &&
-        !MatchesRegExp(CStreamDetails::VideoDimsToResolutionDescription(streamDetails.GetVideoWidth(), streamDetails.GetVideoHeight()), regExp))
+        !MatchesRegExp(CStreamDetails::VideoDimsToResolutionDescription(
+                           streamDetails.GetVideoWidth(), streamDetails.GetVideoHeight()),
+                       regExp))
       return;
 
     if (CompileRegExp(m_videoAspect, regExp) &&
-        !MatchesRegExp(CStreamDetails::VideoAspectToAspectDescription(streamDetails.GetVideoAspect()),  regExp))
+        !MatchesRegExp(
+            CStreamDetails::VideoAspectToAspectDescription(streamDetails.GetVideoAspect()), regExp))
       return;
   }
 
@@ -181,9 +196,8 @@ void CPlayerSelectionRule::GetPlayers(const CFileItem& item, std::vector<std::st
 
   if (std::find(validPlayers.begin(), validPlayers.end(), m_playerName) != validPlayers.end())
   {
-    CLog::Log(LOGDEBUG, "CPlayerSelectionRule::GetPlayers: adding player: %s for rule: %s", m_playerName.c_str(), m_name.c_str());
+    CLog::Log(LOGDEBUG, "CPlayerSelectionRule::GetPlayers: adding player: %s for rule: %s",
+              m_playerName.c_str(), m_name.c_str());
     players.push_back(m_playerName);
   }
 }
-
-

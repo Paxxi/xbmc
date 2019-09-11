@@ -7,13 +7,16 @@
  */
 
 #include "ActiveAEFilter.h"
-#include "utils/log.h"
+
 #include "utils/StringUtils.h"
+#include "utils/log.h"
+
 #include <algorithm>
 
-extern "C" {
-#include <libavfilter/avfilter.h>
+extern "C"
+{
 #include <libavcodec/avcodec.h>
+#include <libavfilter/avfilter.h>
 #include <libavfilter/buffersink.h>
 #include <libavfilter/buffersrc.h>
 #include <libswresample/swresample.h>
@@ -84,20 +87,20 @@ bool CActiveAEFilter::CreateFilterGraph()
   const AVFilter* srcFilter = avfilter_get_by_name("abuffer");
   const AVFilter* outFilter = avfilter_get_by_name("abuffersink");
 
-  std::string args = StringUtils::Format("time_base=1/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%" PRIx64,
-                                         m_sampleRate,
-                                         m_sampleRate,
-                                         av_get_sample_fmt_name(m_sampleFormat),
-                                         m_channelLayout);
+  std::string args = StringUtils::Format(
+      "time_base=1/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%" PRIx64, m_sampleRate,
+      m_sampleRate, av_get_sample_fmt_name(m_sampleFormat), m_channelLayout);
 
-  int ret = avfilter_graph_create_filter(&m_pFilterCtxIn, srcFilter, "in", args.c_str(), NULL, m_pFilterGraph);
+  int ret = avfilter_graph_create_filter(&m_pFilterCtxIn, srcFilter, "in", args.c_str(), NULL,
+                                         m_pFilterGraph);
   if (ret < 0)
   {
     CLog::Log(LOGERROR, "CActiveAEFilter::CreateFilterGraph - avfilter_graph_create_filter: src");
     return false;
   }
 
-  ret = avfilter_graph_create_filter(&m_pFilterCtxOut, outFilter, "out", NULL, NULL, m_pFilterGraph);
+  ret =
+      avfilter_graph_create_filter(&m_pFilterCtxOut, outFilter, "out", NULL, NULL, m_pFilterGraph);
   if (ret < 0)
   {
     CLog::Log(LOGERROR, "CActiveAEFilter::CreateFilterGraph - avfilter_graph_create_filter: out");
@@ -111,11 +114,11 @@ bool CActiveAEFilter::CreateFilterGraph()
 
 bool CActiveAEFilter::CreateAtempoFilter()
 {
-  const AVFilter *atempo;
+  const AVFilter* atempo;
 
   atempo = avfilter_get_by_name("atempo");
   m_pFilterCtxAtempo = avfilter_graph_alloc_filter(m_pFilterGraph, atempo, "atempo");
-  std::string args =  StringUtils::Format("tempo=%f", m_tempo);
+  std::string args = StringUtils::Format("tempo=%f", m_tempo);
   int ret = avfilter_init_str(m_pFilterCtxAtempo, args.c_str());
 
   if (ret < 0)
@@ -134,7 +137,8 @@ bool CActiveAEFilter::CreateAtempoFilter()
   ret = avfilter_link(m_pFilterCtxAtempo, 0, m_pFilterCtxOut, 0);
   if (ret < 0)
   {
-    CLog::Log(LOGERROR, "CActiveAEFilter::CreateAtempoFilter - avfilter_link failed for out filter");
+    CLog::Log(LOGERROR,
+              "CActiveAEFilter::CreateAtempoFilter - avfilter_link failed for out filter");
     return false;
   }
 
@@ -184,7 +188,8 @@ void CActiveAEFilter::CloseFilter()
   m_SamplesOut = 0;
 }
 
-int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_t **src_buffer, int src_samples, int src_bufsize)
+int CActiveAEFilter::ProcessFilter(
+    uint8_t** dst_buffer, int dst_samples, uint8_t** src_buffer, int src_samples, int src_bufsize)
 {
   if (m_filterEof)
   {
@@ -200,7 +205,7 @@ int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_
 
   if (src_samples)
   {
-    AVFrame *frame = av_frame_alloc();
+    AVFrame* frame = av_frame_alloc();
     if (!frame)
       return -1;
 
@@ -214,8 +219,8 @@ int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_
 
     m_SamplesIn += src_samples;
 
-    result = avcodec_fill_audio_frame(frame, channels, m_sampleFormat,
-                             src_buffer[0], src_bufsize, 16);
+    result =
+        avcodec_fill_audio_frame(frame, channels, m_sampleFormat, src_buffer[0], src_bufsize, 16);
     if (result < 0)
     {
       av_frame_free(&frame);
@@ -246,11 +251,11 @@ int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_
   if (!m_hasData && m_started)
   {
     m_needData = false;
-    AVFrame *outFrame = m_needConvert ? m_pConvertFrame : m_pOutFrame;
+    AVFrame* outFrame = m_needConvert ? m_pConvertFrame : m_pOutFrame;
 
     result = av_buffersink_get_frame(m_pFilterCtxOut, outFrame);
 
-    if (result  == AVERROR(EAGAIN))
+    if (result == AVERROR(EAGAIN))
     {
       m_needData = true;
       return 0;
@@ -296,7 +301,7 @@ int CActiveAEFilter::ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_
     int samples = std::min(dst_samples, m_pOutFrame->nb_samples - m_sampleOffset);
     int bytes = samples * av_get_bytes_per_sample(m_sampleFormat) * channels / planes;
     int bytesOffset = m_sampleOffset * av_get_bytes_per_sample(m_sampleFormat) * channels / planes;
-    for (int i=0; i<planes; i++)
+    for (int i = 0; i < planes; i++)
     {
       memcpy(dst_buffer[i], m_pOutFrame->extended_data[i] + bytesOffset, bytes);
     }

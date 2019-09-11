@@ -19,7 +19,6 @@ public:
   bool onMouseEvent(AInputEvent* event);
 
 protected:
-
 private:
   void MouseMove(float x, float y);
   void MouseButton(float x, float y, int32_t type, int32_t buttons);

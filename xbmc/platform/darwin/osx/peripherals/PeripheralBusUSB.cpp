@@ -7,8 +7,10 @@
  */
 
 #include "PeripheralBusUSB.h"
+
 #include "peripherals/Peripherals.h"
 #include "utils/log.h"
+
 #include "platform/darwin/DarwinUtils.h"
 
 #include <sys/param.h>
@@ -16,20 +18,21 @@
 using namespace PERIPHERALS;
 
 #include <IOKit/IOCFPlugIn.h>
-#include <IOKit/usb/IOUSBLib.h>
-#include <IOKit/hid/IOHIDLib.h>
 #include <IOKit/hid/IOHIDKeys.h>
+#include <IOKit/hid/IOHIDLib.h>
 #include <IOKit/serial/IOSerialKeys.h>
+#include <IOKit/usb/IOUSBLib.h>
 
-typedef struct USBDevicePrivateData {
-  CPeripheralBusUSB     *refCon;
-  std::string            deviceName;
-  io_object_t           notification;
-  PeripheralScanResult  result;
+typedef struct USBDevicePrivateData
+{
+  CPeripheralBusUSB* refCon;
+  std::string deviceName;
+  io_object_t notification;
+  PeripheralScanResult result;
 } USBDevicePrivateData;
 
-CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals& manager) :
-    CPeripheralBus("PeripBusUSB", manager, PERIPHERAL_BUS_USB)
+CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals& manager)
+  : CPeripheralBus("PeripBusUSB", manager, PERIPHERAL_BUS_USB)
 {
   m_bNeedsPolling = false;
 
@@ -43,9 +46,9 @@ CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals& manager) :
   CFRunLoopAddSource(CFRunLoopGetCurrent(), run_loop_source, kCFRunLoopCommonModes);
 
   //add a notification callback for attach event
-  IOReturn result = IOServiceAddMatchingNotification(m_notify_port,
-    kIOFirstMatchNotification, matching_dict,
-    (IOServiceMatchingCallback)DeviceAttachCallback, this, &m_attach_iterator);
+  IOReturn result = IOServiceAddMatchingNotification(
+      m_notify_port, kIOFirstMatchNotification, matching_dict,
+      (IOServiceMatchingCallback)DeviceAttachCallback, this, &m_attach_iterator);
   if (result == kIOReturnSuccess)
   {
     //call the callback to 'arm' the notification
@@ -58,8 +61,8 @@ CPeripheralBusUSB::~CPeripheralBusUSB()
   if (m_notify_port)
   {
     // remove the sleep notification port from the application runloop
-    CFRunLoopRemoveSource( CFRunLoopGetCurrent(),
-      IONotificationPortGetRunLoopSource(m_notify_port), kCFRunLoopDefaultMode );
+    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), IONotificationPortGetRunLoopSource(m_notify_port),
+                          kCFRunLoopDefaultMode);
     IONotificationPortDestroy(m_notify_port);
     m_notify_port = 0;
   }
@@ -70,7 +73,7 @@ CPeripheralBusUSB::~CPeripheralBusUSB()
   }
 }
 
-bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults &results)
+bool CPeripheralBusUSB::PerformDeviceScan(PeripheralScanResults& results)
 {
   results = m_scan_results;
   return true;
@@ -98,14 +101,18 @@ PeripheralType CPeripheralBusUSB::GetType(int iDeviceClass)
   }
 }
 
-void CPeripheralBusUSB::DeviceDetachCallback(void *refCon, io_service_t service, natural_t messageType, void *messageArgument)
+void CPeripheralBusUSB::DeviceDetachCallback(void* refCon,
+                                             io_service_t service,
+                                             natural_t messageType,
+                                             void* messageArgument)
 {
   if (messageType == kIOMessageServiceIsTerminated)
   {
-    USBDevicePrivateData *privateDataRef = (USBDevicePrivateData*)refCon;
+    USBDevicePrivateData* privateDataRef = (USBDevicePrivateData*)refCon;
 
-    std::vector<PeripheralScanResult>::iterator it = privateDataRef->refCon->m_scan_results.m_results.begin();
-    while(it != privateDataRef->refCon->m_scan_results.m_results.end())
+    std::vector<PeripheralScanResult>::iterator it =
+        privateDataRef->refCon->m_scan_results.m_results.begin();
+    while (it != privateDataRef->refCon->m_scan_results.m_results.end())
     {
       if (privateDataRef->result.m_strLocation == it->m_strLocation)
         it = privateDataRef->refCon->m_scan_results.m_results.erase(it);
@@ -114,8 +121,8 @@ void CPeripheralBusUSB::DeviceDetachCallback(void *refCon, io_service_t service,
     }
     privateDataRef->refCon->ScanForDevices();
 
-    CLog::Log(LOGDEBUG, "USB Device Detach:%s, %s\n",
-      privateDataRef->deviceName.c_str(), privateDataRef->result.m_strLocation.c_str());
+    CLog::Log(LOGDEBUG, "USB Device Detach:%s, %s\n", privateDataRef->deviceName.c_str(),
+              privateDataRef->result.m_strLocation.c_str());
     IOObjectRelease(privateDataRef->notification);
     delete privateDataRef;
     //release the service
@@ -128,27 +135,28 @@ void CPeripheralBusUSB::DeviceAttachCallback(CPeripheralBusUSB* refCon, io_itera
   io_service_t usbDevice;
   while ((usbDevice = IOIteratorNext(iterator)))
   {
-    IOReturn  result;
+    IOReturn result;
 
     io_name_t deviceName;
     result = IORegistryEntryGetName(usbDevice, deviceName);
-		if (result != KERN_SUCCESS)
+    if (result != KERN_SUCCESS)
       deviceName[0] = '\0';
 
     SInt32 deviceScore;
-    IOCFPlugInInterface **devicePlugin;
-    result = IOCreatePlugInInterfaceForService(usbDevice,
-      kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &devicePlugin, &deviceScore);
+    IOCFPlugInInterface** devicePlugin;
+    result = IOCreatePlugInInterfaceForService(usbDevice, kIOUSBDeviceUserClientTypeID,
+                                               kIOCFPlugInInterfaceID, &devicePlugin, &deviceScore);
     if (result != kIOReturnSuccess)
     {
       IOObjectRelease(usbDevice);
       continue;
     }
 
-    IOUSBDeviceInterface **deviceInterface;
+    IOUSBDeviceInterface** deviceInterface;
     // Use the plugin interface to retrieve the device interface.
-    result = (*devicePlugin)->QueryInterface(devicePlugin,
-      CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID), (LPVOID*)&deviceInterface);
+    result = (*devicePlugin)
+                 ->QueryInterface(devicePlugin, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID),
+                                  (LPVOID*)&deviceInterface);
     if (result != kIOReturnSuccess)
     {
       IODestroyPlugInInterface(devicePlugin);
@@ -157,39 +165,42 @@ void CPeripheralBusUSB::DeviceAttachCallback(CPeripheralBusUSB* refCon, io_itera
     }
 
     // get vendor/product ids
-    UInt16  vendorId;
-    UInt16  productId;
-    UInt32  locationId;
-    UInt8   bDeviceClass;
+    UInt16 vendorId;
+    UInt16 productId;
+    UInt32 locationId;
+    UInt8 bDeviceClass;
 
-    (*deviceInterface)->GetDeviceVendor( deviceInterface, &vendorId);
+    (*deviceInterface)->GetDeviceVendor(deviceInterface, &vendorId);
     (*deviceInterface)->GetDeviceProduct(deviceInterface, &productId);
-    (*deviceInterface)->GetLocationID(   deviceInterface, &locationId);
-    (*deviceInterface)->GetDeviceClass(  deviceInterface, &bDeviceClass);
+    (*deviceInterface)->GetLocationID(deviceInterface, &locationId);
+    (*deviceInterface)->GetDeviceClass(deviceInterface, &bDeviceClass);
 
     io_service_t usbInterface;
     io_iterator_t interface_iterator;
-    IOUSBFindInterfaceRequest	request;
-    request.bInterfaceClass    = kIOUSBFindInterfaceDontCare;
+    IOUSBFindInterfaceRequest request;
+    request.bInterfaceClass = kIOUSBFindInterfaceDontCare;
     request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
     request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
-    request.bAlternateSetting  = kIOUSBFindInterfaceDontCare;
-    result = (*deviceInterface)->CreateInterfaceIterator(deviceInterface, &request, &interface_iterator);
+    request.bAlternateSetting = kIOUSBFindInterfaceDontCare;
+    result =
+        (*deviceInterface)->CreateInterfaceIterator(deviceInterface, &request, &interface_iterator);
     while ((usbInterface = IOIteratorNext(interface_iterator)))
     {
       SInt32 interfaceScore;
-      IOCFPlugInInterface **interfacePlugin;
+      IOCFPlugInInterface** interfacePlugin;
       //create intermediate plugin for interface access
-      result = IOCreatePlugInInterfaceForService(usbInterface,
-        kIOUSBInterfaceUserClientTypeID, kIOCFPlugInInterfaceID, &interfacePlugin, &interfaceScore);
+      result = IOCreatePlugInInterfaceForService(usbInterface, kIOUSBInterfaceUserClientTypeID,
+                                                 kIOCFPlugInInterfaceID, &interfacePlugin,
+                                                 &interfaceScore);
       if (result != kIOReturnSuccess)
       {
         IOObjectRelease(usbInterface);
         continue;
       }
       IOUSBInterfaceInterface** interfaceInterface;
-      result = (*interfacePlugin)->QueryInterface(interfacePlugin,
-        CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceID), (void**)&interfaceInterface);
+      result = (*interfacePlugin)
+                   ->QueryInterface(interfacePlugin, CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceID),
+                                    (void**)&interfaceInterface);
       if (result != kIOReturnSuccess)
       {
         IODestroyPlugInInterface(interfacePlugin);
@@ -202,16 +213,17 @@ void CPeripheralBusUSB::DeviceAttachCallback(CPeripheralBusUSB* refCon, io_itera
       // some IR remotes that emulate an HID keyboard do not report this.
       UInt8 bInterfaceClass;
       result = (*interfaceInterface)->GetInterfaceClass(interfaceInterface, &bInterfaceClass);
-      if (bInterfaceClass == kUSBHIDInterfaceClass || bInterfaceClass == kUSBCommunicationDataInterfaceClass)
+      if (bInterfaceClass == kUSBHIDInterfaceClass ||
+          bInterfaceClass == kUSBCommunicationDataInterfaceClass)
       {
         std::string ttlDeviceFilePath;
         CFStringRef deviceFilePathAsCFString;
-        USBDevicePrivateData *privateDataRef;
+        USBDevicePrivateData* privateDataRef;
         privateDataRef = new USBDevicePrivateData;
         // save the device info to our private data.
         privateDataRef->refCon = refCon;
         privateDataRef->deviceName = deviceName;
-        privateDataRef->result.m_iVendorId  = vendorId;
+        privateDataRef->result.m_iVendorId = vendorId;
         privateDataRef->result.m_iProductId = productId;
 
         if (bInterfaceClass == kUSBCommunicationDataInterfaceClass)
@@ -224,20 +236,24 @@ void CPeripheralBusUSB::DeviceAttachCallback(CPeripheralBusUSB* refCon, io_itera
           kresult = IORegistryEntryGetParentEntry(usbInterface, kIOServicePlane, &parent);
           if (kresult == KERN_SUCCESS)
           {
-            deviceFilePathAsCFString = (CFStringRef)IORegistryEntrySearchCFProperty(parent,
-              kIOServicePlane, CFSTR(kIOCalloutDeviceKey), kCFAllocatorDefault, kIORegistryIterateRecursively);
+            deviceFilePathAsCFString = (CFStringRef)IORegistryEntrySearchCFProperty(
+                parent, kIOServicePlane, CFSTR(kIOCalloutDeviceKey), kCFAllocatorDefault,
+                kIORegistryIterateRecursively);
             if (deviceFilePathAsCFString)
             {
               // Convert the path from a CFString to a std::string
-              if (!CDarwinUtils::CFStringRefToUTF8String(deviceFilePathAsCFString, ttlDeviceFilePath))
-                CLog::Log(LOGWARNING, "CPeripheralBusUSB::DeviceAttachCallback failed to convert CFStringRef");
+              if (!CDarwinUtils::CFStringRefToUTF8String(deviceFilePathAsCFString,
+                                                         ttlDeviceFilePath))
+                CLog::Log(LOGWARNING,
+                          "CPeripheralBusUSB::DeviceAttachCallback failed to convert CFStringRef");
               CFRelease(deviceFilePathAsCFString);
             }
             IOObjectRelease(parent);
           }
         }
         if (!ttlDeviceFilePath.empty())
-          privateDataRef->result.m_strLocation = StringUtils::Format("%s", ttlDeviceFilePath.c_str());
+          privateDataRef->result.m_strLocation =
+              StringUtils::Format("%s", ttlDeviceFilePath.c_str());
         else
           privateDataRef->result.m_strLocation = StringUtils::Format("%d", locationId);
 
@@ -246,22 +262,24 @@ void CPeripheralBusUSB::DeviceAttachCallback(CPeripheralBusUSB* refCon, io_itera
         else
           privateDataRef->result.m_type = refCon->GetType(bDeviceClass);
 
-        privateDataRef->result.m_iSequence = refCon->GetNumberOfPeripheralsWithId(privateDataRef->result.m_iVendorId, privateDataRef->result.m_iProductId);
+        privateDataRef->result.m_iSequence = refCon->GetNumberOfPeripheralsWithId(
+            privateDataRef->result.m_iVendorId, privateDataRef->result.m_iProductId);
         if (!refCon->m_scan_results.ContainsResult(privateDataRef->result))
         {
           // register this usb device for an interest notification callback.
-          result = IOServiceAddInterestNotification(refCon->m_notify_port,
-            usbDevice,                      // service
-            kIOGeneralInterest,             // interestType
-            (IOServiceInterestCallback)DeviceDetachCallback, // callback
-            privateDataRef,                 // refCon
-            &privateDataRef->notification); // notification
+          result = IOServiceAddInterestNotification(
+              refCon->m_notify_port,
+              usbDevice, // service
+              kIOGeneralInterest, // interestType
+              (IOServiceInterestCallback)DeviceDetachCallback, // callback
+              privateDataRef, // refCon
+              &privateDataRef->notification); // notification
 
           if (result == kIOReturnSuccess)
           {
             refCon->m_scan_results.m_results.push_back(privateDataRef->result);
-            CLog::Log(LOGDEBUG, "USB Device Attach:%s, %s\n",
-              deviceName, privateDataRef->result.m_strLocation.c_str());
+            CLog::Log(LOGDEBUG, "USB Device Attach:%s, %s\n", deviceName,
+                      privateDataRef->result.m_strLocation.c_str());
           }
           else
           {

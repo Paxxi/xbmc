@@ -27,19 +27,19 @@ struct DemuxPacket;
 class CDVDAudioCodecAndroidMediaCodec : public CDVDAudioCodec
 {
 public:
-  CDVDAudioCodecAndroidMediaCodec(CProcessInfo &processInfo);
+  CDVDAudioCodecAndroidMediaCodec(CProcessInfo& processInfo);
   virtual ~CDVDAudioCodecAndroidMediaCodec();
 
   // registration
-  static CDVDAudioCodec* Create(CProcessInfo &processInfo);
+  static CDVDAudioCodec* Create(CProcessInfo& processInfo);
   static bool Register();
 
   // required overrides
 public:
-  bool Open(CDVDStreamInfo &hints, CDVDCodecOptions &options) override;
+  bool Open(CDVDStreamInfo& hints, CDVDCodecOptions& options) override;
   void Dispose() override;
-  bool AddData(const DemuxPacket &packet) override;
-  void GetData(DVDAudioFrame &frame) override;
+  bool AddData(const DemuxPacket& packet) override;
+  void GetData(DVDAudioFrame& frame) override;
   void Reset() override;
   AEAudioFormat GetFormat() override;
   std::string GetName() override;
@@ -70,6 +70,6 @@ protected:
   double m_currentPts;
 
   std::shared_ptr<CJNIMediaCodec> m_codec;
-  CJNIMediaCrypto *m_crypto;
+  CJNIMediaCrypto* m_crypto;
   std::shared_ptr<CDVDAudioCodec> m_decryptCodec;
 };

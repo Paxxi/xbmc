@@ -7,20 +7,16 @@
  */
 
 #if defined(TARGET_WINDOWS)
-#  include <windows.h>
+#include <windows.h>
 #endif
 
-#include <errno.h>
-#include <stdlib.h>
-
-#include <gtest/gtest.h>
 #include "URL.h"
 #include "filesystem/CurlFile.h"
 #include "filesystem/File.h"
 #include "interfaces/json-rpc/JSONRPC.h"
 #include "network/WebServer.h"
-#include "network/httprequesthandler/HTTPVfsHandler.h"
 #include "network/httprequesthandler/HTTPJsonRpcHandler.h"
+#include "network/httprequesthandler/HTTPVfsHandler.h"
 #include "settings/MediaSourceSettings.h"
 #include "test/TestUtils.h"
 #include "utils/JSONVariantParser.h"
@@ -28,25 +24,29 @@
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
 
+#include <errno.h>
 #include <random>
+#include <stdlib.h>
+
+#include <gtest/gtest.h>
 
 using namespace XFILE;
 
-#define WEBSERVER_HOST          "localhost"
+#define WEBSERVER_HOST "localhost"
 
-#define TEST_URL_JSONRPC        "jsonrpc"
+#define TEST_URL_JSONRPC "jsonrpc"
 
-#define TEST_FILES_DATA         "test"
-#define TEST_FILES_DATA_RANGES  "range1;range2;range3"
-#define TEST_FILES_HTML         TEST_FILES_DATA ".html"
-#define TEST_FILES_RANGES       TEST_FILES_DATA "-ranges.txt"
+#define TEST_FILES_DATA "test"
+#define TEST_FILES_DATA_RANGES "range1;range2;range3"
+#define TEST_FILES_HTML TEST_FILES_DATA ".html"
+#define TEST_FILES_RANGES TEST_FILES_DATA "-ranges.txt"
 
 class TestWebServer : public testing::Test
 {
 protected:
   TestWebServer()
-    : webserver(),
-      sourcePath(XBMC_REF_FILE_PATH("xbmc/network/test/data/webserver/"))
+    : webserver()
+    , sourcePath(XBMC_REF_FILE_PATH("xbmc/network/test/data/webserver/"))
   {
     static uint16_t port;
     if (port == 0)
@@ -96,10 +96,7 @@ protected:
     CMediaSourceSettings::GetInstance().AddShare("videos", source);
   }
 
-  void TearDownMediaSources()
-  {
-    CMediaSourceSettings::GetInstance().Clear();
-  }
+  void TearDownMediaSources() { CMediaSourceSettings::GetInstance().Clear(); }
 
   std::string GetUrl(const std::string& path)
   {
@@ -131,12 +128,12 @@ protected:
     if (file.Stat(&statBuffer) != 0)
       return false;
 
-    struct tm *time;
+    struct tm* time;
 #ifdef HAVE_LOCALTIME_R
     struct tm result = {};
     time = localtime_r((time_t*)&statBuffer.st_mtime, &result);
 #else
-    time = localtime((time_t *)&statBuffer.st_mtime);
+    time = localtime((time_t*)&statBuffer.st_mtime);
 #endif
     if (time == NULL)
       return false;
@@ -160,7 +157,8 @@ protected:
     // check Last-Modified
     CDateTime lastModified;
     ASSERT_TRUE(GetLastModifiedOfTestFile(TEST_FILES_HTML, lastModified));
-    ASSERT_STREQ(lastModified.GetAsRFC1123DateTime().c_str(), httpHeader.GetValue(MHD_HTTP_HEADER_LAST_MODIFIED).c_str());
+    ASSERT_STREQ(lastModified.GetAsRFC1123DateTime().c_str(),
+                 httpHeader.GetValue(MHD_HTTP_HEADER_LAST_MODIFIED).c_str());
 
     // Cache-Control must contain "mag-age=0" and "no-cache"
     std::string cacheControl = httpHeader.GetValue(MHD_HTTP_HEADER_CACHE_CONTROL);
@@ -168,7 +166,9 @@ protected:
     EXPECT_TRUE(cacheControl.find("no-cache") != std::string::npos);
   }
 
-  void CheckRangesTestFileResponse(const CCurlFile& curl, int httpStatus = MHD_HTTP_OK, bool empty = false)
+  void CheckRangesTestFileResponse(const CCurlFile& curl,
+                                   int httpStatus = MHD_HTTP_OK,
+                                   bool empty = false)
   {
     // get the HTTP header details
     const CHttpHeader& httpHeader = curl.GetHttpHeader();
@@ -191,7 +191,8 @@ protected:
     // check Last-Modified
     CDateTime lastModified;
     ASSERT_TRUE(GetLastModifiedOfTestFile(TEST_FILES_RANGES, lastModified));
-    ASSERT_STREQ(lastModified.GetAsRFC1123DateTime().c_str(), httpHeader.GetValue(MHD_HTTP_HEADER_LAST_MODIFIED).c_str());
+    ASSERT_STREQ(lastModified.GetAsRFC1123DateTime().c_str(),
+                 httpHeader.GetValue(MHD_HTTP_HEADER_LAST_MODIFIED).c_str());
 
     // Cache-Control must contain "mag-age=0" and "no-cache"
     std::string cacheControl = httpHeader.GetValue(MHD_HTTP_HEADER_CACHE_CONTROL);
@@ -199,7 +200,9 @@ protected:
     EXPECT_TRUE(cacheControl.find("public") != std::string::npos);
   }
 
-  void CheckRangesTestFileResponse(const CCurlFile& curl, const std::string& result, const CHttpRanges& ranges)
+  void CheckRangesTestFileResponse(const CCurlFile& curl,
+                                   const std::string& result,
+                                   const CHttpRanges& ranges)
   {
     // get the HTTP header details
     const CHttpHeader& httpHeader = curl.GetHttpHeader();
@@ -215,7 +218,8 @@ protected:
     // check Last-Modified
     CDateTime lastModified;
     ASSERT_TRUE(GetLastModifiedOfTestFile(TEST_FILES_RANGES, lastModified));
-    ASSERT_STREQ(lastModified.GetAsRFC1123DateTime().c_str(), httpHeader.GetValue(MHD_HTTP_HEADER_LAST_MODIFIED).c_str());
+    ASSERT_STREQ(lastModified.GetAsRFC1123DateTime().c_str(),
+                 httpHeader.GetValue(MHD_HTTP_HEADER_LAST_MODIFIED).c_str());
 
     // Cache-Control must contain "mag-age=0" and "no-cache"
     std::string cacheControl = httpHeader.GetValue(MHD_HTTP_HEADER_CACHE_CONTROL);
@@ -234,7 +238,9 @@ protected:
     uint64_t firstPosition, lastPosition;
     ASSERT_TRUE(ranges.GetFirstPosition(firstPosition));
     ASSERT_TRUE(ranges.GetLastPosition(lastPosition));
-    EXPECT_STREQ(HttpRangeUtils::GenerateContentRangeHeaderValue(firstPosition, lastPosition, 20).c_str(), httpHeader.GetValue(MHD_HTTP_HEADER_CONTENT_RANGE).c_str());
+    EXPECT_STREQ(
+        HttpRangeUtils::GenerateContentRangeHeaderValue(firstPosition, lastPosition, 20).c_str(),
+        httpHeader.GetValue(MHD_HTTP_HEADER_CONTENT_RANGE).c_str());
 
     std::string expectedContent = TEST_FILES_DATA_RANGES;
     const std::string expectedContentType = "text/plain";
@@ -246,11 +252,14 @@ protected:
       // check the content
       CHttpRange firstRange;
       ASSERT_TRUE(ranges.GetFirst(firstRange));
-      expectedContent = expectedContent.substr(static_cast<size_t>(firstRange.GetFirstPosition()), static_cast<size_t>(firstRange.GetLength()));
+      expectedContent = expectedContent.substr(static_cast<size_t>(firstRange.GetFirstPosition()),
+                                               static_cast<size_t>(firstRange.GetLength()));
       EXPECT_STREQ(expectedContent.c_str(), result.c_str());
 
       // and Content-Length
-      EXPECT_STREQ(StringUtils::Format("%u", static_cast<unsigned int>(expectedContent.size())).c_str(), httpHeader.GetValue(MHD_HTTP_HEADER_CONTENT_LENGTH).c_str());
+      EXPECT_STREQ(
+          StringUtils::Format("%u", static_cast<unsigned int>(expectedContent.size())).c_str(),
+          httpHeader.GetValue(MHD_HTTP_HEADER_CONTENT_LENGTH).c_str());
 
       return;
     }
@@ -305,7 +314,8 @@ protected:
 
       // parse and check Content-Range
       std::string contentRangeHeader = rangeHeader.GetValue(MHD_HTTP_HEADER_CONTENT_RANGE);
-      std::vector<std::string> contentRangeHeaderParts = StringUtils::Split(contentRangeHeader, "/");
+      std::vector<std::string> contentRangeHeaderParts =
+          StringUtils::Split(contentRangeHeader, "/");
       ASSERT_EQ(2U, contentRangeHeaderParts.size());
 
       // check the length of the range
@@ -330,7 +340,11 @@ protected:
 
       // make sure the length of the content matches the one of the expected range
       EXPECT_EQ(range.GetLength(), data.size());
-      EXPECT_STREQ(expectedContent.substr(static_cast<size_t>(range.GetFirstPosition()), static_cast<size_t>(range.GetLength())).c_str(), data.c_str());
+      EXPECT_STREQ(expectedContent
+                       .substr(static_cast<size_t>(range.GetFirstPosition()),
+                               static_cast<size_t>(range.GetLength()))
+                       .c_str(),
+                   data.c_str());
     }
   }
 
@@ -380,7 +394,10 @@ TEST_F(TestWebServer, CanReadDataOverJsonRpcWithHttpGet)
 
   std::string result;
   CCurlFile curl;
-  ASSERT_TRUE(curl.Get(GetUrl(TEST_URL_JSONRPC "?request=" + CURL::Encode("{ \"jsonrpc\": \"2.0\", \"method\": \"JSONRPC.Version\", \"id\": 1 }")), result));
+  ASSERT_TRUE(curl.Get(
+      GetUrl(TEST_URL_JSONRPC "?request=" +
+             CURL::Encode("{ \"jsonrpc\": \"2.0\", \"method\": \"JSONRPC.Version\", \"id\": 1 }")),
+      result));
   ASSERT_FALSE(result.empty());
 
   // parse the JSON-RPC response
@@ -413,7 +430,10 @@ TEST_F(TestWebServer, CannotModifyOverJsonRpcWithHttpGet)
 
   std::string result;
   CCurlFile curl;
-  ASSERT_TRUE(curl.Get(GetUrl(TEST_URL_JSONRPC "?request=" + CURL::Encode("{ \"jsonrpc\": \"2.0\", \"method\": \"Input.Left\", \"id\": 1 }")), result));
+  ASSERT_TRUE(curl.Get(
+      GetUrl(TEST_URL_JSONRPC "?request=" +
+             CURL::Encode("{ \"jsonrpc\": \"2.0\", \"method\": \"Input.Left\", \"id\": 1 }")),
+      result));
   ASSERT_FALSE(result.empty());
 
   // parse the JSON-RPC response
@@ -451,7 +471,9 @@ TEST_F(TestWebServer, CanReadDataOverJsonRpcWithHttpPost)
   std::string result;
   CCurlFile curl;
   curl.SetMimeType("application/json");
-  ASSERT_TRUE(curl.Post(GetUrl(TEST_URL_JSONRPC), "{ \"jsonrpc\": \"2.0\", \"method\": \"JSONRPC.Version\", \"id\": 1 }", result));
+  ASSERT_TRUE(curl.Post(GetUrl(TEST_URL_JSONRPC),
+                        "{ \"jsonrpc\": \"2.0\", \"method\": \"JSONRPC.Version\", \"id\": 1 }",
+                        result));
   ASSERT_FALSE(result.empty());
 
   // parse the JSON-RPC response
@@ -485,7 +507,8 @@ TEST_F(TestWebServer, CanModifyOverJsonRpcWithHttpPost)
   std::string result;
   CCurlFile curl;
   curl.SetMimeType("application/json");
-  ASSERT_TRUE(curl.Post(GetUrl(TEST_URL_JSONRPC), "{ \"jsonrpc\": \"2.0\", \"method\": \"Input.Left\", \"id\": 1 }", result));
+  ASSERT_TRUE(curl.Post(GetUrl(TEST_URL_JSONRPC),
+                        "{ \"jsonrpc\": \"2.0\", \"method\": \"Input.Left\", \"id\": 1 }", result));
   ASSERT_FALSE(result.empty());
 
   // parse the JSON-RPC response
@@ -588,7 +611,8 @@ TEST_F(TestWebServer, CanGetCachedFileWithOlderIfModifiedSince)
   std::string result;
   CCurlFile curl;
   curl.SetRequestHeader(MHD_HTTP_HEADER_RANGE, "");
-  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_MODIFIED_SINCE, lastModifiedOlder.GetAsRFC1123DateTime());
+  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_MODIFIED_SINCE,
+                        lastModifiedOlder.GetAsRFC1123DateTime());
   ASSERT_TRUE(curl.Get(GetUrlOfTestFile(TEST_FILES_RANGES), result));
   EXPECT_STREQ(TEST_FILES_DATA_RANGES, result.c_str());
   CheckRangesTestFileResponse(curl);
@@ -641,7 +665,8 @@ TEST_F(TestWebServer, CanGetCachedFileWithNewerIfModifiedSinceForcingNoCache)
   std::string result;
   CCurlFile curl;
   curl.SetRequestHeader(MHD_HTTP_HEADER_RANGE, "");
-  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_MODIFIED_SINCE, lastModifiedNewer.GetAsRFC1123DateTime());
+  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_MODIFIED_SINCE,
+                        lastModifiedNewer.GetAsRFC1123DateTime());
   curl.SetRequestHeader(MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
   ASSERT_TRUE(curl.Get(GetUrlOfTestFile(TEST_FILES_RANGES), result));
   EXPECT_STREQ(TEST_FILES_DATA_RANGES, result.c_str());
@@ -659,7 +684,8 @@ TEST_F(TestWebServer, CanGetCachedFileWithOlderIfUnmodifiedSince)
   std::string result;
   CCurlFile curl;
   curl.SetRequestHeader(MHD_HTTP_HEADER_RANGE, "");
-  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_UNMODIFIED_SINCE, lastModifiedOlder.GetAsRFC1123DateTime());
+  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_UNMODIFIED_SINCE,
+                        lastModifiedOlder.GetAsRFC1123DateTime());
   ASSERT_FALSE(curl.Get(GetUrlOfTestFile(TEST_FILES_RANGES), result));
 }
 
@@ -690,7 +716,8 @@ TEST_F(TestWebServer, CanGetCachedFileWithNewerIfUnmodifiedSince)
   std::string result;
   CCurlFile curl;
   curl.SetRequestHeader(MHD_HTTP_HEADER_RANGE, "");
-  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_UNMODIFIED_SINCE, lastModifiedNewer.GetAsRFC1123DateTime());
+  curl.SetRequestHeader(MHD_HTTP_HEADER_IF_UNMODIFIED_SINCE,
+                        lastModifiedNewer.GetAsRFC1123DateTime());
   ASSERT_TRUE(curl.Get(GetUrlOfTestFile(TEST_FILES_RANGES), result));
   EXPECT_STREQ(TEST_FILES_DATA_RANGES, result.c_str());
   CheckRangesTestFileResponse(curl);
@@ -765,7 +792,9 @@ TEST_F(TestWebServer, CanGetRangedFileRangeFirst_Second)
 {
   const std::string rangedFileContent = TEST_FILES_DATA_RANGES;
   std::vector<std::string> rangedContent = StringUtils::Split(TEST_FILES_DATA_RANGES, ";");
-  const std::string range = GenerateRangeHeaderValue(rangedContent.front().size() + 1, rangedContent.front().size() + 1 + rangedContent.at(2).size() - 1);
+  const std::string range =
+      GenerateRangeHeaderValue(rangedContent.front().size() + 1,
+                               rangedContent.front().size() + 1 + rangedContent.at(2).size() - 1);
 
   CHttpRanges ranges;
   ASSERT_TRUE(ranges.Parse(range, rangedFileContent.size()));
@@ -782,7 +811,8 @@ TEST_F(TestWebServer, CanGetRangedFileRange_Last)
 {
   const std::string rangedFileContent = TEST_FILES_DATA_RANGES;
   std::vector<std::string> rangedContent = StringUtils::Split(TEST_FILES_DATA_RANGES, ";");
-  const std::string range = StringUtils::Format("bytes=-%u", static_cast<unsigned int>(rangedContent.back().size()));
+  const std::string range =
+      StringUtils::Format("bytes=-%u", static_cast<unsigned int>(rangedContent.back().size()));
 
   CHttpRanges ranges;
   ASSERT_TRUE(ranges.Parse(range, rangedFileContent.size()));
@@ -799,8 +829,11 @@ TEST_F(TestWebServer, CanGetRangedFileRangeFirstSecond)
 {
   const std::string rangedFileContent = TEST_FILES_DATA_RANGES;
   std::vector<std::string> rangedContent = StringUtils::Split(TEST_FILES_DATA_RANGES, ";");
-  const std::string range = StringUtils::Format("bytes=0-%u,%u-%u", static_cast<unsigned int>(rangedContent.front().size() - 1),
-    static_cast<unsigned int>(rangedContent.front().size() + 1), static_cast<unsigned int>(rangedContent.front().size() + 1) + static_cast<unsigned int>(rangedContent.at(1).size() - 1));
+  const std::string range = StringUtils::Format(
+      "bytes=0-%u,%u-%u", static_cast<unsigned int>(rangedContent.front().size() - 1),
+      static_cast<unsigned int>(rangedContent.front().size() + 1),
+      static_cast<unsigned int>(rangedContent.front().size() + 1) +
+          static_cast<unsigned int>(rangedContent.at(1).size() - 1));
 
   CHttpRanges ranges;
   ASSERT_TRUE(ranges.Parse(range, rangedFileContent.size()));
@@ -817,9 +850,12 @@ TEST_F(TestWebServer, CanGetRangedFileRangeFirstSecondLast)
 {
   const std::string rangedFileContent = TEST_FILES_DATA_RANGES;
   std::vector<std::string> rangedContent = StringUtils::Split(TEST_FILES_DATA_RANGES, ";");
-  const std::string range = StringUtils::Format("bytes=0-%u,%u-%u,-%u", static_cast<unsigned int>(rangedContent.front().size() - 1),
-    static_cast<unsigned int>(rangedContent.front().size() + 1), static_cast<unsigned int>(rangedContent.front().size() + 1) + static_cast<unsigned int>(rangedContent.at(1).size() - 1),
-    static_cast<unsigned int>(rangedContent.back().size()));
+  const std::string range = StringUtils::Format(
+      "bytes=0-%u,%u-%u,-%u", static_cast<unsigned int>(rangedContent.front().size() - 1),
+      static_cast<unsigned int>(rangedContent.front().size() + 1),
+      static_cast<unsigned int>(rangedContent.front().size() + 1) +
+          static_cast<unsigned int>(rangedContent.at(1).size() - 1),
+      static_cast<unsigned int>(rangedContent.back().size()));
 
   CHttpRanges ranges;
   ASSERT_TRUE(ranges.Parse(range, rangedFileContent.size()));

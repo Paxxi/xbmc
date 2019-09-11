@@ -13,12 +13,11 @@
 namespace XFILE
 {
 
-class CCDDADirectory :
-      public IDirectory
+class CCDDADirectory : public IDirectory
 {
 public:
   CCDDADirectory(void);
   ~CCDDADirectory(void) override;
-  bool GetDirectory(const CURL& url, CFileItemList &items) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
 };
-}
+} // namespace XFILE

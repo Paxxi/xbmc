@@ -14,17 +14,18 @@
 
 namespace XFILE
 {
-  class CDAVDirectory : public IDirectory
-  {
-    public:
-      CDAVDirectory(void);
-      ~CDAVDirectory(void) override;
-      bool GetDirectory(const CURL& url, CFileItemList &items) override;
-      bool Create(const CURL& url) override;
-      bool Exists(const CURL& url) override;
-      bool Remove(const CURL& url) override;
-      DIR_CACHE_TYPE GetCacheType(const CURL& url) const override { return DIR_CACHE_ONCE; };
-    private:
-      void ParseResponse(const TiXmlElement *pElement, CFileItem &item);
-  };
-}
+class CDAVDirectory : public IDirectory
+{
+public:
+  CDAVDirectory(void);
+  ~CDAVDirectory(void) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
+  bool Create(const CURL& url) override;
+  bool Exists(const CURL& url) override;
+  bool Remove(const CURL& url) override;
+  DIR_CACHE_TYPE GetCacheType(const CURL& url) const override { return DIR_CACHE_ONCE; };
+
+private:
+  void ParseResponse(const TiXmlElement* pElement, CFileItem& item);
+};
+} // namespace XFILE

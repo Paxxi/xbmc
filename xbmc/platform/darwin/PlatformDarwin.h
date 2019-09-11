@@ -12,12 +12,12 @@
 
 class CPlatformDarwin : public CPlatformPosix
 {
-  public:
-    /**\brief C'tor */
-    CPlatformDarwin();
+public:
+  /**\brief C'tor */
+  CPlatformDarwin();
 
-    /**\brief D'tor */
-    virtual ~CPlatformDarwin();
+  /**\brief D'tor */
+  virtual ~CPlatformDarwin();
 
-    void Init() override;
+  void Init() override;
 };

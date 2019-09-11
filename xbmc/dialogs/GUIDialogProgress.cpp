@@ -18,7 +18,7 @@
 #include "utils/log.h"
 
 CGUIDialogProgress::CGUIDialogProgress(void)
-    : CGUIDialogBoxBase(WINDOW_DIALOG_PROGRESS, "DialogConfirm.xml")
+  : CGUIDialogBoxBase(WINDOW_DIALOG_PROGRESS, "DialogConfirm.xml")
 {
   Reset();
 }
@@ -61,7 +61,7 @@ int CGUIDialogProgress::GetChoice() const
   return m_iChoice;
 }
 
-void CGUIDialogProgress::Open(const std::string &param /* = "" */)
+void CGUIDialogProgress::Open(const std::string& param /* = "" */)
 {
   CLog::Log(LOGDEBUG, "DialogProgress::Open called %s", m_active ? "(already running)!" : "");
 
@@ -94,7 +94,7 @@ void CGUIDialogProgress::Progress()
 
 bool CGUIDialogProgress::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
 
   case GUI_MSG_WINDOW_DEINIT:
@@ -102,30 +102,31 @@ bool CGUIDialogProgress::OnMessage(CGUIMessage& message)
     break;
 
   case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+    if (iControl >= CONTROL_CHOICES_START &&
+        iControl < (CONTROL_CHOICES_START + DIALOG_MAX_CHOICES))
     {
-      int iControl = message.GetSenderId();
-      if (iControl >= CONTROL_CHOICES_START && iControl < (CONTROL_CHOICES_START + DIALOG_MAX_CHOICES))
+      // special handling for choice 0 mapped to cancel button
+      if (m_bCanCancel && !m_supportedChoices[0] && (iControl == CONTROL_CHOICES_START))
       {
-        // special handling for choice 0 mapped to cancel button
-        if (m_bCanCancel && !m_supportedChoices[0] && (iControl == CONTROL_CHOICES_START))
+        if (m_iChoice != CHOICE_CANCELED)
         {
-          if (m_iChoice != CHOICE_CANCELED)
-          {
-            std::string strHeading = m_strHeading;
-            strHeading.append(" : ");
-            strHeading.append(g_localizeStrings.Get(16024));
-            CGUIDialogBoxBase::SetHeading(CVariant{strHeading});
-            m_iChoice = CHOICE_CANCELED;
-          }
+          std::string strHeading = m_strHeading;
+          strHeading.append(" : ");
+          strHeading.append(g_localizeStrings.Get(16024));
+          CGUIDialogBoxBase::SetHeading(CVariant{strHeading});
+          m_iChoice = CHOICE_CANCELED;
         }
-        else
-        {
-          m_iChoice = iControl - CONTROL_CHOICES_START;
-        }
-        return true;
       }
+      else
+      {
+        m_iChoice = iControl - CONTROL_CHOICES_START;
+      }
+      return true;
     }
-    break;
+  }
+  break;
   }
   return CGUIDialog::OnMessage(message);
 }
@@ -143,11 +144,11 @@ bool CGUIDialogProgress::OnBack(int actionID)
 void CGUIDialogProgress::OnWindowLoaded()
 {
   CGUIDialog::OnWindowLoaded();
-  CGUIControl *control = GetControl(CONTROL_PROGRESS_BAR);
+  CGUIControl* control = GetControl(CONTROL_PROGRESS_BAR);
   if (control && control->GetControlType() == CGUIControl::GUICONTROL_PROGRESS)
   {
     // make sure we have the appropriate info set
-    CGUIProgressControl *progress = static_cast<CGUIProgressControl*>(control);
+    CGUIProgressControl* progress = static_cast<CGUIProgressControl*>(control);
     if (!progress->GetInfo())
       progress->SetInfo(SYSTEM_PROGRESS_BAR);
   }
@@ -155,27 +156,29 @@ void CGUIDialogProgress::OnWindowLoaded()
 
 void CGUIDialogProgress::SetPercentage(int iPercentage)
 {
-  if (iPercentage < 0) iPercentage = 0;
-  if (iPercentage > 100) iPercentage = 100;
+  if (iPercentage < 0)
+    iPercentage = 0;
+  if (iPercentage > 100)
+    iPercentage = 100;
 
   m_percentage = iPercentage;
 }
 
 void CGUIDialogProgress::SetProgressMax(int iMax)
 {
-  m_iMax=iMax;
-  m_iCurrent=0;
+  m_iMax = iMax;
+  m_iCurrent = 0;
 }
 
-void CGUIDialogProgress::SetProgressAdvance(int nSteps/*=1*/)
+void CGUIDialogProgress::SetProgressAdvance(int nSteps /*=1*/)
 {
-  m_iCurrent+=nSteps;
+  m_iCurrent += nSteps;
 
-  if (m_iCurrent>m_iMax)
-    m_iCurrent=0;
+  if (m_iCurrent > m_iMax)
+    m_iCurrent = 0;
 
   if (m_iMax > 0)
-    SetPercentage((m_iCurrent*100)/m_iMax);
+    SetPercentage((m_iCurrent * 100) / m_iMax);
 }
 
 bool CGUIDialogProgress::Abort()
@@ -247,7 +250,7 @@ void CGUIDialogProgress::UpdateControls()
     SET_CONTROL_VISIBLE(CONTROL_CHOICES_START);
 }
 
-void CGUIDialogProgress::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUIDialogProgress::Process(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
   if (m_bInvalidated)
     UpdateControls();
@@ -272,7 +275,7 @@ void CGUIDialogProgress::OnInitWindow()
 
   // special handling for choice 0 mapped to cancel button
   if (m_bCanCancel && bNoFocus)
-    SET_CONTROL_FOCUS(CONTROL_CHOICES_START,0 );
+    SET_CONTROL_FOCUS(CONTROL_CHOICES_START, 0);
 
   CGUIDialogBoxBase::OnInitWindow();
 }

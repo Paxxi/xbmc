@@ -20,7 +20,7 @@ public:
   CGUIWindowLoginScreen(void);
   ~CGUIWindowLoginScreen(void) override;
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
   bool OnBack(int actionID) override;
   void FrameMove() override;
   bool HasListItems() const override { return true; };

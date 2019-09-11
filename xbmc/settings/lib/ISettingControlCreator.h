@@ -28,5 +28,5 @@ public:
    \param controlType string representation of the setting control type
    \return A new setting control object of the given (custom) setting control type or nullptr if the setting control type is unknown
    */
-  virtual std::shared_ptr<ISettingControl> CreateControl(const std::string &controlType) const = 0;
+  virtual std::shared_ptr<ISettingControl> CreateControl(const std::string& controlType) const = 0;
 };

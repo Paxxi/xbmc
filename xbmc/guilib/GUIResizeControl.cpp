@@ -15,17 +15,24 @@
 // time to reset accelerated cursors (digital movement)
 #define MOVE_TIME_OUT 500L
 
-CGUIResizeControl::CGUIResizeControl(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus)
-    : CGUIControl(parentID, controlID, posX, posY, width, height)
-    , m_imgFocus(posX, posY, width, height, textureFocus)
-    , m_imgNoFocus(posX, posY, width, height, textureNoFocus)
+CGUIResizeControl::CGUIResizeControl(int parentID,
+                                     int controlID,
+                                     float posX,
+                                     float posY,
+                                     float width,
+                                     float height,
+                                     const CTextureInfo& textureFocus,
+                                     const CTextureInfo& textureNoFocus)
+  : CGUIControl(parentID, controlID, posX, posY, width, height)
+  , m_imgFocus(posX, posY, width, height, textureFocus)
+  , m_imgNoFocus(posX, posY, width, height, textureNoFocus)
 {
   m_frameCounter = 0;
   m_lastMoveTime = 0;
   m_fSpeed = 1.0;
   m_fAnalogSpeed = 2.0f; //! @todo implement correct analog speed
   m_fAcceleration = 0.2f; //! @todo implement correct computation of acceleration
-  m_fMaxSpeed = 10.0;  //! @todo implement correct computation of maxspeed
+  m_fMaxSpeed = 10.0; //! @todo implement correct computation of maxspeed
   ControlType = GUICONTROL_RESIZE;
   SetLimits(0, 0, 720, 576); // defaults
   m_nDirection = DIRECTION_NONE;
@@ -33,7 +40,7 @@ CGUIResizeControl::CGUIResizeControl(int parentID, int controlID, float posX, fl
 
 CGUIResizeControl::~CGUIResizeControl(void) = default;
 
-void CGUIResizeControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregions)
+void CGUIResizeControl::Process(unsigned int currentTime, CDirtyRegionList& dirtyregions)
 {
   if (m_bInvalidated)
   {
@@ -53,7 +60,7 @@ void CGUIResizeControl::Process(unsigned int currentTime, CDirtyRegionList &dirt
       alphaChannel = 63 - (alphaCounter % 64);
 
     alphaChannel += 192;
-    if (SetAlpha( (unsigned char)alphaChannel ))
+    if (SetAlpha((unsigned char)alphaChannel))
       MarkDirtyRegion();
     m_imgFocus.SetVisible(true);
     m_imgNoFocus.SetVisible(false);
@@ -78,7 +85,7 @@ void CGUIResizeControl::Render()
   CGUIControl::Render();
 }
 
-bool CGUIResizeControl::OnAction(const CAction &action)
+bool CGUIResizeControl::OnAction(const CAction& action)
 {
   if (action.GetID() == ACTION_SELECT_ITEM)
   {
@@ -89,7 +96,7 @@ bool CGUIResizeControl::OnAction(const CAction &action)
   }
   if (action.GetID() == ACTION_ANALOG_MOVE)
   {
-    Resize(m_fAnalogSpeed*action.GetAmount(), -m_fAnalogSpeed*action.GetAmount(1));
+    Resize(m_fAnalogSpeed * action.GetAmount(), -m_fAnalogSpeed * action.GetAmount(1));
     return true;
   }
   return CGUIControl::OnAction(action);
@@ -119,7 +126,7 @@ void CGUIResizeControl::OnRight()
   Resize(m_fSpeed, 0);
 }
 
-EVENT_RESULT CGUIResizeControl::OnMouseEvent(const CPoint &point, const CMouseEvent &event)
+EVENT_RESULT CGUIResizeControl::OnMouseEvent(const CPoint& point, const CMouseEvent& event)
 {
   if (event.m_id == ACTION_MOUSE_DRAG)
   {
@@ -150,7 +157,8 @@ void CGUIResizeControl::UpdateSpeed(int nDirection)
   if (nDirection == m_nDirection)
   { // accelerate
     m_fSpeed += m_fAcceleration;
-    if (m_fSpeed > m_fMaxSpeed) m_fSpeed = m_fMaxSpeed;
+    if (m_fSpeed > m_fMaxSpeed)
+      m_fSpeed = m_fMaxSpeed;
   }
   else
   { // reset direction and speed
@@ -195,10 +203,14 @@ void CGUIResizeControl::Resize(float x, float y)
   float width = m_width + x;
   float height = m_height + y;
   // check if we are within the bounds
-  if (width < m_x1) width = m_x1;
-  if (height < m_y1) height = m_y1;
-  if (width > m_x2) width = m_x2;
-  if (height > m_y2) height = m_y2;
+  if (width < m_x1)
+    width = m_x1;
+  if (height < m_y1)
+    height = m_y1;
+  if (width > m_x2)
+    width = m_x2;
+  if (height > m_y2)
+    height = m_y2;
   // ok, now set the default size of the resize control
   SetWidth(width);
   SetHeight(height);
@@ -213,8 +225,7 @@ void CGUIResizeControl::SetPosition(float posX, float posY)
 
 bool CGUIResizeControl::SetAlpha(unsigned char alpha)
 {
-  return m_imgFocus.SetAlpha(alpha) |
-         m_imgNoFocus.SetAlpha(alpha);
+  return m_imgFocus.SetAlpha(alpha) | m_imgNoFocus.SetAlpha(alpha);
 }
 
 bool CGUIResizeControl::UpdateColors()

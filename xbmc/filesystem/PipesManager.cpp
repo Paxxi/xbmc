@@ -12,13 +12,13 @@
 #include "utils/StringUtils.h"
 
 #ifndef min
-#define min(a,b) ((a) < (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
 using namespace XFILE;
 
 
-Pipe::Pipe(const std::string &name, int nMaxSize)
+Pipe::Pipe(const std::string& name, int nMaxSize)
 {
   m_buffer.Create(nMaxSize);
   m_nRefCount = 1;
@@ -38,7 +38,7 @@ void Pipe::SetOpenThreshold(int threshold)
   m_nOpenThreshold = threshold;
 }
 
-const std::string &Pipe::GetName()
+const std::string& Pipe::GetName()
 {
   return m_strPipeName;
 }
@@ -55,7 +55,7 @@ void Pipe::DecRef()
   m_nRefCount--;
 }
 
-int  Pipe::RefCount()
+int Pipe::RefCount()
 {
   CSingleLock lock(m_lock);
   return m_nRefCount;
@@ -88,7 +88,7 @@ void Pipe::Flush()
   CheckStatus();
 }
 
-int  Pipe::Read(char *buf, int nMaxSize, int nWaitMillis)
+int Pipe::Read(char* buf, int nMaxSize, int nWaitMillis)
 {
   CSingleLock lock(m_lock);
 
@@ -122,14 +122,14 @@ int  Pipe::Read(char *buf, int nMaxSize, int nWaitMillis)
     bool bHasData = false;
     int nMillisLeft = nWaitMillis;
     if (nMillisLeft < 0)
-      nMillisLeft = 5*60*1000; // arbitrary. 5 min.
+      nMillisLeft = 5 * 60 * 1000; // arbitrary. 5 min.
 
     do
     {
-      for (size_t l=0; l<m_listeners.size(); l++)
+      for (size_t l = 0; l < m_listeners.size(); l++)
         m_listeners[l]->OnPipeUnderFlow();
 
-      bHasData = m_readEvent.WaitMSec(min(200,nMillisLeft));
+      bHasData = m_readEvent.WaitMSec(min(200, nMillisLeft));
       nMillisLeft -= 200;
     } while (!bHasData && nMillisLeft > 0 && !m_bEof);
 
@@ -152,7 +152,7 @@ int  Pipe::Read(char *buf, int nMaxSize, int nWaitMillis)
   return nResult;
 }
 
-bool Pipe::Write(const char *buf, int nSize, int nWaitMillis)
+bool Pipe::Write(const char* buf, int nSize, int nWaitMillis)
 {
   CSingleLock lock(m_lock);
   if (!m_bOpen)
@@ -166,10 +166,10 @@ bool Pipe::Write(const char *buf, int nSize, int nWaitMillis)
   }
   else
   {
-    while ( (int)m_buffer.getMaxWriteSize() < nSize && m_bOpen )
+    while ((int)m_buffer.getMaxWriteSize() < nSize && m_bOpen)
     {
       lock.Leave();
-      for (size_t l=0; l<m_listeners.size(); l++)
+      for (size_t l = 0; l < m_listeners.size(); l++)
         m_listeners[l]->OnPipeOverFlow();
 
       bool bClear = nWaitMillis < 0 ? m_writeEvent.Wait() : m_writeEvent.WaitMSec(nWaitMillis);
@@ -210,7 +210,7 @@ void Pipe::CheckStatus()
     m_readEvent.Reset();
   else
   {
-    if (!m_bReadyForRead  && (int)m_buffer.getMaxReadSize() >= m_nOpenThreshold)
+    if (!m_bReadyForRead && (int)m_buffer.getMaxReadSize() >= m_nOpenThreshold)
       m_bReadyForRead = true;
     m_readEvent.Set();
   }
@@ -224,10 +224,10 @@ void Pipe::Close()
   m_writeEvent.Set();
 }
 
-void Pipe::AddListener(IPipeListener *l)
+void Pipe::AddListener(IPipeListener* l)
 {
   CSingleLock lock(m_lock);
-  for (size_t i=0; i<m_listeners.size(); i++)
+  for (size_t i = 0; i < m_listeners.size(); i++)
   {
     if (m_listeners[i] == l)
       return;
@@ -235,20 +235,20 @@ void Pipe::AddListener(IPipeListener *l)
   m_listeners.push_back(l);
 }
 
-void Pipe::RemoveListener(IPipeListener *l)
+void Pipe::RemoveListener(IPipeListener* l)
 {
   CSingleLock lock(m_lock);
-  std::vector<XFILE::IPipeListener *>::iterator i = m_listeners.begin();
-  while(i != m_listeners.end())
+  std::vector<XFILE::IPipeListener*>::iterator i = m_listeners.begin();
+  while (i != m_listeners.end())
   {
-    if ( (*i) == l)
+    if ((*i) == l)
       i = m_listeners.erase(i);
     else
       ++i;
   }
 }
 
-int	Pipe::GetAvailableRead()
+int Pipe::GetAvailableRead()
 {
   CSingleLock lock(m_lock);
   return m_buffer.getMaxReadSize();
@@ -256,19 +256,19 @@ int	Pipe::GetAvailableRead()
 
 PipesManager::~PipesManager() = default;
 
-PipesManager &PipesManager::GetInstance()
+PipesManager& PipesManager::GetInstance()
 {
   static PipesManager instance;
   return instance;
 }
 
-std::string   PipesManager::GetUniquePipeName()
+std::string PipesManager::GetUniquePipeName()
 {
   CSingleLock lock(m_lock);
   return StringUtils::Format("pipe://%d/", m_nGenIdHelper++);
 }
 
-XFILE::Pipe *PipesManager::CreatePipe(const std::string &name, int nMaxPipeSize)
+XFILE::Pipe* PipesManager::CreatePipe(const std::string& name, int nMaxPipeSize)
 {
   std::string pName = name;
   if (pName.empty())
@@ -278,12 +278,12 @@ XFILE::Pipe *PipesManager::CreatePipe(const std::string &name, int nMaxPipeSize)
   if (m_pipes.find(pName) != m_pipes.end())
     return NULL;
 
-  XFILE::Pipe *p = new XFILE::Pipe(pName, nMaxPipeSize);
+  XFILE::Pipe* p = new XFILE::Pipe(pName, nMaxPipeSize);
   m_pipes[pName] = p;
   return p;
 }
 
-XFILE::Pipe *PipesManager::OpenPipe(const std::string &name)
+XFILE::Pipe* PipesManager::OpenPipe(const std::string& name)
 {
   CSingleLock lock(m_lock);
   if (m_pipes.find(name) == m_pipes.end())
@@ -292,11 +292,11 @@ XFILE::Pipe *PipesManager::OpenPipe(const std::string &name)
   return m_pipes[name];
 }
 
-void         PipesManager::ClosePipe(XFILE::Pipe *pipe)
+void PipesManager::ClosePipe(XFILE::Pipe* pipe)
 {
   CSingleLock lock(m_lock);
   if (!pipe)
-    return ;
+    return;
 
   pipe->DecRef();
   if (pipe->RefCount() == 0)
@@ -307,9 +307,8 @@ void         PipesManager::ClosePipe(XFILE::Pipe *pipe)
   }
 }
 
-bool         PipesManager::Exists(const std::string &name)
+bool PipesManager::Exists(const std::string& name)
 {
   CSingleLock lock(m_lock);
   return (m_pipes.find(name) != m_pipes.end());
 }
-

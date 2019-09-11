@@ -50,12 +50,15 @@ void CVirtualDirectory::SetSources(const VECSOURCES& vecSources)
     and icons have to be set manually.
  */
 
-bool CVirtualDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CVirtualDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   return GetDirectory(url, items, true, false);
 }
 
-bool CVirtualDirectory::GetDirectory(const CURL& url, CFileItemList &items, bool bUseFileDirectories, bool keepImpl)
+bool CVirtualDirectory::GetDirectory(const CURL& url,
+                                     CFileItemList& items,
+                                     bool bUseFileDirectories,
+                                     bool keepImpl)
 {
   std::string strPath = url.Get();
   int flags = m_flags;
@@ -99,7 +102,9 @@ void CVirtualDirectory::CancelDirectory()
  \note The parameter \e strPath can not be a share with directory. Eg. "iso9660://dir" will return \e false.
     It must be "iso9660://".
  */
-bool CVirtualDirectory::IsSource(const std::string& strPath, VECSOURCES *sources, std::string *name) const
+bool CVirtualDirectory::IsSource(const std::string& strPath,
+                                 VECSOURCES* sources,
+                                 std::string* name) const
 {
   std::string strPathCpy = strPath;
   StringUtils::TrimRight(strPathCpy, "/\\");
@@ -107,7 +112,7 @@ bool CVirtualDirectory::IsSource(const std::string& strPath, VECSOURCES *sources
   // just to make sure there's no mixed slashing in share/default defines
   // ie. f:/video and f:\video was not be recognised as the same directory,
   // resulting in navigation to a lower directory then the share.
-  if(URIUtils::IsDOSPath(strPathCpy))
+  if (URIUtils::IsDOSPath(strPathCpy))
     StringUtils::Replace(strPathCpy, '/', '\\');
 
   VECSOURCES shares;
@@ -120,7 +125,7 @@ bool CVirtualDirectory::IsSource(const std::string& strPath, VECSOURCES *sources
     const CMediaSource& share = shares.at(i);
     std::string strShare = share.strPath;
     StringUtils::TrimRight(strShare, "/\\");
-    if(URIUtils::IsDOSPath(strShare))
+    if (URIUtils::IsDOSPath(strShare))
       StringUtils::Replace(strShare, '/', '\\');
     if (strShare == strPathCpy)
     {
@@ -139,7 +144,7 @@ bool CVirtualDirectory::IsSource(const std::string& strPath, VECSOURCES *sources
  \note The parameter \e path CAN be a share with directory. Eg. "iso9660://dir" will
        return the same as "iso9660://".
  */
-bool CVirtualDirectory::IsInSource(const std::string &path) const
+bool CVirtualDirectory::IsInSource(const std::string& path) const
 {
   bool isSourceName;
   VECSOURCES shares;
@@ -150,9 +155,8 @@ bool CVirtualDirectory::IsInSource(const std::string &path) const
     // and GetMatchingSource() is too naive at it's matching
     for (unsigned int i = 0; i < shares.size(); i++)
     {
-      CMediaSource &share = shares[i];
-      if (URIUtils::IsOnDVD(share.strPath) &&
-          URIUtils::PathHasParent(path, share.strPath))
+      CMediaSource& share = shares[i];
+      if (URIUtils::IsOnDVD(share.strPath) && URIUtils::PathHasParent(path, share.strPath))
         return true;
     }
     return false;
@@ -161,7 +165,7 @@ bool CVirtualDirectory::IsInSource(const std::string &path) const
   return (iShare > -1);
 }
 
-void CVirtualDirectory::GetSources(VECSOURCES &shares) const
+void CVirtualDirectory::GetSources(VECSOURCES& shares) const
 {
   shares = m_vecSources;
   // add our plug n play shares
@@ -176,7 +180,7 @@ void CVirtualDirectory::GetSources(VECSOURCES &shares) const
     CMediaSource& share = shares[i];
     if (share.m_iDriveType == CMediaSource::SOURCE_TYPE_DVD)
     {
-      if(g_mediaManager.IsAudio(share.strPath))
+      if (g_mediaManager.IsAudio(share.strPath))
       {
         share.strStatus = "Audio-CD";
         share.strPath = "cdda://local/";
@@ -199,5 +203,4 @@ void CVirtualDirectory::GetSources(VECSOURCES &shares) const
   }
 #endif
 }
-}
-
+} // namespace XFILE

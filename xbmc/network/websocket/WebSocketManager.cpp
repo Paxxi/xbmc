@@ -17,14 +17,14 @@
 
 #include <string>
 
-#define WS_HTTP_METHOD          "GET"
-#define WS_HTTP_TAG             "HTTP/"
-#define WS_SUPPORTED_VERSIONS   "8, 13"
+#define WS_HTTP_METHOD "GET"
+#define WS_HTTP_TAG "HTTP/"
+#define WS_SUPPORTED_VERSIONS "8, 13"
 
-#define WS_HEADER_VERSION       "Sec-WebSocket-Version"
-#define WS_HEADER_VERSION_LC    "sec-websocket-version"     // "Sec-WebSocket-Version"
+#define WS_HEADER_VERSION "Sec-WebSocket-Version"
+#define WS_HEADER_VERSION_LC "sec-websocket-version" // "Sec-WebSocket-Version"
 
-CWebSocket* CWebSocketManager::Handle(const char* data, unsigned int length, std::string &response)
+CWebSocket* CWebSocketManager::Handle(const char* data, unsigned int length, std::string& response)
 {
   if (data == NULL || length <= 0)
     return NULL;
@@ -33,14 +33,14 @@ CWebSocket* CWebSocketManager::Handle(const char* data, unsigned int length, std
   HttpParser::status_t status = header.addBytes(data, length);
   switch (status)
   {
-    case HttpParser::Error:
-    case HttpParser::Incomplete:
-      response.clear();
-      return NULL;
+  case HttpParser::Error:
+  case HttpParser::Incomplete:
+    response.clear();
+    return NULL;
 
-    case HttpParser::Done:
-    default:
-      break;
+  case HttpParser::Done:
+  default:
+    break;
   }
 
   // There must be a "Sec-WebSocket-Version" header
@@ -49,12 +49,13 @@ CWebSocket* CWebSocketManager::Handle(const char* data, unsigned int length, std
   {
     CLog::Log(LOGINFO, "WebSocket: missing Sec-WebSocket-Version");
     CHttpResponse httpResponse(HTTP::Get, HTTP::BadRequest, HTTP::Version1_1);
-    response = response = httpResponse.Create();;
+    response = response = httpResponse.Create();
+    ;
 
     return NULL;
   }
 
-  CWebSocket *websocket = NULL;
+  CWebSocket* websocket = NULL;
   if (strncmp(value, "8", 1) == 0)
     websocket = new CWebSocketV8();
   else if (strncmp(value, "13", 2) == 0)

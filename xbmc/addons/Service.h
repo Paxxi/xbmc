@@ -14,47 +14,50 @@
 
 namespace ADDON
 {
-  class CService: public CAddon
+class CService : public CAddon
+{
+public:
+  explicit CService(const AddonInfoPtr& addonInfo)
+    : CAddon(addonInfo, ADDON_SERVICE)
   {
-  public:
-    explicit CService(const AddonInfoPtr& addonInfo) : CAddon(addonInfo, ADDON_SERVICE) {}
-  };
+  }
+};
 
-  class CServiceAddonManager
-  {
-  public:
-    explicit CServiceAddonManager(CAddonMgr& addonMgr);
-    ~CServiceAddonManager();
+class CServiceAddonManager
+{
+public:
+  explicit CServiceAddonManager(CAddonMgr& addonMgr);
+  ~CServiceAddonManager();
 
-    /**
+  /**
      * Start all services.
      */
-    void Start();
+  void Start();
 
-    /**
+  /**
      * Start service by add-on id.
      */
-    void Start(const AddonPtr& addon);
-    void Start(const std::string& addonId);
+  void Start(const AddonPtr& addon);
+  void Start(const std::string& addonId);
 
-    /**
+  /**
      * Stop all services.
      */
-    void Stop();
+  void Stop();
 
-    /**
+  /**
      * Stop service by add-on id.
      */
-    void Stop(const std::string& addonId);
+  void Stop(const std::string& addonId);
 
-  private:
-    void OnEvent(const AddonEvent& event);
+private:
+  void OnEvent(const AddonEvent& event);
 
-    void Stop(std::map<std::string, int>::value_type service);
+  void Stop(std::map<std::string, int>::value_type service);
 
-    CAddonMgr& m_addonMgr;
-    CCriticalSection m_criticalSection;
-    /** add-on id -> script id */
-    std::map<std::string, int> m_services;
-  };
-}
+  CAddonMgr& m_addonMgr;
+  CCriticalSection m_criticalSection;
+  /** add-on id -> script id */
+  std::map<std::string, int> m_services;
+};
+} // namespace ADDON

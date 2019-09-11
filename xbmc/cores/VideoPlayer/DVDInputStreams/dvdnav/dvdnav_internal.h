@@ -13,31 +13,31 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifdef TARGET_WINDOWS
 
 /* pthread_mutex_* wrapper for win32 */
 #ifndef TARGET_POSIX
-#include <windows.h>
 #include <process.h>
+#include <windows.h>
 typedef CRITICAL_SECTION pthread_mutex_t;
 #define pthread_mutex_init(a, b) InitializeCriticalSection(a)
-#define pthread_mutex_lock(a)    EnterCriticalSection(a)
-#define pthread_mutex_unlock(a)  LeaveCriticalSection(a)
+#define pthread_mutex_lock(a) EnterCriticalSection(a)
+#define pthread_mutex_unlock(a) LeaveCriticalSection(a)
 #define pthread_mutex_destroy(a) DeleteCriticalSection(a)
 #endif // !TARGET_POSIX
 
 #ifndef HAVE_GETTIMEOFDAY
 /* replacement gettimeofday implementation */
 #include <sys/timeb.h>
-static inline int _private_gettimeofday( struct timeval *tv, void *tz )
+static inline int _private_gettimeofday(struct timeval* tv, void* tz)
 {
   struct timeb t;
-  ftime( &t );
+  ftime(&t);
   tv->tv_sec = t.time;
   tv->tv_usec = t.millitm * 1000;
   return 0;
@@ -81,12 +81,17 @@ static inline int _private_gettimeofday( struct timeval *tv, void *tz )
 #define DVD_VIDEO_LB_LEN 2048
 #endif
 
-typedef enum {
-  DSI_ILVU_PRE   = 1 << 15, /* set during the last 3 VOBU preceeding an interleaved block. */
+typedef enum
+{
+  DSI_ILVU_PRE = 1 << 15, /* set during the last 3 VOBU preceeding an interleaved block. */
   DSI_ILVU_BLOCK = 1 << 14, /* set for all VOBU in an interleaved block */
-  DSI_ILVU_FIRST = 1 << 13, /* set for the first VOBU for a given angle or scene within a ILVU, or the first VOBU in the preparation (PREU) sequence */
-  DSI_ILVU_LAST  = 1 << 12, /* set for the last VOBU for a given angle or scene within a ILVU, or the last VOBU in the preparation (PREU) sequence */
-  DSI_ILVU_MASK  = 0xf000
+  DSI_ILVU_FIRST =
+      1
+      << 13, /* set for the first VOBU for a given angle or scene within a ILVU, or the first VOBU in the preparation (PREU) sequence */
+  DSI_ILVU_LAST =
+      1
+      << 12, /* set for the last VOBU for a given angle or scene within a ILVU, or the last VOBU in the preparation (PREU) sequence */
+  DSI_ILVU_MASK = 0xf000
 } DSI_ILVU;
 
 typedef struct read_cache_s read_cache_t;
@@ -97,60 +102,64 @@ typedef struct read_cache_s read_cache_t;
  */
 
 #ifndef audio_status_t
-typedef struct {
+typedef struct
+{
 #ifdef WORDS_BIGENDIAN
-  unsigned int available     : 1;
-  unsigned int zero1         : 4;
+  unsigned int available : 1;
+  unsigned int zero1 : 4;
   unsigned int stream_number : 3;
   uint8_t zero2;
 #else
   uint8_t zero2;
   unsigned int stream_number : 3;
-  unsigned int zero1         : 4;
-  unsigned int available     : 1;
+  unsigned int zero1 : 4;
+  unsigned int available : 1;
 #endif
 } ATTRIBUTE_PACKED audio_status_t;
 #endif
 
 #ifndef spu_status_t
-typedef struct {
+typedef struct
+{
 #ifdef WORDS_BIGENDIAN
-  unsigned int available               : 1;
-  unsigned int zero1                   : 2;
-  unsigned int stream_number_4_3       : 5;
-  unsigned int zero2                   : 3;
-  unsigned int stream_number_wide      : 5;
-  unsigned int zero3                   : 3;
+  unsigned int available : 1;
+  unsigned int zero1 : 2;
+  unsigned int stream_number_4_3 : 5;
+  unsigned int zero2 : 3;
+  unsigned int stream_number_wide : 5;
+  unsigned int zero3 : 3;
   unsigned int stream_number_letterbox : 5;
-  unsigned int zero4                   : 3;
-  unsigned int stream_number_pan_scan  : 5;
+  unsigned int zero4 : 3;
+  unsigned int stream_number_pan_scan : 5;
 #else
-  unsigned int stream_number_pan_scan  : 5;
-  unsigned int zero4                   : 3;
+  unsigned int stream_number_pan_scan : 5;
+  unsigned int zero4 : 3;
   unsigned int stream_number_letterbox : 5;
-  unsigned int zero3                   : 3;
-  unsigned int stream_number_wide      : 5;
-  unsigned int zero2                   : 3;
-  unsigned int stream_number_4_3       : 5;
-  unsigned int zero1                   : 2;
-  unsigned int available               : 1;
+  unsigned int zero3 : 3;
+  unsigned int stream_number_wide : 5;
+  unsigned int zero2 : 3;
+  unsigned int stream_number_4_3 : 5;
+  unsigned int zero1 : 2;
+  unsigned int available : 1;
 #endif
 } ATTRIBUTE_PACKED spu_status_t;
 #endif
 
-typedef struct dvdnav_vobu_s {
-  int32_t vobu_start;  /* Logical Absolute. MAX needed is 0x300000 */
+typedef struct dvdnav_vobu_s
+{
+  int32_t vobu_start; /* Logical Absolute. MAX needed is 0x300000 */
   int32_t vobu_length;
-  int32_t blockN;      /* Relative offset */
-  int32_t vobu_next;   /* Relative offset */
+  int32_t blockN; /* Relative offset */
+  int32_t vobu_next; /* Relative offset */
 } dvdnav_vobu_t;
 
 /** The main DVDNAV type **/
 
-struct dvdnav_s {
+struct dvdnav_s
+{
   /* General data */
-  char        path[MAX_PATH_LEN]; /* Path to DVD device/dir */
-  dvd_file_t *file;               /* Currently opened file */
+  char path[MAX_PATH_LEN]; /* Path to DVD device/dir */
+  dvd_file_t* file; /* Currently opened file */
 
   /* Position data */
   vm_position_t position_next;
@@ -160,24 +169,24 @@ struct dvdnav_s {
   /* NAV data */
   pci_t pci;
   dsi_t dsi;
-  uint32_t last_cmd_nav_lbn;      /* detects when a command is issued on an already left NAV */
+  uint32_t last_cmd_nav_lbn; /* detects when a command is issued on an already left NAV */
 
   /* Flags */
-  int skip_still;                 /* Set when skipping a still */
-  int sync_wait;                  /* applications should wait till they are in sync with us */
-  int sync_wait_skip;             /* Set when skipping wait state */
-  int spu_clut_changed;           /* The SPU CLUT changed */
-  int started;                    /* vm_start has been called? */
-  int use_read_ahead;             /* 1 - use read-ahead cache, 0 - don't */
-  int pgc_based;                  /* positioning works PGC based instead of PG based */
-  int cur_cell_time;              /* time expired since the beginning of the current cell, read from the dsi */
+  int skip_still; /* Set when skipping a still */
+  int sync_wait; /* applications should wait till they are in sync with us */
+  int sync_wait_skip; /* Set when skipping wait state */
+  int spu_clut_changed; /* The SPU CLUT changed */
+  int started; /* vm_start has been called? */
+  int use_read_ahead; /* 1 - use read-ahead cache, 0 - don't */
+  int pgc_based; /* positioning works PGC based instead of PG based */
+  int cur_cell_time; /* time expired since the beginning of the current cell, read from the dsi */
 
   /* VM */
-  vm_t *vm;
+  vm_t* vm;
   pthread_mutex_t vm_lock;
 
   /* Read-ahead cache */
-  read_cache_t *cache;
+  read_cache_t* cache;
 
   /* Errors */
   char err_str[MAX_ERR_LEN];
@@ -186,34 +195,49 @@ struct dvdnav_s {
 /** HELPER FUNCTIONS **/
 
 /* converts a dvd_time_t to PTS ticks */
-int64_t dvdnav_convert_time(dvd_time_t *time);
+int64_t dvdnav_convert_time(dvd_time_t* time);
 
 /* XBMC added functions */
 /*
  * Get current playback state
  */
-dvdnav_status_t dvdnav_get_state(dvdnav_t *self, dvd_state_t *save_state);
+dvdnav_status_t dvdnav_get_state(dvdnav_t* self, dvd_state_t* save_state);
 
 /*
  * Resume playback state
  */
-dvdnav_status_t dvdnav_set_state(dvdnav_t *self, dvd_state_t *save_state);
+dvdnav_status_t dvdnav_set_state(dvdnav_t* self, dvd_state_t* save_state);
 /* end XBMC */
 
 /** USEFUL MACROS **/
 
 #ifdef __GNUC__
 #define printerrf(format, args...) \
-	do { if (this) snprintf(this->err_str, MAX_ERR_LEN, format, ## args); } while (0)
+  do \
+  { \
+    if (this) \
+      snprintf(this->err_str, MAX_ERR_LEN, format, ##args); \
+  } while (0)
 #else
 #ifdef _MSC_VER
 #define printerrf(str) \
-	do { if (this) snprintf(this->err_str, MAX_ERR_LEN, str); } while (0)
+  do \
+  { \
+    if (this) \
+      snprintf(this->err_str, MAX_ERR_LEN, str); \
+  } while (0)
 #else
 #define printerrf(...) \
-	do { if (this) snprintf(this->err_str, MAX_ERR_LEN, __VA_ARGS__); } while (0)
+  do \
+  { \
+    if (this) \
+      snprintf(this->err_str, MAX_ERR_LEN, __VA_ARGS__); \
+  } while (0)
 #endif /* TARGET_WINDOWS */
 #endif
 #define printerr(str) \
-	do { if (this) strncpy(this->err_str, str, MAX_ERR_LEN - 1); } while (0)
-
+  do \
+  { \
+    if (this) \
+      strncpy(this->err_str, str, MAX_ERR_LEN - 1); \
+  } while (0)

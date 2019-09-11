@@ -29,8 +29,9 @@ namespace HELPERS
 struct DialogOKMessage
 {
   CVariant heading; //!< Heading to be displayed in the dialog box
-  CVariant text;  //!< Body text to be displayed, this is mutually exclusive with lines below
-  std::array<CVariant, 3> lines;  //!< Body text to be displayed, specified as three lines. This is mutually exclusive with the text above
+  CVariant text; //!< Body text to be displayed, this is mutually exclusive with lines below
+  std::array<CVariant, 3>
+      lines; //!< Body text to be displayed, specified as three lines. This is mutually exclusive with the text above
   bool show = true; //!< bool to see if the dialog needs to be shown
 };
 
@@ -68,9 +69,11 @@ bool ShowOKDialogText(CVariant heading, CVariant text);
   \sa CGUIDialogOK::ShowAndGetInput
   \sa DialogOKMessage
 */
-bool ShowOKDialogLines(CVariant heading, CVariant line0, CVariant line1 = CVariant(),
-                                    CVariant line2 = CVariant());
+bool ShowOKDialogLines(CVariant heading,
+                       CVariant line0,
+                       CVariant line1 = CVariant(),
+                       CVariant line2 = CVariant());
 
-}
-}
-}
+} // namespace HELPERS
+} // namespace MESSAGING
+} // namespace KODI

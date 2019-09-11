@@ -29,16 +29,21 @@
 class CGUIResizeControl : public CGUIControl
 {
 public:
-  CGUIResizeControl(int parentID, int controlID,
-                    float posX, float posY, float width, float height,
-                    const CTextureInfo& textureFocus, const CTextureInfo& textureNoFocus);
+  CGUIResizeControl(int parentID,
+                    int controlID,
+                    float posX,
+                    float posY,
+                    float width,
+                    float height,
+                    const CTextureInfo& textureFocus,
+                    const CTextureInfo& textureNoFocus);
 
   ~CGUIResizeControl(void) override;
-  CGUIResizeControl *Clone() const override { return new CGUIResizeControl(*this); };
+  CGUIResizeControl* Clone() const override { return new CGUIResizeControl(*this); };
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
   void OnUp() override;
   void OnDown() override;
   void OnLeft() override;
@@ -52,7 +57,7 @@ public:
   bool CanFocus() const override { return true; };
 
 protected:
-  EVENT_RESULT OnMouseEvent(const CPoint &point, const CMouseEvent &event) override;
+  EVENT_RESULT OnMouseEvent(const CPoint& point, const CMouseEvent& event) override;
   bool UpdateColors() override;
   bool SetAlpha(unsigned char alpha);
   void UpdateSpeed(int nDirection);
@@ -68,4 +73,3 @@ protected:
   float m_fAcceleration;
   float m_x1, m_x2, m_y1, m_y2;
 };
-

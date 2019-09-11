@@ -15,9 +15,9 @@
 using namespace KODI;
 using namespace RETRO;
 
-CRPStreamManager::CRPStreamManager(CRPRenderManager& renderManager, CRPProcessInfo& processInfo) :
-  m_renderManager(renderManager),
-  m_processInfo(processInfo)
+CRPStreamManager::CRPStreamManager(CRPRenderManager& renderManager, CRPProcessInfo& processInfo)
+  : m_renderManager(renderManager)
+  , m_processInfo(processInfo)
 {
 }
 

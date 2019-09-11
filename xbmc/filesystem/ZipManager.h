@@ -18,15 +18,16 @@
 #define CHDR_SIZE 46
 #define ECDREC_SIZE 22
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 class CURL;
 
 static const std::string PATH_TRAVERSAL(R"_((^|\/|\\)\.{2}($|\/|\\))_");
 
-struct SZipEntry {
+struct SZipEntry
+{
   unsigned int header = 0;
   unsigned short version = 0;
   unsigned short flags = 0;
@@ -41,13 +42,10 @@ struct SZipEntry {
   unsigned short eclength = 0; // extra field length (central file header)
   unsigned short clength = 0; // file comment length (central file header)
   unsigned int lhdrOffset = 0; // Relative offset of local header
-  int64_t offset = 0;         // offset in file to compressed data
+  int64_t offset = 0; // offset in file to compressed data
   char name[255];
 
-  SZipEntry()
-  {
-    name[0] = '\0';
-  }
+  SZipEntry() { name[0] = '\0'; }
 };
 
 class CZipManager
@@ -63,10 +61,10 @@ public:
   void release(const std::string& strPath); // release resources used by list zip
   static void readHeader(const char* buffer, SZipEntry& info);
   static void readCHeader(const char* buffer, SZipEntry& info);
+
 private:
-  std::map<std::string,std::vector<SZipEntry> > mZipMap;
-  std::map<std::string,int64_t> mZipDate;
+  std::map<std::string, std::vector<SZipEntry>> mZipMap;
+  std::map<std::string, int64_t> mZipDate;
 };
 
 extern CZipManager g_ZipManager;
-

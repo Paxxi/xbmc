@@ -20,4 +20,4 @@ public:
   static AddonPtr Generate(const AddonInfoPtr& info, TYPE type);
 };
 
-};
+}; // namespace ADDON

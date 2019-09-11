@@ -28,24 +28,19 @@
 #include <androidjni/Environment.h>
 #include <androidjni/StorageManager.h>
 
-static const char * typeWL[] = { "vfat", "exfat", "sdcardfs", "fuse", "ntfs", "fat32", "ext3", "ext4", "esdfs" };
-static const char * mountWL[] = { "/mnt", "/Removable", "/storage" };
-static const char * mountBL[] = {
-  "/mnt/secure",
-  "/mnt/shell",
-  "/mnt/asec",
-  "/mnt/obb",
-  "/mnt/media_rw/extSdCard",
-  "/mnt/media_rw/sdcard",
-  "/mnt/media_rw/usbdisk",
-  "/storage/emulated",
-  "/mnt/runtime"
-};
-static const char * deviceWL[] = {
-  "/dev/block/vold",
-  "/dev/fuse",
-  "/mnt/media_rw"
-};
+static const char* typeWL[] = {"vfat",  "exfat", "sdcardfs", "fuse", "ntfs",
+                               "fat32", "ext3",  "ext4",     "esdfs"};
+static const char* mountWL[] = {"/mnt", "/Removable", "/storage"};
+static const char* mountBL[] = {"/mnt/secure",
+                                "/mnt/shell",
+                                "/mnt/asec",
+                                "/mnt/obb",
+                                "/mnt/media_rw/extSdCard",
+                                "/mnt/media_rw/sdcard",
+                                "/mnt/media_rw/usbdisk",
+                                "/storage/emulated",
+                                "/mnt/runtime"};
+static const char* deviceWL[] = {"/dev/block/vold", "/dev/fuse", "/mnt/media_rw"};
 
 IStorageProvider* IStorageProvider::CreateInstance()
 {
@@ -60,7 +55,7 @@ CAndroidStorageProvider::CAndroidStorageProvider()
 std::string CAndroidStorageProvider::unescape(const std::string& str)
 {
   std::string retString;
-  for (uint32_t i=0; i < str.length(); ++i)
+  for (uint32_t i = 0; i < str.length(); ++i)
   {
     if (str[i] != '\\')
       retString += str[i];
@@ -82,9 +77,9 @@ std::string CAndroidStorageProvider::unescape(const std::string& str)
         if (octString.length() != 0)
         {
           uint8_t val = 0;
-          for (int j=octString.length()-1; j>=0; --j)
+          for (int j = octString.length() - 1; j >= 0; --j)
           {
-            val += ((uint8_t)(octString[j] - '0')) * (1 << ((octString.length() - (j+1)) * 3));
+            val += ((uint8_t)(octString[j] - '0')) * (1 << ((octString.length() - (j + 1)) * 3));
           }
           retString += (char)val;
           i -= 1;
@@ -95,13 +90,13 @@ std::string CAndroidStorageProvider::unescape(const std::string& str)
   return retString;
 }
 
-void CAndroidStorageProvider::GetLocalDrives(VECSOURCES &localDrives)
+void CAndroidStorageProvider::GetLocalDrives(VECSOURCES& localDrives)
 {
   CMediaSource share;
 
   // external directory
   std::string path;
-  if (CXBMCApp::GetExternalStorage(path) && !path.empty()  && XFILE::CDirectory::Exists(path))
+  if (CXBMCApp::GetExternalStorage(path) && !path.empty() && XFILE::CDirectory::Exists(path))
   {
     share.strPath = path;
     share.strName = g_localizeStrings.Get(21456);
@@ -115,7 +110,7 @@ void CAndroidStorageProvider::GetLocalDrives(VECSOURCES &localDrives)
   localDrives.push_back(share);
 }
 
-void CAndroidStorageProvider::GetRemovableDrives(VECSOURCES &removableDrives)
+void CAndroidStorageProvider::GetRemovableDrives(VECSOURCES& removableDrives)
 {
   // Uses non-public API: be extra carefull
   bool inError = false;
@@ -141,7 +136,7 @@ void CAndroidStorageProvider::GetRemovableDrives(VECSOURCES &removableDrives)
     {
       for (auto vol : vols)
       {
-//        CLog::Log(LOGDEBUG, "-- Volume: %s(%s) -- %s", vol.getPath().c_str(), vol.getUserLabel().c_str(), vol.getState().c_str());
+        //        CLog::Log(LOGDEBUG, "-- Volume: %s(%s) -- %s", vol.getPath().c_str(), vol.getUserLabel().c_str(), vol.getState().c_str());
         bool removable = vol.isRemovable();
         if (xbmc_jnienv()->ExceptionCheck())
         {
@@ -175,7 +170,8 @@ void CAndroidStorageProvider::GetRemovableDrives(VECSOURCES &removableDrives)
             break;
           }
           StringUtils::Trim(share.strName);
-          if (share.strName.empty() || share.strName == "?" || StringUtils::EqualsNoCase(share.strName, "null"))
+          if (share.strName.empty() || share.strName == "?" ||
+              StringUtils::EqualsNoCase(share.strName, "null"))
             share.strName = URIUtils::GetFileName(share.strPath);
           share.m_ignore = true;
           droidDrives.push_back(share);
@@ -208,9 +204,9 @@ std::set<std::string> CAndroidStorageProvider::GetRemovableDrivesLinux()
   std::set<std::string> result;
 
   // mounted usb disks
-  char*                               buf     = NULL;
-  FILE*                               pipe;
-  CRegExp                             reMount;
+  char* buf = NULL;
+  FILE* pipe;
+  CRegExp reMount;
   reMount.RegComp("^(.+?)\\s+(.+?)\\s+(.+?)\\s+(.+?)\\s");
 
   /* /proc/mounts is only guaranteed atomic for the current read
@@ -218,14 +214,14 @@ std::set<std::string> CAndroidStorageProvider::GetRemovableDrivesLinux()
    */
   if ((pipe = fopen("/proc/mounts", "r")))
   {
-    char*   new_buf;
-    size_t  buf_len = 4096;
+    char* new_buf;
+    size_t buf_len = 4096;
 
     while ((new_buf = (char*)realloc(buf, buf_len * sizeof(char))))
     {
       size_t nread;
 
-      buf   = new_buf;
+      buf = new_buf;
       nread = fread(buf, sizeof(char), buf_len, pipe);
 
       if (nread == buf_len)
@@ -263,16 +259,16 @@ std::set<std::string> CAndroidStorageProvider::GetRemovableDrivesLinux()
     {
       if (reMount.RegFind(line) != -1)
       {
-        std::string deviceStr   = reMount.GetReplaceString("\\1");
+        std::string deviceStr = reMount.GetReplaceString("\\1");
         std::string mountStr = reMount.GetReplaceString("\\2");
-        std::string fsStr    = reMount.GetReplaceString("\\3");
-        std::string optStr    = reMount.GetReplaceString("\\4");
+        std::string fsStr = reMount.GetReplaceString("\\3");
+        std::string optStr = reMount.GetReplaceString("\\4");
 
         // Blacklist
         bool bl_ok = true;
 
         // What mount points are rejected
-        for (unsigned int i=0; i < ARRAY_SIZE(mountBL); ++i)
+        for (unsigned int i = 0; i < ARRAY_SIZE(mountBL); ++i)
         {
           if (StringUtils::StartsWithNoCase(mountStr, mountBL[i]))
           {
@@ -285,7 +281,7 @@ std::set<std::string> CAndroidStorageProvider::GetRemovableDrivesLinux()
         {
           // What filesystems are accepted
           bool fsok = false;
-          for (unsigned int i=0; i < ARRAY_SIZE(typeWL); ++i)
+          for (unsigned int i = 0; i < ARRAY_SIZE(typeWL); ++i)
           {
             if (StringUtils::StartsWithNoCase(fsStr, typeWL[i]))
             {
@@ -295,7 +291,7 @@ std::set<std::string> CAndroidStorageProvider::GetRemovableDrivesLinux()
           }
           // What devices are accepted
           bool devok = false;
-          for (unsigned int i=0; i < ARRAY_SIZE(deviceWL); ++i)
+          for (unsigned int i = 0; i < ARRAY_SIZE(deviceWL); ++i)
           {
             if (StringUtils::StartsWithNoCase(deviceStr, deviceWL[i]))
             {
@@ -306,7 +302,7 @@ std::set<std::string> CAndroidStorageProvider::GetRemovableDrivesLinux()
 
           // What mount points are accepted
           bool mountok = false;
-          for (unsigned int i=0; i < ARRAY_SIZE(mountWL); ++i)
+          for (unsigned int i = 0; i < ARRAY_SIZE(mountWL); ++i)
           {
             if (StringUtils::StartsWithNoCase(mountStr, mountWL[i]))
             {
@@ -315,7 +311,7 @@ std::set<std::string> CAndroidStorageProvider::GetRemovableDrivesLinux()
             }
           }
 
-          if(devok && (fsok || mountok))
+          if (devok && (fsok || mountok))
           {
             result.insert(mountStr);
           }
@@ -362,7 +358,7 @@ std::vector<std::string> CAndroidStorageProvider::GetDiskUsage()
   return result;
 }
 
-bool CAndroidStorageProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
+bool CAndroidStorageProvider::PumpDriveChangeEvents(IStorageEventsCallback* callback)
 {
   VECSOURCES drives;
   GetRemovableDrives(drives);

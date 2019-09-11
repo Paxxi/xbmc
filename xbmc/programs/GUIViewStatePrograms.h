@@ -21,4 +21,3 @@ protected:
   std::string GetExtensions() override;
   VECSOURCES& GetSources() override;
 };
-

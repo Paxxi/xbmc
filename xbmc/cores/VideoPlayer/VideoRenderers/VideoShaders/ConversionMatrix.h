@@ -10,18 +10,19 @@
 
 #include <memory>
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/pixfmt.h>
 }
 
-template <unsigned Order>
+template<unsigned Order>
 class CMatrix
 {
 public:
   CMatrix(float (&src)[Order][Order]);
-  CMatrix(float (&src)[Order-1][Order-1]);
+  CMatrix(float (&src)[Order - 1][Order - 1]);
   CMatrix& operator=(const CMatrix& src);
-  CMatrix& operator=(const float (&src)[Order-1][Order-1]);
+  CMatrix& operator=(const float (&src)[Order - 1][Order - 1]);
   virtual ~CMatrix() = default;
 
   float (&Get())[Order][Order];
@@ -45,7 +46,7 @@ public:
   CGlMatrix() = default;
   CGlMatrix(float (&src)[3][3]);
   virtual ~CGlMatrix() = default;
-  CMatrix operator*(const float (&other)[4][4]) override;
+  CMatrix operator*(const float (&other)[4][4])override;
 };
 
 class CScale : public CGlMatrix

@@ -19,8 +19,8 @@ public:
 
   static CFileItemListModification& GetInstance();
 
-  bool CanModify(const CFileItemList &items) const override;
-  bool Modify(CFileItemList &items) const override;
+  bool CanModify(const CFileItemList& items) const override;
+  bool Modify(CFileItemList& items) const override;
 
 private:
   CFileItemListModification();

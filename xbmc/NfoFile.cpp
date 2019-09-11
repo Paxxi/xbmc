@@ -27,7 +27,8 @@ using namespace XFILE;
 using namespace ADDON;
 
 CInfoScanner::INFO_TYPE CNfoFile::Create(const std::string& strPath,
-                                         const ScraperPtr& info, int episode)
+                                         const ScraperPtr& info,
+                                         int episode)
 {
   m_info = info; // assume we can use these settings
   m_type = ScraperTypeFromContent(info->Content());
@@ -35,7 +36,7 @@ CInfoScanner::INFO_TYPE CNfoFile::Create(const std::string& strPath,
     return CInfoScanner::NO_NFO;
 
   CFileItemList items;
-  bool bNfo=false;
+  bool bNfo = false;
 
   if (m_type == ADDON_SCRAPER_ALBUMS)
   {
@@ -47,22 +48,22 @@ CInfoScanner::INFO_TYPE CNfoFile::Create(const std::string& strPath,
     CArtist artist;
     bNfo = GetDetails(artist);
   }
-  else if (m_type == ADDON_SCRAPER_TVSHOWS || m_type == ADDON_SCRAPER_MOVIES
-           || m_type == ADDON_SCRAPER_MUSICVIDEOS)
+  else if (m_type == ADDON_SCRAPER_TVSHOWS || m_type == ADDON_SCRAPER_MOVIES ||
+           m_type == ADDON_SCRAPER_MUSICVIDEOS)
   {
     // first check if it's an XML file with the info we need
     CVideoInfoTag details;
     bNfo = GetDetails(details);
     if (episode > -1 && bNfo && m_type == ADDON_SCRAPER_TVSHOWS)
     {
-      int infos=0;
+      int infos = 0;
       while (m_headPos != std::string::npos && details.m_iEpisode != episode)
       {
         m_headPos = m_doc.find("<episodedetails", m_headPos + 1);
         if (m_headPos == std::string::npos)
           break;
 
-        bNfo  = GetDetails(details);
+        bNfo = GetDetails(details);
         infos++;
       }
       if (details.m_iEpisode != episode)
@@ -80,7 +81,7 @@ CInfoScanner::INFO_TYPE CNfoFile::Create(const std::string& strPath,
 
   // search ..
   int res = -1;
-  for (unsigned int i=0; i<vecScrapers.size(); ++i)
+  for (unsigned int i = 0; i < vecScrapers.size(); ++i)
     if ((res = Scrape(vecScrapers[i], m_scurl, m_doc)) == 0 || res == 2)
       break;
 
@@ -102,8 +103,7 @@ CInfoScanner::INFO_TYPE CNfoFile::Create(const std::string& strPath,
 }
 
 // return value: 0 - success; 1 - no result; skip; 2 - error
-int CNfoFile::Scrape(ScraperPtr& scraper, CScraperUrl& url,
-                     const std::string& content)
+int CNfoFile::Scrape(ScraperPtr& scraper, CScraperUrl& url, const std::string& content)
 {
   if (scraper->IsNoop())
   {
@@ -117,7 +117,7 @@ int CNfoFile::Scrape(ScraperPtr& scraper, CScraperUrl& url,
   {
     url = scraper->NfoUrl(content);
   }
-  catch (const CScraperError &sce)
+  catch (const CScraperError& sce)
   {
     CVideoInfoDownloader::ShowErrorDialog(sce);
     if (!sce.FAborted())
@@ -149,8 +149,7 @@ void CNfoFile::Close()
   m_scurl.Clear();
 }
 
-std::vector<ScraperPtr> CNfoFile::GetScrapers(TYPE type,
-                                              ScraperPtr selectedScraper)
+std::vector<ScraperPtr> CNfoFile::GetScrapers(TYPE type, ScraperPtr selectedScraper)
 {
   AddonPtr addon;
   ScraperPtr defaultScraper;
@@ -176,13 +175,12 @@ std::vector<ScraperPtr> CNfoFile::GetScrapers(TYPE type,
       continue;
 
     if ((!selectedScraper || selectedScraper->ID() != scraper->ID()) &&
-         (!defaultScraper || defaultScraper->ID() != scraper->ID()))
+        (!defaultScraper || defaultScraper->ID() != scraper->ID()))
       vecScrapers.push_back(scraper);
   }
 
   // add default scraper - not user selectable so it's last priority
-  if (defaultScraper && (!selectedScraper ||
-                          selectedScraper->ID() != defaultScraper->ID()) &&
+  if (defaultScraper && (!selectedScraper || selectedScraper->ID() != defaultScraper->ID()) &&
       (!defaultScraper->RequiresSettings() || defaultScraper->HasUserSettings()))
     vecScrapers.push_back(defaultScraper);
 

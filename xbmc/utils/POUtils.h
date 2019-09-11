@@ -21,7 +21,7 @@ typedef enum
 
 enum
 {
-  ISSOURCELANG=true
+  ISSOURCELANG = true
 };
 
 // Struct to hold current position and text of the string field in the main PO entry.
@@ -55,7 +55,7 @@ public:
     \param pofilename filename of the PO file to load.
     \return true if the load was successful, unless return false
     */
-  bool LoadFile(const std::string &pofilename);
+  bool LoadFile(const std::string& pofilename);
 
   /*! \brief Fast jumps to the next entry in PO buffer.
     * Finds next entry started with "#: id:" or msgctx or msgid.
@@ -73,14 +73,14 @@ public:
   /*! \brief Gets the type of entry found with GetNextEntry.
     \return the type of entry: ID_FOUND || MSGID_FOUND || MSGID_PLURAL_FOUND
     */
-  int GetEntryType() const {return m_Entry.Type;}
+  int GetEntryType() const { return m_Entry.Type; }
 
   /*! \brief Parses the numeric ID from current entry.
     * This function can only be called right after GetNextEntry()
     * to make sure that we have a valid entry detected.
     \return parsed ID number
     */
-  uint32_t GetEntryID() const {return m_Entry.xID;}
+  uint32_t GetEntryID() const { return m_Entry.xID; }
 
   /*! \brief Parses current entry.
     * Reads msgid, msgstr, msgstr[x], msgctxt strings.
@@ -93,32 +93,31 @@ public:
   /*! \brief Gets the msgctxt string previously parsed by ParseEntry().
     \return string* containing the msgctxt string, unescaped and linked together.
     */
-  const std::string& GetMsgctxt() const {return m_Entry.msgCtxt.Str;}
+  const std::string& GetMsgctxt() const { return m_Entry.msgCtxt.Str; }
 
   /*! \brief Gets the msgid string previously parsed by ParseEntry().
     \return string* containing the msgid string, unescaped and linked together.
     */
-  const std::string& GetMsgid() const {return m_Entry.msgID.Str;}
+  const std::string& GetMsgid() const { return m_Entry.msgID.Str; }
 
   /*! \brief Gets the msgstr string previously parsed by ParseEntry().
     \return string* containing the msgstr string, unescaped and linked together.
     */
-  const std::string& GetMsgstr() const {return m_Entry.msgStr.Str;}
+  const std::string& GetMsgstr() const { return m_Entry.msgStr.Str; }
 
   /*! \brief Gets the msgstr[x] string previously parsed by ParseEntry().
     \param plural the number of plural-form expected to get (0-6).
     \return string* containing the msgstr string, unescaped and linked together.
     */
-  const std::string& GetPlurMsgstr (size_t plural) const;
+  const std::string& GetPlurMsgstr(size_t plural) const;
 
 protected:
-
   /*! \brief Converts c++ style char escape sequences back to char.
     * Supports: \a \v \n \t \r \" \0 \f \? \' \\
     \param strInput string contains the string to be unescaped.
     \return unescaped string.
     */
-  std::string UnescapeString(const std::string &strInput);
+  std::string UnescapeString(const std::string& strInput);
 
   /*! \brief Finds the position of line, starting with a given string in current entry.
     * This function can only be called after GetNextEntry()
@@ -126,14 +125,14 @@ protected:
     \param FoundPos will get the position where we found the line starting with the string.
     \return false if no line like that can be found in the entry (m_Entry)
     */
-  bool FindLineStart(const std::string &strToFind, size_t &FoundPos);
+  bool FindLineStart(const std::string& strToFind, size_t& FoundPos);
 
   /*! \brief Reads, and links together the quoted strings found with ParseEntry().
     * This function can only be called after GetNextEntry() called.
     \param strEntry.Str a string where we get the appended string lines.
     \param strEntry.Pos the position in m_Entry.Content to start reading the string.
     */
-  void GetString(CStrEntry &strEntry);
+  void GetString(CStrEntry& strEntry);
 
   /*! \brief Parses the numeric id and checks if it is valid.
     * This function can only be called after GetNextEntry()
@@ -145,7 +144,7 @@ protected:
 
   /*! \brief If we have Windows or Mac line-end chars in PO file, convert them to Unix LFs
     */
-  void ConvertLineEnds(const std::string &filename);
+  void ConvertLineEnds(const std::string& filename);
 
   // Temporary string buffer to read file in.
   std::string m_strBuffer;

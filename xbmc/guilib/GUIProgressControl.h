@@ -20,19 +20,25 @@
  \ingroup controls
  \brief
  */
-class CGUIProgressControl :
-      public CGUIControl
+class CGUIProgressControl : public CGUIControl
 {
 public:
-  CGUIProgressControl(int parentID, int controlID, float posX, float posY,
-                      float width, float height, const CTextureInfo& backGroundTexture,
-                      const CTextureInfo& leftTexture, const CTextureInfo& midTexture,
-                      const CTextureInfo& rightTexture, const CTextureInfo& overlayTexture,
-                      bool reveal=false);
+  CGUIProgressControl(int parentID,
+                      int controlID,
+                      float posX,
+                      float posY,
+                      float width,
+                      float height,
+                      const CTextureInfo& backGroundTexture,
+                      const CTextureInfo& leftTexture,
+                      const CTextureInfo& midTexture,
+                      const CTextureInfo& rightTexture,
+                      const CTextureInfo& overlayTexture,
+                      bool reveal = false);
   ~CGUIProgressControl(void) override;
-  CGUIProgressControl *Clone() const override { return new CGUIProgressControl(*this); };
+  CGUIProgressControl* Clone() const override { return new CGUIProgressControl(*this); };
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
   bool CanFocus() const override;
   void AllocResources() override;
@@ -43,12 +49,13 @@ public:
   void SetPosition(float posX, float posY) override;
   void SetPercentage(float fPercent);
   void SetInfo(int iInfo, int iInfo2 = 0);
-  int GetInfo() const {return m_iInfoCode;};
+  int GetInfo() const { return m_iInfoCode; };
 
   float GetPercentage() const;
   std::string GetDescription() const override;
-  void UpdateInfo(const CGUIListItem *item = NULL) override;
+  void UpdateInfo(const CGUIListItem* item = NULL) override;
   bool UpdateLayout(void);
+
 protected:
   bool UpdateColors() override;
   CGUITexture m_guiBackground;
@@ -65,4 +72,3 @@ protected:
   bool m_bReveal;
   bool m_bChanged;
 };
-

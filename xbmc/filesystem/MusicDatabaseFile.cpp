@@ -28,14 +28,14 @@ std::string CMusicDatabaseFile::TranslateUrl(const CURL& url)
   if (!musicDatabase.Open())
     return "";
 
-  std::string strFileName=URIUtils::GetFileName(url.Get());
+  std::string strFileName = URIUtils::GetFileName(url.Get());
   std::string strExtension = URIUtils::GetExtension(strFileName);
   URIUtils::RemoveExtension(strFileName);
 
   if (!StringUtils::IsNaturalNumber(strFileName))
     return "";
 
-  long idSong=atol(strFileName.c_str());
+  long idSong = atol(strFileName.c_str());
 
   CSong song;
   if (!musicDatabase.GetSong(idSong, song))
@@ -87,4 +87,3 @@ int64_t CMusicDatabaseFile::GetLength()
 {
   return m_file.GetLength();
 }
-

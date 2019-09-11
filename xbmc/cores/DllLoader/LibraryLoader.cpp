@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-LibraryLoader::LibraryLoader(const std::string& libraryFile):
-  m_fileName(libraryFile)
+LibraryLoader::LibraryLoader(const std::string& libraryFile)
+  : m_fileName(libraryFile)
 {
   size_t pos = m_fileName.find_last_of("\\/");
   if (pos != std::string::npos)
@@ -25,7 +25,7 @@ LibraryLoader::LibraryLoader(const std::string& libraryFile):
 
 LibraryLoader::~LibraryLoader() = default;
 
-const char *LibraryLoader::GetName() const
+const char* LibraryLoader::GetName() const
 {
   size_t pos = m_fileName.find_last_of('/');
   if (pos != std::string::npos)
@@ -33,12 +33,12 @@ const char *LibraryLoader::GetName() const
   return m_fileName.c_str();
 }
 
-const char *LibraryLoader::GetFileName() const
+const char* LibraryLoader::GetFileName() const
 {
   return m_fileName.c_str();
 }
 
-const char *LibraryLoader::GetPath() const
+const char* LibraryLoader::GetPath() const
 {
   return m_path.c_str();
 }

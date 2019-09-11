@@ -40,14 +40,14 @@
 
 #define CONTROL_SETTINGS 5
 #define CONTROL_FOREIGNFILTER 7
-#define CONTROL_BROKENFILTER  8
-#define CONTROL_CHECK_FOR_UPDATES  9
+#define CONTROL_BROKENFILTER 8
+#define CONTROL_CHECK_FOR_UPDATES 9
 
 using namespace ADDON;
 using namespace XFILE;
 
 CGUIWindowAddonBrowser::CGUIWindowAddonBrowser(void)
-: CGUIMediaWindow(WINDOW_ADDON_BROWSER, "AddonBrowser.xml")
+  : CGUIMediaWindow(WINDOW_ADDON_BROWSER, "AddonBrowser.xml")
 {
 }
 
@@ -55,91 +55,95 @@ CGUIWindowAddonBrowser::~CGUIWindowAddonBrowser() = default;
 
 bool CGUIWindowAddonBrowser::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
-    case GUI_MSG_WINDOW_DEINIT:
-    {
-      CServiceBroker::GetRepositoryUpdater().Events().Unsubscribe(this);
-      CServiceBroker::GetAddonMgr().Events().Unsubscribe(this);
+  case GUI_MSG_WINDOW_DEINIT:
+  {
+    CServiceBroker::GetRepositoryUpdater().Events().Unsubscribe(this);
+    CServiceBroker::GetAddonMgr().Events().Unsubscribe(this);
 
-      if (m_thumbLoader.IsLoading())
-        m_thumbLoader.StopThread();
-    }
-    break;
+    if (m_thumbLoader.IsLoading())
+      m_thumbLoader.StopThread();
+  }
+  break;
   case GUI_MSG_WINDOW_INIT:
-    {
-      CServiceBroker::GetRepositoryUpdater().Events().Subscribe(this, &CGUIWindowAddonBrowser::OnEvent);
-      CServiceBroker::GetAddonMgr().Events().Subscribe(this, &CGUIWindowAddonBrowser::OnEvent);
+  {
+    CServiceBroker::GetRepositoryUpdater().Events().Subscribe(this,
+                                                              &CGUIWindowAddonBrowser::OnEvent);
+    CServiceBroker::GetAddonMgr().Events().Subscribe(this, &CGUIWindowAddonBrowser::OnEvent);
 
-      SetProperties();
-    }
-    break;
+    SetProperties();
+  }
+  break;
   case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+    if (iControl == CONTROL_FOREIGNFILTER)
     {
-      int iControl = message.GetSenderId();
-      if (iControl == CONTROL_FOREIGNFILTER)
-      {
-        const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
-        settings->ToggleBool(CSettings::SETTING_GENERAL_ADDONFOREIGNFILTER);
-        settings->Save();
-        Refresh();
-        return true;
-      }
-      else if (iControl == CONTROL_BROKENFILTER)
-      {
-        const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
-        settings->ToggleBool(CSettings::SETTING_GENERAL_ADDONBROKENFILTER);
-        settings->Save();
-        Refresh();
-        return true;
-      }
-      else if (iControl == CONTROL_CHECK_FOR_UPDATES)
-      {
-        CServiceBroker::GetRepositoryUpdater().CheckForUpdates(true);
-        return true;
-      }
-      else if (iControl == CONTROL_SETTINGS)
-      {
-        CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_SETTINGS_SYSTEM, "addons");
-        return true;
-      }
-      else if (m_viewControl.HasControl(iControl))  // list/thumb control
-      {
-        // get selected item
-        int iItem = m_viewControl.GetSelectedItem();
-        int iAction = message.GetParam1();
+      const std::shared_ptr<CSettings> settings =
+          CServiceBroker::GetSettingsComponent()->GetSettings();
+      settings->ToggleBool(CSettings::SETTING_GENERAL_ADDONFOREIGNFILTER);
+      settings->Save();
+      Refresh();
+      return true;
+    }
+    else if (iControl == CONTROL_BROKENFILTER)
+    {
+      const std::shared_ptr<CSettings> settings =
+          CServiceBroker::GetSettingsComponent()->GetSettings();
+      settings->ToggleBool(CSettings::SETTING_GENERAL_ADDONBROKENFILTER);
+      settings->Save();
+      Refresh();
+      return true;
+    }
+    else if (iControl == CONTROL_CHECK_FOR_UPDATES)
+    {
+      CServiceBroker::GetRepositoryUpdater().CheckForUpdates(true);
+      return true;
+    }
+    else if (iControl == CONTROL_SETTINGS)
+    {
+      CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_SETTINGS_SYSTEM, "addons");
+      return true;
+    }
+    else if (m_viewControl.HasControl(iControl)) // list/thumb control
+    {
+      // get selected item
+      int iItem = m_viewControl.GetSelectedItem();
+      int iAction = message.GetParam1();
 
-        // iItem is checked for validity inside these routines
-        if (iAction == ACTION_SHOW_INFO)
-        {
-          if (!m_vecItems->Get(iItem)->GetProperty("Addon.ID").empty())
-            return CGUIDialogAddonInfo::ShowForItem((*m_vecItems)[iItem]);
-          return false;
-        }
+      // iItem is checked for validity inside these routines
+      if (iAction == ACTION_SHOW_INFO)
+      {
+        if (!m_vecItems->Get(iItem)->GetProperty("Addon.ID").empty())
+          return CGUIDialogAddonInfo::ShowForItem((*m_vecItems)[iItem]);
+        return false;
       }
     }
-    break;
+  }
+  break;
   case GUI_MSG_NOTIFY_ALL:
-    {
-      if (message.GetParam1() == GUI_MSG_UPDATE_ITEM && IsActive() && message.GetNumStringParams() == 1)
-      { // update this item
-        for (int i = 0; i < m_vecItems->Size(); ++i)
+  {
+    if (message.GetParam1() == GUI_MSG_UPDATE_ITEM && IsActive() &&
+        message.GetNumStringParams() == 1)
+    { // update this item
+      for (int i = 0; i < m_vecItems->Size(); ++i)
+      {
+        CFileItemPtr item = m_vecItems->Get(i);
+        if (item->GetProperty("Addon.ID") == message.GetStringParam())
         {
-          CFileItemPtr item = m_vecItems->Get(i);
-          if (item->GetProperty("Addon.ID") == message.GetStringParam())
-          {
-            UpdateStatus(item);
-            FormatAndSort(*m_vecItems);
-            return true;
-          }
+          UpdateStatus(item);
+          FormatAndSort(*m_vecItems);
+          return true;
         }
       }
-      else if (message.GetParam1() == GUI_MSG_UPDATE && IsActive())
-        SetProperties();
     }
+    else if (message.GetParam1() == GUI_MSG_UPDATE && IsActive())
+      SetProperties();
+  }
+  break;
+  default:
     break;
-   default:
-     break;
   }
   return CGUIMediaWindow::OnMessage(message);
 }
@@ -147,8 +151,8 @@ bool CGUIWindowAddonBrowser::OnMessage(CGUIMessage& message)
 void CGUIWindowAddonBrowser::SetProperties()
 {
   auto lastUpdated = CServiceBroker::GetRepositoryUpdater().LastUpdated();
-  SetProperty("Updated", lastUpdated.IsValid() ?
-    lastUpdated.GetAsLocalizedDateTime() : g_localizeStrings.Get(21337));
+  SetProperty("Updated", lastUpdated.IsValid() ? lastUpdated.GetAsLocalizedDateTime()
+                                               : g_localizeStrings.Get(21337));
 }
 
 class UpdateAddons : public IRunnable
@@ -176,10 +180,12 @@ void CGUIWindowAddonBrowser::InstallFromZip()
 {
   using namespace KODI::MESSAGING::HELPERS;
 
-  if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_ADDONS_ALLOW_UNKNOWN_SOURCES))
+  if (!CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+          CSettings::SETTING_ADDONS_ALLOW_UNKNOWN_SOURCES))
   {
     if (ShowYesNoDialogText(13106, 36617, 186, 10004) == DialogResponse::YES)
-      CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(WINDOW_SETTINGS_SYSTEM, CSettings::SETTING_ADDONS_ALLOW_UNKNOWN_SOURCES);
+      CServiceBroker::GetGUI()->GetWindowManager().ActivateWindow(
+          WINDOW_SETTINGS_SYSTEM, CSettings::SETTING_ADDONS_ALLOW_UNKNOWN_SOURCES);
   }
   else
   {
@@ -195,7 +201,7 @@ void CGUIWindowAddonBrowser::InstallFromZip()
   }
 }
 
-bool CGUIWindowAddonBrowser::OnClick(int iItem, const std::string &player)
+bool CGUIWindowAddonBrowser::OnClick(int iItem, const std::string& player)
 {
   CFileItemPtr item = m_vecItems->Get(iItem);
   if (item->GetPath() == "addons://install/")
@@ -214,7 +220,8 @@ bool CGUIWindowAddonBrowser::OnClick(int iItem, const std::string &player)
     // cancel a downloading job
     if (item->HasProperty("Addon.Downloading"))
     {
-      if (CGUIDialogYesNo::ShowAndGetInput(CVariant{24000}, item->GetProperty("Addon.Name"), CVariant{24066}, CVariant{""}))
+      if (CGUIDialogYesNo::ShowAndGetInput(CVariant{24000}, item->GetProperty("Addon.Name"),
+                                           CVariant{24066}, CVariant{""}))
       {
         if (CAddonInstaller::GetInstance().Cancel(item->GetProperty("Addon.ID").asString()))
           Refresh();
@@ -237,8 +244,10 @@ bool CGUIWindowAddonBrowser::OnClick(int iItem, const std::string &player)
 void CGUIWindowAddonBrowser::UpdateButtons()
 {
   const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
-  SET_CONTROL_SELECTED(GetID(),CONTROL_FOREIGNFILTER, settings->GetBool(CSettings::SETTING_GENERAL_ADDONFOREIGNFILTER));
-  SET_CONTROL_SELECTED(GetID(),CONTROL_BROKENFILTER, settings->GetBool(CSettings::SETTING_GENERAL_ADDONBROKENFILTER));
+  SET_CONTROL_SELECTED(GetID(), CONTROL_FOREIGNFILTER,
+                       settings->GetBool(CSettings::SETTING_GENERAL_ADDONFOREIGNFILTER));
+  SET_CONTROL_SELECTED(GetID(), CONTROL_BROKENFILTER,
+                       settings->GetBool(CSettings::SETTING_GENERAL_ADDONBROKENFILTER));
   CONTROL_ENABLE(CONTROL_CHECK_FOR_UPDATES);
   CONTROL_ENABLE(CONTROL_SETTINGS);
 
@@ -256,8 +265,7 @@ static bool IsForeign(const std::string& languages)
 
   for (const auto& lang : StringUtils::Split(languages, " "))
   {
-    if (lang == "en" ||
-        lang == g_langInfo.GetLocale().GetLanguageCode() ||
+    if (lang == "en" || lang == g_langInfo.GetLocale().GetLanguageCode() ||
         lang == g_langInfo.GetLocale().ToShortString())
       return false;
 
@@ -274,7 +282,8 @@ bool CGUIWindowAddonBrowser::GetDirectory(const std::string& strDirectory, CFile
 
   if (result && CAddonsDirectory::IsRepoDirectory(CURL(strDirectory)))
   {
-    const std::shared_ptr<CSettings> settings = CServiceBroker::GetSettingsComponent()->GetSettings();
+    const std::shared_ptr<CSettings> settings =
+        CServiceBroker::GetSettingsComponent()->GetSettings();
     if (settings->GetBool(CSettings::SETTING_GENERAL_ADDONFOREIGNFILTER))
     {
       int i = 0;
@@ -295,7 +304,8 @@ bool CGUIWindowAddonBrowser::GetDirectory(const std::string& strDirectory, CFile
         {
           //check if it's installed
           AddonPtr addon;
-          if (!CServiceBroker::GetAddonMgr().GetAddon(items[i]->GetProperty("Addon.ID").asString(), addon))
+          if (!CServiceBroker::GetAddonMgr().GetAddon(items[i]->GetProperty("Addon.ID").asString(),
+                                                      addon))
             items.Remove(i);
         }
       }
@@ -315,9 +325,11 @@ void CGUIWindowAddonBrowser::UpdateStatus(const CFileItemPtr& item)
 
   unsigned int percent;
   bool downloadFinshed;
-  if (CAddonInstaller::GetInstance().GetProgress(item->GetProperty("Addon.ID").asString(), percent, downloadFinshed))
+  if (CAddonInstaller::GetInstance().GetProgress(item->GetProperty("Addon.ID").asString(), percent,
+                                                 downloadFinshed))
   {
-    std::string progress = StringUtils::Format(!downloadFinshed ? g_localizeStrings.Get(24042) : g_localizeStrings.Get(24044), percent);
+    std::string progress = StringUtils::Format(
+        !downloadFinshed ? g_localizeStrings.Get(24042) : g_localizeStrings.Get(24044), percent);
     item->SetProperty("Addon.Status", progress);
     item->SetProperty("Addon.Downloading", true);
   }
@@ -325,7 +337,8 @@ void CGUIWindowAddonBrowser::UpdateStatus(const CFileItemPtr& item)
     item->ClearProperty("Addon.Downloading");
 }
 
-bool CGUIWindowAddonBrowser::Update(const std::string &strDirectory, bool updateFilterPath /* = true */)
+bool CGUIWindowAddonBrowser::Update(const std::string& strDirectory,
+                                    bool updateFilterPath /* = true */)
 {
   if (m_thumbLoader.IsLoading())
     m_thumbLoader.StopThread();
@@ -338,26 +351,48 @@ bool CGUIWindowAddonBrowser::Update(const std::string &strDirectory, bool update
   return true;
 }
 
-int CGUIWindowAddonBrowser::SelectAddonID(TYPE type, std::string &addonID, bool showNone /* = false */, bool showDetails /* = true */, bool showInstalled /* = true */, bool showInstallable /*= false */, bool showMore /* = true */)
+int CGUIWindowAddonBrowser::SelectAddonID(TYPE type,
+                                          std::string& addonID,
+                                          bool showNone /* = false */,
+                                          bool showDetails /* = true */,
+                                          bool showInstalled /* = true */,
+                                          bool showInstallable /*= false */,
+                                          bool showMore /* = true */)
 {
   std::vector<ADDON::TYPE> types;
   types.push_back(type);
-  return SelectAddonID(types, addonID, showNone, showDetails, showInstalled, showInstallable, showMore);
+  return SelectAddonID(types, addonID, showNone, showDetails, showInstalled, showInstallable,
+                       showMore);
 }
 
-int CGUIWindowAddonBrowser::SelectAddonID(ADDON::TYPE type, std::vector<std::string> &addonIDs, bool showNone /* = false */, bool showDetails /* = true */, bool multipleSelection /* = true */, bool showInstalled /* = true */, bool showInstallable /* = false */, bool showMore /* = true */)
+int CGUIWindowAddonBrowser::SelectAddonID(ADDON::TYPE type,
+                                          std::vector<std::string>& addonIDs,
+                                          bool showNone /* = false */,
+                                          bool showDetails /* = true */,
+                                          bool multipleSelection /* = true */,
+                                          bool showInstalled /* = true */,
+                                          bool showInstallable /* = false */,
+                                          bool showMore /* = true */)
 {
   std::vector<ADDON::TYPE> types;
   types.push_back(type);
-  return SelectAddonID(types, addonIDs, showNone, showDetails, multipleSelection, showInstalled, showInstallable, showMore);
+  return SelectAddonID(types, addonIDs, showNone, showDetails, multipleSelection, showInstalled,
+                       showInstallable, showMore);
 }
 
-int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types, std::string &addonID, bool showNone /* = false */, bool showDetails /* = true */, bool showInstalled /* = true */, bool showInstallable /* = false */, bool showMore /* = true */)
+int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE>& types,
+                                          std::string& addonID,
+                                          bool showNone /* = false */,
+                                          bool showDetails /* = true */,
+                                          bool showInstalled /* = true */,
+                                          bool showInstallable /* = false */,
+                                          bool showMore /* = true */)
 {
   std::vector<std::string> addonIDs;
   if (!addonID.empty())
     addonIDs.push_back(addonID);
-  int retval = SelectAddonID(types, addonIDs, showNone, showDetails, false, showInstalled, showInstallable, showMore);
+  int retval = SelectAddonID(types, addonIDs, showNone, showDetails, false, showInstalled,
+                             showInstallable, showMore);
   if (!addonIDs.empty())
     addonID = addonIDs.at(0);
   else
@@ -365,7 +400,14 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
   return retval;
 }
 
-int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types, std::vector<std::string> &addonIDs, bool showNone /* = false */, bool showDetails /* = true */, bool multipleSelection /* = true */, bool showInstalled /* = true */, bool showInstallable /* = false */, bool showMore /* = true */)
+int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE>& types,
+                                          std::vector<std::string>& addonIDs,
+                                          bool showNone /* = false */,
+                                          bool showDetails /* = true */,
+                                          bool multipleSelection /* = true */,
+                                          bool showInstalled /* = true */,
+                                          bool showInstallable /* = false */,
+                                          bool showMore /* = true */)
 {
   // if we shouldn't show neither installed nor installable addons the list will be empty
   if (!showInstalled && !showInstallable)
@@ -375,13 +417,16 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
   if (showInstallable)
     showMore = false;
 
-  CGUIDialogSelect *dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
   if (!dialog)
     return -1;
 
   // get rid of any invalid addon types
   std::vector<ADDON::TYPE> validTypes(types.size());
-  std::copy_if(types.begin(), types.end(), validTypes.begin(), [](ADDON::TYPE type) { return type != ADDON_UNKNOWN; });
+  std::copy_if(types.begin(), types.end(), validTypes.begin(),
+               [](ADDON::TYPE type) { return type != ADDON_UNKNOWN; });
 
   if (validTypes.empty())
     return -1;
@@ -390,7 +435,8 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
   VECADDONS addons;
   if (showInstalled)
   {
-    for (std::vector<ADDON::TYPE>::const_iterator type = validTypes.begin(); type != validTypes.end(); ++type)
+    for (std::vector<ADDON::TYPE>::const_iterator type = validTypes.begin();
+         type != validTypes.end(); ++type)
     {
       VECADDONS typeAddons;
       if (*type == ADDON_AUDIO)
@@ -421,7 +467,8 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
 
         // check if the addon matches one of the provided addon types
         bool matchesType = false;
-        for (std::vector<ADDON::TYPE>::const_iterator type = validTypes.begin(); type != validTypes.end(); ++type)
+        for (std::vector<ADDON::TYPE>::const_iterator type = validTypes.begin();
+             type != validTypes.end(); ++type)
         {
           if (pAddon->IsType(*type))
           {
@@ -467,7 +514,8 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
     return -1;
 
   std::string heading;
-  for (std::vector<ADDON::TYPE>::const_iterator type = validTypes.begin(); type != validTypes.end(); ++type)
+  for (std::vector<ADDON::TYPE>::const_iterator type = validTypes.begin(); type != validTypes.end();
+       ++type)
   {
     if (!heading.empty())
       heading += ", ";
@@ -500,7 +548,7 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
 
   if (!addonIDs.empty())
   {
-    for (std::vector<std::string>::const_iterator it = addonIDs.begin(); it != addonIDs.end() ; ++it)
+    for (std::vector<std::string>::const_iterator it = addonIDs.begin(); it != addonIDs.end(); ++it)
     {
       CFileItemPtr item = items.Get(*it);
       if (item)
@@ -513,8 +561,9 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
 
   // if the "Get More" button has been pressed and we haven't shown the
   // installable addons so far show a list of installable addons
-  if (showMore&& dialog->IsButtonPressed())
-    return SelectAddonID(types, addonIDs, showNone, showDetails, multipleSelection, false, true, false);
+  if (showMore && dialog->IsButtonPressed())
+    return SelectAddonID(types, addonIDs, showNone, showDetails, multipleSelection, false, true,
+                         false);
 
   if (!dialog->IsConfirmed())
     return 0;
@@ -551,7 +600,7 @@ int CGUIWindowAddonBrowser::SelectAddonID(const std::vector<ADDON::TYPE> &types,
   return 1;
 }
 
-std::string CGUIWindowAddonBrowser::GetStartFolder(const std::string &dir)
+std::string CGUIWindowAddonBrowser::GetStartFolder(const std::string& dir)
 {
   if (StringUtils::StartsWith(dir, "addons://"))
     return dir;

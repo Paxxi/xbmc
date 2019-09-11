@@ -19,7 +19,7 @@ static const std::string HTTPMethodHead = "HEAD";
 static const std::string HTTPMethodGet = "GET";
 static const std::string HTTPMethodPost = "POST";
 
-HTTPMethod GetHTTPMethod(const char *method)
+HTTPMethod GetHTTPMethod(const char* method)
 {
   if (HTTPMethodGet.compare(method) == 0)
     return GET;
@@ -52,22 +52,23 @@ std::string GetHTTPMethod(HTTPMethod method)
 }
 
 IHTTPRequestHandler::IHTTPRequestHandler()
-  : m_request(),
-    m_response(),
-    m_postFields()
-{ }
+  : m_request()
+  , m_response()
+  , m_postFields()
+{
+}
 
-IHTTPRequestHandler::IHTTPRequestHandler(const HTTPRequest &request)
-  : m_request(request),
-    m_response(),
-    m_postFields()
+IHTTPRequestHandler::IHTTPRequestHandler(const HTTPRequest& request)
+  : m_request(request)
+  , m_response()
+  , m_postFields()
 {
   m_response.type = HTTPError;
   m_response.status = MHD_HTTP_INTERNAL_SERVER_ERROR;
   m_response.totalLength = 0;
 }
 
-bool IHTTPRequestHandler::HasResponseHeader(const std::string &field) const
+bool IHTTPRequestHandler::HasResponseHeader(const std::string& field) const
 {
   if (field.empty())
     return false;
@@ -75,7 +76,9 @@ bool IHTTPRequestHandler::HasResponseHeader(const std::string &field) const
   return m_response.headers.find(field) != m_response.headers.end();
 }
 
-bool IHTTPRequestHandler::AddResponseHeader(const std::string &field, const std::string &value, bool allowMultiple /* = false */)
+bool IHTTPRequestHandler::AddResponseHeader(const std::string& field,
+                                            const std::string& value,
+                                            bool allowMultiple /* = false */)
 {
   if (field.empty() || value.empty())
     return false;
@@ -87,7 +90,7 @@ bool IHTTPRequestHandler::AddResponseHeader(const std::string &field, const std:
   return true;
 }
 
-void IHTTPRequestHandler::AddPostField(const std::string &key, const std::string &value)
+void IHTTPRequestHandler::AddPostField(const std::string& key, const std::string& value)
 {
   if (key.empty())
     return;
@@ -99,7 +102,7 @@ void IHTTPRequestHandler::AddPostField(const std::string &key, const std::string
     m_postFields[key].append(value);
 }
 
-bool IHTTPRequestHandler::AddPostData(const char *data, size_t size)
+bool IHTTPRequestHandler::AddPostData(const char* data, size_t size)
 {
   if (size > 0)
     return appendPostData(data, size);
@@ -116,15 +119,17 @@ bool IHTTPRequestHandler::GetRequestedRanges(uint64_t totalLength)
   if (totalLength == 0)
     return true;
 
-  return HTTPRequestHandlerUtils::GetRequestedRanges(m_request.connection, totalLength, m_request.ranges);
+  return HTTPRequestHandlerUtils::GetRequestedRanges(m_request.connection, totalLength,
+                                                     m_request.ranges);
 }
 
-bool IHTTPRequestHandler::GetHostnameAndPort(std::string& hostname, uint16_t &port)
+bool IHTTPRequestHandler::GetHostnameAndPort(std::string& hostname, uint16_t& port)
 {
   if (m_request.webserver == NULL || m_request.connection == NULL)
     return false;
 
-  std::string hostnameAndPort = HTTPRequestHandlerUtils::GetRequestHeaderValue(m_request.connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_HOST);
+  std::string hostnameAndPort = HTTPRequestHandlerUtils::GetRequestHeaderValue(
+      m_request.connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_HOST);
   if (hostnameAndPort.empty())
     return false;
 

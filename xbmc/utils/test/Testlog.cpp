@@ -22,10 +22,7 @@ class Testlog : public testing::Test
 {
 protected:
   Testlog() = default;
-  ~Testlog() override
-  {
-    CLog::Close();
-  }
+  ~Testlog() override { CLog::Close(); }
 };
 
 TEST_F(Testlog, Log)

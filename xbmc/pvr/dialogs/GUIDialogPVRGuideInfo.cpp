@@ -23,23 +23,23 @@
 
 using namespace PVR;
 
-#define CONTROL_BTN_FIND                4
-#define CONTROL_BTN_SWITCH              5
-#define CONTROL_BTN_RECORD              6
-#define CONTROL_BTN_OK                  7
-#define CONTROL_BTN_PLAY_RECORDING      8
-#define CONTROL_BTN_ADD_TIMER           9
-#define CONTROL_BTN_PLAY_EPGTAG        10
-#define CONTROL_BTN_SET_REMINDER       11
+#define CONTROL_BTN_FIND 4
+#define CONTROL_BTN_SWITCH 5
+#define CONTROL_BTN_RECORD 6
+#define CONTROL_BTN_OK 7
+#define CONTROL_BTN_PLAY_RECORDING 8
+#define CONTROL_BTN_ADD_TIMER 9
+#define CONTROL_BTN_PLAY_EPGTAG 10
+#define CONTROL_BTN_SET_REMINDER 11
 
 CGUIDialogPVRGuideInfo::CGUIDialogPVRGuideInfo(void)
-    : CGUIDialog(WINDOW_DIALOG_PVR_GUIDE_INFO, "DialogPVRInfo.xml")
+  : CGUIDialog(WINDOW_DIALOG_PVR_GUIDE_INFO, "DialogPVRInfo.xml")
 {
 }
 
 CGUIDialogPVRGuideInfo::~CGUIDialogPVRGuideInfo(void) = default;
 
-bool CGUIDialogPVRGuideInfo::OnClickButtonOK(CGUIMessage &message)
+bool CGUIDialogPVRGuideInfo::OnClickButtonOK(CGUIMessage& message)
 {
   bool bReturn = false;
 
@@ -52,7 +52,7 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonOK(CGUIMessage &message)
   return bReturn;
 }
 
-bool CGUIDialogPVRGuideInfo::OnClickButtonRecord(CGUIMessage &message)
+bool CGUIDialogPVRGuideInfo::OnClickButtonRecord(CGUIMessage& message)
 {
   bool bReturn = false;
 
@@ -60,7 +60,8 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonRecord(CGUIMessage &message)
   {
     bReturn = true;
 
-    const std::shared_ptr<CPVRTimerInfoTag> timerTag = CServiceBroker::GetPVRManager().Timers()->GetTimerForEpgTag(m_progItem);
+    const std::shared_ptr<CPVRTimerInfoTag> timerTag =
+        CServiceBroker::GetPVRManager().Timers()->GetTimerForEpgTag(m_progItem);
     if (timerTag)
     {
       const CFileItemPtr item(new CFileItem(timerTag));
@@ -82,7 +83,7 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonRecord(CGUIMessage &message)
   return bReturn;
 }
 
-bool CGUIDialogPVRGuideInfo::OnClickButtonAddTimer(CGUIMessage &message)
+bool CGUIDialogPVRGuideInfo::OnClickButtonAddTimer(CGUIMessage& message)
 {
   bool bReturn = false;
 
@@ -120,7 +121,7 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonSetReminder(CGUIMessage& message)
   return bReturn;
 }
 
-bool CGUIDialogPVRGuideInfo::OnClickButtonPlay(CGUIMessage &message)
+bool CGUIDialogPVRGuideInfo::OnClickButtonPlay(CGUIMessage& message)
 {
   bool bReturn = false;
 
@@ -144,12 +145,13 @@ bool CGUIDialogPVRGuideInfo::OnClickButtonPlay(CGUIMessage &message)
   return bReturn;
 }
 
-bool CGUIDialogPVRGuideInfo::OnClickButtonFind(CGUIMessage &message)
+bool CGUIDialogPVRGuideInfo::OnClickButtonFind(CGUIMessage& message)
 {
   bool bReturn = false;
 
   if (message.GetSenderId() == CONTROL_BTN_FIND)
-    return CServiceBroker::GetPVRManager().GUIActions()->FindSimilar(CFileItemPtr(new CFileItem(m_progItem)), this);
+    return CServiceBroker::GetPVRManager().GUIActions()->FindSimilar(
+        CFileItemPtr(new CFileItem(m_progItem)), this);
 
   return bReturn;
 }
@@ -159,11 +161,8 @@ bool CGUIDialogPVRGuideInfo::OnMessage(CGUIMessage& message)
   switch (message.GetMessage())
   {
   case GUI_MSG_CLICKED:
-    return OnClickButtonOK(message) ||
-           OnClickButtonRecord(message) ||
-           OnClickButtonPlay(message) ||
-           OnClickButtonFind(message) ||
-           OnClickButtonAddTimer(message) ||
+    return OnClickButtonOK(message) || OnClickButtonRecord(message) || OnClickButtonPlay(message) ||
+           OnClickButtonFind(message) || OnClickButtonAddTimer(message) ||
            OnClickButtonSetReminder(message);
   }
 
@@ -176,7 +175,7 @@ bool CGUIDialogPVRGuideInfo::OnInfo(int actionID)
   return true;
 }
 
-void CGUIDialogPVRGuideInfo::SetProgInfo(const CPVREpgInfoTagPtr &tag)
+void CGUIDialogPVRGuideInfo::SetProgInfo(const CPVREpgInfoTagPtr& tag)
 {
   m_progItem = tag;
 }
@@ -204,8 +203,10 @@ void CGUIDialogPVRGuideInfo::OnInitWindow()
 
   bool bHideRecord = true;
   bool bHideAddTimer = true;
-  const std::shared_ptr<CPVRTimerInfoTag> timer = CServiceBroker::GetPVRManager().Timers()->GetTimerForEpgTag(m_progItem);
-  bool bHideSetReminder = timer || (m_progItem->StartAsLocalTime() <= CDateTime::GetCurrentDateTime());
+  const std::shared_ptr<CPVRTimerInfoTag> timer =
+      CServiceBroker::GetPVRManager().Timers()->GetTimerForEpgTag(m_progItem);
+  bool bHideSetReminder =
+      timer || (m_progItem->StartAsLocalTime() <= CDateTime::GetCurrentDateTime());
 
   if (timer)
   {

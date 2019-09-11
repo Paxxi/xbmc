@@ -12,8 +12,10 @@
 
 using namespace KODI::WINDOWING::WAYLAND;
 
-CSeatInputProcessing::CSeatInputProcessing(wayland::surface_t const& inputSurface, IInputHandler& handler)
-: m_inputSurface{inputSurface}, m_handler{handler}
+CSeatInputProcessing::CSeatInputProcessing(wayland::surface_t const& inputSurface,
+                                           IInputHandler& handler)
+  : m_inputSurface{inputSurface}
+  , m_handler{handler}
 {
 }
 

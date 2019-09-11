@@ -8,28 +8,28 @@
 
 #include "AddonBuiltins.h"
 
-#include <memory>
-
-#include "addons/AddonManager.h"
+#include "Application.h"
+#include "FileItem.h"
+#include "GUIUserMessages.h"
+#include "PlayListPlayer.h"
+#include "ServiceBroker.h"
 #include "addons/AddonInstaller.h"
+#include "addons/AddonManager.h"
 #include "addons/AddonSystemSettings.h"
-#include "addons/settings/GUIDialogAddonSettings.h"
 #include "addons/GUIWindowAddonBrowser.h"
 #include "addons/PluginSource.h"
 #include "addons/RepositoryUpdater.h"
-#include "FileItem.h"
+#include "addons/settings/GUIDialogAddonSettings.h"
 #include "filesystem/PluginDirectory.h"
 #include "games/tags/GameInfoTag.h"
 #include "guilib/GUIComponent.h"
 #include "guilib/GUIWindowManager.h"
-#include "GUIUserMessages.h"
 #include "interfaces/generic/ScriptInvocationManager.h"
-#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "Application.h"
-#include "PlayListPlayer.h"
-#include "ServiceBroker.h"
+#include "utils/log.h"
+
+#include <memory>
 
 #if defined(TARGET_DARWIN)
 #include "filesystem/SpecialProtocol.h"
@@ -113,15 +113,20 @@ static int RunAddon(const std::vector<std::string>& params)
 
       std::string cmd;
       if (plugin->Provides(CPluginSource::VIDEO))
-        cmd = StringUtils::Format("ActivateWindow(Videos,plugin://%s%s,return)", addonid.c_str(), urlParameters.c_str());
+        cmd = StringUtils::Format("ActivateWindow(Videos,plugin://%s%s,return)", addonid.c_str(),
+                                  urlParameters.c_str());
       else if (plugin->Provides(CPluginSource::AUDIO))
-        cmd = StringUtils::Format("ActivateWindow(Music,plugin://%s%s,return)", addonid.c_str(), urlParameters.c_str());
+        cmd = StringUtils::Format("ActivateWindow(Music,plugin://%s%s,return)", addonid.c_str(),
+                                  urlParameters.c_str());
       else if (plugin->Provides(CPluginSource::EXECUTABLE))
-        cmd = StringUtils::Format("ActivateWindow(Programs,plugin://%s%s,return)", addonid.c_str(), urlParameters.c_str());
+        cmd = StringUtils::Format("ActivateWindow(Programs,plugin://%s%s,return)", addonid.c_str(),
+                                  urlParameters.c_str());
       else if (plugin->Provides(CPluginSource::IMAGE))
-        cmd = StringUtils::Format("ActivateWindow(Pictures,plugin://%s%s,return)", addonid.c_str(), urlParameters.c_str());
+        cmd = StringUtils::Format("ActivateWindow(Pictures,plugin://%s%s,return)", addonid.c_str(),
+                                  urlParameters.c_str());
       else if (plugin->Provides(CPluginSource::GAME))
-        cmd = StringUtils::Format("ActivateWindow(Games,plugin://%s%s,return)", addonid.c_str(), urlParameters.c_str());
+        cmd = StringUtils::Format("ActivateWindow(Games,plugin://%s%s,return)", addonid.c_str(),
+                                  urlParameters.c_str());
       else
         // Pass the script name (addonid) and all the parameters
         // (params[1] ... params[x]) separated by a comma to RunPlugin
@@ -129,13 +134,14 @@ static int RunAddon(const std::vector<std::string>& params)
       CBuiltins::GetInstance().Execute(cmd);
     }
     else if (CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_SCRIPT) ||
-        CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_SCRIPT_WEATHER) ||
-        CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_SCRIPT_LYRICS) ||
-        CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_SCRIPT_LIBRARY))
+             CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_SCRIPT_WEATHER) ||
+             CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_SCRIPT_LYRICS) ||
+             CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_SCRIPT_LIBRARY))
     {
       // Pass the script name (addonid) and all the parameters
       // (params[1] ... params[x]) separated by a comma to RunScript
-      CBuiltins::GetInstance().Execute(StringUtils::Format("RunScript(%s)", StringUtils::Join(params, ",").c_str()));
+      CBuiltins::GetInstance().Execute(
+          StringUtils::Format("RunScript(%s)", StringUtils::Join(params, ",").c_str()));
     }
     else if (CServiceBroker::GetAddonMgr().GetAddon(addonid, addon, ADDON_GAMEDLL))
     {
@@ -156,7 +162,10 @@ static int RunAddon(const std::vector<std::string>& params)
       }
     }
     else
-      CLog::Log(LOGERROR, "RunAddon: unknown add-on id '%s', or unexpected add-on type (not a script or plugin).", addonid.c_str());
+      CLog::Log(
+          LOGERROR,
+          "RunAddon: unknown add-on id '%s', or unexpected add-on type (not a script or plugin).",
+          addonid.c_str());
   }
   else
   {
@@ -177,7 +186,7 @@ static int RunAddon(const std::vector<std::string>& params)
  *           Set the OnlyApple template parameter to true to only attempt
  *           execution of applescripts.
  */
-template<bool OnlyApple=false>
+template<bool OnlyApple = false>
 static int RunScript(const std::vector<std::string>& params)
 {
 #if defined(TARGET_DARWIN_OSX)
@@ -211,7 +220,9 @@ static int RunScript(const std::vector<std::string>& params)
         //Run a random extension point (old behaviour).
         CServiceBroker::GetAddonMgr().GetAddon(params[0], addon);
         scriptpath = addon->LibPath();
-        CLog::Log(LOGWARNING, "RunScript called for a non-script addon '%s'. This behaviour is deprecated.", params[0].c_str());
+        CLog::Log(LOGWARNING,
+                  "RunScript called for a non-script addon '%s'. This behaviour is deprecated.",
+                  params[0].c_str());
       }
     }
     else
@@ -259,8 +270,7 @@ static int SetDefaultAddon(const std::vector<std::string>& params)
   if (type == ADDON_VIZ)
     allowNone = true;
 
-  if (type != ADDON_UNKNOWN &&
-      CGUIWindowAddonBrowser::SelectAddonID(type,addonID,allowNone))
+  if (type != ADDON_UNKNOWN && CGUIWindowAddonBrowser::SelectAddonID(type, addonID, allowNone))
   {
     CAddonSystemSettings::GetInstance().SetActive(type, addonID);
     if (type == ADDON_VIZ)
@@ -440,19 +450,22 @@ static int UpdateLocals(const std::vector<std::string>& params)
 CBuiltins::CommandMap CAddonBuiltins::GetOperations() const
 {
   return {
-           {"addon.default.opensettings", {"Open a settings dialog for the default addon of the given type", 1, OpenDefaultSettings}},
-           {"addon.default.set",          {"Open a select dialog to allow choosing the default addon of the given type", 1, SetDefaultAddon}},
-           {"addon.opensettings",         {"Open a settings dialog for the addon of the given id", 1, AddonSettings}},
-           {"installaddon",               {"Install the specified plugin/script", 1, InstallAddon}},
-           {"installfromzip",             { "Open the install from zip dialog", 0, InstallFromZip}},
-           {"runaddon",                   {"Run the specified plugin/script", 1, RunAddon}},
+      {"addon.default.opensettings",
+       {"Open a settings dialog for the default addon of the given type", 1, OpenDefaultSettings}},
+      {"addon.default.set",
+       {"Open a select dialog to allow choosing the default addon of the given type", 1,
+        SetDefaultAddon}},
+      {"addon.opensettings",
+       {"Open a settings dialog for the addon of the given id", 1, AddonSettings}},
+      {"installaddon", {"Install the specified plugin/script", 1, InstallAddon}},
+      {"installfromzip", {"Open the install from zip dialog", 0, InstallFromZip}},
+      {"runaddon", {"Run the specified plugin/script", 1, RunAddon}},
 #ifdef TARGET_DARWIN
-           {"runapplescript",             {"Run the specified AppleScript command", 1, RunScript<true>}},
+      {"runapplescript", {"Run the specified AppleScript command", 1, RunScript<true>}},
 #endif
-           {"runplugin",                  {"Run the specified plugin", 1, RunPlugin}},
-           {"runscript",                  {"Run the specified script", 1, RunScript}},
-           {"stopscript",                 {"Stop the script by ID or path, if running", 1, StopScript}},
-           {"updateaddonrepos",           {"Check add-on repositories for updates", 0, UpdateRepos}},
-           {"updatelocaladdons",          {"Check for local add-on changes", 0, UpdateLocals}}
-         };
+      {"runplugin", {"Run the specified plugin", 1, RunPlugin}},
+      {"runscript", {"Run the specified script", 1, RunScript}},
+      {"stopscript", {"Stop the script by ID or path, if running", 1, StopScript}},
+      {"updateaddonrepos", {"Check add-on repositories for updates", 0, UpdateRepos}},
+      {"updatelocaladdons", {"Check for local add-on changes", 0, UpdateLocals}}};
 }

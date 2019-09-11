@@ -16,9 +16,10 @@
 class CSettingCategoryAccessCondition : public CSettingConditionItem
 {
 public:
-  explicit CSettingCategoryAccessCondition(CSettingsManager *settingsManager = nullptr)
+  explicit CSettingCategoryAccessCondition(CSettingsManager* settingsManager = nullptr)
     : CSettingConditionItem(settingsManager)
-  { }
+  {
+  }
   ~CSettingCategoryAccessCondition() override = default;
 
   bool Check() const override;
@@ -27,21 +28,28 @@ public:
 class CSettingCategoryAccessConditionCombination : public CSettingConditionCombination
 {
 public:
-  explicit CSettingCategoryAccessConditionCombination(CSettingsManager *settingsManager = nullptr)
+  explicit CSettingCategoryAccessConditionCombination(CSettingsManager* settingsManager = nullptr)
     : CSettingConditionCombination(settingsManager)
-  { }
+  {
+  }
   ~CSettingCategoryAccessConditionCombination() override = default;
 
   bool Check() const override;
 
 private:
-  CBooleanLogicOperation* newOperation() override { return new CSettingCategoryAccessConditionCombination(m_settingsManager); }
-  CBooleanLogicValue* newValue() override { return new CSettingCategoryAccessCondition(m_settingsManager); }
+  CBooleanLogicOperation* newOperation() override
+  {
+    return new CSettingCategoryAccessConditionCombination(m_settingsManager);
+  }
+  CBooleanLogicValue* newValue() override
+  {
+    return new CSettingCategoryAccessCondition(m_settingsManager);
+  }
 };
 
 class CSettingCategoryAccess : public CSettingCondition
 {
 public:
-  explicit CSettingCategoryAccess(CSettingsManager *settingsManager = nullptr);
+  explicit CSettingCategoryAccess(CSettingsManager* settingsManager = nullptr);
   ~CSettingCategoryAccess() override = default;
 };

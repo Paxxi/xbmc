@@ -20,10 +20,10 @@ public:
   ~CGUIWindowSystemInfo(void) override;
   bool OnMessage(CGUIMessage& message) override;
   void FrameMove() override;
+
 private:
-  int  m_section;
+  int m_section;
   void ResetLabels();
-  void SetControlLabel(int id, const char *format, int label, int info);
+  void SetControlLabel(int id, const char* format, int label, int info);
   std::vector<std::string> m_diskUsage;
 };
-

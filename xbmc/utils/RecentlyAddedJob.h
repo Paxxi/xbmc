@@ -25,6 +25,7 @@ public:
   static bool UpdateMusic();
   static bool UpdateTotal();
   bool DoWork() override;
+
 private:
   int m_flag;
 };

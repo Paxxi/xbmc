@@ -18,7 +18,12 @@
 class CWin32PowerStateWorker : public CThread
 {
 public:
-  CWin32PowerStateWorker() : CThread("CWin32PowerStateWorker"), m_queryEvent(true), m_state(POWERSTATE_NONE) {}
+  CWin32PowerStateWorker()
+    : CThread("CWin32PowerStateWorker")
+    , m_queryEvent(true)
+    , m_state(POWERSTATE_NONE)
+  {
+  }
   bool QueryStateChange(PowerState State);
 
 protected:
@@ -29,7 +34,7 @@ private:
   static bool PowerManagement(PowerState State);
 
   std::atomic<PowerState> m_state;
-  CEvent                  m_queryEvent;
+  CEvent m_queryEvent;
 };
 
 class CWin32PowerSyscall : public CAbstractPowerSyscall
@@ -50,9 +55,9 @@ public:
   virtual bool CanSuspend();
   virtual bool CanHibernate();
   virtual bool CanReboot();
-  virtual int  BatteryLevel();
+  virtual int BatteryLevel();
 
-  virtual bool PumpPowerEvents(IPowerEventsCallback *callback);
+  virtual bool PumpPowerEvents(IPowerEventsCallback* callback);
 
   static void SetOnResume() { m_OnResume = true; }
   static void SetOnSuspend() { m_OnSuspend = true; }
@@ -65,5 +70,4 @@ private:
 
   static bool m_OnResume;
   static bool m_OnSuspend;
-
 };

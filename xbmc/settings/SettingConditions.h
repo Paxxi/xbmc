@@ -25,13 +25,18 @@ public:
   static const CProfile& GetCurrentProfile();
 
   static const std::set<std::string>& GetSimpleConditions() { return m_simpleConditions; }
-  static const std::map<std::string, SettingConditionCheck>& GetComplexConditions() { return m_complexConditions; }
+  static const std::map<std::string, SettingConditionCheck>& GetComplexConditions()
+  {
+    return m_complexConditions;
+  }
 
-  static bool Check(const std::string &condition, const std::string &value = "", std::shared_ptr<const CSetting> setting = NULL);
+  static bool Check(const std::string& condition,
+                    const std::string& value = "",
+                    std::shared_ptr<const CSetting> setting = NULL);
 
 private:
   // Initialization parameters
-  static const CProfileManager *m_profileManager;
+  static const CProfileManager* m_profileManager;
 
   static std::set<std::string> m_simpleConditions;
   static std::map<std::string, SettingConditionCheck> m_complexConditions;

@@ -8,7 +8,8 @@
 
 #pragma once
 
-extern "C" {
+extern "C"
+{
 #include <libavfilter/avfilter.h>
 #include <libavutil/frame.h>
 }
@@ -24,7 +25,11 @@ public:
   CActiveAEFilter();
   virtual ~CActiveAEFilter();
   void Init(AVSampleFormat fmt, int sampleRate, uint64_t channelLayout);
-  int ProcessFilter(uint8_t **dst_buffer, int dst_samples, uint8_t **src_buffer, int src_samples, int src_bufsize);
+  int ProcessFilter(uint8_t** dst_buffer,
+                    int dst_samples,
+                    uint8_t** src_buffer,
+                    int src_samples,
+                    int src_bufsize);
   bool SetTempo(float tempo);
   bool NeedData() const;
   bool IsEof() const;
@@ -57,4 +62,4 @@ protected:
   int64_t m_SamplesOut;
 };
 
-}
+} // namespace ActiveAE

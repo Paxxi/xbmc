@@ -40,7 +40,8 @@ using namespace KODI::WINDOWING;
 
 #define EGL_NO_CONFIG (EGLConfig)0
 
-CWinSystemX11::CWinSystemX11() : CWinSystemBase()
+CWinSystemX11::CWinSystemX11()
+  : CWinSystemBase()
 {
   m_dpy = NULL;
   m_glWindow = 0;
@@ -82,10 +83,10 @@ bool CWinSystemX11::DestroyWindowSystem()
     XOutput out;
     XMode mode;
     out.name = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strOutput;
-    mode.w   = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iWidth;
-    mode.h   = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iHeight;
-    mode.hz  = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).fRefreshRate;
-    mode.id  = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strId;
+    mode.w = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iWidth;
+    mode.h = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iHeight;
+    mode.hz = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).fRefreshRate;
+    mode.id = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strId;
     g_xrandr.SetMode(out, mode);
   }
 
@@ -94,7 +95,7 @@ bool CWinSystemX11::DestroyWindowSystem()
 
 bool CWinSystemX11::CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res)
 {
-  if(!SetFullScreen(fullScreen, res, false))
+  if (!SetFullScreen(fullScreen, res, false))
     return false;
 
   m_bWindowCreated = true;
@@ -129,8 +130,9 @@ bool CWinSystemX11::DestroyWindow()
 
 bool CWinSystemX11::ResizeWindow(int newWidth, int newHeight, int newLeft, int newTop)
 {
-  m_userOutput = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_VIDEOSCREEN_MONITOR);
-  XOutput *out = NULL;
+  m_userOutput = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+      CSettings::SETTING_VIDEOSCREEN_MONITOR);
+  XOutput* out = NULL;
   if (m_userOutput.compare("Default") != 0)
   {
     out = g_xrandr.GetOutput(m_userOutput);
@@ -167,8 +169,9 @@ bool CWinSystemX11::ResizeWindow(int newWidth, int newHeight, int newLeft, int n
 
 void CWinSystemX11::FinishWindowResize(int newWidth, int newHeight)
 {
-  m_userOutput = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_VIDEOSCREEN_MONITOR);
-  XOutput *out = NULL;
+  m_userOutput = CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+      CSettings::SETTING_VIDEOSCREEN_MONITOR);
+  XOutput* out = NULL;
   if (m_userOutput.compare("Default") != 0)
   {
     out = g_xrandr.GetOutput(m_userOutput);
@@ -210,21 +213,21 @@ bool CWinSystemX11::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool bl
   if (fullScreen)
   {
     out.name = res.strOutput;
-    mode.w   = res.iWidth;
-    mode.h   = res.iHeight;
-    mode.hz  = res.fRefreshRate;
-    mode.id  = res.strId;
+    mode.w = res.iWidth;
+    mode.h = res.iHeight;
+    mode.hz = res.fRefreshRate;
+    mode.id = res.strId;
   }
   else
   {
     out.name = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strOutput;
-    mode.w   = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iWidth;
-    mode.h   = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iHeight;
-    mode.hz  = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).fRefreshRate;
-    mode.id  = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strId;
+    mode.w = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iWidth;
+    mode.h = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).iHeight;
+    mode.hz = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).fRefreshRate;
+    mode.id = CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strId;
   }
 
-  XMode   currmode = g_xrandr.GetCurrentMode(out.name);
+  XMode currmode = g_xrandr.GetCurrentMode(out.name);
   if (!currmode.name.empty())
   {
     // flip h/w when rotated
@@ -238,8 +241,8 @@ bool CWinSystemX11::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool bl
     // only call xrandr if mode changes
     if (m_mainWindow)
     {
-      if (currmode.w != mode.w || currmode.h != mode.h ||
-          currmode.hz != mode.hz || currmode.id != mode.id)
+      if (currmode.w != mode.w || currmode.h != mode.h || currmode.hz != mode.hz ||
+          currmode.id != mode.id)
       {
         CLog::Log(LOGNOTICE, "CWinSystemX11::SetFullScreen - calling xrandr");
 
@@ -248,10 +251,9 @@ bool CWinSystemX11::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool bl
         int root_x_return, root_y_return;
         int win_x_return, win_y_return;
         unsigned int mask_return;
-        bool isInWin = XQueryPointer(m_dpy, m_mainWindow, &root_return, &child_return,
-                                     &root_x_return, &root_y_return,
-                                     &win_x_return, &win_y_return,
-                                     &mask_return);
+        bool isInWin =
+            XQueryPointer(m_dpy, m_mainWindow, &root_return, &child_return, &root_x_return,
+                          &root_y_return, &win_x_return, &win_y_return, &mask_return);
 
         if (isInWin)
         {
@@ -267,7 +269,8 @@ bool CWinSystemX11::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool bl
         OnLostDevice();
         m_bIsInternalXrr = true;
         g_xrandr.SetMode(out, mode);
-        int delay = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt("videoscreen.delayrefreshchange");
+        int delay = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+            "videoscreen.delayrefreshchange");
         if (delay > 0)
         {
           m_delayDispReset = true;
@@ -281,8 +284,8 @@ bool CWinSystemX11::SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool bl
   if (!SetWindow(res.iWidth, res.iHeight, fullScreen, m_userOutput))
     return false;
 
-  m_nWidth      = res.iWidth;
-  m_nHeight     = res.iHeight;
+  m_nWidth = res.iWidth;
+  m_nHeight = res.iHeight;
   m_bFullScreen = fullScreen;
   m_currentOutput = m_userOutput;
 
@@ -302,9 +305,9 @@ void CWinSystemX11::UpdateResolutions()
   if (m_userOutput.compare("Default") == 0)
     switchOnOff = false;
 
-  if(g_xrandr.Query(true, !switchOnOff))
+  if (g_xrandr.Query(true, !switchOnOff))
   {
-    XOutput *out = NULL;
+    XOutput* out = NULL;
     if (m_userOutput.compare("Default") != 0)
     {
       out = g_xrandr.GetOutput(m_userOutput);
@@ -330,7 +333,7 @@ void CWinSystemX11::UpdateResolutions()
 
       // switch off other outputs
       std::vector<XOutput> outputs = g_xrandr.GetModes();
-      for (size_t i=0; i<outputs.size(); i++)
+      for (size_t i = 0; i < outputs.size(); i++)
       {
         if (StringUtils::EqualsNoCase(outputs[i].name, m_userOutput))
           continue;
@@ -343,9 +346,11 @@ void CWinSystemX11::UpdateResolutions()
       mode = g_xrandr.GetPreferredMode(m_userOutput);
     m_bIsRotated = out->isRotated;
     if (!m_bIsRotated)
-      UpdateDesktopResolution(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP), out->name, mode.w, mode.h, mode.hz, 0);
+      UpdateDesktopResolution(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP),
+                              out->name, mode.w, mode.h, mode.hz, 0);
     else
-      UpdateDesktopResolution(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP), out->name, mode.h, mode.w, mode.hz, 0);
+      UpdateDesktopResolution(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP),
+                              out->name, mode.h, mode.w, mode.hz, 0);
     CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP).strId = mode.id;
   }
   else
@@ -354,7 +359,8 @@ void CWinSystemX11::UpdateResolutions()
     m_screen = DefaultScreen(m_dpy);
     int w = DisplayWidth(m_dpy, m_screen);
     int h = DisplayHeight(m_dpy, m_screen);
-    UpdateDesktopResolution(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP), m_userOutput, w, h, 0.0, 0);
+    UpdateDesktopResolution(CDisplaySettings::GetInstance().GetResolutionInfo(RES_DESKTOP),
+                            m_userOutput, w, h, 0.0, 0);
   }
 
   // erase previous stored modes
@@ -362,15 +368,15 @@ void CWinSystemX11::UpdateResolutions()
 
   CLog::Log(LOGINFO, "Available videomodes (xrandr):");
 
-  XOutput *out = g_xrandr.GetOutput(m_userOutput);
+  XOutput* out = g_xrandr.GetOutput(m_userOutput);
   if (out != NULL)
   {
-    CLog::Log(LOGINFO, "Output '%s' has %" PRIdS" modes", out->name.c_str(), out->modes.size());
+    CLog::Log(LOGINFO, "Output '%s' has %" PRIdS " modes", out->name.c_str(), out->modes.size());
 
     for (auto mode : out->modes)
     {
-      CLog::Log(LOGINFO, "ID:%s Name:%s Refresh:%f Width:%d Height:%d",
-                mode.id.c_str(), mode.name.c_str(), mode.hz, mode.w, mode.h);
+      CLog::Log(LOGINFO, "ID:%s Name:%s Refresh:%f Width:%d Height:%d", mode.id.c_str(),
+                mode.name.c_str(), mode.hz, mode.w, mode.h);
       RESOLUTION_INFO res;
       res.dwFlags = 0;
 
@@ -379,32 +385,33 @@ void CWinSystemX11::UpdateResolutions()
 
       if (!m_bIsRotated)
       {
-        res.iWidth  = mode.w;
+        res.iWidth = mode.w;
         res.iHeight = mode.h;
         res.iScreenWidth = mode.w;
         res.iScreenHeight = mode.h;
       }
       else
       {
-        res.iWidth  = mode.h;
+        res.iWidth = mode.h;
         res.iHeight = mode.w;
         res.iScreenWidth = mode.h;
         res.iScreenHeight = mode.w;
       }
 
       if (mode.h > 0 && mode.w > 0 && out->hmm > 0 && out->wmm > 0)
-        res.fPixelRatio = ((float)out->wmm/(float)mode.w) / (((float)out->hmm/(float)mode.h));
+        res.fPixelRatio = ((float)out->wmm / (float)mode.w) / (((float)out->hmm / (float)mode.h));
       else
         res.fPixelRatio = 1.0f;
 
       CLog::Log(LOGINFO, "Pixel Ratio: %f", res.fPixelRatio);
 
-      res.strMode      = StringUtils::Format("%s: %s @ %.2fHz", out->name.c_str(), mode.name.c_str(), mode.hz);
-      res.strOutput    = out->name;
-      res.strId        = mode.id;
-      res.iSubtitles   = (int)(0.965*mode.h);
+      res.strMode =
+          StringUtils::Format("%s: %s @ %.2fHz", out->name.c_str(), mode.name.c_str(), mode.hz);
+      res.strOutput = out->name;
+      res.strId = mode.id;
+      res.iSubtitles = (int)(0.965 * mode.h);
       res.fRefreshRate = mode.hz;
-      res.bFullScreen  = true;
+      res.bFullScreen = true;
 
       CServiceBroker::GetWinSystem()->GetGfxContext().ResetOverscan(res);
       CDisplaySettings::GetInstance().AddResolutionInfo(res);
@@ -413,9 +420,9 @@ void CWinSystemX11::UpdateResolutions()
   CDisplaySettings::GetInstance().ApplyCalibrations();
 }
 
-bool CWinSystemX11::HasCalibration(const RESOLUTION_INFO &resInfo)
+bool CWinSystemX11::HasCalibration(const RESOLUTION_INFO& resInfo)
 {
-  XOutput *out = g_xrandr.GetOutput(m_currentOutput);
+  XOutput* out = g_xrandr.GetOutput(m_currentOutput);
 
   // keep calibrations done on a not connected output
   if (!StringUtils::EqualsNoCase(out->name, resInfo.strOutput))
@@ -426,8 +433,9 @@ bool CWinSystemX11::HasCalibration(const RESOLUTION_INFO &resInfo)
     return true;
 
   float fPixRatio;
-  if (resInfo.iHeight>0 && resInfo.iWidth>0 && out->hmm>0 && out->wmm>0)
-    fPixRatio = ((float)out->wmm/(float)resInfo.iWidth) / (((float)out->hmm/(float)resInfo.iHeight));
+  if (resInfo.iHeight > 0 && resInfo.iWidth > 0 && out->hmm > 0 && out->wmm > 0)
+    fPixRatio =
+        ((float)out->wmm / (float)resInfo.iWidth) / (((float)out->hmm / (float)resInfo.iHeight));
   else
     fPixRatio = 1.0f;
 
@@ -441,7 +449,7 @@ bool CWinSystemX11::HasCalibration(const RESOLUTION_INFO &resInfo)
     return true;
   if (resInfo.fPixelRatio != fPixRatio)
     return true;
-  if (resInfo.iSubtitles != (int)(0.965*resInfo.iHeight))
+  if (resInfo.iSubtitles != (int)(0.965 * resInfo.iHeight))
     return true;
 
   return false;
@@ -449,16 +457,17 @@ bool CWinSystemX11::HasCalibration(const RESOLUTION_INFO &resInfo)
 
 bool CWinSystemX11::UseLimitedColor()
 {
-  return CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_VIDEOSCREEN_LIMITEDRANGE);
+  return CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+      CSettings::SETTING_VIDEOSCREEN_LIMITEDRANGE);
 }
 
-void CWinSystemX11::GetConnectedOutputs(std::vector<std::string> *outputs)
+void CWinSystemX11::GetConnectedOutputs(std::vector<std::string>* outputs)
 {
   std::vector<XOutput> outs;
   g_xrandr.Query(true);
   outs = g_xrandr.GetModes();
   outputs->push_back("Default");
-  for(unsigned int i=0; i<outs.size(); ++i)
+  for (unsigned int i = 0; i < outs.size(); ++i)
   {
     outputs->push_back(outs[i].name);
   }
@@ -466,15 +475,16 @@ void CWinSystemX11::GetConnectedOutputs(std::vector<std::string> *outputs)
 
 bool CWinSystemX11::IsCurrentOutput(std::string output)
 {
-  return (StringUtils::EqualsNoCase(output, "Default")) || (m_currentOutput.compare(output.c_str()) == 0);
+  return (StringUtils::EqualsNoCase(output, "Default")) ||
+         (m_currentOutput.compare(output.c_str()) == 0);
 }
 
 void CWinSystemX11::ShowOSMouse(bool show)
 {
   if (show)
-    XUndefineCursor(m_dpy,m_mainWindow);
+    XUndefineCursor(m_dpy, m_mainWindow);
   else if (m_invisibleCursor)
-    XDefineCursor(m_dpy,m_mainWindow, m_invisibleCursor);
+    XDefineCursor(m_dpy, m_mainWindow, m_invisibleCursor);
 }
 
 std::unique_ptr<IOSScreenSaver> CWinSystemX11::GetOSScreenSaverImpl()
@@ -500,8 +510,7 @@ void CWinSystemX11::NotifyAppActiveChange(bool bActivated)
 
 void CWinSystemX11::NotifyAppFocusChange(bool bGaining)
 {
-  if (bGaining && m_bWasFullScreenBeforeMinimize && !m_bIgnoreNextFocusMessage &&
-      !m_bFullScreen)
+  if (bGaining && m_bWasFullScreenBeforeMinimize && !m_bIgnoreNextFocusMessage && !m_bFullScreen)
   {
     m_bWasFullScreenBeforeMinimize = false;
     CApplicationMessenger::GetInstance().PostMsg(TMSG_TOGGLEFULLSCREEN);
@@ -570,12 +579,12 @@ void CWinSystemX11::RecreateWindow()
 
   CSingleLock lock(CServiceBroker::GetWinSystem()->GetGfxContext());
 
-  XOutput *out = g_xrandr.GetOutput(m_userOutput);
-  XMode   mode = g_xrandr.GetCurrentMode(m_userOutput);
+  XOutput* out = g_xrandr.GetOutput(m_userOutput);
+  XMode mode = g_xrandr.GetCurrentMode(m_userOutput);
 
   if (out)
-    CLog::Log(LOGDEBUG, "%s - current output: %s, mode: %s, refresh: %.3f", __FUNCTION__
-             , out->name.c_str(), mode.id.c_str(), mode.hz);
+    CLog::Log(LOGDEBUG, "%s - current output: %s, mode: %s, refresh: %.3f", __FUNCTION__,
+              out->name.c_str(), mode.id.c_str(), mode.hz);
   else
     CLog::Log(LOGWARNING, "%s - output name not set", __FUNCTION__);
 
@@ -585,7 +594,8 @@ void CWinSystemX11::RecreateWindow()
   for (i = RES_DESKTOP; i < CDisplaySettings::GetInstance().ResolutionInfoSize(); ++i)
   {
     res = CDisplaySettings::GetInstance().GetResolutionInfo(i);
-    if (StringUtils::EqualsNoCase(CDisplaySettings::GetInstance().GetResolutionInfo(i).strId, mode.id))
+    if (StringUtils::EqualsNoCase(CDisplaySettings::GetInstance().GetResolutionInfo(i).strId,
+                                  mode.id))
     {
       found = true;
       break;
@@ -608,15 +618,16 @@ void CWinSystemX11::OnLostDevice()
 {
   CLog::Log(LOGDEBUG, "%s - notify display change event", __FUNCTION__);
 
-  { CSingleLock lock(m_resourceSection);
-    for (std::vector<IDispResource *>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
+  {
+    CSingleLock lock(m_resourceSection);
+    for (std::vector<IDispResource*>::iterator i = m_resources.begin(); i != m_resources.end(); ++i)
       (*i)->OnLostDisplay();
   }
 
   m_winEventsX11->SetXRRFailSafeTimer(3000);
 }
 
-void CWinSystemX11::Register(IDispResource *resource)
+void CWinSystemX11::Register(IDispResource* resource)
 {
   CSingleLock lock(m_resourceSection);
   m_resources.push_back(resource);
@@ -634,13 +645,17 @@ int CWinSystemX11::XErrorHandler(Display* dpy, XErrorEvent* error)
 {
   char buf[1024];
   XGetErrorText(error->display, error->error_code, buf, sizeof(buf));
-  CLog::Log(LOGERROR, "CWinSystemX11::XErrorHandler: %s, type:%i, serial:%lu, error_code:%i, request_code:%i minor_code:%i",
-            buf, error->type, error->serial, (int)error->error_code, (int)error->request_code, (int)error->minor_code);
+  CLog::Log(LOGERROR,
+            "CWinSystemX11::XErrorHandler: %s, type:%i, serial:%lu, error_code:%i, request_code:%i "
+            "minor_code:%i",
+            buf, error->type, error->serial, (int)error->error_code, (int)error->request_code,
+            (int)error->minor_code);
 
   return 0;
 }
 
-bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std::string &output, int *winstate)
+bool CWinSystemX11::SetWindow(
+    int width, int height, bool fullscreen, const std::string& output, int* winstate)
 {
   bool changeWindow = false;
   bool changeSize = false;
@@ -652,14 +667,15 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
     CServiceBroker::GetInputManager().SetMouseActive(false);
   }
 
-  if (m_mainWindow && ((m_bFullScreen != fullscreen) || m_currentOutput.compare(output) != 0 || m_windowDirty))
+  if (m_mainWindow &&
+      ((m_bFullScreen != fullscreen) || m_currentOutput.compare(output) != 0 || m_windowDirty))
   {
     // set mouse to last known position
     // we can't trust values after an xrr event
     if (m_bIsInternalXrr && m_MouseX >= 0 && m_MouseY >= 0)
     {
-      mouseX = (float)m_MouseX/m_nWidth;
-      mouseY = (float)m_MouseY/m_nHeight;
+      mouseX = (float)m_MouseX / m_nWidth;
+      mouseY = (float)m_MouseY / m_nHeight;
     }
     else if (!m_windowDirty)
     {
@@ -667,15 +683,13 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
       int root_x_return, root_y_return;
       int win_x_return, win_y_return;
       unsigned int mask_return;
-      bool isInWin = XQueryPointer(m_dpy, m_mainWindow, &root_return, &child_return,
-                                   &root_x_return, &root_y_return,
-                                   &win_x_return, &win_y_return,
-                                   &mask_return);
+      bool isInWin = XQueryPointer(m_dpy, m_mainWindow, &root_return, &child_return, &root_x_return,
+                                   &root_y_return, &win_x_return, &win_y_return, &mask_return);
 
       if (isInWin)
       {
-        mouseX = (float)win_x_return/m_nWidth;
-        mouseY = (float)win_y_return/m_nHeight;
+        mouseX = (float)win_x_return / m_nWidth;
+        mouseY = (float)win_y_return / m_nHeight;
       }
     }
 
@@ -690,11 +704,11 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
   {
     Colormap cmap;
     XSetWindowAttributes swa;
-    XVisualInfo *vi;
+    XVisualInfo* vi;
     int x0 = 0;
     int y0 = 0;
 
-    XOutput *out = g_xrandr.GetOutput(output);
+    XOutput* out = g_xrandr.GetOutput(output);
     if (!out)
       out = g_xrandr.GetOutput(m_currentOutput);
     if (out)
@@ -720,59 +734,58 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
     swa.border_pixel = fullscreen ? 0 : 5;
     swa.background_pixel = def_vis ? BlackPixel(m_dpy, vi->screen) : 0;
     swa.colormap = cmap;
-    swa.event_mask = FocusChangeMask | KeyPressMask | KeyReleaseMask |
-                     ButtonPressMask | ButtonReleaseMask | PointerMotionMask |
-                     PropertyChangeMask | StructureNotifyMask | KeymapStateMask |
-                     EnterWindowMask | LeaveWindowMask | ExposureMask;
-    unsigned long mask = CWBackPixel | CWBorderPixel | CWColormap | CWOverrideRedirect | CWEventMask;
+    swa.event_mask = FocusChangeMask | KeyPressMask | KeyReleaseMask | ButtonPressMask |
+                     ButtonReleaseMask | PointerMotionMask | PropertyChangeMask |
+                     StructureNotifyMask | KeymapStateMask | EnterWindowMask | LeaveWindowMask |
+                     ExposureMask;
+    unsigned long mask =
+        CWBackPixel | CWBorderPixel | CWColormap | CWOverrideRedirect | CWEventMask;
 
-    m_mainWindow = XCreateWindow(m_dpy, RootWindow(m_dpy, vi->screen),
-                    x0, y0, width, height, 0, vi->depth,
-                    InputOutput, vi->visual,
-                    mask, &swa);
+    m_mainWindow = XCreateWindow(m_dpy, RootWindow(m_dpy, vi->screen), x0, y0, width, height, 0,
+                                 vi->depth, InputOutput, vi->visual, mask, &swa);
 
     swa.override_redirect = False;
     swa.border_pixel = 0;
     swa.event_mask = ExposureMask;
     mask = CWBackPixel | CWBorderPixel | CWColormap | CWOverrideRedirect | CWColormap | CWEventMask;
 
-    m_glWindow = XCreateWindow(m_dpy, m_mainWindow,
-                    0, 0, width, height, 0, vi->depth,
-                    InputOutput, vi->visual,
-                    mask, &swa);
+    m_glWindow = XCreateWindow(m_dpy, m_mainWindow, 0, 0, width, height, 0, vi->depth, InputOutput,
+                               vi->visual, mask, &swa);
 
     if (fullscreen && hasWM)
     {
       Atom fs = XInternAtom(m_dpy, "_NET_WM_STATE_FULLSCREEN", True);
-      XChangeProperty(m_dpy, m_mainWindow, XInternAtom(m_dpy, "_NET_WM_STATE", True), XA_ATOM, 32, PropModeReplace, (unsigned char *) &fs, 1);
+      XChangeProperty(m_dpy, m_mainWindow, XInternAtom(m_dpy, "_NET_WM_STATE", True), XA_ATOM, 32,
+                      PropModeReplace, (unsigned char*)&fs, 1);
       // disable desktop compositing for KDE, when Kodi is in full-screen mode
       int one = 1;
       Atom composite = XInternAtom(m_dpy, "_KDE_NET_WM_BLOCK_COMPOSITING", True);
       if (composite != None)
       {
-        XChangeProperty(m_dpy, m_mainWindow, XInternAtom(m_dpy, "_KDE_NET_WM_BLOCK_COMPOSITING", True), XA_CARDINAL, 32,
-                        PropModeReplace, (unsigned char*) &one,  1);
+        XChangeProperty(m_dpy, m_mainWindow,
+                        XInternAtom(m_dpy, "_KDE_NET_WM_BLOCK_COMPOSITING", True), XA_CARDINAL, 32,
+                        PropModeReplace, (unsigned char*)&one, 1);
       }
       composite = XInternAtom(m_dpy, "_NET_WM_BYPASS_COMPOSITOR", True);
       if (composite != None)
       {
         // standard way for Gnome 3
-        XChangeProperty(m_dpy, m_mainWindow, XInternAtom(m_dpy, "_NET_WM_BYPASS_COMPOSITOR", True), XA_CARDINAL, 32,
-                        PropModeReplace, (unsigned char*) &one,  1);
+        XChangeProperty(m_dpy, m_mainWindow, XInternAtom(m_dpy, "_NET_WM_BYPASS_COMPOSITOR", True),
+                        XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&one, 1);
       }
     }
 
     // define invisible cursor
     Pixmap bitmapNoData;
     XColor black;
-    static char noData[] = { 0,0,0,0,0,0,0,0 };
+    static char noData[] = {0, 0, 0, 0, 0, 0, 0, 0};
     black.red = black.green = black.blue = 0;
 
     bitmapNoData = XCreateBitmapFromData(m_dpy, m_mainWindow, noData, 8, 8);
-    m_invisibleCursor = XCreatePixmapCursor(m_dpy, bitmapNoData, bitmapNoData,
-                                            &black, &black, 0, 0);
+    m_invisibleCursor =
+        XCreatePixmapCursor(m_dpy, bitmapNoData, bitmapNoData, &black, &black, 0, 0);
     XFreePixmap(m_dpy, bitmapNoData);
-    XDefineCursor(m_dpy,m_mainWindow, m_invisibleCursor);
+    XDefineCursor(m_dpy, m_mainWindow, m_invisibleCursor);
     XFree(vi);
 
     //init X11 events
@@ -802,13 +815,13 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
     m_icon = None;
     {
       CreateIconPixmap();
-      XWMHints *wm_hints;
-      XClassHint *class_hints;
+      XWMHints* wm_hints;
+      XClassHint* class_hints;
       XTextProperty windowName, iconName;
 
       std::string titleString = CCompileInfo::GetAppName();
       std::string classString = titleString;
-      char *title = const_cast<char*>(titleString.c_str());
+      char* title = const_cast<char*>(titleString.c_str());
 
       XStringListToTextProperty(&title, 1, &windowName);
       XStringListToTextProperty(&title, 1, &iconName);
@@ -822,9 +835,8 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
       class_hints->res_class = const_cast<char*>(classString.c_str());
       class_hints->res_name = const_cast<char*>(classString.c_str());
 
-      XSetWMProperties(m_dpy, m_mainWindow, &windowName, &iconName,
-                            NULL, 0, NULL, wm_hints,
-                            class_hints);
+      XSetWMProperties(m_dpy, m_mainWindow, &windowName, &iconName, NULL, 0, NULL, wm_hints,
+                       class_hints);
       XFree(class_hints);
       XFree(wm_hints);
 
@@ -834,7 +846,7 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
     }
 
     // placement of window may follow mouse
-    XWarpPointer(m_dpy, None, m_mainWindow, 0, 0, 0, 0, mouseX*width, mouseY*height);
+    XWarpPointer(m_dpy, None, m_mainWindow, 0, 0, 0, 0, mouseX * width, mouseY * height);
 
     XMapRaised(m_dpy, m_glWindow);
     XMapRaised(m_dpy, m_mainWindow);
@@ -854,17 +866,17 @@ bool CWinSystemX11::SetWindow(int width, int height, bool fullscreen, const std:
 bool CWinSystemX11::CreateIconPixmap()
 {
   int depth;
-  XImage *img = NULL;
-  Visual *vis;
+  XImage* img = NULL;
+  Visual* vis;
   XWindowAttributes wndattribs;
   XVisualInfo visInfo;
   double rRatio;
   double gRatio;
   double bRatio;
   int outIndex = 0;
-  unsigned int i,j;
-  unsigned char *buf;
-  uint32_t *newBuf = 0;
+  unsigned int i, j;
+  unsigned char* buf;
+  uint32_t* newBuf = 0;
   size_t numNewBufBytes;
 
   // Get visual Info
@@ -893,14 +905,14 @@ bool CWinSystemX11::CreateIconPixmap()
   gRatio = vis->green_mask / 255.0;
   bRatio = vis->blue_mask / 255.0;
 
-  CBaseTexture *iconTexture = CBaseTexture::LoadFromFile("special://xbmc/media/icon256x256.png");
+  CBaseTexture* iconTexture = CBaseTexture::LoadFromFile("special://xbmc/media/icon256x256.png");
 
   if (!iconTexture)
     return false;
 
   buf = iconTexture->GetPixels();
 
-  if (depth>=24)
+  if (depth >= 24)
     numNewBufBytes = (4 * (iconTexture->GetWidth() * iconTexture->GetHeight()));
   else
     numNewBufBytes = (2 * (iconTexture->GetWidth() * iconTexture->GetHeight()));
@@ -912,15 +924,15 @@ bool CWinSystemX11::CreateIconPixmap()
     return false;
   }
 
-  for (i=0; i<iconTexture->GetHeight();++i)
+  for (i = 0; i < iconTexture->GetHeight(); ++i)
   {
-    for (j=0; j<iconTexture->GetWidth();++j)
+    for (j = 0; j < iconTexture->GetWidth(); ++j)
     {
-      unsigned int pos = i*iconTexture->GetPitch()+j*4;
+      unsigned int pos = i * iconTexture->GetPitch() + j * 4;
       unsigned int r, g, b;
-      r = (buf[pos+2] * rRatio);
-      g = (buf[pos+1] * gRatio);
-      b = (buf[pos+0] * bRatio);
+      r = (buf[pos + 2] * rRatio);
+      g = (buf[pos + 1] * gRatio);
+      b = (buf[pos + 0] * bRatio);
       r &= vis->red_mask;
       g &= vis->green_mask;
       b &= vis->blue_mask;
@@ -928,9 +940,8 @@ bool CWinSystemX11::CreateIconPixmap()
       ++outIndex;
     }
   }
-  img = XCreateImage(m_dpy, vis, depth,ZPixmap, 0, (char *)newBuf,
-                     iconTexture->GetWidth(), iconTexture->GetHeight(),
-                     (depth>=24)?32:16, 0);
+  img = XCreateImage(m_dpy, vis, depth, ZPixmap, 0, (char*)newBuf, iconTexture->GetWidth(),
+                     iconTexture->GetHeight(), (depth >= 24) ? 32 : 16, 0);
   if (!img)
   {
     CLog::Log(LOGERROR, "CWinSystemX11::CreateIconPixmap - could not create image");
@@ -945,8 +956,7 @@ bool CWinSystemX11::CreateIconPixmap()
   }
 
   // set byte order
-  union
-  {
+  union {
     char c[sizeof(short)];
     short s;
   } order;
@@ -975,7 +985,7 @@ bool CWinSystemX11::CreateIconPixmap()
 bool CWinSystemX11::HasWindowManager()
 {
   Window wm_check;
-  unsigned char *data;
+  unsigned char* data;
   int status, real_format;
   Atom real_type, prop;
   unsigned long items_read, items_left;
@@ -983,12 +993,11 @@ bool CWinSystemX11::HasWindowManager()
   prop = XInternAtom(m_dpy, "_NET_SUPPORTING_WM_CHECK", True);
   if (prop == None)
     return false;
-  status = XGetWindowProperty(m_dpy, DefaultRootWindow(m_dpy), prop,
-                      0L, 1L, False, XA_WINDOW, &real_type, &real_format,
-                      &items_read, &items_left, &data);
-  if(status != Success || ! items_read)
+  status = XGetWindowProperty(m_dpy, DefaultRootWindow(m_dpy), prop, 0L, 1L, False, XA_WINDOW,
+                              &real_type, &real_format, &items_read, &items_left, &data);
+  if (status != Success || !items_read)
   {
-    if(status == Success)
+    if (status == Success)
       XFree(data);
     return false;
   }
@@ -996,18 +1005,17 @@ bool CWinSystemX11::HasWindowManager()
   wm_check = ((Window*)data)[0];
   XFree(data);
 
-  status = XGetWindowProperty(m_dpy, wm_check, prop,
-                      0L, 1L, False, XA_WINDOW, &real_type, &real_format,
-                      &items_read, &items_left, &data);
+  status = XGetWindowProperty(m_dpy, wm_check, prop, 0L, 1L, False, XA_WINDOW, &real_type,
+                              &real_format, &items_read, &items_left, &data);
 
-  if(status != Success || !items_read)
+  if (status != Success || !items_read)
   {
-    if(status == Success)
+    if (status == Success)
       XFree(data);
     return false;
   }
 
-  if(wm_check != ((Window*)data)[0])
+  if (wm_check != ((Window*)data)[0])
   {
     XFree(data);
     return false;
@@ -1018,22 +1026,21 @@ bool CWinSystemX11::HasWindowManager()
   prop = XInternAtom(m_dpy, "_NET_WM_NAME", True);
   if (prop == None)
   {
-    CLog::Log(LOGDEBUG,"Window Manager Name: ");
+    CLog::Log(LOGDEBUG, "Window Manager Name: ");
     return true;
   }
 
-  status = XGetWindowProperty(m_dpy, wm_check, prop,
-                        0L, (~0L), False, AnyPropertyType, &real_type, &real_format,
-                        &items_read, &items_left, &data);
+  status = XGetWindowProperty(m_dpy, wm_check, prop, 0L, (~0L), False, AnyPropertyType, &real_type,
+                              &real_format, &items_read, &items_left, &data);
 
-  if(status == Success && items_read)
+  if (status == Success && items_read)
   {
-    CLog::Log(LOGDEBUG,"Window Manager Name: %s", data);
+    CLog::Log(LOGDEBUG, "Window Manager Name: %s", data);
   }
   else
-    CLog::Log(LOGDEBUG,"Window Manager Name: ");
+    CLog::Log(LOGDEBUG, "Window Manager Name: ");
 
-  if(status == Success)
+  if (status == Success)
     XFree(data);
 
   return true;
@@ -1049,7 +1056,7 @@ void CWinSystemX11::UpdateCrtc()
   XTranslateCoordinates(m_dpy, m_mainWindow, RootWindow(m_dpy, m_screen), winattr.x, winattr.y,
                         &posx, &posy, &child);
 
-  m_crtc = g_xrandr.GetCrtc(posx+winattr.width/2, posy+winattr.height/2, fps);
+  m_crtc = g_xrandr.GetCrtc(posx + winattr.width / 2, posy + winattr.height / 2, fps);
   CServiceBroker::GetWinSystem()->GetGfxContext().SetFPS(fps);
 }
 

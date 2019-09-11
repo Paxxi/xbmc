@@ -7,10 +7,12 @@
  */
 
 #include "dll_tracker_file.h"
-#include "dll_tracker.h"
+
 #include "DllLoader.h"
+#include "dll_tracker.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
+
 #include <stdlib.h>
 
 #ifdef TARGET_POSIX
@@ -21,10 +23,14 @@
 #define dll_freopen freopen
 #else
 #include "exports/emu_msvcrt.h"
+
 #include <io.h>
 #endif
 
-extern "C" void tracker_file_track(uintptr_t caller, uintptr_t handle, TrackedFileType type, const char* sFile)
+extern "C" void tracker_file_track(uintptr_t caller,
+                                   uintptr_t handle,
+                                   TrackedFileType type,
+                                   const char* sFile)
 {
   DllTrackInfo* pInfo = tracker_get_dlltrackinfo(caller);
   if (pInfo)
@@ -64,17 +70,22 @@ extern "C" void tracker_file_free_all(DllTrackInfo* pInfo)
   if (!pInfo->fileList.empty())
   {
     CSingleLock lock(g_trackerLock);
-    CLog::Log(LOGDEBUG, "{0}: Detected open files: {1}", pInfo->pDll->GetFileName(), pInfo->fileList.size());
+    CLog::Log(LOGDEBUG, "{0}: Detected open files: {1}", pInfo->pDll->GetFileName(),
+              pInfo->fileList.size());
     for (FileListIter it = pInfo->fileList.begin(); it != pInfo->fileList.end(); ++it)
     {
       TrackedFile* file = *it;
       CLog::Log(LOGDEBUG, "%s", file->name);
       free(file->name);
 
-      if (file->type == FILE_XBMC_OPEN) dll_close(file->handle);
-      else if (file->type == FILE_XBMC_FOPEN) dll_fclose((FILE*)file->handle);
-      else if (file->type == FILE_OPEN) close(file->handle);
-      else if (file->type == FILE_FOPEN) fclose((FILE*)file->handle);
+      if (file->type == FILE_XBMC_OPEN)
+        dll_close(file->handle);
+      else if (file->type == FILE_XBMC_FOPEN)
+        dll_fclose((FILE*)file->handle);
+      else if (file->type == FILE_OPEN)
+        close(file->handle);
+      else if (file->type == FILE_FOPEN)
+        fclose((FILE*)file->handle);
 
       delete file;
     }
@@ -89,7 +100,8 @@ extern "C"
     uintptr_t loc = (uintptr_t)_ReturnAddress();
 
     int fd = dll_open(sFileName, iMode);
-    if (fd >= 0) tracker_file_track(loc, fd, FILE_XBMC_OPEN, sFileName);
+    if (fd >= 0)
+      tracker_file_track(loc, fd, FILE_XBMC_OPEN, sFileName);
     return fd;
   }
 
@@ -106,7 +118,8 @@ extern "C"
     uintptr_t loc = (uintptr_t)_ReturnAddress();
 
     FILE* fd = dll_fopen(sFileName, mode);
-    if (fd) tracker_file_track(loc, (uintptr_t)fd, FILE_XBMC_FOPEN, sFileName);
+    if (fd)
+      tracker_file_track(loc, (uintptr_t)fd, FILE_XBMC_FOPEN, sFileName);
     return fd;
   }
 
@@ -118,7 +131,7 @@ extern "C"
     return dll_fclose(stream);
   }
 
-  FILE* track_freopen(const char *path, const char *mode, FILE *stream)
+  FILE* track_freopen(const char* path, const char* mode, FILE* stream)
   {
     uintptr_t loc = (uintptr_t)_ReturnAddress();
 
@@ -128,5 +141,4 @@ extern "C"
       tracker_file_track(loc, (uintptr_t)stream, FILE_XBMC_FOPEN, path);
     return stream;
   }
-
 }

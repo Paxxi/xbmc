@@ -27,9 +27,9 @@ using namespace XFILE;
 
 #define FAVOURITES_LIST 450
 
-CGUIDialogFavourites::CGUIDialogFavourites() :
-    CGUIDialog(WINDOW_DIALOG_FAVOURITES, "DialogFavourites.xml"),
-    m_favouritesService(CServiceBroker::GetFavouritesService())
+CGUIDialogFavourites::CGUIDialogFavourites()
+  : CGUIDialog(WINDOW_DIALOG_FAVOURITES, "DialogFavourites.xml")
+  , m_favouritesService(CServiceBroker::GetFavouritesService())
 {
   m_favourites = new CFileItemList;
   m_loadType = KEEP_IN_MEMORY;
@@ -40,7 +40,7 @@ CGUIDialogFavourites::~CGUIDialogFavourites(void)
   delete m_favourites;
 }
 
-bool CGUIDialogFavourites::OnMessage(CGUIMessage &message)
+bool CGUIDialogFavourites::OnMessage(CGUIMessage& message)
 {
   if (message.GetMessage() == GUI_MSG_CLICKED)
   {
@@ -150,10 +150,12 @@ void CGUIDialogFavourites::OnPopupMenu(int item)
 
 void CGUIDialogFavourites::OnMoveItem(int item, int amount)
 {
-  if (item < 0 || item >= m_favourites->Size() || m_favourites->Size() <= 1 || 0 == amount) return;
+  if (item < 0 || item >= m_favourites->Size() || m_favourites->Size() <= 1 || 0 == amount)
+    return;
 
   int nextItem = (item + amount) % m_favourites->Size();
-  if (nextItem < 0) nextItem += m_favourites->Size();
+  if (nextItem < 0)
+    nextItem += m_favourites->Size();
 
   m_favourites->Swap(item, nextItem);
   m_favouritesService.Save(*m_favourites);
@@ -171,7 +173,8 @@ void CGUIDialogFavourites::OnDelete(int item)
   m_favourites->Remove(item);
   m_favouritesService.Save(*m_favourites);
 
-  CGUIMessage message(GUI_MSG_ITEM_SELECT, GetID(), FAVOURITES_LIST, item < m_favourites->Size() ? item : item - 1);
+  CGUIMessage message(GUI_MSG_ITEM_SELECT, GetID(), FAVOURITES_LIST,
+                      item < m_favourites->Size() ? item : item - 1);
   OnMessage(message);
 
   UpdateList();
@@ -204,24 +207,28 @@ void CGUIDialogFavourites::OnSetThumb(int item)
 void CGUIDialogFavourites::UpdateList()
 {
   int currentItem = GetSelectedItem();
-  CGUIMessage message(GUI_MSG_LABEL_BIND, GetID(), FAVOURITES_LIST, currentItem >= 0 ? currentItem : 0, 0, m_favourites);
+  CGUIMessage message(GUI_MSG_LABEL_BIND, GetID(), FAVOURITES_LIST,
+                      currentItem >= 0 ? currentItem : 0, 0, m_favourites);
   OnMessage(message);
 }
 
 CFileItemPtr CGUIDialogFavourites::GetCurrentListItem(int offset)
 {
   int currentItem = GetSelectedItem();
-  if (currentItem < 0 || !m_favourites->Size()) return CFileItemPtr();
+  if (currentItem < 0 || !m_favourites->Size())
+    return CFileItemPtr();
 
   int item = (currentItem + offset) % m_favourites->Size();
-  if (item < 0) item += m_favourites->Size();
+  if (item < 0)
+    item += m_favourites->Size();
   return (*m_favourites)[item];
 }
 
-bool CGUIDialogFavourites::ChooseAndSetNewName(const CFileItemPtr &item)
+bool CGUIDialogFavourites::ChooseAndSetNewName(const CFileItemPtr& item)
 {
   std::string label(item->GetLabel());
-  if (CGUIKeyboardFactory::ShowAndGetInput(label, CVariant{g_localizeStrings.Get(16008)}, false)) // Enter new title
+  if (CGUIKeyboardFactory::ShowAndGetInput(label, CVariant{g_localizeStrings.Get(16008)},
+                                           false)) // Enter new title
   {
     item->SetLabel(label);
     return true;
@@ -229,7 +236,7 @@ bool CGUIDialogFavourites::ChooseAndSetNewName(const CFileItemPtr &item)
   return false;
 }
 
-bool CGUIDialogFavourites::ChooseAndSetNewThumbnail(const CFileItemPtr &item)
+bool CGUIDialogFavourites::ChooseAndSetNewThumbnail(const CFileItemPtr& item)
 {
   CFileItemList prefilledItems;
   if (item->HasArt("thumb"))
@@ -248,7 +255,8 @@ bool CGUIDialogFavourites::ChooseAndSetNewThumbnail(const CFileItemPtr &item)
   std::string thumb;
   VECSOURCES sources;
   g_mediaManager.GetLocalDrives(sources);
-  if (CGUIDialogFileBrowser::ShowAndGetImage(prefilledItems, sources, g_localizeStrings.Get(1030), thumb)) // Browse for image
+  if (CGUIDialogFileBrowser::ShowAndGetImage(prefilledItems, sources, g_localizeStrings.Get(1030),
+                                             thumb)) // Browse for image
   {
     item->SetArt("thumb", thumb);
     return true;

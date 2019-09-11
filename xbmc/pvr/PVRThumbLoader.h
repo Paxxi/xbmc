@@ -38,4 +38,4 @@ private:
   bool m_bInvalidated = false;
 };
 
-}
+} // namespace PVR

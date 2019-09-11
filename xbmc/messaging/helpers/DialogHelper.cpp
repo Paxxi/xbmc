@@ -19,12 +19,18 @@ namespace MESSAGING
 {
 namespace HELPERS
 {
-DialogResponse ShowYesNoDialogText(CVariant heading, CVariant text, CVariant noLabel, CVariant yesLabel, uint32_t autoCloseTimeout)
+DialogResponse ShowYesNoDialogText(
+    CVariant heading, CVariant text, CVariant noLabel, CVariant yesLabel, uint32_t autoCloseTimeout)
 {
   return ShowYesNoCustomDialog(heading, text, noLabel, yesLabel, "", autoCloseTimeout);
 }
 
-DialogResponse ShowYesNoCustomDialog(CVariant heading, CVariant text, CVariant noLabel, CVariant yesLabel, CVariant customLabel, uint32_t autoCloseTimeout)
+DialogResponse ShowYesNoCustomDialog(CVariant heading,
+                                     CVariant text,
+                                     CVariant noLabel,
+                                     CVariant yesLabel,
+                                     CVariant customLabel,
+                                     uint32_t autoCloseTimeout)
 {
   DialogYesNoMessage options;
   options.heading = std::move(heading);
@@ -34,7 +40,8 @@ DialogResponse ShowYesNoCustomDialog(CVariant heading, CVariant text, CVariant n
   options.customLabel = std::move(customLabel);
   options.autoclose = autoCloseTimeout;
 
-  switch (CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_DIALOG_YESNO, -1, -1, static_cast<void*>(&options)))
+  switch (CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_DIALOG_YESNO, -1, -1,
+                                                       static_cast<void*>(&options)))
   {
   case -1:
     return DialogResponse::CANCELLED;
@@ -53,8 +60,13 @@ DialogResponse ShowYesNoCustomDialog(CVariant heading, CVariant text, CVariant n
   return DialogResponse::CANCELLED;
 }
 
-DialogResponse ShowYesNoDialogLines(CVariant heading, CVariant line0, CVariant line1, CVariant line2,
-  CVariant noLabel, CVariant yesLabel, uint32_t autoCloseTimeout)
+DialogResponse ShowYesNoDialogLines(CVariant heading,
+                                    CVariant line0,
+                                    CVariant line1,
+                                    CVariant line2,
+                                    CVariant noLabel,
+                                    CVariant yesLabel,
+                                    uint32_t autoCloseTimeout)
 {
   DialogYesNoMessage options;
   options.heading = std::move(heading);
@@ -66,7 +78,8 @@ DialogResponse ShowYesNoDialogLines(CVariant heading, CVariant line0, CVariant l
   options.customLabel = "";
   options.autoclose = autoCloseTimeout;
 
-  switch (CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_DIALOG_YESNO, -1, -1, static_cast<void*>(&options)))
+  switch (CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_DIALOG_YESNO, -1, -1,
+                                                       static_cast<void*>(&options)))
   {
   case -1:
     return DialogResponse::CANCELLED;
@@ -85,6 +98,6 @@ DialogResponse ShowYesNoDialogLines(CVariant heading, CVariant line0, CVariant l
   return DialogResponse::CANCELLED;
 }
 
-}
-}
-}
+} // namespace HELPERS
+} // namespace MESSAGING
+} // namespace KODI

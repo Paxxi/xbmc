@@ -8,7 +8,7 @@
 
 #include "StreamUtils.h"
 
-int StreamUtils::GetCodecPriority(const std::string &codec)
+int StreamUtils::GetCodecPriority(const std::string& codec)
 {
   /*
    * Technically flac, truehd, and dtshd_ma are equivalently good as they're all lossless. However,

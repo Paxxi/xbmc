@@ -25,7 +25,7 @@ CSourcesDirectory::CSourcesDirectory(void) = default;
 
 CSourcesDirectory::~CSourcesDirectory(void) = default;
 
-bool CSourcesDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CSourcesDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   // break up our path
   // format is:  sources://<type>/
@@ -33,7 +33,7 @@ bool CSourcesDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   URIUtils::RemoveSlashAtEnd(type);
 
   VECSOURCES sources;
-  VECSOURCES *sourcesFromType = CMediaSourceSettings::GetInstance().GetSources(type);
+  VECSOURCES* sourcesFromType = CMediaSourceSettings::GetInstance().GetSources(type);
   if (!sourcesFromType)
     return false;
 
@@ -43,7 +43,7 @@ bool CSourcesDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   return GetDirectory(sources, items);
 }
 
-bool CSourcesDirectory::GetDirectory(const VECSOURCES &sources, CFileItemList &items)
+bool CSourcesDirectory::GetDirectory(const VECSOURCES& sources, CFileItemList& items)
 {
   for (unsigned int i = 0; i < sources.size(); ++i)
   {
@@ -56,7 +56,7 @@ bool CSourcesDirectory::GetDirectory(const VECSOURCES &sources, CFileItemList &i
     // We have the real DVD-ROM, set icon on disktype
     if (share.m_iDriveType == CMediaSource::SOURCE_TYPE_DVD && share.m_strThumbnailImage.empty())
     {
-      CUtil::GetDVDDriveIcon( pItem->GetPath(), strIcon );
+      CUtil::GetDVDDriveIcon(pItem->GetPath(), strIcon);
       // CDetectDVDMedia::SetNewDVDShareUrl() caches disc thumb as special://temp/dvdicon.tbn
       std::string strThumb = "special://temp/dvdicon.tbn";
       if (XFILE::CFile::Exists(strThumb))
@@ -64,13 +64,11 @@ bool CSourcesDirectory::GetDirectory(const VECSOURCES &sources, CFileItemList &i
     }
     else if (URIUtils::IsProtocol(pItem->GetPath(), "addons"))
       strIcon = "DefaultHardDisk.png";
-    else if (   pItem->IsPath("special://musicplaylists/")
-             || pItem->IsPath("special://videoplaylists/"))
+    else if (pItem->IsPath("special://musicplaylists/") ||
+             pItem->IsPath("special://videoplaylists/"))
       strIcon = "DefaultPlaylist.png";
-    else if (   pItem->IsVideoDb()
-             || pItem->IsMusicDb()
-             || pItem->IsPlugin()
-             || pItem->IsPath("musicsearch://"))
+    else if (pItem->IsVideoDb() || pItem->IsMusicDb() || pItem->IsPlugin() ||
+             pItem->IsPath("musicsearch://"))
       strIcon = "DefaultFolder.png";
     else if (pItem->IsRemote())
       strIcon = "DefaultNetwork.png";
@@ -82,13 +80,15 @@ bool CSourcesDirectory::GetDirectory(const VECSOURCES &sources, CFileItemList &i
       strIcon = "DefaultBluray.png";
     else if (pItem->IsCDDA())
       strIcon = "DefaultCDDA.png";
-    else if (pItem->IsRemovable() && CServiceBroker::GetGUI()->GetTextureManager().HasTexture("DefaultRemovableDisk.png"))
+    else if (pItem->IsRemovable() &&
+             CServiceBroker::GetGUI()->GetTextureManager().HasTexture("DefaultRemovableDisk.png"))
       strIcon = "DefaultRemovableDisk.png";
     else
       strIcon = "DefaultHardDisk.png";
 
     pItem->SetArt("icon", strIcon);
-    if (share.m_iHasLock == 2 && m_profileManager->GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE)
+    if (share.m_iHasLock == 2 &&
+        m_profileManager->GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE)
       pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_LOCKED);
     else
       pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_NONE);

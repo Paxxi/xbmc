@@ -14,6 +14,5 @@ class IWinEvents
 {
 public:
   virtual ~IWinEvents() = default;
-  virtual bool  MessagePump() = 0;
+  virtual bool MessagePump() = 0;
 };
-

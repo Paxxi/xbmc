@@ -14,7 +14,7 @@
 
 enum AppleRemoteOptions
 {
-  APPLE_REMOTE_DISABLED    = 0,
+  APPLE_REMOTE_DISABLED = 0,
   APPLE_REMOTE_STANDARD,
   APPLE_REMOTE_UNIVERSAL,
   APPLE_REMOTE_MULTIREMOTE
@@ -22,7 +22,7 @@ enum AppleRemoteOptions
 
 class XBMCHelper : public ISettingCallback
 {
- public:
+public:
   static XBMCHelper& GetInstance();
 
   virtual bool OnSettingChanging(std::shared_ptr<const CSetting> setting) override;
@@ -35,13 +35,13 @@ class XBMCHelper : public ISettingCallback
   bool IsRunning();
 
   bool IsAlwaysOn() const { return m_alwaysOn; }
-  int  GetMode() const { return m_mode; }
+  int GetMode() const { return m_mode; }
 
   bool ErrorStarting() { return m_errorStarting; }
 
 private:
   XBMCHelper();
-  XBMCHelper(XBMCHelper const& ) = delete;
+  XBMCHelper(XBMCHelper const&) = delete;
   XBMCHelper& operator=(XBMCHelper const&) = delete;
 
   void HandleLaunchAgent();
@@ -57,9 +57,9 @@ private:
   void WriteFile(const char* fileName, const std::string& data);
 
   bool m_alwaysOn;
-  int  m_mode;
-  int  m_sequenceDelay;
-  int  m_port;
+  int m_mode;
+  int m_sequenceDelay;
+  int m_port;
   bool m_errorStarting;
 
   std::string m_configFile;

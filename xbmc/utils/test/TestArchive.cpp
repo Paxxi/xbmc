@@ -7,29 +7,22 @@
  */
 
 #if defined(TARGET_WINDOWS)
-#  include <windows.h>
+#include <windows.h>
 #endif
 
+#include "filesystem/File.h"
+#include "test/TestUtils.h"
 #include "utils/Archive.h"
 #include "utils/Variant.h"
-#include "filesystem/File.h"
-
-#include "test/TestUtils.h"
 
 #include <gtest/gtest.h>
 
 class TestArchive : public testing::Test
 {
 protected:
-  TestArchive()
-  {
-    file = XBMC_CREATETEMPFILE(".ar");
-  }
-  ~TestArchive() override
-  {
-    EXPECT_TRUE(XBMC_DELETETEMPFILE(file));
-  }
-  XFILE::CFile *file;
+  TestArchive() { file = XBMC_CREATETEMPFILE(".ar"); }
+  ~TestArchive() override { EXPECT_TRUE(XBMC_DELETETEMPFILE(file)); }
+  XFILE::CFile* file;
 };
 
 TEST_F(TestArchive, IsStoring)
@@ -223,8 +216,8 @@ TEST_F(TestArchive, StringArchive)
 TEST_F(TestArchive, SYSTEMTIMEArchive)
 {
   ASSERT_NE(nullptr, file);
-  SYSTEMTIME SYSTEMTIME_ref = { 1, 2, 3, 4, 5, 6, 7, 8 };
-  SYSTEMTIME SYSTEMTIME_var = { 0, 0, 0, 0, 0, 0, 0, 0 };
+  SYSTEMTIME SYSTEMTIME_ref = {1, 2, 3, 4, 5, 6, 7, 8};
+  SYSTEMTIME SYSTEMTIME_var = {0, 0, 0, 0, 0, 0, 0, 0};
 
   CArchive arstore(file, CArchive::store);
   arstore << SYSTEMTIME_ref;
@@ -335,8 +328,8 @@ TEST_F(TestArchive, MultiTypeArchive)
   char char_ref = 'A', char_var = '\0';
   std::string string_ref = "test string", string_var;
   std::wstring wstring_ref = L"test wstring", wstring_var;
-  SYSTEMTIME SYSTEMTIME_ref = { 1, 2, 3, 4, 5, 6, 7, 8 };
-  SYSTEMTIME SYSTEMTIME_var = { 0, 0, 0, 0, 0, 0, 0, 0 };
+  SYSTEMTIME SYSTEMTIME_ref = {1, 2, 3, 4, 5, 6, 7, 8};
+  SYSTEMTIME SYSTEMTIME_var = {0, 0, 0, 0, 0, 0, 0, 0};
   CVariant CVariant_ref((int)1), CVariant_var;
   std::vector<std::string> strArray_ref, strArray_var;
   strArray_ref.push_back("test strArray_ref 0");

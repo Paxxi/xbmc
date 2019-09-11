@@ -12,15 +12,17 @@
 #else
 #include <sys/syscall.h>
 #endif
-#include <sys/resource.h>
 #include <string.h>
+
+#include <sys/resource.h>
 #ifdef TARGET_FREEBSD
-#include <sys/param.h>
 #include <pthread_np.h>
+#include <sys/param.h>
 #endif
 
-#include <signal.h>
 #include "utils/log.h"
+
+#include <signal.h>
 
 namespace XbmcThreads
 {
@@ -29,7 +31,8 @@ static pthread_mutexattr_t recursiveAttr;
 
 static bool SetRecursiveAttr()
 {
-  static bool alreadyCalled = false; // initialized to 0 in the data segment prior to startup init code running
+  static bool alreadyCalled =
+      false; // initialized to 0 in the data segment prior to startup init code running
   if (!alreadyCalled)
   {
     pthread_mutexattr_init(&recursiveAttr);
@@ -51,7 +54,7 @@ pthread_mutexattr_t* CRecursiveMutex::getRecursiveAttr()
   return &recursiveAttr;
 }
 // ==========================================================
-}
+} // namespace XbmcThreads
 
 static pid_t GetCurrentThreadPid_()
 {
@@ -217,16 +220,19 @@ int64_t CThread::GetAbsoluteUsage()
   thread_basic_info threadInfo;
   mach_msg_type_number_t threadInfoCount = THREAD_BASIC_INFO_COUNT;
 
-  kern_return_t ret = thread_info(pthread_mach_thread_np(static_cast<pthread_t>(m_thread->native_handle())),
-      THREAD_BASIC_INFO, (thread_info_t)&threadInfo, &threadInfoCount);
+  kern_return_t ret =
+      thread_info(pthread_mach_thread_np(static_cast<pthread_t>(m_thread->native_handle())),
+                  THREAD_BASIC_INFO, (thread_info_t)&threadInfo, &threadInfoCount);
 
   if (ret == KERN_SUCCESS)
   {
     // User time.
-    time = ((int64_t)threadInfo.user_time.seconds * 10000000L) + threadInfo.user_time.microseconds*10L;
+    time = ((int64_t)threadInfo.user_time.seconds * 10000000L) +
+           threadInfo.user_time.microseconds * 10L;
 
     // System time.
-    time += (((int64_t)threadInfo.system_time.seconds * 10000000L) + threadInfo.system_time.microseconds*10L);
+    time += (((int64_t)threadInfo.system_time.seconds * 10000000L) +
+             threadInfo.system_time.microseconds * 10L);
   }
 
 #else
@@ -235,7 +241,7 @@ int64_t CThread::GetAbsoluteUsage()
   {
     struct timespec tp;
     clock_gettime(clock, &tp);
-    time = (int64_t) tp.tv_sec * 10000000 + tp.tv_nsec / 100;
+    time = (int64_t)tp.tv_sec * 10000000 + tp.tv_nsec / 100;
   }
 #endif
 
@@ -244,8 +250,10 @@ int64_t CThread::GetAbsoluteUsage()
 
 void term_handler(int signum)
 {
-  CLog::Log(LOGERROR, "thread 0x%lx (%lu) got signal %d. calling OnException and terminating thread abnormally.", (long unsigned int) pthread_self(),
-      (long unsigned int) pthread_self(), signum);
+  CLog::Log(
+      LOGERROR,
+      "thread 0x%lx (%lu) got signal %d. calling OnException and terminating thread abnormally.",
+      (long unsigned int)pthread_self(), (long unsigned int)pthread_self(), signum);
   CThread* curThread = CThread::GetCurrentThread();
   if (curThread)
   {
@@ -266,4 +274,3 @@ void CThread::SetSignalHandlers()
   //sigaction (SIGABRT, &action, NULL);
   //sigaction (SIGSEGV, &action, NULL);
 }
-

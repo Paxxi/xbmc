@@ -12,16 +12,16 @@
 
 namespace XbmcCommons
 {
-  void ILogger::Log(int loglevel, const char *format, ... )
-  {
-    std::string strData;
+void ILogger::Log(int loglevel, const char* format, ...)
+{
+  std::string strData;
 
-    strData.reserve(16384);
-    va_list va;
-    va_start(va, format);
-    strData = StringUtils::FormatV(format,va);
-    va_end(va);
+  strData.reserve(16384);
+  va_list va;
+  va_start(va, format);
+  strData = StringUtils::FormatV(format, va);
+  va_end(va);
 
-    log(loglevel, strData.c_str());
-  }
+  log(loglevel, strData.c_str());
 }
+} // namespace XbmcCommons

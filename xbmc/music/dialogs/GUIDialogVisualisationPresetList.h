@@ -18,7 +18,7 @@ class CGUIDialogVisualisationPresetList : public CGUIDialogSelect
 {
 public:
   CGUIDialogVisualisationPresetList();
-  bool OnMessage(CGUIMessage &message) override;
+  bool OnMessage(CGUIMessage& message) override;
 
 protected:
   void OnInitWindow() override;
@@ -27,6 +27,6 @@ protected:
 
 private:
   void ClearVisualisation();
-  void SetVisualisation(CGUIVisualisationControl *addon);
+  void SetVisualisation(CGUIVisualisationControl* addon);
   CGUIVisualisationControl* m_viz = nullptr;
 };

@@ -10,28 +10,29 @@
 
 #include <memory>
 
-namespace ADDON {
+namespace ADDON
+{
 class CAddonMgr;
 class CBinaryAddonManager;
 class CBinaryAddonCache;
 class CVFSAddonCache;
 class CServiceAddonManager;
 class CRepositoryUpdater;
-}
+} // namespace ADDON
 
 namespace ANNOUNCEMENT
 {
-  class CAnnouncementManager;
+class CAnnouncementManager;
 }
 
 namespace PVR
 {
-  class CPVRManager;
+class CPVRManager;
 }
 
 namespace PLAYLIST
 {
-  class CPlayListPlayer;
+class CPlayListPlayer;
 }
 
 class CContextMenuManager;
@@ -58,34 +59,35 @@ namespace KODI
 {
 namespace GAME
 {
-  class CControllerManager;
-  class CGameServices;
-}
+class CControllerManager;
+class CGameServices;
+} // namespace GAME
 
 namespace RETRO
 {
-  class CGUIGameRenderManager;
+class CGUIGameRenderManager;
 }
-}
+} // namespace KODI
 
 namespace PERIPHERALS
 {
-  class CPeripherals;
+class CPeripherals;
 }
 
 class CServiceBroker
 {
 public:
   static std::shared_ptr<ANNOUNCEMENT::CAnnouncementManager> GetAnnouncementManager();
-  static void RegisterAnnouncementManager(std::shared_ptr<ANNOUNCEMENT::CAnnouncementManager> announcementManager);
+  static void RegisterAnnouncementManager(
+      std::shared_ptr<ANNOUNCEMENT::CAnnouncementManager> announcementManager);
   static void UnregisterAnnouncementManager();
 
-  static ADDON::CAddonMgr &GetAddonMgr();
-  static ADDON::CBinaryAddonManager &GetBinaryAddonManager();
-  static ADDON::CBinaryAddonCache &GetBinaryAddonCache();
-  static ADDON::CVFSAddonCache &GetVFSAddonCache();
-  static XBPython &GetXBPython();
-  static PVR::CPVRManager &GetPVRManager();
+  static ADDON::CAddonMgr& GetAddonMgr();
+  static ADDON::CBinaryAddonManager& GetBinaryAddonManager();
+  static ADDON::CBinaryAddonCache& GetBinaryAddonCache();
+  static ADDON::CVFSAddonCache& GetVFSAddonCache();
+  static XBPython& GetXBPython();
+  static PVR::CPVRManager& GetPVRManager();
   static CContextMenuManager& GetContextMenuManager();
   static CDataCacheCore& GetDataCacheCore();
   static PLAYLIST::CPlayListPlayer& GetPlaylistPlayer();
@@ -97,31 +99,31 @@ public:
   static ADDON::CServiceAddonManager& GetServiceAddons();
   static ADDON::CRepositoryUpdater& GetRepositoryUpdater();
   static CInputManager& GetInputManager();
-  static CFileExtensionProvider &GetFileExtensionProvider();
+  static CFileExtensionProvider& GetFileExtensionProvider();
   static bool IsBinaryAddonCacheUp();
   static bool IsServiceManagerUp();
   static CNetworkBase& GetNetwork();
   static CPowerManager& GetPowerManager();
   static CWeatherManager& GetWeatherManager();
-  static CPlayerCoreFactory &GetPlayerCoreFactory();
-  static CDatabaseManager &GetDatabaseManager();
-  static CEventLog &GetEventLog();
+  static CPlayerCoreFactory& GetPlayerCoreFactory();
+  static CDatabaseManager& GetDatabaseManager();
+  static CEventLog& GetEventLog();
 
   static CGUIComponent* GetGUI();
-  static void RegisterGUI(CGUIComponent *gui);
+  static void RegisterGUI(CGUIComponent* gui);
   static void UnregisterGUI();
 
-  static void RegisterSettingsComponent(CSettingsComponent *settings);
+  static void RegisterSettingsComponent(CSettingsComponent* settings);
   static void UnregisterSettingsComponent();
   static CSettingsComponent* GetSettingsComponent();
 
-  static void RegisterWinSystem(CWinSystemBase *winsystem);
+  static void RegisterWinSystem(CWinSystemBase* winsystem);
   static void UnregisterWinSystem();
   static CWinSystemBase* GetWinSystem();
   static CRenderSystemBase* GetRenderSystem();
 
   static IAE* GetActiveAE();
-  static void RegisterAE(IAE *ae);
+  static void RegisterAE(IAE* ae);
   static void UnregisterAE();
 
   static std::shared_ptr<CAppInboundProtocol> GetAppPort();

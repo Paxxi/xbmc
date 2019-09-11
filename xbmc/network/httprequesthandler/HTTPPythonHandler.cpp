@@ -25,33 +25,36 @@
 #define MAX_STRING_POST_SIZE 20000
 
 CHTTPPythonHandler::CHTTPPythonHandler()
-  : IHTTPRequestHandler(),
-    m_scriptPath(),
-    m_addon(),
-    m_lastModified(),
-    m_requestData(),
-    m_responseData(),
-    m_responseRanges(),
-    m_redirectUrl()
-{ }
+  : IHTTPRequestHandler()
+  , m_scriptPath()
+  , m_addon()
+  , m_lastModified()
+  , m_requestData()
+  , m_responseData()
+  , m_responseRanges()
+  , m_redirectUrl()
+{
+}
 
-CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest &request)
-  : IHTTPRequestHandler(request),
-    m_scriptPath(),
-    m_addon(),
-    m_lastModified(),
-    m_requestData(),
-    m_responseData(),
-    m_responseRanges(),
-    m_redirectUrl()
+CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest& request)
+  : IHTTPRequestHandler(request)
+  , m_scriptPath()
+  , m_addon()
+  , m_lastModified()
+  , m_requestData()
+  , m_responseData()
+  , m_responseRanges()
+  , m_redirectUrl()
 {
   m_response.type = HTTPMemoryDownloadNoFreeCopy;
 
   // get the real path of the script and check if it actually exists
-  m_response.status = CHTTPWebinterfaceHandler::ResolveUrl(m_request.pathUrl, m_scriptPath, m_addon);
+  m_response.status =
+      CHTTPWebinterfaceHandler::ResolveUrl(m_request.pathUrl, m_scriptPath, m_addon);
   // only allow requests to a non-static webinterface addon
   if (m_addon == NULL || m_addon->Type() != ADDON::ADDON_WEB_INTERFACE ||
-      std::dynamic_pointer_cast<ADDON::CWebinterface>(m_addon)->GetType() == ADDON::WebinterfaceTypeStatic)
+      std::dynamic_pointer_cast<ADDON::CWebinterface>(m_addon)->GetType() ==
+          ADDON::WebinterfaceTypeStatic)
   {
     m_response.type = HTTPError;
     m_response.status = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -59,7 +62,8 @@ CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest &request)
     return;
   }
 
-  std::shared_ptr<ADDON::CWebinterface> webinterface = std::dynamic_pointer_cast<ADDON::CWebinterface>(m_addon);
+  std::shared_ptr<ADDON::CWebinterface> webinterface =
+      std::dynamic_pointer_cast<ADDON::CWebinterface>(m_addon);
 
   // forward every request to the default entry point
   m_scriptPath = webinterface->LibPath();
@@ -88,7 +92,7 @@ CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest &request)
   struct tm result = {};
   time = localtime_r((time_t*)&statBuffer.st_mtime, &result);
 #else
-  time = localtime((time_t *)&statBuffer.st_mtime);
+  time = localtime((time_t*)&statBuffer.st_mtime);
 #endif
   if (time == NULL)
     return;
@@ -96,13 +100,13 @@ CHTTPPythonHandler::CHTTPPythonHandler(const HTTPRequest &request)
   m_lastModified = *time;
 }
 
-bool CHTTPPythonHandler::CanHandleRequest(const HTTPRequest &request) const
+bool CHTTPPythonHandler::CanHandleRequest(const HTTPRequest& request) const
 {
   ADDON::AddonPtr addon;
   std::string path;
   // try to resolve the addon as any python script must be part of a webinterface
-  if (!CHTTPWebinterfaceHandler::ResolveAddon(request.pathUrl, addon, path) ||
-      addon == NULL || addon->Type() != ADDON::ADDON_WEB_INTERFACE)
+  if (!CHTTPWebinterfaceHandler::ResolveAddon(request.pathUrl, addon, path) || addon == NULL ||
+      addon->Type() != ADDON::ADDON_WEB_INTERFACE)
     return false;
 
   // static webinterfaces aren't allowed to run python scripts
@@ -126,8 +130,10 @@ int CHTTPPythonHandler::HandleRequest()
     HTTPPythonRequest* pythonRequest = new HTTPPythonRequest();
     pythonRequest->connection = m_request.connection;
     pythonRequest->file = URIUtils::GetFileName(m_request.pathUrl);
-    HTTPRequestHandlerUtils::GetRequestHeaderValues(m_request.connection, MHD_GET_ARGUMENT_KIND, pythonRequest->getValues);
-    HTTPRequestHandlerUtils::GetRequestHeaderValues(m_request.connection, MHD_HEADER_KIND, pythonRequest->headerValues);
+    HTTPRequestHandlerUtils::GetRequestHeaderValues(m_request.connection, MHD_GET_ARGUMENT_KIND,
+                                                    pythonRequest->getValues);
+    HTTPRequestHandlerUtils::GetRequestHeaderValues(m_request.connection, MHD_HEADER_KIND,
+                                                    pythonRequest->headerValues);
     pythonRequest->method = m_request.method;
     pythonRequest->postValues = m_postFields;
     pythonRequest->requestContent = m_requestData;
@@ -150,7 +156,8 @@ int CHTTPPythonHandler::HandleRequest()
 
     CHTTPPythonInvoker* pythonInvoker = new CHTTPPythonWsgiInvoker(&g_pythonParser, pythonRequest);
     LanguageInvokerPtr languageInvokerPtr(pythonInvoker);
-    int result = CScriptInvocationManager::GetInstance().ExecuteSync(m_scriptPath, languageInvokerPtr, m_addon, args, 30000, false);
+    int result = CScriptInvocationManager::GetInstance().ExecuteSync(
+        m_scriptPath, languageInvokerPtr, m_addon, args, 30000, false);
 
     // check if the script couldn't be started
     if (result < 0)
@@ -200,7 +207,8 @@ int CHTTPPythonHandler::HandleRequest()
     }
 
     m_responseData = pythonFinalizedRequest->responseData;
-    if (pythonFinalizedRequest->responseLength > 0 && pythonFinalizedRequest->responseLength <= m_responseData.size())
+    if (pythonFinalizedRequest->responseLength > 0 &&
+        pythonFinalizedRequest->responseLength <= m_responseData.size())
       m_response.totalLength = pythonFinalizedRequest->responseLength;
     else
       m_response.totalLength = m_responseData.size();
@@ -220,7 +228,7 @@ int CHTTPPythonHandler::HandleRequest()
   return MHD_YES;
 }
 
-bool CHTTPPythonHandler::GetLastModifiedDate(CDateTime &lastModified) const
+bool CHTTPPythonHandler::GetLastModifiedDate(CDateTime& lastModified) const
 {
   if (!m_lastModified.IsValid())
     return false;
@@ -229,7 +237,7 @@ bool CHTTPPythonHandler::GetLastModifiedDate(CDateTime &lastModified) const
   return true;
 }
 
-bool CHTTPPythonHandler::appendPostData(const char *data, size_t size)
+bool CHTTPPythonHandler::appendPostData(const char* data, size_t size)
 {
   if (m_requestData.size() + size > MAX_STRING_POST_SIZE)
   {

@@ -13,8 +13,7 @@
 class CVideoBuffer;
 class CVideoLayerBridgeDRMPRIME;
 
-class CRendererDRMPRIME
-  : public CBaseRenderer
+class CRendererDRMPRIME : public CBaseRenderer
 {
 public:
   CRendererDRMPRIME() = default;
@@ -28,14 +27,15 @@ public:
   bool Configure(const VideoPicture& picture, float fps, unsigned int orientation) override;
   bool IsConfigured() override { return m_bConfigured; };
   void AddVideoPicture(const VideoPicture& picture, int index) override;
-  void UnInit() override {};
+  void UnInit() override{};
   bool Flush(bool saveBuffers) override;
   void ReleaseBuffer(int idx) override;
   bool NeedBuffer(int idx) override;
   bool IsGuiLayer() override { return false; };
   CRenderInfo GetRenderInfo() override;
   void Update() override;
-  void RenderUpdate(int index, int index2, bool clear, unsigned int flags, unsigned int alpha) override;
+  void RenderUpdate(
+      int index, int index2, bool clear, unsigned int flags, unsigned int alpha) override;
   bool RenderCapture(CRenderCapture* capture) override;
   bool ConfigChanged(const VideoPicture& picture) override;
 

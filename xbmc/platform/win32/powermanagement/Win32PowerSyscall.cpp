@@ -68,7 +68,7 @@ bool CWin32PowerStateWorker::PowerManagement(PowerState State)
       TOKEN_PRIVILEGES tkp = {};
       if (LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid))
       {
-        tkp.PrivilegeCount = 1;  // one privilege to set
+        tkp.PrivilegeCount = 1; // one privilege to set
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
         // Get the shutdown privilege for this process.
         if (AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0))
@@ -92,17 +92,22 @@ bool CWin32PowerStateWorker::PowerManagement(PowerState State)
   case POWERSTATE_SHUTDOWN:
     CLog::Log(LOGINFO, "Shutdown Windows...");
     if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin8))
-      return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_HYBRID | SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_POWEROFF,
-                               SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
+      return InitiateShutdownW(NULL, NULL, 0,
+                               SHUTDOWN_HYBRID | SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_POWEROFF,
+                               SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER |
+                                   SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
     return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_POWEROFF,
-                             SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
+                             SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER |
+                                 SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
   case POWERSTATE_REBOOT:
     CLog::Log(LOGINFO, "Rebooting Windows...");
     if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin8))
       return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_RESTART,
-                               SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
+                               SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER |
+                                   SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
     return InitiateShutdownW(NULL, NULL, 0, SHUTDOWN_INSTALL_UPDATES | SHUTDOWN_RESTART,
-                             SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER | SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
+                             SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_OTHER |
+                                 SHTDN_REASON_FLAG_PLANNED) == ERROR_SUCCESS;
   default:
     CLog::Log(LOGERROR, "Unknown PowerState called.");
     return false;
@@ -146,7 +151,8 @@ bool CWin32PowerSyscall::CanPowerdown()
 bool CWin32PowerSyscall::CanSuspend()
 {
   if (m_hascapabilities)
-    return (m_capabilities.SystemS1 == TRUE || m_capabilities.SystemS2 == TRUE || m_capabilities.SystemS3 == TRUE);
+    return (m_capabilities.SystemS1 == TRUE || m_capabilities.SystemS2 == TRUE ||
+            m_capabilities.SystemS3 == TRUE);
   return true;
 }
 bool CWin32PowerSyscall::CanHibernate()
@@ -164,11 +170,11 @@ int CWin32PowerSyscall::BatteryLevel()
 {
   SYSTEM_POWER_STATUS SystemPowerStatus;
   if (GetSystemPowerStatus(&SystemPowerStatus) && SystemPowerStatus.BatteryLifePercent != 255)
-      return SystemPowerStatus.BatteryLifePercent;
+    return SystemPowerStatus.BatteryLifePercent;
   return 0;
 }
 
-bool CWin32PowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
+bool CWin32PowerSyscall::PumpPowerEvents(IPowerEventsCallback* callback)
 {
   if (m_OnSuspend)
   {

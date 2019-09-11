@@ -62,7 +62,8 @@ void CScreenShot::TakeScreenshot(const std::string& filename, bool sync)
   //if sync is true, the png file needs to be completely written when this function returns
   if (sync)
   {
-    if (!CPicture::CreateThumbnailFromSurface(surface->GetBuffer(), surface->GetWidth(), surface->GetHeight(), surface->GetStride(), filename))
+    if (!CPicture::CreateThumbnailFromSurface(surface->GetBuffer(), surface->GetWidth(),
+                                              surface->GetHeight(), surface->GetStride(), filename))
       CLog::Log(LOGERROR, "Unable to write screenshot %s", CURL::GetRedacted(filename).c_str());
 
     surface->ReleaseBuffer();
@@ -78,14 +79,18 @@ void CScreenShot::TakeScreenshot(const std::string& filename, bool sync)
 
     //write .png file asynchronous with CThumbnailWriter, prevents stalling of the render thread
     //buffer is deleted from CThumbnailWriter
-    CThumbnailWriter* thumbnailwriter = new CThumbnailWriter(surface->GetBuffer(), surface->GetWidth(), surface->GetHeight(), surface->GetStride(), filename);
+    CThumbnailWriter* thumbnailwriter =
+        new CThumbnailWriter(surface->GetBuffer(), surface->GetWidth(), surface->GetHeight(),
+                             surface->GetStride(), filename);
     CJobManager::GetInstance().AddJob(thumbnailwriter, NULL);
   }
 }
 
 void CScreenShot::TakeScreenshot()
 {
-  std::shared_ptr<CSettingPath> screenshotSetting = std::static_pointer_cast<CSettingPath>(CServiceBroker::GetSettingsComponent()->GetSettings()->GetSetting(CSettings::SETTING_DEBUG_SCREENSHOTPATH));
+  std::shared_ptr<CSettingPath> screenshotSetting = std::static_pointer_cast<CSettingPath>(
+      CServiceBroker::GetSettingsComponent()->GetSettings()->GetSetting(
+          CSettings::SETTING_DEBUG_SCREENSHOTPATH));
   if (!screenshotSetting)
     return;
 
@@ -102,7 +107,8 @@ void CScreenShot::TakeScreenshot()
 
   if (!strDir.empty())
   {
-    std::string file = CUtil::GetNextFilename(URIUtils::AddFileToFolder(strDir, "screenshot%03d.png"), 999);
+    std::string file =
+        CUtil::GetNextFilename(URIUtils::AddFileToFolder(strDir, "screenshot%03d.png"), 999);
 
     if (!file.empty())
     {

@@ -14,29 +14,34 @@
 #include "utils/XMLUtils.h"
 #include "utils/log.h"
 
-#define XML_ELM_DEFAULT     "default"
+#define XML_ELM_DEFAULT "default"
 #define XML_ELM_CONSTRAINTS "constraints"
 
-CSettingPath::CSettingPath(const std::string &id, CSettingsManager *settingsManager /* = nullptr */)
+CSettingPath::CSettingPath(const std::string& id, CSettingsManager* settingsManager /* = nullptr */)
   : CSettingString(id, settingsManager)
-{ }
+{
+}
 
-CSettingPath::CSettingPath(const std::string &id, int label, const std::string &value, CSettingsManager *settingsManager /* = nullptr */)
+CSettingPath::CSettingPath(const std::string& id,
+                           int label,
+                           const std::string& value,
+                           CSettingsManager* settingsManager /* = nullptr */)
   : CSettingString(id, label, value, settingsManager)
-{ }
+{
+}
 
-CSettingPath::CSettingPath(const std::string &id, const CSettingPath &setting)
+CSettingPath::CSettingPath(const std::string& id, const CSettingPath& setting)
   : CSettingString(id, setting)
 {
   copy(setting);
 }
 
-SettingPtr CSettingPath::Clone(const std::string &id) const
+SettingPtr CSettingPath::Clone(const std::string& id) const
 {
   return std::make_shared<CSettingPath>(id, *this);
 }
 
-bool CSettingPath::Deserialize(const TiXmlNode *node, bool update /* = false */)
+bool CSettingPath::Deserialize(const TiXmlNode* node, bool update /* = false */)
 {
   CExclusiveLock lock(m_critical);
 
@@ -44,7 +49,8 @@ bool CSettingPath::Deserialize(const TiXmlNode *node, bool update /* = false */)
     return false;
 
   if (m_control != nullptr &&
-     (m_control->GetType() != "button" || (m_control->GetFormat() != "path" && m_control->GetFormat() != "file")))
+      (m_control->GetType() != "button" ||
+       (m_control->GetFormat() != "path" && m_control->GetFormat() != "file")))
   {
     CLog::Log(LOGERROR, "CSettingPath: invalid <control> of \"%s\"", m_id.c_str());
     return false;
@@ -81,7 +87,7 @@ bool CSettingPath::Deserialize(const TiXmlNode *node, bool update /* = false */)
   return true;
 }
 
-bool CSettingPath::SetValue(const std::string &value)
+bool CSettingPath::SetValue(const std::string& value)
 {
   // for backwards compatibility to Frodo
   if (StringUtils::EqualsNoCase(value, "select folder") ||
@@ -91,7 +97,7 @@ bool CSettingPath::SetValue(const std::string &value)
   return CSettingString::SetValue(value);
 }
 
-void CSettingPath::copy(const CSettingPath &setting)
+void CSettingPath::copy(const CSettingPath& setting)
 {
   CSettingString::Copy(setting);
 

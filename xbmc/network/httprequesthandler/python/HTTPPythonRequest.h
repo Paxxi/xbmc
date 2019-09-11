@@ -17,7 +17,7 @@
 
 typedef struct HTTPPythonRequest
 {
-  struct MHD_Connection *connection;
+  struct MHD_Connection* connection;
   std::string hostname;
   uint16_t port;
   std::string url;

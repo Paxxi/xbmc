@@ -7,49 +7,34 @@
  */
 
 #include "AESinkOSS.h"
-#include <stdint.h>
-#include <limits.h>
-#include <unistd.h>
 
 #include "cores/AudioEngine/AESinkFactory.h"
 #include "cores/AudioEngine/Utils/AEUtil.h"
-#include "utils/log.h"
 #include "threads/SingleLock.h"
-#include <sstream>
+#include "utils/log.h"
 
-#include <sys/ioctl.h>
+#include <limits.h>
+#include <sstream>
+#include <stdint.h>
+
 #include <sys/fcntl.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 #if defined(OSS4) || defined(TARGET_FREEBSD)
-  #include <sys/soundcard.h>
+#include <sys/soundcard.h>
 #else
-  #include <linux/soundcard.h>
+#include <linux/soundcard.h>
 #endif
 
 #define OSS_FRAMES 256
 
-static enum AEChannel OSSChannelMap[9] =
-  {AE_CH_FL, AE_CH_FR, AE_CH_BL, AE_CH_BR, AE_CH_FC, AE_CH_LFE, AE_CH_SL, AE_CH_SR, AE_CH_NULL};
+static enum AEChannel OSSChannelMap[9] = {AE_CH_FL,  AE_CH_FR, AE_CH_BL, AE_CH_BR,  AE_CH_FC,
+                                          AE_CH_LFE, AE_CH_SL, AE_CH_SR, AE_CH_NULL};
 
 #if defined(SNDCTL_SYSINFO) && defined(SNDCTL_CARDINFO)
-static int OSSSampleRateList[] =
-{
-  5512,
-  8000,
-  11025,
-  16000,
-  22050,
-  32000,
-  44100,
-  48000,
-  64000,
-  88200,
-  96000,
-  176400,
-  192000,
-  384000,
-  0
-};
+static int OSSSampleRateList[] = {5512,  8000,  11025, 16000,  22050,  32000,  44100, 48000,
+                                  64000, 88200, 96000, 176400, 192000, 384000, 0};
 #endif
 
 CAESinkOSS::CAESinkOSS()
@@ -71,7 +56,7 @@ void CAESinkOSS::Register()
   AE::CAESinkFactory::RegisterSink(entry);
 }
 
-IAESink* CAESinkOSS::Create(std::string &device, AEAudioFormat& desiredFormat)
+IAESink* CAESinkOSS::Create(std::string& device, AEAudioFormat& desiredFormat)
 {
   IAESink* sink = new CAESinkOSS();
   if (sink->Initialize(desiredFormat, device))
@@ -81,7 +66,7 @@ IAESink* CAESinkOSS::Create(std::string &device, AEAudioFormat& desiredFormat)
   return nullptr;
 }
 
-std::string CAESinkOSS::GetDeviceUse(const AEAudioFormat& format, const std::string &device)
+std::string CAESinkOSS::GetDeviceUse(const AEAudioFormat& format, const std::string& device)
 {
 #ifdef OSS4
   if (AE_IS_RAW(format.m_dataFormat))
@@ -101,7 +86,7 @@ std::string CAESinkOSS::GetDeviceUse(const AEAudioFormat& format, const std::str
   return device;
 }
 
-bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
+bool CAESinkOSS::Initialize(AEAudioFormat& format, std::string& device)
 {
   m_initFormat = format;
   format.m_channelLayout = GetChannelLayout(format);
@@ -115,7 +100,8 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
     m_fd = open(device.c_str(), O_WRONLY, 0);
   if (m_fd == -1)
   {
-    CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to open the audio device: %s", device.c_str());
+    CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to open the audio device: %s",
+              device.c_str());
     return false;
   }
 
@@ -123,7 +109,8 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
   if (ioctl(m_fd, SNDCTL_DSP_GETFMTS, &format_mask) == -1)
   {
     close(m_fd);
-    CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to get supported formats, assuming AFMT_S16_NE");
+    CLog::Log(LOGERROR,
+              "CAESinkOSS::Initialize - Failed to get supported formats, assuming AFMT_S16_NE");
     return false;
   }
 
@@ -133,12 +120,12 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
 
   int oss_fmt = 0;
 #ifdef AFMT_FLOAT
-  if ((format.m_dataFormat == AE_FMT_FLOAT) && (format_mask & AFMT_FLOAT ))
+  if ((format.m_dataFormat == AE_FMT_FLOAT) && (format_mask & AFMT_FLOAT))
     oss_fmt = AFMT_FLOAT;
   else
 #endif
 #ifdef AFMT_S32_NE
-  if ((format.m_dataFormat == AE_FMT_S32NE) && (format_mask & AFMT_S32_NE))
+      if ((format.m_dataFormat == AE_FMT_S32NE) && (format_mask & AFMT_S32_NE))
     oss_fmt = AFMT_S32_NE;
   else if ((format.m_dataFormat == AE_FMT_S32BE) && (format_mask & AFMT_S32_BE))
     oss_fmt = AFMT_S32_BE;
@@ -146,15 +133,15 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
     oss_fmt = AFMT_S32_LE;
   else
 #endif
-  if ((format.m_dataFormat == AE_FMT_S16NE) && (format_mask & AFMT_S16_NE))
+      if ((format.m_dataFormat == AE_FMT_S16NE) && (format_mask & AFMT_S16_NE))
     oss_fmt = AFMT_S16_NE;
   else if ((format.m_dataFormat == AE_FMT_S16BE) && (format_mask & AFMT_S16_BE))
     oss_fmt = AFMT_S16_BE;
   else if ((format.m_dataFormat == AE_FMT_S16LE) && (format_mask & AFMT_S16_LE))
     oss_fmt = AFMT_S16_LE;
-  else if ((format.m_dataFormat == AE_FMT_U8   ) && (format_mask & AFMT_U8    ))
+  else if ((format.m_dataFormat == AE_FMT_U8) && (format_mask & AFMT_U8))
     oss_fmt = AFMT_U8;
-  else if (((format.m_dataFormat == AE_FMT_RAW)     ) && (format_mask & AFMT_AC3   ))
+  else if (((format.m_dataFormat == AE_FMT_RAW)) && (format_mask & AFMT_AC3))
   {
     oss_fmt = AFMT_AC3;
     format.m_dataFormat = AE_FMT_S16NE;
@@ -167,11 +154,13 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
   }
   else
   {
-    CLog::Log(LOGINFO, "CAESinkOSS::Initialize - Your hardware does not support %s, trying other formats", CAEUtil::DataFormatToStr(format.m_dataFormat));
+    CLog::Log(LOGINFO,
+              "CAESinkOSS::Initialize - Your hardware does not support %s, trying other formats",
+              CAEUtil::DataFormatToStr(format.m_dataFormat));
 
     /* fallback to the best supported format */
 #ifdef AFMT_FLOAT
-    if (format_mask & AFMT_FLOAT )
+    if (format_mask & AFMT_FLOAT)
     {
       oss_fmt = AFMT_FLOAT;
       format.m_dataFormat = AE_FMT_FLOAT;
@@ -179,7 +168,7 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
     else
 #endif
 #ifdef AFMT_S32_NE
-    if (format_mask & AFMT_S32_NE)
+        if (format_mask & AFMT_S32_NE)
     {
       oss_fmt = AFMT_S32_NE;
       format.m_dataFormat = AE_FMT_S32NE;
@@ -196,7 +185,7 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
     }
     else
 #endif
-    if (format_mask & AFMT_S16_NE)
+        if (format_mask & AFMT_S16_NE)
     {
       oss_fmt = AFMT_S16_NE;
       format.m_dataFormat = AE_FMT_S16NE;
@@ -211,19 +200,20 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
       oss_fmt = AFMT_S16_LE;
       format.m_dataFormat = AE_FMT_S16LE;
     }
-    else if (format_mask & AFMT_U8    )
+    else if (format_mask & AFMT_U8)
     {
       oss_fmt = AFMT_U8;
       format.m_dataFormat = AE_FMT_U8;
     }
     else
     {
-      CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to find a suitable native output format, will try to use AE_FMT_S16NE anyway");
-      oss_fmt             = AFMT_S16_NE;
+      CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to find a suitable native output "
+                          "format, will try to use AE_FMT_S16NE anyway");
+      oss_fmt = AFMT_S16_NE;
       format.m_dataFormat = AE_FMT_S16NE;
 #ifdef OSS4
       /* dont use cooked if we did not find a native format, OSS might be able to convert */
-      useCooked           = false;
+      useCooked = false;
 #endif
     }
   }
@@ -240,7 +230,8 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
   if (ioctl(m_fd, SNDCTL_DSP_SETFMT, &oss_fmt) == -1)
   {
     close(m_fd);
-    CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to set the data format (%s)", CAEUtil::DataFormatToStr(format.m_dataFormat));
+    CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to set the data format (%s)",
+              CAEUtil::DataFormatToStr(format.m_dataFormat));
     return false;
   }
 
@@ -250,7 +241,8 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
   for (int ch = format.m_channelLayout.Count(); ch < 9; ++ch)
   {
     oss_ch = ch;
-    if (ioctl(m_fd, SNDCTL_DSP_CHANNELS, &oss_ch) != -1 && oss_ch >= (int)format.m_channelLayout.Count())
+    if (ioctl(m_fd, SNDCTL_DSP_CHANNELS, &oss_ch) != -1 &&
+        oss_ch >= (int)format.m_channelLayout.Count())
     {
       found = true;
       break;
@@ -258,7 +250,9 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
   }
 
   if (!found)
-    CLog::Log(LOGWARNING, "CAESinkOSS::Initialize - Failed to access the number of channels required, falling back");
+    CLog::Log(
+        LOGWARNING,
+        "CAESinkOSS::Initialize - Failed to access the number of channels required, falling back");
 
 #if defined(TARGET_FREEBSD)
   /* fix hdmi 8 channels order */
@@ -275,29 +269,48 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
   for (unsigned int i = 0; i < format.m_channelLayout.Count(); ++i)
     switch (format.m_channelLayout[i])
     {
-      case AE_CH_FL : order = (order << 4) | CHID_L  ; break;
-      case AE_CH_FR : order = (order << 4) | CHID_R  ; break;
-      case AE_CH_FC : order = (order << 4) | CHID_C  ; break;
-      case AE_CH_LFE: order = (order << 4) | CHID_LFE; break;
-      case AE_CH_SL : order = (order << 4) | CHID_LS ; break;
-      case AE_CH_SR : order = (order << 4) | CHID_RS ; break;
-      case AE_CH_BL : order = (order << 4) | CHID_LR ; break;
-      case AE_CH_BR : order = (order << 4) | CHID_RR ; break;
+    case AE_CH_FL:
+      order = (order << 4) | CHID_L;
+      break;
+    case AE_CH_FR:
+      order = (order << 4) | CHID_R;
+      break;
+    case AE_CH_FC:
+      order = (order << 4) | CHID_C;
+      break;
+    case AE_CH_LFE:
+      order = (order << 4) | CHID_LFE;
+      break;
+    case AE_CH_SL:
+      order = (order << 4) | CHID_LS;
+      break;
+    case AE_CH_SR:
+      order = (order << 4) | CHID_RS;
+      break;
+    case AE_CH_BL:
+      order = (order << 4) | CHID_LR;
+      break;
+    case AE_CH_BR:
+      order = (order << 4) | CHID_RR;
+      break;
 
-      default:
-        continue;
+    default:
+      continue;
     }
 
   if (ioctl(m_fd, SNDCTL_DSP_SET_CHNORDER, &order) == -1)
   {
     if (ioctl(m_fd, SNDCTL_DSP_GET_CHNORDER, &order) == -1)
     {
-      CLog::Log(LOGWARNING, "CAESinkOSS::Initialize - Failed to get the channel order, assuming CHNORDER_NORMAL");
+      CLog::Log(
+          LOGWARNING,
+          "CAESinkOSS::Initialize - Failed to get the channel order, assuming CHNORDER_NORMAL");
     }
   }
 #endif
 
-  int tmp = (CAEUtil::DataFormatToBits(format.m_dataFormat) >> 3) * format.m_channelLayout.Count() * OSS_FRAMES;
+  int tmp = (CAEUtil::DataFormatToBits(format.m_dataFormat) >> 3) * format.m_channelLayout.Count() *
+            OSS_FRAMES;
   int pos = 0;
   while ((tmp & 0x1) == 0x0)
   {
@@ -325,9 +338,10 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
     return false;
   }
 
-  format.m_sampleRate    = oss_sr;
-  format.m_frameSize     = (CAEUtil::DataFormatToBits(format.m_dataFormat) >> 3) * format.m_channelLayout.Count();
-  format.m_frames        = bi.fragsize / format.m_frameSize;
+  format.m_sampleRate = oss_sr;
+  format.m_frameSize =
+      (CAEUtil::DataFormatToBits(format.m_dataFormat) >> 3) * format.m_channelLayout.Count();
+  format.m_frames = bi.fragsize / format.m_frameSize;
 
   m_device = device;
   m_format = format;
@@ -412,7 +426,7 @@ void CAESinkOSS::GetDelay(AEDelayStatus& status)
   status.SetDelay((double)delay / (m_format.m_frameSize * m_format.m_sampleRate));
 }
 
-unsigned int CAESinkOSS::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
+unsigned int CAESinkOSS::AddPackets(uint8_t** data, unsigned int frames, unsigned int offset)
 {
   int size = frames * m_format.m_frameSize;
   if (m_fd == -1)
@@ -421,7 +435,7 @@ unsigned int CAESinkOSS::AddPackets(uint8_t **data, unsigned int frames, unsigne
     return INT_MAX;
   }
 
-  void *buffer = data[0]+offset*m_format.m_frameSize;
+  void* buffer = data[0] + offset * m_format.m_frameSize;
   int wrote = write(m_fd, buffer, size);
   if (wrote < 0)
   {
@@ -437,21 +451,21 @@ void CAESinkOSS::Drain()
   if (m_fd == -1)
     return;
 
-  if(ioctl(m_fd, SNDCTL_DSP_SYNC, NULL) == -1)
+  if (ioctl(m_fd, SNDCTL_DSP_SYNC, NULL) == -1)
   {
     CLog::Log(LOGERROR, "CAESinkOSS::Drain - Draining the Sink failed");
   }
 }
 
-void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
+void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList& list, bool force)
 {
   int mixerfd;
-  const char * mixerdev = "/dev/mixer";
+  const char* mixerdev = "/dev/mixer";
 
   if ((mixerfd = open(mixerdev, O_RDWR, 0)) == -1)
   {
-    CLog::Log(LOGNOTICE,
-	  "CAESinkOSS::EnumerateDevicesEx - No OSS mixer device present: %s", mixerdev);
+    CLog::Log(LOGNOTICE, "CAESinkOSS::EnumerateDevicesEx - No OSS mixer device present: %s",
+              mixerdev);
     return;
   }
 
@@ -460,7 +474,7 @@ void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
   if (ioctl(mixerfd, SNDCTL_SYSINFO, &sysinfo) == -1)
   {
     // hardware not supported
-	// OSSv4 required ?
+    // OSSv4 required ?
     close(mixerfd);
     return;
   }
@@ -484,8 +498,8 @@ void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
 
     info.m_dataFormats.push_back(AE_FMT_S16NE);
     info.m_dataFormats.push_back(AE_FMT_S32NE);
-    if (info.m_displayName.find("HDMI") != std::string::npos
-    ||  info.m_displayName.find("DisplayPort") != std::string::npos)
+    if (info.m_displayName.find("HDMI") != std::string::npos ||
+        info.m_displayName.find("DisplayPort") != std::string::npos)
     {
       info.m_deviceType = AE_DEVTYPE_HDMI;
       info.m_streamTypes.push_back(CAEStreamInfo::STREAM_TYPE_AC3);
@@ -517,19 +531,18 @@ void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
     oss_audioinfo ainfo;
     memset(&ainfo, 0, sizeof(ainfo));
     ainfo.dev = i;
-    if (ioctl(mixerfd, SNDCTL_AUDIOINFO, &ainfo) != -1) {
+    if (ioctl(mixerfd, SNDCTL_AUDIOINFO, &ainfo) != -1)
+    {
 #if 0
       if (ainfo.oformats & AFMT_S32_LE)
         info.m_dataFormats.push_back(AE_FMT_S32LE);
       if (ainfo.oformats & AFMT_S16_LE)
         info.m_dataFormats.push_back(AE_FMT_S16LE);
 #endif
-      for (int j = 0;
-        j < ainfo.max_channels && AE_CH_NULL != OSSChannelMap[j];
-        ++j)
-          info.m_channels += OSSChannelMap[j];
+      for (int j = 0; j < ainfo.max_channels && AE_CH_NULL != OSSChannelMap[j]; ++j)
+        info.m_channels += OSSChannelMap[j];
 
-      for (int *rate = OSSSampleRateList; *rate != 0; ++rate)
+      for (int* rate = OSSSampleRateList; *rate != 0; ++rate)
         if (*rate >= ainfo.min_rate && *rate <= ainfo.max_rate)
           info.m_sampleRates.push_back(*rate);
     }
@@ -539,4 +552,3 @@ void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
 #endif
   close(mixerfd);
 }
-

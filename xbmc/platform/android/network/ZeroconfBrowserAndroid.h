@@ -69,8 +69,10 @@ protected:
   std::vector<ZeroconfService> doGetFoundServices();
   bool doResolveService(ZeroconfService& fr_service, double f_timeout);
 
-  void addDiscoveredService(CZeroconfBrowserAndroidDiscover* browser, const CZeroconfBrowser::ZeroconfService& fcr_service);
-  void removeDiscoveredService(CZeroconfBrowserAndroidDiscover* browser, const CZeroconfBrowser::ZeroconfService& fcr_service);
+  void addDiscoveredService(CZeroconfBrowserAndroidDiscover* browser,
+                            const CZeroconfBrowser::ZeroconfService& fcr_service);
+  void removeDiscoveredService(CZeroconfBrowserAndroidDiscover* browser,
+                               const CZeroconfBrowser::ZeroconfService& fcr_service);
 
 private:
   jni::CJNINsdManager m_manager;
@@ -82,6 +84,8 @@ private:
   tBrowserMap m_service_browsers;
   //tDiscoveredServicesMap maps browsers to their discovered services + a ref-count for each service
   //ref-count is needed, because a service might pop up more than once, if there's more than one network-iface
-  typedef std::map<CZeroconfBrowserAndroidDiscover*, std::vector<std::pair<ZeroconfService, unsigned int> > > tDiscoveredServicesMap;
+  typedef std::map<CZeroconfBrowserAndroidDiscover*,
+                   std::vector<std::pair<ZeroconfService, unsigned int>>>
+      tDiscoveredServicesMap;
   tDiscoveredServicesMap m_discovered_services;
 };

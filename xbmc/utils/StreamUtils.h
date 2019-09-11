@@ -13,5 +13,5 @@
 class StreamUtils
 {
 public:
-  static int GetCodecPriority(const std::string &codec);
+  static int GetCodecPriority(const std::string& codec);
 };

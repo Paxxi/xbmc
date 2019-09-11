@@ -46,7 +46,7 @@ void thread_id(CRYPTO_THREADID* tid)
   CRYPTO_THREADID_set_numeric(tid, GetCryptThreadId());
 }
 
-}
+} // namespace
 
 CryptThreadingInitializer::CryptThreadingInitializer()
 {

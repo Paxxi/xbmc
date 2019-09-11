@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include <stdint.h>
 #include <assert.h>
 #include <climits>
 #include <cmath>
+#include <stdint.h>
 
 #if defined(HAVE_SSE2) && defined(__SSE2__)
 #include <emmintrin.h>
@@ -21,18 +21,10 @@
 // avoid including system.h or other magic includes.
 // use 'gcc -dM -E - < /dev/null' or similar to find them.
 
-#if defined(__ppc__) || \
-    defined(__powerpc__) || \
-    defined(__mips__) || \
-    defined(__arm__) || \
-    defined(__aarch64__) || \
-    defined(__SH4__) || \
-    defined(__sparc__) || \
-    defined(__arc__) || \
-    defined(_M_ARM) || \
-    defined(__or1k__) || \
-    defined(__xtensa__)
-  #define DISABLE_MATHUTILS_ASM_ROUND_INT
+#if defined(__ppc__) || defined(__powerpc__) || defined(__mips__) || defined(__arm__) || \
+    defined(__aarch64__) || defined(__SH4__) || defined(__sparc__) || defined(__arc__) || \
+    defined(_M_ARM) || defined(__or1k__) || defined(__xtensa__)
+#define DISABLE_MATHUTILS_ASM_ROUND_INT
 #endif
 
 /*! \brief Math utility class.
@@ -43,10 +35,10 @@
  */
 namespace MathUtils
 {
-  // GCC does something stupid with optimization on release builds if we try
-  // to assert in these functions
+// GCC does something stupid with optimization on release builds if we try
+// to assert in these functions
 
-  /*! \brief Round to nearest integer.
+/*! \brief Round to nearest integer.
    This routine does fast rounding to the nearest integer.
    In the case (k + 0.5 for any integer k) we round up to k+1, and in all other
    instances we should return the nearest integer.
@@ -56,13 +48,13 @@ namespace MathUtils
    Make sure MathUtils::test() returns true for each implementation.
    \sa truncate_int, test
   */
-  inline int round_int(double x)
-  {
-    assert(x > static_cast<double>((int) (INT_MIN / 2)) - 1.0);
-    assert(x < static_cast<double>((int) (INT_MAX / 2)) + 1.0);
+inline int round_int(double x)
+{
+  assert(x > static_cast<double>((int)(INT_MIN / 2)) - 1.0);
+  assert(x < static_cast<double>((int)(INT_MAX / 2)) + 1.0);
 
 #if defined(DISABLE_MATHUTILS_ASM_ROUND_INT)
-    /* This implementation warrants some further explanation.
+  /* This implementation warrants some further explanation.
      *
      * First, a couple of notes on rounding:
      * 1) C casts from float/double to integer round towards zero.
@@ -111,76 +103,77 @@ namespace MathUtils
      *    The representation once the offset is applied has equal or greater
      *    precision than the input, so the addition does not cause rounding.
      */
-    return ((unsigned int) (x + 2147483648.5)) - 0x80000000;
+  return ((unsigned int)(x + 2147483648.5)) - 0x80000000;
 
 #else
-    const float round_to_nearest = 0.5f;
-    int i;
+  const float round_to_nearest = 0.5f;
+  int i;
 #if defined(HAVE_SSE2) && defined(__SSE2__)
-    const float round_dn_to_nearest = 0.4999999f;
-    i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest)) : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
+  const float round_dn_to_nearest = 0.4999999f;
+  i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest))
+              : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
 
 #elif defined(TARGET_WINDOWS)
-    __asm
-    {
+  __asm
+  {
       fld x
       fadd st, st (0)
       fadd round_to_nearest
       fistp i
       sar i, 1
-    }
-
-#else
-    __asm__ __volatile__ (
-      "fadd %%st\n\t"
-      "fadd %%st(1)\n\t"
-      "fistpl %0\n\t"
-      "sarl $1, %0\n"
-      : "=m"(i) : "u"(round_to_nearest), "t"(x) : "st"
-    );
-
-#endif
-    return i;
-#endif
   }
 
-  /*! \brief Truncate to nearest integer.
+#else
+  __asm__ __volatile__("fadd %%st\n\t"
+                       "fadd %%st(1)\n\t"
+                       "fistpl %0\n\t"
+                       "sarl $1, %0\n"
+                       : "=m"(i)
+                       : "u"(round_to_nearest), "t"(x)
+                       : "st");
+
+#endif
+  return i;
+#endif
+}
+
+/*! \brief Truncate to nearest integer.
    This routine does fast truncation to an integer.
    It should simply drop the fractional portion of the floating point number.
 
    Make sure MathUtils::test() returns true for each implementation.
    \sa round_int, test
   */
-  inline int truncate_int(double x)
-  {
-    assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
-    assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
-    return static_cast<int>(x);
-  }
+inline int truncate_int(double x)
+{
+  assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
+  assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
+  return static_cast<int>(x);
+}
 
-  inline int64_t abs(int64_t a)
-  {
-    return (a < 0) ? -a : a;
-  }
+inline int64_t abs(int64_t a)
+{
+  return (a < 0) ? -a : a;
+}
 
-  inline unsigned bitcount(unsigned v)
-  {
-    unsigned c = 0;
-    for (c = 0; v; c++)
-      v &= v - 1; // clear the least significant bit set
-    return c;
-  }
+inline unsigned bitcount(unsigned v)
+{
+  unsigned c = 0;
+  for (c = 0; v; c++)
+    v &= v - 1; // clear the least significant bit set
+  return c;
+}
 
-  inline void hack()
-  {
-    // stupid hack to keep compiler from dropping these
-    // functions as unused
-    MathUtils::round_int(0.0);
-    MathUtils::truncate_int(0.0);
-    MathUtils::abs(0);
-  }
+inline void hack()
+{
+  // stupid hack to keep compiler from dropping these
+  // functions as unused
+  MathUtils::round_int(0.0);
+  MathUtils::truncate_int(0.0);
+  MathUtils::abs(0);
+}
 
-  /**
+/**
    * Compare two floating-point numbers for equality and regard them
    * as equal if their difference is below a given threshold.
    *
@@ -188,11 +181,11 @@ namespace MathUtils
    * the standard operator== since very close numbers might have different
    * representations.
    */
-  template<typename FloatT>
-  inline bool FloatEquals(FloatT f1, FloatT f2, FloatT maxDelta)
-  {
-    return (std::abs(f2 - f1) < maxDelta);
-  }
+template<typename FloatT>
+inline bool FloatEquals(FloatT f1, FloatT f2, FloatT maxDelta)
+{
+  return (std::abs(f2 - f1) < maxDelta);
+}
 
 #if 0
   /*! \brief test routine for round_int and truncate_int
@@ -212,4 +205,3 @@ namespace MathUtils
   }
 #endif
 } // namespace MathUtils
-

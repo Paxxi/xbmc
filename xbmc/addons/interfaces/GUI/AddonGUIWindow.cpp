@@ -20,10 +20,10 @@
 #include "utils/URIUtils.h"
 #include "utils/log.h"
 
-#define CONTROL_BTNVIEWASICONS  2
-#define CONTROL_BTNSORTBY       3
-#define CONTROL_BTNSORTASC      4
-#define CONTROL_LABELFILES      12
+#define CONTROL_BTNVIEWASICONS 2
+#define CONTROL_BTNSORTBY 3
+#define CONTROL_BTNSORTASC 4
+#define CONTROL_LABELFILES 12
 
 using namespace KODI::MESSAGING;
 using namespace ADDON;
@@ -34,18 +34,18 @@ namespace GUI
 {
 
 CGUIAddonWindow::CGUIAddonWindow(int id, const std::string& strXML, CAddon* addon)
- : CGUIMediaWindow(id, strXML.c_str())
- , CBOnInit{nullptr}
- , CBOnFocus{nullptr}
- , CBOnClick{nullptr}
- , CBOnAction{nullptr}
- , m_clientHandle{nullptr}
- , m_iWindowId(id)
- , m_iOldWindowId(0)
- , m_bModal(false)
- , m_bIsDialog(false)
- , m_actionEvent(true)
- , m_addon(addon)
+  : CGUIMediaWindow(id, strXML.c_str())
+  , CBOnInit{nullptr}
+  , CBOnFocus{nullptr}
+  , CBOnClick{nullptr}
+  , CBOnAction{nullptr}
+  , m_clientHandle{nullptr}
+  , m_iWindowId(id)
+  , m_iOldWindowId(0)
+  , m_bModal(false)
+  , m_bIsDialog(false)
+  , m_actionEvent(true)
+  , m_addon(addon)
 
 {
   m_loadType = LOAD_ON_GUI_INIT;
@@ -53,7 +53,7 @@ CGUIAddonWindow::CGUIAddonWindow(int id, const std::string& strXML, CAddon* addo
 
 CGUIAddonWindow::~CGUIAddonWindow(void) = default;
 
-bool CGUIAddonWindow::OnAction(const CAction &action)
+bool CGUIAddonWindow::OnAction(const CAction& action)
 {
   // Let addon decide whether it wants to handle action first
   if (CBOnAction && CBOnAction(m_clientHandle, action.GetID()))
@@ -69,97 +69,98 @@ bool CGUIAddonWindow::OnMessage(CGUIMessage& message)
   //! what this side of things should be doing
   switch (message.GetMessage())
   {
-    case GUI_MSG_WINDOW_DEINIT:
-    {
-      return CGUIMediaWindow::OnMessage(message);
-    }
-    break;
+  case GUI_MSG_WINDOW_DEINIT:
+  {
+    return CGUIMediaWindow::OnMessage(message);
+  }
+  break;
 
-    case GUI_MSG_WINDOW_INIT:
-    {
-      CGUIMediaWindow::OnMessage(message);
-      if (CBOnInit)
-        CBOnInit(m_clientHandle);
+  case GUI_MSG_WINDOW_INIT:
+  {
+    CGUIMediaWindow::OnMessage(message);
+    if (CBOnInit)
+      CBOnInit(m_clientHandle);
 
+    return true;
+  }
+  break;
+
+  case GUI_MSG_SETFOCUS:
+  {
+    if (m_viewControl.HasControl(message.GetControlId()) &&
+        m_viewControl.GetCurrentControl() != message.GetControlId())
+    {
+      m_viewControl.SetFocused();
       return true;
     }
-    break;
-
-    case GUI_MSG_SETFOCUS:
+    // check if our focused control is one of our category buttons
+    int iControl = message.GetControlId();
+    if (CBOnFocus)
     {
-      if (m_viewControl.HasControl(message.GetControlId()) && m_viewControl.GetCurrentControl() != message.GetControlId())
-      {
-        m_viewControl.SetFocused();
-        return true;
-      }
-      // check if our focused control is one of our category buttons
-      int iControl = message.GetControlId();
-      if (CBOnFocus)
-      {
-        CBOnFocus(m_clientHandle, iControl);
-      }
+      CBOnFocus(m_clientHandle, iControl);
     }
-    break;
+  }
+  break;
 
-    case GUI_MSG_FOCUSED:
+  case GUI_MSG_FOCUSED:
+  {
+    if (HasID(message.GetSenderId()) && CBOnFocus)
     {
-      if (HasID(message.GetSenderId()) && CBOnFocus)
-      {
-        CBOnFocus(m_clientHandle, message.GetControlId());
-      }
+      CBOnFocus(m_clientHandle, message.GetControlId());
     }
-    break;
+  }
+  break;
 
-    case GUI_MSG_CLICKED:
+  case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+    // Handle Sort/View internally. Scripters shouldn't use ID 2, 3 or 4.
+    if (iControl == CONTROL_BTNSORTASC) // sort asc
     {
-      int iControl=message.GetSenderId();
-      // Handle Sort/View internally. Scripters shouldn't use ID 2, 3 or 4.
-      if (iControl == CONTROL_BTNSORTASC) // sort asc
-      {
-        CLog::Log(LOGINFO, "WindowXML: Internal asc/dsc button not implemented");
-        /*if (m_guiState.get())
+      CLog::Log(LOGINFO, "WindowXML: Internal asc/dsc button not implemented");
+      /*if (m_guiState.get())
           m_guiState->SetNextSortOrder();
         UpdateFileList();*/
-        return true;
-      }
-      else if (iControl == CONTROL_BTNSORTBY) // sort by
-      {
-        CLog::Log(LOGINFO, "WindowXML: Internal sort button not implemented");
-        /*if (m_guiState.get())
+      return true;
+    }
+    else if (iControl == CONTROL_BTNSORTBY) // sort by
+    {
+      CLog::Log(LOGINFO, "WindowXML: Internal sort button not implemented");
+      /*if (m_guiState.get())
           m_guiState->SetNextSortMethod();
         UpdateFileList();*/
-        return true;
-      }
+      return true;
+    }
 
-      if (CBOnClick && iControl && iControl != this->GetID())
+    if (CBOnClick && iControl && iControl != this->GetID())
+    {
+      CGUIControl* controlClicked = this->GetControl(iControl);
+
+      // The old python way used to check list AND SELECITEM method or if its a button, radiobutton.
+      // Its done this way for now to allow other controls without a python version like togglebutton to still raise a onAction event
+      if (controlClicked) // Will get problems if we the id is not on the window and we try to do GetControlType on it. So check to make sure it exists
       {
-        CGUIControl* controlClicked = this->GetControl(iControl);
-
-        // The old python way used to check list AND SELECITEM method or if its a button, radiobutton.
-        // Its done this way for now to allow other controls without a python version like togglebutton to still raise a onAction event
-        if (controlClicked) // Will get problems if we the id is not on the window and we try to do GetControlType on it. So check to make sure it exists
+        if ((controlClicked->IsContainer() && (message.GetParam1() == ACTION_SELECT_ITEM ||
+                                               message.GetParam1() == ACTION_MOUSE_LEFT_CLICK)) ||
+            !controlClicked->IsContainer())
         {
-          if ((controlClicked->IsContainer() && (message.GetParam1() == ACTION_SELECT_ITEM ||
-                                                 message.GetParam1() == ACTION_MOUSE_LEFT_CLICK)) ||
-                                                 !controlClicked->IsContainer())
-          {
-            if (CBOnClick(m_clientHandle, iControl))
-              return true;
-          }
-          else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_MOUSE_RIGHT_CLICK)
-          {
-//            PyXBMCAction* inf = new PyXBMCAction;
-//            inf->pObject = Action_FromAction(CAction(ACTION_CONTEXT_MENU));
-//            inf->pCallbackWindow = pCallbackWindow;
-//
-//            // acquire lock?
-//            PyXBMC_AddPendingCall(Py_XBMC_Event_OnAction, inf);
-//            PulseActionEvent();
-          }
+          if (CBOnClick(m_clientHandle, iControl))
+            return true;
+        }
+        else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_MOUSE_RIGHT_CLICK)
+        {
+          //            PyXBMCAction* inf = new PyXBMCAction;
+          //            inf->pObject = Action_FromAction(CAction(ACTION_CONTEXT_MENU));
+          //            inf->pCallbackWindow = pCallbackWindow;
+          //
+          //            // acquire lock?
+          //            PyXBMC_AddPendingCall(Py_XBMC_Event_OnAction, inf);
+          //            PulseActionEvent();
         }
       }
     }
-    break;
+  }
+  break;
   }
 
   return CGUIMediaWindow::OnMessage(message);
@@ -201,13 +202,13 @@ void CGUIAddonWindow::AddItem(CFileItemPtr fileItem, int itemPosition)
   {
     m_vecItems->Add(fileItem);
   }
-  else if (itemPosition <  -1 &&  !(itemPosition-1 < m_vecItems->Size()))
+  else if (itemPosition < -1 && !(itemPosition - 1 < m_vecItems->Size()))
   {
-    m_vecItems->AddFront(fileItem,0);
+    m_vecItems->AddFront(fileItem, 0);
   }
   else
   {
-    m_vecItems->AddFront(fileItem,itemPosition);
+    m_vecItems->AddFront(fileItem, itemPosition);
   }
   m_viewControl.SetItems(*m_vecItems);
   UpdateButtons();
@@ -237,7 +238,8 @@ int CGUIAddonWindow::GetListSize()
 
 CFileItemPtr CGUIAddonWindow::GetListItem(int position)
 {
-  if (position < 0 || position >= m_vecItems->Size()) return CFileItemPtr();
+  if (position < 0 || position >= m_vecItems->Size())
+    return CFileItemPtr();
   return m_vecItems->Get(position);
 }
 
@@ -249,7 +251,7 @@ void CGUIAddonWindow::ClearList()
   UpdateButtons();
 }
 
-void CGUIAddonWindow::GetContextButtons(int itemNumber, CContextButtons &buttons)
+void CGUIAddonWindow::GetContextButtons(int itemNumber, CContextButtons& buttons)
 {
   // maybe on day we can make an easy way to do this context menu
   // with out this method overriding the MediaWindow version, it will display 'Add to Favourites'
@@ -266,7 +268,7 @@ void CGUIAddonWindow::PulseActionEvent()
   m_actionEvent.Set();
 }
 
-bool CGUIAddonWindow::OnClick(int iItem, const std::string &player)
+bool CGUIAddonWindow::OnClick(int iItem, const std::string& player)
 {
   // Hook Over calling  CGUIMediaWindow::OnClick(iItem) results in it trying to PLAY the file item
   // which if its not media is BAD and 99 out of 100 times undesirable.
@@ -284,7 +286,7 @@ void CGUIAddonWindow::SetupShares()
 }
 
 CGUIAddonWindowDialog::CGUIAddonWindowDialog(int id, const std::string& strXML, CAddon* addon)
-: CGUIAddonWindow(id,strXML,addon)
+  : CGUIAddonWindow(id, strXML, addon)
 {
   m_bRunning = false;
   m_bIsDialog = true;
@@ -292,7 +294,7 @@ CGUIAddonWindowDialog::CGUIAddonWindowDialog(int id, const std::string& strXML, 
 
 CGUIAddonWindowDialog::~CGUIAddonWindowDialog(void) = default;
 
-bool CGUIAddonWindowDialog::OnMessage(CGUIMessage &message)
+bool CGUIAddonWindowDialog::OnMessage(CGUIMessage& message)
 {
   if (message.GetMessage() == GUI_MSG_WINDOW_DEINIT)
     return CGUIWindow::OnMessage(message);
@@ -303,7 +305,8 @@ bool CGUIAddonWindowDialog::OnMessage(CGUIMessage &message)
 void CGUIAddonWindowDialog::Show(bool show /* = true */)
 {
   unsigned int iCount = CServiceBroker::GetWinSystem()->GetGfxContext().exit();
-  CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ADDON_DIALOG, 1, show ? 1 : 0, static_cast<void*>(this));
+  CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ADDON_DIALOG, 1, show ? 1 : 0,
+                                               static_cast<void*>(this));
   CServiceBroker::GetWinSystem()->GetGfxContext().restore(iCount);
 }
 
@@ -332,7 +335,7 @@ void CGUIAddonWindowDialog::Show_Internal(bool show /* = true */)
   {
     m_bRunning = false;
 
-    CGUIMessage msg(GUI_MSG_WINDOW_DEINIT,0,0);
+    CGUIMessage msg(GUI_MSG_WINDOW_DEINIT, 0, 0);
     OnMessage(msg);
 
     CServiceBroker::GetGUI()->GetWindowManager().RemoveDialog(GetID());

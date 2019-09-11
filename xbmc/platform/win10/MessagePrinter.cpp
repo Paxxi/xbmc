@@ -30,8 +30,7 @@ int WINAPI MessageBox(void* hWnd, const char* lpText, const char* lpCaption, UIN
   auto wText = KODI::PLATFORM::WINDOWS::ToW(lpText);
   auto wCaption = KODI::PLATFORM::WINDOWS::ToW(lpCaption);
 
-  auto handler = winrt::Windows::UI::Core::DispatchedHandler([wText, wCaption]()
-  {
+  auto handler = winrt::Windows::UI::Core::DispatchedHandler([wText, wCaption]() {
     // Show the message dialog
     auto msg = winrt::Windows::UI::Popups::MessageDialog(wText, wCaption);
     // Set the command to be invoked when a user presses 'ESC'
@@ -42,7 +41,8 @@ int WINAPI MessageBox(void* hWnd, const char* lpText, const char* lpCaption, UIN
   if (coreWindow.Dispatcher().HasThreadAccess())
     handler();
   else
-    coreWindow.Dispatcher().RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, handler);
+    coreWindow.Dispatcher().RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal,
+                                     handler);
 
   return IDOK;
 }
@@ -62,7 +62,8 @@ void CMessagePrinter::DisplayError(const std::string& error)
   MessageBox(NULL, error.c_str(), CCompileInfo::GetAppName(), MB_OK | MB_ICONERROR);
 }
 
-void CMessagePrinter::DisplayHelpMessage(const std::vector<std::pair<std::string, std::string>>& help)
+void CMessagePrinter::DisplayHelpMessage(
+    const std::vector<std::pair<std::string, std::string>>& help)
 {
   //very crude implementation, pretty it up when possible
   std::string message;

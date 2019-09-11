@@ -15,13 +15,16 @@ class CVariant;
 class CAnnounceReceiver : public ANNOUNCEMENT::IAnnouncer
 {
 public:
-  static  CAnnounceReceiver* GetInstance();
+  static CAnnounceReceiver* GetInstance();
 
-  void    Initialize();
-  void    DeInitialize();
+  void Initialize();
+  void DeInitialize();
 
-  virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data);
+  virtual void Announce(ANNOUNCEMENT::AnnouncementFlag flag,
+                        const char* sender,
+                        const char* message,
+                        const CVariant& data);
 
 private:
-  CAnnounceReceiver() {};
+  CAnnounceReceiver(){};
 };

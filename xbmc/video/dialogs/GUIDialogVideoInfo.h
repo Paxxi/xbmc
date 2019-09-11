@@ -14,15 +14,14 @@
 
 class CVideoDatabase;
 
-class CGUIDialogVideoInfo :
-      public CGUIDialog
+class CGUIDialogVideoInfo : public CGUIDialog
 {
 public:
   CGUIDialogVideoInfo(void);
   ~CGUIDialogVideoInfo(void) override;
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
-  void SetMovie(const CFileItem *item);
+  bool OnAction(const CAction& action) override;
+  void SetMovie(const CFileItem* item);
   bool NeedRefresh() const;
   bool RefreshAll() const;
   bool HasUpdatedThumb() const { return m_hasUpdatedThumb; };
@@ -33,26 +32,32 @@ public:
   const CFileItemList& CurrentDirectory() const { return *m_castList; };
   bool HasListItems() const override { return true; };
 
-  static void AddItemPathToFileBrowserSources(VECSOURCES &sources, const CFileItem &item);
+  static void AddItemPathToFileBrowserSources(VECSOURCES& sources, const CFileItem& item);
 
-  static int ManageVideoItem(const CFileItemPtr &item);
-  static bool UpdateVideoItemTitle(const CFileItemPtr &pItem);
-  static bool CanDeleteVideoItem(const CFileItemPtr &item);
-  static bool DeleteVideoItemFromDatabase(const CFileItemPtr &item, bool unavailable = false);
-  static bool DeleteVideoItem(const CFileItemPtr &item, bool unavailable = false);
+  static int ManageVideoItem(const CFileItemPtr& item);
+  static bool UpdateVideoItemTitle(const CFileItemPtr& pItem);
+  static bool CanDeleteVideoItem(const CFileItemPtr& item);
+  static bool DeleteVideoItemFromDatabase(const CFileItemPtr& item, bool unavailable = false);
+  static bool DeleteVideoItem(const CFileItemPtr& item, bool unavailable = false);
 
-  static bool ManageMovieSets(const CFileItemPtr &item);
-  static bool GetMoviesForSet(const CFileItem *setItem, CFileItemList &originalMovies, CFileItemList &selectedMovies);
-  static bool GetSetForMovie(const CFileItem *movieItem, CFileItemPtr &selectedSet);
-  static bool SetMovieSet(const CFileItem *movieItem, const CFileItem *selectedSet);
+  static bool ManageMovieSets(const CFileItemPtr& item);
+  static bool GetMoviesForSet(const CFileItem* setItem,
+                              CFileItemList& originalMovies,
+                              CFileItemList& selectedMovies);
+  static bool GetSetForMovie(const CFileItem* movieItem, CFileItemPtr& selectedSet);
+  static bool SetMovieSet(const CFileItem* movieItem, const CFileItem* selectedSet);
 
-  static bool GetItemsForTag(const std::string &strHeading, const std::string &type, CFileItemList &items, int idTag = -1, bool showAll = true);
-  static bool AddItemsToTag(const CFileItemPtr &tagItem);
-  static bool RemoveItemsFromTag(const CFileItemPtr &tagItem);
+  static bool GetItemsForTag(const std::string& strHeading,
+                             const std::string& type,
+                             CFileItemList& items,
+                             int idTag = -1,
+                             bool showAll = true);
+  static bool AddItemsToTag(const CFileItemPtr& tagItem);
+  static bool RemoveItemsFromTag(const CFileItemPtr& tagItem);
 
-  static bool ManageVideoItemArtwork(const CFileItemPtr &item, const MediaType &type);
+  static bool ManageVideoItemArtwork(const CFileItemPtr& item, const MediaType& type);
 
-  static std::string GetLocalizedVideoType(const std::string &strType);
+  static std::string GetLocalizedVideoType(const std::string& strType);
 
   static void ShowFor(const CFileItem& item);
 
@@ -86,16 +91,16 @@ protected:
   void OnSetUserrating() const;
   void PlayTrailer();
 
-  static bool UpdateVideoItemSortTitle(const CFileItemPtr &pItem);
-  static bool LinkMovieToTvShow(const CFileItemPtr &item, bool bRemove, CVideoDatabase &database);
+  static bool UpdateVideoItemSortTitle(const CFileItemPtr& pItem);
+  static bool LinkMovieToTvShow(const CFileItemPtr& item, bool bRemove, CVideoDatabase& database);
 
   /*! \brief Pop up a fanart chooser. Does not utilise remote URLs.
    \param videoItem the item to choose fanart for.
    */
-  static bool OnGetFanart(const CFileItemPtr &videoItem);
+  static bool OnGetFanart(const CFileItemPtr& videoItem);
 
   CFileItemPtr m_movieItem;
-  CFileItemList *m_castList;
+  CFileItemList* m_castList;
   bool m_bViewReview = false;
   bool m_bRefresh = false;
   bool m_bRefreshAll = true;

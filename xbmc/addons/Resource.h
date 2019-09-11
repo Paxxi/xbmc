@@ -21,20 +21,20 @@ class CResource : public CAddon
 public:
   ~CResource() override = default;
 
-  virtual bool IsAllowed(const std::string &file) const = 0;
+  virtual bool IsAllowed(const std::string& file) const = 0;
 
-  virtual std::string GetFullPath(const std::string &filePath) const
+  virtual std::string GetFullPath(const std::string& filePath) const
   {
     return URIUtils::AddFileToFolder(GetResourcePath(), filePath);
   }
 
 protected:
-  explicit CResource(const AddonInfoPtr& addonInfo, TYPE addonType) : CAddon(addonInfo, addonType) {}
-
-  std::string GetResourcePath() const
+  explicit CResource(const AddonInfoPtr& addonInfo, TYPE addonType)
+    : CAddon(addonInfo, addonType)
   {
-    return URIUtils::AddFileToFolder(Path(), "resources");
   }
+
+  std::string GetResourcePath() const { return URIUtils::AddFileToFolder(Path(), "resources"); }
 };
 
-}
+} // namespace ADDON

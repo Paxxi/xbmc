@@ -10,7 +10,8 @@
 
 #include "DVDDemuxers/DVDDemux.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 }
 
@@ -24,17 +25,17 @@ class CDVDStreamInfo
 {
 public:
   CDVDStreamInfo();
-  CDVDStreamInfo(const CDVDStreamInfo &right, bool withextradata = true);
-  CDVDStreamInfo(const CDemuxStream &right, bool withextradata = true);
+  CDVDStreamInfo(const CDVDStreamInfo& right, bool withextradata = true);
+  CDVDStreamInfo(const CDemuxStream& right, bool withextradata = true);
 
   ~CDVDStreamInfo();
 
   void Clear(); // clears current information
-  bool Equal(const CDVDStreamInfo &right, bool withextradata);
-  bool Equal(const CDemuxStream &right, bool withextradata);
+  bool Equal(const CDVDStreamInfo& right, bool withextradata);
+  bool Equal(const CDemuxStream& right, bool withextradata);
 
-  void Assign(const CDVDStreamInfo &right, bool withextradata);
-  void Assign(const CDemuxStream &right, bool withextradata);
+  void Assign(const CDVDStreamInfo& right, bool withextradata);
+  void Assign(const CDemuxStream& right, bool withextradata);
 
   AVCodecID codec;
   StreamType type;
@@ -55,7 +56,7 @@ public:
   bool stills; // there may be odd still frames in video
   int level; // encoder level of the stream reported by the decoder. used to qualify hw decoders.
   int profile; // encoder profile of the stream reported by the decoder. used to qualify hw decoders.
-  bool ptsinvalid;  // pts cannot be trusted (avi's).
+  bool ptsinvalid; // pts cannot be trusted (avi's).
   bool forced_aspect; // aspect is forced from container
   int orientation; // orientation of the video in degrees counter clockwise
   int bitsperpixel;
@@ -78,7 +79,7 @@ public:
   // SUBTITLE
 
   // CODEC EXTRADATA
-  void*        extradata; // extra data for codec to use
+  void* extradata; // extra data for codec to use
   unsigned int extrasize; // size of extra data
   unsigned int codec_tag; // extra identifier hints for decoding
 
@@ -86,8 +87,8 @@ public:
   std::shared_ptr<DemuxCryptoSession> cryptoSession;
   std::shared_ptr<ADDON::IAddonProvider> externalInterfaces;
 
-  bool operator==(const CDVDStreamInfo& right)      { return Equal(right, true);}
-  bool operator!=(const CDVDStreamInfo& right)      { return !Equal(right, true);}
+  bool operator==(const CDVDStreamInfo& right) { return Equal(right, true); }
+  bool operator!=(const CDVDStreamInfo& right) { return !Equal(right, true); }
 
   CDVDStreamInfo& operator=(const CDVDStreamInfo& right)
   {
@@ -97,8 +98,8 @@ public:
     return *this;
   }
 
-  bool operator==(const CDemuxStream& right)      { return Equal( CDVDStreamInfo(right, true), true);}
-  bool operator!=(const CDemuxStream& right)      { return !Equal( CDVDStreamInfo(right, true), true);}
+  bool operator==(const CDemuxStream& right) { return Equal(CDVDStreamInfo(right, true), true); }
+  bool operator!=(const CDemuxStream& right) { return !Equal(CDVDStreamInfo(right, true), true); }
 
   CDVDStreamInfo& operator=(const CDemuxStream& right)
   {

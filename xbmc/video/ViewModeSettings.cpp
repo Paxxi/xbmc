@@ -24,19 +24,12 @@ struct ViewModeProperties
 
 /** The list of all the view modes along with their properties
  */
-static const ViewModeProperties viewModes[] =
-{
-  { 630,   ViewModeNormal },
-  { 631,   ViewModeZoom },
-  { 39008, ViewModeZoom120Width },
-  { 39009, ViewModeZoom110Width },
-  { 632,   ViewModeStretch4x3 },
-  { 633,   ViewModeWideZoom },
-  { 634,   ViewModeStretch16x9 },
-  { 644,   ViewModeStretch16x9Nonlin, HIDE_ITEM, HIDE_ITEM },
-  { 635,   ViewModeOriginal },
-  { 636,   ViewModeCustom, HIDE_ITEM }
-};
+static const ViewModeProperties viewModes[] = {
+    {630, ViewModeNormal},         {631, ViewModeZoom},
+    {39008, ViewModeZoom120Width}, {39009, ViewModeZoom110Width},
+    {632, ViewModeStretch4x3},     {633, ViewModeWideZoom},
+    {634, ViewModeStretch16x9},    {644, ViewModeStretch16x9Nonlin, HIDE_ITEM, HIDE_ITEM},
+    {635, ViewModeOriginal},       {636, ViewModeCustom, HIDE_ITEM}};
 
 #define NUMBER_OF_VIEW_MODES (sizeof(viewModes) / sizeof(viewModes[0]))
 
@@ -88,10 +81,13 @@ int CViewModeSettings::GetViewModeStringIndex(int viewMode)
 
 /** Fills the list with all visible view modes
  */
-void CViewModeSettings::ViewModesFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data)
+void CViewModeSettings::ViewModesFiller(std::shared_ptr<const CSetting> setting,
+                                        std::vector<IntegerSettingOption>& list,
+                                        int& current,
+                                        void* data)
 {
   // Add all appropriate view modes to the list control
-  for (const auto &item : viewModes)
+  for (const auto& item : viewModes)
   {
     if (!item.hideFromList)
       list.push_back(IntegerSettingOption(g_localizeStrings.Get(item.stringIndex), item.viewMode));

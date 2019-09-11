@@ -9,10 +9,10 @@
 #pragma once
 
 #include <atomic>
-#include <string>
-#include <set>
-#include <vector>
 #include <map>
+#include <set>
+#include <string>
+#include <vector>
 
 #ifdef TARGET_WINDOWS
 #undef SetPort // WIN32INCLUDES this is defined as SetPortA in WinSpool.h which is being included _somewhere_
@@ -27,60 +27,63 @@ class CZeroconfBrowser
 public:
   class ZeroconfService
   {
-    public:
-      typedef std::map<std::string, std::string> tTxtRecordMap;
+  public:
+    typedef std::map<std::string, std::string> tTxtRecordMap;
 
-      ZeroconfService() = default;
-      ZeroconfService(const std::string& fcr_name, const std::string& fcr_type, const std::string& fcr_domain);
+    ZeroconfService() = default;
+    ZeroconfService(const std::string& fcr_name,
+                    const std::string& fcr_type,
+                    const std::string& fcr_domain);
 
-      /// easy conversion to string and back (used in czeronfdiretory to store this service)
-      ///@{
-      static std::string toPath(const ZeroconfService& fcr_service);
-      static ZeroconfService fromPath(const std::string& fcr_path); //throws std::runtime_error on failure
-      ///@}
+    /// easy conversion to string and back (used in czeronfdiretory to store this service)
+    ///@{
+    static std::string toPath(const ZeroconfService& fcr_service);
+    static ZeroconfService fromPath(
+        const std::string& fcr_path); //throws std::runtime_error on failure
+    ///@}
 
-      /// general access methods
-      ///@{
-      void SetName(const std::string& fcr_name);
-      const std::string& GetName() const {return m_name;}
+    /// general access methods
+    ///@{
+    void SetName(const std::string& fcr_name);
+    const std::string& GetName() const { return m_name; }
 
-      void SetType(const std::string& fcr_type);
-      const std::string& GetType() const {return m_type;}
+    void SetType(const std::string& fcr_type);
+    const std::string& GetType() const { return m_type; }
 
-      void SetDomain(const std::string& fcr_domain);
-      const std::string& GetDomain() const {return m_domain;}
-      ///@}
+    void SetDomain(const std::string& fcr_domain);
+    const std::string& GetDomain() const { return m_domain; }
+    ///@}
 
-      /// access methods needed during resolve
-      ///@{
-      void SetIP(const std::string& fcr_ip);
-      const std::string& GetIP() const {return m_ip;}
+    /// access methods needed during resolve
+    ///@{
+    void SetIP(const std::string& fcr_ip);
+    const std::string& GetIP() const { return m_ip; }
 
-      void SetHostname(const std::string& fcr_hostname);
-      const std::string& GetHostname() const {return m_hostname;}
+    void SetHostname(const std::string& fcr_hostname);
+    const std::string& GetHostname() const { return m_hostname; }
 
-      void SetPort(int f_port);
-      int GetPort() const {return m_port;}
+    void SetPort(int f_port);
+    int GetPort() const { return m_port; }
 
-      void SetTxtRecords(const tTxtRecordMap& txt_records);
-      const tTxtRecordMap& GetTxtRecords() const { return m_txtrecords_map;}
-      ///@}
-    private:
-      //3 entries below identify a service
-      std::string m_name;
-      std::string m_type;
-      std::string m_domain;
+    void SetTxtRecords(const tTxtRecordMap& txt_records);
+    const tTxtRecordMap& GetTxtRecords() const { return m_txtrecords_map; }
+    ///@}
+  private:
+    //3 entries below identify a service
+    std::string m_name;
+    std::string m_type;
+    std::string m_domain;
 
-      //2 entries below store 1 ip:port pair for this service
-      std::string m_ip;
-      int        m_port = 0;
+    //2 entries below store 1 ip:port pair for this service
+    std::string m_ip;
+    int m_port = 0;
 
-      //used for mdns in case dns resolution fails
-      //we store the hostname and resolve with mdns functions again
-      std::string m_hostname;
+    //used for mdns in case dns resolution fails
+    //we store the hostname and resolve with mdns functions again
+    std::string m_hostname;
 
-      //1 entry below stores the txt-record as a key value map for this service
-      tTxtRecordMap m_txtrecords_map;
+    //1 entry below stores the txt-record as a key value map for this service
+    tTxtRecordMap m_txtrecords_map;
   };
 
   // starts browsing
@@ -112,7 +115,7 @@ public:
   // release the singleton; (save to call multiple times)
   static void ReleaseInstance();
   // returns false if ReleaseInstance() was called befores
-  static bool IsInstantiated() { return  smp_instance != 0; }
+  static bool IsInstantiated() { return smp_instance != 0; }
 
   virtual void ProcessResults() {}
 
@@ -160,18 +163,23 @@ private:
 #include <iostream>
 
 //debugging helper
-inline std::ostream& operator<<(std::ostream& o, const CZeroconfBrowser::ZeroconfService& service){
+inline std::ostream& operator<<(std::ostream& o, const CZeroconfBrowser::ZeroconfService& service)
+{
   o << "(" << service.GetName() << "|" << service.GetType() << "|" << service.GetDomain() << ")";
   return o;
 }
 
 //inline methods
-inline bool operator<(CZeroconfBrowser::ZeroconfService const& fcr_lhs, CZeroconfBrowser::ZeroconfService const& fcr_rhs)
+inline bool operator<(CZeroconfBrowser::ZeroconfService const& fcr_lhs,
+                      CZeroconfBrowser::ZeroconfService const& fcr_rhs)
 {
-  return (fcr_lhs.GetName() +  fcr_lhs.GetType() + fcr_lhs.GetDomain() < fcr_rhs.GetName() + fcr_rhs.GetType() + fcr_rhs.GetDomain());
+  return (fcr_lhs.GetName() + fcr_lhs.GetType() + fcr_lhs.GetDomain() <
+          fcr_rhs.GetName() + fcr_rhs.GetType() + fcr_rhs.GetDomain());
 }
 
-inline bool operator==(CZeroconfBrowser::ZeroconfService const& fcr_lhs, CZeroconfBrowser::ZeroconfService const& fcr_rhs)
+inline bool operator==(CZeroconfBrowser::ZeroconfService const& fcr_lhs,
+                       CZeroconfBrowser::ZeroconfService const& fcr_rhs)
 {
-  return (fcr_lhs.GetName() == fcr_rhs.GetName() && fcr_lhs.GetType() == fcr_rhs.GetType() && fcr_lhs.GetDomain() == fcr_rhs.GetDomain() );
+  return (fcr_lhs.GetName() == fcr_rhs.GetName() && fcr_lhs.GetType() == fcr_rhs.GetType() &&
+          fcr_lhs.GetDomain() == fcr_rhs.GetDomain());
 }

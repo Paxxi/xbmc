@@ -20,43 +20,49 @@ class CFileItem;
 
 namespace PVR
 {
-  class CGUIWindowPVRRecordingsBase : public CGUIWindowPVRBase
+class CGUIWindowPVRRecordingsBase : public CGUIWindowPVRBase
+{
+public:
+  CGUIWindowPVRRecordingsBase(bool bRadio, int id, const std::string& xmlFile);
+  ~CGUIWindowPVRRecordingsBase() override;
+
+  void OnWindowLoaded() override;
+  bool OnMessage(CGUIMessage& message) override;
+  bool OnAction(const CAction& action) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
+  bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
+  bool Update(const std::string& strDirectory, bool updateFilterPath = true) override;
+  void UpdateButtons() override;
+
+protected:
+  std::string GetDirectoryPath(void) override;
+  void OnPrepareFileItems(CFileItemList& items) override;
+  bool GetFilteredItems(const std::string& filter, CFileItemList& items) override;
+
+private:
+  bool OnContextButtonDeleteAll(CFileItem* item, CONTEXT_BUTTON button);
+
+  CVideoThumbLoader m_thumbLoader;
+  CVideoDatabase m_database;
+  bool m_bShowDeletedRecordings;
+  CPVRSettings m_settings;
+};
+
+class CGUIWindowPVRTVRecordings : public CGUIWindowPVRRecordingsBase
+{
+public:
+  CGUIWindowPVRTVRecordings()
+    : CGUIWindowPVRRecordingsBase(false, WINDOW_TV_RECORDINGS, "MyPVRRecordings.xml")
   {
-  public:
-    CGUIWindowPVRRecordingsBase(bool bRadio, int id, const std::string &xmlFile);
-    ~CGUIWindowPVRRecordingsBase() override;
+  }
+};
 
-    void OnWindowLoaded() override;
-    bool OnMessage(CGUIMessage& message) override;
-    bool OnAction(const CAction &action) override;
-    void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
-    bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
-    bool Update(const std::string &strDirectory, bool updateFilterPath = true) override;
-    void UpdateButtons() override;
-
-  protected:
-    std::string GetDirectoryPath(void) override;
-    void OnPrepareFileItems(CFileItemList &items) override;
-    bool GetFilteredItems(const std::string &filter, CFileItemList &items) override;
-
-  private:
-    bool OnContextButtonDeleteAll(CFileItem *item, CONTEXT_BUTTON button);
-
-    CVideoThumbLoader m_thumbLoader;
-    CVideoDatabase m_database;
-    bool m_bShowDeletedRecordings;
-    CPVRSettings m_settings;
-  };
-
-  class CGUIWindowPVRTVRecordings : public CGUIWindowPVRRecordingsBase
+class CGUIWindowPVRRadioRecordings : public CGUIWindowPVRRecordingsBase
+{
+public:
+  CGUIWindowPVRRadioRecordings()
+    : CGUIWindowPVRRecordingsBase(true, WINDOW_RADIO_RECORDINGS, "MyPVRRecordings.xml")
   {
-  public:
-    CGUIWindowPVRTVRecordings() : CGUIWindowPVRRecordingsBase(false, WINDOW_TV_RECORDINGS, "MyPVRRecordings.xml") {}
-  };
-
-  class CGUIWindowPVRRadioRecordings : public CGUIWindowPVRRecordingsBase
-  {
-  public:
-    CGUIWindowPVRRadioRecordings() : CGUIWindowPVRRecordingsBase(true, WINDOW_RADIO_RECORDINGS, "MyPVRRecordings.xml") {}
-  };
-}
+  }
+};
+} // namespace PVR

@@ -17,7 +17,7 @@ namespace ADDON
 {
 
 CScreenSaver::CScreenSaver(BinaryAddonBasePtr addonBase)
- : IAddonInstanceHandler(ADDON_INSTANCE_SCREENSAVER, addonBase)
+  : IAddonInstanceHandler(ADDON_INSTANCE_SCREENSAVER, addonBase)
 {
   m_name = Name();
   m_presets = CSpecialProtocol::TranslatePath(Path());
@@ -29,7 +29,8 @@ CScreenSaver::CScreenSaver(BinaryAddonBasePtr addonBase)
   m_struct.props.device = CServiceBroker::GetWinSystem()->GetHWContext();
   m_struct.props.width = CServiceBroker::GetWinSystem()->GetGfxContext().GetWidth();
   m_struct.props.height = CServiceBroker::GetWinSystem()->GetGfxContext().GetHeight();
-  m_struct.props.pixelRatio = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo().fPixelRatio;
+  m_struct.props.pixelRatio =
+      CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo().fPixelRatio;
   m_struct.props.name = m_name.c_str();
   m_struct.props.presets = m_presets.c_str();
   m_struct.props.profile = m_profile.c_str();
@@ -38,7 +39,8 @@ CScreenSaver::CScreenSaver(BinaryAddonBasePtr addonBase)
 
   /* Open the class "kodi::addon::CInstanceScreensaver" on add-on side */
   if (CreateInstance(&m_struct) != ADDON_STATUS_OK)
-    CLog::Log(LOGFATAL, "Screensaver: failed to create instance for '%s' and not usable!", ID().c_str());
+    CLog::Log(LOGFATAL, "Screensaver: failed to create instance for '%s' and not usable!",
+              ID().c_str());
 }
 
 CScreenSaver::~CScreenSaver()

@@ -23,8 +23,8 @@ using namespace GAME;
 const int CDialogGameOSDHelp::CONTROL_ID_HELP_TEXT = 1101;
 const int CDialogGameOSDHelp::CONTROL_ID_GAME_CONTROLLER = 1102;
 
-CDialogGameOSDHelp::CDialogGameOSDHelp(CDialogGameOSD &dialog) :
-  m_dialog(dialog)
+CDialogGameOSDHelp::CDialogGameOSDHelp(CDialogGameOSD& dialog)
+  : m_dialog(dialog)
 {
 }
 
@@ -49,7 +49,8 @@ void CDialogGameOSDHelp::OnInitWindow()
     if (controller)
     {
       //! @todo Activate controller for all game controller controls
-      CGUIGameController* guiController = dynamic_cast<CGUIGameController*>(m_dialog.GetControl(CONTROL_ID_GAME_CONTROLLER));
+      CGUIGameController* guiController =
+          dynamic_cast<CGUIGameController*>(m_dialog.GetControl(CONTROL_ID_GAME_CONTROLLER));
       if (guiController != nullptr)
         guiController->ActivateController(controller);
     }
@@ -58,13 +59,12 @@ void CDialogGameOSDHelp::OnInitWindow()
 
 bool CDialogGameOSDHelp::IsVisible()
 {
-  return IsVisible(CONTROL_ID_HELP_TEXT) ||
-         IsVisible(CONTROL_ID_GAME_CONTROLLER);
+  return IsVisible(CONTROL_ID_HELP_TEXT) || IsVisible(CONTROL_ID_GAME_CONTROLLER);
 }
 
 bool CDialogGameOSDHelp::IsVisible(int windowId)
 {
-  CGUIControl *control = m_dialog.GetControl(windowId);
+  CGUIControl* control = m_dialog.GetControl(windowId);
   if (control != nullptr)
     return control->IsVisible();
 

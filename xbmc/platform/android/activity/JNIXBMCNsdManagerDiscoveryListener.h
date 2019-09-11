@@ -14,12 +14,17 @@
 namespace jni
 {
 
-class CJNIXBMCNsdManagerDiscoveryListener : public CJNINsdManagerDiscoveryListener, public CJNIInterfaceImplem<CJNIXBMCNsdManagerDiscoveryListener>
+class CJNIXBMCNsdManagerDiscoveryListener
+  : public CJNINsdManagerDiscoveryListener,
+    public CJNIInterfaceImplem<CJNIXBMCNsdManagerDiscoveryListener>
 {
 public:
   CJNIXBMCNsdManagerDiscoveryListener();
   CJNIXBMCNsdManagerDiscoveryListener(const CJNIXBMCNsdManagerDiscoveryListener& other);
-  explicit CJNIXBMCNsdManagerDiscoveryListener(const jni::jhobject &object) : CJNIBase(object) {}
+  explicit CJNIXBMCNsdManagerDiscoveryListener(const jni::jhobject& object)
+    : CJNIBase(object)
+  {
+  }
   virtual ~CJNIXBMCNsdManagerDiscoveryListener();
 
   static void RegisterNatives(JNIEnv* env);
@@ -38,9 +43,14 @@ protected:
   static void _onDiscoveryStopped(JNIEnv* env, jobject thiz, jstring serviceType);
   static void _onServiceFound(JNIEnv* env, jobject thiz, jobject serviceInfo);
   static void _onServiceLost(JNIEnv* env, jobject thiz, jobject serviceInfo);
-  static void _onStartDiscoveryFailed(JNIEnv* env, jobject thiz, jstring serviceType, jint errorCode);
-  static void _onStopDiscoveryFailed(JNIEnv* env, jobject thiz, jstring serviceType, jint errorCode);
+  static void _onStartDiscoveryFailed(JNIEnv* env,
+                                      jobject thiz,
+                                      jstring serviceType,
+                                      jint errorCode);
+  static void _onStopDiscoveryFailed(JNIEnv* env,
+                                     jobject thiz,
+                                     jstring serviceType,
+                                     jint errorCode);
 };
 
-}
-
+} // namespace jni

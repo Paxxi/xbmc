@@ -25,7 +25,7 @@ void CPosixMountProvider::Initialize()
   CLog::Log(LOGDEBUG, "Selected Posix mount as storage provider");
 }
 
-void CPosixMountProvider::GetDrives(VECSOURCES &drives)
+void CPosixMountProvider::GetDrives(VECSOURCES& drives)
 {
   std::vector<std::string> result;
 
@@ -47,24 +47,22 @@ void CPosixMountProvider::GetDrives(VECSOURCES &drives)
       {
         bool accepted = false;
         std::string mountStr = reMount.GetReplaceString("\\1");
-        std::string fsStr    = reMount.GetReplaceString("\\2");
+        std::string fsStr = reMount.GetReplaceString("\\2");
         const char* mount = mountStr.c_str();
-        const char* fs    = fsStr.c_str();
+        const char* fs = fsStr.c_str();
 
         // Here we choose which filesystems are approved
-        if (strcmp(fs, "fuseblk") == 0 || strcmp(fs, "vfat") == 0
-            || strcmp(fs, "ext2") == 0 || strcmp(fs, "ext3") == 0
-            || strcmp(fs, "reiserfs") == 0 || strcmp(fs, "xfs") == 0
-            || strcmp(fs, "ntfs-3g") == 0 || strcmp(fs, "iso9660") == 0
-            || strcmp(fs, "exfat") == 0
-            || strcmp(fs, "fusefs") == 0 || strcmp(fs, "hfs") == 0)
+        if (strcmp(fs, "fuseblk") == 0 || strcmp(fs, "vfat") == 0 || strcmp(fs, "ext2") == 0 ||
+            strcmp(fs, "ext3") == 0 || strcmp(fs, "reiserfs") == 0 || strcmp(fs, "xfs") == 0 ||
+            strcmp(fs, "ntfs-3g") == 0 || strcmp(fs, "iso9660") == 0 || strcmp(fs, "exfat") == 0 ||
+            strcmp(fs, "fusefs") == 0 || strcmp(fs, "hfs") == 0)
           accepted = true;
 
         // Ignore root
         if (strcmp(mount, "/") == 0)
           accepted = false;
 
-        if(accepted)
+        if (accepted)
           result.push_back(mount);
       }
     }
@@ -94,18 +92,19 @@ std::vector<std::string> CPosixMountProvider::GetDiskUsage()
   FILE* pipe = popen("df -h", "r");
 #endif
 
-  static const char* excludes[] = {"rootfs","devtmpfs","tmpfs","none","/dev/loop", "udev", NULL};
+  static const char* excludes[] = {"rootfs",    "devtmpfs", "tmpfs", "none",
+                                   "/dev/loop", "udev",     NULL};
 
   if (pipe)
   {
     while (fgets(line, sizeof(line) - 1, pipe))
     {
-      bool ok=true;
-      for (int i=0;excludes[i];++i)
+      bool ok = true;
+      for (int i = 0; excludes[i]; ++i)
       {
-        if (strstr(line,excludes[i]))
+        if (strstr(line, excludes[i]))
         {
-          ok=false;
+          ok = false;
           break;
         }
       }
@@ -134,7 +133,7 @@ bool CPosixMountProvider::Eject(const std::string& mountpath)
   return false;
 }
 
-bool CPosixMountProvider::PumpDriveChangeEvents(IStorageEventsCallback *callback)
+bool CPosixMountProvider::PumpDriveChangeEvents(IStorageEventsCallback* callback)
 {
   VECSOURCES drives;
   GetRemovableDrives(drives);

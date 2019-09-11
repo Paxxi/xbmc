@@ -12,56 +12,55 @@
 
 #define MAX_CHANNEL_LABEL 45
 
-const char* g_ChannelLabels[] =
-{
-  "Unused",           // kAudioChannelLabel_Unused
-  "Left",             // kAudioChannelLabel_Left
-  "Right",            // kAudioChannelLabel_Right
-  "Center",           // kAudioChannelLabel_Center
-  "LFE",              // kAudioChannelLabel_LFEScreen
-  "Side Left",        // kAudioChannelLabel_LeftSurround
-  "Side Right",       // kAudioChannelLabel_RightSurround
-  "Left Center",      // kAudioChannelLabel_LeftCenter
-  "Right Center",     // kAudioChannelLabel_RightCenter
-  "Back Center",      // kAudioChannelLabel_CenterSurround
-  "Back Left",        // kAudioChannelLabel_LeftSurroundDirect
-  "Back Right",       // kAudioChannelLabel_RightSurroundDirect
-  "Top Center",       // kAudioChannelLabel_TopCenterSurround
-  "Vertical Back Left",    // kAudioChannelLabel_VerticalHeightLeft
-  "Vertical Back Center",  // kAudioChannelLabel_VerticalHeightCenter
-  "Vertical Back Right",   // kAudioChannelLabel_VerticalHeightRight
-  "Top Back Left",    // kAudioChannelLabel_VerticalHeightLeft
-  "Top Back Center",  // kAudioChannelLabel_VerticalHeightCenter
-  "Top Back Right",   // kAudioChannelLabel_VerticalHeightRight
+const char* g_ChannelLabels[] = {
+    "Unused", // kAudioChannelLabel_Unused
+    "Left", // kAudioChannelLabel_Left
+    "Right", // kAudioChannelLabel_Right
+    "Center", // kAudioChannelLabel_Center
+    "LFE", // kAudioChannelLabel_LFEScreen
+    "Side Left", // kAudioChannelLabel_LeftSurround
+    "Side Right", // kAudioChannelLabel_RightSurround
+    "Left Center", // kAudioChannelLabel_LeftCenter
+    "Right Center", // kAudioChannelLabel_RightCenter
+    "Back Center", // kAudioChannelLabel_CenterSurround
+    "Back Left", // kAudioChannelLabel_LeftSurroundDirect
+    "Back Right", // kAudioChannelLabel_RightSurroundDirect
+    "Top Center", // kAudioChannelLabel_TopCenterSurround
+    "Vertical Back Left", // kAudioChannelLabel_VerticalHeightLeft
+    "Vertical Back Center", // kAudioChannelLabel_VerticalHeightCenter
+    "Vertical Back Right", // kAudioChannelLabel_VerticalHeightRight
+    "Top Back Left", // kAudioChannelLabel_VerticalHeightLeft
+    "Top Back Center", // kAudioChannelLabel_VerticalHeightCenter
+    "Top Back Right", // kAudioChannelLabel_VerticalHeightRight
 
-  // gap
+    // gap
 
-  "unused19",  "unused20",  "unused21",  "unused22",  "unused23",  "unused24",  "unused25",
-  "unused26",  "unused27",  "unused28",  "unused29",  "unused30",  "unused31",  "unused32",
+    "unused19", "unused20", "unused21", "unused22", "unused23", "unused24", "unused25", "unused26",
+    "unused27", "unused28", "unused29", "unused30", "unused31", "unused32",
 
-  "Rear Left",        // kAudioChannelLabel_RearSurroundLeft
-  "Rear Right",       // kAudioChannelLabel_RearSurroundRight
-  "Left Wide",        // kAudioChannelLabel_LeftWide
-  "Right Wide",       // kAudioChannelLabel_RightWide
-  "LFE2",             // kAudioChannelLabel_LFE2
-  "Left Total",       // kAudioChannelLabel_LeftTotal
-  "Right Total",      // kAudioChannelLabel_RightTotal
-  "HearingImpaired",  // kAudioChannelLabel_HearingImpaired
-  "Narration",        // kAudioChannelLabel_Narration
-  "Mono",             // kAudioChannelLabel_Mono
-  "DialogCentricMix", // kAudioChannelLabel_DialogCentricMix
-  "CenterSurroundDirect", // kAudioChannelLabel_CenterSurroundDirect
-  "Haptic",           // kAudioChannelLabel_Haptic
+    "Rear Left", // kAudioChannelLabel_RearSurroundLeft
+    "Rear Right", // kAudioChannelLabel_RearSurroundRight
+    "Left Wide", // kAudioChannelLabel_LeftWide
+    "Right Wide", // kAudioChannelLabel_RightWide
+    "LFE2", // kAudioChannelLabel_LFE2
+    "Left Total", // kAudioChannelLabel_LeftTotal
+    "Right Total", // kAudioChannelLabel_RightTotal
+    "HearingImpaired", // kAudioChannelLabel_HearingImpaired
+    "Narration", // kAudioChannelLabel_Narration
+    "Mono", // kAudioChannelLabel_Mono
+    "DialogCentricMix", // kAudioChannelLabel_DialogCentricMix
+    "CenterSurroundDirect", // kAudioChannelLabel_CenterSurroundDirect
+    "Haptic", // kAudioChannelLabel_Haptic
 
 };
 
-CCoreAudioChannelLayout::CCoreAudioChannelLayout() :
-  m_pLayout(NULL)
+CCoreAudioChannelLayout::CCoreAudioChannelLayout()
+  : m_pLayout(NULL)
 {
 }
 
-CCoreAudioChannelLayout::CCoreAudioChannelLayout(AudioChannelLayout& layout) :
-m_pLayout(NULL)
+CCoreAudioChannelLayout::CCoreAudioChannelLayout(AudioChannelLayout& layout)
+  : m_pLayout(NULL)
 {
   CopyLayout(layout);
 }
@@ -73,7 +72,8 @@ CCoreAudioChannelLayout::~CCoreAudioChannelLayout()
 
 bool CCoreAudioChannelLayout::CopyLayout(AudioChannelLayout& layout)
 {
-  enum {
+  enum
+  {
     kVariableLengthArray_deprecated = 1
   };
 
@@ -84,7 +84,8 @@ bool CCoreAudioChannelLayout::CopyLayout(AudioChannelLayout& layout)
 
   OSStatus ret = 0;
   UInt32 channels = GetChannelCountForLayout(layout);
-  UInt32 size = sizeof(AudioChannelLayout) + (channels - kVariableLengthArray_deprecated) * sizeof(AudioChannelDescription);
+  UInt32 size = sizeof(AudioChannelLayout) +
+                (channels - kVariableLengthArray_deprecated) * sizeof(AudioChannelDescription);
 
   if (layout.mChannelLayoutTag == kAudioChannelLayoutTag_UseChannelDescriptions)
   {
@@ -96,9 +97,12 @@ bool CCoreAudioChannelLayout::CopyLayout(AudioChannelLayout& layout)
   {
     // Deconstruct the bitmap to get the layout
     UInt32 propSize = 0;
-    AudioFormatGetPropertyInfo(kAudioFormatProperty_ChannelLayoutForBitmap, sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize);
+    AudioFormatGetPropertyInfo(kAudioFormatProperty_ChannelLayoutForBitmap,
+                               sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize);
     m_pLayout = (AudioChannelLayout*)malloc(propSize);
-    ret = AudioFormatGetProperty(kAudioFormatProperty_ChannelLayoutForBitmap, sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize, m_pLayout);
+    ret = AudioFormatGetProperty(kAudioFormatProperty_ChannelLayoutForBitmap,
+                                 sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize,
+                                 m_pLayout);
     m_pLayout->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
   }
   else
@@ -106,10 +110,12 @@ bool CCoreAudioChannelLayout::CopyLayout(AudioChannelLayout& layout)
     // Convert the known layout to a custom layout
     UInt32 propSize = 0;
     AudioFormatGetPropertyInfo(kAudioFormatProperty_ChannelLayoutForTag,
-      sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag, &propSize);
+                               sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag,
+                               &propSize);
     m_pLayout = (AudioChannelLayout*)malloc(propSize);
     ret = AudioFormatGetProperty(kAudioFormatProperty_ChannelLayoutForTag,
-      sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag, &propSize, m_pLayout);
+                                 sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag,
+                                 &propSize, m_pLayout);
     m_pLayout->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
   }
 
@@ -118,7 +124,8 @@ bool CCoreAudioChannelLayout::CopyLayout(AudioChannelLayout& layout)
 
 bool CCoreAudioChannelLayout::CopyLayoutForStereo(UInt32 layout[2])
 {
-  enum {
+  enum
+  {
     kVariableLengthArray_deprecated = 1
   };
 
@@ -126,20 +133,21 @@ bool CCoreAudioChannelLayout::CopyLayoutForStereo(UInt32 layout[2])
   m_pLayout = NULL;
 
   UInt32 channels = 2;
-  UInt32 size = sizeof(AudioChannelLayout) + (channels - kVariableLengthArray_deprecated) * sizeof(AudioChannelDescription);
+  UInt32 size = sizeof(AudioChannelLayout) +
+                (channels - kVariableLengthArray_deprecated) * sizeof(AudioChannelDescription);
 
   m_pLayout = (AudioChannelLayout*)malloc(size);
   m_pLayout->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
-  m_pLayout->mNumberChannelDescriptions = 2;//stereo
+  m_pLayout->mNumberChannelDescriptions = 2; //stereo
 
   AudioChannelDescription desc;
   desc.mChannelFlags = kAudioChannelFlags_AllOff;
   memset(desc.mCoordinates, 0, sizeof(desc.mCoordinates));
 
-  desc.mChannelLabel = layout[0];// label for channel 1
+  desc.mChannelLabel = layout[0]; // label for channel 1
   m_pLayout->mChannelDescriptions[0] = desc;
 
-  desc.mChannelLabel = layout[1];// label for channel 2
+  desc.mChannelLabel = layout[1]; // label for channel 2
   m_pLayout->mChannelDescriptions[1] = desc;
   return true;
 }
@@ -179,7 +187,8 @@ const char* CCoreAudioChannelLayout::ChannelLabelToString(UInt32 label)
   return g_ChannelLabels[label];
 }
 
-const char* CCoreAudioChannelLayout::ChannelLayoutToString(AudioChannelLayout& layout, std::string& str)
+const char* CCoreAudioChannelLayout::ChannelLayoutToString(AudioChannelLayout& layout,
+                                                           std::string& str)
 {
   AudioChannelLayout* pLayout = NULL;
 
@@ -192,20 +201,23 @@ const char* CCoreAudioChannelLayout::ChannelLayoutToString(AudioChannelLayout& l
     // Deconstruct the bitmap to get the layout
     UInt32 propSize = 0;
     AudioFormatGetPropertyInfo(kAudioFormatProperty_ChannelLayoutForBitmap,
-      sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize);
+                               sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize);
     pLayout = (AudioChannelLayout*)calloc(propSize, 1);
     AudioFormatGetProperty(kAudioFormatProperty_ChannelLayoutForBitmap,
-      sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize, pLayout);
+                           sizeof(layout.mChannelBitmap), &layout.mChannelBitmap, &propSize,
+                           pLayout);
   }
   else
   {
     // Predefined layout 'tag'
     UInt32 propSize = 0;
     AudioFormatGetPropertyInfo(kAudioFormatProperty_ChannelLayoutForTag,
-      sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag, &propSize);
+                               sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag,
+                               &propSize);
     pLayout = (AudioChannelLayout*)calloc(propSize, 1);
     AudioFormatGetProperty(kAudioFormatProperty_ChannelLayoutForTag,
-      sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag, &propSize, pLayout);
+                           sizeof(layout.mChannelLayoutTag), &layout.mChannelLayoutTag, &propSize,
+                           pLayout);
   }
 
   for (UInt32 c = 0; c < pLayout->mNumberChannelDescriptions; c++)
@@ -241,20 +253,24 @@ bool CCoreAudioChannelLayout::AllChannelUnknown()
     // Deconstruct the bitmap to get the layout
     UInt32 propSize = 0;
     AudioFormatGetPropertyInfo(kAudioFormatProperty_ChannelLayoutForBitmap,
-      sizeof(m_pLayout->mChannelBitmap), &m_pLayout->mChannelBitmap, &propSize);
+                               sizeof(m_pLayout->mChannelBitmap), &m_pLayout->mChannelBitmap,
+                               &propSize);
     pLayout = (AudioChannelLayout*)calloc(propSize, 1);
     AudioFormatGetProperty(kAudioFormatProperty_ChannelLayoutForBitmap,
-      sizeof(m_pLayout->mChannelBitmap), &m_pLayout->mChannelBitmap, &propSize, pLayout);
+                           sizeof(m_pLayout->mChannelBitmap), &m_pLayout->mChannelBitmap, &propSize,
+                           pLayout);
   }
   else
   {
     // Predefined layout 'tag'
     UInt32 propSize = 0;
     AudioFormatGetPropertyInfo(kAudioFormatProperty_ChannelLayoutForTag,
-      sizeof(m_pLayout->mChannelLayoutTag), &m_pLayout->mChannelLayoutTag, &propSize);
+                               sizeof(m_pLayout->mChannelLayoutTag), &m_pLayout->mChannelLayoutTag,
+                               &propSize);
     pLayout = (AudioChannelLayout*)calloc(propSize, 1);
     AudioFormatGetProperty(kAudioFormatProperty_ChannelLayoutForTag,
-      sizeof(m_pLayout->mChannelLayoutTag), &m_pLayout->mChannelLayoutTag, &propSize, pLayout);
+                           sizeof(m_pLayout->mChannelLayoutTag), &m_pLayout->mChannelLayoutTag,
+                           &propSize, pLayout);
   }
 
   for (UInt32 c = 0; c < pLayout->mNumberChannelDescriptions; c++)
@@ -270,4 +286,3 @@ bool CCoreAudioChannelLayout::AllChannelUnknown()
 
   return true;
 }
-

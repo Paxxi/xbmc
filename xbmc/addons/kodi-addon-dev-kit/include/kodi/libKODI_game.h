@@ -8,28 +8,26 @@
 
 #pragma once
 
-#include "libXBMC_addon.h"
 #include "kodi_game_types.h"
+#include "libXBMC_addon.h"
 
-#include <string>
 #include <stdio.h>
+#include <string>
 
 #if defined(ANDROID)
-  #include <sys/stat.h>
+#include <sys/stat.h>
 #endif
 
 class CHelper_libKODI_game
 {
 public:
-  CHelper_libKODI_game(void) :
-    m_handle(nullptr),
-    m_callbacks(nullptr)
+  CHelper_libKODI_game(void)
+    : m_handle(nullptr)
+    , m_callbacks(nullptr)
   {
   }
 
-  ~CHelper_libKODI_game(void)
-  {
-  }
+  ~CHelper_libKODI_game(void) {}
 
   /*!
     * @brief Resolve all callback methods
@@ -42,7 +40,8 @@ public:
     if (m_handle)
       m_callbacks = (AddonInstance_Game*)m_handle->GameLib_RegisterMe(m_handle->addonData);
     if (!m_callbacks)
-      fprintf(stderr, "libKODI_game-ERROR: GameLib_RegisterMe can't get callback table from Kodi !!!\n");
+      fprintf(stderr,
+              "libKODI_game-ERROR: GameLib_RegisterMe can't get callback table from Kodi !!!\n");
 
     return m_callbacks != nullptr;
   }
@@ -52,10 +51,7 @@ public:
   /*!
    * \brief Requests the frontend to stop the current game
    */
-  void CloseGame(void)
-  {
-    m_callbacks->toKodi.CloseGame(m_callbacks->toKodi.kodiInstance);
-  }
+  void CloseGame(void) { m_callbacks->toKodi.CloseGame(m_callbacks->toKodi.kodiInstance); }
 
   /*!
    * \brief Create a stream for gameplay data
@@ -64,7 +60,7 @@ public:
    *
    * \return A stream handle, or NULL on failure
    */
-  void* OpenStream(const game_stream_properties &properties)
+  void* OpenStream(const game_stream_properties& properties)
   {
     return m_callbacks->toKodi.OpenStream(m_callbacks->toKodi.kodiInstance, &properties);
   }
@@ -81,9 +77,13 @@ public:
    *
    * \return True if buffer was set, false otherwise
    */
-  bool GetStreamBuffer(void *stream, unsigned int width, unsigned int height, game_stream_buffer &buffer)
+  bool GetStreamBuffer(void* stream,
+                       unsigned int width,
+                       unsigned int height,
+                       game_stream_buffer& buffer)
   {
-    return m_callbacks->toKodi.GetStreamBuffer(m_callbacks->toKodi.kodiInstance, stream, width, height, &buffer);
+    return m_callbacks->toKodi.GetStreamBuffer(m_callbacks->toKodi.kodiInstance, stream, width,
+                                               height, &buffer);
   }
 
   /*!
@@ -92,7 +92,7 @@ public:
    * \param stream The target stream
    * \param packet The data packet
    */
-  void AddStreamData(void *stream, const game_stream_packet &packet)
+  void AddStreamData(void* stream, const game_stream_packet& packet)
   {
     m_callbacks->toKodi.AddStreamData(m_callbacks->toKodi.kodiInstance, stream, &packet);
   }
@@ -103,7 +103,7 @@ public:
    * \param stream The stream handle
    * \param buffer The buffer returned from GetStreamBuffer()
    */
-  void ReleaseStreamBuffer(void *stream, game_stream_buffer &buffer)
+  void ReleaseStreamBuffer(void* stream, game_stream_buffer& buffer)
   {
     m_callbacks->toKodi.ReleaseStreamBuffer(m_callbacks->toKodi.kodiInstance, stream, &buffer);
   }
@@ -113,7 +113,7 @@ public:
    *
    * \param stream The stream to close
    */
-  void CloseStream(void *stream)
+  void CloseStream(void* stream)
   {
     m_callbacks->toKodi.CloseStream(m_callbacks->toKodi.kodiInstance, stream);
   }

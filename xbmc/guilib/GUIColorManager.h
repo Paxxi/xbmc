@@ -31,14 +31,14 @@ public:
   CGUIColorManager(void);
   virtual ~CGUIColorManager(void);
 
-  void Load(const std::string &colorFile);
+  void Load(const std::string& colorFile);
 
-  UTILS::Color GetColor(const std::string &color) const;
+  UTILS::Color GetColor(const std::string& color) const;
 
   void Clear();
 
 protected:
-  bool LoadXML(CXBMCTinyXML &xmlDoc);
+  bool LoadXML(CXBMCTinyXML& xmlDoc);
 
   std::map<std::string, UTILS::Color> m_colors;
 };

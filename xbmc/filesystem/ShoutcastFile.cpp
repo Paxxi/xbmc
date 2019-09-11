@@ -28,8 +28,9 @@ using namespace XFILE;
 using namespace MUSIC_INFO;
 using namespace KODI::MESSAGING;
 
-CShoutcastFile::CShoutcastFile() :
-  IFile(), CThread("ShoutcastFile")
+CShoutcastFile::CShoutcastFile()
+  : IFile()
+  , CThread("ShoutcastFile")
 {
   m_discarded = 0;
   m_currint = 0;
@@ -46,7 +47,7 @@ CShoutcastFile::~CShoutcastFile()
 
 int64_t CShoutcastFile::GetPosition()
 {
-  return m_file.GetPosition()-m_discarded;
+  return m_file.GetPosition() - m_discarded;
 }
 
 int64_t CShoutcastFile::GetLength()
@@ -57,7 +58,7 @@ int64_t CShoutcastFile::GetLength()
 bool CShoutcastFile::Open(const CURL& url)
 {
   CURL url2(url);
-  url2.SetProtocolOptions(url2.GetProtocolOptions()+"&noshout=true&Icy-MetaData=1");
+  url2.SetProtocolOptions(url2.GetProtocolOptions() + "&noshout=true&Icy-MetaData=1");
   url2.SetProtocol("http");
 
   bool result = m_file.Open(url2);
@@ -75,7 +76,7 @@ bool CShoutcastFile::Open(const CURL& url)
   m_metaint = atoi(m_file.GetHttpHeader().GetValue("icy-metaint").c_str());
   if (!m_metaint)
     m_metaint = -1;
-  m_buffer = new char[16*255];
+  m_buffer = new char[16 * 255];
   m_tagPos = 1;
   m_tagChange.Set();
 
@@ -90,26 +91,27 @@ ssize_t CShoutcastFile::Read(void* lpBuf, size_t uiBufSize)
   if (m_currint >= m_metaint && m_metaint > 0)
   {
     unsigned char header;
-    m_file.Read(&header,1);
-    ReadTruncated(m_buffer, header*16);
+    m_file.Read(&header, 1);
+    ReadTruncated(m_buffer, header * 16);
     if ((ExtractTagInfo(m_buffer)
-        // this is here to workaround issues caused by application posting callbacks to itself (3cf882d9)
-        // the callback will set an empty tag in the info manager item, while we think we have ours set
-        || m_file.GetPosition() < 10*m_metaint) && !m_tagPos)
+         // this is here to workaround issues caused by application posting callbacks to itself (3cf882d9)
+         // the callback will set an empty tag in the info manager item, while we think we have ours set
+         || m_file.GetPosition() < 10 * m_metaint) &&
+        !m_tagPos)
     {
       m_tagPos = m_file.GetPosition();
       m_tagChange.Set();
     }
-    m_discarded += header*16+1;
+    m_discarded += header * 16 + 1;
     m_currint = 0;
   }
 
   ssize_t toRead;
   if (m_metaint > 0)
-    toRead = std::min<size_t>(uiBufSize,m_metaint-m_currint);
+    toRead = std::min<size_t>(uiBufSize, m_metaint - m_currint);
   else
-    toRead = std::min<size_t>(uiBufSize,16*255);
-  toRead = m_file.Read(lpBuf,toRead);
+    toRead = std::min<size_t>(uiBufSize, 16 * 255);
+  toRead = m_file.Read(lpBuf, toRead);
   if (toRead > 0)
     m_currint += toRead;
   return toRead;
@@ -141,7 +143,7 @@ bool CShoutcastFile::ExtractTagInfo(const char* buf)
   else
     g_charsetConverter.unknownToUTF8(strBuffer);
 
-  bool result=false;
+  bool result = false;
 
   std::wstring wBuffer, wConverted;
   g_charsetConverter.utf8ToW(strBuffer, wBuffer, false);
@@ -167,7 +169,7 @@ void CShoutcastFile::ReadTruncated(char* buf2, int size)
   char* buf = buf2;
   while (size > 0)
   {
-    int read = m_file.Read(buf,size);
+    int read = m_file.Read(buf, size);
     size -= read;
     buf += read;
   }
@@ -193,7 +195,8 @@ void CShoutcastFile::Process()
       while (!m_bStop && m_cacheReader->GetPosition() < m_tagPos)
         Sleep(20);
       CSingleLock lock(m_tagSection);
-      CApplicationMessenger::GetInstance().PostMsg(TMSG_UPDATE_CURRENT_ITEM, 1,-1, static_cast<void*>(new CFileItem(m_tag)));
+      CApplicationMessenger::GetInstance().PostMsg(TMSG_UPDATE_CURRENT_ITEM, 1, -1,
+                                                   static_cast<void*>(new CFileItem(m_tag)));
       m_tagPos = 0;
     }
   }

@@ -33,12 +33,12 @@ enum EFIELDSYNC
 // Render Methods
 enum RenderMethods
 {
-  RENDER_METHOD_AUTO     = 0,
+  RENDER_METHOD_AUTO = 0,
   RENDER_METHOD_GLSL,
   RENDER_METHOD_SOFTWARE,
   RENDER_METHOD_D3D_PS,
   RENDER_METHOD_DXVA,
-  RENDER_OVERLAYS        = 99   // to retain compatibility
+  RENDER_OVERLAYS = 99 // to retain compatibility
 };
 
 struct VideoPicture;
@@ -51,22 +51,23 @@ public:
   virtual ~CBaseRenderer();
 
   // Player functions
-  virtual bool Configure(const VideoPicture &picture, float fps, unsigned int orientation) = 0;
+  virtual bool Configure(const VideoPicture& picture, float fps, unsigned int orientation) = 0;
   virtual bool IsConfigured() = 0;
-  virtual void AddVideoPicture(const VideoPicture &picture, int index) = 0;
-  virtual bool IsPictureHW(const VideoPicture &picture) { return false; };
+  virtual void AddVideoPicture(const VideoPicture& picture, int index) = 0;
+  virtual bool IsPictureHW(const VideoPicture& picture) { return false; };
   virtual void UnInit() = 0;
   virtual bool Flush(bool saveBuffers) { return false; };
-  virtual void SetBufferSize(int numBuffers) { }
-  virtual void ReleaseBuffer(int idx) { }
+  virtual void SetBufferSize(int numBuffers) {}
+  virtual void ReleaseBuffer(int idx) {}
   virtual bool NeedBuffer(int idx) { return false; }
   virtual bool IsGuiLayer() { return true; }
   // Render info, can be called before configure
   virtual CRenderInfo GetRenderInfo() { return CRenderInfo(); }
   virtual void Update() = 0;
-  virtual void RenderUpdate(int index, int index2, bool clear, unsigned int flags, unsigned int alpha) = 0;
+  virtual void RenderUpdate(
+      int index, int index2, bool clear, unsigned int flags, unsigned int alpha) = 0;
   virtual bool RenderCapture(CRenderCapture* capture) = 0;
-  virtual bool ConfigChanged(const VideoPicture &picture) = 0;
+  virtual bool ConfigChanged(const VideoPicture& picture) = 0;
 
   // Feature support
   virtual bool SupportsMultiPassRendering() = 0;
@@ -82,16 +83,24 @@ public:
   \param dest is the target rendering area honoring aspect ratio of source
   \param view is the entire target rendering area for the video (including black bars)
   */
-  void GetVideoRect(CRect &source, CRect &dest, CRect &view);
+  void GetVideoRect(CRect& source, CRect& dest, CRect& view);
   float GetAspectRatio() const;
 
-  static void SettingOptionsRenderMethodsFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
+  static void SettingOptionsRenderMethodsFiller(std::shared_ptr<const CSetting> setting,
+                                                std::vector<IntegerSettingOption>& list,
+                                                int& current,
+                                                void* data);
 
-  void SetVideoSettings(const CVideoSettings &settings);
+  void SetVideoSettings(const CVideoSettings& settings);
 
 protected:
-  void CalcNormalRenderRect(float offsetX, float offsetY, float width, float height,
-                            float inputFrameRatio, float zoomAmount, float verticalShift);
+  void CalcNormalRenderRect(float offsetX,
+                            float offsetY,
+                            float width,
+                            float height,
+                            float inputFrameRatio,
+                            float zoomAmount,
+                            float verticalShift);
   void CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height);
   virtual void ManageRenderArea();
   virtual void ReorderDrawPoints();
@@ -99,9 +108,10 @@ protected:
   void MarkDirty();
 
   //@todo drop those
-  void saveRotatedCoords();//saves the current state of m_rotatedDestCoords
-  void syncDestRectToRotatedPoints();//sync any changes of m_destRect to m_rotatedDestCoords
-  void restoreRotatedCoords();//restore the current state of m_rotatedDestCoords from saveRotatedCoords
+  void saveRotatedCoords(); //saves the current state of m_rotatedDestCoords
+  void syncDestRectToRotatedPoints(); //sync any changes of m_destRect to m_rotatedDestCoords
+  void
+  restoreRotatedCoords(); //restore the current state of m_rotatedDestCoords from saveRotatedCoords
 
   unsigned int m_sourceWidth = 720;
   unsigned int m_sourceHeight = 480;
@@ -113,7 +123,7 @@ protected:
   // with correct orientation based on m_renderOrientation
   // 0 - top left, 1 - top right, 2 - bottom right, 3 - bottom left
   CPoint m_rotatedDestCoords[4];
-  CPoint m_savedRotatedDestCoords[4];//saved points from saveRotatedCoords call
+  CPoint m_savedRotatedDestCoords[4]; //saved points from saveRotatedCoords call
 
   CRect m_destRect;
   CRect m_sourceRect;

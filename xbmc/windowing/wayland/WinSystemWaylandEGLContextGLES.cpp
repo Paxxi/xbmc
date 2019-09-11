@@ -38,7 +38,7 @@ bool CWinSystemWaylandEGLContextGLES::InitWindowSystem()
 
   bool general, deepColor;
   m_vaapiProxy.reset(::WAYLAND::VaapiProxyCreate());
-  ::WAYLAND::VaapiProxyConfig(m_vaapiProxy.get(),GetConnection()->GetDisplay(),
+  ::WAYLAND::VaapiProxyConfig(m_vaapiProxy.get(), GetConnection()->GetDisplay(),
                               m_eglContext.GetEGLDisplay());
   ::WAYLAND::VAAPIRegisterRender(m_vaapiProxy.get(), general, deepColor);
   if (general)
@@ -86,7 +86,7 @@ void CWinSystemWaylandEGLContextGLES::PresentRenderImpl(bool rendered)
   PresentFrame(rendered);
 }
 
-void CWinSystemWaylandEGLContextGLES::delete_CVaapiProxy::operator()(CVaapiProxy *p) const
+void CWinSystemWaylandEGLContextGLES::delete_CVaapiProxy::operator()(CVaapiProxy* p) const
 {
   ::WAYLAND::VaapiProxyDelete(p);
 }

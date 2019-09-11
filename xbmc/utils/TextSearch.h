@@ -21,17 +21,19 @@ typedef enum TextSearchDefault
 class CTextSearch final
 {
 public:
-  CTextSearch(const std::string &strSearchTerms, bool bCaseSensitive = false, TextSearchDefault defaultSearchMode = SEARCH_DEFAULT_OR);
+  CTextSearch(const std::string& strSearchTerms,
+              bool bCaseSensitive = false,
+              TextSearchDefault defaultSearchMode = SEARCH_DEFAULT_OR);
 
-  bool Search(const std::string &strHaystack) const;
+  bool Search(const std::string& strHaystack) const;
   bool IsValid(void) const;
 
 private:
-  static void GetAndCutNextTerm(std::string &strSearchTerm, std::string &strNextTerm);
-  void ExtractSearchTerms(const std::string &strSearchTerm, TextSearchDefault defaultSearchMode);
+  static void GetAndCutNextTerm(std::string& strSearchTerm, std::string& strNextTerm);
+  void ExtractSearchTerms(const std::string& strSearchTerm, TextSearchDefault defaultSearchMode);
 
-  bool                     m_bCaseSensitive;
-  std::vector<std::string>  m_AND;
-  std::vector<std::string>  m_OR;
-  std::vector<std::string>  m_NOT;
+  bool m_bCaseSensitive;
+  std::vector<std::string> m_AND;
+  std::vector<std::string> m_OR;
+  std::vector<std::string> m_NOT;
 };

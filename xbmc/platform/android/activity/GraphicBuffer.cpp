@@ -21,20 +21,20 @@
 #include "XBMCApp.h"
 #include "utils/log.h"
 
-DllGraphicBuffer *CGraphicBuffer::m_dll = NULL;
+DllGraphicBuffer* CGraphicBuffer::m_dll = NULL;
 
 /* Yanked from Android's hardware.h */
 enum
 {
-    HAL_PIXEL_FORMAT_RGBA_8888          = 1,
-    HAL_PIXEL_FORMAT_RGBX_8888          = 2,
-    HAL_PIXEL_FORMAT_RGB_888            = 3,
-    HAL_PIXEL_FORMAT_RGB_565            = 4,
-    HAL_PIXEL_FORMAT_BGRA_8888          = 5,
-    HAL_PIXEL_FORMAT_RGBA_5551          = 6,
-    HAL_PIXEL_FORMAT_RGBA_4444          = 7,
+  HAL_PIXEL_FORMAT_RGBA_8888 = 1,
+  HAL_PIXEL_FORMAT_RGBX_8888 = 2,
+  HAL_PIXEL_FORMAT_RGB_888 = 3,
+  HAL_PIXEL_FORMAT_RGB_565 = 4,
+  HAL_PIXEL_FORMAT_BGRA_8888 = 5,
+  HAL_PIXEL_FORMAT_RGBA_5551 = 6,
+  HAL_PIXEL_FORMAT_RGBA_4444 = 7,
 
-    /*
+  /*
      * Android YUV format:
      *
      * This format is exposed outside of the HAL to software
@@ -58,11 +58,14 @@ enum
      *   cb_offset = y_size + c_size
      *
      */
-    HAL_PIXEL_FORMAT_YV12   = 0x32315659, // YCrCb 4:2:0 Planar
+  HAL_PIXEL_FORMAT_YV12 = 0x32315659, // YCrCb 4:2:0 Planar
 };
 
-CGraphicBuffer::CGraphicBuffer(uint32_t width, uint32_t height, uint32_t format, gfxImageUsage usage):
-  m_handle(0)
+CGraphicBuffer::CGraphicBuffer(uint32_t width,
+                               uint32_t height,
+                               uint32_t format,
+                               gfxImageUsage usage)
+  : m_handle(0)
 {
   CLog::Log(LOGDEBUG, "CGraphicBuffer::CGraphicBuffer");
   if (!m_dll)
@@ -88,7 +91,7 @@ CGraphicBuffer::~CGraphicBuffer()
   }
 }
 
-bool CGraphicBuffer::Lock(gfxImageUsage aUsage, void **addr)
+bool CGraphicBuffer::Lock(gfxImageUsage aUsage, void** addr)
 {
   if (m_dll)
     return m_dll->GraphicBufferLock(m_handle, aUsage, addr) == 0;
@@ -113,12 +116,12 @@ uint32_t CGraphicBuffer::GetAndroidFormat(uint32_t format)
 {
   switch (format)
   {
-    case XB_FMT_A8R8G8B8:
-      return HAL_PIXEL_FORMAT_BGRA_8888;
-    case XB_FMT_RGBA8:
-      return HAL_PIXEL_FORMAT_RGBA_8888;
-    case XB_FMT_RGB8:
-      return HAL_PIXEL_FORMAT_RGB_888;
+  case XB_FMT_A8R8G8B8:
+    return HAL_PIXEL_FORMAT_BGRA_8888;
+  case XB_FMT_RGBA8:
+    return HAL_PIXEL_FORMAT_RGBA_8888;
+  case XB_FMT_RGB8:
+    return HAL_PIXEL_FORMAT_RGB_888;
   }
   return 0;
 }

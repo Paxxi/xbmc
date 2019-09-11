@@ -38,6 +38,6 @@ private:
   PFNEGLGETSYNCATTRIBKHRPROC m_eglGetSyncAttribKHR{nullptr};
 };
 
-}
-}
-}
+} // namespace EGL
+} // namespace UTILS
+} // namespace KODI

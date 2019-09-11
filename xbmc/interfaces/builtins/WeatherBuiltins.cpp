@@ -33,7 +33,7 @@ static int SetLocation(const std::vector<std::string>& params)
  *  The Direction template parameter can be -1 for previous location,
  *  1 for next location or 0 to refresh current location.
  */
-  template<int Direction>
+template<int Direction>
 static int SwitchLocation(const std::vector<std::string>& params)
 {
   CGUIMessage msg(GUI_MSG_MOVE_OFFSET, 0, 0, Direction);
@@ -80,9 +80,9 @@ static int SwitchLocation(const std::vector<std::string>& params)
 CBuiltins::CommandMap CWeatherBuiltins::GetOperations() const
 {
   return {
-           {"weather.refresh",          {"Force weather data refresh", 0, SwitchLocation<0>}},
-           {"weather.locationnext",     {"Switch to next weather location", 0, SwitchLocation<1>}},
-           {"weather.locationprevious", {"Switch to previous weather location", 0, SwitchLocation<-1>}},
-           {"weather.locationset",      {"Switch to given weather location (parameter can be 1-3)", 1, SetLocation}}
-         };
+      {"weather.refresh", {"Force weather data refresh", 0, SwitchLocation<0>}},
+      {"weather.locationnext", {"Switch to next weather location", 0, SwitchLocation<1>}},
+      {"weather.locationprevious", {"Switch to previous weather location", 0, SwitchLocation<-1>}},
+      {"weather.locationset",
+       {"Switch to given weather location (parameter can be 1-3)", 1, SetLocation}}};
 }

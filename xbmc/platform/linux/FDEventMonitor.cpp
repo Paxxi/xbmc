@@ -15,8 +15,8 @@
 #include <poll.h>
 #include <sys/eventfd.h>
 
-CFDEventMonitor::CFDEventMonitor() :
-  CThread("FDEventMonitor")
+CFDEventMonitor::CFDEventMonitor()
+  : CThread("FDEventMonitor")
 {
 }
 
@@ -53,8 +53,7 @@ void CFDEventMonitor::AddFD(const MonitoredFD& monitoredFD, int& id)
   StartMonitoring();
 }
 
-void CFDEventMonitor::AddFDs(const std::vector<MonitoredFD>& monitoredFDs,
-                             std::vector<int>& ids)
+void CFDEventMonitor::AddFDs(const std::vector<MonitoredFD>& monitoredFDs, std::vector<int>& ids)
 {
   CSingleLock lock(m_mutex);
   InterruptPoll();
@@ -76,7 +75,8 @@ void CFDEventMonitor::RemoveFD(int id)
 
   if (m_monitoredFDs.erase(id) != 1)
   {
-    CLog::Log(LOGERROR, "CFDEventMonitor::RemoveFD - Tried to remove non-existing monitoredFD %d", id);
+    CLog::Log(LOGERROR, "CFDEventMonitor::RemoveFD - Tried to remove non-existing monitoredFD %d",
+              id);
   }
 
   UpdatePollDescs();
@@ -91,7 +91,10 @@ void CFDEventMonitor::RemoveFDs(const std::vector<int>& ids)
   {
     if (m_monitoredFDs.erase(ids[i]) != 1)
     {
-      CLog::Log(LOGERROR, "CFDEventMonitor::RemoveFDs - Tried to remove non-existing monitoredFD %d while removing %u FDs", ids[i], (unsigned)ids.size());
+      CLog::Log(LOGERROR,
+                "CFDEventMonitor::RemoveFDs - Tried to remove non-existing monitoredFD %d while "
+                "removing %u FDs",
+                ids[i], (unsigned)ids.size());
     }
   }
 
@@ -120,7 +123,8 @@ void CFDEventMonitor::Process()
 
     if (err < 0 && errno != EINTR)
     {
-      CLog::Log(LOGERROR, "CFDEventMonitor::Process - poll() failed, error %d, stopping monitoring", errno);
+      CLog::Log(LOGERROR, "CFDEventMonitor::Process - poll() failed, error %d, stopping monitoring",
+                errno);
       StopThread(false);
     }
 
@@ -137,13 +141,14 @@ void CFDEventMonitor::Process()
       {
         if (monitoredFD.callback)
         {
-          monitoredFD.callback(id, pollDesc.fd, pollDesc.revents,
-                               monitoredFD.callbackData);
+          monitoredFD.callback(id, pollDesc.fd, pollDesc.revents, monitoredFD.callbackData);
         }
 
         if (pollDesc.revents & (POLLERR | POLLHUP | POLLNVAL))
         {
-          CLog::Log(LOGERROR, "CFDEventMonitor::Process - polled fd %d got revents 0x%x, removing it", pollDesc.fd, pollDesc.revents);
+          CLog::Log(LOGERROR,
+                    "CFDEventMonitor::Process - polled fd %d got revents 0x%x, removing it",
+                    pollDesc.fd, pollDesc.revents);
 
           /* Probably would be nice to inform our caller that their FD was
            * dropped, but oh well... */
@@ -157,7 +162,6 @@ void CFDEventMonitor::Process()
 
     /* flush wakeup fd */
     eventfd_read(m_wakeupfd, &dummy);
-
   }
 }
 
@@ -207,7 +211,8 @@ void CFDEventMonitor::StartMonitoring()
     m_wakeupfd = eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
     if (m_wakeupfd < 0)
     {
-      CLog::Log(LOGERROR, "CFDEventMonitor::StartMonitoring - Failed to create eventfd, error %d", errno);
+      CLog::Log(LOGERROR, "CFDEventMonitor::StartMonitoring - Failed to create eventfd, error %d",
+                errno);
       return;
     }
 

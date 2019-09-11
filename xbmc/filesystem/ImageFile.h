@@ -13,22 +13,22 @@
 
 namespace XFILE
 {
-  class CImageFile: public IFile
-  {
-  public:
-    CImageFile();
-    ~CImageFile() override;
-    bool Open(const CURL& url) override;
-    bool Exists(const CURL& url) override;
-    int Stat(const CURL& url, struct __stat64* buffer) override;
+class CImageFile : public IFile
+{
+public:
+  CImageFile();
+  ~CImageFile() override;
+  bool Open(const CURL& url) override;
+  bool Exists(const CURL& url) override;
+  int Stat(const CURL& url, struct __stat64* buffer) override;
 
-    ssize_t Read(void* lpBuf, size_t uiBufSize) override;
-    int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET) override;
-    void Close() override;
-    int64_t GetPosition() override;
-    int64_t GetLength() override;
+  ssize_t Read(void* lpBuf, size_t uiBufSize) override;
+  int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET) override;
+  void Close() override;
+  int64_t GetPosition() override;
+  int64_t GetLength() override;
 
-  protected:
-    CFile m_file;
-  };
-}
+protected:
+  CFile m_file;
+};
+} // namespace XFILE

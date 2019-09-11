@@ -20,7 +20,7 @@ std::vector<AudioStreamBasicDescription> stereoFormatsWithoutPassthrough;
 std::vector<AudioStreamBasicDescription> allFormatsWithPassthrough;
 std::vector<AudioStreamBasicDescription> allFormatsWithoutPassthrough;
 
-void addLPCMFormats(std::vector<AudioStreamBasicDescription> &streamFormats)
+void addLPCMFormats(std::vector<AudioStreamBasicDescription>& streamFormats)
 {
   AudioStreamBasicDescription streamFormat;
 
@@ -52,7 +52,7 @@ void addLPCMFormats(std::vector<AudioStreamBasicDescription> &streamFormats)
   streamFormats.push_back(streamFormat); // + 8
 }
 
-void addPassthroughFormats(std::vector<AudioStreamBasicDescription> &streamFormats)
+void addPassthroughFormats(std::vector<AudioStreamBasicDescription>& streamFormats)
 {
   AudioStreamBasicDescription streamFormat;
 
@@ -112,7 +112,7 @@ void initStreamFormats()
   stereoFormatsWithPassthrough = stereoFormatsWithoutPassthrough;
   allFormatsWithoutPassthrough = stereoFormatsWithoutPassthrough;
 
-  addLPCMFormats( allFormatsWithoutPassthrough);
+  addLPCMFormats(allFormatsWithoutPassthrough);
 
   allFormatsWithPassthrough = allFormatsWithoutPassthrough;
 
@@ -166,20 +166,21 @@ AEAudioFormat getLPCM96000AEFormat()
   return srcFormat;
 }
 
-unsigned int findMatchingFormat(const std::vector<AudioStreamBasicDescription> &formatList, const AEAudioFormat &srcFormat)
+unsigned int findMatchingFormat(const std::vector<AudioStreamBasicDescription>& formatList,
+                                const AEAudioFormat& srcFormat)
 {
   unsigned int formatIdx = 0;
   float highestScore = 0;
   float currentScore = 0;
   AEDeviceEnumerationOSX devEnum((AudioDeviceID)0);
 
-//  fprintf(stderr, "%s: Matching streamFormat for source: %s with samplerate: %d\n", __FUNCTION__, CAEUtil::DataFormatToStr(srcFormat.m_dataFormat), srcFormat.m_sampleRate);
+  //  fprintf(stderr, "%s: Matching streamFormat for source: %s with samplerate: %d\n", __FUNCTION__, CAEUtil::DataFormatToStr(srcFormat.m_dataFormat), srcFormat.m_sampleRate);
   for (unsigned int i = 0; i < formatList.size(); i++)
   {
     AudioStreamBasicDescription desc = formatList[i];
     std::string formatString;
     currentScore = devEnum.ScoreFormat(desc, srcFormat);
-//    fprintf(stderr, "%s: Physical Format: %s idx: %d rated %f\n", __FUNCTION__, StreamDescriptionToString(desc, formatString), i, currentScore);
+    //    fprintf(stderr, "%s: Physical Format: %s idx: %d rated %f\n", __FUNCTION__, StreamDescriptionToString(desc, formatString), i, currentScore);
 
     if (currentScore > highestScore)
     {
@@ -224,7 +225,7 @@ TEST(TestAESinkDARWINOSXScoreStream, MatchAc3InAllWithPassthroughFormats)
   AEAudioFormat srcFormat = getAC3AEFormat();
   // mach ac3 in streamformats with dedicated passthrough format
   formatIdx = findMatchingFormat(allFormatsWithPassthrough, srcFormat);
-  EXPECT_EQ(formatIdx,allFormatsWithoutPassthrough.size() + 1);
+  EXPECT_EQ(formatIdx, allFormatsWithoutPassthrough.size() + 1);
 }
 
 TEST(TestAESinkDARWINOSXScoreStream, MatchAc3InAllWithoutPassthroughFormats)

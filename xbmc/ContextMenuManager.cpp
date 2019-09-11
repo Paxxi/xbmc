@@ -27,12 +27,16 @@
 using namespace ADDON;
 using namespace PVR;
 
-const CContextMenuItem CContextMenuManager::MAIN = CContextMenuItem::CreateGroup("", "", "kodi.core.main", "");
-const CContextMenuItem CContextMenuManager::MANAGE = CContextMenuItem::CreateGroup("", "", "kodi.core.manage", "");
+const CContextMenuItem CContextMenuManager::MAIN =
+    CContextMenuItem::CreateGroup("", "", "kodi.core.main", "");
+const CContextMenuItem CContextMenuManager::MANAGE =
+    CContextMenuItem::CreateGroup("", "", "kodi.core.manage", "");
 
 
 CContextMenuManager::CContextMenuManager(CAddonMgr& addonMgr)
-  : m_addonMgr(addonMgr) {}
+  : m_addonMgr(addonMgr)
+{
+}
 
 CContextMenuManager::~CContextMenuManager()
 {
@@ -80,8 +84,9 @@ void CContextMenuManager::Init()
 
   ReloadAddonItems();
 
-  const std::vector<std::shared_ptr<IContextMenuItem>> pvrItems(CPVRContextMenuManager::GetInstance().GetMenuItems());
-  for (const auto &item : pvrItems)
+  const std::vector<std::shared_ptr<IContextMenuItem>> pvrItems(
+      CPVRContextMenuManager::GetInstance().GetMenuItems());
+  for (const auto& item : pvrItems)
     m_items.emplace_back(item);
 }
 
@@ -144,28 +149,29 @@ void CContextMenuManager::OnPVREvent(const PVRContextMenuEvent& event)
 {
   switch (event.action)
   {
-    case PVRContextMenuEventAction::ADD_ITEM:
-    {
-      CSingleLock lock(m_criticalSection);
-      m_items.emplace_back(event.item);
-      break;
-    }
-    case PVRContextMenuEventAction::REMOVE_ITEM:
-    {
-      CSingleLock lock(m_criticalSection);
-      auto it = std::find(m_items.begin(), m_items.end(), event.item);
-      if (it != m_items.end())
-        m_items.erase(it);
-      break;
-    }
+  case PVRContextMenuEventAction::ADD_ITEM:
+  {
+    CSingleLock lock(m_criticalSection);
+    m_items.emplace_back(event.item);
+    break;
+  }
+  case PVRContextMenuEventAction::REMOVE_ITEM:
+  {
+    CSingleLock lock(m_criticalSection);
+    auto it = std::find(m_items.begin(), m_items.end(), event.item);
+    if (it != m_items.end())
+      m_items.erase(it);
+    break;
+  }
 
-    default:
-      break;
+  default:
+    break;
   }
 }
 
-bool CContextMenuManager::IsVisible(
-  const CContextMenuItem& menuItem, const CContextMenuItem& root, const CFileItem& fileItem) const
+bool CContextMenuManager::IsVisible(const CContextMenuItem& menuItem,
+                                    const CContextMenuItem& root,
+                                    const CFileItem& fileItem) const
 {
   if (menuItem.GetLabel(fileItem).empty() || !root.IsParentOf(menuItem))
     return false;
@@ -174,26 +180,31 @@ bool CContextMenuManager::IsVisible(
   {
     CSingleLock lock(m_criticalSection);
     return std::any_of(m_addonItems.begin(), m_addonItems.end(),
-        [&](const CContextMenuItem& other){ return menuItem.IsParentOf(other) && other.IsVisible(fileItem); });
+                       [&](const CContextMenuItem& other) {
+                         return menuItem.IsParentOf(other) && other.IsVisible(fileItem);
+                       });
   }
 
   return menuItem.IsVisible(fileItem);
 }
 
-ContextMenuView CContextMenuManager::GetItems(const CFileItem& fileItem, const CContextMenuItem& root /*= MAIN*/) const
+ContextMenuView CContextMenuManager::GetItems(const CFileItem& fileItem,
+                                              const CContextMenuItem& root /*= MAIN*/) const
 {
   ContextMenuView result;
   //! @todo implement group support
   if (&root == &MAIN)
   {
     CSingleLock lock(m_criticalSection);
-    std::copy_if(m_items.begin(), m_items.end(), std::back_inserter(result),
-        [&](const std::shared_ptr<IContextMenuItem>& menu){ return menu->IsVisible(fileItem); });
+    std::copy_if(
+        m_items.begin(), m_items.end(), std::back_inserter(result),
+        [&](const std::shared_ptr<IContextMenuItem>& menu) { return menu->IsVisible(fileItem); });
   }
   return result;
 }
 
-ContextMenuView CContextMenuManager::GetAddonItems(const CFileItem& fileItem, const CContextMenuItem& root /*= MAIN*/) const
+ContextMenuView CContextMenuManager::GetAddonItems(const CFileItem& fileItem,
+                                                   const CContextMenuItem& root /*= MAIN*/) const
 {
   ContextMenuView result;
   {
@@ -206,11 +217,9 @@ ContextMenuView CContextMenuManager::GetAddonItems(const CFileItem& fileItem, co
   if (&root == &MANAGE)
   {
     std::sort(result.begin(), result.end(),
-        [&](const ContextMenuView::value_type& lhs, const ContextMenuView::value_type& rhs)
-        {
-          return lhs->GetLabel(fileItem) < rhs->GetLabel(fileItem);
-        }
-    );
+              [&](const ContextMenuView::value_type& lhs, const ContextMenuView::value_type& rhs) {
+                return lhs->GetLabel(fileItem) < rhs->GetLabel(fileItem);
+              });
   }
   return result;
 }
@@ -220,7 +229,7 @@ bool CONTEXTMENU::ShowFor(const CFileItemPtr& fileItem, const CContextMenuItem& 
   if (!fileItem)
     return false;
 
-  const CContextMenuManager &contextMenuManager = CServiceBroker::GetContextMenuManager();
+  const CContextMenuManager& contextMenuManager = CServiceBroker::GetContextMenuManager();
 
   auto menuItems = contextMenuManager.GetItems(*fileItem, root);
   for (auto&& item : contextMenuManager.GetAddonItems(*fileItem, root))
@@ -238,9 +247,9 @@ bool CONTEXTMENU::ShowFor(const CFileItemPtr& fileItem, const CContextMenuItem& 
   if (selected < 0 || selected >= static_cast<int>(menuItems.size()))
     return false;
 
-  return menuItems[selected]->IsGroup() ?
-         ShowFor(fileItem, static_cast<const CContextMenuItem&>(*menuItems[selected])) :
-         menuItems[selected]->Execute(fileItem);
+  return menuItems[selected]->IsGroup()
+             ? ShowFor(fileItem, static_cast<const CContextMenuItem&>(*menuItems[selected]))
+             : menuItems[selected]->Execute(fileItem);
 }
 
 bool CONTEXTMENU::LoopFrom(const IContextMenuItem& menu, const CFileItemPtr& fileItem)

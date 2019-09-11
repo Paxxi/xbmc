@@ -26,27 +26,27 @@
 #include "video/Bookmark.h"
 
 #define TIME_TO_CACHE_NEXT_FILE 5000 /* 5 seconds before end of song, start caching the next song */
-#define FAST_XFADE_TIME           80 /* 80 milliseconds */
-#define MAX_SKIP_XFADE_TIME     2000 /* max 2 seconds crossfade on track skip */
+#define FAST_XFADE_TIME 80 /* 80 milliseconds */
+#define MAX_SKIP_XFADE_TIME 2000 /* max 2 seconds crossfade on track skip */
 
 // PAP: Psycho-acoustic Audio Player
 // Supporting all open  audio codec standards.
 // First one being nullsoft's nsv audio decoder format
 
-PAPlayer::PAPlayer(IPlayerCallback& callback) :
-  IPlayer(callback),
-  CThread("PAPlayer"),
-  m_signalSpeedChange(false),
-  m_playbackSpeed(1    ),
-  m_isPlaying(false),
-  m_isPaused(false),
-  m_isFinished(false),
-  m_defaultCrossfadeMS (0),
-  m_upcomingCrossfadeMS(0),
-  m_audioCallback(NULL ),
-  m_jobCounter(0),
-  m_newForcedPlayerTime(-1),
-  m_newForcedTotalTime (-1)
+PAPlayer::PAPlayer(IPlayerCallback& callback)
+  : IPlayer(callback)
+  , CThread("PAPlayer")
+  , m_signalSpeedChange(false)
+  , m_playbackSpeed(1)
+  , m_isPlaying(false)
+  , m_isPaused(false)
+  , m_isFinished(false)
+  , m_defaultCrossfadeMS(0)
+  , m_upcomingCrossfadeMS(0)
+  , m_audioCallback(NULL)
+  , m_jobCounter(0)
+  , m_newForcedPlayerTime(-1)
+  , m_newForcedTotalTime(-1)
 {
   memset(&m_playerGUIData, 0, sizeof(m_playerGUIData));
   m_processInfo.reset(CProcessInfo::CreateInstance());
@@ -58,7 +58,7 @@ PAPlayer::~PAPlayer()
   CloseFile();
 }
 
-bool PAPlayer::HandlesType(const std::string &type)
+bool PAPlayer::HandlesType(const std::string& type)
 {
   ICodec* codec = CodecFactory::CreateCodec(type);
   if (codec && codec->CanInit())
@@ -70,10 +70,10 @@ bool PAPlayer::HandlesType(const std::string &type)
   return false;
 }
 
-void PAPlayer::SoftStart(bool wait/* = false */)
+void PAPlayer::SoftStart(bool wait /* = false */)
 {
   CSingleLock lock(m_streamsLock);
-  for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+  for (StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
   {
     StreamInfo* si = *itt;
     if (si->m_fadeOutTriggered)
@@ -91,10 +91,10 @@ void PAPlayer::SoftStart(bool wait/* = false */)
     lock.Enter();
 
     /* be sure they have faded in */
-    while(wait)
+    while (wait)
     {
       wait = false;
-      for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+      for (StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
       {
         StreamInfo* si = *itt;
         if (si->m_stream->IsFading())
@@ -110,11 +110,11 @@ void PAPlayer::SoftStart(bool wait/* = false */)
   }
 }
 
-void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
+void PAPlayer::SoftStop(bool wait /* = false */, bool close /* = true */)
 {
   /* fade all the streams out fast for a nice soft stop */
   CSingleLock lock(m_streamsLock);
-  for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+  for (StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
   {
     StreamInfo* si = *itt;
     if (si->m_stream)
@@ -122,14 +122,14 @@ void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
 
     if (close)
     {
-      si->m_prepareTriggered  = true;
+      si->m_prepareTriggered = true;
       si->m_playNextTriggered = true;
-      si->m_fadeOutTriggered  = true;
+      si->m_fadeOutTriggered = true;
     }
   }
 
   /* if we are going to wait for them to finish fading */
-  if(wait)
+  if (wait)
   {
     // fail safe timer, do not wait longer than 1000ms
     XbmcThreads::EndTime timer(1000);
@@ -140,10 +140,10 @@ void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
     lock.Enter();
 
     /* be sure they have faded out */
-    while(wait && !CServiceBroker::GetActiveAE()->IsSuspended() && !timer.IsTimePast())
+    while (wait && !CServiceBroker::GetActiveAE()->IsSuspended() && !timer.IsTimePast())
     {
       wait = false;
-      for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+      for (StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
       {
         StreamInfo* si = *itt;
         if (si->m_stream && si->m_stream->IsFading())
@@ -160,7 +160,7 @@ void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
     /* if we are not closing the streams, pause them */
     if (!close)
     {
-      for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+      for (StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
       {
         StreamInfo* si = *itt;
         si->m_stream->Pause();
@@ -169,7 +169,7 @@ void PAPlayer::SoftStop(bool wait/* = false */, bool close/* = true */)
   }
 }
 
-void PAPlayer::CloseAllStreams(bool fade/* = true */)
+void PAPlayer::CloseAllStreams(bool fade /* = true */)
 {
   if (!fade)
   {
@@ -215,9 +215,11 @@ void PAPlayer::CloseAllStreams(bool fade/* = true */)
   }
 }
 
-bool PAPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
+bool PAPlayer::OpenFile(const CFileItem& file, const CPlayerOptions& options)
 {
-  m_defaultCrossfadeMS = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_MUSICPLAYER_CROSSFADE) * 1000;
+  m_defaultCrossfadeMS = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+                             CSettings::SETTING_MUSICPLAYER_CROSSFADE) *
+                         1000;
 
   if (m_streams.size() > 1 || !m_defaultCrossfadeMS || m_isPaused)
   {
@@ -230,11 +232,8 @@ bool PAPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
     CSingleLock lock(m_streamsLock);
     m_jobCounter++;
   }
-  CJobManager::GetInstance().Submit(
-    [=]() { QueueNextFileEx(file, false); },
-    this,
-    CJob::PRIORITY_NORMAL
-  );
+  CJobManager::GetInstance().Submit([=]() { QueueNextFileEx(file, false); }, this,
+                                    CJob::PRIORITY_NORMAL);
 
   CSingleLock lock(m_streamsLock);
   if (m_streams.size() == 2)
@@ -244,7 +243,7 @@ bool PAPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
 
     //start transition to next track
     StreamInfo* si = m_streams.front();
-    si->m_playNextAtFrame  = si->m_framesSent; //start next track at current frame
+    si->m_playNextAtFrame = si->m_framesSent; //start next track at current frame
     si->m_prepareTriggered = true; //next track is ready to go
   }
   lock.Leave();
@@ -266,19 +265,26 @@ void PAPlayer::UpdateCrossfadeTime(const CFileItem& file)
 {
   // we explicitly disable crossfading for audio cds
   if (file.IsCDDA())
-   m_upcomingCrossfadeMS = 0;
+    m_upcomingCrossfadeMS = 0;
   else
-    m_upcomingCrossfadeMS = m_defaultCrossfadeMS = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_MUSICPLAYER_CROSSFADE) * 1000;
+    m_upcomingCrossfadeMS = m_defaultCrossfadeMS =
+        CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+            CSettings::SETTING_MUSICPLAYER_CROSSFADE) *
+        1000;
 
   if (m_upcomingCrossfadeMS)
   {
-    if (!m_currentStream ||
-         (file.HasMusicInfoTag() && !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MUSICPLAYER_CROSSFADEALBUMTRACKS) &&
-          m_currentStream->m_fileItem.HasMusicInfoTag() &&
-          (m_currentStream->m_fileItem.GetMusicInfoTag()->GetAlbum() != "") &&
-          (m_currentStream->m_fileItem.GetMusicInfoTag()->GetAlbum() == file.GetMusicInfoTag()->GetAlbum()) &&
-          (m_currentStream->m_fileItem.GetMusicInfoTag()->GetDiscNumber() == file.GetMusicInfoTag()->GetDiscNumber()) &&
-          (m_currentStream->m_fileItem.GetMusicInfoTag()->GetTrackNumber() == file.GetMusicInfoTag()->GetTrackNumber() - 1)))
+    if (!m_currentStream || (file.HasMusicInfoTag() &&
+                             !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                                 CSettings::SETTING_MUSICPLAYER_CROSSFADEALBUMTRACKS) &&
+                             m_currentStream->m_fileItem.HasMusicInfoTag() &&
+                             (m_currentStream->m_fileItem.GetMusicInfoTag()->GetAlbum() != "") &&
+                             (m_currentStream->m_fileItem.GetMusicInfoTag()->GetAlbum() ==
+                              file.GetMusicInfoTag()->GetAlbum()) &&
+                             (m_currentStream->m_fileItem.GetMusicInfoTag()->GetDiscNumber() ==
+                              file.GetMusicInfoTag()->GetDiscNumber()) &&
+                             (m_currentStream->m_fileItem.GetMusicInfoTag()->GetTrackNumber() ==
+                              file.GetMusicInfoTag()->GetTrackNumber() - 1)))
     {
       //do not crossfade when playing consecutive albumtracks
       m_upcomingCrossfadeMS = 0;
@@ -286,20 +292,19 @@ void PAPlayer::UpdateCrossfadeTime(const CFileItem& file)
   }
 }
 
-bool PAPlayer::QueueNextFile(const CFileItem &file)
+bool PAPlayer::QueueNextFile(const CFileItem& file)
 {
   {
     CSingleLock lock(m_streamsLock);
     m_jobCounter++;
   }
-  CJobManager::GetInstance().Submit([this, file]() {
-    QueueNextFileEx(file, true);
-  }, this, CJob::PRIORITY_NORMAL);
+  CJobManager::GetInstance().Submit([this, file]() { QueueNextFileEx(file, true); }, this,
+                                    CJob::PRIORITY_NORMAL);
 
   return true;
 }
 
-bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn)
+bool PAPlayer::QueueNextFileEx(const CFileItem& file, bool fadeIn)
 {
   if (m_currentStream)
   {
@@ -307,10 +312,9 @@ bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn)
     // if this is the case we don't need to open a new stream
     std::string newURL = file.GetDynURL().GetFileName();
     std::string oldURL = m_currentStream->m_fileItem.GetDynURL().GetFileName();
-    if (newURL.compare(oldURL) == 0 &&
-        file.m_lStartOffset &&
-        file.m_lStartOffset == m_currentStream->m_fileItem.m_lEndOffset &&
-        m_currentStream && m_currentStream->m_prepareTriggered)
+    if (newURL.compare(oldURL) == 0 && file.m_lStartOffset &&
+        file.m_lStartOffset == m_currentStream->m_fileItem.m_lEndOffset && m_currentStream &&
+        m_currentStream->m_prepareTriggered)
     {
       m_currentStream->m_nextFileItem.reset(new CFileItem(file));
       m_upcomingCrossfadeMS = 0;
@@ -319,7 +323,7 @@ bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn)
     m_currentStream->m_nextFileItem.reset();
   }
 
-  StreamInfo *si = new StreamInfo();
+  StreamInfo* si = new StreamInfo();
   si->m_fileItem = file;
   if (!si->m_decoder.Create(file, si->m_fileItem.m_lStartOffset))
   {
@@ -338,8 +342,7 @@ bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn)
   while (si->m_decoder.GetDataSize(true) == 0)
   {
     int status = si->m_decoder.GetStatus();
-    if (status == STATUS_ENDED   ||
-        status == STATUS_NO_FILE ||
+    if (status == STATUS_ENDED || status == STATUS_NO_FILE ||
         si->m_decoder.ReadSamples(PACKET_SIZE) == RET_ERROR)
     {
       CLog::Log(LOGINFO, "PAPlayer::QueueNextFileEx - Error reading samples");
@@ -370,7 +373,9 @@ bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn)
   si->m_framesSent = 0;
   si->m_seekNextAtFrame = 0;
   if (si->m_fileItem.HasProperty("audiobook_bookmark"))
-    si->m_seekFrame = si->m_audioFormat.m_sampleRate * CUtil::ConvertMilliSecsToSecs(si->m_fileItem.GetProperty("audiobook_bookmark").asInteger());
+    si->m_seekFrame =
+        si->m_audioFormat.m_sampleRate *
+        CUtil::ConvertMilliSecsToSecs(si->m_fileItem.GetProperty("audiobook_bookmark").asInteger());
   else
     si->m_seekFrame = -1;
   si->m_stream = NULL;
@@ -385,13 +390,16 @@ bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn)
 
   si->m_prepareNextAtFrame = 0;
   // cd drives don't really like it to be crossfaded or prepared
-  if(!file.IsCDDA())
+  if (!file.IsCDDA())
   {
     if (streamTotalTime >= TIME_TO_CACHE_NEXT_FILE + m_defaultCrossfadeMS)
-      si->m_prepareNextAtFrame = (int)((streamTotalTime - TIME_TO_CACHE_NEXT_FILE - m_defaultCrossfadeMS) * si->m_audioFormat.m_sampleRate / 1000.0f);
+      si->m_prepareNextAtFrame =
+          (int)((streamTotalTime - TIME_TO_CACHE_NEXT_FILE - m_defaultCrossfadeMS) *
+                si->m_audioFormat.m_sampleRate / 1000.0f);
   }
 
-  if (m_currentStream && ((m_currentStream->m_audioFormat.m_dataFormat == AE_FMT_RAW) || (si->m_audioFormat.m_dataFormat == AE_FMT_RAW)))
+  if (m_currentStream && ((m_currentStream->m_audioFormat.m_dataFormat == AE_FMT_RAW) ||
+                          (si->m_audioFormat.m_dataFormat == AE_FMT_RAW)))
   {
     m_currentStream->m_prepareTriggered = false;
     m_currentStream->m_waitOnDrain = true;
@@ -427,7 +435,7 @@ bool PAPlayer::QueueNextFileEx(const CFileItem &file, bool fadeIn)
   return true;
 }
 
-void PAPlayer::UpdateStreamInfoPlayNextAtFrame(StreamInfo *si, unsigned int crossFadingTime)
+void PAPlayer::UpdateStreamInfoPlayNextAtFrame(StreamInfo* si, unsigned int crossFadingTime)
 {
   // if no crossfading or cue sheet, wait for eof
   if (si && (crossFadingTime || si->m_endOffset))
@@ -436,13 +444,15 @@ void PAPlayer::UpdateStreamInfoPlayNextAtFrame(StreamInfo *si, unsigned int cros
     if (si->m_endOffset)
       streamTotalTime = si->m_endOffset - si->m_startOffset;
     if (streamTotalTime < crossFadingTime)
-      si->m_playNextAtFrame = (int)((streamTotalTime / 2) * si->m_audioFormat.m_sampleRate / 1000.0f);
+      si->m_playNextAtFrame =
+          (int)((streamTotalTime / 2) * si->m_audioFormat.m_sampleRate / 1000.0f);
     else
-      si->m_playNextAtFrame = (int)((streamTotalTime - crossFadingTime) * si->m_audioFormat.m_sampleRate / 1000.0f);
+      si->m_playNextAtFrame =
+          (int)((streamTotalTime - crossFadingTime) * si->m_audioFormat.m_sampleRate / 1000.0f);
   }
 }
 
-inline bool PAPlayer::PrepareStream(StreamInfo *si)
+inline bool PAPlayer::PrepareStream(StreamInfo* si)
 {
   /* if we have a stream we are already prepared */
   if (si->m_stream)
@@ -450,10 +460,7 @@ inline bool PAPlayer::PrepareStream(StreamInfo *si)
 
   /* get a paused stream */
   AEAudioFormat format = si->m_audioFormat;
-  si->m_stream = CServiceBroker::GetActiveAE()->MakeStream(
-    format,
-    AESTREAM_PAUSED
-  );
+  si->m_stream = CServiceBroker::GetActiveAE()->MakeStream(format, AESTREAM_PAUSED);
 
   if (!si->m_stream)
   {
@@ -467,7 +474,8 @@ inline bool PAPlayer::PrepareStream(StreamInfo *si)
   if (peak * gain <= 1.0)
     // No clipping protection needed
     si->m_stream->SetReplayGain(gain);
-  else if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MUSICPLAYER_REPLAYGAINAVOIDCLIPPING))
+  else if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+               CSettings::SETTING_MUSICPLAYER_REPLAYGAINAVOIDCLIPPING))
     // Normalise volume reducing replaygain to avoid needing clipping protection, plays file at lower level
     si->m_stream->SetReplayGain(1.0f / fabs(peak));
   else
@@ -483,11 +491,10 @@ inline bool PAPlayer::PrepareStream(StreamInfo *si)
   }
 
   /* fill the stream's buffer */
-  while(si->m_stream->IsBuffering())
+  while (si->m_stream->IsBuffering())
   {
     int status = si->m_decoder.GetStatus();
-    if (status == STATUS_ENDED   ||
-        status == STATUS_NO_FILE ||
+    if (status == STATUS_ENDED || status == STATUS_NO_FILE ||
         si->m_decoder.ReadSamples(PACKET_SIZE) == RET_ERROR)
     {
       CLog::Log(LOGINFO, "PAPlayer::PrepareStream - Stream Finished");
@@ -516,7 +523,7 @@ bool PAPlayer::CloseFile(bool reopen)
   CloseAllStreams(false);
 
   /* wait for the thread to terminate */
-  StopThread(true);//true - wait for end of thread
+  StopThread(true); //true - wait for end of thread
 
   // wait for any pending jobs to complete
   {
@@ -541,7 +548,7 @@ void PAPlayer::Process()
   }
 
   CLog::Log(LOGDEBUG, "PAPlayer::Process - Playback started");
-  while(m_isPlaying && !m_bStop)
+  while (m_isPlaying && !m_bStop)
   {
     /* this needs to happen outside of any locks to prevent deadlocks */
     if (m_signalSpeedChange)
@@ -580,7 +587,7 @@ void PAPlayer::Process()
   m_isPlaying = false;
 }
 
-inline void PAPlayer::ProcessStreams(double &freeBufferTime)
+inline void PAPlayer::ProcessStreams(double& freeBufferTime)
 {
   CSingleLock sharedLock(m_streamsLock);
   if (m_isFinished && m_streams.empty() && m_finishing.empty())
@@ -609,7 +616,7 @@ inline void PAPlayer::ProcessStreams(double &freeBufferTime)
   sharedLock.Leave();
   CSingleLock lock(m_streamsLock);
 
-  for(StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
+  for (StreamList::iterator itt = m_streams.begin(); itt != m_streams.end(); ++itt)
   {
     StreamInfo* si = *itt;
     if (!m_currentStream && !si->m_started)
@@ -618,7 +625,8 @@ inline void PAPlayer::ProcessStreams(double &freeBufferTime)
       UpdateGUIData(si); //update for GUI
     }
     /* if the stream is finishing */
-    if ((si->m_playNextTriggered && si->m_stream && !si->m_stream->IsFading()) || !ProcessStream(si, freeBufferTime))
+    if ((si->m_playNextTriggered && si->m_stream && !si->m_stream->IsFading()) ||
+        !ProcessStream(si, freeBufferTime))
     {
       if (!si->m_prepareTriggered)
       {
@@ -671,14 +679,16 @@ inline void PAPlayer::ProcessStreams(double &freeBufferTime)
       continue;
 
     // is it time to prepare the next stream?
-    if (si->m_prepareNextAtFrame > 0 && !si->m_prepareTriggered && si->m_framesSent >= si->m_prepareNextAtFrame)
+    if (si->m_prepareNextAtFrame > 0 && !si->m_prepareTriggered &&
+        si->m_framesSent >= si->m_prepareNextAtFrame)
     {
       si->m_prepareTriggered = true;
       m_callback.OnQueueNextItem();
     }
 
     // it is time to start playing the next stream?
-    if (si->m_playNextAtFrame > 0 && !si->m_playNextTriggered && !si->m_nextFileItem && si->m_framesSent >= si->m_playNextAtFrame)
+    if (si->m_playNextAtFrame > 0 && !si->m_playNextTriggered && !si->m_nextFileItem &&
+        si->m_framesSent >= si->m_playNextAtFrame)
     {
       if (!si->m_prepareTriggered)
       {
@@ -704,7 +714,7 @@ inline void PAPlayer::ProcessStreams(double &freeBufferTime)
   }
 }
 
-inline bool PAPlayer::ProcessStream(StreamInfo *si, double &freeBufferTime)
+inline bool PAPlayer::ProcessStream(StreamInfo* si, double& freeBufferTime)
 {
   /* if playback needs to start on this stream, do it */
   if (si == m_currentStream && !si->m_started)
@@ -726,15 +736,18 @@ inline bool PAPlayer::ProcessStream(StreamInfo *si, double &freeBufferTime)
     return true;
 
   /* see if it is time yet to FF/RW or a direct seek */
-  if (!si->m_playNextTriggered && ((m_playbackSpeed != 1 && si->m_framesSent >= si->m_seekNextAtFrame) || si->m_seekFrame > -1))
+  if (!si->m_playNextTriggered &&
+      ((m_playbackSpeed != 1 && si->m_framesSent >= si->m_seekNextAtFrame) || si->m_seekFrame > -1))
   {
     int64_t time = (int64_t)0;
     /* if its a direct seek */
     if (si->m_seekFrame > -1)
     {
       time = (int64_t)((float)si->m_seekFrame / (float)si->m_audioFormat.m_sampleRate * 1000.0f);
-      si->m_framesSent = (int)(si->m_seekFrame - ((float)si->m_startOffset * (float)si->m_audioFormat.m_sampleRate) / 1000.0f);
-      si->m_seekFrame  = -1;
+      si->m_framesSent =
+          (int)(si->m_seekFrame -
+                ((float)si->m_startOffset * (float)si->m_audioFormat.m_sampleRate) / 1000.0f);
+      si->m_seekFrame = -1;
       m_playerGUIData.m_time = time; //update for GUI
       si->m_seekNextAtFrame = 0;
       CDataCacheCore::GetInstance().SetPlayTimes(0, time, 0, m_playerGUIData.m_totalTime);
@@ -742,16 +755,17 @@ inline bool PAPlayer::ProcessStream(StreamInfo *si, double &freeBufferTime)
     /* if its FF/RW */
     else
     {
-      si->m_framesSent      += si->m_audioFormat.m_sampleRate * (m_playbackSpeed  - 1);
-      si->m_seekNextAtFrame  = si->m_framesSent + si->m_audioFormat.m_sampleRate / 2;
-      time = (int64_t)(((float)si->m_framesSent / (float)si->m_audioFormat.m_sampleRate * 1000.0f) + (float)si->m_startOffset);
+      si->m_framesSent += si->m_audioFormat.m_sampleRate * (m_playbackSpeed - 1);
+      si->m_seekNextAtFrame = si->m_framesSent + si->m_audioFormat.m_sampleRate / 2;
+      time = (int64_t)(((float)si->m_framesSent / (float)si->m_audioFormat.m_sampleRate * 1000.0f) +
+                       (float)si->m_startOffset);
     }
 
     /* if we are seeking back before the start of the track start normal playback */
     if (time < si->m_startOffset || si->m_framesSent < 0)
     {
       time = si->m_startOffset;
-      si->m_framesSent      = 0;
+      si->m_framesSent = 0;
       si->m_seekNextAtFrame = 0;
       SetSpeed(1);
     }
@@ -760,10 +774,10 @@ inline bool PAPlayer::ProcessStream(StreamInfo *si, double &freeBufferTime)
   }
 
   int status = si->m_decoder.GetStatus();
-  if (status == STATUS_ENDED   ||
-      status == STATUS_NO_FILE ||
+  if (status == STATUS_ENDED || status == STATUS_NO_FILE ||
       si->m_decoder.ReadSamples(PACKET_SIZE) == RET_ERROR ||
-      ((si->m_endOffset) && (si->m_framesSent / si->m_audioFormat.m_sampleRate >= (si->m_endOffset - si->m_startOffset) / 1000)))
+      ((si->m_endOffset) && (si->m_framesSent / si->m_audioFormat.m_sampleRate >=
+                             (si->m_endOffset - si->m_startOffset) / 1000)))
   {
     if (si == m_currentStream && si->m_nextFileItem)
     {
@@ -787,7 +801,9 @@ inline bool PAPlayer::ProcessStream(StreamInfo *si, double &freeBufferTime)
       // calculate time when to prepare next stream
       si->m_prepareNextAtFrame = 0;
       if (streamTotalTime >= TIME_TO_CACHE_NEXT_FILE + m_defaultCrossfadeMS)
-        si->m_prepareNextAtFrame = (int)((streamTotalTime - TIME_TO_CACHE_NEXT_FILE - m_defaultCrossfadeMS) * si->m_audioFormat.m_sampleRate / 1000.0f);
+        si->m_prepareNextAtFrame =
+            (int)((streamTotalTime - TIME_TO_CACHE_NEXT_FILE - m_defaultCrossfadeMS) *
+                  si->m_audioFormat.m_sampleRate / 1000.0f);
 
       si->m_prepareTriggered = false;
       si->m_playNextAtFrame = 0;
@@ -822,18 +838,20 @@ inline bool PAPlayer::ProcessStream(StreamInfo *si, double &freeBufferTime)
     {
       double free_space;
       if (si->m_audioFormat.m_dataFormat != AE_FMT_RAW)
-        free_space = (double)(si->m_stream->GetSpace() / si->m_bytesPerSample) / si->m_audioFormat.m_sampleRate;
+        free_space = (double)(si->m_stream->GetSpace() / si->m_bytesPerSample) /
+                     si->m_audioFormat.m_sampleRate;
       else
-        free_space = (double) si->m_stream->GetSpace() * si->m_audioFormat.m_streamInfo.GetDuration() / 1000;
+        free_space =
+            (double)si->m_stream->GetSpace() * si->m_audioFormat.m_streamInfo.GetDuration() / 1000;
 
-      freeBufferTime = std::max(freeBufferTime , free_space);
+      freeBufferTime = std::max(freeBufferTime, free_space);
     }
   }
 
   return true;
 }
 
-bool PAPlayer::QueueData(StreamInfo *si)
+bool PAPlayer::QueueData(StreamInfo* si)
 {
   unsigned int space = si->m_stream->GetSpace();
 
@@ -853,7 +871,7 @@ bool PAPlayer::QueueData(StreamInfo *si)
       return false;
     }
 
-    unsigned int frames = samples/si->m_audioFormat.m_channelLayout.Count();
+    unsigned int frames = samples / si->m_audioFormat.m_channelLayout.Count();
     unsigned int added = si->m_stream->AddData(&data, 0, frames, nullptr);
     si->m_framesSent += added;
   }
@@ -863,7 +881,7 @@ bool PAPlayer::QueueData(StreamInfo *si)
       return true;
 
     int size;
-    uint8_t *data = si->m_decoder.GetRawData(size);
+    uint8_t* data = si->m_decoder.GetRawData(size);
     if (data && size)
     {
       int added = si->m_stream->AddData(&data, 0, size, nullptr);
@@ -872,7 +890,8 @@ bool PAPlayer::QueueData(StreamInfo *si)
         CLog::Log(LOGERROR, "PAPlayer::QueueData - unknown error");
         return false;
       }
-      si->m_framesSent += si->m_audioFormat.m_streamInfo.GetDuration() / 1000 * si->m_audioFormat.m_streamInfo.m_sampleRate;
+      si->m_framesSent += si->m_audioFormat.m_streamInfo.GetDuration() / 1000 *
+                          si->m_audioFormat.m_streamInfo.m_sampleRate;
     }
   }
 
@@ -915,12 +934,10 @@ void PAPlayer::Pause()
 
 void PAPlayer::SetVolume(float volume)
 {
-
 }
 
 void PAPlayer::SetDynamicRangeCompression(long drc)
 {
-
 }
 
 void PAPlayer::SetSpeed(float speed)
@@ -948,7 +965,8 @@ int64_t PAPlayer::GetTimeInternal()
   if (!m_currentStream)
     return 0;
 
-  double time = ((double)m_currentStream->m_framesSent / (double)m_currentStream->m_audioFormat.m_sampleRate);
+  double time =
+      ((double)m_currentStream->m_framesSent / (double)m_currentStream->m_audioFormat.m_sampleRate);
   if (m_currentStream->m_stream)
     time -= m_currentStream->m_stream->GetDelay();
   time = time * 1000.0;
@@ -969,7 +987,7 @@ bool PAPlayer::SetTotalTimeInternal(int64_t time)
 
   m_currentStream->m_decoder.SetTotalTime(time);
   UpdateGUIData(m_currentStream);
-  
+
   return true;
 }
 
@@ -982,8 +1000,9 @@ bool PAPlayer::SetTimeInternal(int64_t time)
   m_currentStream->m_framesSent = time / 1000 * m_currentStream->m_audioFormat.m_sampleRate;
 
   if (m_currentStream->m_stream)
-    m_currentStream->m_framesSent += m_currentStream->m_stream->GetDelay() * m_currentStream->m_audioFormat.m_sampleRate;
-  
+    m_currentStream->m_framesSent +=
+        m_currentStream->m_stream->GetDelay() * m_currentStream->m_audioFormat.m_sampleRate;
+
   return true;
 }
 
@@ -1015,7 +1034,7 @@ int PAPlayer::GetCacheLevel() const
   return m_playerGUIData.m_cacheLevel;
 }
 
-void PAPlayer::GetAudioStreamInfo(int index, AudioStreamInfo &info)
+void PAPlayer::GetAudioStreamInfo(int index, AudioStreamInfo& info)
 {
   info.bitrate = m_playerGUIData.m_audioBitrate;
   info.channels = m_playerGUIData.m_channelCount;
@@ -1031,16 +1050,21 @@ bool PAPlayer::CanSeek()
 
 void PAPlayer::Seek(bool bPlus, bool bLargeStep, bool bChapterOverride)
 {
-  if (!CanSeek()) return;
+  if (!CanSeek())
+    return;
 
   long long seek;
-  const std::shared_ptr<CAdvancedSettings> advancedSettings = CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
-  if (advancedSettings->m_musicUseTimeSeeking && m_playerGUIData.m_totalTime > 2 * advancedSettings->m_musicTimeSeekForwardBig)
+  const std::shared_ptr<CAdvancedSettings> advancedSettings =
+      CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
+  if (advancedSettings->m_musicUseTimeSeeking &&
+      m_playerGUIData.m_totalTime > 2 * advancedSettings->m_musicTimeSeekForwardBig)
   {
     if (bLargeStep)
-      seek = bPlus ? advancedSettings->m_musicTimeSeekForwardBig : advancedSettings->m_musicTimeSeekBackwardBig;
+      seek = bPlus ? advancedSettings->m_musicTimeSeekForwardBig
+                   : advancedSettings->m_musicTimeSeekBackwardBig;
     else
-      seek = bPlus ? advancedSettings->m_musicTimeSeekForward : advancedSettings->m_musicTimeSeekBackward;
+      seek = bPlus ? advancedSettings->m_musicTimeSeekForward
+                   : advancedSettings->m_musicTimeSeekBackward;
     seek *= 1000;
     seek += m_playerGUIData.m_time;
   }
@@ -1048,9 +1072,11 @@ void PAPlayer::Seek(bool bPlus, bool bLargeStep, bool bChapterOverride)
   {
     float percent;
     if (bLargeStep)
-      percent = bPlus ? static_cast<float>(advancedSettings->m_musicPercentSeekForwardBig) : static_cast<float>(advancedSettings->m_musicPercentSeekBackwardBig);
+      percent = bPlus ? static_cast<float>(advancedSettings->m_musicPercentSeekForwardBig)
+                      : static_cast<float>(advancedSettings->m_musicPercentSeekBackwardBig);
     else
-      percent = bPlus ? static_cast<float>(advancedSettings->m_musicPercentSeekForward) : static_cast<float>(advancedSettings->m_musicPercentSeekBackward);
+      percent = bPlus ? static_cast<float>(advancedSettings->m_musicPercentSeekForward)
+                      : static_cast<float>(advancedSettings->m_musicPercentSeekBackward);
     seek = static_cast<long long>(GetTotalTime64() * (GetPercentage() + percent) / 100);
   }
 
@@ -1059,7 +1085,8 @@ void PAPlayer::Seek(bool bPlus, bool bLargeStep, bool bChapterOverride)
 
 void PAPlayer::SeekTime(int64_t iTime /*=0*/)
 {
-  if (!CanSeek()) return;
+  if (!CanSeek())
+    return;
 
   CSingleLock lock(m_streamsLock);
   if (!m_currentStream)
@@ -1070,14 +1097,18 @@ void PAPlayer::SeekTime(int64_t iTime /*=0*/)
   if (m_playbackSpeed != 1)
     SetSpeed(1);
 
-  m_currentStream->m_seekFrame = (int)((float)m_currentStream->m_audioFormat.m_sampleRate * ((float)iTime + (float)m_currentStream->m_startOffset) / 1000.0f);
+  m_currentStream->m_seekFrame =
+      (int)((float)m_currentStream->m_audioFormat.m_sampleRate *
+            ((float)iTime + (float)m_currentStream->m_startOffset) / 1000.0f);
   m_callback.OnPlayBackSeek(iTime, seekOffset);
 }
 
 void PAPlayer::SeekPercentage(float fPercent /*=0*/)
 {
-  if (fPercent < 0.0f  ) fPercent = 0.0f;
-  if (fPercent > 100.0f) fPercent = 100.0f;
+  if (fPercent < 0.0f)
+    fPercent = 0.0f;
+  if (fPercent > 100.0f)
+    fPercent = 100.0f;
   SeekTime((int64_t)(fPercent * 0.01f * (float)GetTotalTime64()));
 }
 
@@ -1089,7 +1120,7 @@ float PAPlayer::GetPercentage()
   return 0.0f;
 }
 
-void PAPlayer::UpdateGUIData(StreamInfo *si)
+void PAPlayer::UpdateGUIData(StreamInfo* si)
 {
   /* Store data need by external threads in member
    * structure to prevent locking conflicts when
@@ -1097,16 +1128,18 @@ void PAPlayer::UpdateGUIData(StreamInfo *si)
    */
   CSingleLock lock(m_streamsLock);
 
-  m_playerGUIData.m_sampleRate    = si->m_audioFormat.m_sampleRate;
-  m_playerGUIData.m_channelCount  = si->m_audioFormat.m_channelLayout.Count();
-  m_playerGUIData.m_canSeek       = si->m_decoder.CanSeek();
+  m_playerGUIData.m_sampleRate = si->m_audioFormat.m_sampleRate;
+  m_playerGUIData.m_channelCount = si->m_audioFormat.m_channelLayout.Count();
+  m_playerGUIData.m_canSeek = si->m_decoder.CanSeek();
 
   const ICodec* codec = si->m_decoder.GetCodec();
 
   m_playerGUIData.m_audioBitrate = codec ? codec->m_bitRate : 0;
-  strncpy(m_playerGUIData.m_codec,codec ? codec->m_CodecName.c_str() : "",20);
-  m_playerGUIData.m_cacheLevel   = codec ? codec->GetCacheLevel() : 0;
-  m_playerGUIData.m_bitsPerSample = (codec && codec->m_bitsPerCodedSample) ? codec->m_bitsPerCodedSample : si->m_bytesPerSample << 3;
+  strncpy(m_playerGUIData.m_codec, codec ? codec->m_CodecName.c_str() : "", 20);
+  m_playerGUIData.m_cacheLevel = codec ? codec->GetCacheLevel() : 0;
+  m_playerGUIData.m_bitsPerSample = (codec && codec->m_bitsPerCodedSample)
+                                        ? codec->m_bitsPerCodedSample
+                                        : si->m_bytesPerSample << 3;
 
   int64_t total = si->m_decoder.TotalTime();
   if (si->m_endOffset)
@@ -1117,16 +1150,16 @@ void PAPlayer::UpdateGUIData(StreamInfo *si)
   CServiceBroker::GetDataCacheCore().SignalAudioInfoChange();
 }
 
-void PAPlayer::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void PAPlayer::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   CSingleLock lock(m_streamsLock);
   m_jobCounter--;
   m_jobEvent.Set();
 }
 
-void PAPlayer::CloseFileCB(StreamInfo &si)
+void PAPlayer::CloseFileCB(StreamInfo& si)
 {
-  IPlayerCallback *cb = &m_callback;
+  IPlayerCallback* cb = &m_callback;
   CFileItem fileItem(si.m_fileItem);
   CBookmark bookmark;
   double total = si.m_decoderTotal;
@@ -1134,17 +1167,16 @@ void PAPlayer::CloseFileCB(StreamInfo &si)
     total = si.m_endOffset;
   total -= si.m_startOffset;
   bookmark.totalTimeInSeconds = total / 1000;
-  bookmark.timeInSeconds = (static_cast<double>(si.m_framesSent) /
-                            static_cast<double>(si.m_audioFormat.m_sampleRate));
+  bookmark.timeInSeconds =
+      (static_cast<double>(si.m_framesSent) / static_cast<double>(si.m_audioFormat.m_sampleRate));
   bookmark.timeInSeconds -= si.m_stream->GetDelay();
   bookmark.player = m_name;
   bookmark.playerState = GetPlayerState();
-  CJobManager::GetInstance().Submit([=]() {
-    cb->OnPlayerCloseFile(fileItem, bookmark);
-  }, CJob::PRIORITY_NORMAL);
+  CJobManager::GetInstance().Submit([=]() { cb->OnPlayerCloseFile(fileItem, bookmark); },
+                                    CJob::PRIORITY_NORMAL);
 }
 
-void PAPlayer::AdvancePlaylistOnError(CFileItem &fileItem)
+void PAPlayer::AdvancePlaylistOnError(CFileItem& fileItem)
 {
   if (m_signalStarted)
     m_callback.OnPlayBackStarted(fileItem);

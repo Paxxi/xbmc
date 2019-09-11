@@ -29,7 +29,7 @@ CLibraryDirectory::CLibraryDirectory(void) = default;
 
 CLibraryDirectory::~CLibraryDirectory(void) = default;
 
-bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   std::string libNode = GetNode(url);
   if (libNode.empty())
@@ -37,7 +37,7 @@ bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList &items)
 
   if (URIUtils::HasExtension(libNode, ".xml"))
   { // a filter or folder node
-    TiXmlElement *node = LoadXML(libNode);
+    TiXmlElement* node = LoadXML(libNode);
     if (node)
     {
       std::string type = XMLUtils::GetAttribute(node, "type");
@@ -48,15 +48,15 @@ bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList &items)
         XMLUtils::GetString(node, "content", type);
         if (type.empty())
         {
-          CLog::Log(LOGERROR, "<content> tag must not be empty for type=\"filter\" node '%s'", libNode.c_str());
+          CLog::Log(LOGERROR, "<content> tag must not be empty for type=\"filter\" node '%s'",
+                    libNode.c_str());
           return false;
         }
         if (XMLUtils::GetString(node, "label", label))
           label = CGUIControlFactory::FilterLabel(label);
         playlist.SetType(type);
         playlist.SetName(label);
-        if (playlist.LoadFromXML(node) &&
-            CSmartPlaylistDirectory::GetDirectory(playlist, items))
+        if (playlist.LoadFromXML(node) && CSmartPlaylistDirectory::GetDirectory(playlist, items))
         {
           items.SetProperty("library.filter", "true");
           items.SetPath(items.GetProperty("path.db").asString());
@@ -86,7 +86,7 @@ bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   std::string basePath = url.Get();
   for (int i = 0; i < nodes.Size(); i++)
   {
-    const TiXmlElement *node = NULL;
+    const TiXmlElement* node = NULL;
     std::string xml = nodes[i]->GetPath();
     if (nodes[i]->m_bIsFolder)
       node = LoadXML(URIUtils::AddFileToFolder(xml, "index.xml"));
@@ -127,7 +127,7 @@ bool CLibraryDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   return true;
 }
 
-TiXmlElement *CLibraryDirectory::LoadXML(const std::string &xmlFile)
+TiXmlElement* CLibraryDirectory::LoadXML(const std::string& xmlFile)
 {
   if (!CFile::Exists(xmlFile))
     return nullptr;
@@ -135,7 +135,7 @@ TiXmlElement *CLibraryDirectory::LoadXML(const std::string &xmlFile)
   if (!m_doc.LoadFile(xmlFile))
     return nullptr;
 
-  TiXmlElement *xml = m_doc.RootElement();
+  TiXmlElement* xml = m_doc.RootElement();
   if (!xml || xml->ValueStr() != "node")
     return nullptr;
 
@@ -155,7 +155,8 @@ bool CLibraryDirectory::Exists(const CURL& url)
 
 std::string CLibraryDirectory::GetNode(const CURL& url)
 {
-  std::string libDir = URIUtils::AddFileToFolder(m_profileManager->GetLibraryFolder(), url.GetHostName() + "/");
+  std::string libDir =
+      URIUtils::AddFileToFolder(m_profileManager->GetLibraryFolder(), url.GetHostName() + "/");
   if (!CDirectory::Exists(libDir))
     libDir = URIUtils::AddFileToFolder("special://xbmc/system/library/", url.GetHostName() + "/");
 

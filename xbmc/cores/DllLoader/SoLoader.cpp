@@ -13,7 +13,8 @@
 
 #include <dlfcn.h>
 
-SoLoader::SoLoader(const std::string &so, bool bGlobal) : LibraryLoader(so)
+SoLoader::SoLoader(const std::string& so, bool bGlobal)
+  : LibraryLoader(so)
 {
   m_soHandle = NULL;
   m_bGlobal = bGlobal;
@@ -31,7 +32,7 @@ bool SoLoader::Load()
   if (m_soHandle != NULL)
     return true;
 
-  std::string strFileName= CSpecialProtocol::TranslatePath(GetFileName());
+  std::string strFileName = CSpecialProtocol::TranslatePath(GetFileName());
   if (strFileName == "xbmc.so")
   {
     CLog::Log(LOGDEBUG, "Loading Internal Library\n");
@@ -58,7 +59,7 @@ void SoLoader::Unload()
   if (m_soHandle)
   {
     if (dlclose(m_soHandle) != 0)
-       CLog::Log(LOGERROR, "Unable to unload %s, reason: %s", GetName(), dlerror());
+      CLog::Log(LOGERROR, "Unable to unload %s, reason: %s", GetName(), dlerror());
   }
   m_bLoaded = false;
   m_soHandle = NULL;

@@ -29,22 +29,21 @@ void CDVDOverlayContainer::Add(CDVDOverlay* pOverlay)
   // multiple overlays queued at same start
   // point so only stop them when we get a
   // new startpoint
-  for(int i = m_overlays.size();i>0;)
+  for (int i = m_overlays.size(); i > 0;)
   {
     i--;
-    if(m_overlays[i]->iPTSStopTime)
+    if (m_overlays[i]->iPTSStopTime)
     {
-      if(!m_overlays[i]->replace)
+      if (!m_overlays[i]->replace)
         break;
-      if(m_overlays[i]->iPTSStopTime <= pOverlay->iPTSStartTime)
+      if (m_overlays[i]->iPTSStopTime <= pOverlay->iPTSStartTime)
         break;
     }
-    if(m_overlays[i]->iPTSStartTime != pOverlay->iPTSStartTime)
+    if (m_overlays[i]->iPTSStartTime != pOverlay->iPTSStartTime)
       m_overlays[i]->iPTSStopTime = pOverlay->iPTSStartTime;
   }
 
   m_overlays.push_back(pOverlay);
-
 }
 
 VecOverlays* CDVDOverlayContainer::GetOverlays()
@@ -95,7 +94,8 @@ void CDVDOverlayContainer::CleanUp(double pts)
       while (!bNewer && ++it2 != m_overlays.end())
       {
         CDVDOverlay* pOverlay2 = *it2;
-        if (pOverlay2->bForced && pOverlay2->iPTSStartTime <= pts) bNewer = true;
+        if (pOverlay2->bForced && pOverlay2->iPTSStartTime <= pts)
+          bNewer = true;
       }
 
       if (bNewer)
@@ -106,13 +106,12 @@ void CDVDOverlayContainer::CleanUp(double pts)
     }
     ++it;
   }
-
 }
 
 void CDVDOverlayContainer::Clear()
 {
   CSingleLock lock(*this);
-  for (auto &overlay : m_overlays)
+  for (auto& overlay : m_overlays)
   {
     overlay->Release();
   }
@@ -133,7 +132,8 @@ bool CDVDOverlayContainer::ContainsOverlayType(DVDOverlayType type)
   VecOverlaysIter it = m_overlays.begin();
   while (!result && it != m_overlays.end())
   {
-    if ((*it)->IsOverlayType(type)) result = true;
+    if ((*it)->IsOverlayType(type))
+      result = true;
     ++it;
   }
 
@@ -143,14 +143,16 @@ bool CDVDOverlayContainer::ContainsOverlayType(DVDOverlayType type)
 /*
  * iAction should be LIBDVDNAV_BUTTON_NORMAL or LIBDVDNAV_BUTTON_CLICKED
  */
-void CDVDOverlayContainer::UpdateOverlayInfo(std::shared_ptr<CDVDInputStreamNavigator> pStream, CDVDDemuxSPU *pSpu, int iAction)
+void CDVDOverlayContainer::UpdateOverlayInfo(std::shared_ptr<CDVDInputStreamNavigator> pStream,
+                                             CDVDDemuxSPU* pSpu,
+                                             int iAction)
 {
   CSingleLock lock(*this);
 
   pStream->CheckButtons();
 
   //Update any forced overlays.
-  for(VecOverlays::iterator it = m_overlays.begin(); it != m_overlays.end(); ++it )
+  for (VecOverlays::iterator it = m_overlays.begin(); it != m_overlays.end(); ++it)
   {
     if ((*it)->IsOverlayType(DVDOVERLAY_TYPE_SPU))
     {
@@ -167,11 +169,10 @@ void CDVDOverlayContainer::UpdateOverlayInfo(std::shared_ptr<CDVDInputStreamNavi
           (*it) = pOverlaySpu;
         }
 
-        if(pStream->GetCurrentButtonInfo(pOverlaySpu, pSpu, iAction))
+        if (pStream->GetCurrentButtonInfo(pOverlaySpu, pSpu, iAction))
         {
           pOverlaySpu->m_textureid = 0;
         }
-
       }
     }
   }

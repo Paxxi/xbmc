@@ -16,9 +16,9 @@ public:
   virtual ~IBufferObject() = default;
 
   virtual bool CreateBufferObject(int width, int height) = 0;
-  virtual void DestroyBufferObject() { }
-  virtual uint8_t *GetMemory() = 0;
-  virtual void ReleaseMemory() { }
+  virtual void DestroyBufferObject() {}
+  virtual uint8_t* GetMemory() = 0;
+  virtual void ReleaseMemory() {}
   virtual int GetFd() { return -1; }
   virtual int GetStride() = 0;
 

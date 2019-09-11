@@ -13,7 +13,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Event.h"
-
 #include "threads/platform/ThreadImpl.h"
 
 #include <atomic>
@@ -44,10 +43,7 @@ public:
   bool IsCurrentThread() const;
   bool Join(unsigned int milliseconds);
 
-  inline static const std::thread::id GetCurrentThreadId()
-  {
-    return std::this_thread::get_id();
-  }
+  inline static const std::thread::id GetCurrentThreadId() { return std::this_thread::get_id(); }
 
   // -----------------------------------------------------------------------------------
   // These are platform specific and can be found in ./platform/[platform]/ThreadImpl.cpp
@@ -61,13 +57,13 @@ public:
   int GetPriority(void);
   bool SetPriority(const int iPriority);
 
-  float GetRelativeUsage();  // returns the relative cpu usage of this thread since last call
+  float GetRelativeUsage(); // returns the relative cpu usage of this thread since last call
   int64_t GetAbsoluteUsage();
   // -----------------------------------------------------------------------------------
 
   static CThread* GetCurrentThread();
 
-  virtual void OnException(){} // signal termination handler
+  virtual void OnException() {} // signal termination handler
 
 protected:
   virtual void OnStartup(){};
@@ -76,19 +72,24 @@ protected:
 
   std::atomic<bool> m_bStop;
 
-  enum WaitResponse { WAIT_INTERRUPTED = -1, WAIT_SIGNALED = 0, WAIT_TIMEDOUT = 1 };
+  enum WaitResponse
+  {
+    WAIT_INTERRUPTED = -1,
+    WAIT_SIGNALED = 0,
+    WAIT_TIMEDOUT = 1
+  };
 
   /**
    * This call will wait on a CEvent in an interruptible way such that if
    *  stop is called on the thread the wait will return with a response
    *  indicating what happened.
    */
-  inline WaitResponse AbortableWait(CEvent& event, int timeoutMillis = -1 /* indicates wait forever*/)
+  inline WaitResponse AbortableWait(CEvent& event,
+                                    int timeoutMillis = -1 /* indicates wait forever*/)
   {
     XbmcThreads::CEventGroup group{&event, &m_StopEvent};
     CEvent* result = timeoutMillis < 0 ? group.wait() : group.wait(timeoutMillis);
-    return  result == &event ? WAIT_SIGNALED :
-      (result == NULL ? WAIT_TIMEDOUT : WAIT_INTERRUPTED);
+    return result == &event ? WAIT_SIGNALED : (result == NULL ? WAIT_TIMEDOUT : WAIT_INTERRUPTED);
   }
 
 private:

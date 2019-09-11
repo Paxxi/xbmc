@@ -13,9 +13,9 @@
 TEST(TestStreamDetails, General)
 {
   CStreamDetails a;
-  CStreamDetailVideo *video = new CStreamDetailVideo();
-  CStreamDetailAudio *audio = new CStreamDetailAudio();
-  CStreamDetailSubtitle *subtitle = new CStreamDetailSubtitle();
+  CStreamDetailVideo* video = new CStreamDetailVideo();
+  CStreamDetailAudio* audio = new CStreamDetailAudio();
+  CStreamDetailSubtitle* subtitle = new CStreamDetailSubtitle();
 
   video->m_iWidth = 1920;
   video->m_iHeight = 1080;
@@ -66,8 +66,7 @@ TEST(TestStreamDetails, General)
 
 TEST(TestStreamDetails, VideoDimsToResolutionDescription)
 {
-  EXPECT_STREQ("1080",
-               CStreamDetails::VideoDimsToResolutionDescription(1920, 1080).c_str());
+  EXPECT_STREQ("1080", CStreamDetails::VideoDimsToResolutionDescription(1920, 1080).c_str());
 }
 
 TEST(TestStreamDetails, VideoAspectToAspectDescription)

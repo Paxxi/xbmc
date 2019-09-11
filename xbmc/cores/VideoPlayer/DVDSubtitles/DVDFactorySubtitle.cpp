@@ -25,7 +25,7 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
   int i;
 
   std::unique_ptr<CDVDSubtitleStream> pStream(new CDVDSubtitleStream());
-  if(!pStream->Open(strFile))
+  if (!pStream->Open(strFile))
   {
     return nullptr;
   }
@@ -34,8 +34,7 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
   {
     if (pStream->ReadLine(line, sizeof(line)))
     {
-      if ((sscanf (line, "{%d}{}", &i)==1) ||
-          (sscanf (line, "{%d}{%d}", &i, &i)==2))
+      if ((sscanf(line, "{%d}{}", &i) == 1) || (sscanf(line, "{%d}{%d}", &i, &i) == 2))
       {
         return new CDVDSubtitleParserMicroDVD(std::move(pStream), strFile.c_str());
       }
@@ -55,7 +54,7 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
       {
         return new CDVDSubtitleParserSSA(std::move(pStream), strFile.c_str());
       }
-      else if (strstr (line, "<SAMI>"))
+      else if (strstr(line, "<SAMI>"))
       {
         return new CDVDSubtitleParserSami(std::move(pStream), strFile.c_str());
       }
@@ -68,4 +67,3 @@ CDVDSubtitleParser* CDVDFactorySubtitle::CreateParser(std::string& strFile)
 
   return nullptr;
 }
-

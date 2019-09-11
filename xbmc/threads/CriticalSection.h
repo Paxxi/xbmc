@@ -11,4 +11,6 @@
 #include "platform/RecursiveMutex.h"
 #include "threads/Lockables.h"
 
-class CCriticalSection : public XbmcThreads::CountingLockable<XbmcThreads::CRecursiveMutex> {};
+class CCriticalSection : public XbmcThreads::CountingLockable<XbmcThreads::CRecursiveMutex>
+{
+};

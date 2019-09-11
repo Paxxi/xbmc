@@ -15,19 +15,11 @@
 #include <sys/param.h>
 
 #ifndef nitems
-#define nitems(x) (sizeof((x))/sizeof((x)[0]))
+#define nitems(x) (sizeof((x)) / sizeof((x)[0]))
 #endif
 
-static enum AEChannel channelMap[] =
-{
-  AE_CH_FL,
-  AE_CH_FR,
-  AE_CH_BL,
-  AE_CH_BR,
-  AE_CH_FC,
-  AE_CH_LFE,
-  AE_CH_SL,
-  AE_CH_SR,
+static enum AEChannel channelMap[] = {
+    AE_CH_FL, AE_CH_FR, AE_CH_BL, AE_CH_BR, AE_CH_FC, AE_CH_LFE, AE_CH_SL, AE_CH_SR,
 };
 
 struct sndio_formats
@@ -40,39 +32,35 @@ struct sndio_formats
   unsigned int msb;
 };
 
-static struct sndio_formats formats[] =
-{
-  { AE_FMT_S32NE, 32, 4, 1, SIO_LE_NATIVE, 1 },
-  { AE_FMT_S32LE, 32, 4, 1, 1, 1 },
-  { AE_FMT_S32BE, 32, 4, 1, 0, 1 },
+static struct sndio_formats formats[] = {
+    {AE_FMT_S32NE, 32, 4, 1, SIO_LE_NATIVE, 1},
+    {AE_FMT_S32LE, 32, 4, 1, 1, 1},
+    {AE_FMT_S32BE, 32, 4, 1, 0, 1},
 
-  { AE_FMT_S24NE4, 24, 4, 1, SIO_LE_NATIVE, 0 },
-  { AE_FMT_S24NE4, 24, 4, 1, SIO_LE_NATIVE, 1 },
-  { AE_FMT_S24NE3, 24, 3, 1, SIO_LE_NATIVE, 0 },
-  { AE_FMT_S24NE3, 24, 3, 1, SIO_LE_NATIVE, 1 },
+    {AE_FMT_S24NE4, 24, 4, 1, SIO_LE_NATIVE, 0},
+    {AE_FMT_S24NE4, 24, 4, 1, SIO_LE_NATIVE, 1},
+    {AE_FMT_S24NE3, 24, 3, 1, SIO_LE_NATIVE, 0},
+    {AE_FMT_S24NE3, 24, 3, 1, SIO_LE_NATIVE, 1},
 
-  { AE_FMT_S16NE, 16, 2, 1, SIO_LE_NATIVE, 1 },
-  { AE_FMT_S16NE, 16, 2, 1, SIO_LE_NATIVE, 0 },
-  { AE_FMT_S16LE, 16, 2, 1, 1, 1 },
-  { AE_FMT_S16LE, 16, 2, 1, 1, 0 },
-  { AE_FMT_S16BE, 16, 2, 1, 0, 1 },
-  { AE_FMT_S16BE, 16, 2, 1, 0, 0 },
+    {AE_FMT_S16NE, 16, 2, 1, SIO_LE_NATIVE, 1},
+    {AE_FMT_S16NE, 16, 2, 1, SIO_LE_NATIVE, 0},
+    {AE_FMT_S16LE, 16, 2, 1, 1, 1},
+    {AE_FMT_S16LE, 16, 2, 1, 1, 0},
+    {AE_FMT_S16BE, 16, 2, 1, 0, 1},
+    {AE_FMT_S16BE, 16, 2, 1, 0, 0},
 
-  { AE_FMT_U8, 8, 1, 0, 0, 0 },
-  { AE_FMT_U8, 8, 1, 0, 0, 1 },
-  { AE_FMT_U8, 8, 1, 0, 1, 0 },
-  { AE_FMT_U8, 8, 1, 0, 1, 1 },
+    {AE_FMT_U8, 8, 1, 0, 0, 0},
+    {AE_FMT_U8, 8, 1, 0, 0, 1},
+    {AE_FMT_U8, 8, 1, 0, 1, 0},
+    {AE_FMT_U8, 8, 1, 0, 1, 1},
 };
 
-static AEDataFormat lookupDataFormat(unsigned int bits, unsigned int bps,
-                                     unsigned int sig, unsigned int le, unsigned int msb)
+static AEDataFormat lookupDataFormat(
+    unsigned int bits, unsigned int bps, unsigned int sig, unsigned int le, unsigned int msb)
 {
   for (const sndio_formats& format : formats)
   {
-    if (bits == format.bits &&
-        bps == format.bps &&
-        sig == format.sig &&
-        le == format.le &&
+    if (bits == format.bits && bps == format.bps && sig == format.sig && le == format.le &&
         msb == format.msb)
     {
       return format.fmt;
@@ -126,7 +114,7 @@ bool CAESinkSNDIO::ParToAudioFormat(AEAudioFormat& format)
 
   CAEChannelInfo info;
   for (unsigned int i = 0; i < m_par.pchan; i++)
-      info += channelMap[i];
+    info += channelMap[i];
   format.m_channelLayout = info;
   format.m_dataFormat = dataFormat;
   format.m_sampleRate = m_par.rate;
@@ -155,7 +143,7 @@ void CAESinkSNDIO::Register()
   AE::CAESinkFactory::RegisterSink(entry);
 }
 
-IAESink* CAESinkSNDIO::Create(std::string &device, AEAudioFormat& desiredFormat)
+IAESink* CAESinkSNDIO::Create(std::string& device, AEAudioFormat& desiredFormat)
 {
   IAESink* sink = new CAESinkSNDIO();
   if (sink->Initialize(desiredFormat, device))
@@ -165,7 +153,7 @@ IAESink* CAESinkSNDIO::Create(std::string &device, AEAudioFormat& desiredFormat)
   return nullptr;
 }
 
-bool CAESinkSNDIO::Initialize(AEAudioFormat &format, std::string &device)
+bool CAESinkSNDIO::Initialize(AEAudioFormat& format, std::string& device)
 {
   if ((m_hdl = sio_open(SIO_DEVANY, SIO_PLAY, 0)) == nullptr)
   {
@@ -174,9 +162,7 @@ bool CAESinkSNDIO::Initialize(AEAudioFormat &format, std::string &device)
   }
 
   AudioFormatToPar(format);
-  if (!sio_setpar(m_hdl, &m_par) ||
-      !sio_getpar(m_hdl, &m_par) ||
-      !ParToAudioFormat(format))
+  if (!sio_setpar(m_hdl, &m_par) || !sio_getpar(m_hdl, &m_par) || !ParToAudioFormat(format))
   {
     CLog::Log(LOGERROR, "CAESinkSNDIO::Initialize - could not negotiate parameters");
     return false;
@@ -215,7 +201,8 @@ void CAESinkSNDIO::Stop()
   m_written = m_played = 0;
 }
 
-void CAESinkSNDIO::OnmoveCb(void *arg, int delta) {
+void CAESinkSNDIO::OnmoveCb(void* arg, int delta)
+{
   CAESinkSNDIO* self = static_cast<CAESinkSNDIO*>(arg);
   self->m_played += delta;
 }
@@ -227,14 +214,14 @@ void CAESinkSNDIO::GetDelay(AEDelayStatus& status)
   status.SetDelay(delay);
 }
 
-unsigned int CAESinkSNDIO::AddPackets(uint8_t **data, unsigned int frames, unsigned int offset)
+unsigned int CAESinkSNDIO::AddPackets(uint8_t** data, unsigned int frames, unsigned int offset)
 {
   if (!m_hdl)
     return INT_MAX;
 
   unsigned int frameSize = m_par.bps * m_par.pchan;
   size_t size = frames * frameSize;
-  void *buffer = data[0] + offset * frameSize;
+  void* buffer = data[0] + offset * frameSize;
   size_t wrote = sio_write(m_hdl, buffer, size);
   m_written += wrote;
   return wrote / frameSize;
@@ -242,7 +229,7 @@ unsigned int CAESinkSNDIO::AddPackets(uint8_t **data, unsigned int frames, unsig
 
 void CAESinkSNDIO::Drain()
 {
-  if(!m_hdl)
+  if (!m_hdl)
     return;
 
   if (!sio_stop(m_hdl) || !sio_start(m_hdl))
@@ -251,9 +238,9 @@ void CAESinkSNDIO::Drain()
   m_written = m_played = 0;
 }
 
-void CAESinkSNDIO::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
+void CAESinkSNDIO::EnumerateDevicesEx(AEDeviceInfoList& list, bool force)
 {
-  struct sio_hdl *hdl;
+  struct sio_hdl* hdl;
   struct sio_cap cap;
 
   if ((hdl = sio_open(SIO_DEVANY, SIO_PLAY, 0)) == nullptr)
@@ -305,7 +292,8 @@ void CAESinkSNDIO::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
     {
       if (conf.enc & (1 << j))
       {
-        AEDataFormat format = lookupDataFormat(cap.enc[j].bits, cap.enc[j].bps, cap.enc[j].sig, cap.enc[j].le, cap.enc[j].msb);
+        AEDataFormat format = lookupDataFormat(cap.enc[j].bits, cap.enc[j].bps, cap.enc[j].sig,
+                                               cap.enc[j].le, cap.enc[j].msb);
         if (format != AE_FMT_INVALID)
           info.m_dataFormats.push_back(format);
       }

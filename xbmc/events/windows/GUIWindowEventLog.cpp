@@ -23,13 +23,14 @@
 #include "utils/StringUtils.h"
 #include "view/ViewStateSettings.h"
 
-#define CONTROL_BUTTON_CLEAR          20
-#define CONTROL_BUTTON_LEVEL          21
-#define CONTROL_BUTTON_LEVEL_ONLY     22
+#define CONTROL_BUTTON_CLEAR 20
+#define CONTROL_BUTTON_LEVEL 21
+#define CONTROL_BUTTON_LEVEL_ONLY 22
 
 CGUIWindowEventLog::CGUIWindowEventLog()
   : CGUIMediaWindow(WINDOW_EVENT_LOG, "EventLog.xml")
-{ }
+{
+}
 
 CGUIWindowEventLog::~CGUIWindowEventLog() = default;
 
@@ -44,7 +45,9 @@ bool CGUIWindowEventLog::OnMessage(CGUIMessage& message)
     // check if we should clear all items
     if (iControl == CONTROL_BUTTON_CLEAR)
     {
-      CServiceBroker::GetEventLog().Clear(CViewStateSettings::GetInstance().GetEventLevel(), CViewStateSettings::GetInstance().ShowHigherEventLevels());
+      CServiceBroker::GetEventLog().Clear(
+          CViewStateSettings::GetInstance().GetEventLevel(),
+          CViewStateSettings::GetInstance().ShowHigherEventLevels());
 
       // refresh the list
       Refresh(true);
@@ -129,7 +132,7 @@ bool CGUIWindowEventLog::OnSelect(int item)
   return OnSelect(m_vecItems->Get(item));
 }
 
-void CGUIWindowEventLog::GetContextButtons(int itemNumber, CContextButtons &buttons)
+void CGUIWindowEventLog::GetContextButtons(int itemNumber, CContextButtons& buttons)
 {
   if (itemNumber < 0 && itemNumber >= m_vecItems->Size())
     return;
@@ -177,17 +180,20 @@ void CGUIWindowEventLog::UpdateButtons()
 
   EventLevel eventLevel = CViewStateSettings::GetInstance().GetEventLevel();
   // set the label of the "level" button
-  SET_CONTROL_LABEL(CONTROL_BUTTON_LEVEL, StringUtils::Format(g_localizeStrings.Get(14119).c_str(), g_localizeStrings.Get(14115 + (int)eventLevel).c_str()));
+  SET_CONTROL_LABEL(CONTROL_BUTTON_LEVEL,
+                    StringUtils::Format(g_localizeStrings.Get(14119).c_str(),
+                                        g_localizeStrings.Get(14115 + (int)eventLevel).c_str()));
 
   // set the label, value and enabled state of the "level only" button
   SET_CONTROL_LABEL(CONTROL_BUTTON_LEVEL_ONLY, 14120);
-  SET_CONTROL_SELECTED(GetID(), CONTROL_BUTTON_LEVEL_ONLY, CViewStateSettings::GetInstance().ShowHigherEventLevels());
+  SET_CONTROL_SELECTED(GetID(), CONTROL_BUTTON_LEVEL_ONLY,
+                       CViewStateSettings::GetInstance().ShowHigherEventLevels());
   CONTROL_ENABLE_ON_CONDITION(CONTROL_BUTTON_LEVEL_ONLY, eventLevel < EventLevel::Error);
 
   CGUIMediaWindow::UpdateButtons();
 }
 
-bool CGUIWindowEventLog::GetDirectory(const std::string &strDirectory, CFileItemList &items)
+bool CGUIWindowEventLog::GetDirectory(const std::string& strDirectory, CFileItemList& items)
 {
   bool result = CGUIMediaWindow::GetDirectory(strDirectory, items);
 
@@ -207,9 +213,9 @@ bool CGUIWindowEventLog::GetDirectory(const std::string &strDirectory, CFileItem
     if (!item->HasProperty(PROPERTY_EVENT_LEVEL))
       continue;
 
-    EventLevel level = CEventLog::EventLevelFromString(item->GetProperty(PROPERTY_EVENT_LEVEL).asString());
-    if (level == currentLevel ||
-      (level > currentLevel && showHigherLevels))
+    EventLevel level =
+        CEventLog::EventLevelFromString(item->GetProperty(PROPERTY_EVENT_LEVEL).asString());
+    if (level == currentLevel || (level > currentLevel && showHigherLevels))
       filteredItems.Add(item);
   }
 
@@ -278,7 +284,8 @@ void CGUIWindowEventLog::OnEventRemoved(CFileItemPtr item)
   {
     selectedItemIndex = m_viewControl.GetSelectedItem();
     // only update the selected item index when the deleted item is focused
-    if (m_vecItems->Get(selectedItemIndex)->GetProperty(PROPERTY_EVENT_IDENTIFIER).asString() != item->GetProperty(PROPERTY_EVENT_IDENTIFIER).asString())
+    if (m_vecItems->Get(selectedItemIndex)->GetProperty(PROPERTY_EVENT_IDENTIFIER).asString() !=
+        item->GetProperty(PROPERTY_EVENT_IDENTIFIER).asString())
       selectedItemIndex = -1;
   }
 

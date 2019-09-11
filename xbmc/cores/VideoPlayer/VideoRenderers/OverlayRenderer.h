@@ -20,92 +20,95 @@ class CDVDOverlayImage;
 class CDVDOverlaySpu;
 class CDVDOverlaySSA;
 
-namespace OVERLAY {
+namespace OVERLAY
+{
 
-  struct SRenderState
+struct SRenderState
+{
+  float x;
+  float y;
+  float width;
+  float height;
+};
+
+class COverlay
+{
+public:
+  COverlay();
+  virtual ~COverlay();
+
+  virtual void Render(SRenderState& state) = 0;
+  virtual void PrepareRender(){};
+
+  enum EType
   {
-    float x;
-    float y;
-    float width;
-    float height;
-  };
+    TYPE_NONE,
+    TYPE_TEXTURE,
+    TYPE_GUITEXT
+  } m_type;
 
-  class COverlay
+  enum EAlign
   {
-  public:
-    COverlay();
-    virtual ~COverlay();
+    ALIGN_SCREEN,
+    ALIGN_VIDEO,
+    ALIGN_SUBTITLE
+  } m_align;
 
-    virtual void Render(SRenderState& state) = 0;
-    virtual void PrepareRender() {};
-
-    enum EType
-    { TYPE_NONE
-    , TYPE_TEXTURE
-    , TYPE_GUITEXT
-    } m_type;
-
-    enum EAlign
-    { ALIGN_SCREEN
-    , ALIGN_VIDEO
-    , ALIGN_SUBTITLE
-    } m_align;
-
-    enum EPosition
-    { POSITION_ABSOLUTE
-    , POSITION_ABSOLUTE_SCREEN
-    , POSITION_RELATIVE
-    } m_pos;
-
-    float m_x;
-    float m_y;
-    float m_width;
-    float m_height;
-  };
-
-  class CRenderer
+  enum EPosition
   {
-  public:
-    CRenderer();
-    virtual ~CRenderer();
+    POSITION_ABSOLUTE,
+    POSITION_ABSOLUTE_SCREEN,
+    POSITION_RELATIVE
+  } m_pos;
 
-    void AddOverlay(CDVDOverlay* o, double pts, int index);
-    virtual void Render(int idx);
-    void Flush();
-    void Release(int idx);
-    bool HasOverlay(int idx);
-    void SetVideoRect(CRect &source, CRect &dest, CRect &view);
-    void SetStereoMode(const std::string &stereomode);
+  float m_x;
+  float m_y;
+  float m_width;
+  float m_height;
+};
 
-  protected:
+class CRenderer
+{
+public:
+  CRenderer();
+  virtual ~CRenderer();
 
-    struct SElement
+  void AddOverlay(CDVDOverlay* o, double pts, int index);
+  virtual void Render(int idx);
+  void Flush();
+  void Release(int idx);
+  bool HasOverlay(int idx);
+  void SetVideoRect(CRect& source, CRect& dest, CRect& view);
+  void SetStereoMode(const std::string& stereomode);
+
+protected:
+  struct SElement
+  {
+    SElement()
     {
-      SElement()
-      {
-        overlay_dvd = NULL;
-        pts = 0.0;
-      }
-      double pts;
-      CDVDOverlay* overlay_dvd;
-    };
-
-    void Render(COverlay* o, float adjust_height);
-    COverlay* Convert(CDVDOverlay* o, double pts);
-    COverlay* Convert(CDVDOverlaySSA* o, double pts);
-
-    void Release(std::vector<SElement>& list);
-    void ReleaseCache();
-    void ReleaseUnused();
-
-    CCriticalSection m_section;
-    std::vector<SElement> m_buffers[NUM_BUFFERS];
-    std::map<unsigned int, COverlay*> m_textureCache;
-    static unsigned int m_textureid;
-    CRect m_rv, m_rs, m_rd;
-    std::string m_font, m_fontBorder;
-    std::string m_stereomode;
+      overlay_dvd = NULL;
+      pts = 0.0;
+    }
+    double pts;
+    CDVDOverlay* overlay_dvd;
   };
 
-  extern const std::string SETTING_SUBTITLES_OPACITY;
-}
+  void Render(COverlay* o, float adjust_height);
+  COverlay* Convert(CDVDOverlay* o, double pts);
+  COverlay* Convert(CDVDOverlaySSA* o, double pts);
+
+  void Release(std::vector<SElement>& list);
+  void ReleaseCache();
+  void ReleaseUnused();
+
+  CCriticalSection m_section;
+  std::vector<SElement> m_buffers[NUM_BUFFERS];
+  std::map<unsigned int, COverlay*> m_textureCache;
+  static unsigned int m_textureid;
+  CRect m_rv, m_rs, m_rd;
+  std::string m_font, m_fontBorder;
+  std::string m_stereomode;
+};
+
+extern const std::string SETTING_SUBTITLES_OPACITY;
+} // namespace OVERLAY

@@ -16,20 +16,20 @@ class CFileItem;
 
 namespace PVR
 {
-  class CGUIWindowPVRTimersBase : public CGUIWindowPVRBase
-  {
-  public:
-    CGUIWindowPVRTimersBase(bool bRadio, int id, const std::string &xmlFile);
-    ~CGUIWindowPVRTimersBase(void) override;
+class CGUIWindowPVRTimersBase : public CGUIWindowPVRBase
+{
+public:
+  CGUIWindowPVRTimersBase(bool bRadio, int id, const std::string& xmlFile);
+  ~CGUIWindowPVRTimersBase(void) override;
 
-    bool OnMessage(CGUIMessage& message) override;
-    bool OnAction(const CAction &action) override;
-    bool Update(const std::string &strDirectory, bool updateFilterPath = true) override;
-    void UpdateButtons(void) override;
+  bool OnMessage(CGUIMessage& message) override;
+  bool OnAction(const CAction& action) override;
+  bool Update(const std::string& strDirectory, bool updateFilterPath = true) override;
+  void UpdateButtons(void) override;
 
-  private:
-    bool ActionShowTimer(const std::shared_ptr<CFileItem>& item);
+private:
+  bool ActionShowTimer(const std::shared_ptr<CFileItem>& item);
 
-    std::shared_ptr<CFileItem> m_currentFileItem;
-  };
-}
+  std::shared_ptr<CFileItem> m_currentFileItem;
+};
+} // namespace PVR

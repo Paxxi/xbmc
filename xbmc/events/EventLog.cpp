@@ -68,8 +68,7 @@ Events CEventLog::Get(EventLevel level, bool includeHigherLevels /* = false */) 
   CSingleLock lock(m_critical);
   for (const auto& eventPtr : m_events)
   {
-    if (eventPtr->GetLevel() == level ||
-       (includeHigherLevels && eventPtr->GetLevel() > level))
+    if (eventPtr->GetLevel() == level || (includeHigherLevels && eventPtr->GetLevel() > level))
       events.push_back(eventPtr);
   }
 
@@ -92,8 +91,11 @@ EventPtr CEventLog::Get(const std::string& eventPtrIdentifier) const
 void CEventLog::Add(const EventPtr& eventPtr)
 {
   if (eventPtr == nullptr || eventPtr->GetIdentifier().empty() ||
-      !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_EVENTLOG_ENABLED) ||
-     (eventPtr->GetLevel() == EventLevel::Information && !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_EVENTLOG_ENABLED_NOTIFICATIONS)))
+      !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+          CSettings::SETTING_EVENTLOG_ENABLED) ||
+      (eventPtr->GetLevel() == EventLevel::Information &&
+       !CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+           CSettings::SETTING_EVENTLOG_ENABLED_NOTIFICATIONS)))
     return;
 
   CSingleLock lock(m_critical);
@@ -127,7 +129,9 @@ void CEventLog::AddWithNotification(const EventPtr& eventPtr,
 
   // queue the eventPtr as a kai toast notification
   if (!eventPtr->GetIcon().empty())
-    CGUIDialogKaiToast::QueueNotification(eventPtr->GetIcon(), eventPtr->GetLabel(), eventPtr->GetDescription(), displayTime, withSound, messageTime);
+    CGUIDialogKaiToast::QueueNotification(eventPtr->GetIcon(), eventPtr->GetLabel(),
+                                          eventPtr->GetDescription(), displayTime, withSound,
+                                          messageTime);
   else
   {
     CGUIDialogKaiToast::eMessageType type = CGUIDialogKaiToast::Info;
@@ -136,7 +140,8 @@ void CEventLog::AddWithNotification(const EventPtr& eventPtr,
     else if (eventPtr->GetLevel() == EventLevel::Error)
       type = CGUIDialogKaiToast::Error;
 
-    CGUIDialogKaiToast::QueueNotification(type, eventPtr->GetLabel(), eventPtr->GetDescription(), displayTime, withSound, messageTime);
+    CGUIDialogKaiToast::QueueNotification(type, eventPtr->GetLabel(), eventPtr->GetDescription(),
+                                          displayTime, withSound, messageTime);
   }
 }
 
@@ -183,8 +188,7 @@ void CEventLog::Clear(EventLevel level, bool includeHigherLevels /* = false */)
   for (const auto& eventPtr : eventsCopy)
   {
 
-    if (eventPtr->GetLevel() == level ||
-      (includeHigherLevels && eventPtr->GetLevel() > level))
+    if (eventPtr->GetLevel() == level || (includeHigherLevels && eventPtr->GetLevel() > level))
       Remove(eventPtr);
   }
 }
@@ -202,7 +206,8 @@ bool CEventLog::Execute(const std::string& eventPtrIdentifier)
   return itEvent->second->Execute();
 }
 
-void CEventLog::ShowFullEventLog(EventLevel level /* = EventLevel::Basic */, bool includeHigherLevels /* = true */)
+void CEventLog::ShowFullEventLog(EventLevel level /* = EventLevel::Basic */,
+                                 bool includeHigherLevels /* = true */)
 {
   // put together the path
   std::string path = "events://";
@@ -224,6 +229,7 @@ void CEventLog::ShowFullEventLog(EventLevel level /* = EventLevel::Basic */, boo
 
 void CEventLog::SendMessage(const EventPtr& eventPtr, int message)
 {
-  CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, message, 0, XFILE::CEventsDirectory::EventToFileItem(eventPtr));
+  CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, message, 0,
+                  XFILE::CEventsDirectory::EventToFileItem(eventPtr));
   CServiceBroker::GetGUI()->GetWindowManager().SendThreadMessage(msg);
 }

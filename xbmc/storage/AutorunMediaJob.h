@@ -15,11 +15,12 @@
 class CAutorunMediaJob : public CJob
 {
 public:
-  CAutorunMediaJob(const std::string &label, const std::string &path);
+  CAutorunMediaJob(const std::string& label, const std::string& path);
 
   bool DoWork() override;
+
 private:
-  const char *GetWindowString(int selection);
+  const char* GetWindowString(int selection);
 
   std::string m_path, m_label;
 };

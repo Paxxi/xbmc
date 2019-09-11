@@ -21,7 +21,10 @@ class CJNIXBMCMediaSession : public CJNIBase, public CJNIInterfaceImplem<CJNIXBM
 public:
   CJNIXBMCMediaSession();
   CJNIXBMCMediaSession(const CJNIXBMCMediaSession& other);
-  CJNIXBMCMediaSession(const jni::jhobject &object) : CJNIBase(object) {}
+  CJNIXBMCMediaSession(const jni::jhobject& object)
+    : CJNIBase(object)
+  {
+  }
   virtual ~CJNIXBMCMediaSession();
 
   static void RegisterNatives(JNIEnv* env);
@@ -56,4 +59,4 @@ protected:
   bool m_isActive;
 };
 
-}
+} // namespace jni

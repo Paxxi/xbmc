@@ -16,11 +16,11 @@
 #include <stdlib.h>
 
 #undef ALIGN
-#define ALIGN(value, alignment) (((value)+((alignment)-1))&~((alignment)-1))
+#define ALIGN(value, alignment) (((value) + ((alignment)-1)) & ~((alignment)-1))
 
 // #define SPU_DEBUG
 
-void DebugLog(const char *format, ...)
+void DebugLog(const char* format, ...)
 {
 #ifdef SPU_DEBUG
   static char temp_spubuffer[1024];
@@ -30,7 +30,7 @@ void DebugLog(const char *format, ...)
   _vsnprintf(temp_spubuffer, 1024, format, va);
   va_end(va);
 
-  CLog::Log(LOGDEBUG,temp_spubuffer);
+  CLog::Log(LOGDEBUG, temp_spubuffer);
 #endif
 }
 
@@ -68,8 +68,7 @@ CDVDOverlaySpu* CDVDDemuxSPU::AddData(uint8_t* data, int iSize, double pts)
 {
   SPUData* pSPUData = &m_spuData;
 
-  if (pSPUData->iNeededSize > 0 &&
-      (pSPUData->iSize != pSPUData->iNeededSize) &&
+  if (pSPUData->iNeededSize > 0 && (pSPUData->iSize != pSPUData->iNeededSize) &&
       ((pSPUData->iSize + iSize) > pSPUData->iNeededSize))
   {
     DebugLog("corrupt spu data: packet does not fit");
@@ -93,8 +92,10 @@ CDVDOverlaySpu* CDVDDemuxSPU::AddData(uint8_t* data, int iSize, double pts)
       m_spuData.iSize = 0;
       return NULL;
     }
-    if (length > iSize) pSPUData->iNeededSize = length;
-    else pSPUData->iNeededSize = iSize;
+    if (length > iSize)
+      pSPUData->iNeededSize = length;
+    else
+      pSPUData->iNeededSize = iSize;
 
     // set presentation time stamp
     pSPUData->pts = pts;
@@ -113,7 +114,7 @@ CDVDOverlaySpu* CDVDDemuxSPU::AddData(uint8_t* data, int iSize, double pts)
     pSPUData->data = tmpptr;
   }
 
-  if(!pSPUData->data)
+  if (!pSPUData->data)
     return NULL; // crap realloc failed, this will have leaked some memory due to odd realloc
 
   // add new data
@@ -138,15 +139,15 @@ CDVDOverlaySpu* CDVDDemuxSPU::AddData(uint8_t* data, int iSize, double pts)
   return NULL;
 }
 
-#define CMD_END     0xFF
-#define FSTA_DSP    0x00
-#define STA_DSP     0x01
-#define STP_DSP     0x02
-#define SET_COLOR   0x03
-#define SET_CONTR   0x04
-#define SET_DAREA   0x05
-#define SET_DSPXA   0x06
-#define CHG_COLCON  0x07
+#define CMD_END 0xFF
+#define FSTA_DSP 0x00
+#define STA_DSP 0x01
+#define STP_DSP 0x02
+#define SET_COLOR 0x03
+#define SET_CONTR 0x04
+#define SET_DAREA 0x05
+#define SET_DSPXA 0x06
+#define CHG_COLCON 0x07
 
 CDVDOverlaySpu* CDVDDemuxSPU::ParsePacket(SPUData* pSPUData)
 {
@@ -155,7 +156,8 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParsePacket(SPUData* pSPUData)
 
   if (pSPUData->iNeededSize != pSPUData->iSize)
   {
-    DebugLog("GetPacket, packet is incomplete, missing: %i bytes", (pSPUData->iNeededSize - pSPUData->iSize));
+    DebugLog("GetPacket, packet is incomplete, missing: %i bytes",
+             (pSPUData->iNeededSize - pSPUData->iSize));
   }
 
   if (pSPUData->data[pSPUData->iSize - 1] != 0xff)
@@ -204,106 +206,108 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParsePacket(SPUData* pSPUData)
         // delay is always 0, the VideoPlayer should decide when to display the packet (menu highlight)
         break;
       case STA_DSP:
-        {
-          p++;
-          pSPUInfo->iPTSStartTime = pSPUData->pts;
-          pSPUInfo->iPTSStartTime += (double)delay * 1024 * DVD_TIME_BASE / 90000;
-          DebugLog("    GetPacket, STA_DSP: Start Display, delay: %i", ((delay * 1024) / 90000));
-        }
-        break;
+      {
+        p++;
+        pSPUInfo->iPTSStartTime = pSPUData->pts;
+        pSPUInfo->iPTSStartTime += (double)delay * 1024 * DVD_TIME_BASE / 90000;
+        DebugLog("    GetPacket, STA_DSP: Start Display, delay: %i", ((delay * 1024) / 90000));
+      }
+      break;
       case STP_DSP:
-        {
-          p++;
-          pSPUInfo->iPTSStopTime = pSPUData->pts;
-          pSPUInfo->iPTSStopTime += (double)delay * 1024 * DVD_TIME_BASE / 90000;
-          DebugLog("    GetPacket, STP_DSP: Stop Display, delay: %i", ((delay * 1024) / 90000));
-        }
-        break;
+      {
+        p++;
+        pSPUInfo->iPTSStopTime = pSPUData->pts;
+        pSPUInfo->iPTSStopTime += (double)delay * 1024 * DVD_TIME_BASE / 90000;
+        DebugLog("    GetPacket, STP_DSP: Stop Display, delay: %i", ((delay * 1024) / 90000));
+      }
+      break;
       case SET_COLOR:
+      {
+        p++;
+
+        if (m_bHasClut)
         {
-          p++;
+          pSPUInfo->bHasColor = true;
 
-          if (m_bHasClut)
+          unsigned int idx[4];
+          // 0, 1, 2, 3
+          idx[0] = (p[0] >> 4) & 0x0f;
+          idx[1] = (p[0]) & 0x0f;
+          idx[2] = (p[1] >> 4) & 0x0f;
+          idx[3] = (p[1]) & 0x0f;
+
+          for (int i = 0; i < 4; i++) // emphasis 1, emphasis 2, pattern, back ground
           {
-            pSPUInfo->bHasColor = true;
+            uint8_t* iColor = m_clut[idx[i]];
 
-            unsigned int idx[4];
-            // 0, 1, 2, 3
-            idx[0] = (p[0] >> 4) & 0x0f;
-            idx[1] = (p[0]) & 0x0f;
-            idx[2] = (p[1] >> 4) & 0x0f;
-            idx[3] = (p[1]) & 0x0f;
-
-            for (int i = 0; i < 4 ; i++) // emphasis 1, emphasis 2, pattern, back ground
-            {
-              uint8_t* iColor = m_clut[idx[i]];
-
-              pSPUInfo->color[3 - i][0] = iColor[0]; // Y
-              pSPUInfo->color[3 - i][1] = iColor[1]; // Cr
-              pSPUInfo->color[3 - i][2] = iColor[2]; // Cb
-            }
+            pSPUInfo->color[3 - i][0] = iColor[0]; // Y
+            pSPUInfo->color[3 - i][1] = iColor[1]; // Cr
+            pSPUInfo->color[3 - i][2] = iColor[2]; // Cb
           }
-
-          DebugLog("    GetPacket, SET_COLOR:");
-          p += 2;
         }
-        break;
-      case SET_CONTR:  // alpha
+
+        DebugLog("    GetPacket, SET_COLOR:");
+        p += 2;
+      }
+      break;
+      case SET_CONTR: // alpha
+      {
+        p++;
+        // 3, 2, 1, 0
+        alpha[0] = (p[0] >> 4) & 0x0f;
+        alpha[1] = (p[0]) & 0x0f;
+        alpha[2] = (p[1] >> 4) & 0x0f;
+        alpha[3] = (p[1]) & 0x0f;
+
+        // Ignore blank alpha palette.
+        if (alpha[0] | alpha[1] | alpha[2] | alpha[3])
         {
-          p++;
-          // 3, 2, 1, 0
-          alpha[0] = (p[0] >> 4) & 0x0f;
-          alpha[1] = (p[0]) & 0x0f;
-          alpha[2] = (p[1] >> 4) & 0x0f;
-          alpha[3] = (p[1]) & 0x0f;
+          pSPUInfo->bHasAlpha = true;
 
-          // Ignore blank alpha palette.
-          if (alpha[0] | alpha[1] | alpha[2] | alpha[3])
-          {
-            pSPUInfo->bHasAlpha = true;
-
-            // 0, 1, 2, 3
-            pSPUInfo->alpha[0] = alpha[3]; //0 // background, should be hidden
-            pSPUInfo->alpha[1] = alpha[2]; //1
-            pSPUInfo->alpha[2] = alpha[1]; //2 // wm button overlay
-            pSPUInfo->alpha[3] = alpha[0]; //3
-          }
-
-          DebugLog("    GetPacket, SET_CONTR:");
-          p += 2;
+          // 0, 1, 2, 3
+          pSPUInfo->alpha[0] = alpha[3]; //0 // background, should be hidden
+          pSPUInfo->alpha[1] = alpha[2]; //1
+          pSPUInfo->alpha[2] = alpha[1]; //2 // wm button overlay
+          pSPUInfo->alpha[3] = alpha[0]; //3
         }
-        break;
+
+        DebugLog("    GetPacket, SET_CONTR:");
+        p += 2;
+      }
+      break;
       case SET_DAREA:
-        {
-          p++;
-          pSPUInfo->x = (p[0] << 4) | (p[1] >> 4);
-          pSPUInfo->y = (p[3] << 4) | (p[4] >> 4);
-          pSPUInfo->width = (((p[1] & 0x0f) << 8) | p[2]) - pSPUInfo->x + 1;
-          pSPUInfo->height = (((p[4] & 0x0f) << 8) | p[5]) - pSPUInfo->y + 1;
-          DebugLog("    GetPacket, SET_DAREA: x,y:%i,%i width,height:%i,%i",
-                   pSPUInfo->x, pSPUInfo->y, pSPUInfo->width, pSPUInfo->height);
-          p += 6;
-        }
-        break;
+      {
+        p++;
+        pSPUInfo->x = (p[0] << 4) | (p[1] >> 4);
+        pSPUInfo->y = (p[3] << 4) | (p[4] >> 4);
+        pSPUInfo->width = (((p[1] & 0x0f) << 8) | p[2]) - pSPUInfo->x + 1;
+        pSPUInfo->height = (((p[4] & 0x0f) << 8) | p[5]) - pSPUInfo->y + 1;
+        DebugLog("    GetPacket, SET_DAREA: x,y:%i,%i width,height:%i,%i", pSPUInfo->x, pSPUInfo->y,
+                 pSPUInfo->width, pSPUInfo->height);
+        p += 6;
+      }
+      break;
       case SET_DSPXA:
-        {
-          p++;
-          uint16_t tfaddr = (p[0] << 8 | p[1]); // offset in packet
-          uint16_t bfaddr = (p[2] << 8 | p[3]); // offset in packet
-          pSPUInfo->pTFData = (tfaddr - 4); //pSPUInfo->pData + (tfaddr - 4); // pSPUData->data = packet startaddr - 4
-          pSPUInfo->pBFData = (bfaddr - 4); //pSPUInfo->pData + (bfaddr - 4); // pSPUData->data = packet startaddr - 4
-          p += 4;
-          DebugLog("    GetPacket, SET_DSPXA: tf: %i bf: %i ", tfaddr, bfaddr);
-        }
-        break;
+      {
+        p++;
+        uint16_t tfaddr = (p[0] << 8 | p[1]); // offset in packet
+        uint16_t bfaddr = (p[2] << 8 | p[3]); // offset in packet
+        pSPUInfo->pTFData =
+            (tfaddr - 4); //pSPUInfo->pData + (tfaddr - 4); // pSPUData->data = packet startaddr - 4
+        pSPUInfo->pBFData =
+            (bfaddr - 4); //pSPUInfo->pData + (bfaddr - 4); // pSPUData->data = packet startaddr - 4
+        p += 4;
+        DebugLog("    GetPacket, SET_DSPXA: tf: %i bf: %i ", tfaddr, bfaddr);
+      }
+      break;
       case CHG_COLCON:
-        {
-          p++;
-          uint16_t paramlength = p[0] << 8 | p[1];
-          DebugLog("GetPacket, CHG_COLCON, skippin %i bytes", paramlength);
-          p += paramlength;
-        }
-        break;
+      {
+        p++;
+        uint16_t paramlength = p[0] << 8 | p[1];
+        DebugLog("GetPacket, CHG_COLCON, skippin %i bytes", paramlength);
+        p += paramlength;
+      }
+      break;
 
       default:
         DebugLog("GetPacket, error parsing control sequence");
@@ -313,7 +317,8 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParsePacket(SPUData* pSPUData)
       }
     }
     DebugLog("  end off SP_DCSQT");
-    if (*p == CMD_END) p++;
+    if (*p == CMD_END)
+      p++;
     else
     {
       DebugLog("GetPacket, end off SP_DCSQT, but did not found 0xff (CMD_END)");
@@ -328,15 +333,15 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParsePacket(SPUData* pSPUData)
 /*****************************************************************************
  * AddNibble: read a nibble from a source packet and add it to our integer.
  *****************************************************************************/
-inline unsigned int AddNibble( unsigned int i_code, uint8_t* p_src, unsigned int* pi_index )
+inline unsigned int AddNibble(unsigned int i_code, uint8_t* p_src, unsigned int* pi_index)
 {
-  if ( *pi_index & 0x1 )
+  if (*pi_index & 0x1)
   {
-    return ( i_code << 4 | ( p_src[(*pi_index)++ >> 1] & 0xf ) );
+    return (i_code << 4 | (p_src[(*pi_index)++ >> 1] & 0xf));
   }
   else
   {
-    return ( i_code << 4 | p_src[(*pi_index)++ >> 1] >> 4 );
+    return (i_code << 4 | p_src[(*pi_index)++ >> 1] >> 4);
   }
 }
 
@@ -361,43 +366,44 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
   uint16_t* p_dest = (uint16_t*)pSPU->result;
 
   /* The subtitles are interlaced, we need two offsets */
-  unsigned int i_id = 0;                   /* Start on the even SPU layer */
+  unsigned int i_id = 0; /* Start on the even SPU layer */
   unsigned int pi_table[2];
 
   /* Colormap statistics */
   int i_border = -1;
-  int stats[4]; stats[0] = stats[1] = stats[2] = stats[3] = 0;
+  int stats[4];
+  stats[0] = stats[1] = stats[2] = stats[3] = 0;
 
-  pi_table[ 0 ] = pSPU->pTFData << 1;
-  pi_table[ 1 ] = pSPU->pBFData << 1;
+  pi_table[0] = pSPU->pTFData << 1;
+  pi_table[1] = pSPU->pBFData << 1;
 
-  for ( i_y = 0 ; i_y < i_height ; i_y++ )
+  for (i_y = 0; i_y < i_height; i_y++)
   {
-    unsigned int *pi_offset = pi_table + i_id;
+    unsigned int* pi_offset = pi_table + i_id;
 
-    for ( i_x = 0 ; i_x < i_width ; i_x += i_code >> 2 )
+    for (i_x = 0; i_x<i_width; i_x += i_code>> 2)
     {
-      i_code = AddNibble( 0, p_src, pi_offset );
+      i_code = AddNibble(0, p_src, pi_offset);
 
-      if ( i_code < 0x04 )
+      if (i_code < 0x04)
       {
-        i_code = AddNibble( i_code, p_src, pi_offset );
+        i_code = AddNibble(i_code, p_src, pi_offset);
 
-        if ( i_code < 0x10 )
+        if (i_code < 0x10)
         {
-          i_code = AddNibble( i_code, p_src, pi_offset );
+          i_code = AddNibble(i_code, p_src, pi_offset);
 
-          if ( i_code < 0x040 )
+          if (i_code < 0x040)
           {
-            i_code = AddNibble( i_code, p_src, pi_offset );
+            i_code = AddNibble(i_code, p_src, pi_offset);
 
-            if ( i_code < 0x0100 )
+            if (i_code < 0x0100)
             {
               /* If the 14 first bits are set to 0, then it's a
                * new line. We emulate it. */
-              if ( i_code < 0x0004 )
+              if (i_code < 0x0004)
               {
-                i_code |= ( i_width - i_x ) << 2;
+                i_code |= (i_width - i_x) << 2;
               }
               else
               {
@@ -411,10 +417,10 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
         }
       }
 
-      if ( ( (i_code >> 2) + i_x + i_y * i_width ) > i_height * i_width )
+      if (((i_code >> 2) + i_x + i_y * i_width) > i_height * i_width)
       {
-        CLog::Log(LOGERROR, "ParseRLE: out of bounds, %i at (%i,%i) is out of %ix%i",
-                 i_code >> 2, i_x, i_y, i_width, i_height );
+        CLog::Log(LOGERROR, "ParseRLE: out of bounds, %i at (%i,%i) is out of %ix%i", i_code >> 2,
+                  i_x, i_y, i_width, i_height);
         pSPU->Release();
         return NULL;
       }
@@ -433,9 +439,10 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
       /* Check we aren't overwriting our data range
          This occurs on "The Triplets of BelleVille" region 4 disk (NTSC)"
          where we use around 96k rather than 64k + 20bytes */
-      if ((uint8_t *)p_dest >= pSPU->result + sizeof(pSPU->result))
+      if ((uint8_t*)p_dest >= pSPU->result + sizeof(pSPU->result))
       {
-        CLog::Log(LOGERROR, "ParseRLE: Overrunning our data range.  Need %li bytes", (long)((uint8_t *)p_dest - pSPU->result));
+        CLog::Log(LOGERROR, "ParseRLE: Overrunning our data range.  Need %li bytes",
+                  (long)((uint8_t*)p_dest - pSPU->result));
         pSPU->Release();
         return NULL;
       }
@@ -443,15 +450,15 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
     }
 
     /* Check that we didn't go too far */
-    if ( i_x > i_width )
+    if (i_x > i_width)
     {
-      CLog::Log(LOGERROR, "ParseRLE: i_x overflowed, %i > %i", i_x, i_width );
+      CLog::Log(LOGERROR, "ParseRLE: i_x overflowed, %i > %i", i_x, i_width);
       pSPU->Release();
       return NULL;
     }
 
     /* Byte-align the stream */
-    if ( *pi_offset & 0x1 )
+    if (*pi_offset & 0x1)
     {
       (*pi_offset)++;
     }
@@ -461,20 +468,21 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
   }
 
   /* We shouldn't get any padding bytes */
-  if ( i_y < i_height )
+  if (i_y < i_height)
   {
-    DebugLog("ParseRLE: padding bytes found in RLE sequence" );
-    DebugLog("ParseRLE: send mail to <sam@zoy.org> if you want to help debugging this" );
+    DebugLog("ParseRLE: padding bytes found in RLE sequence");
+    DebugLog("ParseRLE: send mail to <sam@zoy.org> if you want to help debugging this");
 
     /* Skip them just in case */
-    while ( i_y < i_height )
+    while (i_y < i_height)
     {
       /* Check we aren't overwriting our data range
          This occurs on "The Triplets of BelleVille" region 4 disk (NTSC)"
          where we use around 96k rather than 64k + 20bytes */
-      if ((uint8_t *)p_dest >= pSPU->result + sizeof(pSPU->result))
+      if ((uint8_t*)p_dest >= pSPU->result + sizeof(pSPU->result))
       {
-        CLog::Log(LOGERROR, "ParseRLE: Overrunning our data range.  Need %li bytes", (long)((uint8_t *)p_dest - pSPU->result));
+        CLog::Log(LOGERROR, "ParseRLE: Overrunning our data range.  Need %li bytes",
+                  (long)((uint8_t*)p_dest - pSPU->result));
         pSPU->Release();
         return NULL;
       }
@@ -486,14 +494,14 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
     return NULL;
   }
 
-  DebugLog("ParseRLE: valid subtitle, size: %ix%i, position: %i,%i",
-           pSPU->width, pSPU->height, pSPU->x, pSPU->y );
+  DebugLog("ParseRLE: valid subtitle, size: %ix%i, position: %i,%i", pSPU->width, pSPU->height,
+           pSPU->x, pSPU->y);
 
   // forced spu's (menu overlays) retrieve their alpha/color information from InputStreamNavigator::GetCurrentButtonInfo
   // also they may contain completely covering data wich is supposed to be hidden normally
   // since whole spu is drawn, if this is done for forced, that may be displayed
   // so we must trust what is given
-  if( !pSPU->bForced )
+  if (!pSPU->bForced)
   {
     // Handle color if no palette was found.
     // we only set it if there is a valid i_border color
@@ -511,7 +519,8 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
       // thus if there are no pixels to display, we assume the alphas are incorrect.
       if (!CanDisplayWithAlphas(pSPU->alpha, stats))
       {
-        CLog::Log(LOGINFO, "%s - no  matching color and alpha found, resetting alpha", __FUNCTION__);
+        CLog::Log(LOGINFO, "%s - no  matching color and alpha found, resetting alpha",
+                  __FUNCTION__);
 
         pSPU->alpha[0] = 0x00; // back ground
         pSPU->alpha[1] = 0x0f;
@@ -528,7 +537,6 @@ CDVDOverlaySpu* CDVDDemuxSPU::ParseRLE(CDVDOverlaySpu* pSPU, uint8_t* pUnparsedD
       pSPU->alpha[2] = 0x0f;
       pSPU->alpha[3] = 0x0f;
     }
-
   }
 
   return pSPU;
@@ -546,10 +554,11 @@ void CDVDDemuxSPU::FindSubtitleColor(int last_color, int stats[4], CDVDOverlaySp
   //  { 0x00, 0x90, 0xff }  // border color
   //};
 
-  uint8_t custom_subtitle_color[4][3] = { // inner color white, gray shading and a black border
-    { 0xff, 0x80, 0x80 }, // inner color, white
-    { 0x80, 0x80, 0x80 }, // shade color, gray
-    { 0x00, 0x80, 0x80 }  // border color, black
+  uint8_t custom_subtitle_color[4][3] = {
+      // inner color white, gray shading and a black border
+      {0xff, 0x80, 0x80}, // inner color, white
+      {0x80, 0x80, 0x80}, // shade color, gray
+      {0x00, 0x80, 0x80} // border color, black
   };
 
   //uint8_t custom_subtitle_color[4][3] = { // completely white and a black border
@@ -562,7 +571,8 @@ void CDVDDemuxSPU::FindSubtitleColor(int last_color, int stats[4], CDVDOverlaySp
   int nrOfUsedColors = 0;
   for (int alpha : pSPU->alpha)
   {
-    if (alpha > 0) nrOfUsedColors++;
+    if (alpha > 0)
+      nrOfUsedColors++;
   }
 
   if (nrOfUsedColors == 0)
@@ -583,7 +593,6 @@ void CDVDDemuxSPU::FindSubtitleColor(int last_color, int stats[4], CDVDOverlaySp
         return;
       }
     }
-
   }
   else
   {
@@ -598,60 +607,57 @@ void CDVDDemuxSPU::FindSubtitleColor(int last_color, int stats[4], CDVDOverlaySp
       pSPU->color[last_color][2] = custom_subtitle_color[COLOR_BORDER][2];
       stats[last_color] = 0;
 
-    // find the inner colors
-    for ( i = 0 ; i < 4 && i_inner == -1 ; i++ )
-    {
-      if ( stats[i] )
+      // find the inner colors
+      for (i = 0; i < 4 && i_inner == -1; i++)
       {
-        i_inner = i;
-      }
-    }
-
-    // try to find the shade color
-    for ( ; i < 4 && i_shade == -1 ; i++)
-    {
-      if ( stats[i] )
-      {
-        if ( stats[i] > stats[i_inner] )
+        if (stats[i])
         {
-          i_shade = i_inner;
           i_inner = i;
         }
-        else
+      }
+
+      // try to find the shade color
+      for (; i < 4 && i_shade == -1; i++)
+      {
+        if (stats[i])
         {
-          i_shade = i;
+          if (stats[i] > stats[i_inner])
+          {
+            i_shade = i_inner;
+            i_inner = i;
+          }
+          else
+          {
+            i_shade = i;
+          }
         }
       }
-    }
 
-    /* Set the inner color */
-    if ( i_inner != -1 )
-    {
-      // white color
+      /* Set the inner color */
+      if (i_inner != -1)
+      {
+        // white color
         pSPU->color[i_inner][0] = custom_subtitle_color[COLOR_INNER][0]; // Y
         pSPU->color[i_inner][1] = custom_subtitle_color[COLOR_INNER][1]; // Cr ?
         pSPU->color[i_inner][2] = custom_subtitle_color[COLOR_INNER][2]; // Cb ?
-    }
+      }
 
-    /* Set the anti-aliasing color */
-    if ( i_shade != -1 )
-    {
-      // gray
+      /* Set the anti-aliasing color */
+      if (i_shade != -1)
+      {
+        // gray
         pSPU->color[i_shade][0] = custom_subtitle_color[COLOR_SHADE][0];
         pSPU->color[i_shade][1] = custom_subtitle_color[COLOR_SHADE][1];
         pSPU->color[i_shade][2] = custom_subtitle_color[COLOR_SHADE][2];
-    }
+      }
 
-      DebugLog("ParseRLE: using custom palette (border %i, inner %i, shade %i)", last_color, i_inner, i_shade);
+      DebugLog("ParseRLE: using custom palette (border %i, inner %i, shade %i)", last_color,
+               i_inner, i_shade);
     }
   }
 }
 
 bool CDVDDemuxSPU::CanDisplayWithAlphas(int a[4], int stats[4])
 {
-  return(
-    a[0] * stats[0] > 0 ||
-    a[1] * stats[1] > 0 ||
-    a[2] * stats[2] > 0 ||
-    a[3] * stats[3] > 0);
+  return (a[0] * stats[0] > 0 || a[1] * stats[1] > 0 || a[2] * stats[2] > 0 || a[3] * stats[3] > 0);
 }

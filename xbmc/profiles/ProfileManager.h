@@ -22,8 +22,7 @@ class CEventLogManager;
 class CSettings;
 class TiXmlNode;
 
-class CProfileManager : protected ISettingsHandler,
-                         protected ISettingCallback
+class CProfileManager : protected ISettingsHandler, protected ISettingCallback
 {
 public:
   CProfileManager();
@@ -88,7 +87,7 @@ public:
     \param name name of the profile index to retrieve
     \return index of this profile, -1 if invalid.
     */
-  int GetProfileIndex(const std::string &name) const;
+  int GetProfileIndex(const std::string& name) const;
 
   /*! \brief Retrieve the number of profiles
     \return number of profiles
@@ -98,7 +97,7 @@ public:
   /*! \brief Add a new profile
     \param profile CProfile to add
     */
-  void AddProfile(const CProfile &profile);
+  void AddProfile(const CProfile& profile);
 
   /*! \brief Are we using the login screen?
     \return true if we're using the login screen, false otherwise
@@ -179,7 +178,7 @@ public:
   std::string GetUserDataItem(const std::string& strFile) const;
 
   // Event log access
-  CEventLog &GetEventLog();
+  CEventLog& GetEventLog();
 
 protected:
   // implementation of ISettingCallback
@@ -202,7 +201,8 @@ private:
   bool m_profileLoadedForLogin;
   int m_autoLoginProfile;
   unsigned int m_lastUsedProfile;
-  unsigned int m_currentProfile; // do not modify directly, use SetCurrentProfileId() function instead
+  unsigned int
+      m_currentProfile; // do not modify directly, use SetCurrentProfileId() function instead
   int m_nextProfileId; // for tracking the next available id to give to a new profile to ensure id's are not re-used
   mutable CCriticalSection m_critical;
 

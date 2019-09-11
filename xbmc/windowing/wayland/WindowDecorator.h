@@ -72,7 +72,9 @@ public:
    * \param scale scale to use for buffers
    * \param state surface state for adjusting decoration appearance
    */
-  CWindowDecorator(IWindowDecorationHandler& handler, CConnection& connection, wayland::surface_t const& mainSurface);
+  CWindowDecorator(IWindowDecorationHandler& handler,
+                   CConnection& connection,
+                   wayland::surface_t const& mainSurface);
 
   /**
    * Set decoration state and size by providing full surface size including decorations
@@ -88,10 +90,7 @@ public:
   /**
    * Get calculated size of main surface
    */
-  CSizeInt GetMainSurfaceSize() const
-  {
-    return m_mainSurfaceSize;
-  }
+  CSizeInt GetMainSurfaceSize() const { return m_mainSurfaceSize; }
   /**
    * Get full geometry of the window, including decorations if active
    */
@@ -105,7 +104,8 @@ public:
    * Calculate size of full surface including decorations given the size of the
    * main surface and a state
    */
-  CSizeInt CalculateFullSurfaceSize(CSizeInt mainSurfaceSize, IShellSurface::StateBitset state) const;
+  CSizeInt CalculateFullSurfaceSize(CSizeInt mainSurfaceSize,
+                                    IShellSurface::StateBitset state) const;
 
   bool IsDecorationActive() const;
 
@@ -122,13 +122,14 @@ public:
     Buffer() noexcept {}
 
     Buffer(void* data, std::size_t dataSize, CSizeInt size, wayland::buffer_t&& buffer)
-    : data{data}, dataSize{dataSize}, size{size}, wlBuffer{std::move(buffer)}
-    {}
-
-    std::uint32_t* RgbaBuffer()
+      : data{data}
+      , dataSize{dataSize}
+      , size{size}
+      , wlBuffer{std::move(buffer)}
     {
-      return static_cast<std::uint32_t*> (data);
     }
+
+    std::uint32_t* RgbaBuffer() { return static_cast<std::uint32_t*>(data); }
   };
 
   struct Surface
@@ -144,12 +145,26 @@ private:
   CWindowDecorator& operator=(CWindowDecorator const& other) = delete;
 
   // IRawInputHandlerTouch
-  void OnTouchDown(CSeat* seat, std::uint32_t serial, std::uint32_t time, wayland::surface_t surface, std::int32_t id, double x, double y) override;
+  void OnTouchDown(CSeat* seat,
+                   std::uint32_t serial,
+                   std::uint32_t time,
+                   wayland::surface_t surface,
+                   std::int32_t id,
+                   double x,
+                   double y) override;
   // IRawInputHandlerPointer
-  void OnPointerEnter(CSeat* seat, std::uint32_t serial, wayland::surface_t surface, double surfaceX, double surfaceY) override;
+  void OnPointerEnter(CSeat* seat,
+                      std::uint32_t serial,
+                      wayland::surface_t surface,
+                      double surfaceX,
+                      double surfaceY) override;
   void OnPointerLeave(CSeat* seat, std::uint32_t serial, wayland::surface_t surface) override;
   void OnPointerMotion(CSeat* seat, std::uint32_t time, double surfaceX, double surfaceY) override;
-  void OnPointerButton(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::uint32_t button, wayland::pointer_button_state state) override;
+  void OnPointerButton(CSeat* seat,
+                       std::uint32_t serial,
+                       std::uint32_t time,
+                       std::uint32_t button,
+                       wayland::pointer_button_state state) override;
 
   void Reset(bool reallocate);
 
@@ -221,8 +236,9 @@ private:
     wayland::surface_t cursor;
 
     explicit SeatState(CSeat* seat)
-    : seat{seat}
-    {}
+      : seat{seat}
+    {
+    }
   };
   std::map<std::uint32_t, SeatState> m_seats;
 
@@ -242,9 +258,13 @@ private:
 
   void UpdateSeatCursor(SeatState& seatState);
   void UpdateButtonHoverState();
-  void HandleSeatClick(SeatState const& seatState, SurfaceIndex surface, std::uint32_t serial, std::uint32_t button, CPoint position);
+  void HandleSeatClick(SeatState const& seatState,
+                       SurfaceIndex surface,
+                       std::uint32_t serial,
+                       std::uint32_t button,
+                       CPoint position);
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

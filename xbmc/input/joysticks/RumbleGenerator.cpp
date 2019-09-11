@@ -16,18 +16,18 @@
 
 #include <algorithm>
 
-#define RUMBLE_TEST_DURATION_MS          1000 // Per motor
-#define RUMBLE_NOTIFICATION_DURATION_MS  300
+#define RUMBLE_TEST_DURATION_MS 1000 // Per motor
+#define RUMBLE_NOTIFICATION_DURATION_MS 300
 
- // From game.controller.default profile
-#define WEAK_MOTOR_NAME        "rightmotor"
+// From game.controller.default profile
+#define WEAK_MOTOR_NAME "rightmotor"
 
 using namespace KODI;
 using namespace JOYSTICK;
 
-CRumbleGenerator::CRumbleGenerator() :
-  CThread("RumbleGenerator"),
-  m_motors(GetMotors(ControllerID()))
+CRumbleGenerator::CRumbleGenerator()
+  : CThread("RumbleGenerator")
+  , m_motors(GetMotors(ControllerID()))
 {
 }
 
@@ -62,7 +62,7 @@ bool CRumbleGenerator::DoTest(IInputReceiver* receiver)
 
     return true;
   }
-  return  false;
+  return false;
 }
 
 void CRumbleGenerator::Process(void)

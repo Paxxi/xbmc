@@ -12,22 +12,22 @@
 #include "dialogs/GUIDialogProgress.h"
 #include "windows/GUIMediaWindow.h"
 
-class CGUIWindowPrograms :
-      public CGUIMediaWindow, public IBackgroundLoaderObserver
+class CGUIWindowPrograms : public CGUIMediaWindow, public IBackgroundLoaderObserver
 {
 public:
   CGUIWindowPrograms(void);
   ~CGUIWindowPrograms(void) override;
   bool OnMessage(CGUIMessage& message) override;
   virtual void OnItemInfo(int iItem);
+
 protected:
-  void OnItemLoaded(CFileItem* pItem) override {};
+  void OnItemLoaded(CFileItem* pItem) override{};
   bool Update(const std::string& strDirectory, bool updateFilterPath = true) override;
   bool OnPlayMedia(int iItem, const std::string& = "") override;
-  void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
   bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
   bool OnAddMediaSource() override;
-  std::string GetStartFolder(const std::string &dir) override;
+  std::string GetStartFolder(const std::string& dir) override;
 
   CGUIDialogProgress* m_dlgProgress;
 

@@ -13,63 +13,63 @@
 
 namespace PVR
 {
-  class CPVRChannel;
+class CPVRChannel;
 
-  class CPVREpgChannelData
-  {
-  public:
-    CPVREpgChannelData() = default;
-    CPVREpgChannelData(int iClientId, int iUniqueClientChannelId);
-    explicit CPVREpgChannelData(const CPVRChannel& channel);
+class CPVREpgChannelData
+{
+public:
+  CPVREpgChannelData() = default;
+  CPVREpgChannelData(int iClientId, int iUniqueClientChannelId);
+  explicit CPVREpgChannelData(const CPVRChannel& channel);
 
-    int ClientId() const;
-    int UniqueClientChannelId() const;
-    bool IsRadio() const;
+  int ClientId() const;
+  int UniqueClientChannelId() const;
+  bool IsRadio() const;
 
-    bool IsHidden() const;
-    void SetHidden(bool bIsHidden);
+  bool IsHidden() const;
+  void SetHidden(bool bIsHidden);
 
-    bool IsLocked() const;
-    void SetLocked(bool bIsLocked);
+  bool IsLocked() const;
+  void SetLocked(bool bIsLocked);
 
-    bool IsEPGEnabled() const;
-    void SetEPGEnabled(bool bIsEPGEnabled);
+  bool IsEPGEnabled() const;
+  void SetEPGEnabled(bool bIsEPGEnabled);
 
-    int ChannelId() const;
-    void SetChannelId(int iChannelId);
+  int ChannelId() const;
+  void SetChannelId(int iChannelId);
 
-    const std::string& IconPath() const;
-    void SetIconPath(const std::string& strIconPath);
+  const std::string& IconPath() const;
+  void SetIconPath(const std::string& strIconPath);
 
-    const std::string& ChannelName() const;
-    void SetChannelName(const std::string& strChannelName);
+  const std::string& ChannelName() const;
+  void SetChannelName(const std::string& strChannelName);
 
-    const std::string& SortableChannelNumber() const;
-    void SetSortableChannelNumber(const std::string& strSortableChannelNumber);
+  const std::string& SortableChannelNumber() const;
+  void SetSortableChannelNumber(const std::string& strSortableChannelNumber);
 
-    const std::string& SortableClientChannelNumber() const;
-    void SetSortableClientChannelNumber(const std::string& strSortableClientChannelNumber);
+  const std::string& SortableClientChannelNumber() const;
+  void SetSortableClientChannelNumber(const std::string& strSortableClientChannelNumber);
 
-    const std::string& LastWatched() const;
-    void SetLastWatched(time_t iLastWatched);
+  const std::string& LastWatched() const;
+  void SetLastWatched(time_t iLastWatched);
 
-    int ClientOrder() const;
-    void SetClientOrder(int iOrder);
+  int ClientOrder() const;
+  void SetClientOrder(int iOrder);
 
-  private:
-    const bool m_bIsRadio = false;
-    const int m_iClientId = -1;
-    const int m_iUniqueClientChannelId = -1;
+private:
+  const bool m_bIsRadio = false;
+  const int m_iClientId = -1;
+  const int m_iUniqueClientChannelId = -1;
 
-    bool m_bIsHidden = false;
-    bool m_bIsLocked = false;
-    bool m_bIsEPGEnabled = true;
-    int m_iChannelId = -1;
-    std::string m_strIconPath;
-    std::string m_strChannelName;
-    std::string m_strSortableChannelNumber;
-    std::string m_strSortableClientChannelNumber;
-    std::string m_strLastWatched;
-    int m_iOrder = 0;
-  };
-}
+  bool m_bIsHidden = false;
+  bool m_bIsLocked = false;
+  bool m_bIsEPGEnabled = true;
+  int m_iChannelId = -1;
+  std::string m_strIconPath;
+  std::string m_strChannelName;
+  std::string m_strSortableChannelNumber;
+  std::string m_strSortableClientChannelNumber;
+  std::string m_strLastWatched;
+  int m_iOrder = 0;
+};
+} // namespace PVR

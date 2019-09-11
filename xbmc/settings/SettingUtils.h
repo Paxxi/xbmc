@@ -32,8 +32,12 @@ public:
    \param value Values to set
    \return True if setting the values was successful, false otherwise
    */
-  static bool SetList(std::shared_ptr<CSettingList> settingList, const std::vector<CVariant> &value);
+  static bool SetList(std::shared_ptr<CSettingList> settingList,
+                      const std::vector<CVariant>& value);
 
-  static std::vector<CVariant> ListToValues(std::shared_ptr<const CSettingList> setting, const std::vector< std::shared_ptr<CSetting> > &values);
-  static bool ValuesToList(std::shared_ptr<const CSettingList> setting, const std::vector<CVariant> &values, std::vector< std::shared_ptr<CSetting> > &newValues);
+  static std::vector<CVariant> ListToValues(std::shared_ptr<const CSettingList> setting,
+                                            const std::vector<std::shared_ptr<CSetting>>& values);
+  static bool ValuesToList(std::shared_ptr<const CSettingList> setting,
+                           const std::vector<CVariant>& values,
+                           std::vector<std::shared_ptr<CSetting>>& newValues);
 };

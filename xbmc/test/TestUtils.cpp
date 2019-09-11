@@ -7,6 +7,7 @@
  */
 
 #include "TestUtils.h"
+
 #include "Util.h"
 #include "filesystem/File.h"
 #include "filesystem/SpecialProtocol.h"
@@ -17,8 +18,8 @@
 #ifdef TARGET_WINDOWS
 #include <windows.h>
 #else
-#include <cstdlib>
 #include <climits>
+#include <cstdlib>
 #include <ctime>
 #endif
 
@@ -30,11 +31,8 @@ class CTempFile : public XFILE::CFile
 {
 public:
   CTempFile() = default;
-  ~CTempFile()
-  {
-    Delete();
-  }
-  bool Create(const std::string &suffix)
+  ~CTempFile() { Delete(); }
+  bool Create(const std::string& suffix)
   {
     std::error_code ec;
     m_ptempFilePath = fs::temp_file_path(suffix, ec);
@@ -52,14 +50,9 @@ public:
     Close();
     return CFile::Delete(m_ptempFilePath);
   };
-  std::string getTempFilePath() const
-  {
-    return m_ptempFilePath;
-  }
-  std::string getTempFileDirectory() const
-  {
-    return URIUtils::GetDirectory(m_ptempFilePath);
-  }
+  std::string getTempFilePath() const { return m_ptempFilePath; }
+  std::string getTempFileDirectory() const { return URIUtils::GetDirectory(m_ptempFilePath); }
+
 private:
   std::string m_ptempFilePath;
 };
@@ -69,7 +62,7 @@ CXBMCTestUtils::CXBMCTestUtils()
   probability = 0.01;
 }
 
-CXBMCTestUtils &CXBMCTestUtils::Instance()
+CXBMCTestUtils& CXBMCTestUtils::Instance()
 {
   static CXBMCTestUtils instance;
   return instance;
@@ -94,20 +87,20 @@ bool CXBMCTestUtils::SetReferenceFileBasePath()
   return true;
 }
 
-XFILE::CFile *CXBMCTestUtils::CreateTempFile(std::string const& suffix)
+XFILE::CFile* CXBMCTestUtils::CreateTempFile(std::string const& suffix)
 {
-  CTempFile *f = new CTempFile();
+  CTempFile* f = new CTempFile();
   if (f->Create(suffix))
     return f;
   delete f;
   return NULL;
 }
 
-bool CXBMCTestUtils::DeleteTempFile(XFILE::CFile *tempfile)
+bool CXBMCTestUtils::DeleteTempFile(XFILE::CFile* tempfile)
 {
   if (!tempfile)
     return true;
-  CTempFile *f = static_cast<CTempFile*>(tempfile);
+  CTempFile* f = static_cast<CTempFile*>(tempfile);
   bool retval = f->Delete();
   delete f;
   return retval;
@@ -129,8 +122,8 @@ std::string CXBMCTestUtils::TempFileDirectory(XFILE::CFile const* const tempfile
   return f->getTempFileDirectory();
 }
 
-XFILE::CFile *CXBMCTestUtils::CreateCorruptedFile(std::string const& strFileName,
-  std::string const& suffix)
+XFILE::CFile* CXBMCTestUtils::CreateCorruptedFile(std::string const& strFileName,
+                                                  std::string const& suffix)
 {
   XFILE::CFile inputfile, *tmpfile = CreateTempFile(suffix);
   unsigned char buf[20], tmpchar;
@@ -169,17 +162,17 @@ XFILE::CFile *CXBMCTestUtils::CreateCorruptedFile(std::string const& strFileName
 }
 
 
-std::vector<std::string> &CXBMCTestUtils::getTestFileFactoryReadUrls()
+std::vector<std::string>& CXBMCTestUtils::getTestFileFactoryReadUrls()
 {
   return TestFileFactoryReadUrls;
 }
 
-std::vector<std::string> &CXBMCTestUtils::getTestFileFactoryWriteUrls()
+std::vector<std::string>& CXBMCTestUtils::getTestFileFactoryWriteUrls()
 {
   return TestFileFactoryWriteUrls;
 }
 
-std::string &CXBMCTestUtils::getTestFileFactoryWriteInputFile()
+std::string& CXBMCTestUtils::getTestFileFactoryWriteInputFile()
 {
   return TestFileFactoryWriteInputFile;
 }
@@ -189,61 +182,60 @@ void CXBMCTestUtils::setTestFileFactoryWriteInputFile(std::string const& file)
   TestFileFactoryWriteInputFile = file;
 }
 
-std::vector<std::string> &CXBMCTestUtils::getAdvancedSettingsFiles()
+std::vector<std::string>& CXBMCTestUtils::getAdvancedSettingsFiles()
 {
   return AdvancedSettingsFiles;
 }
 
-std::vector<std::string> &CXBMCTestUtils::getGUISettingsFiles()
+std::vector<std::string>& CXBMCTestUtils::getGUISettingsFiles()
 {
   return GUISettingsFiles;
 }
 
 static const char usage[] =
-"Kodi Test Suite\n"
-"Usage: kodi-test [options]\n"
-"\n"
-"The following options are recognized by the kodi-test program.\n"
-"\n"
-"  --add-testfilefactory-readurl [URL]\n"
-"    Add a url to be used int the TestFileFactory read tests.\n"
-"\n"
-"  --add-testfilefactory-readurls [URLS]\n"
-"    Add multiple urls from a ',' delimited string of urls to be used\n"
-"    in the TestFileFactory read tests.\n"
-"\n"
-"  --add-testfilefactory-writeurl [URL]\n"
-"    Add a url to be used int the TestFileFactory write tests.\n"
-"\n"
-"  --add-testfilefactory-writeurls [URLS]\n"
-"    Add multiple urls from a ',' delimited string of urls to be used\n"
-"    in the TestFileFactory write tests.\n"
-"\n"
-"  --set-testfilefactory-writeinputfile [FILE]\n"
-"    Set the path to the input file used in the TestFileFactory write tests.\n"
-"\n"
-"  --add-advancedsettings-file [FILE]\n"
-"    Add an advanced settings file to be loaded in test cases that use them.\n"
-"\n"
-"  --add-advancedsettings-files [FILES]\n"
-"    Add multiple advanced settings files from a ',' delimited string of\n"
-"    files to be loaded in test cases that use them.\n"
-"\n"
-"  --add-guisettings-file [FILE]\n"
-"    Add a GUI settings file to be loaded in test cases that use them.\n"
-"\n"
-"  --add-guisettings-files [FILES]\n"
-"    Add multiple GUI settings files from a ',' delimited string of\n"
-"    files to be loaded in test cases that use them.\n"
-"\n"
-"  --set-probability [PROBABILITY]\n"
-"    Set the probability variable used by the file corrupting functions.\n"
-"    The variable should be a double type from 0.0 to 1.0. Values given\n"
-"    less than 0.0 are treated as 0.0. Values greater than 1.0 are treated\n"
-"    as 1.0. The default probability is 0.01.\n"
-;
+    "Kodi Test Suite\n"
+    "Usage: kodi-test [options]\n"
+    "\n"
+    "The following options are recognized by the kodi-test program.\n"
+    "\n"
+    "  --add-testfilefactory-readurl [URL]\n"
+    "    Add a url to be used int the TestFileFactory read tests.\n"
+    "\n"
+    "  --add-testfilefactory-readurls [URLS]\n"
+    "    Add multiple urls from a ',' delimited string of urls to be used\n"
+    "    in the TestFileFactory read tests.\n"
+    "\n"
+    "  --add-testfilefactory-writeurl [URL]\n"
+    "    Add a url to be used int the TestFileFactory write tests.\n"
+    "\n"
+    "  --add-testfilefactory-writeurls [URLS]\n"
+    "    Add multiple urls from a ',' delimited string of urls to be used\n"
+    "    in the TestFileFactory write tests.\n"
+    "\n"
+    "  --set-testfilefactory-writeinputfile [FILE]\n"
+    "    Set the path to the input file used in the TestFileFactory write tests.\n"
+    "\n"
+    "  --add-advancedsettings-file [FILE]\n"
+    "    Add an advanced settings file to be loaded in test cases that use them.\n"
+    "\n"
+    "  --add-advancedsettings-files [FILES]\n"
+    "    Add multiple advanced settings files from a ',' delimited string of\n"
+    "    files to be loaded in test cases that use them.\n"
+    "\n"
+    "  --add-guisettings-file [FILE]\n"
+    "    Add a GUI settings file to be loaded in test cases that use them.\n"
+    "\n"
+    "  --add-guisettings-files [FILES]\n"
+    "    Add multiple GUI settings files from a ',' delimited string of\n"
+    "    files to be loaded in test cases that use them.\n"
+    "\n"
+    "  --set-probability [PROBABILITY]\n"
+    "    Set the probability variable used by the file corrupting functions.\n"
+    "    The variable should be a double type from 0.0 to 1.0. Values given\n"
+    "    less than 0.0 are treated as 0.0. Values greater than 1.0 are treated\n"
+    "    as 1.0. The default probability is 0.01.\n";
 
-void CXBMCTestUtils::ParseArgs(int argc, char **argv)
+void CXBMCTestUtils::ParseArgs(int argc, char** argv)
 {
   int i;
   std::string arg;

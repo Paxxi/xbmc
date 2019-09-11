@@ -14,7 +14,8 @@
 #include <string>
 #include <vector>
 
-typedef enum {
+typedef enum
+{
   BooleanLogicOperationOr = 0,
   BooleanLogicOperationAnd
 } BooleanLogicOperation;
@@ -22,18 +23,20 @@ typedef enum {
 class CBooleanLogicValue : public IXmlDeserializable
 {
 public:
-  CBooleanLogicValue(const std::string &value = "", bool negated = false)
-    : m_value(value), m_negated(negated)
-  { }
+  CBooleanLogicValue(const std::string& value = "", bool negated = false)
+    : m_value(value)
+    , m_negated(negated)
+  {
+  }
   virtual ~CBooleanLogicValue() = default;
 
-  bool Deserialize(const TiXmlNode *node) override;
+  bool Deserialize(const TiXmlNode* node) override;
 
   virtual const std::string& GetValue() const { return m_value; }
   virtual bool IsNegated() const { return m_negated; }
   virtual const char* GetTag() const { return "value"; }
 
-  virtual void SetValue(const std::string &value) { m_value = value; }
+  virtual void SetValue(const std::string& value) { m_value = value; }
   virtual void SetNegated(bool negated) { m_negated = negated; }
 
 protected:
@@ -53,10 +56,11 @@ class CBooleanLogicOperation : public IXmlDeserializable
 public:
   explicit CBooleanLogicOperation(BooleanLogicOperation op = BooleanLogicOperationAnd)
     : m_operation(op)
-  { }
+  {
+  }
   virtual ~CBooleanLogicOperation() = default;
 
-  bool Deserialize(const TiXmlNode *node) override;
+  bool Deserialize(const TiXmlNode* node) override;
 
   virtual BooleanLogicOperation GetOperation() const { return m_operation; }
   virtual const CBooleanLogicOperations& GetOperations() const { return m_operations; }
@@ -80,7 +84,7 @@ protected:
   ~CBooleanLogic() = default;
 
 public:
-  bool Deserialize(const TiXmlNode *node) override;
+  bool Deserialize(const TiXmlNode* node) override;
 
   const CBooleanLogicOperationPtr& Get() const { return m_operation; }
   CBooleanLogicOperationPtr Get() { return m_operation; }

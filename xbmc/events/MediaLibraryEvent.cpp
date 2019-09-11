@@ -15,29 +15,55 @@
 #include "guilib/WindowIDs.h"
 #include "utils/URIUtils.h"
 
-CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType, const std::string& mediaPath, const CVariant& label, const CVariant& description, EventLevel level /* = EventLevel::Information */)
-  : CUniqueEvent(label, description, level),
-    m_mediaType(mediaType),
-    m_mediaPath(mediaPath)
-{ }
+CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType,
+                                       const std::string& mediaPath,
+                                       const CVariant& label,
+                                       const CVariant& description,
+                                       EventLevel level /* = EventLevel::Information */)
+  : CUniqueEvent(label, description, level)
+  , m_mediaType(mediaType)
+  , m_mediaPath(mediaPath)
+{
+}
 
-CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType, const std::string& mediaPath, const CVariant& label, const CVariant& description, const std::string& icon, EventLevel level /* = EventLevel::Information */)
-  : CUniqueEvent(label, description, icon, level),
-    m_mediaType(mediaType),
-    m_mediaPath(mediaPath)
-{ }
+CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType,
+                                       const std::string& mediaPath,
+                                       const CVariant& label,
+                                       const CVariant& description,
+                                       const std::string& icon,
+                                       EventLevel level /* = EventLevel::Information */)
+  : CUniqueEvent(label, description, icon, level)
+  , m_mediaType(mediaType)
+  , m_mediaPath(mediaPath)
+{
+}
 
-CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType, const std::string& mediaPath, const CVariant& label, const CVariant& description, const std::string& icon, const CVariant& details, EventLevel level /* = EventLevel::Information */)
-  : CUniqueEvent(label, description, icon, details, level),
-    m_mediaType(mediaType),
-    m_mediaPath(mediaPath)
-{ }
+CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType,
+                                       const std::string& mediaPath,
+                                       const CVariant& label,
+                                       const CVariant& description,
+                                       const std::string& icon,
+                                       const CVariant& details,
+                                       EventLevel level /* = EventLevel::Information */)
+  : CUniqueEvent(label, description, icon, details, level)
+  , m_mediaType(mediaType)
+  , m_mediaPath(mediaPath)
+{
+}
 
-CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType, const std::string& mediaPath, const CVariant& label, const CVariant& description, const std::string& icon, const CVariant& details, const CVariant& executionLabel, EventLevel level /* = EventLevel::Information */)
-  : CUniqueEvent(label, description, icon, details, executionLabel, level),
-    m_mediaType(mediaType),
-    m_mediaPath(mediaPath)
-{ }
+CMediaLibraryEvent::CMediaLibraryEvent(const MediaType& mediaType,
+                                       const std::string& mediaPath,
+                                       const CVariant& label,
+                                       const CVariant& description,
+                                       const std::string& icon,
+                                       const CVariant& details,
+                                       const CVariant& executionLabel,
+                                       EventLevel level /* = EventLevel::Information */)
+  : CUniqueEvent(label, description, icon, details, executionLabel, level)
+  , m_mediaType(mediaType)
+  , m_mediaPath(mediaPath)
+{
+}
 
 std::string CMediaLibraryEvent::GetExecutionLabel() const
 {
@@ -55,8 +81,9 @@ bool CMediaLibraryEvent::Execute() const
 
   int windowId = -1;
   std::string path = m_mediaPath;
-  if (m_mediaType == MediaTypeVideo || m_mediaType == MediaTypeMovie || m_mediaType == MediaTypeVideoCollection ||
-      m_mediaType == MediaTypeTvShow || m_mediaType == MediaTypeSeason || m_mediaType == MediaTypeEpisode ||
+  if (m_mediaType == MediaTypeVideo || m_mediaType == MediaTypeMovie ||
+      m_mediaType == MediaTypeVideoCollection || m_mediaType == MediaTypeTvShow ||
+      m_mediaType == MediaTypeSeason || m_mediaType == MediaTypeEpisode ||
       m_mediaType == MediaTypeMusicVideo)
   {
     if (path.empty())
@@ -69,13 +96,15 @@ bool CMediaLibraryEvent::Execute() const
         path = "videodb://movies/sets/";
       else if (m_mediaType == MediaTypeMusicVideo)
         path = "videodb://musicvideos/titles/";
-      else if (m_mediaType == MediaTypeTvShow || m_mediaType == MediaTypeSeason || m_mediaType == MediaTypeEpisode)
+      else if (m_mediaType == MediaTypeTvShow || m_mediaType == MediaTypeSeason ||
+               m_mediaType == MediaTypeEpisode)
         path = "videodb://tvshows/titles/";
     }
     else
     {
       //! @todo remove the filename for now as CGUIMediaWindow::GetDirectory() can't handle it
-      if (m_mediaType == MediaTypeMovie || m_mediaType == MediaTypeMusicVideo || m_mediaType == MediaTypeEpisode)
+      if (m_mediaType == MediaTypeMovie || m_mediaType == MediaTypeMusicVideo ||
+          m_mediaType == MediaTypeEpisode)
         path = URIUtils::GetDirectory(path);
     }
 

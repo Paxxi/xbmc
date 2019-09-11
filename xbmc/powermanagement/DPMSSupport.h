@@ -35,10 +35,7 @@ public:
 
   // Which power-saving modes are supported, in the order of preference (i.e.
   // the first mode should be the best choice).
-  const std::vector<PowerSavingMode>& GetSupportedModes() const
-  {
-    return m_supportedModes;
-  }
+  const std::vector<PowerSavingMode>& GetSupportedModes() const { return m_supportedModes; }
 
   // Whether a given mode is supported.
   bool IsModeSupported(PowerSavingMode mode) const;

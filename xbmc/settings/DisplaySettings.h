@@ -23,19 +23,20 @@ class TiXmlNode;
 struct IntegerSettingOption;
 struct StringSettingOption;
 
-class CDisplaySettings : public ISettingCallback, public ISubSettings,
-                         public Observable
+class CDisplaySettings : public ISettingCallback, public ISubSettings, public Observable
 {
 public:
   static CDisplaySettings& GetInstance();
 
-  bool Load(const TiXmlNode *settings) override;
-  bool Save(TiXmlNode *settings) const override;
+  bool Load(const TiXmlNode* settings) override;
+  bool Save(TiXmlNode* settings) const override;
   void Clear() override;
 
   void OnSettingAction(std::shared_ptr<const CSetting> setting) override;
   bool OnSettingChanging(std::shared_ptr<const CSetting> setting) override;
-  bool OnSettingUpdate(std::shared_ptr<CSetting> setting, const char *oldSettingId, const TiXmlNode *oldSettingNode) override;
+  bool OnSettingUpdate(std::shared_ptr<CSetting> setting,
+                       const char* oldSettingId,
+                       const TiXmlNode* oldSettingNode) override;
 
   /*!
    \brief Returns the currently active resolution
@@ -64,12 +65,21 @@ public:
   RESOLUTION_INFO& GetResolutionInfo(size_t index);
   RESOLUTION_INFO& GetResolutionInfo(RESOLUTION resolution);
   size_t ResolutionInfoSize() const { return m_resolutions.size(); }
-  void AddResolutionInfo(const RESOLUTION_INFO &resolution);
+  void AddResolutionInfo(const RESOLUTION_INFO& resolution);
 
-  const RESOLUTION_INFO& GetCurrentResolutionInfo() const { return GetResolutionInfo(m_currentResolution); }
+  const RESOLUTION_INFO& GetCurrentResolutionInfo() const
+  {
+    return GetResolutionInfo(m_currentResolution);
+  }
   RESOLUTION_INFO& GetCurrentResolutionInfo() { return GetResolutionInfo(m_currentResolution); }
-  RESOLUTION GetResFromString(const std::string &strResolution) { return GetResolutionFromString(strResolution); }
-  std::string GetStringFromRes(const RESOLUTION resolution, float refreshrate = 0.0f) { return GetStringFromResolution(resolution, refreshrate); }
+  RESOLUTION GetResFromString(const std::string& strResolution)
+  {
+    return GetResolutionFromString(strResolution);
+  }
+  std::string GetStringFromRes(const RESOLUTION resolution, float refreshrate = 0.0f)
+  {
+    return GetStringFromResolution(resolution, refreshrate);
+  }
 
   void ApplyCalibrations();
   void UpdateCalibrations();
@@ -86,18 +96,55 @@ public:
   void SetNonLinearStretched(bool nonLinearStretch) { m_nonLinearStretched = nonLinearStretch; }
   void SetMonitor(std::string monitor);
 
-  static void SettingOptionsModesFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data);
-  static void SettingOptionsRefreshChangeDelaysFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsRefreshRatesFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data);
-  static void SettingOptionsResolutionsFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsDispModeFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsStereoscopicModesFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsPreferredStereoscopicViewModesFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsMonitorsFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data);
-  static void SettingOptionsCmsModesFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsCmsWhitepointsFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsCmsPrimariesFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
-  static void SettingOptionsCmsGammaModesFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
+  static void SettingOptionsModesFiller(std::shared_ptr<const CSetting> setting,
+                                        std::vector<StringSettingOption>& list,
+                                        std::string& current,
+                                        void* data);
+  static void SettingOptionsRefreshChangeDelaysFiller(std::shared_ptr<const CSetting> setting,
+                                                      std::vector<IntegerSettingOption>& list,
+                                                      int& current,
+                                                      void* data);
+  static void SettingOptionsRefreshRatesFiller(std::shared_ptr<const CSetting> setting,
+                                               std::vector<StringSettingOption>& list,
+                                               std::string& current,
+                                               void* data);
+  static void SettingOptionsResolutionsFiller(std::shared_ptr<const CSetting> setting,
+                                              std::vector<IntegerSettingOption>& list,
+                                              int& current,
+                                              void* data);
+  static void SettingOptionsDispModeFiller(std::shared_ptr<const CSetting> setting,
+                                           std::vector<IntegerSettingOption>& list,
+                                           int& current,
+                                           void* data);
+  static void SettingOptionsStereoscopicModesFiller(std::shared_ptr<const CSetting> setting,
+                                                    std::vector<IntegerSettingOption>& list,
+                                                    int& current,
+                                                    void* data);
+  static void SettingOptionsPreferredStereoscopicViewModesFiller(
+      std::shared_ptr<const CSetting> setting,
+      std::vector<IntegerSettingOption>& list,
+      int& current,
+      void* data);
+  static void SettingOptionsMonitorsFiller(std::shared_ptr<const CSetting> setting,
+                                           std::vector<StringSettingOption>& list,
+                                           std::string& current,
+                                           void* data);
+  static void SettingOptionsCmsModesFiller(std::shared_ptr<const CSetting> setting,
+                                           std::vector<IntegerSettingOption>& list,
+                                           int& current,
+                                           void* data);
+  static void SettingOptionsCmsWhitepointsFiller(std::shared_ptr<const CSetting> setting,
+                                                 std::vector<IntegerSettingOption>& list,
+                                                 int& current,
+                                                 void* data);
+  static void SettingOptionsCmsPrimariesFiller(std::shared_ptr<const CSetting> setting,
+                                               std::vector<IntegerSettingOption>& list,
+                                               int& current,
+                                               void* data);
+  static void SettingOptionsCmsGammaModesFiller(std::shared_ptr<const CSetting> setting,
+                                                std::vector<IntegerSettingOption>& list,
+                                                int& current,
+                                                void* data);
 
 
 protected:
@@ -108,11 +155,16 @@ protected:
 
   DisplayMode GetCurrentDisplayMode() const;
 
-  static RESOLUTION GetResolutionFromString(const std::string &strResolution);
+  static RESOLUTION GetResolutionFromString(const std::string& strResolution);
   static std::string GetStringFromResolution(RESOLUTION resolution, float refreshrate = 0.0f);
   static RESOLUTION GetResolutionForScreen();
 
-  static RESOLUTION FindBestMatchingResolution(const std::map<RESOLUTION, RESOLUTION_INFO> &resolutionInfos, int width, int height, float refreshrate, unsigned int flags);
+  static RESOLUTION FindBestMatchingResolution(
+      const std::map<RESOLUTION, RESOLUTION_INFO>& resolutionInfos,
+      int width,
+      int height,
+      float refreshrate,
+      unsigned int flags);
 
 private:
   // holds the real gui resolution
@@ -122,10 +174,10 @@ private:
   ResolutionInfos m_resolutions;
   ResolutionInfos m_calibrations;
 
-  float m_zoomAmount;         // current zoom amount
-  float m_pixelRatio;         // current pixel ratio
-  float m_verticalShift;      // current vertical shift
-  bool  m_nonLinearStretched;   // current non-linear stretch
+  float m_zoomAmount; // current zoom amount
+  float m_pixelRatio; // current pixel ratio
+  float m_verticalShift; // current vertical shift
+  bool m_nonLinearStretched; // current non-linear stretch
 
   bool m_resolutionChangeAborted;
   mutable CCriticalSection m_critical;

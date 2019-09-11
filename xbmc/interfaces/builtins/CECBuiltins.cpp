@@ -38,7 +38,8 @@ static int Standby(const std::vector<std::string>& params)
 static int ToggleState(const std::vector<std::string>& params)
 {
   bool result;
-  CApplicationMessenger::GetInstance().SendMsg(TMSG_CECTOGGLESTATE, 0, 0, static_cast<void*>(&result));
+  CApplicationMessenger::GetInstance().SendMsg(TMSG_CECTOGGLESTATE, 0, 0,
+                                               static_cast<void*>(&result));
 
   return 0;
 }
@@ -75,8 +76,7 @@ static int ToggleState(const std::vector<std::string>& params)
 CBuiltins::CommandMap CCECBuiltins::GetOperations() const
 {
   return {
-           {"cectogglestate",    {"Toggle state of playing device via a CEC peripheral", 0, ToggleState}},
-           {"cecactivatesource", {"Wake up playing device via a CEC peripheral", 0, ActivateSource}},
-           {"cecstandby",        {"Put playing device on standby via a CEC peripheral", 0, Standby}}
-         };
+      {"cectogglestate", {"Toggle state of playing device via a CEC peripheral", 0, ToggleState}},
+      {"cecactivatesource", {"Wake up playing device via a CEC peripheral", 0, ActivateSource}},
+      {"cecstandby", {"Put playing device on standby via a CEC peripheral", 0, Standby}}};
 }

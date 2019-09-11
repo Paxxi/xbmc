@@ -73,15 +73,14 @@ bool OPTIONALS::SndioRegister()
 //-----------------------------------------------------------------------------
 
 #ifdef HAS_LIRC
-#include "platform/linux/input/LIRC.h"
 #include "ServiceBroker.h"
+
+#include "platform/linux/input/LIRC.h"
 class OPTIONALS::CLircContainer
 {
 public:
-  CLircContainer()
-  {
-    m_lirc.Start();
-  }
+  CLircContainer() { m_lirc.Start(); }
+
 protected:
   CLirc m_lirc;
 };
@@ -95,7 +94,7 @@ OPTIONALS::CLircContainer* OPTIONALS::LircRegister()
 {
   return new CLircContainer();
 }
-void OPTIONALS::delete_CLircContainer::operator()(CLircContainer *p) const
+void OPTIONALS::delete_CLircContainer::operator()(CLircContainer* p) const
 {
   delete p;
 }

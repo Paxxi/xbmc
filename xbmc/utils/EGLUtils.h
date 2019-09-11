@@ -21,16 +21,17 @@ class CEGLUtils
 public:
   static std::set<std::string> GetClientExtensions();
   static std::set<std::string> GetExtensions(EGLDisplay eglDisplay);
-  static bool HasExtension(EGLDisplay eglDisplay, std::string const & name);
+  static bool HasExtension(EGLDisplay eglDisplay, std::string const& name);
   static bool HasClientExtension(std::string const& name);
   static void Log(int logLevel, std::string const& what);
   template<typename T>
-  static T GetRequiredProcAddress(const char * procname)
+  static T GetRequiredProcAddress(const char* procname)
   {
     T p = reinterpret_cast<T>(eglGetProcAddress(procname));
     if (!p)
     {
-      throw std::runtime_error(std::string("Could not get EGL function \"") + procname + "\" - maybe a required extension is not supported?");
+      throw std::runtime_error(std::string("Could not get EGL function \"") + procname +
+                               "\" - maybe a required extension is not supported?");
     }
     return p;
   }
@@ -73,15 +74,9 @@ public:
    *
    * The array is automatically terminated with EGL_NONE
    */
-  void Add(EGLAttribute const& attribute)
-  {
-    Add({attribute});
-  }
+  void Add(EGLAttribute const& attribute) { Add({attribute}); }
 
-  EGLint const * Get() const
-  {
-    return m_attributes.data();
-  }
+  EGLint const* Get() const { return m_attributes.data(); }
 
 private:
   std::vector<EGLint> m_attributes{EGL_NONE};
@@ -107,10 +102,7 @@ public:
     EGLint value;
   };
 
-  CEGLAttributes()
-  {
-    m_attributes[0] = EGL_NONE;
-  }
+  CEGLAttributes() { m_attributes[0] = EGL_NONE; }
 
   /**
    * Add multiple attributes
@@ -143,20 +135,11 @@ public:
    * \throws std::out_of_range if more than AttributeCount attributes are added
    *                           in total
    */
-  void Add(EGLAttribute const& attribute)
-  {
-    Add({attribute});
-  }
+  void Add(EGLAttribute const& attribute) { Add({attribute}); }
 
-  EGLint const * Get() const
-  {
-    return m_attributes.data();
-  }
+  EGLint const* Get() const { return m_attributes.data(); }
 
-  int Size() const
-  {
-    return m_writePosition;
-  }
+  int Size() const { return m_writePosition; }
 
 private:
   std::array<EGLint, AttributeCount * 2 + 1> m_attributes;
@@ -202,22 +185,10 @@ public:
   bool IsPlatformSupported() const;
   EGLint GetConfigAttrib(EGLint attribute) const;
 
-  EGLDisplay GetEGLDisplay() const
-  {
-    return m_eglDisplay;
-  }
-  EGLSurface GetEGLSurface() const
-  {
-    return m_eglSurface;
-  }
-  EGLContext GetEGLContext() const
-  {
-    return m_eglContext;
-  }
-  EGLConfig GetEGLConfig() const
-  {
-    return m_eglConfig;
-  }
+  EGLDisplay GetEGLDisplay() const { return m_eglDisplay; }
+  EGLSurface GetEGLSurface() const { return m_eglSurface; }
+  EGLContext GetEGLContext() const { return m_eglContext; }
+  EGLConfig GetEGLConfig() const { return m_eglConfig; }
 
 private:
   void SurfaceAttrib();

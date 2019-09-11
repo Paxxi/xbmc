@@ -29,9 +29,9 @@ public:
   virtual HMODULE GetHModule() = 0;
   virtual bool HasSymbols() = 0;
 
-  const char *GetName() const; // eg "mplayer.dll"
-  const char *GetFileName() const; // "special://xbmcbin/system/mplayer/players/mplayer.dll"
-  const char *GetPath() const; // "special://xbmcbin/system/mplayer/players/"
+  const char* GetName() const; // eg "mplayer.dll"
+  const char* GetFileName() const; // "special://xbmcbin/system/mplayer/players/mplayer.dll"
+  const char* GetPath() const; // "special://xbmcbin/system/mplayer/players/"
 
   int IncrRef();
   int DecrRef();
@@ -42,5 +42,5 @@ private:
   LibraryLoader& operator=(const LibraryLoader&);
   std::string m_fileName;
   std::string m_path;
-  int   m_iRefCount;
+  int m_iRefCount;
 };

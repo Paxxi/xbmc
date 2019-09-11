@@ -13,19 +13,19 @@
 
 namespace PVR
 {
-  class CGUIDialogPVRChannelGuide : public CGUIDialogPVRItemsViewBase
-  {
-  public:
-    CGUIDialogPVRChannelGuide(void);
-    ~CGUIDialogPVRChannelGuide(void) override = default;
+class CGUIDialogPVRChannelGuide : public CGUIDialogPVRItemsViewBase
+{
+public:
+  CGUIDialogPVRChannelGuide(void);
+  ~CGUIDialogPVRChannelGuide(void) override = default;
 
-    void Open(const CPVRChannelPtr &channel);
+  void Open(const CPVRChannelPtr& channel);
 
-  protected:
-    void OnInitWindow() override;
-    void OnDeinitWindow(int nextWindowID) override;
+protected:
+  void OnInitWindow() override;
+  void OnDeinitWindow(int nextWindowID) override;
 
-  private:
-    CPVRChannelPtr m_channel;
-  };
-}
+private:
+  CPVRChannelPtr m_channel;
+};
+} // namespace PVR

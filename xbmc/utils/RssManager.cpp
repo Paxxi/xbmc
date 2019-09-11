@@ -61,7 +61,7 @@ void CRssManager::OnSettingAction(std::shared_ptr<const CSetting> setting)
   if (setting == NULL)
     return;
 
-  const std::string &settingId = setting->GetId();
+  const std::string& settingId = setting->GetId();
   if (settingId == CSettings::SETTING_LOOKANDFEEL_RSSEDIT)
   {
     ADDON::AddonPtr addon;
@@ -75,8 +75,8 @@ void CRssManager::OnSettingAction(std::shared_ptr<const CSetting> setting)
 }
 
 void CRssManager::Start()
- {
-   m_bActive = true;
+{
+  m_bActive = true;
 }
 
 void CRssManager::Stop()
@@ -93,7 +93,8 @@ void CRssManager::Stop()
 
 bool CRssManager::Load()
 {
-  const std::shared_ptr<CProfileManager> profileManager = CServiceBroker::GetSettingsComponent()->GetProfileManager();
+  const std::shared_ptr<CProfileManager> profileManager =
+      CServiceBroker::GetSettingsComponent()->GetProfileManager();
 
   CSingleLock lock(m_critical);
 
@@ -104,11 +105,12 @@ bool CRssManager::Load()
   CXBMCTinyXML rssDoc;
   if (!rssDoc.LoadFile(rssXML))
   {
-    CLog::Log(LOGERROR, "CRssManager: error loading %s, Line %d\n%s", rssXML.c_str(), rssDoc.ErrorRow(), rssDoc.ErrorDesc());
+    CLog::Log(LOGERROR, "CRssManager: error loading %s, Line %d\n%s", rssXML.c_str(),
+              rssDoc.ErrorRow(), rssDoc.ErrorDesc());
     return false;
   }
 
-  const TiXmlElement *pRootElement = rssDoc.RootElement();
+  const TiXmlElement* pRootElement = rssDoc.RootElement();
   if (pRootElement == NULL || !StringUtils::EqualsNoCase(pRootElement->ValueStr(), "rssfeeds"))
   {
     CLog::Log(LOGERROR, "CRssManager: error loading %s, no <rssfeeds> node", rssXML.c_str());
@@ -145,7 +147,7 @@ bool CRssManager::Load()
         pFeed = pFeed->NextSiblingElement("feed");
       }
 
-      m_mapRssUrls.insert(std::make_pair(iId,set));
+      m_mapRssUrls.insert(std::make_pair(iId, set));
     }
     else
       CLog::Log(LOGERROR, "CRssManager: found rss url set with no id in RssFeeds.xml, ignored");
@@ -173,7 +175,10 @@ void CRssManager::Clear()
 }
 
 // returns true if the reader doesn't need creating, false otherwise
-bool CRssManager::GetReader(int controlID, int windowID, IRssObserver* observer, CRssReader *&reader)
+bool CRssManager::GetReader(int controlID,
+                            int windowID,
+                            IRssObserver* observer,
+                            CRssReader*& reader)
 {
   CSingleLock lock(m_critical);
   // check to see if we've already created this reader

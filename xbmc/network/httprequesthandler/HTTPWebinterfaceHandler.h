@@ -19,14 +19,17 @@ public:
   CHTTPWebinterfaceHandler() = default;
   ~CHTTPWebinterfaceHandler() override = default;
 
-  IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPWebinterfaceHandler(request); }
-  bool CanHandleRequest(const HTTPRequest &request) const override;
+  IHTTPRequestHandler* Create(const HTTPRequest& request) const override
+  {
+    return new CHTTPWebinterfaceHandler(request);
+  }
+  bool CanHandleRequest(const HTTPRequest& request) const override;
 
-  static int ResolveUrl(const std::string &url, std::string &path);
-  static int ResolveUrl(const std::string &url, std::string &path, ADDON::AddonPtr &addon);
-  static bool ResolveAddon(const std::string &url, ADDON::AddonPtr &addon);
-  static bool ResolveAddon(const std::string &url, ADDON::AddonPtr &addon, std::string &addonPath);
+  static int ResolveUrl(const std::string& url, std::string& path);
+  static int ResolveUrl(const std::string& url, std::string& path, ADDON::AddonPtr& addon);
+  static bool ResolveAddon(const std::string& url, ADDON::AddonPtr& addon);
+  static bool ResolveAddon(const std::string& url, ADDON::AddonPtr& addon, std::string& addonPath);
 
 protected:
-  explicit CHTTPWebinterfaceHandler(const HTTPRequest &request);
+  explicit CHTTPWebinterfaceHandler(const HTTPRequest& request);
 };

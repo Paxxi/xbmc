@@ -38,23 +38,24 @@ bool CAndroidMouse::onMouseEvent(AInputEvent* event)
 
 #ifdef DEBUG_VERBOSE
   int32_t mousePointerId = AMotionEvent_getPointerId(event, mousePointerIdx);
-  CXBMCApp::android_printf("%s idx:%i, id:%i", __PRETTY_FUNCTION__, mousePointerIdx, mousePointerId);
+  CXBMCApp::android_printf("%s idx:%i, id:%i", __PRETTY_FUNCTION__, mousePointerIdx,
+                           mousePointerId);
 #endif
   float x = AMotionEvent_getX(event, mousePointerIdx);
   float y = AMotionEvent_getY(event, mousePointerIdx);
 
   switch (mouseAction)
   {
-    case AMOTION_EVENT_ACTION_UP:
-    case AMOTION_EVENT_ACTION_DOWN:
-      MouseButton(x,y,mouseAction,AMotionEvent_getButtonState(event));
-      return true;
-    case AMOTION_EVENT_ACTION_SCROLL:
-      MouseWheel(x, y, AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_VSCROLL, mousePointerIdx));
-      return true;
-    default:
-      MouseMove(x,y);
-      return true;
+  case AMOTION_EVENT_ACTION_UP:
+  case AMOTION_EVENT_ACTION_DOWN:
+    MouseButton(x, y, mouseAction, AMotionEvent_getButtonState(event));
+    return true;
+  case AMOTION_EVENT_ACTION_SCROLL:
+    MouseWheel(x, y, AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_VSCROLL, mousePointerIdx));
+    return true;
+  default:
+    MouseMove(x, y);
+    return true;
   }
   return false;
 }
@@ -79,17 +80,18 @@ void CAndroidMouse::MouseMove(float x, float y)
 void CAndroidMouse::MouseButton(float x, float y, int32_t action, int32_t buttons)
 {
 #ifdef DEBUG_VERBOSE
-  CXBMCApp::android_printf("%s: x:%f, y:%f, action:%i, buttons:%i", __PRETTY_FUNCTION__, x, y, action, buttons);
+  CXBMCApp::android_printf("%s: x:%f, y:%f, action:%i, buttons:%i", __PRETTY_FUNCTION__, x, y,
+                           action, buttons);
 #endif
   XBMC_Event newEvent;
 
   memset(&newEvent, 0, sizeof(newEvent));
 
   int32_t checkButtons = buttons;
-  if (action ==  AMOTION_EVENT_ACTION_UP)
+  if (action == AMOTION_EVENT_ACTION_UP)
     checkButtons = m_lastButtonState;
 
-  newEvent.type = (action ==  AMOTION_EVENT_ACTION_DOWN) ? XBMC_MOUSEBUTTONDOWN : XBMC_MOUSEBUTTONUP;
+  newEvent.type = (action == AMOTION_EVENT_ACTION_DOWN) ? XBMC_MOUSEBUTTONDOWN : XBMC_MOUSEBUTTONUP;
   newEvent.button.x = x;
   newEvent.button.y = y;
   if (checkButtons & AMOTION_EVENT_BUTTON_PRIMARY)

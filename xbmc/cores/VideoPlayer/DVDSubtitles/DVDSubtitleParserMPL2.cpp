@@ -14,10 +14,11 @@
 #include "cores/VideoPlayer/Interface/Addon/TimingConstants.h"
 #include "utils/RegExp.h"
 
-CDVDSubtitleParserMPL2::CDVDSubtitleParserMPL2(std::unique_ptr<CDVDSubtitleStream> && stream, const std::string& filename)
-    : CDVDSubtitleParserText(std::move(stream), filename), m_framerate(DVD_TIME_BASE / 10.0)
+CDVDSubtitleParserMPL2::CDVDSubtitleParserMPL2(std::unique_ptr<CDVDSubtitleStream>&& stream,
+                                               const std::string& filename)
+  : CDVDSubtitleParserText(std::move(stream), filename)
+  , m_framerate(DVD_TIME_BASE / 10.0)
 {
-
 }
 
 CDVDSubtitleParserMPL2::~CDVDSubtitleParserMPL2()
@@ -25,7 +26,7 @@ CDVDSubtitleParserMPL2::~CDVDSubtitleParserMPL2()
   Dispose();
 }
 
-bool CDVDSubtitleParserMPL2::Open(CDVDStreamInfo &hints)
+bool CDVDSubtitleParserMPL2::Open(CDVDStreamInfo& hints)
 {
   if (!CDVDSubtitleParserText::Open())
     return false;
@@ -50,12 +51,13 @@ bool CDVDSubtitleParserMPL2::Open(CDVDStreamInfo &hints)
     {
       const char* text = line + pos + reg.GetFindLen();
       std::string startFrame(reg.GetMatch(1));
-      std::string endFrame  (reg.GetMatch(2));
+      std::string endFrame(reg.GetMatch(2));
       CDVDOverlayText* pOverlay = new CDVDOverlayText();
-      pOverlay->Acquire(); // increase ref count with one so that we can hold a handle to this overlay
+      pOverlay
+          ->Acquire(); // increase ref count with one so that we can hold a handle to this overlay
 
       pOverlay->iPTSStartTime = m_framerate * atoi(startFrame.c_str());
-      pOverlay->iPTSStopTime  = m_framerate * atoi(endFrame.c_str());
+      pOverlay->iPTSStopTime = m_framerate * atoi(endFrame.c_str());
 
       TagConv.ConvertLine(pOverlay, text, strlen(text));
       m_collection.Add(pOverlay);
@@ -64,4 +66,3 @@ bool CDVDSubtitleParserMPL2::Open(CDVDStreamInfo &hints)
 
   return true;
 }
-

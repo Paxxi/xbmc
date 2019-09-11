@@ -38,13 +38,15 @@ class CRenderManager;
 class IRenderMsg
 {
   friend CRenderManager;
+
 public:
   virtual ~IRenderMsg() = default;
+
 protected:
   virtual void VideoParamsChange() = 0;
-  virtual void GetDebugInfo(std::string &audio, std::string &video, std::string &general) = 0;
+  virtual void GetDebugInfo(std::string& audio, std::string& video, std::string& general) = 0;
   virtual void UpdateClockSync(bool enabled) = 0;
-  virtual void UpdateRenderInfo(CRenderInfo &info) = 0;
+  virtual void UpdateRenderInfo(CRenderInfo& info) = 0;
   virtual void UpdateRenderBuffers(int queued, int discard, int free) = 0;
   virtual void UpdateGuiRender(bool gui) = 0;
   virtual void UpdateVideoRender(bool video) = 0;
@@ -54,11 +56,11 @@ protected:
 class CRenderManager
 {
 public:
-  CRenderManager(CDVDClock &clock, IRenderMsg *player);
+  CRenderManager(CDVDClock& clock, IRenderMsg* player);
   virtual ~CRenderManager();
 
   // Functions called from render thread
-  void GetVideoRect(CRect &source, CRect &dest, CRect &view);
+  void GetVideoRect(CRect& source, CRect& dest, CRect& view);
   float GetAspectRatio();
   void FrameMove();
   void FrameWait(int ms);
@@ -66,7 +68,7 @@ public:
   bool IsVideoLayer();
   RESOLUTION GetResolution();
   void UpdateResolution();
-  void TriggerUpdateResolution(float fps, int width, int height, std::string &stereomode);
+  void TriggerUpdateResolution(float fps, int width, int height, std::string& stereomode);
   void SetViewMode(int iViewMode);
   void PreInit();
   void UnInit();
@@ -76,17 +78,26 @@ public:
 
   unsigned int AllocRenderCapture();
   void ReleaseRenderCapture(unsigned int captureId);
-  void StartRenderCapture(unsigned int captureId, unsigned int width, unsigned int height, int flags);
-  bool RenderCaptureGetPixels(unsigned int captureId, unsigned int millis, uint8_t *buffer, unsigned int size);
+  void StartRenderCapture(unsigned int captureId,
+                          unsigned int width,
+                          unsigned int height,
+                          int flags);
+  bool RenderCaptureGetPixels(unsigned int captureId,
+                              unsigned int millis,
+                              uint8_t* buffer,
+                              unsigned int size);
 
   // Functions called from GUI
   bool Supports(ERENDERFEATURE feature);
   bool Supports(ESCALINGMETHOD method);
 
-  int GetSkippedFrames()  { return m_QueueSkip; }
+  int GetSkippedFrames() { return m_QueueSkip; }
 
   bool Configure(const VideoPicture& picture, float fps, unsigned int orientation, int buffers = 0);
-  bool AddVideoPicture(const VideoPicture& picture, volatile std::atomic_bool& bStop, EINTERLACEMETHOD deintMethod, bool wait);
+  bool AddVideoPicture(const VideoPicture& picture,
+                       volatile std::atomic_bool& bStop,
+                       EINTERLACEMETHOD deintMethod,
+                       bool wait);
   void AddOverlay(CDVDOverlay* o, double pts);
   void ShowVideo(bool enable);
 
@@ -102,7 +113,7 @@ public:
    * Can be called by player for lateness detection. This is done best by
    * looking at the end of the queue.
    */
-  bool GetStats(int &lateframes, double &pts, int &queued, int &discard);
+  bool GetStats(int& lateframes, double& pts, int& queued, int& discard);
 
   /**
    * Video player call this on flush in oder to discard any queued frames
@@ -115,7 +126,6 @@ public:
   void SetVideoSettings(CVideoSettings settings);
 
 protected:
-
   void PresentSingle(bool clear, DWORD flags, DWORD alpha);
   void PresentFields(bool clear, DWORD flags, DWORD alpha);
   void PresentBlend(bool clear, DWORD flags, DWORD alpha);
@@ -132,7 +142,7 @@ protected:
   void UpdateLatencyTweak();
   void CheckEnableClockSync();
 
-  CBaseRenderer *m_pRenderer = nullptr;
+  CBaseRenderer* m_pRenderer = nullptr;
   OVERLAY::CRenderer m_overlays;
   CDebugRenderer m_debugRenderer;
   mutable CCriticalSection m_statelock;
@@ -147,11 +157,11 @@ protected:
 
   enum EPRESENTSTEP
   {
-    PRESENT_IDLE     = 0
-  , PRESENT_FLIP
-  , PRESENT_FRAME
-  , PRESENT_FRAME2
-  , PRESENT_READY
+    PRESENT_IDLE = 0,
+    PRESENT_FLIP,
+    PRESENT_FRAME,
+    PRESENT_FRAME2,
+    PRESENT_READY
   };
 
   enum EPRESENTMETHOD
@@ -182,8 +192,8 @@ protected:
 
   struct SPresent
   {
-    double         pts;
-    EFIELDSYNC     presentfield;
+    double pts;
+    EFIELDSYNC presentfield;
     EPRESENTMETHOD presentmethod;
   } m_Queue[NUM_BUFFERS];
 
@@ -211,8 +221,8 @@ protected:
   XbmcThreads::ConditionVariable m_presentevent;
   CEvent m_flushEvent;
   CEvent m_initEvent;
-  CDVDClock &m_dvdClock;
-  IRenderMsg *m_playerPort;
+  CDVDClock& m_dvdClock;
+  IRenderMsg* m_playerPort;
 
   struct CClockSync
   {

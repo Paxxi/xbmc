@@ -38,9 +38,9 @@ using namespace XFILE::MUSICDATABASEDIRECTORY;
 //  Constructor is protected use ParseURL()
 CDirectoryNode::CDirectoryNode(NODE_TYPE Type, const std::string& strName, CDirectoryNode* pParent)
 {
-  m_Type=Type;
-  m_strName=strName;
-  m_pParent=pParent;
+  m_Type = Type;
+  m_strName = strName;
+  m_pParent = pParent;
 }
 
 CDirectoryNode::~CDirectoryNode()
@@ -53,7 +53,7 @@ CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
 {
   CURL url(strPath);
 
-  std::string strDirectory=url.GetFileName();
+  std::string strDirectory = url.GetFileName();
   URIUtils::RemoveSlashAtEnd(strDirectory);
 
   std::vector<std::string> Path = StringUtils::Split(strDirectory, '/');
@@ -63,7 +63,7 @@ CDirectoryNode* CDirectoryNode::ParseURL(const std::string& strPath)
   CDirectoryNode* pParent = nullptr;
   NODE_TYPE NodeType = NODE_TYPE_ROOT;
 
-  for (int i=0; i < static_cast<int>(Path.size()); ++i)
+  for (int i = 0; i < static_cast<int>(Path.size()); ++i)
   {
     pNode = CreateNode(NodeType, Path[i], pParent);
     NodeType = pNode ? pNode->GetChildType() : NODE_TYPE_NONE;
@@ -89,7 +89,9 @@ void CDirectoryNode::GetDatabaseInfo(const std::string& strPath, CQueryParams& p
 }
 
 //  Create a node object
-CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type, const std::string& strName, CDirectoryNode* pParent)
+CDirectoryNode* CDirectoryNode::CreateNode(NODE_TYPE Type,
+                                           const std::string& strName,
+                                           CDirectoryNode* pParent)
 {
   switch (Type)
   {
@@ -190,19 +192,19 @@ std::string CDirectoryNode::BuildPath() const
   if (!m_strName.empty())
     array.insert(array.begin(), m_strName);
 
-  CDirectoryNode* pParent=m_pParent;
+  CDirectoryNode* pParent = m_pParent;
   while (pParent != nullptr)
   {
-    const std::string& strNodeName=pParent->GetName();
+    const std::string& strNodeName = pParent->GetName();
     if (!strNodeName.empty())
       array.insert(array.begin(), strNodeName);
 
-    pParent=pParent->GetParent();
+    pParent = pParent->GetParent();
   }
 
-  std::string strPath="musicdb://";
+  std::string strPath = "musicdb://";
   for (int i = 0; i < static_cast<int>(array.size()); ++i)
-    strPath+=array[i]+"/";
+    strPath += array[i] + "/";
 
   std::string options = m_options.GetOptionsString();
   if (!options.empty())
@@ -211,7 +213,7 @@ std::string CDirectoryNode::BuildPath() const
   return strPath;
 }
 
-void CDirectoryNode::AddOptions(const std::string &options)
+void CDirectoryNode::AddOptions(const std::string& options)
 {
   if (options.empty())
     return;
@@ -226,11 +228,11 @@ void CDirectoryNode::CollectQueryParams(CQueryParams& params) const
 {
   params.SetQueryParam(m_Type, m_strName);
 
-  CDirectoryNode* pParent=m_pParent;
+  CDirectoryNode* pParent = m_pParent;
   while (pParent != nullptr)
   {
     params.SetQueryParam(pParent->GetType(), pParent->GetName());
-    pParent=pParent->GetParent();
+    pParent = pParent->GetParent();
   }
 }
 
@@ -249,11 +251,11 @@ bool CDirectoryNode::GetChilds(CFileItemList& items)
 
   std::unique_ptr<CDirectoryNode> pNode(CDirectoryNode::CreateNode(GetChildType(), "", this));
 
-  bool bSuccess=false;
+  bool bSuccess = false;
   if (pNode)
   {
     pNode->m_options = m_options;
-    bSuccess=pNode->GetContent(items);
+    bSuccess = pNode->GetContent(items);
     if (bSuccess)
     {
       if (CanCache())

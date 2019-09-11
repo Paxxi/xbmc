@@ -36,5 +36,5 @@ void GetMemoryStatus(MemoryStatus* buffer)
   buffer->availPhys = memory.ullAvailPhys;
 }
 
-}
-}
+} // namespace MEMORY
+} // namespace KODI

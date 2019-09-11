@@ -8,26 +8,29 @@
 
 #pragma once
 
-#include "utils/XBMCTinyXML.h"
+#include "cores/ExternalPlayer/ExternalPlayer.h"
 #include "cores/IPlayer.h"
+#include "cores/RetroPlayer/RetroPlayer.h"
 #include "cores/VideoPlayer/VideoPlayer.h"
 #include "cores/paplayer/PAPlayer.h"
-#include "cores/RetroPlayer/RetroPlayer.h"
-#include "cores/ExternalPlayer/ExternalPlayer.h"
+#include "utils/XBMCTinyXML.h"
 #ifdef HAS_UPNP
 #include "network/upnp/UPnPPlayer.h"
 #endif
-#include "system.h"
 #include "utils/log.h"
+
+#include "system.h"
 
 class CPlayerCoreConfig
 {
 public:
-
-  CPlayerCoreConfig(std::string name, std::string type, const TiXmlElement* pConfig, const std::string& id = ""):
-    m_name(name),
-    m_id(id),
-    m_type(type)
+  CPlayerCoreConfig(std::string name,
+                    std::string type,
+                    const TiXmlElement* pConfig,
+                    const std::string& id = "")
+    : m_name(name)
+    , m_id(id)
+    , m_type(type)
   {
     m_bPlaysAudio = false;
     m_bPlaysVideo = false;
@@ -35,8 +38,8 @@ public:
     if (pConfig)
     {
       m_config = static_cast<TiXmlElement*>(pConfig->Clone());
-      const char *sAudio = pConfig->Attribute("audio");
-      const char *sVideo = pConfig->Attribute("video");
+      const char* sAudio = pConfig->Attribute("audio");
+      const char* sVideo = pConfig->Attribute("video");
       m_bPlaysAudio = sAudio && stricmp(sAudio, "true") == 0;
       m_bPlaysVideo = sVideo && stricmp(sVideo, "true") == 0;
     }
@@ -47,30 +50,15 @@ public:
     CLog::Log(LOGDEBUG, "CPlayerCoreConfig::<ctor>: created player %s", m_name.c_str());
   }
 
-  virtual ~CPlayerCoreConfig()
-  {
-    SAFE_DELETE(m_config);
-  }
+  virtual ~CPlayerCoreConfig() { SAFE_DELETE(m_config); }
 
-  const std::string& GetName() const
-  {
-    return m_name;
-  }
+  const std::string& GetName() const { return m_name; }
 
-  const std::string& GetId() const
-  {
-    return m_id;
-  }
+  const std::string& GetId() const { return m_id; }
 
-  bool PlaysAudio() const
-  {
-    return m_bPlaysAudio;
-  }
+  bool PlaysAudio() const { return m_bPlaysAudio; }
 
-  bool PlaysVideo() const
-  {
-    return m_bPlaysVideo;
-  }
+  bool PlaysVideo() const { return m_bPlaysVideo; }
 
   IPlayer* CreatePlayer(IPlayerCallback& callback) const
   {

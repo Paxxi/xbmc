@@ -18,16 +18,17 @@
  * DVD Menu ID
  * (see dvdnav_menu_call())
  */
-typedef enum {
+typedef enum
+{
   /* When used in VTS domain, DVD_MENU_Escape behaves like DVD_MENU_Root,
    * but from within a menu domain, DVD_MENU_Escape resumes playback. */
-  DVD_MENU_Escape     = 0,
-  DVD_MENU_Title      = 2,
-  DVD_MENU_Root       = 3,
+  DVD_MENU_Escape = 0,
+  DVD_MENU_Title = 2,
+  DVD_MENU_Root = 3,
   DVD_MENU_Subpicture = 4,
-  DVD_MENU_Audio      = 5,
-  DVD_MENU_Angle      = 6,
-  DVD_MENU_Part       = 7
+  DVD_MENU_Audio = 5,
+  DVD_MENU_Angle = 6,
+  DVD_MENU_Part = 7
 } DVDMenuID_t;
 
 
@@ -35,11 +36,12 @@ typedef enum {
  * Structure containing info on highlight areas
  * (see dvdnav_get_highlight_area())
  */
-typedef struct {
-  uint32_t palette;     /* The CLUT entries for the highlight palette
+typedef struct
+{
+  uint32_t palette; /* The CLUT entries for the highlight palette
 			   (4-bits per entry -> 4 entries) */
-  uint16_t sx,sy,ex,ey; /* The start/end x,y positions */
-  uint32_t pts;         /* Highlight PTS to match with SPU */
+  uint16_t sx, sy, ex, ey; /* The start/end x,y positions */
+  uint32_t pts; /* Highlight PTS to match with SPU */
 
   /* button number for the SPU decoder/overlaying engine */
   uint32_t buttonN;
@@ -52,45 +54,48 @@ typedef struct {
 #if 1
 
 /* Domain */
-typedef enum {
-  DVD_DOMAIN_FirstPlay,  /* First Play Domain */
-  DVD_DOMAIN_VMG,        /* Video Manager Domain */
-  DVD_DOMAIN_VTSMenu,    /* Video Title Set Menu Domain */
-  DVD_DOMAIN_VTSTitle,   /* Video Title Set Domain */
-  DVD_DOMAIN_Stop        /* Stop Domain */
+typedef enum
+{
+  DVD_DOMAIN_FirstPlay, /* First Play Domain */
+  DVD_DOMAIN_VMG, /* Video Manager Domain */
+  DVD_DOMAIN_VTSMenu, /* Video Title Set Menu Domain */
+  DVD_DOMAIN_VTSTitle, /* Video Title Set Domain */
+  DVD_DOMAIN_Stop /* Stop Domain */
 } DVDDomain_t;
 
 /* User operation permissions */
-typedef enum {
-  UOP_FLAG_TitleOrTimePlay            = 0x00000001,
-  UOP_FLAG_ChapterSearchOrPlay        = 0x00000002,
-  UOP_FLAG_TitlePlay                  = 0x00000004,
-  UOP_FLAG_Stop                       = 0x00000008,
-  UOP_FLAG_GoUp                       = 0x00000010,
-  UOP_FLAG_TimeOrChapterSearch        = 0x00000020,
-  UOP_FLAG_PrevOrTopPGSearch          = 0x00000040,
-  UOP_FLAG_NextPGSearch               = 0x00000080,
-  UOP_FLAG_ForwardScan                = 0x00000100,
-  UOP_FLAG_BackwardScan               = 0x00000200,
-  UOP_FLAG_TitleMenuCall              = 0x00000400,
-  UOP_FLAG_RootMenuCall               = 0x00000800,
-  UOP_FLAG_SubPicMenuCall             = 0x00001000,
-  UOP_FLAG_AudioMenuCall              = 0x00002000,
-  UOP_FLAG_AngleMenuCall              = 0x00004000,
-  UOP_FLAG_ChapterMenuCall            = 0x00008000,
-  UOP_FLAG_Resume                     = 0x00010000,
-  UOP_FLAG_ButtonSelectOrActivate     = 0x00020000,
-  UOP_FLAG_StillOff                   = 0x00040000,
-  UOP_FLAG_PauseOn                    = 0x00080000,
-  UOP_FLAG_AudioStreamChange          = 0x00100000,
-  UOP_FLAG_SubPicStreamChange         = 0x00200000,
-  UOP_FLAG_AngleChange                = 0x00400000,
+typedef enum
+{
+  UOP_FLAG_TitleOrTimePlay = 0x00000001,
+  UOP_FLAG_ChapterSearchOrPlay = 0x00000002,
+  UOP_FLAG_TitlePlay = 0x00000004,
+  UOP_FLAG_Stop = 0x00000008,
+  UOP_FLAG_GoUp = 0x00000010,
+  UOP_FLAG_TimeOrChapterSearch = 0x00000020,
+  UOP_FLAG_PrevOrTopPGSearch = 0x00000040,
+  UOP_FLAG_NextPGSearch = 0x00000080,
+  UOP_FLAG_ForwardScan = 0x00000100,
+  UOP_FLAG_BackwardScan = 0x00000200,
+  UOP_FLAG_TitleMenuCall = 0x00000400,
+  UOP_FLAG_RootMenuCall = 0x00000800,
+  UOP_FLAG_SubPicMenuCall = 0x00001000,
+  UOP_FLAG_AudioMenuCall = 0x00002000,
+  UOP_FLAG_AngleMenuCall = 0x00004000,
+  UOP_FLAG_ChapterMenuCall = 0x00008000,
+  UOP_FLAG_Resume = 0x00010000,
+  UOP_FLAG_ButtonSelectOrActivate = 0x00020000,
+  UOP_FLAG_StillOff = 0x00040000,
+  UOP_FLAG_PauseOn = 0x00080000,
+  UOP_FLAG_AudioStreamChange = 0x00100000,
+  UOP_FLAG_SubPicStreamChange = 0x00200000,
+  UOP_FLAG_AngleChange = 0x00400000,
   UOP_FLAG_KaraokeAudioPresModeChange = 0x00800000,
-  UOP_FLAG_VideoPresModeChange        = 0x01000000
+  UOP_FLAG_VideoPresModeChange = 0x01000000
 } DVDUOP_t;
 
 /* Parental Level */
-typedef enum {
+typedef enum
+{
   DVD_PARENTAL_LEVEL_1 = 1,
   DVD_PARENTAL_LEVEL_2 = 2,
   DVD_PARENTAL_LEVEL_3 = 3,
@@ -110,7 +115,8 @@ typedef uint16_t DVDCountryID_t;
 
 /* Register */
 typedef uint16_t DVDRegister_t;
-typedef enum {
+typedef enum
+{
   DVDFalse = 0,
   DVDTrue = 1
 } DVDBool_t;
@@ -126,7 +132,8 @@ typedef int DVDTitle_t;
 typedef int DVDAngle_t;
 
 /* Timecode */
-typedef struct {
+typedef struct
+{
   uint8_t Hours;
   uint8_t Minutes;
   uint8_t Seconds;
@@ -140,51 +147,56 @@ typedef int DVDSubpictureStream_t;
 typedef int DVDAudioStream_t;
 
 /* The audio application mode */
-typedef enum {
-  DVD_AUDIO_APP_MODE_None     = 0,
-  DVD_AUDIO_APP_MODE_Karaoke  = 1,
+typedef enum
+{
+  DVD_AUDIO_APP_MODE_None = 0,
+  DVD_AUDIO_APP_MODE_Karaoke = 1,
   DVD_AUDIO_APP_MODE_Surround = 2,
-  DVD_AUDIO_APP_MODE_Other    = 3
+  DVD_AUDIO_APP_MODE_Other = 3
 } DVDAudioAppMode_t;
 
 /* The audio format */
-typedef enum {
-  DVD_AUDIO_FORMAT_AC3        = 0,
-  DVD_AUDIO_FORMAT_UNKNOWN_1  = 1,
-  DVD_AUDIO_FORMAT_MPEG       = 2,
-  DVD_AUDIO_FORMAT_MPEG2_EXT  = 3,
-  DVD_AUDIO_FORMAT_LPCM       = 4,
-  DVD_AUDIO_FORMAT_UNKNOWN_5  = 5,
-  DVD_AUDIO_FORMAT_DTS        = 6,
-  DVD_AUDIO_FORMAT_SDDS       = 7
+typedef enum
+{
+  DVD_AUDIO_FORMAT_AC3 = 0,
+  DVD_AUDIO_FORMAT_UNKNOWN_1 = 1,
+  DVD_AUDIO_FORMAT_MPEG = 2,
+  DVD_AUDIO_FORMAT_MPEG2_EXT = 3,
+  DVD_AUDIO_FORMAT_LPCM = 4,
+  DVD_AUDIO_FORMAT_UNKNOWN_5 = 5,
+  DVD_AUDIO_FORMAT_DTS = 6,
+  DVD_AUDIO_FORMAT_SDDS = 7
 } DVDAudioFormat_t;
 
 /* Audio language extension */
-typedef enum {
-  DVD_AUDIO_LANG_EXT_NotSpecified       = 0,
-  DVD_AUDIO_LANG_EXT_NormalCaptions     = 1,
-  DVD_AUDIO_LANG_EXT_VisuallyImpaired   = 2,
+typedef enum
+{
+  DVD_AUDIO_LANG_EXT_NotSpecified = 0,
+  DVD_AUDIO_LANG_EXT_NormalCaptions = 1,
+  DVD_AUDIO_LANG_EXT_VisuallyImpaired = 2,
   DVD_AUDIO_LANG_EXT_DirectorsComments1 = 3,
   DVD_AUDIO_LANG_EXT_DirectorsComments2 = 4
 } DVDAudioLangExt_t;
 
 /* Subpicture language extension */
-typedef enum {
-  DVD_SUBPICTURE_LANG_EXT_NotSpecified  = 0,
-  DVD_SUBPICTURE_LANG_EXT_NormalCaptions  = 1,
-  DVD_SUBPICTURE_LANG_EXT_BigCaptions  = 2,
-  DVD_SUBPICTURE_LANG_EXT_ChildrensCaptions  = 3,
-  DVD_SUBPICTURE_LANG_EXT_NormalCC  = 5,
-  DVD_SUBPICTURE_LANG_EXT_BigCC  = 6,
-  DVD_SUBPICTURE_LANG_EXT_ChildrensCC  = 7,
-  DVD_SUBPICTURE_LANG_EXT_Forced  = 9,
-  DVD_SUBPICTURE_LANG_EXT_NormalDirectorsComments  = 13,
-  DVD_SUBPICTURE_LANG_EXT_BigDirectorsComments  = 14,
-  DVD_SUBPICTURE_LANG_EXT_ChildrensDirectorsComments  = 15,
+typedef enum
+{
+  DVD_SUBPICTURE_LANG_EXT_NotSpecified = 0,
+  DVD_SUBPICTURE_LANG_EXT_NormalCaptions = 1,
+  DVD_SUBPICTURE_LANG_EXT_BigCaptions = 2,
+  DVD_SUBPICTURE_LANG_EXT_ChildrensCaptions = 3,
+  DVD_SUBPICTURE_LANG_EXT_NormalCC = 5,
+  DVD_SUBPICTURE_LANG_EXT_BigCC = 6,
+  DVD_SUBPICTURE_LANG_EXT_ChildrensCC = 7,
+  DVD_SUBPICTURE_LANG_EXT_Forced = 9,
+  DVD_SUBPICTURE_LANG_EXT_NormalDirectorsComments = 13,
+  DVD_SUBPICTURE_LANG_EXT_BigDirectorsComments = 14,
+  DVD_SUBPICTURE_LANG_EXT_ChildrensDirectorsComments = 15,
 } DVDSubpictureLangExt_t;
 
 /* Karaoke Downmix mode */
-typedef enum {
+typedef enum
+{
   DVD_KARAOKE_DOWNMIX_0to0 = 0x0001,
   DVD_KARAOKE_DOWNMIX_1to0 = 0x0002,
   DVD_KARAOKE_DOWNMIX_2to0 = 0x0004,
@@ -203,7 +215,8 @@ typedef enum {
 typedef int DVDKaraokeDownmixMask_t;
 
 /* Display mode */
-typedef enum {
+typedef enum
+{
   DVD_DISPLAY_MODE_ContentDefault = 0,
   DVD_DISPLAY_MODE_16x9 = 1,
   DVD_DISPLAY_MODE_4x3PanScan = 2,
@@ -215,39 +228,44 @@ typedef int DVDAudioSampleQuant_t;
 typedef int DVDChannelNumber_t;
 
 /* Audio attributes */
-typedef struct {
-  DVDAudioAppMode_t     AppMode;
-  DVDAudioFormat_t      AudioFormat;
-  DVDLangID_t           Language;
-  DVDAudioLangExt_t     LanguageExtension;
-  DVDBool_t             HasMultichannelInfo;
-  DVDAudioSampleFreq_t  SampleFrequency;
+typedef struct
+{
+  DVDAudioAppMode_t AppMode;
+  DVDAudioFormat_t AudioFormat;
+  DVDLangID_t Language;
+  DVDAudioLangExt_t LanguageExtension;
+  DVDBool_t HasMultichannelInfo;
+  DVDAudioSampleFreq_t SampleFrequency;
   DVDAudioSampleQuant_t SampleQuantization;
-  DVDChannelNumber_t    NumberOfChannels;
+  DVDChannelNumber_t NumberOfChannels;
 } DVDAudioAttributes_t;
 
 /* Subpicture attributes */
-typedef enum {
+typedef enum
+{
   DVD_SUBPICTURE_TYPE_NotSpecified = 0,
-  DVD_SUBPICTURE_TYPE_Language     = 1,
-  DVD_SUBPICTURE_TYPE_Other        = 2
+  DVD_SUBPICTURE_TYPE_Language = 1,
+  DVD_SUBPICTURE_TYPE_Other = 2
 } DVDSubpictureType_t;
-typedef enum {
+typedef enum
+{
   DVD_SUBPICTURE_CODING_RunLength = 0,
-  DVD_SUBPICTURE_CODING_Extended  = 1,
-  DVD_SUBPICTURE_CODING_Other     = 2
+  DVD_SUBPICTURE_CODING_Extended = 1,
+  DVD_SUBPICTURE_CODING_Other = 2
 } DVDSubpictureCoding_t;
-typedef struct {
-  DVDSubpictureType_t    Type;
-  DVDSubpictureCoding_t  CodingMode;
-  DVDLangID_t            Language;
+typedef struct
+{
+  DVDSubpictureType_t Type;
+  DVDSubpictureCoding_t CodingMode;
+  DVDLangID_t Language;
   DVDSubpictureLangExt_t LanguageExtension;
 } DVDSubpictureAttributes_t;
 
 typedef int DVDVideoCompression_t;
 
 /* Video attributes */
-typedef struct {
+typedef struct
+{
   DVDBool_t PanscanPermitted;
   DVDBool_t LetterboxPermitted;
   int AspectX;
@@ -261,4 +279,3 @@ typedef struct {
 } DVDVideoAttributes_t;
 
 #endif
-

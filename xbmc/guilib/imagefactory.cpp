@@ -29,8 +29,8 @@ IImage* ImageFactory::CreateLoader(const std::string& strFileName)
 
 IImage* ImageFactory::CreateLoader(const CURL& url)
 {
-  if(!url.GetFileType().empty())
-    return CreateLoaderFromMimeType("image/"+url.GetFileType());
+  if (!url.GetFileType().empty())
+    return CreateLoaderFromMimeType("image/" + url.GetFileType());
 
   return CreateLoaderFromMimeType(CMime::GetMimeType(url));
 }
@@ -42,7 +42,8 @@ IImage* ImageFactory::CreateLoaderFromMimeType(const std::string& strMimeType)
   CServiceBroker::GetBinaryAddonManager().GetAddonInfos(addonInfos, true, ADDON_IMAGEDECODER);
   for (auto addonInfo : addonInfos)
   {
-    std::vector<std::string> mime = StringUtils::Split(addonInfo->Type(ADDON_IMAGEDECODER)->GetValue("@mimetype").asString(), "|");
+    std::vector<std::string> mime = StringUtils::Split(
+        addonInfo->Type(ADDON_IMAGEDECODER)->GetValue("@mimetype").asString(), "|");
     if (std::find(mime.begin(), mime.end(), strMimeType) != mime.end())
     {
       CSingleLock lock(m_createSec);

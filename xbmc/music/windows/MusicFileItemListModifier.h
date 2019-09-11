@@ -16,9 +16,9 @@ public:
   CMusicFileItemListModifier() = default;
   ~CMusicFileItemListModifier() override = default;
 
-  bool CanModify(const CFileItemList &items) const override;
-  bool Modify(CFileItemList &items) const override;
+  bool CanModify(const CFileItemList& items) const override;
+  bool Modify(CFileItemList& items) const override;
 
 private:
-  static void AddQueuingFolder(CFileItemList & items);
+  static void AddQueuingFolder(CFileItemList& items);
 };

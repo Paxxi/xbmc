@@ -14,25 +14,25 @@
 
 class CDACP
 {
-  public:
-    CDACP(const std::string &active_remote_header, const std::string &hostname, int port);
+public:
+  CDACP(const std::string& active_remote_header, const std::string& hostname, int port);
 
-    void BeginFwd();
-    void BeginRewnd();
-    void ToggleMute();
-    void NextItem();
-    void PrevItem();
-    void Pause();
-    void PlayPause();
-    void Play();
-    void Stop();
-    void PlayResume();
-    void ShuffleSongs();
-    void VolumeDown();
-    void VolumeUp();
+  void BeginFwd();
+  void BeginRewnd();
+  void ToggleMute();
+  void NextItem();
+  void PrevItem();
+  void Pause();
+  void PlayPause();
+  void Play();
+  void Stop();
+  void PlayResume();
+  void ShuffleSongs();
+  void VolumeDown();
+  void VolumeUp();
 
-  private:
-    void SendCmd(const std::string &cmd);
+private:
+  void SendCmd(const std::string& cmd);
 
-    CURL m_dacpUrl;
+  CURL m_dacpUrl;
 };

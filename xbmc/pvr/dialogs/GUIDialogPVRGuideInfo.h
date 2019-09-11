@@ -15,31 +15,31 @@ class CGUIMessage;
 
 namespace PVR
 {
-  class CGUIDialogPVRGuideInfo : public CGUIDialog
-  {
-  public:
-    CGUIDialogPVRGuideInfo(void);
-    ~CGUIDialogPVRGuideInfo(void) override;
-    bool OnMessage(CGUIMessage& message) override;
-    bool OnInfo(int actionID) override;
-    bool HasListItems() const override { return true; }
-    CFileItemPtr GetCurrentListItem(int offset = 0) override;
+class CGUIDialogPVRGuideInfo : public CGUIDialog
+{
+public:
+  CGUIDialogPVRGuideInfo(void);
+  ~CGUIDialogPVRGuideInfo(void) override;
+  bool OnMessage(CGUIMessage& message) override;
+  bool OnInfo(int actionID) override;
+  bool HasListItems() const override { return true; }
+  CFileItemPtr GetCurrentListItem(int offset = 0) override;
 
-    void SetProgInfo(const CPVREpgInfoTagPtr &tag);
+  void SetProgInfo(const CPVREpgInfoTagPtr& tag);
 
-    static void ShowFor(const CFileItemPtr& item);
+  static void ShowFor(const CFileItemPtr& item);
 
-  protected:
-    void OnInitWindow() override;
+protected:
+  void OnInitWindow() override;
 
-  private:
-    bool OnClickButtonOK(CGUIMessage &message);
-    bool OnClickButtonRecord(CGUIMessage &message);
-    bool OnClickButtonPlay(CGUIMessage &message);
-    bool OnClickButtonFind(CGUIMessage &message);
-    bool OnClickButtonAddTimer(CGUIMessage &message);
-    bool OnClickButtonSetReminder(CGUIMessage& message);
+private:
+  bool OnClickButtonOK(CGUIMessage& message);
+  bool OnClickButtonRecord(CGUIMessage& message);
+  bool OnClickButtonPlay(CGUIMessage& message);
+  bool OnClickButtonFind(CGUIMessage& message);
+  bool OnClickButtonAddTimer(CGUIMessage& message);
+  bool OnClickButtonSetReminder(CGUIMessage& message);
 
-    CPVREpgInfoTagPtr m_progItem;
-  };
-}
+  CPVREpgInfoTagPtr m_progItem;
+};
+} // namespace PVR

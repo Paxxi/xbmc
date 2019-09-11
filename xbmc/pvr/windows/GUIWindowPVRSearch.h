@@ -18,46 +18,52 @@ class CFileItem;
 
 namespace PVR
 {
-  class CPVREpgSearchFilter;
+class CPVREpgSearchFilter;
 
-  class CGUIWindowPVRSearchBase : public CGUIWindowPVRBase
-  {
-  public:
-    CGUIWindowPVRSearchBase(bool bRadio, int id, const std::string &xmlFile);
-    ~CGUIWindowPVRSearchBase() override;
+class CGUIWindowPVRSearchBase : public CGUIWindowPVRBase
+{
+public:
+  CGUIWindowPVRSearchBase(bool bRadio, int id, const std::string& xmlFile);
+  ~CGUIWindowPVRSearchBase() override;
 
-    bool OnMessage(CGUIMessage& message)  override;
-    void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
-    bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
+  bool OnMessage(CGUIMessage& message) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
+  bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
 
-    /*!
+  /*!
      * @brief set the item to search similar events for.
      * @param item the epg event to search similar events for.
      */
-    void SetItemToSearch(const CFileItemPtr &item);
+  void SetItemToSearch(const CFileItemPtr& item);
 
-  protected:
-    void OnPrepareFileItems(CFileItemList &items) override;
-    std::string GetDirectoryPath(void) override { return ""; }
+protected:
+  void OnPrepareFileItems(CFileItemList& items) override;
+  std::string GetDirectoryPath(void) override { return ""; }
 
-  private:
-    bool OnContextButtonClear(CFileItem *item, CONTEXT_BUTTON button);
+private:
+  bool OnContextButtonClear(CFileItem* item, CONTEXT_BUTTON button);
 
-    void OpenDialogSearch();
+  void OpenDialogSearch();
 
-    bool m_bSearchConfirmed;
-    std::unique_ptr<CPVREpgSearchFilter> m_searchfilter;
-  };
+  bool m_bSearchConfirmed;
+  std::unique_ptr<CPVREpgSearchFilter> m_searchfilter;
+};
 
-  class CGUIWindowPVRTVSearch : public CGUIWindowPVRSearchBase
+class CGUIWindowPVRTVSearch : public CGUIWindowPVRSearchBase
+{
+public:
+  CGUIWindowPVRTVSearch()
+    : CGUIWindowPVRSearchBase(false, WINDOW_TV_SEARCH, "MyPVRSearch.xml")
   {
-  public:
-    CGUIWindowPVRTVSearch() : CGUIWindowPVRSearchBase(false, WINDOW_TV_SEARCH, "MyPVRSearch.xml") {}
-  };
+  }
+};
 
-  class CGUIWindowPVRRadioSearch : public CGUIWindowPVRSearchBase
+class CGUIWindowPVRRadioSearch : public CGUIWindowPVRSearchBase
+{
+public:
+  CGUIWindowPVRRadioSearch()
+    : CGUIWindowPVRSearchBase(true, WINDOW_RADIO_SEARCH, "MyPVRSearch.xml")
   {
-  public:
-    CGUIWindowPVRRadioSearch() : CGUIWindowPVRSearchBase(true, WINDOW_RADIO_SEARCH, "MyPVRSearch.xml") {}
-  };
-}
+  }
+};
+} // namespace PVR

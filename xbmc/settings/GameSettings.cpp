@@ -10,7 +10,7 @@
 
 using namespace KODI;
 
-CGameSettings &CGameSettings::operator=(const CGameSettings &rhs)
+CGameSettings& CGameSettings::operator=(const CGameSettings& rhs)
 {
   if (this != &rhs)
   {
@@ -28,14 +28,13 @@ void CGameSettings::Reset()
   m_rotationDegCCW = 0;
 }
 
-bool CGameSettings::operator==(const CGameSettings &rhs) const
+bool CGameSettings::operator==(const CGameSettings& rhs) const
 {
-  return m_videoFilter == rhs.m_videoFilter &&
-         m_stretchMode == rhs.m_stretchMode &&
+  return m_videoFilter == rhs.m_videoFilter && m_stretchMode == rhs.m_stretchMode &&
          m_rotationDegCCW == rhs.m_rotationDegCCW;
 }
 
-void CGameSettings::SetVideoFilter(const std::string &videoFilter)
+void CGameSettings::SetVideoFilter(const std::string& videoFilter)
 {
   if (videoFilter != m_videoFilter)
   {

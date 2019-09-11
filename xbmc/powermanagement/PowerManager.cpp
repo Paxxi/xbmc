@@ -40,7 +40,8 @@ extern HWND g_hWnd;
 CPowerManager::CPowerManager()
 {
   m_settings = CServiceBroker::GetSettingsComponent()->GetSettings();
-  m_settings->GetSettingsManager()->RegisterSettingOptionsFiller("shutdownstates", SettingOptionsShutdownStatesFiller);
+  m_settings->GetSettingsManager()->RegisterSettingOptionsFiller(
+      "shutdownstates", SettingOptionsShutdownStatesFiller);
 }
 
 CPowerManager::~CPowerManager() = default;
@@ -56,49 +57,55 @@ void CPowerManager::SetDefaults()
 
   switch (defaultShutdown)
   {
-    case POWERSTATE_QUIT:
-    case POWERSTATE_MINIMIZE:
-      // assume we can shutdown if --standalone is passed
-      if (g_application.IsStandAlone())
-        defaultShutdown = POWERSTATE_SHUTDOWN;
+  case POWERSTATE_QUIT:
+  case POWERSTATE_MINIMIZE:
+    // assume we can shutdown if --standalone is passed
+    if (g_application.IsStandAlone())
+      defaultShutdown = POWERSTATE_SHUTDOWN;
     break;
-    case POWERSTATE_HIBERNATE:
-      if (!CServiceBroker::GetPowerManager().CanHibernate())
-      {
-        if (CServiceBroker::GetPowerManager().CanSuspend())
-          defaultShutdown = POWERSTATE_SUSPEND;
-        else
-          defaultShutdown = CServiceBroker::GetPowerManager().CanPowerdown() ? POWERSTATE_SHUTDOWN : POWERSTATE_QUIT;
-      }
+  case POWERSTATE_HIBERNATE:
+    if (!CServiceBroker::GetPowerManager().CanHibernate())
+    {
+      if (CServiceBroker::GetPowerManager().CanSuspend())
+        defaultShutdown = POWERSTATE_SUSPEND;
+      else
+        defaultShutdown = CServiceBroker::GetPowerManager().CanPowerdown() ? POWERSTATE_SHUTDOWN
+                                                                           : POWERSTATE_QUIT;
+    }
     break;
-    case POWERSTATE_SUSPEND:
-      if (!CServiceBroker::GetPowerManager().CanSuspend())
-      {
-        if (CServiceBroker::GetPowerManager().CanHibernate())
-          defaultShutdown = POWERSTATE_HIBERNATE;
-        else
-          defaultShutdown = CServiceBroker::GetPowerManager().CanPowerdown() ? POWERSTATE_SHUTDOWN : POWERSTATE_QUIT;
-      }
+  case POWERSTATE_SUSPEND:
+    if (!CServiceBroker::GetPowerManager().CanSuspend())
+    {
+      if (CServiceBroker::GetPowerManager().CanHibernate())
+        defaultShutdown = POWERSTATE_HIBERNATE;
+      else
+        defaultShutdown = CServiceBroker::GetPowerManager().CanPowerdown() ? POWERSTATE_SHUTDOWN
+                                                                           : POWERSTATE_QUIT;
+    }
     break;
-    case POWERSTATE_SHUTDOWN:
-      if (!CServiceBroker::GetPowerManager().CanPowerdown())
-      {
-        if (CServiceBroker::GetPowerManager().CanSuspend())
-          defaultShutdown = POWERSTATE_SUSPEND;
-        else
-          defaultShutdown = CServiceBroker::GetPowerManager().CanHibernate() ? POWERSTATE_HIBERNATE : POWERSTATE_QUIT;
-      }
+  case POWERSTATE_SHUTDOWN:
+    if (!CServiceBroker::GetPowerManager().CanPowerdown())
+    {
+      if (CServiceBroker::GetPowerManager().CanSuspend())
+        defaultShutdown = POWERSTATE_SUSPEND;
+      else
+        defaultShutdown = CServiceBroker::GetPowerManager().CanHibernate() ? POWERSTATE_HIBERNATE
+                                                                           : POWERSTATE_QUIT;
+    }
     break;
   }
 
-  std::static_pointer_cast<CSettingInt>(m_settings->GetSetting(CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNSTATE))->SetDefault(defaultShutdown);
+  std::static_pointer_cast<CSettingInt>(
+      m_settings->GetSetting(CSettings::SETTING_POWERMANAGEMENT_SHUTDOWNSTATE))
+      ->SetDefault(defaultShutdown);
 }
 
 bool CPowerManager::Powerdown()
 {
   if (CanPowerdown() && m_instance->Powerdown())
   {
-    CGUIDialogBusy* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
+    CGUIDialogBusy* dialog =
+        CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
     if (dialog)
       dialog->Open();
 
@@ -126,7 +133,8 @@ bool CPowerManager::Reboot()
   {
     CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::System, "xbmc", "OnRestart");
 
-    CGUIDialogBusy* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
+    CGUIDialogBusy* dialog =
+        CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
     if (dialog)
       dialog->Open();
   }
@@ -171,7 +179,8 @@ void CPowerManager::OnSleep()
 {
   CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::System, "xbmc", "OnSleep");
 
-  CGUIDialogBusy* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
+  CGUIDialogBusy* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
   if (dialog)
     dialog->Open();
 
@@ -195,7 +204,8 @@ void CPowerManager::OnWake()
   // reset out timers
   g_application.ResetShutdownTimers();
 
-  CGUIDialogBusy* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
+  CGUIDialogBusy* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogBusy>(WINDOW_DIALOG_BUSY);
   if (dialog)
     dialog->Close(true); // force close. no closing animation, sound etc at this early stage
 
@@ -223,14 +233,15 @@ void CPowerManager::OnLowBattery()
 {
   CLog::Log(LOGNOTICE, "%s: Running low battery jobs", __FUNCTION__);
 
-  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, g_localizeStrings.Get(13050), "");
+  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, g_localizeStrings.Get(13050),
+                                        "");
 
   CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::System, "xbmc", "OnLowBattery");
 }
 
 void CPowerManager::StorePlayerState()
 {
-  CApplicationPlayer &appPlayer = g_application.GetAppPlayer();
+  CApplicationPlayer& appPlayer = g_application.GetAppPlayer();
   if (appPlayer.IsPlaying())
   {
     m_lastUsedPlayer = appPlayer.GetCurrentPlayer();
@@ -239,12 +250,18 @@ void CPowerManager::StorePlayerState()
     m_lastPlayedFileItem->m_lStartOffset = appPlayer.GetTime();
     // in case of regular stack, correct the start offset by adding current part start time
     if (g_application.GetAppStackHelper().IsPlayingRegularStack())
-      m_lastPlayedFileItem->m_lStartOffset += g_application.GetAppStackHelper().GetCurrentStackPartStartTimeMs();
+      m_lastPlayedFileItem->m_lStartOffset +=
+          g_application.GetAppStackHelper().GetCurrentStackPartStartTimeMs();
     // in case of iso stack, keep track of part number
-    m_lastPlayedFileItem->m_lStartPartNumber = g_application.GetAppStackHelper().IsPlayingISOStack() ? g_application.GetAppStackHelper().GetCurrentPartNumber() + 1 : 1;
+    m_lastPlayedFileItem->m_lStartPartNumber =
+        g_application.GetAppStackHelper().IsPlayingISOStack()
+            ? g_application.GetAppStackHelper().GetCurrentPartNumber() + 1
+            : 1;
     // for iso and iso stacks, keep track of playerstate
     m_lastPlayedFileItem->SetProperty("savedplayerstate", appPlayer.GetPlayerState());
-    CLog::Log(LOGDEBUG, "CPowerManager::StorePlayerState - store last played item (startOffset: %i ms)", m_lastPlayedFileItem->m_lStartOffset);
+    CLog::Log(LOGDEBUG,
+              "CPowerManager::StorePlayerState - store last played item (startOffset: %i ms)",
+              m_lastPlayedFileItem->m_lStartOffset);
   }
   else
   {
@@ -258,11 +275,16 @@ void CPowerManager::RestorePlayerState()
   if (!m_lastPlayedFileItem)
     return;
 
-  CLog::Log(LOGDEBUG, "CPowerManager::RestorePlayerState - resume last played item (startOffset: %i ms)", m_lastPlayedFileItem->m_lStartOffset);
+  CLog::Log(LOGDEBUG,
+            "CPowerManager::RestorePlayerState - resume last played item (startOffset: %i ms)",
+            m_lastPlayedFileItem->m_lStartOffset);
   g_application.PlayFile(*m_lastPlayedFileItem, m_lastUsedPlayer);
 }
 
-void CPowerManager::SettingOptionsShutdownStatesFiller(SettingConstPtr setting, std::vector<IntegerSettingOption> &list, int &current, void *data)
+void CPowerManager::SettingOptionsShutdownStatesFiller(SettingConstPtr setting,
+                                                       std::vector<IntegerSettingOption>& list,
+                                                       int& current,
+                                                       void* data)
 {
   if (CServiceBroker::GetPowerManager().CanPowerdown())
     list.push_back(IntegerSettingOption(g_localizeStrings.Get(13005), POWERSTATE_SHUTDOWN));

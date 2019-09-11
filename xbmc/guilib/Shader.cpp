@@ -29,7 +29,7 @@ using namespace XFILE;
 //////////////////////////////////////////////////////////////////////
 bool CShader::LoadSource(const std::string& filename, const std::string& prefix)
 {
-  if(filename.empty())
+  if (filename.empty())
     return true;
 
   CFileStream file;
@@ -37,9 +37,10 @@ bool CShader::LoadSource(const std::string& filename, const std::string& prefix)
   std::string path = "special://xbmc/system/shaders/";
   path += CServiceBroker::GetRenderSystem()->GetShaderPath(filename);
   path += filename;
-  if(!file.Open(path))
+  if (!file.Open(path))
   {
-    CLog::Log(LOGERROR, "CYUVShaderGLSL::CYUVShaderGLSL - failed to open file %s", filename.c_str());
+    CLog::Log(LOGERROR, "CYUVShaderGLSL::CYUVShaderGLSL - failed to open file %s",
+              filename.c_str());
     return false;
   }
   getline(file, m_source, '\0');
@@ -61,7 +62,7 @@ bool CShader::LoadSource(const std::string& filename, const std::string& prefix)
 
 bool CShader::AppendSource(const std::string& filename)
 {
-  if(filename.empty())
+  if (filename.empty())
     return true;
 
   CFileStream file;
@@ -70,7 +71,7 @@ bool CShader::AppendSource(const std::string& filename)
   std::string path = "special://xbmc/system/shaders/";
   path += CServiceBroker::GetRenderSystem()->GetShaderPath(filename);
   path += filename;
-  if(!file.Open(path))
+  if (!file.Open(path))
   {
     CLog::Log(LOGERROR, "CShader::AppendSource - failed to open file %s", filename.c_str());
     return false;
@@ -85,7 +86,7 @@ bool CShader::AppendSource(const std::string& filename)
 
 bool CShader::InsertSource(const std::string& filename, const std::string& loc)
 {
-  if(filename.empty())
+  if (filename.empty())
     return true;
 
   CFileStream file;
@@ -94,7 +95,7 @@ bool CShader::InsertSource(const std::string& filename, const std::string& loc)
   std::string path = "special://xbmc/system/shaders/";
   path += CServiceBroker::GetRenderSystem()->GetShaderPath(filename);
   path += filename;
-  if(!file.Open(path))
+  if (!file.Open(path))
   {
     CLog::Log(LOGERROR, "CShader::InsertSource - failed to open file %s", filename.c_str());
     return false;
@@ -142,7 +143,7 @@ bool CGLSLVertexShader::Compile()
   Free();
 
   m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  const char *ptr = m_source.c_str();
+  const char* ptr = m_source.c_str();
   glShaderSource(m_vertexShader, 1, &ptr, 0);
   glCompileShader(m_vertexShader);
   glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, params);
@@ -189,14 +190,14 @@ bool CGLSLPixelShader::Compile()
   Free();
 
   // Pixel shaders are not mandatory.
-  if (m_source.length()==0)
+  if (m_source.length() == 0)
   {
     CLog::Log(LOGNOTICE, "GL: No pixel shader, fixed pipeline in use");
     return true;
   }
 
   m_pixelShader = glCreateShader(GL_FRAGMENT_SHADER);
-  const char *ptr = m_source.c_str();
+  const char* ptr = m_source.c_str();
   glShaderSource(m_pixelShader, 1, &ptr, 0);
   glCompileShader(m_pixelShader);
   glGetShaderiv(m_pixelShader, GL_COMPILE_STATUS, params);
@@ -241,8 +242,7 @@ CGLSLShaderProgram::CGLSLShaderProgram()
   m_pVP = new CGLSLVertexShader();
 }
 
-CGLSLShaderProgram::CGLSLShaderProgram(const std::string& vert,
-                                       const std::string& frag)
+CGLSLShaderProgram::CGLSLShaderProgram(const std::string& vert, const std::string& frag)
 {
   m_pFP = new CGLSLPixelShader();
   m_pFP->LoadSource(frag);
@@ -316,7 +316,7 @@ bool CGLSLShaderProgram::CompileAndLink()
   // link the program
   glLinkProgram(m_shaderProgram);
   glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, params);
-  if (params[0]!=GL_TRUE)
+  if (params[0] != GL_TRUE)
   {
     GLchar log[LOG_SIZE];
     CLog::Log(LOGERROR, "GL: Error linking shader");
@@ -332,7 +332,7 @@ bool CGLSLShaderProgram::CompileAndLink()
   VerifyGLState();
   return true;
 
- error:
+error:
   m_ok = false;
   Free();
   return false;
@@ -351,7 +351,7 @@ bool CGLSLShaderProgram::Enable()
         GLint params[4];
         glValidateProgram(m_shaderProgram);
         glGetProgramiv(m_shaderProgram, GL_VALIDATE_STATUS, params);
-        if (params[0]!=GL_TRUE)
+        if (params[0] != GL_TRUE)
         {
           GLchar log[LOG_SIZE];
           CLog::Log(LOGERROR, "GL: Error validating shader");
@@ -381,4 +381,3 @@ void CGLSLShaderProgram::Disable()
     OnDisabled();
   }
 }
-

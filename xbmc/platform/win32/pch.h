@@ -9,29 +9,30 @@
 #pragma once
 
 #define _CRT_RAND_S
-#include <vector>
+#include <fstream>
+#include <iostream>
 #include <map>
 #include <string>
-#include <iostream>
-#include <fstream>
+#include <vector>
 #if !(defined(_WINSOCKAPI_) || defined(_WINSOCK_H))
 #include <winsock2.h>
 #endif
-#include <wrl/client.h>
-#include <windows.h>
-#include <TCHAR.H>
 #include <locale>
-#include <comdef.h>
 #include <memory>
 
+#include <TCHAR.H>
+#include <comdef.h>
+#include <windows.h>
+#include <wrl/client.h>
+
 #ifdef TARGET_WINDOWS_STORE
-#include <winrt/Windows.ApplicationModel.h>
-#include <winrt/Windows.ApplicationModel.Core.h>
 #include <winrt/Windows.ApplicationModel.Activation.h>
+#include <winrt/Windows.ApplicationModel.Core.h>
+#include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Graphics.Display.h>
-#include <winrt/Windows.System.h>
 #include <winrt/Windows.System.Threading.h>
+#include <winrt/Windows.System.h>
 #include <winrt/Windows.UI.Core.h>
 #include <winrt/Windows.UI.Input.h>
 #include <winrt/Windows.UI.ViewManagement.h>

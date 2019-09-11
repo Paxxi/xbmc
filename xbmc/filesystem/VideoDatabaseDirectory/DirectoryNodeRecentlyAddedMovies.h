@@ -12,16 +12,15 @@
 
 namespace XFILE
 {
-  namespace VIDEODATABASEDIRECTORY
-  {
-    class CDirectoryNodeRecentlyAddedMovies : public CDirectoryNode
-    {
-    public:
-      CDirectoryNodeRecentlyAddedMovies(const std::string& strEntryName, CDirectoryNode* pParent);
-    protected:
-      bool GetContent(CFileItemList& items) const override;
-    };
-  }
-}
+namespace VIDEODATABASEDIRECTORY
+{
+class CDirectoryNodeRecentlyAddedMovies : public CDirectoryNode
+{
+public:
+  CDirectoryNodeRecentlyAddedMovies(const std::string& strEntryName, CDirectoryNode* pParent);
 
-
+protected:
+  bool GetContent(CFileItemList& items) const override;
+};
+} // namespace VIDEODATABASEDIRECTORY
+} // namespace XFILE

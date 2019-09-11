@@ -7,14 +7,17 @@
  */
 
 #include "VideoSyncGLX.h"
-#include <sstream>
-#include <X11/extensions/Xrandr.h>
-#include "windowing/X11/WinSystemX11GLContext.h"
-#include "windowing/GraphicContext.h"
+
 #include "threads/SingleLock.h"
-#include "utils/log.h"
 #include "utils/TimeUtils.h"
+#include "utils/log.h"
+#include "windowing/GraphicContext.h"
+#include "windowing/X11/WinSystemX11GLContext.h"
+
+#include <sstream>
 #include <string>
+
+#include <X11/extensions/Xrandr.h>
 
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
@@ -47,13 +50,8 @@ bool CVideoSyncGLX::Setup(PUPDATECLOCK func)
   m_Context = NULL;
   UpdateClock = func;
 
-  int singleBufferAttributes[] = {
-    GLX_RGBA,
-    GLX_RED_SIZE,      0,
-    GLX_GREEN_SIZE,    0,
-    GLX_BLUE_SIZE,     0,
-    None
-  };
+  int singleBufferAttributes[] = {GLX_RGBA, GLX_RED_SIZE,  0, GLX_GREEN_SIZE,
+                                  0,        GLX_BLUE_SIZE, 0, None};
 
   int ReturnV, SwaMask;
   unsigned int GlxTest;
@@ -116,11 +114,11 @@ bool CVideoSyncGLX::Setup(PUPDATECLOCK func)
 
   Swa.border_pixel = 0;
   Swa.event_mask = StructureNotifyMask;
-  Swa.colormap = XCreateColormap(m_Dpy, m_winSystem.GetWindow(), m_vInfo->visual, AllocNone );
+  Swa.colormap = XCreateColormap(m_Dpy, m_winSystem.GetWindow(), m_vInfo->visual, AllocNone);
   SwaMask = CWBorderPixel | CWColormap | CWEventMask;
 
-  m_Window = XCreateWindow(m_Dpy, m_winSystem.GetWindow(), 0, 0, 256, 256, 0,
-                           m_vInfo->depth, InputOutput, m_vInfo->visual, SwaMask, &Swa);
+  m_Window = XCreateWindow(m_Dpy, m_winSystem.GetWindow(), 0, 0, 256, 256, 0, m_vInfo->depth,
+                           InputOutput, m_vInfo->visual, SwaMask, &Swa);
 
   m_Context = glXCreateContext(m_Dpy, m_vInfo, NULL, True);
   if (!m_Context)
@@ -136,7 +134,8 @@ bool CVideoSyncGLX::Setup(PUPDATECLOCK func)
     return false;
   }
 
-  m_glXWaitVideoSyncSGI = (int (*)(int, int, unsigned int*))glXGetProcAddress((const GLubyte*)"glXWaitVideoSyncSGI");
+  m_glXWaitVideoSyncSGI =
+      (int (*)(int, int, unsigned int*))glXGetProcAddress((const GLubyte*)"glXWaitVideoSyncSGI");
   if (!m_glXWaitVideoSyncSGI)
   {
     CLog::Log(LOGDEBUG, "CVideoReferenceClock: glXWaitVideoSyncSGI not found");
@@ -150,7 +149,8 @@ bool CVideoSyncGLX::Setup(PUPDATECLOCK func)
     return false;
   }
 
-  m_glXGetVideoSyncSGI = (int (*)(unsigned int*))glXGetProcAddress((const GLubyte*)"glXGetVideoSyncSGI");
+  m_glXGetVideoSyncSGI =
+      (int (*)(unsigned int*))glXGetProcAddress((const GLubyte*)"glXGetVideoSyncSGI");
   if (!m_glXGetVideoSyncSGI)
   {
     CLog::Log(LOGDEBUG, "CVideoReferenceClock: glXGetVideoSyncSGI not found");
@@ -169,24 +169,25 @@ bool CVideoSyncGLX::Setup(PUPDATECLOCK func)
 
 void CVideoSyncGLX::Run(CEvent& stopEvent)
 {
-  unsigned int  PrevVblankCount;
-  unsigned int  VblankCount;
-  int           ReturnV;
-  bool          IsReset = false;
-  int64_t       Now;
+  unsigned int PrevVblankCount;
+  unsigned int VblankCount;
+  int ReturnV;
+  bool IsReset = false;
+  int64_t Now;
 
   //get the current vblank counter
   m_glXGetVideoSyncSGI(&VblankCount);
   PrevVblankCount = VblankCount;
 
-  while(!stopEvent.Signaled() && !m_displayLost && !m_displayReset)
+  while (!stopEvent.Signaled() && !m_displayLost && !m_displayReset)
   {
     //wait for the next vblank
     ReturnV = m_glXWaitVideoSyncSGI(2, (VblankCount + 1) % 2, &VblankCount);
-    m_glXGetVideoSyncSGI(&VblankCount); //the vblank count returned by glXWaitVideoSyncSGI is not always correct
-    Now = CurrentHostCounter();         //get the timestamp of this vblank
+    m_glXGetVideoSyncSGI(
+        &VblankCount); //the vblank count returned by glXWaitVideoSyncSGI is not always correct
+    Now = CurrentHostCounter(); //get the timestamp of this vblank
 
-    if(ReturnV)
+    if (ReturnV)
     {
       CLog::Log(LOGDEBUG, "CVideoReferenceClock: glXWaitVideoSyncSGI returned %i", ReturnV);
       return;
@@ -232,7 +233,7 @@ void CVideoSyncGLX::Run(CEvent& stopEvent)
     PrevVblankCount = VblankCount;
   }
   m_lostEvent.Set();
-  while(!stopEvent.Signaled() && m_displayLost && !m_displayReset)
+  while (!stopEvent.Signaled() && m_displayLost && !m_displayReset)
   {
     Sleep(10);
   }

@@ -9,15 +9,18 @@
 
 #include "utils/log.h"
 
-CVariant CDBusUtil::GetVariant(const char *destination, const char *object, const char *interface, const char *property)
+CVariant CDBusUtil::GetVariant(const char* destination,
+                               const char* object,
+                               const char* interface,
+                               const char* property)
 {
-//dbus-send --system --print-reply --dest=destination object org.freedesktop.DBus.Properties.Get string:interface string:property
+  //dbus-send --system --print-reply --dest=destination object org.freedesktop.DBus.Properties.Get string:interface string:property
   CDBusMessage message(destination, object, "org.freedesktop.DBus.Properties", "Get");
   CVariant result;
 
   message.AppendArgument(interface);
   message.AppendArgument(property);
-  DBusMessage *reply = message.SendSystem();
+  DBusMessage* reply = message.SendSystem();
 
   if (reply)
   {
@@ -26,7 +29,8 @@ CVariant CDBusUtil::GetVariant(const char *destination, const char *object, cons
     if (dbus_message_iter_init(reply, &iter))
     {
       if (!dbus_message_has_signature(reply, "v"))
-        CLog::Log(LOGERROR, "DBus: wrong signature on Get - should be \"v\" but was %s", dbus_message_iter_get_signature(&iter));
+        CLog::Log(LOGERROR, "DBus: wrong signature on Get - should be \"v\" but was %s",
+                  dbus_message_iter_get_signature(&iter));
       else
         result = ParseVariant(&iter);
     }
@@ -35,19 +39,20 @@ CVariant CDBusUtil::GetVariant(const char *destination, const char *object, cons
   return result;
 }
 
-CVariant CDBusUtil::GetAll(const char *destination, const char *object, const char *interface)
+CVariant CDBusUtil::GetAll(const char* destination, const char* object, const char* interface)
 {
   CDBusMessage message(destination, object, "org.freedesktop.DBus.Properties", "GetAll");
   CVariant properties;
   message.AppendArgument(interface);
-  DBusMessage *reply = message.SendSystem();
+  DBusMessage* reply = message.SendSystem();
   if (reply)
   {
     DBusMessageIter iter;
     if (dbus_message_iter_init(reply, &iter))
     {
       if (!dbus_message_has_signature(reply, "a{sv}"))
-        CLog::Log(LOGERROR, "DBus: wrong signature on GetAll - should be \"a{sv}\" but was %s", dbus_message_iter_get_signature(&iter));
+        CLog::Log(LOGERROR, "DBus: wrong signature on GetAll - should be \"a{sv}\" but was %s",
+                  dbus_message_iter_get_signature(&iter));
       else
       {
         do
@@ -60,7 +65,7 @@ CVariant CDBusUtil::GetAll(const char *destination, const char *object, const ch
             dbus_message_iter_recurse(&sub, &dict);
             do
             {
-              const char * key = NULL;
+              const char* key = NULL;
 
               dbus_message_iter_get_basic(&dict, &key);
               if (!dbus_message_iter_next(&dict))
@@ -83,7 +88,7 @@ CVariant CDBusUtil::GetAll(const char *destination, const char *object, const ch
   return properties;
 }
 
-CVariant CDBusUtil::ParseVariant(DBusMessageIter *itr)
+CVariant CDBusUtil::ParseVariant(DBusMessageIter* itr)
 {
   DBusMessageIter variant;
   dbus_message_iter_recurse(itr, &variant);
@@ -91,16 +96,16 @@ CVariant CDBusUtil::ParseVariant(DBusMessageIter *itr)
   return ParseType(&variant);
 }
 
-CVariant CDBusUtil::ParseType(DBusMessageIter *itr)
+CVariant CDBusUtil::ParseType(DBusMessageIter* itr)
 {
   CVariant value;
-  const char *    string  = NULL;
-  dbus_int32_t    int32   = 0;
-  dbus_uint32_t   uint32  = 0;
-  dbus_int64_t    int64   = 0;
-  dbus_uint64_t   uint64  = 0;
-  dbus_bool_t     boolean = false;
-  double          doublev = 0;
+  const char* string = NULL;
+  dbus_int32_t int32 = 0;
+  dbus_uint32_t uint32 = 0;
+  dbus_int64_t int64 = 0;
+  dbus_uint64_t uint64 = 0;
+  dbus_bool_t boolean = false;
+  double doublev = 0;
 
   int type = dbus_message_iter_get_arg_type(itr);
   switch (type)
@@ -153,19 +158,28 @@ CVariant CDBusUtil::ParseType(DBusMessageIter *itr)
   return value;
 }
 
-bool CDBusUtil::TryMethodCall(DBusBusType bus, const char* destination, const char* object, const char* interface, const char* method)
+bool CDBusUtil::TryMethodCall(DBusBusType bus,
+                              const char* destination,
+                              const char* object,
+                              const char* interface,
+                              const char* method)
 {
   CDBusMessage message(destination, object, interface, method);
   CDBusError error;
   message.Send(bus, error);
   if (error)
   {
-    error.Log(LOGDEBUG, std::string("DBus method call to ") + interface + "." + method + " at " + object + " of " + destination + " failed");
+    error.Log(LOGDEBUG, std::string("DBus method call to ") + interface + "." + method + " at " +
+                            object + " of " + destination + " failed");
   }
   return !error;
 }
 
-bool CDBusUtil::TryMethodCall(DBusBusType bus, std::string const& destination, std::string const& object, std::string const& interface, std::string const& method)
+bool CDBusUtil::TryMethodCall(DBusBusType bus,
+                              std::string const& destination,
+                              std::string const& object,
+                              std::string const& interface,
+                              std::string const& method)
 {
   return TryMethodCall(bus, destination.c_str(), object.c_str(), interface.c_str(), method.c_str());
 }
@@ -238,7 +252,7 @@ CDBusError::~CDBusError()
 
 void CDBusError::Reset()
 {
- dbus_error_free(&m_error);
+  dbus_error_free(&m_error);
 }
 
 CDBusError::operator DBusError*()

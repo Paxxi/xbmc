@@ -14,24 +14,32 @@
 namespace ADDON
 {
 
-CSettingUrlEncodedString::CSettingUrlEncodedString(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
+CSettingUrlEncodedString::CSettingUrlEncodedString(const std::string& id,
+                                                   CSettingsManager* settingsManager /* = NULL */)
   : CSettingString(id, settingsManager)
-{ }
+{
+}
 
-CSettingUrlEncodedString::CSettingUrlEncodedString(const std::string &id, int label, const std::string &value, CSettingsManager *settingsManager /* = NULL */)
+CSettingUrlEncodedString::CSettingUrlEncodedString(const std::string& id,
+                                                   int label,
+                                                   const std::string& value,
+                                                   CSettingsManager* settingsManager /* = NULL */)
   : CSettingString(id, label, value, settingsManager)
-{ }
+{
+}
 
-CSettingUrlEncodedString::CSettingUrlEncodedString(const std::string &id, const CSettingUrlEncodedString &setting)
+CSettingUrlEncodedString::CSettingUrlEncodedString(const std::string& id,
+                                                   const CSettingUrlEncodedString& setting)
   : CSettingString(id, setting)
-{ }
+{
+}
 
 std::string CSettingUrlEncodedString::GetDecodedValue() const
 {
   return CURL::Decode(CSettingString::GetValue());
 }
 
-bool CSettingUrlEncodedString::SetDecodedValue(const std::string &decodedValue)
+bool CSettingUrlEncodedString::SetDecodedValue(const std::string& decodedValue)
 {
   return CSettingString::SetValue(CURL::Encode(decodedValue));
 }

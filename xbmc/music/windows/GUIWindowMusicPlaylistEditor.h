@@ -22,14 +22,14 @@ public:
   bool OnBack(int actionID) override;
 
 protected:
-  bool GetDirectory(const std::string &strDirectory, CFileItemList &items) override;
+  bool GetDirectory(const std::string& strDirectory, CFileItemList& items) override;
   void UpdateButtons() override;
-  bool Update(const std::string &strDirectory, bool updateFilterPath = true) override;
-  void OnPrepareFileItems(CFileItemList &items) override;
-  void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
+  bool Update(const std::string& strDirectory, bool updateFilterPath = true) override;
+  void OnPrepareFileItems(CFileItemList& items) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
   bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
   void OnQueueItem(int iItem, bool) override;
-  std::string GetStartFolder(const std::string &dir) override { return ""; };
+  std::string GetStartFolder(const std::string& dir) override { return ""; };
 
   void OnPlaylistContext();
   int GetCurrentPlaylistItem();
@@ -38,10 +38,10 @@ protected:
   void ClearPlaylist();
   void OnSavePlaylist();
   void OnLoadPlaylist();
-  void AppendToPlaylist(CFileItemList &newItems);
+  void AppendToPlaylist(CFileItemList& newItems);
   void OnMovePlaylistItem(int item, int direction);
 
-  void LoadPlaylist(const std::string &playlist);
+  void LoadPlaylist(const std::string& playlist);
 
   // new method
   void PlayItem(int iItem) override;

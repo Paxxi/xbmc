@@ -7,16 +7,19 @@
  */
 
 #include "XSLTUtils.h"
+
 #include "log.h"
-#include <libxslt/xslt.h>
+
 #include <libxslt/transform.h>
+#include <libxslt/xslt.h>
 
 #ifndef TARGET_WINDOWS
 #include <iostream>
 #endif
 
 #define TMP_BUF_SIZE 512
-void err(void *ctx, const char *msg, ...) {
+void err(void* ctx, const char* msg, ...)
+{
   char string[TMP_BUF_SIZE];
   va_list arg_ptr;
   va_start(arg_ptr, msg);
@@ -45,7 +48,7 @@ XSLTUtils::~XSLTUtils()
 
 bool XSLTUtils::XSLTTransform(std::string& output)
 {
-  const char *params[16+1];
+  const char* params[16 + 1];
   params[0] = NULL;
   m_xmlOutput = xsltApplyStylesheet(m_xsltStylesheet, m_xmlInput, params);
   if (!m_xmlOutput)
@@ -54,16 +57,17 @@ bool XSLTUtils::XSLTTransform(std::string& output)
     return false;
   }
 
-  xmlChar *xmlResultBuffer = NULL;
+  xmlChar* xmlResultBuffer = NULL;
   int xmlResultLength = 0;
-  int res = xsltSaveResultToString(&xmlResultBuffer, &xmlResultLength, m_xmlOutput, m_xsltStylesheet);
+  int res =
+      xsltSaveResultToString(&xmlResultBuffer, &xmlResultLength, m_xmlOutput, m_xsltStylesheet);
   if (res == -1)
   {
     xmlFree(xmlResultBuffer);
     return false;
   }
 
-  output.append((const char *)xmlResultBuffer, xmlResultLength);
+  output.append((const char*)xmlResultBuffer, xmlResultLength);
   xmlFree(xmlResultBuffer);
 
   return true;
@@ -79,7 +83,8 @@ bool XSLTUtils::SetInput(const std::string& input)
 
 bool XSLTUtils::SetStylesheet(const std::string& stylesheet)
 {
-  if (m_xsltStylesheet) {
+  if (m_xsltStylesheet)
+  {
     xsltFreeStylesheet(m_xsltStylesheet);
     m_xsltStylesheet = NULL;
   }
@@ -92,7 +97,8 @@ bool XSLTUtils::SetStylesheet(const std::string& stylesheet)
   }
 
   m_xsltStylesheet = xsltParseStylesheetDoc(m_xmlStylesheet);
-  if (!m_xsltStylesheet) {
+  if (!m_xsltStylesheet)
+  {
     CLog::Log(LOGDEBUG, "could not parse stylesheetdoc");
     xmlFree(m_xmlStylesheet);
     m_xmlStylesheet = NULL;

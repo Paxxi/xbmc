@@ -14,7 +14,7 @@
 #include "utils/FileUtils.h"
 
 
-CHTTPImageHandler::CHTTPImageHandler(const HTTPRequest &request)
+CHTTPImageHandler::CHTTPImageHandler(const HTTPRequest& request)
   : CHTTPFileHandler(request)
 {
   std::string file;
@@ -45,7 +45,7 @@ CHTTPImageHandler::CHTTPImageHandler(const HTTPRequest &request)
   SetFile(file, responseStatus);
 }
 
-bool CHTTPImageHandler::CanHandleRequest(const HTTPRequest &request) const
+bool CHTTPImageHandler::CanHandleRequest(const HTTPRequest& request) const
 {
   return request.pathUrl.find("/image/") == 0;
 }

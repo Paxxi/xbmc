@@ -43,15 +43,21 @@ static const std::string OldSettingValuesSeparator = "|";
 
 static const int UnknownSettingLabelIdStart = 100000;
 
-bool InfoBool(const std::string &condition, const std::string &value, SettingConstPtr setting, void *data)
+bool InfoBool(const std::string& condition,
+              const std::string& value,
+              SettingConstPtr setting,
+              void* data)
 {
   return CServiceBroker::GetGUI()->GetInfoManager().EvaluateBool(value);
 }
 
 template<class TSetting>
-SettingPtr InitializeFromOldSettingWithoutDefinition(ADDON::CAddonSettings& settings, const std::string& settingId, typename TSetting::Value defaultValue)
+SettingPtr InitializeFromOldSettingWithoutDefinition(ADDON::CAddonSettings& settings,
+                                                     const std::string& settingId,
+                                                     typename TSetting::Value defaultValue)
 {
-  std::shared_ptr<TSetting> setting = std::make_shared<TSetting>(settingId, settings.GetSettingsManager());
+  std::shared_ptr<TSetting> setting =
+      std::make_shared<TSetting>(settingId, settings.GetSettingsManager());
   setting->SetLevel(SettingLevel::Internal);
   setting->SetVisible(false);
   setting->SetDefault(defaultValue);
@@ -60,9 +66,13 @@ SettingPtr InitializeFromOldSettingWithoutDefinition(ADDON::CAddonSettings& sett
 }
 
 template<>
-SettingPtr InitializeFromOldSettingWithoutDefinition<CSettingString>(ADDON::CAddonSettings& settings, const std::string& settingId, typename CSettingString::Value defaultValue)
+SettingPtr InitializeFromOldSettingWithoutDefinition<CSettingString>(
+    ADDON::CAddonSettings& settings,
+    const std::string& settingId,
+    typename CSettingString::Value defaultValue)
 {
-  std::shared_ptr<CSettingString> setting = std::make_shared<CSettingString>(settingId, settings.GetSettingsManager());
+  std::shared_ptr<CSettingString> setting =
+      std::make_shared<CSettingString>(settingId, settings.GetSettingsManager());
   setting->SetLevel(SettingLevel::Internal);
   setting->SetVisible(false);
   setting->SetDefault(defaultValue);
@@ -72,7 +82,9 @@ SettingPtr InitializeFromOldSettingWithoutDefinition<CSettingString>(ADDON::CAdd
 }
 
 template<class TSetting>
-SettingPtr AddSettingWithoutDefinition(ADDON::CAddonSettings& settings, const std::string& settingId, typename TSetting::Value defaultValue)
+SettingPtr AddSettingWithoutDefinition(ADDON::CAddonSettings& settings,
+                                       const std::string& settingId,
+                                       typename TSetting::Value defaultValue)
 {
   if (settingId.empty())
     return nullptr;
@@ -80,7 +92,8 @@ SettingPtr AddSettingWithoutDefinition(ADDON::CAddonSettings& settings, const st
   // if necessary try to initialize the settings manager on-the-fly without any definitions
   if (!settings.IsInitialized() && !settings.Initialize(CXBMCTinyXML(), true))
   {
-    CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to initialize settings on-the-fly", settings.GetAddon()->ID().c_str());
+    CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to initialize settings on-the-fly",
+              settings.GetAddon()->ID().c_str());
     return nullptr;
   }
 
@@ -88,7 +101,8 @@ SettingPtr AddSettingWithoutDefinition(ADDON::CAddonSettings& settings, const st
   auto sections = settings.GetSettingsManager()->GetSections();
   SettingSectionPtr section;
   if (sections.empty())
-    section = std::make_shared<CSettingSection>(settings.GetAddon()->ID(), settings.GetSettingsManager());
+    section =
+        std::make_shared<CSettingSection>(settings.GetAddon()->ID(), settings.GetSettingsManager());
   else
     section = sections.back();
 
@@ -109,17 +123,20 @@ SettingPtr AddSettingWithoutDefinition(ADDON::CAddonSettings& settings, const st
     group = groups.back();
 
   // create a new setting on-the-fly
-  auto setting = InitializeFromOldSettingWithoutDefinition<TSetting>(settings, settingId, defaultValue);
+  auto setting =
+      InitializeFromOldSettingWithoutDefinition<TSetting>(settings, settingId, defaultValue);
   if (setting == nullptr)
   {
-    CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to create setting \"%s\" on-the-fly", settings.GetAddon()->ID().c_str(), settingId.c_str());
+    CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to create setting \"%s\" on-the-fly",
+              settings.GetAddon()->ID().c_str(), settingId.c_str());
     return nullptr;
   }
 
   // add the setting (and if necessary the section, category and/or group)
   if (!settings.GetSettingsManager()->AddSetting(setting, section, category, group))
   {
-    CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to add setting \"%s\" on-the-fly", settings.GetAddon()->ID().c_str(), settingId.c_str());
+    CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to add setting \"%s\" on-the-fly",
+              settings.GetAddon()->ID().c_str(), settingId.c_str());
     return nullptr;
   }
 
@@ -136,9 +153,13 @@ CAddonSettings::CAddonSettings(std::shared_ptr<const IAddon> addon)
   , m_addonProfile(addon->Profile())
   , m_unidentifiedSettingId(0)
   , m_unknownSettingLabelId(UnknownSettingLabelIdStart)
-{ }
+{
+}
 
-std::shared_ptr<CSetting> CAddonSettings::CreateSetting(const std::string &settingType, const std::string &settingId, CSettingsManager *settingsManager /* = NULL */) const
+std::shared_ptr<CSetting> CAddonSettings::CreateSetting(
+    const std::string& settingType,
+    const std::string& settingId,
+    CSettingsManager* settingsManager /* = NULL */) const
 {
   if (StringUtils::EqualsNoCase(settingType, "urlencodedstring"))
     return std::make_shared<CSettingUrlEncodedString>(settingId, settingsManager);
@@ -160,9 +181,11 @@ void CAddonSettings::OnSettingAction(std::shared_ptr<const CSetting> setting)
   }
 
   // check if the setting control's is a button and its format is action
-  if (setting->GetControl()->GetType() == "button" && setting->GetControl()->GetFormat() == "action")
+  if (setting->GetControl()->GetType() == "button" &&
+      setting->GetControl()->GetFormat() == "action")
   {
-    auto controlButton = std::dynamic_pointer_cast<const CSettingControlButton>(setting->GetControl());
+    auto controlButton =
+        std::dynamic_pointer_cast<const CSettingControlButton>(setting->GetControl());
     if (controlButton != nullptr)
     {
       if (actionData.empty() && controlButton->HasActionData())
@@ -178,7 +201,8 @@ void CAddonSettings::OnSettingAction(std::shared_ptr<const CSetting> setting)
   if (closeDialog)
     CGUIDialogAddonSettings::SaveAndClose();
 
-  KODI::MESSAGING::CApplicationMessenger::GetInstance().SendMsg(TMSG_EXECUTE_BUILT_IN, -1, -1, nullptr, actionData);
+  KODI::MESSAGING::CApplicationMessenger::GetInstance().SendMsg(TMSG_EXECUTE_BUILT_IN, -1, -1,
+                                                                nullptr, actionData);
 }
 
 bool CAddonSettings::Initialize(const CXBMCTinyXML& doc, bool allowEmpty /* = false */)
@@ -212,15 +236,14 @@ bool CAddonSettings::Load(const CXBMCTinyXML& doc)
   if (!m_initialized)
     return false;
 
-  CLog::Log(LOGDEBUG, "CAddonSettings[%s]: loading setting values",
-    m_addonId.c_str());
+  CLog::Log(LOGDEBUG, "CAddonSettings[%s]: loading setting values", m_addonId.c_str());
 
   // figure out the version of the setting definitions
   uint32_t version = 0;
   if (!ParseSettingVersion(doc, version))
   {
     CLog::Log(LOGERROR, "CAddonSettings[%s]: failed to determine setting values version",
-      m_addonId.c_str());
+              m_addonId.c_str());
     return false;
   }
 
@@ -234,8 +257,8 @@ bool CAddonSettings::Load(const CXBMCTinyXML& doc)
       return false;
 
     // helper lambda for parsing a setting's ID and value from XML
-    auto parseSettingValue = [&settingValues](const TiXmlNode* setting, const std::string& categoryId = "")
-    {
+    auto parseSettingValue = [&settingValues](const TiXmlNode* setting,
+                                              const std::string& categoryId = "") {
       // put together the setting ID
       auto settingId = categoryId;
       if (!settingId.empty())
@@ -279,7 +302,7 @@ bool CAddonSettings::Load(const CXBMCTinyXML& doc)
   else if (!LoadOldSettingValues(doc, settingValues))
   {
     CLog::Log(LOGERROR, "CAddonSettings[%s]: failed to determine setting values from old format",
-      m_addonId.c_str());
+              m_addonId.c_str());
     return false;
   }
 
@@ -294,23 +317,26 @@ bool CAddonSettings::Load(const CXBMCTinyXML& doc)
     SettingPtr newSetting = GetSetting(setting.first);
     if (newSetting == nullptr)
     {
-      CLog::Log(LOGDEBUG, "CAddonSettings[%s]: failed to find definition for setting %s. Creating a setting on-the-fly...",
-        m_addonId.c_str(), setting.first.c_str());
+      CLog::Log(LOGDEBUG,
+                "CAddonSettings[%s]: failed to find definition for setting %s. Creating a setting "
+                "on-the-fly...",
+                m_addonId.c_str(), setting.first.c_str());
 
       // create a hidden/internal string setting on-the-fly
-      newSetting = AddSettingWithoutDefinition<CSettingString>(*this, setting.first, setting.second);
+      newSetting =
+          AddSettingWithoutDefinition<CSettingString>(*this, setting.first, setting.second);
     }
 
     // try to load the old setting value
     if (!newSetting)
     {
       CLog::Log(LOGERROR, "CAddonSettings[%s]: had null newSetting for value \"%s\" for setting %s",
-        m_addonId.c_str(), setting.second.c_str(), setting.first.c_str());
+                m_addonId.c_str(), setting.second.c_str(), setting.first.c_str());
     }
     else if (!newSetting->FromString(setting.second))
     {
       CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to load value \"%s\" for setting %s",
-        m_addonId.c_str(), setting.second.c_str(), setting.first.c_str());
+                m_addonId.c_str(), setting.second.c_str(), setting.first.c_str());
     }
   }
 
@@ -366,7 +392,8 @@ std::shared_ptr<CSetting> CAddonSettings::AddSetting(const std::string& settingI
   return AddSettingWithoutDefinition<CSettingNumber>(*this, settingId, value);
 }
 
-std::shared_ptr<CSetting> CAddonSettings::AddSetting(const std::string& settingId, const std::string& value)
+std::shared_ptr<CSetting> CAddonSettings::AddSetting(const std::string& settingId,
+                                                     const std::string& value)
 {
   return AddSettingWithoutDefinition<CSettingString>(*this, settingId, value);
 }
@@ -412,7 +439,8 @@ bool CAddonSettings::InitializeDefinitions(const CXBMCTinyXML& doc)
   uint32_t version = 0;
   if (!ParseSettingVersion(doc, version))
   {
-    CLog::Log(LOGERROR, "CAddonSettings[%s]: failed to determine setting definitions version", m_addonId.c_str());
+    CLog::Log(LOGERROR, "CAddonSettings[%s]: failed to determine setting definitions version",
+              m_addonId.c_str());
     return false;
   }
 
@@ -432,7 +460,8 @@ bool CAddonSettings::ParseSettingVersion(const CXBMCTinyXML& doc, uint32_t& vers
 
   if (!StringUtils::EqualsNoCase(root->ValueStr(), SETTING_XML_ROOT))
   {
-    CLog::Log(LOGERROR, "CAddonSettings[%s]: error reading setting definitions: no <settings> tag", m_addonId.c_str());
+    CLog::Log(LOGERROR, "CAddonSettings[%s]: error reading setting definitions: no <settings> tag",
+              m_addonId.c_str());
     return false;
   }
 
@@ -440,227 +469,255 @@ bool CAddonSettings::ParseSettingVersion(const CXBMCTinyXML& doc, uint32_t& vers
   return true;
 }
 
-std::shared_ptr<CSettingGroup> CAddonSettings::ParseOldSettingElement(const TiXmlElement* categoryElement, std::shared_ptr<CSettingCategory> category, std::set<std::string>& actionSettings, std::set<std::string>& settingIds)
+std::shared_ptr<CSettingGroup> CAddonSettings::ParseOldSettingElement(
+    const TiXmlElement* categoryElement,
+    std::shared_ptr<CSettingCategory> category,
+    std::set<std::string>& actionSettings,
+    std::set<std::string>& settingIds)
 {
-    // build a vector of settings from the same category
-    std::vector<std::shared_ptr<const CSetting>> categorySettings;
+  // build a vector of settings from the same category
+  std::vector<std::shared_ptr<const CSetting>> categorySettings;
 
-    // prepare for settings with enable/visible conditions
-    struct SettingWithConditions {
-      SettingPtr setting;
-      std::string enableCondition;
-      std::string visibleCondition;
-      SettingDependencies deps;
-    };
-    std::vector<SettingWithConditions> settingsWithConditions;
+  // prepare for settings with enable/visible conditions
+  struct SettingWithConditions
+  {
+    SettingPtr setting;
+    std::string enableCondition;
+    std::string visibleCondition;
+    SettingDependencies deps;
+  };
+  std::vector<SettingWithConditions> settingsWithConditions;
 
-    auto group = std::make_shared<CSettingGroup>("0", GetSettingsManager());
-    uint32_t groupId = 1;
+  auto group = std::make_shared<CSettingGroup>("0", GetSettingsManager());
+  uint32_t groupId = 1;
 
-    // go through all settings in the category
-    const TiXmlElement* settingElement = categoryElement->FirstChildElement("setting");
-    while (settingElement != nullptr)
+  // go through all settings in the category
+  const TiXmlElement* settingElement = categoryElement->FirstChildElement("setting");
+  while (settingElement != nullptr)
+  {
+    // read the possible attributes
+    const auto settingType = XMLUtils::GetAttribute(settingElement, "type");
+    const auto settingId = XMLUtils::GetAttribute(settingElement, "id");
+    const auto defaultValue = XMLUtils::GetAttribute(settingElement, "default");
+    const auto settingValues = XMLUtils::GetAttribute(settingElement, "values");
+    const auto settingLValues = StringUtils::Split(
+        XMLUtils::GetAttribute(settingElement, "lvalues"), OldSettingValuesSeparator);
+    int settingLabel = -1;
+    bool settingLabelParsed = ParseOldLabel(settingElement, settingId, settingLabel);
+
+    SettingPtr setting;
+    if (settingType == "sep" || settingType == "lsep")
     {
-      // read the possible attributes
-      const auto settingType = XMLUtils::GetAttribute(settingElement, "type");
-      const auto settingId = XMLUtils::GetAttribute(settingElement, "id");
-      const auto defaultValue = XMLUtils::GetAttribute(settingElement, "default");
-      const auto settingValues = XMLUtils::GetAttribute(settingElement, "values");
-      const auto settingLValues = StringUtils::Split(XMLUtils::GetAttribute(settingElement, "lvalues"), OldSettingValuesSeparator);
-      int settingLabel = -1;
-      bool settingLabelParsed = ParseOldLabel(settingElement, settingId, settingLabel);
-
-      SettingPtr setting;
-      if (settingType == "sep" || settingType == "lsep")
+      // check if we need to create a new group
+      if (!group->GetSettings().empty())
       {
-        // check if we need to create a new group
-        if (!group->GetSettings().empty())
-        {
-          // add the current group to the category
-          category->AddGroup(group);
+        // add the current group to the category
+        category->AddGroup(group);
 
-          // and create a new one
-          group.reset(new CSettingGroup(StringUtils::Format("%u", groupId), GetSettingsManager()));
-          groupId += 1;
-        }
-
-        if (settingType == "lsep" && settingLabelParsed)
-          group->SetLabel(settingLabel);
+        // and create a new one
+        group.reset(new CSettingGroup(StringUtils::Format("%u", groupId), GetSettingsManager()));
+        groupId += 1;
       }
-      else if (settingId.empty() || settingType == "action")
+
+      if (settingType == "lsep" && settingLabelParsed)
+        group->SetLabel(settingLabel);
+    }
+    else if (settingId.empty() || settingType == "action")
+    {
+      if (settingType == "action")
       {
-        if (settingType == "action")
-        {
-          setting = InitializeFromOldSettingAction(settingId, settingElement, defaultValue);
-          actionSettings.insert(setting->GetId());
-        }
-        else
-          setting = InitializeFromOldSettingLabel();
-      }
-      else if (settingType == "bool")
-        setting = InitializeFromOldSettingBool(settingId, settingElement, defaultValue);
-      else if (settingType == "text" || settingType == "ipaddress")
-        setting = InitializeFromOldSettingTextIpAddress(settingId, settingType, settingElement, defaultValue, settingLabel);
-      else if (settingType == "number")
-        setting = InitializeFromOldSettingNumber(settingId, settingElement, defaultValue, settingLabel);
-      else if (settingType == "video" || settingType == "audio" ||
-                settingType == "image" || settingType == "executable" ||
-                settingType == "file" || settingType == "folder")
-        setting = InitializeFromOldSettingPath(settingId, settingType, settingElement, defaultValue, settingLabel);
-      else if (settingType == "date")
-        setting = InitializeFromOldSettingDate(settingId, settingElement, defaultValue, settingLabel);
-      else if (settingType == "time")
-        setting = InitializeFromOldSettingTime(settingId, settingElement, defaultValue, settingLabel);
-      else if (settingType == "select")
-        setting = InitializeFromOldSettingSelect(settingId, settingElement, defaultValue, settingLabel, settingValues, settingLValues);
-      else if (settingType == "addon")
-        setting = InitializeFromOldSettingAddon(settingId, settingElement, defaultValue, settingLabel);
-      else if (settingType == "enum" || settingType == "labelenum")
-        setting = InitializeFromOldSettingEnums(settingId, settingType, settingElement, defaultValue, settingValues, settingLValues);
-      else if (settingType == "fileenum")
-        setting = InitializeFromOldSettingFileEnum(settingId, settingElement, defaultValue, settingValues);
-      else if (settingType == "rangeofnum")
-        setting = InitializeFromOldSettingRangeOfNum(settingId, settingElement, defaultValue);
-      else if (settingType == "slider")
-        setting = InitializeFromOldSettingSlider(settingId, settingElement, defaultValue);
-      else if (settingType.empty())
-      {
-        // setting definitions without a type are considered as "text" / strings but are hidden
-        setting = InitializeFromOldSettingTextIpAddress(settingId, "text", settingElement, defaultValue, settingLabel);
-        setting->SetLevel(SettingLevel::Internal);
+        setting = InitializeFromOldSettingAction(settingId, settingElement, defaultValue);
+        actionSettings.insert(setting->GetId());
       }
       else
-      {
-        CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to parse old setting definition for \"%s\" of type \"%s\"",
+        setting = InitializeFromOldSettingLabel();
+    }
+    else if (settingType == "bool")
+      setting = InitializeFromOldSettingBool(settingId, settingElement, defaultValue);
+    else if (settingType == "text" || settingType == "ipaddress")
+      setting = InitializeFromOldSettingTextIpAddress(settingId, settingType, settingElement,
+                                                      defaultValue, settingLabel);
+    else if (settingType == "number")
+      setting =
+          InitializeFromOldSettingNumber(settingId, settingElement, defaultValue, settingLabel);
+    else if (settingType == "video" || settingType == "audio" || settingType == "image" ||
+             settingType == "executable" || settingType == "file" || settingType == "folder")
+      setting = InitializeFromOldSettingPath(settingId, settingType, settingElement, defaultValue,
+                                             settingLabel);
+    else if (settingType == "date")
+      setting = InitializeFromOldSettingDate(settingId, settingElement, defaultValue, settingLabel);
+    else if (settingType == "time")
+      setting = InitializeFromOldSettingTime(settingId, settingElement, defaultValue, settingLabel);
+    else if (settingType == "select")
+      setting = InitializeFromOldSettingSelect(settingId, settingElement, defaultValue,
+                                               settingLabel, settingValues, settingLValues);
+    else if (settingType == "addon")
+      setting =
+          InitializeFromOldSettingAddon(settingId, settingElement, defaultValue, settingLabel);
+    else if (settingType == "enum" || settingType == "labelenum")
+      setting = InitializeFromOldSettingEnums(settingId, settingType, settingElement, defaultValue,
+                                              settingValues, settingLValues);
+    else if (settingType == "fileenum")
+      setting =
+          InitializeFromOldSettingFileEnum(settingId, settingElement, defaultValue, settingValues);
+    else if (settingType == "rangeofnum")
+      setting = InitializeFromOldSettingRangeOfNum(settingId, settingElement, defaultValue);
+    else if (settingType == "slider")
+      setting = InitializeFromOldSettingSlider(settingId, settingElement, defaultValue);
+    else if (settingType.empty())
+    {
+      // setting definitions without a type are considered as "text" / strings but are hidden
+      setting = InitializeFromOldSettingTextIpAddress(settingId, "text", settingElement,
+                                                      defaultValue, settingLabel);
+      setting->SetLevel(SettingLevel::Internal);
+    }
+    else
+    {
+      CLog::Log(
+          LOGWARNING,
+          "CAddonSettings[%s]: failed to parse old setting definition for \"%s\" of type \"%s\"",
           m_addonId.c_str(), settingId.c_str(), settingType.c_str());
+    }
+
+    // process general properties
+    if (setting != nullptr)
+    {
+      // use the setting's ID if there's no label
+      if (settingLabel < 0)
+      {
+        settingLabel = m_unknownSettingLabelId;
+        m_unknownSettingLabelId += 1;
+
+        m_unknownSettingLabels.emplace(settingLabel, settingId);
       }
 
-      // process general properties
-      if (setting != nullptr)
+      // set the setting's label
+      setting->SetLabel(settingLabel);
+
+      // handle subsettings
+      bool isSubsetting = false;
+      if (settingElement->QueryBoolAttribute("subsetting", &isSubsetting) == TIXML_SUCCESS &&
+          isSubsetting)
       {
-        // use the setting's ID if there's no label
-        if (settingLabel < 0)
+        // find the last non-subsetting in the current group and use that as the parent setting
+        const auto groupSettings = group->GetSettings();
+        const auto parentSetting =
+            std::find_if(groupSettings.crbegin(), groupSettings.crend(),
+                         [](SettingConstPtr setting) { return setting->GetParent().empty(); });
+
+        if (parentSetting != groupSettings.crend())
         {
-          settingLabel = m_unknownSettingLabelId;
-          m_unknownSettingLabelId += 1;
-
-          m_unknownSettingLabels.emplace(settingLabel, settingId);
+          if ((*parentSetting)->GetType() == SettingType::Reference)
+            setting->SetParent(std::static_pointer_cast<const CSettingReference>(*parentSetting)
+                                   ->GetReferencedId());
+          else
+            setting->SetParent((*parentSetting)->GetId());
         }
+      }
 
-        // set the setting's label
-        setting->SetLabel(settingLabel);
+      SettingWithConditions settingWithConditions = {setting};
 
-        // handle subsettings
-        bool isSubsetting = false;
-        if (settingElement->QueryBoolAttribute("subsetting", &isSubsetting) == TIXML_SUCCESS && isSubsetting)
-        {
-          // find the last non-subsetting in the current group and use that as the parent setting
-          const auto groupSettings = group->GetSettings();
-          const auto parentSetting = std::find_if(groupSettings.crbegin(), groupSettings.crend(),
-            [](SettingConstPtr setting)
-            {
-              return setting->GetParent().empty();
-            });
+      // parse enable status
+      const auto conditionEnable = XMLUtils::GetAttribute(settingElement, "enable");
+      if (StringUtils::EqualsNoCase(conditionEnable, "true"))
+        setting->SetEnabled(true);
+      else if (StringUtils::EqualsNoCase(conditionEnable, "false"))
+        setting->SetEnabled(false);
+      else if (!conditionEnable.empty())
+        settingWithConditions.enableCondition = conditionEnable;
 
-          if (parentSetting != groupSettings.crend())
-          {
-            if ((*parentSetting)->GetType() == SettingType::Reference)
-              setting->SetParent(std::static_pointer_cast<const CSettingReference>(*parentSetting)->GetReferencedId());
-            else
-              setting->SetParent((*parentSetting)->GetId());
-          }
-        }
+      // parse visible status
+      const auto conditionVisible = XMLUtils::GetAttribute(settingElement, "visible");
+      if (StringUtils::EqualsNoCase(conditionVisible, "true"))
+        setting->SetVisible(true);
+      else if (StringUtils::EqualsNoCase(conditionVisible, "false"))
+        setting->SetVisible(false);
+      else if (!conditionVisible.empty())
+        settingWithConditions.visibleCondition = conditionVisible;
 
-        SettingWithConditions settingWithConditions = {
-          setting
-        };
+      if (!settingWithConditions.enableCondition.empty() ||
+          !settingWithConditions.visibleCondition.empty())
+        settingsWithConditions.push_back(settingWithConditions);
 
-        // parse enable status
-        const auto conditionEnable = XMLUtils::GetAttribute(settingElement, "enable");
-        if (StringUtils::EqualsNoCase(conditionEnable, "true"))
-          setting->SetEnabled(true);
-        else if (StringUtils::EqualsNoCase(conditionEnable, "false"))
-          setting->SetEnabled(false);
-        else if (!conditionEnable.empty())
-          settingWithConditions.enableCondition = conditionEnable;
-
-        // parse visible status
-        const auto conditionVisible = XMLUtils::GetAttribute(settingElement, "visible");
-        if (StringUtils::EqualsNoCase(conditionVisible, "true"))
-          setting->SetVisible(true);
-        else if (StringUtils::EqualsNoCase(conditionVisible, "false"))
-          setting->SetVisible(false);
-        else if (!conditionVisible.empty())
-          settingWithConditions.visibleCondition = conditionVisible;
-
-        if (!settingWithConditions.enableCondition.empty() || !settingWithConditions.visibleCondition.empty())
-          settingsWithConditions.push_back(settingWithConditions);
-
-        // check if there already is a setting with the setting identifier
-        if (settingIds.find(settingId) != settingIds.end())
-        {
-          // turn the setting into a reference setting
-          setting = std::make_shared<CSettingReference>(settingId, GetSettingsManager());
-        }
-        else
-        {
-          // add the setting's identifier to the list of all identifiers
-          settingIds.insert(setting->GetId());
-        }
-
-        // add the setting to the list of settings from the same category
-        categorySettings.push_back(setting);
-
-        // add the setting to the current group
-        group->AddSetting(setting);
+      // check if there already is a setting with the setting identifier
+      if (settingIds.find(settingId) != settingIds.end())
+      {
+        // turn the setting into a reference setting
+        setting = std::make_shared<CSettingReference>(settingId, GetSettingsManager());
       }
       else
       {
-        // add a dummy setting for the group / separator to the list of settings from the same category
-        categorySettings.push_back(nullptr);
+        // add the setting's identifier to the list of all identifiers
+        settingIds.insert(setting->GetId());
       }
 
-      // look for the next setting
-      settingElement = settingElement->NextSiblingElement("setting");
+      // add the setting to the list of settings from the same category
+      categorySettings.push_back(setting);
+
+      // add the setting to the current group
+      group->AddSetting(setting);
+    }
+    else
+    {
+      // add a dummy setting for the group / separator to the list of settings from the same category
+      categorySettings.push_back(nullptr);
     }
 
-    // process settings with enable/visible conditions
-    for (auto setting : settingsWithConditions) {
-      if (!setting.enableCondition.empty())
-      {
-        CSettingDependency dependencyEnable(SettingDependencyType::Enable, GetSettingsManager());
-        if (ParseOldCondition(setting.setting, categorySettings, setting.enableCondition, dependencyEnable))
-          setting.deps.push_back(dependencyEnable);
-        else
-        {
-          CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to parse enable condition \"%s\" of old setting definition for \"%s\"",
-            m_addonId.c_str(), setting.enableCondition.c_str(), setting.setting->GetId().c_str());
-        }
-      }
+    // look for the next setting
+    settingElement = settingElement->NextSiblingElement("setting");
+  }
 
-      if (!setting.visibleCondition.empty())
+  // process settings with enable/visible conditions
+  for (auto setting : settingsWithConditions)
+  {
+    if (!setting.enableCondition.empty())
+    {
+      CSettingDependency dependencyEnable(SettingDependencyType::Enable, GetSettingsManager());
+      if (ParseOldCondition(setting.setting, categorySettings, setting.enableCondition,
+                            dependencyEnable))
+        setting.deps.push_back(dependencyEnable);
+      else
       {
-        CSettingDependency dependencyVisible(SettingDependencyType::Visible, GetSettingsManager());
-        if (ParseOldCondition(setting.setting, categorySettings, setting.visibleCondition, dependencyVisible))
-          setting.deps.push_back(dependencyVisible);
-        else
-        {
-          CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to parse visible condition \"%s\" of old setting definition for \"%s\"",
-            m_addonId.c_str(), setting.visibleCondition.c_str(), setting.setting->GetId().c_str());
-        }
+        CLog::Log(LOGWARNING,
+                  "CAddonSettings[%s]: failed to parse enable condition \"%s\" of old setting "
+                  "definition for \"%s\"",
+                  m_addonId.c_str(), setting.enableCondition.c_str(),
+                  setting.setting->GetId().c_str());
       }
-
-      // set dependencies
-      setting.setting->SetDependencies(setting.deps);
     }
 
-    return group;
+    if (!setting.visibleCondition.empty())
+    {
+      CSettingDependency dependencyVisible(SettingDependencyType::Visible, GetSettingsManager());
+      if (ParseOldCondition(setting.setting, categorySettings, setting.visibleCondition,
+                            dependencyVisible))
+        setting.deps.push_back(dependencyVisible);
+      else
+      {
+        CLog::Log(LOGWARNING,
+                  "CAddonSettings[%s]: failed to parse visible condition \"%s\" of old setting "
+                  "definition for \"%s\"",
+                  m_addonId.c_str(), setting.visibleCondition.c_str(),
+                  setting.setting->GetId().c_str());
+      }
+    }
+
+    // set dependencies
+    setting.setting->SetDependencies(setting.deps);
+  }
+
+  return group;
 }
 
-std::shared_ptr<CSettingCategory> CAddonSettings::ParseOldCategoryElement(uint32_t &categoryId, const TiXmlElement * categoryElement, std::set<std::string> &actionSettings, std::set<std::string> &settingIds)
+std::shared_ptr<CSettingCategory> CAddonSettings::ParseOldCategoryElement(
+    uint32_t& categoryId,
+    const TiXmlElement* categoryElement,
+    std::set<std::string>& actionSettings,
+    std::set<std::string>& settingIds)
 {
   // create the category
-  auto category = std::make_shared<CSettingCategory>(StringUtils::Format("category%u", categoryId), GetSettingsManager());
+  auto category = std::make_shared<CSettingCategory>(StringUtils::Format("category%u", categoryId),
+                                                     GetSettingsManager());
   categoryId += 1;
 
   // try to get the category's label and fall back to "General"
@@ -679,13 +736,15 @@ std::shared_ptr<CSettingCategory> CAddonSettings::ParseOldCategoryElement(uint32
 
 bool CAddonSettings::InitializeFromOldSettingDefinitions(const CXBMCTinyXML& doc)
 {
-  CLog::Log(LOGDEBUG, "CAddonSettings[%s]: trying to load setting definitions from old format...", m_addonId.c_str());
+  CLog::Log(LOGDEBUG, "CAddonSettings[%s]: trying to load setting definitions from old format...",
+            m_addonId.c_str());
 
   const TiXmlElement* root = doc.RootElement();
   if (root == nullptr)
     return false;
 
-  std::shared_ptr<CSettingSection> section = std::make_shared<CSettingSection>(m_addonId, GetSettingsManager());
+  std::shared_ptr<CSettingSection> section =
+      std::make_shared<CSettingSection>(m_addonId, GetSettingsManager());
 
   std::shared_ptr<CSettingCategory> category;
   uint32_t categoryId = 0;
@@ -697,10 +756,11 @@ bool CAddonSettings::InitializeFromOldSettingDefinitions(const CXBMCTinyXML& doc
   // Special case for no category settings
   section->AddCategory(ParseOldCategoryElement(categoryId, root, actionSettings, settingIds));
 
-  const TiXmlElement *categoryElement = root->FirstChildElement("category");
+  const TiXmlElement* categoryElement = root->FirstChildElement("category");
   while (categoryElement != nullptr)
   {
-    section->AddCategory(ParseOldCategoryElement(categoryId, categoryElement, actionSettings, settingIds));
+    section->AddCategory(
+        ParseOldCategoryElement(categoryId, categoryElement, actionSettings, settingIds));
 
     // look for the next category
     categoryElement = categoryElement->NextSiblingElement("category");
@@ -715,7 +775,9 @@ bool CAddonSettings::InitializeFromOldSettingDefinitions(const CXBMCTinyXML& doc
   return true;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingAction(std::string settingId, const TiXmlElement *settingElement, const std::string& defaultValue)
+SettingPtr CAddonSettings::InitializeFromOldSettingAction(std::string settingId,
+                                                          const TiXmlElement* settingElement,
+                                                          const std::string& defaultValue)
 {
   // parse the action attribute
   std::string action = XMLUtils::GetAttribute(settingElement, "action");
@@ -777,7 +839,9 @@ std::shared_ptr<CSetting> CAddonSettings::InitializeFromOldSettingLabel()
   return settingLabel;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingBool(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue)
+SettingPtr CAddonSettings::InitializeFromOldSettingBool(const std::string& settingId,
+                                                        const TiXmlElement* settingElement,
+                                                        const std::string& defaultValue)
 {
   auto setting = std::make_shared<CSettingBool>(settingId, GetSettingsManager());
   if (setting->FromString(defaultValue))
@@ -788,7 +852,11 @@ SettingPtr CAddonSettings::InitializeFromOldSettingBool(const std::string& setti
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingTextIpAddress(const std::string& settingId, const std::string& settingType, const TiXmlElement *settingElement, const std::string& defaultValue, const int settingLabel)
+SettingPtr CAddonSettings::InitializeFromOldSettingTextIpAddress(const std::string& settingId,
+                                                                 const std::string& settingType,
+                                                                 const TiXmlElement* settingElement,
+                                                                 const std::string& defaultValue,
+                                                                 const int settingLabel)
 {
   std::shared_ptr<CSettingString> setting;
   auto control = std::make_shared<CSettingControlEdit>();
@@ -825,7 +893,10 @@ SettingPtr CAddonSettings::InitializeFromOldSettingTextIpAddress(const std::stri
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingNumber(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue, const int settingLabel)
+SettingPtr CAddonSettings::InitializeFromOldSettingNumber(const std::string& settingId,
+                                                          const TiXmlElement* settingElement,
+                                                          const std::string& defaultValue,
+                                                          const int settingLabel)
 {
   auto setting = std::make_shared<CSettingInt>(settingId, GetSettingsManager());
   if (setting->FromString(defaultValue))
@@ -839,7 +910,11 @@ SettingPtr CAddonSettings::InitializeFromOldSettingNumber(const std::string& set
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingPath(const std::string& settingId, const std::string& settingType, const TiXmlElement *settingElement, const std::string& defaultValue, const int settingLabel)
+SettingPtr CAddonSettings::InitializeFromOldSettingPath(const std::string& settingId,
+                                                        const std::string& settingType,
+                                                        const TiXmlElement* settingElement,
+                                                        const std::string& defaultValue,
+                                                        const int settingLabel)
 {
   auto setting = std::make_shared<CSettingPath>(settingId, GetSettingsManager());
   setting->SetDefault(defaultValue);
@@ -847,7 +922,7 @@ SettingPtr CAddonSettings::InitializeFromOldSettingPath(const std::string& setti
   // parse sources/shares
   const auto source = XMLUtils::GetAttribute(settingElement, "source");
   if (!source.empty())
-    setting->SetSources({ source });
+    setting->SetSources({source});
 
   // setup masking
   const auto audioMask = CServiceBroker::GetFileExtensionProvider().GetMusicExtensions();
@@ -856,7 +931,7 @@ SettingPtr CAddonSettings::InitializeFromOldSettingPath(const std::string& setti
   auto execMask = "";
 #if defined(TARGET_WINDOWS)
   execMask = ".exe|.bat|.cmd|.py";
-#endif  // defined(TARGET_WINDOWS)
+#endif // defined(TARGET_WINDOWS)
 
   std::string mask = XMLUtils::GetAttribute(settingElement, "mask");
   if (!mask.empty())
@@ -895,8 +970,10 @@ SettingPtr CAddonSettings::InitializeFromOldSettingPath(const std::string& setti
 
     // parse the options
     const auto options = StringUtils::Split(option, OldSettingValuesSeparator);
-    control->SetUseImageThumbs(std::find(options.cbegin(), options.cend(), "usethumbs") != options.cend());
-    control->SetUseFileDirectories(std::find(options.cbegin(), options.cend(), "treatasfolder") != options.cend());
+    control->SetUseImageThumbs(std::find(options.cbegin(), options.cend(), "usethumbs") !=
+                               options.cend());
+    control->SetUseFileDirectories(std::find(options.cbegin(), options.cend(), "treatasfolder") !=
+                                   options.cend());
   }
   control->SetHeading(settingLabel);
   setting->SetControl(control);
@@ -904,7 +981,10 @@ SettingPtr CAddonSettings::InitializeFromOldSettingPath(const std::string& setti
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingDate(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue, const int settingLabel)
+SettingPtr CAddonSettings::InitializeFromOldSettingDate(const std::string& settingId,
+                                                        const TiXmlElement* settingElement,
+                                                        const std::string& defaultValue,
+                                                        const int settingLabel)
 {
   auto setting = std::make_shared<CSettingDate>(settingId, GetSettingsManager());
   if (setting->FromString(defaultValue))
@@ -918,7 +998,10 @@ SettingPtr CAddonSettings::InitializeFromOldSettingDate(const std::string& setti
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingTime(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue, const int settingLabel)
+SettingPtr CAddonSettings::InitializeFromOldSettingTime(const std::string& settingId,
+                                                        const TiXmlElement* settingElement,
+                                                        const std::string& defaultValue,
+                                                        const int settingLabel)
 {
   auto setting = std::make_shared<CSettingTime>(settingId, GetSettingsManager());
   if (setting->FromString(defaultValue))
@@ -932,7 +1015,13 @@ SettingPtr CAddonSettings::InitializeFromOldSettingTime(const std::string& setti
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingSelect(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue, const int settingLabel, const std::string& settingValues, const std::vector<std::string>& settingLValues)
+SettingPtr CAddonSettings::InitializeFromOldSettingSelect(
+    const std::string& settingId,
+    const TiXmlElement* settingElement,
+    const std::string& defaultValue,
+    const int settingLabel,
+    const std::string& settingValues,
+    const std::vector<std::string>& settingLValues)
 {
   // process values and lvalues
   std::vector<std::string> values;
@@ -964,7 +1053,8 @@ SettingPtr CAddonSettings::InitializeFromOldSettingSelect(const std::string& set
 
       TranslatableIntegerSettingOptions options;
       for (uint32_t i = 0; i < values.size(); ++i)
-        options.push_back(std::make_pair(static_cast<int>(strtol(values[i].c_str(), nullptr, 0)), i));
+        options.push_back(
+            std::make_pair(static_cast<int>(strtol(values[i].c_str(), nullptr, 0)), i));
       settingInt->SetTranslatableOptions(options);
 
       setting = settingInt;
@@ -975,10 +1065,13 @@ SettingPtr CAddonSettings::InitializeFromOldSettingSelect(const std::string& set
     // parse sources/shares
     const auto source = XMLUtils::GetAttribute(settingElement, "source");
     if (!source.empty())
-      setting = InitializeFromOldSettingFileWithSource(settingId, settingElement, defaultValue, settingValues);
+      setting = InitializeFromOldSettingFileWithSource(settingId, settingElement, defaultValue,
+                                                       settingValues);
     else
-      CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to parse old setting definition for \"%s\" of type \"select\"",
-        m_addonId.c_str(), settingId.c_str());
+      CLog::Log(LOGWARNING,
+                "CAddonSettings[%s]: failed to parse old setting definition for \"%s\" of type "
+                "\"select\"",
+                m_addonId.c_str(), settingId.c_str());
   }
 
   if (setting != nullptr)
@@ -992,7 +1085,10 @@ SettingPtr CAddonSettings::InitializeFromOldSettingSelect(const std::string& set
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue, const int settingLabel)
+SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& settingId,
+                                                         const TiXmlElement* settingElement,
+                                                         const std::string& defaultValue,
+                                                         const int settingLabel)
 {
   // get addon types
   std::string addonTypeStr = XMLUtils::GetAttribute(settingElement, "addontype");
@@ -1007,14 +1103,17 @@ SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& sett
 
   if (addonTypes.empty())
   {
-    CLog::Log(LOGERROR, "CAddonSettings[%s]: missing addon type for addon setting \"%s\"", m_addonId.c_str(), settingId.c_str());
+    CLog::Log(LOGERROR, "CAddonSettings[%s]: missing addon type for addon setting \"%s\"",
+              m_addonId.c_str(), settingId.c_str());
     return nullptr;
   }
 
   // TODO: support multiple addon types
   if (addonTypes.size() > 1)
   {
-    CLog::Log(LOGERROR, "CAddonSettings[%s]: multiple addon types are not supported (addon setting \"%s\")", m_addonId.c_str(), settingId.c_str());
+    CLog::Log(LOGERROR,
+              "CAddonSettings[%s]: multiple addon types are not supported (addon setting \"%s\")",
+              m_addonId.c_str(), settingId.c_str());
     return nullptr;
   }
 
@@ -1028,7 +1127,10 @@ SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& sett
   // sanity check
   if (addonIds.size() > 1 && !multiselect)
   {
-    CLog::Log(LOGWARNING, "CAddonSettings[%s]: multiple default addon ids on non-multiselect addon setting \"%s\"", m_addonId.c_str(), settingId.c_str());
+    CLog::Log(
+        LOGWARNING,
+        "CAddonSettings[%s]: multiple default addon ids on non-multiselect addon setting \"%s\"",
+        m_addonId.c_str(), settingId.c_str());
     addonIds.erase(++addonIds.begin(), addonIds.end());
   }
 
@@ -1038,7 +1140,8 @@ SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& sett
   SettingPtr setting = settingAddon;
   if (multiselect)
   {
-    auto settingList = std::make_shared<CSettingList>(settingId, settingAddon, GetSettingsManager());
+    auto settingList =
+        std::make_shared<CSettingList>(settingId, settingAddon, GetSettingsManager());
     settingList->SetDelimiter(",");
     if (settingList->FromString(addonIds))
       settingList->SetDefault(settingList->GetValue());
@@ -1056,7 +1159,13 @@ SettingPtr CAddonSettings::InitializeFromOldSettingAddon(const std::string& sett
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingEnums(const std::string& settingId, const std::string& settingType, const TiXmlElement *settingElement, const std::string& defaultValue, const std::string& settingValues, const std::vector<std::string>& settingLValues)
+SettingPtr CAddonSettings::InitializeFromOldSettingEnums(
+    const std::string& settingId,
+    const std::string& settingType,
+    const TiXmlElement* settingElement,
+    const std::string& defaultValue,
+    const std::string& settingValues,
+    const std::vector<std::string>& settingLValues)
 {
   // process values and lvalues
   std::vector<std::string> values;
@@ -1065,13 +1174,15 @@ SettingPtr CAddonSettings::InitializeFromOldSettingEnums(const std::string& sett
   else if (settingValues == "$HOURS")
   {
     for (uint32_t hour = 0; hour < 24; hour++)
-      values.push_back(CDateTime(2000, 1, 1, hour, 0, 0).GetAsLocalizedTime(g_langInfo.GetTimeFormat(), false));
+      values.push_back(
+          CDateTime(2000, 1, 1, hour, 0, 0).GetAsLocalizedTime(g_langInfo.GetTimeFormat(), false));
   }
   else
     values = StringUtils::Split(settingValues, OldSettingValuesSeparator);
 
   // process entries
-  const auto settingEntries = StringUtils::Split(XMLUtils::GetAttribute(settingElement, "entries"), OldSettingValuesSeparator);
+  const auto settingEntries = StringUtils::Split(XMLUtils::GetAttribute(settingElement, "entries"),
+                                                 OldSettingValuesSeparator);
 
   // process sort
   std::string sort = XMLUtils::GetAttribute(settingElement, "sort");
@@ -1167,9 +1278,13 @@ SettingPtr CAddonSettings::InitializeFromOldSettingEnums(const std::string& sett
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingFileEnum(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue, const std::string& settingValues)
+SettingPtr CAddonSettings::InitializeFromOldSettingFileEnum(const std::string& settingId,
+                                                            const TiXmlElement* settingElement,
+                                                            const std::string& defaultValue,
+                                                            const std::string& settingValues)
 {
-  auto setting = InitializeFromOldSettingFileWithSource(settingId, settingElement, defaultValue, settingValues);
+  auto setting = InitializeFromOldSettingFileWithSource(settingId, settingElement, defaultValue,
+                                                        settingValues);
 
   auto control = std::make_shared<CSettingControlSpinner>();
   control->SetFormat("string");
@@ -1178,7 +1293,9 @@ SettingPtr CAddonSettings::InitializeFromOldSettingFileEnum(const std::string& s
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingRangeOfNum(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue)
+SettingPtr CAddonSettings::InitializeFromOldSettingRangeOfNum(const std::string& settingId,
+                                                              const TiXmlElement* settingElement,
+                                                              const std::string& defaultValue)
 {
   auto setting = std::make_shared<CSettingNumber>(settingId, GetSettingsManager());
   if (setting->FromString(defaultValue))
@@ -1209,7 +1326,9 @@ SettingPtr CAddonSettings::InitializeFromOldSettingRangeOfNum(const std::string&
   return setting;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingSlider(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue)
+SettingPtr CAddonSettings::InitializeFromOldSettingSlider(const std::string& settingId,
+                                                          const TiXmlElement* settingElement,
+                                                          const std::string& defaultValue)
 {
   // parse range
   double min = 0.0, max = 100.0, step = 1.0;
@@ -1266,13 +1385,19 @@ SettingPtr CAddonSettings::InitializeFromOldSettingSlider(const std::string& set
     return setting;
   }
 
-  CLog::Log(LOGWARNING, "CAddonSettings[%s]: ignoring old setting definition for \"%s\" of type \"slider\" because of unknown option \"%s\"",
-    m_addonId.c_str(), settingId.c_str(), option.c_str());
+  CLog::Log(LOGWARNING,
+            "CAddonSettings[%s]: ignoring old setting definition for \"%s\" of type \"slider\" "
+            "because of unknown option \"%s\"",
+            m_addonId.c_str(), settingId.c_str(), option.c_str());
 
   return nullptr;
 }
 
-SettingPtr CAddonSettings::InitializeFromOldSettingFileWithSource(const std::string& settingId, const TiXmlElement *settingElement, const std::string& defaultValue, std::string source)
+SettingPtr CAddonSettings::InitializeFromOldSettingFileWithSource(
+    const std::string& settingId,
+    const TiXmlElement* settingElement,
+    const std::string& defaultValue,
+    std::string source)
 {
   auto setting = std::make_shared<CSettingPath>(settingId, GetSettingsManager());
   setting->SetDefault(defaultValue);
@@ -1282,7 +1407,7 @@ SettingPtr CAddonSettings::InitializeFromOldSettingFileWithSource(const std::str
   else
     source = URIUtils::AddFileToFolder(m_addonPath, source);
 
-  setting->SetSources({ source });
+  setting->SetSources({source});
 
   // process the path/file mask
   setting->SetMasking(XMLUtils::GetAttribute(settingElement, "mask"));
@@ -1296,7 +1421,8 @@ SettingPtr CAddonSettings::InitializeFromOldSettingFileWithSource(const std::str
   return setting;
 }
 
-bool CAddonSettings::LoadOldSettingValues(const CXBMCTinyXML& doc, std::map<std::string, std::string>& settings) const
+bool CAddonSettings::LoadOldSettingValues(const CXBMCTinyXML& doc,
+                                          std::map<std::string, std::string>& settings) const
 {
   if (!doc.RootElement())
     return false;
@@ -1307,11 +1433,11 @@ bool CAddonSettings::LoadOldSettingValues(const CXBMCTinyXML& doc, std::map<std:
 
   while (category != nullptr)
   {
-    const TiXmlElement *setting = category->FirstChildElement("setting");
+    const TiXmlElement* setting = category->FirstChildElement("setting");
     while (setting != nullptr)
     {
-      const char *id = setting->Attribute("id");
-      const char *value = setting->Attribute("value");
+      const char* id = setting->Attribute("id");
+      const char* value = setting->Attribute("value");
       if (id != nullptr && value != nullptr)
         settings[id] = value;
 
@@ -1324,19 +1450,21 @@ bool CAddonSettings::LoadOldSettingValues(const CXBMCTinyXML& doc, std::map<std:
   return !settings.empty();
 }
 
-bool CAddonSettings::ParseOldLabel(const TiXmlElement* element, const std::string settingId, int& labelId)
+bool CAddonSettings::ParseOldLabel(const TiXmlElement* element,
+                                   const std::string settingId,
+                                   int& labelId)
 {
   labelId = -1;
   if (element == nullptr)
     return false;
-  
+
   // label value as a string
   std::string labelString;
   element->QueryStringAttribute("label", &labelString);
 
 
   // try to parse the label as a pure number, i.e. a localized string
-  char *endptr;
+  char* endptr;
   labelId = std::strtol(labelString.c_str(), &endptr, 10);
   if (endptr == nullptr || *endptr == '\0')
     return true;
@@ -1354,7 +1482,10 @@ bool CAddonSettings::ParseOldLabel(const TiXmlElement* element, const std::strin
   return parsed;
 }
 
-bool CAddonSettings::ParseOldCondition(std::shared_ptr<const CSetting> setting, const std::vector<std::shared_ptr<const CSetting>> settings, const std::string& condition, CSettingDependency& dependeny) const
+bool CAddonSettings::ParseOldCondition(std::shared_ptr<const CSetting> setting,
+                                       const std::vector<std::shared_ptr<const CSetting>> settings,
+                                       const std::string& condition,
+                                       CSettingDependency& dependeny) const
 {
   if (setting == nullptr)
     return false;
@@ -1363,22 +1494,26 @@ bool CAddonSettings::ParseOldCondition(std::shared_ptr<const CSetting> setting, 
     return true;
 
   // find the index of the setting in the list of all settings of the category
-  auto settingIt = std::find_if(settings.cbegin(), settings.cend(), [setting](SettingConstPtr otherSetting) {
-    if (otherSetting == nullptr)
-      return false;
+  auto settingIt =
+      std::find_if(settings.cbegin(), settings.cend(), [setting](SettingConstPtr otherSetting) {
+        if (otherSetting == nullptr)
+          return false;
 
-    std::string id = setting->GetId();
-    if (setting->GetType() == SettingType::Reference)
-      id = std::static_pointer_cast<const CSettingReference>(setting)->GetReferencedId();
-    std::string otherId = otherSetting->GetId();
-    if (otherSetting->GetType() == SettingType::Reference)
-      otherId = std::static_pointer_cast<const CSettingReference>(otherSetting)->GetReferencedId();
+        std::string id = setting->GetId();
+        if (setting->GetType() == SettingType::Reference)
+          id = std::static_pointer_cast<const CSettingReference>(setting)->GetReferencedId();
+        std::string otherId = otherSetting->GetId();
+        if (otherSetting->GetType() == SettingType::Reference)
+          otherId =
+              std::static_pointer_cast<const CSettingReference>(otherSetting)->GetReferencedId();
 
-    return id == otherId;
-  });
-  if (settingIt == settings.cend()) {
-    CLog::Log(LOGWARNING, "CAddonSettings[%s]: failed to parse old setting conditions \"%s\" for \"%s\"",
-      m_addonId.c_str(), condition.c_str(), setting->GetId().c_str());
+        return id == otherId;
+      });
+  if (settingIt == settings.cend())
+  {
+    CLog::Log(LOGWARNING,
+              "CAddonSettings[%s]: failed to parse old setting conditions \"%s\" for \"%s\"",
+              m_addonId.c_str(), condition.c_str(), setting->GetId().c_str());
     return false;
   }
   int32_t currentSettingIndex = std::distance(settings.cbegin(), settingIt);
@@ -1409,8 +1544,11 @@ bool CAddonSettings::ParseOldCondition(std::shared_ptr<const CSetting> setting, 
     // we cannot handle relative indices pointing to settings not belonging to the same category
     if (absoluteSettingIndex < 0 || static_cast<size_t>(absoluteSettingIndex) >= settings.size())
     {
-      CLog::Log(LOGWARNING, "CAddonSettings[%s]: cannot reference setting (relative index: %d; absolute index: %d) in another category in old setting condition \"%s\" for \"%s\"",
-        m_addonId.c_str(), expression.m_relativeSettingIndex, absoluteSettingIndex, cond.c_str(), setting->GetId().c_str());
+      CLog::Log(LOGWARNING,
+                "CAddonSettings[%s]: cannot reference setting (relative index: %d; absolute index: "
+                "%d) in another category in old setting condition \"%s\" for \"%s\"",
+                m_addonId.c_str(), expression.m_relativeSettingIndex, absoluteSettingIndex,
+                cond.c_str(), setting->GetId().c_str());
       error = true;
       continue;
     }
@@ -1418,49 +1556,57 @@ bool CAddonSettings::ParseOldCondition(std::shared_ptr<const CSetting> setting, 
     SettingConstPtr referencedSetting = settings.at(absoluteSettingIndex);
     if (referencedSetting == nullptr)
     {
-      CLog::Log(LOGWARNING, "CAddonSettings[%s]: cannot reference separator setting in old setting condition \"%s\" for \"%s\"",
-        m_addonId.c_str(), cond.c_str(), setting->GetId().c_str());
+      CLog::Log(LOGWARNING,
+                "CAddonSettings[%s]: cannot reference separator setting in old setting condition "
+                "\"%s\" for \"%s\"",
+                m_addonId.c_str(), cond.c_str(), setting->GetId().c_str());
       error = true;
       continue;
     }
 
     // try to handle some odd cases where the setting is of type string but the comparison value references the index of the value in the list of options
-    if (referencedSetting->GetType() == SettingType::String && StringUtils::IsNaturalNumber(expression.m_value))
+    if (referencedSetting->GetType() == SettingType::String &&
+        StringUtils::IsNaturalNumber(expression.m_value))
     {
       // try to parse the comparison value
       size_t valueIndex = static_cast<size_t>(strtoul(expression.m_value.c_str(), nullptr, 10));
 
-      const auto referencedSettingString = std::static_pointer_cast<const CSettingString>(referencedSetting);
+      const auto referencedSettingString =
+          std::static_pointer_cast<const CSettingString>(referencedSetting);
       switch (referencedSettingString->GetOptionsType())
       {
-        case SettingOptionsType::Static:
-        {
-          const auto& options = referencedSettingString->GetOptions();
-          if (options.size() > valueIndex)
-            expression.m_value = options.at(valueIndex).value;
-          break;
-        }
+      case SettingOptionsType::Static:
+      {
+        const auto& options = referencedSettingString->GetOptions();
+        if (options.size() > valueIndex)
+          expression.m_value = options.at(valueIndex).value;
+        break;
+      }
 
-        case SettingOptionsType::StaticTranslatable:
-        {
-          const auto& options = referencedSettingString->GetTranslatableOptions();
-          if (options.size() > valueIndex)
-            expression.m_value = options.at(valueIndex).second;
-          break;
-        }
+      case SettingOptionsType::StaticTranslatable:
+      {
+        const auto& options = referencedSettingString->GetTranslatableOptions();
+        if (options.size() > valueIndex)
+          expression.m_value = options.at(valueIndex).second;
+        break;
+      }
 
-        default:
-          break;
+      default:
+        break;
       }
     }
 
     // add the condition to the value of the referenced setting
-    dependencyCombination->Add(std::make_shared<CSettingDependencyCondition>(referencedSetting->GetId(), expression.m_value, expression.m_operator, expression.m_negated, GetSettingsManager()));
+    dependencyCombination->Add(std::make_shared<CSettingDependencyCondition>(
+        referencedSetting->GetId(), expression.m_value, expression.m_operator, expression.m_negated,
+        GetSettingsManager()));
   }
 
   // if the condition doesn't depend on other settings it might be an infobool expression
-  if (!error && dependencyCombination->GetOperations().empty() && dependencyCombination->GetValues().empty())
-    dependencyCombination->Add(std::make_shared<CSettingDependencyCondition>("InfoBool", condition, "", false, GetSettingsManager()));
+  if (!error && dependencyCombination->GetOperations().empty() &&
+      dependencyCombination->GetValues().empty())
+    dependencyCombination->Add(std::make_shared<CSettingDependencyCondition>(
+        "InfoBool", condition, "", false, GetSettingsManager()));
 
   return !error;
 }
@@ -1473,9 +1619,7 @@ bool CAddonSettings::ParseOldConditionExpression(std::string str, ConditionExpre
   size_t posSep = str.find(',', posOpen);
   size_t posClose = str.find(')', posSep);
 
-  if (posOpen == std::string::npos ||
-      posSep == std::string::npos ||
-      posClose == std::string::npos)
+  if (posOpen == std::string::npos || posSep == std::string::npos || posClose == std::string::npos)
     return false;
 
   auto op = str.substr(0, posOpen);
@@ -1495,13 +1639,17 @@ bool CAddonSettings::ParseOldConditionExpression(std::string str, ConditionExpre
   else
     return false;
 
-  expression.m_relativeSettingIndex = static_cast<int32_t>(strtol(str.substr(posOpen + 1, posSep - posOpen - 1).c_str(), nullptr, 10));
+  expression.m_relativeSettingIndex = static_cast<int32_t>(
+      strtol(str.substr(posOpen + 1, posSep - posOpen - 1).c_str(), nullptr, 10));
   expression.m_value = str.substr(posSep + 1, posClose - posSep - 1);
 
   return true;
 }
 
-void CAddonSettings::FileEnumSettingOptionsFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data)
+void CAddonSettings::FileEnumSettingOptionsFiller(std::shared_ptr<const CSetting> setting,
+                                                  std::vector<StringSettingOption>& list,
+                                                  std::string& current,
+                                                  void* data)
 {
   if (setting == nullptr)
     return;
@@ -1517,7 +1665,8 @@ void CAddonSettings::FileEnumSettingOptionsFiller(std::shared_ptr<const CSetting
 
   // fetch the matching files/directories
   CFileItemList items;
-  XFILE::CDirectory::GetDirectory(settingPath->GetSources().front(), items, masking, XFILE::DIR_FLAG_NO_FILE_DIRS);
+  XFILE::CDirectory::GetDirectory(settingPath->GetSources().front(), items, masking,
+                                  XFILE::DIR_FLAG_NO_FILE_DIRS);
 
   // process the matching files/directories
   for (auto item : items)

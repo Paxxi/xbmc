@@ -39,4 +39,3 @@ void CProcessInfoIOS::SetSwDeinterlacingMethods()
   // update with the new methods list
   UpdateDeinterlacingMethods(methods);
 }
-

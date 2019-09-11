@@ -19,24 +19,25 @@
 class CGLContextEGL : public CGLContext
 {
 public:
-  explicit CGLContextEGL(Display *dpy);
+  explicit CGLContextEGL(Display* dpy);
   ~CGLContextEGL() override;
-  bool Refresh(bool force, int screen, Window glWindow, bool &newContext) override;
+  bool Refresh(bool force, int screen, Window glWindow, bool& newContext) override;
   bool CreatePB() override;
   void Destroy() override;
   void Detach() override;
   void SetVSync(bool enable) override;
   void SwapBuffers() override;
   void QueryExtensions() override;
-  uint64_t GetVblankTiming(uint64_t &msc, uint64_t &interval) override;
+  uint64_t GetVblankTiming(uint64_t& msc, uint64_t& interval) override;
 
   EGLDisplay m_eglDisplay;
   EGLSurface m_eglSurface;
   EGLContext m_eglContext;
   EGLConfig m_eglConfig;
+
 protected:
   bool SuitableCheck(EGLDisplay eglDisplay, EGLConfig config);
-  EGLConfig GetEGLConfig(EGLDisplay eglDisplay, XVisualInfo *vInfo);
+  EGLConfig GetEGLConfig(EGLDisplay eglDisplay, XVisualInfo* vInfo);
   PFNEGLGETSYNCVALUESCHROMIUMPROC eglGetSyncValuesCHROMIUM = nullptr;
   PFNEGLGETPLATFORMDISPLAYEXTPROC eglGetPlatformDisplayEXT = nullptr;
 

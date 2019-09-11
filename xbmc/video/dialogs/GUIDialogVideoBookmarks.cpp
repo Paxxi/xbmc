@@ -41,17 +41,18 @@
 
 using namespace KODI::MESSAGING;
 
-#define BOOKMARK_THUMB_WIDTH CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_imageRes
+#define BOOKMARK_THUMB_WIDTH \
+  CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_imageRes
 
-#define CONTROL_ADD_BOOKMARK           2
-#define CONTROL_CLEAR_BOOKMARKS        3
-#define CONTROL_ADD_EPISODE_BOOKMARK   4
+#define CONTROL_ADD_BOOKMARK 2
+#define CONTROL_CLEAR_BOOKMARKS 3
+#define CONTROL_ADD_EPISODE_BOOKMARK 4
 
-#define CONTROL_THUMBS                11
+#define CONTROL_THUMBS 11
 
 CGUIDialogVideoBookmarks::CGUIDialogVideoBookmarks()
-    : CGUIDialog(WINDOW_DIALOG_VIDEO_BOOKMARKS, "VideoOSDBookmarks.xml"),
-    CJobQueue(false, 1, CJob::PRIORITY_NORMAL)
+  : CGUIDialog(WINDOW_DIALOG_VIDEO_BOOKMARKS, "VideoOSDBookmarks.xml")
+  , CJobQueue(false, 1, CJob::PRIORITY_NORMAL)
 {
   m_vecItems = new CFileItemList;
   m_loadType = LOAD_EVERY_TIME;
@@ -65,98 +66,99 @@ CGUIDialogVideoBookmarks::~CGUIDialogVideoBookmarks()
 
 bool CGUIDialogVideoBookmarks::OnMessage(CGUIMessage& message)
 {
-  switch ( message.GetMessage() )
+  switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_DEINIT:
-    {
-      CUtil::DeleteVideoDatabaseDirectoryCache();
-      Clear();
-    }
-    break;
+  {
+    CUtil::DeleteVideoDatabaseDirectoryCache();
+    Clear();
+  }
+  break;
 
   case GUI_MSG_WINDOW_INIT:
-    {
-      // don't init this dialog if we don't playback a file
-      if (!g_application.GetAppPlayer().IsPlaying())
-        return false;
+  {
+    // don't init this dialog if we don't playback a file
+    if (!g_application.GetAppPlayer().IsPlaying())
+      return false;
 
-      CGUIWindow::OnMessage(message);
-      Update();
-      return true;
-    }
-    break;
+    CGUIWindow::OnMessage(message);
+    Update();
+    return true;
+  }
+  break;
 
   case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+    if (iControl == CONTROL_ADD_BOOKMARK)
     {
-      int iControl = message.GetSenderId();
-      if (iControl == CONTROL_ADD_BOOKMARK)
+      AddBookmark();
+      Update();
+    }
+    else if (iControl == CONTROL_CLEAR_BOOKMARKS)
+    {
+      ClearBookmarks();
+    }
+    else if (iControl == CONTROL_ADD_EPISODE_BOOKMARK)
+    {
+      AddEpisodeBookmark();
+      Update();
+    }
+    else if (m_viewControl.HasControl(iControl)) // list/thumb control
+    {
+      int iItem = m_viewControl.GetSelectedItem();
+      int iAction = message.GetParam1();
+      if (iAction == ACTION_DELETE_ITEM)
       {
-        AddBookmark();
-        Update();
+        Delete(iItem);
       }
-      else if (iControl == CONTROL_CLEAR_BOOKMARKS)
+      else if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK)
       {
-        ClearBookmarks();
-      }
-      else if (iControl == CONTROL_ADD_EPISODE_BOOKMARK)
-      {
-        AddEpisodeBookmark();
-        Update();
-      }
-      else if (m_viewControl.HasControl(iControl))  // list/thumb control
-      {
-        int iItem = m_viewControl.GetSelectedItem();
-        int iAction = message.GetParam1();
-        if (iAction == ACTION_DELETE_ITEM)
-        {
-          Delete(iItem);
-        }
-        else if (iAction == ACTION_SELECT_ITEM || iAction == ACTION_MOUSE_LEFT_CLICK)
-        {
-          GotoBookmark(iItem);
-        }
+        GotoBookmark(iItem);
       }
     }
-    break;
+  }
+  break;
   case GUI_MSG_SETFOCUS:
+  {
+    if (m_viewControl.HasControl(message.GetControlId()) &&
+        m_viewControl.GetCurrentControl() != message.GetControlId())
     {
-      if (m_viewControl.HasControl(message.GetControlId()) && m_viewControl.GetCurrentControl() != message.GetControlId())
-      {
-        m_viewControl.SetFocused();
-        return true;
-      }
+      m_viewControl.SetFocused();
+      return true;
     }
-    break;
+  }
+  break;
   case GUI_MSG_REFRESH_LIST:
+  {
+    switch (message.GetParam1())
     {
-      switch (message.GetParam1())
-      {
-      case 0:
-        OnRefreshList();
-        break;
-      case 1:
-        UpdateItem(message.GetParam2());
-        break;
-      default:
-        break;
-      }
+    case 0:
+      OnRefreshList();
+      break;
+    case 1:
+      UpdateItem(message.GetParam2());
+      break;
+    default:
+      break;
     }
-    break;
+  }
+  break;
   }
 
   return CGUIDialog::OnMessage(message);
 }
 
-bool CGUIDialogVideoBookmarks::OnAction(const CAction &action)
+bool CGUIDialogVideoBookmarks::OnAction(const CAction& action)
 {
-  switch(action.GetID())
+  switch (action.GetID())
   {
   case ACTION_CONTEXT_MENU:
   case ACTION_MOUSE_RIGHT_CLICK:
-    {
-      OnPopupMenu(m_viewControl.GetSelectedItem());
-      return true;
-    }
+  {
+    OnPopupMenu(m_viewControl.GetSelectedItem());
+    return true;
+  }
   }
   return CGUIDialog::OnAction(action);
 }
@@ -164,14 +166,16 @@ bool CGUIDialogVideoBookmarks::OnAction(const CAction &action)
 
 void CGUIDialogVideoBookmarks::OnPopupMenu(int item)
 {
-  if (item < 0 || item >= (int) m_bookmarks.size())
+  if (item < 0 || item >= (int)m_bookmarks.size())
     return;
 
   // highlight the item
   (*m_vecItems)[item]->Select(true);
 
   CContextButtons choices;
-  choices.Add(1, (m_bookmarks[item].type == CBookmark::EPISODE ? 20405 : 20404)); // "Remove episode bookmark" or "Remove bookmark"
+  choices.Add(1, (m_bookmarks[item].type == CBookmark::EPISODE
+                      ? 20405
+                      : 20404)); // "Remove episode bookmark" or "Remove bookmark"
 
   int button = CGUIDialogContextMenu::ShowAndGetChoice(choices);
 
@@ -184,13 +188,14 @@ void CGUIDialogVideoBookmarks::OnPopupMenu(int item)
 
 void CGUIDialogVideoBookmarks::Delete(int item)
 {
-  if ( item>=0 && (unsigned)item < m_bookmarks.size() )
+  if (item >= 0 && (unsigned)item < m_bookmarks.size())
   {
     CVideoDatabase videoDatabase;
     videoDatabase.Open();
     std::string path(g_application.CurrentFile());
     if (g_application.CurrentFileItem().HasProperty("original_listitem_url") &&
-       !URIUtils::IsVideoDb(g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
+        !URIUtils::IsVideoDb(
+            g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
       path = g_application.CurrentFileItem().GetProperty("original_listitem_url").asString();
     videoDatabase.ClearBookMarkOfFile(path, m_bookmarks[item], m_bookmarks[item].type);
     videoDatabase.Close();
@@ -214,7 +219,8 @@ void CGUIDialogVideoBookmarks::UpdateItem(unsigned int chapterIdx)
   if (itemPos < m_vecItems->Size())
   {
     std::string time = StringUtils::Format("chapter://%s/%i", m_filePath.c_str(), chapterIdx);
-    std::string cachefile = CTextureCache::GetInstance().GetCachedPath(CTextureCache::GetInstance().GetCacheFile(time) + ".jpg");
+    std::string cachefile = CTextureCache::GetInstance().GetCachedPath(
+        CTextureCache::GetInstance().GetCacheFile(time) + ".jpg");
     if (XFILE::CFile::Exists(cachefile))
     {
       (*m_vecItems)[itemPos]->SetArt("thumb", cachefile);
@@ -230,8 +236,9 @@ void CGUIDialogVideoBookmarks::OnRefreshList()
   // open the d/b and retrieve the bookmarks for the current movie
   m_filePath = g_application.CurrentFile();
   if (g_application.CurrentFileItem().HasProperty("original_listitem_url") &&
-     !URIUtils::IsVideoDb(g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
-     m_filePath = g_application.CurrentFileItem().GetProperty("original_listitem_url").asString();
+      !URIUtils::IsVideoDb(
+          g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
+    m_filePath = g_application.CurrentFileItem().GetProperty("original_listitem_url").asString();
 
   CVideoDatabase videoDatabase;
   videoDatabase.Open();
@@ -247,11 +254,15 @@ void CGUIDialogVideoBookmarks::OnRefreshList()
   {
     std::string bookmarkTime;
     if (m_bookmarks[i].type == CBookmark::EPISODE)
-      bookmarkTime = StringUtils::Format("%s %li %s %li", g_localizeStrings.Get(20373).c_str(), m_bookmarks[i].seasonNumber, g_localizeStrings.Get(20359).c_str(), m_bookmarks[i].episodeNumber);
+      bookmarkTime = StringUtils::Format(
+          "%s %li %s %li", g_localizeStrings.Get(20373).c_str(), m_bookmarks[i].seasonNumber,
+          g_localizeStrings.Get(20359).c_str(), m_bookmarks[i].episodeNumber);
     else
-      bookmarkTime = StringUtils::SecondsToTimeString((long)m_bookmarks[i].timeInSeconds, TIME_FORMAT_HH_MM_SS);
+      bookmarkTime = StringUtils::SecondsToTimeString((long)m_bookmarks[i].timeInSeconds,
+                                                      TIME_FORMAT_HH_MM_SS);
 
-    CFileItemPtr item(new CFileItem(StringUtils::Format(g_localizeStrings.Get(299).c_str(), i+1)));
+    CFileItemPtr item(
+        new CFileItem(StringUtils::Format(g_localizeStrings.Get(299).c_str(), i + 1)));
     item->SetLabel2(bookmarkTime);
     item->SetArt("thumb", m_bookmarks[i].thumbNailImage);
     item->SetProperty("resumepoint", m_bookmarks[i].timeInSeconds);
@@ -267,10 +278,9 @@ void CGUIDialogVideoBookmarks::OnRefreshList()
     g_application.GetAppPlayer().GetChapterName(chapterName, i);
 
     int64_t pos = g_application.GetAppPlayer().GetChapterPos(i);
-    std::string time = StringUtils::SecondsToTimeString((long) pos, TIME_FORMAT_HH_MM_SS);
+    std::string time = StringUtils::SecondsToTimeString((long)pos, TIME_FORMAT_HH_MM_SS);
 
-    if (chapterName.empty() ||
-        StringUtils::StartsWithNoCase(chapterName, time) ||
+    if (chapterName.empty() || StringUtils::StartsWithNoCase(chapterName, time) ||
         StringUtils::IsNaturalNumber(chapterName))
       chapterName = StringUtils::Format(g_localizeStrings.Get(25010).c_str(), i);
 
@@ -278,10 +288,12 @@ void CGUIDialogVideoBookmarks::OnRefreshList()
     item->SetLabel2(time);
 
     std::string chapterPath = StringUtils::Format("chapter://%s/%i", m_filePath.c_str(), i);
-    std::string cachefile = CTextureCache::GetInstance().GetCachedPath(CTextureCache::GetInstance().GetCacheFile(chapterPath)+".jpg");
+    std::string cachefile = CTextureCache::GetInstance().GetCachedPath(
+        CTextureCache::GetInstance().GetCacheFile(chapterPath) + ".jpg");
     if (XFILE::CFile::Exists(cachefile))
       item->SetArt("thumb", cachefile);
-    else if (i > m_jobsStarted && CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_MYVIDEOS_EXTRACTCHAPTERTHUMBS))
+    else if (i > m_jobsStarted && CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(
+                                      CSettings::SETTING_MYVIDEOS_EXTRACTCHAPTERTHUMBS))
     {
       CFileItem item(m_filePath, false);
       CJob* job = new CThumbExtractor(item, m_filePath, true, chapterPath, pos * 1000, false);
@@ -297,8 +309,9 @@ void CGUIDialogVideoBookmarks::OnRefreshList()
   }
 
   // sort items by resume point
-  std::sort(items.begin(), items.end(), [](const CFileItemPtr &item1, const CFileItemPtr &item2) {
-    return item1->GetProperty("resumepoint").asDouble() < item2->GetProperty("resumepoint").asDouble();
+  std::sort(items.begin(), items.end(), [](const CFileItemPtr& item1, const CFileItemPtr& item2) {
+    return item1->GetProperty("resumepoint").asDouble() <
+           item2->GetProperty("resumepoint").asDouble();
   });
 
   // add items to file list and mark the proper item as selected if the current playtime is above
@@ -320,10 +333,11 @@ void CGUIDialogVideoBookmarks::Update()
   CVideoDatabase videoDatabase;
   videoDatabase.Open();
 
-  if (g_application.CurrentFileItem().HasVideoInfoTag() && g_application.CurrentFileItem().GetVideoInfoTag()->m_iEpisode > -1)
+  if (g_application.CurrentFileItem().HasVideoInfoTag() &&
+      g_application.CurrentFileItem().GetVideoInfoTag()->m_iEpisode > -1)
   {
     std::vector<CVideoInfoTag> episodes;
-    videoDatabase.GetEpisodesByFile(g_application.CurrentFile(),episodes);
+    videoDatabase.GetEpisodesByFile(g_application.CurrentFile(), episodes);
     if (episodes.size() > 1)
     {
       CONTROL_ENABLE(CONTROL_ADD_EPISODE_BOOKMARK);
@@ -379,7 +393,8 @@ void CGUIDialogVideoBookmarks::ClearBookmarks()
   videoDatabase.Open();
   std::string path = g_application.CurrentFile();
   if (g_application.CurrentFileItem().HasProperty("original_listitem_url") &&
-     !URIUtils::IsVideoDb(g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
+      !URIUtils::IsVideoDb(
+          g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
     path = g_application.CurrentFileItem().GetProperty("original_listitem_url").asString();
   videoDatabase.ClearBookMarksOfFile(path, CBookmark::STANDARD);
   videoDatabase.ClearBookMarksOfFile(path, CBookmark::RESUME);
@@ -395,7 +410,7 @@ bool CGUIDialogVideoBookmarks::AddBookmark(CVideoInfoTag* tag)
   bookmark.timeInSeconds = (int)g_application.GetTime();
   bookmark.totalTimeInSeconds = (int)g_application.GetTotalTime();
 
-  if( g_application.GetAppPlayer().HasPlayer() )
+  if (g_application.GetAppPlayer().HasPlayer())
     bookmark.playerState = g_application.GetAppPlayer().GetPlayerState();
   else
     bookmark.playerState.clear();
@@ -413,32 +428,35 @@ bool CGUIDialogVideoBookmarks::AddBookmark(CVideoInfoTag* tag)
   }
 
 
-  uint8_t *pixels = (uint8_t*)malloc(height * width * 4);
+  uint8_t* pixels = (uint8_t*)malloc(height * width * 4);
   unsigned int captureId = g_application.GetAppPlayer().RenderCaptureAlloc();
 
   g_application.GetAppPlayer().RenderCapture(captureId, width, height, CAPTUREFLAG_IMMEDIATELY);
-  bool hasImage = g_application.GetAppPlayer().RenderCaptureGetPixels(captureId, 1000, pixels, height * width * 4);
+  bool hasImage = g_application.GetAppPlayer().RenderCaptureGetPixels(captureId, 1000, pixels,
+                                                                      height * width * 4);
 
   if (hasImage)
   {
-    const std::shared_ptr<CProfileManager> profileManager = CServiceBroker::GetSettingsComponent()->GetProfileManager();
+    const std::shared_ptr<CProfileManager> profileManager =
+        CServiceBroker::GetSettingsComponent()->GetProfileManager();
 
     auto crc = Crc32::ComputeFromLowerCase(g_application.CurrentFile());
     bookmark.thumbNailImage = StringUtils::Format("%08x_%i.jpg", crc, (int)bookmark.timeInSeconds);
-    bookmark.thumbNailImage = URIUtils::AddFileToFolder(profileManager->GetBookmarksThumbFolder(), bookmark.thumbNailImage);
+    bookmark.thumbNailImage = URIUtils::AddFileToFolder(profileManager->GetBookmarksThumbFolder(),
+                                                        bookmark.thumbNailImage);
 
     if (!CPicture::CreateThumbnailFromSurface(pixels, width, height, width * 4,
-                                                         bookmark.thumbNailImage))
+                                              bookmark.thumbNailImage))
     {
       bookmark.thumbNailImage.clear();
     }
     else
-      CLog::Log(LOGERROR,"CGUIDialogVideoBookmarks: failed to create thumbnail");
+      CLog::Log(LOGERROR, "CGUIDialogVideoBookmarks: failed to create thumbnail");
 
     g_application.GetAppPlayer().RenderCaptureRelease(captureId);
   }
   else
-    CLog::Log(LOGERROR,"CGUIDialogVideoBookmarks: failed to create thumbnail 2");
+    CLog::Log(LOGERROR, "CGUIDialogVideoBookmarks: failed to create thumbnail 2");
 
   free(pixels);
 
@@ -449,7 +467,8 @@ bool CGUIDialogVideoBookmarks::AddBookmark(CVideoInfoTag* tag)
   {
     std::string path = g_application.CurrentFile();
     if (g_application.CurrentFileItem().HasProperty("original_listitem_url") &&
-       !URIUtils::IsVideoDb(g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
+        !URIUtils::IsVideoDb(
+            g_application.CurrentFileItem().GetProperty("original_listitem_url").asString()))
       path = g_application.CurrentFileItem().GetProperty("original_listitem_url").asString();
     videoDatabase.AddBookMarkToFile(path, bookmark, CBookmark::STANDARD);
   }
@@ -478,7 +497,7 @@ void CGUIDialogVideoBookmarks::OnWindowUnload()
   m_viewControl.Reset();
 }
 
-CGUIControl *CGUIDialogVideoBookmarks::GetFirstFocusableControl(int id)
+CGUIControl* CGUIDialogVideoBookmarks::GetFirstFocusableControl(int id)
 {
   if (m_viewControl.HasControl(id))
     id = m_viewControl.GetCurrentControl();
@@ -495,11 +514,11 @@ bool CGUIDialogVideoBookmarks::AddEpisodeBookmark()
   if (!episodes.empty())
   {
     CContextButtons choices;
-    for (unsigned int i=0; i < episodes.size(); ++i)
+    for (unsigned int i = 0; i < episodes.size(); ++i)
     {
-      std::string strButton = StringUtils::Format("%s %i, %s %i",
-                                                 g_localizeStrings.Get(20373).c_str(), episodes[i].m_iSeason,
-                                                 g_localizeStrings.Get(20359).c_str(), episodes[i].m_iEpisode);
+      std::string strButton = StringUtils::Format(
+          "%s %i, %s %i", g_localizeStrings.Get(20373).c_str(), episodes[i].m_iSeason,
+          g_localizeStrings.Get(20359).c_str(), episodes[i].m_iEpisode);
       choices.Add(i, strButton);
     }
 
@@ -514,7 +533,6 @@ bool CGUIDialogVideoBookmarks::AddEpisodeBookmark()
 }
 
 
-
 bool CGUIDialogVideoBookmarks::OnAddBookmark()
 {
   if (!g_application.CurrentFileItem().IsVideo())
@@ -522,10 +540,11 @@ bool CGUIDialogVideoBookmarks::OnAddBookmark()
 
   if (CGUIDialogVideoBookmarks::AddBookmark())
   {
-    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_REFRESH_LIST, 0, WINDOW_DIALOG_VIDEO_BOOKMARKS);
+    CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_REFRESH_LIST, 0,
+                                                             WINDOW_DIALOG_VIDEO_BOOKMARKS);
     CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info,
-                                          g_localizeStrings.Get(298),   // "Bookmarks"
-                                          g_localizeStrings.Get(21362));// "Bookmark created"
+                                          g_localizeStrings.Get(298), // "Bookmarks"
+                                          g_localizeStrings.Get(21362)); // "Bookmark created"
     return true;
   }
   return false;
@@ -534,22 +553,24 @@ bool CGUIDialogVideoBookmarks::OnAddBookmark()
 bool CGUIDialogVideoBookmarks::OnAddEpisodeBookmark()
 {
   bool bReturn = false;
-  if (g_application.CurrentFileItem().HasVideoInfoTag() && g_application.CurrentFileItem().GetVideoInfoTag()->m_iEpisode > -1)
+  if (g_application.CurrentFileItem().HasVideoInfoTag() &&
+      g_application.CurrentFileItem().GetVideoInfoTag()->m_iEpisode > -1)
   {
     CVideoDatabase videoDatabase;
     videoDatabase.Open();
     std::vector<CVideoInfoTag> episodes;
-    videoDatabase.GetEpisodesByFile(g_application.CurrentFile(),episodes);
+    videoDatabase.GetEpisodesByFile(g_application.CurrentFile(), episodes);
     if (episodes.size() > 1)
     {
       bReturn = CGUIDialogVideoBookmarks::AddEpisodeBookmark();
-      if(bReturn)
+      if (bReturn)
       {
-        CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_REFRESH_LIST, 0, WINDOW_DIALOG_VIDEO_BOOKMARKS);
-        CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info,
-                                              g_localizeStrings.Get(298),   // "Bookmarks"
-                                              g_localizeStrings.Get(21363));// "Episode Bookmark created"
-
+        CServiceBroker::GetGUI()->GetWindowManager().SendMessage(GUI_MSG_REFRESH_LIST, 0,
+                                                                 WINDOW_DIALOG_VIDEO_BOOKMARKS);
+        CGUIDialogKaiToast::QueueNotification(
+            CGUIDialogKaiToast::Info,
+            g_localizeStrings.Get(298), // "Bookmarks"
+            g_localizeStrings.Get(21363)); // "Episode Bookmark created"
       }
     }
     videoDatabase.Close();
@@ -557,8 +578,7 @@ bool CGUIDialogVideoBookmarks::OnAddEpisodeBookmark()
   return bReturn;
 }
 
-void CGUIDialogVideoBookmarks::OnJobComplete(unsigned int jobID,
-                                             bool success, CJob* job)
+void CGUIDialogVideoBookmarks::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   if (success && IsActive())
   {

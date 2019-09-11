@@ -24,14 +24,16 @@ struct Interface_AudioEngine
   * @param[in] options A bit field of stream options (see: enum AEStreamOptions)
   * @return a new Handle to an IAEStream that will accept data in the requested format
   */
-  static AEStreamHandle* audioengine_make_stream(void *kodiBase, AudioEngineFormat* streamFormat, unsigned int options);
+  static AEStreamHandle* audioengine_make_stream(void* kodiBase,
+                                                 AudioEngineFormat* streamFormat,
+                                                 unsigned int options);
 
   /**
   * This method will remove the specifyed stream from the engine.
   * For OSX/IOS this is essential to reconfigure the audio output.
   * @param[in] streamHandle The stream to be altered
   */
-  static void audioengine_free_stream(void *kodiBase, AEStreamHandle* streamHandle);
+  static void audioengine_free_stream(void* kodiBase, AEStreamHandle* streamHandle);
 
   /**
   * Get the current sink data format
@@ -39,7 +41,7 @@ struct Interface_AudioEngine
   * @param[in] sinkFormat sink data format. For more details see AudioEngineFormat.
   * @return Returns true on success, else false.
   */
-  static bool audioengine_get_current_sink_format(void* kodiBase, AudioEngineFormat *sinkFormat);
+  static bool audioengine_get_current_sink_format(void* kodiBase, AudioEngineFormat* sinkFormat);
 
   /**
   * Returns the amount of space available in the stream
@@ -54,8 +56,13 @@ struct Interface_AudioEngine
   * @param[in] frames number of frames
   * @return The number of frames consumed
   */
-  static unsigned int aestream_add_data(void* kodiBase, AEStreamHandle* streamHandle, uint8_t* const *data,
-                                        unsigned int offset, unsigned int frames,  double pts, bool hasDownmix,
+  static unsigned int aestream_add_data(void* kodiBase,
+                                        AEStreamHandle* streamHandle,
+                                        uint8_t* const* data,
+                                        unsigned int offset,
+                                        unsigned int frames,
+                                        double pts,
+                                        bool hasDownmix,
                                         double centerMixLevel);
 
   /**
@@ -125,7 +132,7 @@ struct Interface_AudioEngine
   * Set the stream's volume level
   * @param volume The new volume level between 0.0 and 1.0
   */
-  static void  aestream_set_volume(void* kodiBase, AEStreamHandle* streamHandle, float volume);
+  static void aestream_set_volume(void* kodiBase, AEStreamHandle* streamHandle, float volume);
 
   /**
   * Gets the stream's volume amplification in linear units.
@@ -137,7 +144,9 @@ struct Interface_AudioEngine
   * Sets the stream's volume amplification in linear units.
   * @param amplify The volume amplification factor between 1.0 and 1000.0
   */
-  static void aestream_set_amplification(void* kodiBase, AEStreamHandle* streamHandle, float amplify);
+  static void aestream_set_amplification(void* kodiBase,
+                                         AEStreamHandle* streamHandle,
+                                         float amplify);
 
   /**
   * Returns the size of one audio frame in bytes (channelCount * resolution)
@@ -175,7 +184,9 @@ struct Interface_AudioEngine
   * @note This function may return false if the stream is not resampling, if you wish to use this be sure to set the AESTREAM_FORCE_RESAMPLE option
   * @param[in] ratio the new sample rate ratio, calculated by ((double)desiredRate / (double)GetSampleRate())
   */
-  static void aestream_set_resample_ratio(void* kodiBase, AEStreamHandle* streamHandle, double ratio);
+  static void aestream_set_resample_ratio(void* kodiBase,
+                                          AEStreamHandle* streamHandle,
+                                          double ratio);
 };
 
 } /* namespace ADDON */

@@ -17,8 +17,8 @@
 using namespace PVR;
 
 #define CONTROL_BTN_FIND 4
-#define CONTROL_BTN_OK  7
-#define CONTROL_BTN_PLAY_RECORDING  8
+#define CONTROL_BTN_OK 7
+#define CONTROL_BTN_PLAY_RECORDING 8
 
 CGUIDialogPVRRecordingInfo::CGUIDialogPVRRecordingInfo(void)
   : CGUIDialog(WINDOW_DIALOG_PVR_RECORDING_INFO, "DialogPVRInfo.xml")
@@ -30,16 +30,14 @@ bool CGUIDialogPVRRecordingInfo::OnMessage(CGUIMessage& message)
 {
   switch (message.GetMessage())
   {
-    case GUI_MSG_CLICKED:
-      return OnClickButtonOK(message) ||
-             OnClickButtonPlay(message) ||
-             OnClickButtonFind(message);
+  case GUI_MSG_CLICKED:
+    return OnClickButtonOK(message) || OnClickButtonPlay(message) || OnClickButtonFind(message);
   }
 
   return CGUIDialog::OnMessage(message);
 }
 
-bool CGUIDialogPVRRecordingInfo::OnClickButtonOK(CGUIMessage &message)
+bool CGUIDialogPVRRecordingInfo::OnClickButtonOK(CGUIMessage& message)
 {
   bool bReturn = false;
 
@@ -52,7 +50,7 @@ bool CGUIDialogPVRRecordingInfo::OnClickButtonOK(CGUIMessage &message)
   return bReturn;
 }
 
-bool CGUIDialogPVRRecordingInfo::OnClickButtonPlay(CGUIMessage &message)
+bool CGUIDialogPVRRecordingInfo::OnClickButtonPlay(CGUIMessage& message)
 {
   bool bReturn = false;
 
@@ -61,7 +59,8 @@ bool CGUIDialogPVRRecordingInfo::OnClickButtonPlay(CGUIMessage &message)
     Close();
 
     if (m_recordItem)
-      CServiceBroker::GetPVRManager().GUIActions()->PlayRecording(m_recordItem, true /* check resume */);
+      CServiceBroker::GetPVRManager().GUIActions()->PlayRecording(m_recordItem,
+                                                                  true /* check resume */);
 
     bReturn = true;
   }
@@ -92,7 +91,7 @@ bool CGUIDialogPVRRecordingInfo::OnInfo(int actionID)
   return true;
 }
 
-void CGUIDialogPVRRecordingInfo::SetRecording(const CFileItem *item)
+void CGUIDialogPVRRecordingInfo::SetRecording(const CFileItem* item)
 {
   *m_recordItem = *item;
 }
@@ -106,4 +105,3 @@ void CGUIDialogPVRRecordingInfo::ShowFor(const CFileItemPtr& item)
 {
   CServiceBroker::GetPVRManager().GUIActions()->ShowRecordingInfo(item);
 }
-

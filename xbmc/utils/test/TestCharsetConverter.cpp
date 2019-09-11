@@ -339,8 +339,7 @@ TEST_F(TestCharsetConverter, getCharsetLabels)
 
 TEST_F(TestCharsetConverter, getCharsetLabelByName)
 {
-  std::string varstr =
-    g_charsetConverter.getCharsetLabelByName("ISO-8859-1");
+  std::string varstr = g_charsetConverter.getCharsetLabelByName("ISO-8859-1");
   EXPECT_STREQ("Western Europe (ISO)", varstr.c_str());
   varstr.clear();
   varstr = g_charsetConverter.getCharsetLabelByName("Bogus");
@@ -349,8 +348,7 @@ TEST_F(TestCharsetConverter, getCharsetLabelByName)
 
 TEST_F(TestCharsetConverter, getCharsetNameByLabel)
 {
-  std::string varstr =
-    g_charsetConverter.getCharsetNameByLabel("Western Europe (ISO)");
+  std::string varstr = g_charsetConverter.getCharsetNameByLabel("Western Europe (ISO)");
   EXPECT_STREQ("ISO-8859-1", varstr.c_str());
   varstr.clear();
   varstr = g_charsetConverter.getCharsetNameByLabel("Bogus");

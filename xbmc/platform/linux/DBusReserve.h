@@ -17,13 +17,12 @@ class CDBusReserve
 {
 public:
   CDBusReserve();
- ~CDBusReserve();
+  ~CDBusReserve();
 
-  bool AcquireDevice(const std::string &device);
-  bool ReleaseDevice(const std::string &device);
+  bool AcquireDevice(const std::string& device);
+  bool ReleaseDevice(const std::string& device);
 
 private:
   CDBusConnection m_conn;
   std::vector<std::string> m_devs;
 };
-

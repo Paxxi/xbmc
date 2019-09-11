@@ -25,7 +25,11 @@
 using namespace JSONRPC;
 using namespace KODI::MESSAGING;
 
-JSONRPC_STATUS CApplicationOperations::GetProperties(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CApplicationOperations::GetProperties(const std::string& method,
+                                                     ITransportLayer* transport,
+                                                     IClient* client,
+                                                     const CVariant& parameterObject,
+                                                     CVariant& result)
 {
   CVariant properties = CVariant(CVariant::VariantTypeObject);
   for (unsigned int index = 0; index < parameterObject["properties"].size(); index++)
@@ -44,7 +48,11 @@ JSONRPC_STATUS CApplicationOperations::GetProperties(const std::string &method, 
   return OK;
 }
 
-JSONRPC_STATUS CApplicationOperations::SetVolume(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CApplicationOperations::SetVolume(const std::string& method,
+                                                 ITransportLayer* transport,
+                                                 IClient* client,
+                                                 const CVariant& parameterObject,
+                                                 CVariant& result)
 {
   bool up = false;
   if (parameterObject["volume"].isInteger())
@@ -79,29 +87,42 @@ JSONRPC_STATUS CApplicationOperations::SetVolume(const std::string &method, ITra
   else
     return InvalidParams;
 
-  CApplicationMessenger::GetInstance().PostMsg(TMSG_VOLUME_SHOW, up ? ACTION_VOLUME_UP : ACTION_VOLUME_DOWN);
+  CApplicationMessenger::GetInstance().PostMsg(TMSG_VOLUME_SHOW,
+                                               up ? ACTION_VOLUME_UP : ACTION_VOLUME_DOWN);
 
   return GetPropertyValue("volume", result);
 }
 
-JSONRPC_STATUS CApplicationOperations::SetMute(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CApplicationOperations::SetMute(const std::string& method,
+                                               ITransportLayer* transport,
+                                               IClient* client,
+                                               const CVariant& parameterObject,
+                                               CVariant& result)
 {
-  if ((parameterObject["mute"].isString() && parameterObject["mute"].asString().compare("toggle") == 0) ||
-      (parameterObject["mute"].isBoolean() && parameterObject["mute"].asBoolean() != g_application.IsMuted()))
-      CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_MUTE)));
+  if ((parameterObject["mute"].isString() &&
+       parameterObject["mute"].asString().compare("toggle") == 0) ||
+      (parameterObject["mute"].isBoolean() &&
+       parameterObject["mute"].asBoolean() != g_application.IsMuted()))
+    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1,
+                                                 static_cast<void*>(new CAction(ACTION_MUTE)));
   else if (!parameterObject["mute"].isBoolean() && !parameterObject["mute"].isString())
     return InvalidParams;
 
   return GetPropertyValue("muted", result);
 }
 
-JSONRPC_STATUS CApplicationOperations::Quit(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CApplicationOperations::Quit(const std::string& method,
+                                            ITransportLayer* transport,
+                                            IClient* client,
+                                            const CVariant& parameterObject,
+                                            CVariant& result)
 {
   CApplicationMessenger::GetInstance().PostMsg(TMSG_QUIT);
   return ACK;
 }
 
-JSONRPC_STATUS CApplicationOperations::GetPropertyValue(const std::string &property, CVariant &result)
+JSONRPC_STATUS CApplicationOperations::GetPropertyValue(const std::string& property,
+                                                        CVariant& result)
 {
   if (property == "volume")
     result = static_cast<int>(g_application.GetVolume());

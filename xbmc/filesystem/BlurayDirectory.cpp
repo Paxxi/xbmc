@@ -43,7 +43,7 @@ CBlurayDirectory::~CBlurayDirectory()
 
 void CBlurayDirectory::Dispose()
 {
-  if(m_bd)
+  if (m_bd)
   {
     bd_close(m_bd);
     m_bd = nullptr;
@@ -74,7 +74,7 @@ std::string CBlurayDirectory::GetDiscInfoString(DiscInfo info)
 
     std::string title = "";
 
-#if (BLURAY_VERSION > BLURAY_VERSION_CODE(1,0,0))
+#if (BLURAY_VERSION > BLURAY_VERSION_CODE(1, 0, 0))
     title = disc_info->disc_name ? disc_info->disc_name : "";
 #endif
 
@@ -91,7 +91,7 @@ std::string CBlurayDirectory::GetDiscInfoString(DiscInfo info)
 
     std::string id = "";
 
-#if (BLURAY_VERSION > BLURAY_VERSION_CODE(1,0,0))
+#if (BLURAY_VERSION > BLURAY_VERSION_CODE(1, 0, 0))
     id = disc_info->udf_volume_id ? disc_info->udf_volume_id : "";
 
     if (id.empty())
@@ -124,17 +124,18 @@ CFileItemPtr CBlurayDirectory::GetTitle(const BLURAY_TITLE_INFO* title, const st
   buf = StringUtils::Format(label.c_str(), title->playlist);
   item->m_strTitle = buf;
   item->SetLabel(buf);
-  chap = StringUtils::Format(g_localizeStrings.Get(25007).c_str(), title->chapter_count, StringUtils::SecondsToTimeString(duration).c_str());
+  chap = StringUtils::Format(g_localizeStrings.Get(25007).c_str(), title->chapter_count,
+                             StringUtils::SecondsToTimeString(duration).c_str());
   item->SetLabel2(chap);
   item->m_dwSize = 0;
   item->SetArt("icon", "DefaultVideo.png");
-  for(unsigned int i = 0; i < title->clip_count; ++i)
+  for (unsigned int i = 0; i < title->clip_count; ++i)
     item->m_dwSize += title->clips[i].pkt_count * 192;
 
   return item;
 }
 
-void CBlurayDirectory::GetTitles(bool main, CFileItemList &items)
+void CBlurayDirectory::GetTitles(bool main, CFileItemList& items)
 {
   std::vector<BLURAY_TITLE_INFO*> titleList;
   uint64_t minDuration = 0;
@@ -158,7 +159,7 @@ void CBlurayDirectory::GetTitles(bool main, CFileItemList &items)
       }
 
       if (main && t->duration > minDuration)
-          minDuration = t->duration;
+        minDuration = t->duration;
 
       titleList.emplace_back(t);
     }
@@ -171,43 +172,44 @@ void CBlurayDirectory::GetTitles(bool main, CFileItemList &items)
     if (title->duration < minDuration)
       continue;
 
-    items.Add(GetTitle(title, main ? g_localizeStrings.Get(25004) /* Main Title */ : g_localizeStrings.Get(25005) /* Title */));
+    items.Add(GetTitle(title, main ? g_localizeStrings.Get(25004) /* Main Title */
+                                   : g_localizeStrings.Get(25005) /* Title */));
     bd_free_title_info(title);
   }
 }
 
-void CBlurayDirectory::GetRoot(CFileItemList &items)
+void CBlurayDirectory::GetRoot(CFileItemList& items)
 {
-    GetTitles(true, items);
+  GetTitles(true, items);
 
-    CURL path(m_url);
-    CFileItemPtr item;
+  CURL path(m_url);
+  CFileItemPtr item;
 
-    path.SetFileName(URIUtils::AddFileToFolder(m_url.GetFileName(), "titles"));
-    item.reset(new CFileItem());
-    item->SetPath(path.Get());
-    item->m_bIsFolder = true;
-    item->SetLabel(g_localizeStrings.Get(25002) /* All titles */);
-    item->SetArt("icon", "DefaultVideoPlaylists.png");
-    items.Add(item);
+  path.SetFileName(URIUtils::AddFileToFolder(m_url.GetFileName(), "titles"));
+  item.reset(new CFileItem());
+  item->SetPath(path.Get());
+  item->m_bIsFolder = true;
+  item->SetLabel(g_localizeStrings.Get(25002) /* All titles */);
+  item->SetArt("icon", "DefaultVideoPlaylists.png");
+  items.Add(item);
 
-    const BLURAY_DISC_INFO* disc_info = bd_get_disc_info(m_bd);
-    if (disc_info && disc_info->no_menu_support)
-    {
-      CLog::Log(LOGDEBUG, "CBlurayDirectory::GetRoot - no menu support, skipping menu entry");
-      return;
-    }
+  const BLURAY_DISC_INFO* disc_info = bd_get_disc_info(m_bd);
+  if (disc_info && disc_info->no_menu_support)
+  {
+    CLog::Log(LOGDEBUG, "CBlurayDirectory::GetRoot - no menu support, skipping menu entry");
+    return;
+  }
 
-    path.SetFileName("menu");
-    item.reset(new CFileItem());
-    item->SetPath(path.Get());
-    item->m_bIsFolder = false;
-    item->SetLabel(g_localizeStrings.Get(25003) /* Menus */);
-    item->SetArt("icon", "DefaultProgram.png");
-    items.Add(item);
+  path.SetFileName("menu");
+  item.reset(new CFileItem());
+  item->SetPath(path.Get());
+  item->m_bIsFolder = false;
+  item->SetLabel(g_localizeStrings.Get(25003) /* Menus */);
+  item->SetArt("icon", "DefaultProgram.png");
+  items.Add(item);
 }
 
-bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   Dispose();
   m_url = url;
@@ -219,9 +221,9 @@ bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   if (!InitializeBluray(root))
     return false;
 
-  if(file == "root")
+  if (file == "root")
     GetRoot(items);
-  else if(file == "root/titles")
+  else if (file == "root/titles")
     GetTitles(false, items);
   else
   {
@@ -232,8 +234,10 @@ bool CBlurayDirectory::GetDirectory(const CURL& url, CFileItemList &items)
       return false;
   }
 
-  items.AddSortMethod(SortByTrackNumber,  554, LABEL_MASKS("%L", "%D", "%L", ""));    // FileName, Duration | Foldername, empty
-  items.AddSortMethod(SortBySize,         553, LABEL_MASKS("%L", "%I", "%L", "%I"));  // FileName, Size | Foldername, Size
+  items.AddSortMethod(SortByTrackNumber, 554,
+                      LABEL_MASKS("%L", "%D", "%L", "")); // FileName, Duration | Foldername, empty
+  items.AddSortMethod(SortBySize, 553,
+                      LABEL_MASKS("%L", "%I", "%L", "%I")); // FileName, Size | Foldername, Size
 
   return true;
 }
@@ -246,7 +250,7 @@ CURL CBlurayDirectory::GetUnderlyingCURL(const CURL& url)
   return CURL(host.append(filename));
 }
 
-bool CBlurayDirectory::InitializeBluray(const std::string &root)
+bool CBlurayDirectory::InitializeBluray(const std::string& root)
 {
   bd_set_debug_handler(CBlurayCallback::bluray_logger);
   bd_set_debug_mask(DBG_CRIT | DBG_BLURAY | DBG_NAV);
@@ -263,9 +267,11 @@ bool CBlurayDirectory::InitializeBluray(const std::string &root)
   g_LangCodeExpander.ConvertToISO6392T(g_langInfo.GetDVDMenuLanguage(), langCode);
   bd_set_player_setting_str(m_bd, BLURAY_PLAYER_SETTING_MENU_LANG, langCode.c_str());
 
-  if (!bd_open_files(m_bd, const_cast<std::string*>(&root), CBlurayCallback::dir_open, CBlurayCallback::file_open))
+  if (!bd_open_files(m_bd, const_cast<std::string*>(&root), CBlurayCallback::dir_open,
+                     CBlurayCallback::file_open))
   {
-    CLog::Log(LOGERROR, "CBlurayDirectory::InitializeBluray - failed to open %s", CURL::GetRedacted(root).c_str());
+    CLog::Log(LOGERROR, "CBlurayDirectory::InitializeBluray - failed to open %s",
+              CURL::GetRedacted(root).c_str());
     return false;
   }
   m_blurayInitialized = true;
@@ -273,7 +279,7 @@ bool CBlurayDirectory::InitializeBluray(const std::string &root)
   return true;
 }
 
-std::string CBlurayDirectory::HexToString(const uint8_t *buf, int count)
+std::string CBlurayDirectory::HexToString(const uint8_t* buf, int count)
 {
   std::array<char, 42> tmp;
 

@@ -19,4 +19,3 @@ protected:
 public:
   virtual void Archive(CArchive& ar) = 0;
 };
-

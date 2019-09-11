@@ -101,7 +101,8 @@ TEST(TestLocale, LanguageModifierLocale)
 
 TEST(TestLocale, LanguageTerritoryCodesetLocale)
 {
-  const std::string strLocaleShort = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
+  const std::string strLocaleShort =
+      LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
   std::string strLocaleShortLC = strLocaleShort;
   StringUtils::ToLower(strLocaleShortLC);
   const std::string strLocale = strLocaleShort + CodesetSeparator + CodesetUtf8;
@@ -122,7 +123,8 @@ TEST(TestLocale, LanguageTerritoryCodesetLocale)
 
 TEST(TestLocale, LanguageTerritoryModifierLocale)
 {
-  const std::string strLocaleShort = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
+  const std::string strLocaleShort =
+      LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
   std::string strLocaleShortLC = strLocaleShort;
   StringUtils::ToLower(strLocaleShortLC);
   const std::string strLocale = strLocaleShort + ModifierSeparator + ModifierLatin;
@@ -143,10 +145,12 @@ TEST(TestLocale, LanguageTerritoryModifierLocale)
 
 TEST(TestLocale, LanguageTerritoryCodesetModifierLocale)
 {
-  const std::string strLocaleShort = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
+  const std::string strLocaleShort =
+      LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
   std::string strLocaleShortLC = strLocaleShort;
   StringUtils::ToLower(strLocaleShortLC);
-  const std::string strLocale = strLocaleShort + CodesetSeparator + CodesetUtf8 + ModifierSeparator + ModifierLatin;
+  const std::string strLocale =
+      strLocaleShort + CodesetSeparator + CodesetUtf8 + ModifierSeparator + ModifierLatin;
   std::string strLocaleLC = strLocale;
   StringUtils::ToLower(strLocaleLC);
 
@@ -164,10 +168,12 @@ TEST(TestLocale, LanguageTerritoryCodesetModifierLocale)
 
 TEST(TestLocale, FullStringLocale)
 {
-  const std::string strLocaleShort = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
+  const std::string strLocaleShort =
+      LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain;
   std::string strLocaleShortLC = strLocaleShort;
   StringUtils::ToLower(strLocaleShortLC);
-  const std::string strLocale = strLocaleShort + CodesetSeparator + CodesetUtf8 + ModifierSeparator + ModifierLatin;
+  const std::string strLocale =
+      strLocaleShort + CodesetSeparator + CodesetUtf8 + ModifierSeparator + ModifierLatin;
   std::string strLocaleLC = strLocale;
   StringUtils::ToLower(strLocaleLC);
 
@@ -210,17 +216,20 @@ TEST(TestLocale, FromString)
   ASSERT_TRUE(locale.IsValid());
   ASSERT_STREQ(strLocale.c_str(), locale.ToString().c_str());
 
-  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator + CodesetUtf8;
+  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator +
+              CodesetUtf8;
   locale = CLocale::FromString(strLocale);
   ASSERT_TRUE(locale.IsValid());
   ASSERT_STREQ(strLocale.c_str(), locale.ToString().c_str());
 
-  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + ModifierSeparator + ModifierLatin;
+  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + ModifierSeparator +
+              ModifierLatin;
   locale = CLocale::FromString(strLocale);
   ASSERT_TRUE(locale.IsValid());
   ASSERT_STREQ(strLocale.c_str(), locale.ToString().c_str());
 
-  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator + CodesetUtf8 + ModifierSeparator + ModifierLatin;
+  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator +
+              CodesetUtf8 + ModifierSeparator + ModifierLatin;
   locale = CLocale::FromString(strLocale);
   ASSERT_TRUE(locale.IsValid());
   ASSERT_STREQ(strLocale.c_str(), locale.ToString().c_str());
@@ -259,14 +268,17 @@ TEST(TestLocale, Equals)
   ASSERT_TRUE(locale.Equals(strLocale));
 
   locale = CLocale(LanguageCodeEnglish, TerritoryCodeBritain, CodesetUtf8);
-  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator + CodesetUtf8;
+  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator +
+              CodesetUtf8;
   ASSERT_TRUE(locale.Equals(strLocale));
 
   locale = CLocale(LanguageCodeEnglish, TerritoryCodeBritain, "", ModifierLatin);
-  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + ModifierSeparator + ModifierLatin;
+  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + ModifierSeparator +
+              ModifierLatin;
   ASSERT_TRUE(locale.Equals(strLocale));
 
   locale = CLocale(LanguageCodeEnglish, TerritoryCodeBritain, CodesetUtf8, ModifierLatin);
-  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator + CodesetUtf8 + ModifierSeparator + ModifierLatin;
+  strLocale = LanguageCodeEnglish + TerritorySeparator + TerritoryCodeBritain + CodesetSeparator +
+              CodesetUtf8 + ModifierSeparator + ModifierLatin;
   ASSERT_TRUE(locale.Equals(strLocale));
 }

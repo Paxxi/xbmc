@@ -45,5 +45,5 @@ void GetMemoryStatus(MemoryStatus* buffer)
   }
 }
 
-}
-}
+} // namespace MEMORY
+} // namespace KODI

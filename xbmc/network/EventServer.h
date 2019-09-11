@@ -22,59 +22,58 @@
 namespace EVENTSERVER
 {
 
-  /**********************************************************************/
-  /* UDP Event Server Class                                             */
-  /**********************************************************************/
-  class CEventServer : private CThread
+/**********************************************************************/
+/* UDP Event Server Class                                             */
+/**********************************************************************/
+class CEventServer : private CThread
+{
+public:
+  static void RemoveInstance();
+  static CEventServer* GetInstance();
+  ~CEventServer() override = default;
+
+  // IRunnable entry point for thread
+  void Process() override;
+
+  bool Running() { return m_bRunning; }
+
+  void RefreshSettings()
   {
-  public:
-    static void RemoveInstance();
-    static CEventServer* GetInstance();
-    ~CEventServer() override = default;
+    CSingleLock lock(m_critSection);
+    m_bRefreshSettings = true;
+  }
 
-    // IRunnable entry point for thread
-    void  Process() override;
+  // start / stop server
+  void StartServer();
+  void StopServer(bool bWait);
 
-    bool Running()
-    {
-      return m_bRunning;
-    }
+  // get events
+  unsigned int GetButtonCode(std::string& strMapName,
+                             bool& isAxis,
+                             float& amount,
+                             bool& isJoystick);
+  bool ExecuteNextAction();
+  bool GetMousePos(float& x, float& y);
+  int GetNumberOfClients();
 
-    void RefreshSettings()
-    {
-      CSingleLock lock(m_critSection);
-      m_bRefreshSettings = true;
-    }
+protected:
+  CEventServer();
+  void Cleanup();
+  void Run();
+  void ProcessPacket(SOCKETS::CAddress& addr, int packetSize);
+  void ProcessEvents();
+  void RefreshClients();
 
-    // start / stop server
-    void StartServer();
-    void StopServer(bool bWait);
+  std::map<unsigned long, EVENTCLIENT::CEventClient*> m_clients;
+  static CEventServer* m_pInstance;
+  SOCKETS::CUDPSocket* m_pSocket;
+  int m_iPort;
+  int m_iListenTimeout;
+  int m_iMaxClients;
+  unsigned char* m_pPacketBuffer;
+  std::atomic<bool> m_bRunning;
+  CCriticalSection m_critSection;
+  bool m_bRefreshSettings;
+};
 
-    // get events
-    unsigned int GetButtonCode(std::string& strMapName, bool& isAxis, float& amount, bool &isJoystick);
-    bool ExecuteNextAction();
-    bool GetMousePos(float &x, float &y);
-    int GetNumberOfClients();
-
-  protected:
-    CEventServer();
-    void Cleanup();
-    void Run();
-    void ProcessPacket(SOCKETS::CAddress& addr, int packetSize);
-    void ProcessEvents();
-    void RefreshClients();
-
-    std::map<unsigned long, EVENTCLIENT::CEventClient*>  m_clients;
-    static CEventServer* m_pInstance;
-    SOCKETS::CUDPSocket* m_pSocket;
-    int              m_iPort;
-    int              m_iListenTimeout;
-    int              m_iMaxClients;
-    unsigned char*   m_pPacketBuffer;
-    std::atomic<bool>  m_bRunning;
-    CCriticalSection m_critSection;
-    bool             m_bRefreshSettings;
-  };
-
-}
-
+} // namespace EVENTSERVER

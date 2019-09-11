@@ -27,7 +27,9 @@ class CMMNotificationClient : public IMMNotificationClient
 
 
 public:
-  CMMNotificationClient() : _cRef(1), _pEnumerator(nullptr)
+  CMMNotificationClient()
+    : _cRef(1)
+    , _pEnumerator(nullptr)
   {
   }
 
@@ -35,10 +37,7 @@ public:
 
   // IUnknown methods -- AddRef, Release, and QueryInterface
 
-  ULONG STDMETHODCALLTYPE AddRef()
-  {
-    return InterlockedIncrement(&_cRef);
-  }
+  ULONG STDMETHODCALLTYPE AddRef() { return InterlockedIncrement(&_cRef); }
 
   ULONG STDMETHODCALLTYPE Release()
   {
@@ -50,7 +49,7 @@ public:
     return ulRef;
   }
 
-  HRESULT STDMETHODCALLTYPE QueryInterface(const IID & riid, void **ppvInterface)
+  HRESULT STDMETHODCALLTYPE QueryInterface(const IID& riid, void** ppvInterface)
   {
     if (IID_IUnknown == riid)
     {
@@ -72,12 +71,14 @@ public:
 
   // Callback methods for device-event notifications.
 
-  HRESULT STDMETHODCALLTYPE OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR pwstrDeviceId)
+  HRESULT STDMETHODCALLTYPE OnDefaultDeviceChanged(EDataFlow flow,
+                                                   ERole role,
+                                                   LPCWSTR pwstrDeviceId)
   {
     // if the default device changes this function is called four times.
     // therefore we call CServiceBroker::GetActiveAE()->DeviceChange() only for one role.
-    char  *pszFlow = "?????";
-    char  *pszRole = "?????";
+    char* pszFlow = "?????";
+    char* pszRole = "?????";
 
     switch (flow)
     {
@@ -103,7 +104,8 @@ public:
       break;
     }
 
-    CLog::Log(LOGDEBUG, "%s: New default device: flow = %s, role = %s", __FUNCTION__, pszFlow, pszRole);
+    CLog::Log(LOGDEBUG, "%s: New default device: flow = %s, role = %s", __FUNCTION__, pszFlow,
+              pszRole);
     return S_OK;
   }
 
@@ -123,7 +125,7 @@ public:
 
   HRESULT STDMETHODCALLTYPE OnDeviceStateChanged(LPCWSTR pwstrDeviceId, DWORD dwNewState)
   {
-    char  *pszState = "?????";
+    char* pszState = "?????";
 
     switch (dwNewState)
     {
@@ -147,19 +149,19 @@ public:
 
   HRESULT STDMETHODCALLTYPE OnPropertyValueChanged(LPCWSTR pwstrDeviceId, const PROPERTYKEY key)
   {
-    CLog::Log(LOGDEBUG, "%s: Changed device property of %s is (%8.8x-%4.4x-%4.4x-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x)#%d",
+    CLog::Log(LOGDEBUG,
+              "%s: Changed device property of %s is "
+              "(%8.8x-%4.4x-%4.4x-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x)#%d",
               __FUNCTION__, FromW(pwstrDeviceId), key.fmtid.Data1, key.fmtid.Data2, key.fmtid.Data3,
-                                           key.fmtid.Data4[0], key.fmtid.Data4[1],
-                                           key.fmtid.Data4[2], key.fmtid.Data4[3],
-                                           key.fmtid.Data4[4], key.fmtid.Data4[5],
-                                           key.fmtid.Data4[6], key.fmtid.Data4[7],
-                                           key.pid);
+              key.fmtid.Data4[0], key.fmtid.Data4[1], key.fmtid.Data4[2], key.fmtid.Data4[3],
+              key.fmtid.Data4[4], key.fmtid.Data4[5], key.fmtid.Data4[6], key.fmtid.Data4[7],
+              key.pid);
     return S_OK;
   }
 
   void STDMETHODCALLTYPE NotifyAE()
   {
-    if(!CWin32PowerSyscall::IsSuspending())
+    if (!CWin32PowerSyscall::IsSuspending())
       CServiceBroker::GetActiveAE()->DeviceChange();
   }
 };

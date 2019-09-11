@@ -15,7 +15,7 @@
 
 namespace ActiveAE
 {
-  class IAEResample;
+class IAEResample;
 };
 
 class VideoPlayerCodec : public ICodec
@@ -24,16 +24,16 @@ public:
   VideoPlayerCodec();
   ~VideoPlayerCodec() override;
 
-  bool Init(const CFileItem &file, unsigned int filecache) override;
+  bool Init(const CFileItem& file, unsigned int filecache) override;
   bool Seek(int64_t iSeekTime) override;
-  int ReadPCM(unsigned char *pBuffer, int size, int *actualsize) override;
-  int ReadRaw(uint8_t **pBuffer, int *bufferSize) override;
+  int ReadPCM(unsigned char* pBuffer, int size, int* actualsize) override;
+  int ReadRaw(uint8_t** pBuffer, int* bufferSize) override;
   bool CanInit() override;
   bool CanSeek() override;
 
   void DeInit();
   AEAudioFormat GetFormat();
-  void SetContentType(const std::string &strContent);
+  void SetContentType(const std::string& strContent);
 
   bool NeedConvert(AEDataFormat fmt);
   void SetPassthroughStreamType(CAEStreamInfo::DataType streamType);
@@ -48,12 +48,12 @@ private:
   std::string m_strContentType;
   std::string m_strFileName;
   int m_nAudioStream;
-  int  m_nDecodedLen;
+  int m_nDecodedLen;
 
   bool m_bInited;
   bool m_bCanSeek;
 
-  ActiveAE::IAEResample *m_pResampler;
+  ActiveAE::IAEResample* m_pResampler;
   DVDAudioFrame m_audioFrame;
   int m_planes;
   bool m_needConvert;
@@ -62,4 +62,3 @@ private:
 
   std::unique_ptr<CProcessInfo> m_processInfo;
 };
-

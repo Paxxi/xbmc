@@ -16,7 +16,7 @@
 
 #include <utility>
 
-bool CGUIListItem::icompare::operator()(const std::string &s1, const std::string &s2) const
+bool CGUIListItem::icompare::operator()(const std::string& s1, const std::string& s2) const
 {
   return StringUtils::CompareNoCase(s1, s2) < 0;
 }
@@ -35,8 +35,8 @@ CGUIListItem::CGUIListItem(void)
   m_currentItem = 1;
 }
 
-CGUIListItem::CGUIListItem(const std::string& strLabel):
-  m_strLabel(strLabel)
+CGUIListItem::CGUIListItem(const std::string& strLabel)
+  : m_strLabel(strLabel)
 {
   m_bIsFolder = false;
   SetSortLabel(strLabel);
@@ -79,13 +79,13 @@ const std::string& CGUIListItem::GetLabel2() const
   return m_strLabel2;
 }
 
-void CGUIListItem::SetSortLabel(const std::string &label)
+void CGUIListItem::SetSortLabel(const std::string& label)
 {
   g_charsetConverter.utf8ToW(label, m_sortLabel, false);
   // no need to invalidate - this is never shown in the UI
 }
 
-void CGUIListItem::SetSortLabel(const std::wstring &label)
+void CGUIListItem::SetSortLabel(const std::wstring& label)
 {
   m_sortLabel = label;
 }
@@ -95,7 +95,7 @@ const std::wstring& CGUIListItem::GetSortLabel() const
   return m_sortLabel;
 }
 
-void CGUIListItem::SetArt(const std::string &type, const std::string &url)
+void CGUIListItem::SetArt(const std::string& type, const std::string& url)
 {
   ArtMap::iterator i = m_art.find(type);
   if (i == m_art.end() || i->second != url)
@@ -105,13 +105,13 @@ void CGUIListItem::SetArt(const std::string &type, const std::string &url)
   }
 }
 
-void CGUIListItem::SetArt(const ArtMap &art)
+void CGUIListItem::SetArt(const ArtMap& art)
 {
   m_art = art;
   SetInvalid();
 }
 
-void CGUIListItem::SetArtFallback(const std::string &from, const std::string &to)
+void CGUIListItem::SetArtFallback(const std::string& from, const std::string& to)
 {
   m_artFallbacks[from] = to;
 }
@@ -122,13 +122,13 @@ void CGUIListItem::ClearArt()
   m_artFallbacks.clear();
 }
 
-void CGUIListItem::AppendArt(const ArtMap &art, const std::string &prefix)
+void CGUIListItem::AppendArt(const ArtMap& art, const std::string& prefix)
 {
   for (const auto& i : art)
     SetArt(prefix.empty() ? i.first : prefix + '.' + i.first, i.second);
 }
 
-std::string CGUIListItem::GetArt(const std::string &type) const
+std::string CGUIListItem::GetArt(const std::string& type) const
 {
   ArtMap::const_iterator i = m_art.find(type);
   if (i != m_art.end())
@@ -143,19 +143,19 @@ std::string CGUIListItem::GetArt(const std::string &type) const
   return "";
 }
 
-const CGUIListItem::ArtMap &CGUIListItem::GetArt() const
+const CGUIListItem::ArtMap& CGUIListItem::GetArt() const
 {
   return m_art;
 }
 
-bool CGUIListItem::HasArt(const std::string &type) const
+bool CGUIListItem::HasArt(const std::string& type) const
 {
   return !GetArt(type).empty();
 }
 
 void CGUIListItem::SetOverlayImage(GUIIconOverlay icon, bool bOnOff)
 {
-  GUIIconOverlay newIcon = (bOnOff) ? GUIIconOverlay((int)(icon)+1) : icon;
+  GUIIconOverlay newIcon = (bOnOff) ? GUIIconOverlay((int)(icon) + 1) : icon;
   if (m_overlayIcon == newIcon)
     return;
   m_overlayIcon = newIcon;
@@ -198,9 +198,10 @@ bool CGUIListItem::IsSelected() const
   return m_bSelected;
 }
 
-CGUIListItem& CGUIListItem::operator =(const CGUIListItem& item)
+CGUIListItem& CGUIListItem::operator=(const CGUIListItem& item)
 {
-  if (&item == this) return * this;
+  if (&item == this)
+    return *this;
   m_strLabel2 = item.m_strLabel2;
   m_strLabel = item.m_strLabel;
   m_sortLabel = item.m_sortLabel;
@@ -215,7 +216,7 @@ CGUIListItem& CGUIListItem::operator =(const CGUIListItem& item)
   return *this;
 }
 
-void CGUIListItem::Archive(CArchive &ar)
+void CGUIListItem::Archive(CArchive& ar)
 {
   if (ar.IsStoring())
   {
@@ -285,7 +286,7 @@ void CGUIListItem::Archive(CArchive &ar)
     SetInvalid();
   }
 }
-void CGUIListItem::Serialize(CVariant &value)
+void CGUIListItem::Serialize(CVariant& value)
 {
   value["isFolder"] = m_bIsFolder;
   value["strLabel"] = m_strLabel;
@@ -327,7 +328,7 @@ void CGUIListItem::SetLayout(CGUIListItemLayoutPtr layout)
   m_layout = std::move(layout);
 }
 
-CGUIListItemLayout *CGUIListItem::GetLayout()
+CGUIListItemLayout* CGUIListItem::GetLayout()
 {
   return m_layout.get();
 }
@@ -337,18 +338,20 @@ void CGUIListItem::SetFocusedLayout(CGUIListItemLayoutPtr layout)
   m_focusedLayout = std::move(layout);
 }
 
-CGUIListItemLayout *CGUIListItem::GetFocusedLayout()
+CGUIListItemLayout* CGUIListItem::GetFocusedLayout()
 {
   return m_focusedLayout.get();
 }
 
 void CGUIListItem::SetInvalid()
 {
-  if (m_layout) m_layout->SetInvalid();
-  if (m_focusedLayout) m_focusedLayout->SetInvalid();
+  if (m_layout)
+    m_layout->SetInvalid();
+  if (m_focusedLayout)
+    m_focusedLayout->SetInvalid();
 }
 
-void CGUIListItem::SetProperty(const std::string &strKey, const CVariant &value)
+void CGUIListItem::SetProperty(const std::string& strKey, const CVariant& value)
 {
   PropertyMap::iterator iter = m_mapProperties.find(strKey);
   if (iter == m_mapProperties.end())
@@ -363,7 +366,7 @@ void CGUIListItem::SetProperty(const std::string &strKey, const CVariant &value)
   }
 }
 
-const CVariant &CGUIListItem::GetProperty(const std::string &strKey) const
+const CVariant& CGUIListItem::GetProperty(const std::string& strKey) const
 {
   PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
   static CVariant nullVariant = CVariant(CVariant::VariantTypeNull);
@@ -374,7 +377,7 @@ const CVariant &CGUIListItem::GetProperty(const std::string &strKey) const
   return iter->second;
 }
 
-bool CGUIListItem::HasProperty(const std::string &strKey) const
+bool CGUIListItem::HasProperty(const std::string& strKey) const
 {
   PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
   if (iter == m_mapProperties.end())
@@ -383,7 +386,7 @@ bool CGUIListItem::HasProperty(const std::string &strKey) const
   return true;
 }
 
-void CGUIListItem::ClearProperty(const std::string &strKey)
+void CGUIListItem::ClearProperty(const std::string& strKey)
 {
   PropertyMap::iterator iter = m_mapProperties.find(strKey);
   if (iter != m_mapProperties.end())
@@ -402,21 +405,21 @@ void CGUIListItem::ClearProperties()
   }
 }
 
-void CGUIListItem::IncrementProperty(const std::string &strKey, int nVal)
+void CGUIListItem::IncrementProperty(const std::string& strKey, int nVal)
 {
   int64_t i = GetProperty(strKey).asInteger();
   i += nVal;
   SetProperty(strKey, i);
 }
 
-void CGUIListItem::IncrementProperty(const std::string &strKey, double dVal)
+void CGUIListItem::IncrementProperty(const std::string& strKey, double dVal)
 {
   double d = GetProperty(strKey).asDouble();
   d += dVal;
   SetProperty(strKey, d);
 }
 
-void CGUIListItem::AppendProperties(const CGUIListItem &item)
+void CGUIListItem::AppendProperties(const CGUIListItem& item)
 {
   for (const auto& i : item.m_mapProperties)
     SetProperty(i.first, i.second);

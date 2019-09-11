@@ -18,7 +18,10 @@
 class PLT_MediaController;
 class CGUIDialogBusy;
 
-namespace XbmcThreads { class EndTime; }
+namespace XbmcThreads
+{
+class EndTime;
+}
 
 
 namespace UPNP
@@ -26,15 +29,14 @@ namespace UPNP
 
 class CUPnPPlayerController;
 
-class CUPnPPlayer
-  : public IPlayer, public IRenderLoop
+class CUPnPPlayer : public IPlayer, public IRenderLoop
 {
 public:
   CUPnPPlayer(IPlayerCallback& callback, const char* uuid);
   ~CUPnPPlayer() override;
 
   bool OpenFile(const CFileItem& file, const CPlayerOptions& options) override;
-  bool QueueNextFile(const CFileItem &file) override;
+  bool QueueNextFile(const CFileItem& file) override;
   bool CloseFile(bool reopen = false) override;
   bool IsPlaying() const override;
   void Pause() override;
@@ -46,7 +48,7 @@ public:
 
   int GetChapterCount() override { return 0; }
   int GetChapter() override { return -1; }
-  void GetChapterName(std::string& strChapterName, int chapterIdx = -1) override { }
+  void GetChapterName(std::string& strChapterName, int chapterIdx = -1) override {}
   int SeekChapter(int iChapter) override { return -1; }
 
   void SeekTime(int64_t iTime = 0) override;
@@ -55,11 +57,14 @@ public:
   bool IsCaching() const override { return false; }
   int GetCacheLevel() const override { return -1; }
   void DoAudioWork() override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
   void FrameMove() override;
 
-  int PlayFile(const CFileItem& file, const CPlayerOptions& options, CGUIDialogBusy*& dialog, XbmcThreads::EndTime& timeout);
+  int PlayFile(const CFileItem& file,
+               const CPlayerOptions& options,
+               CGUIDialogBusy*& dialog,
+               XbmcThreads::EndTime& timeout);
 
 private:
   bool IsPaused() const;

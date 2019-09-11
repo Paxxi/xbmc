@@ -46,6 +46,7 @@ private:
     int swscale;
   } ScalingAlgorithm;
 
-  typedef std::map<CPictureScalingAlgorithm::Algorithm, CPictureScalingAlgorithm::ScalingAlgorithm> AlgorithmMap;
+  typedef std::map<CPictureScalingAlgorithm::Algorithm, CPictureScalingAlgorithm::ScalingAlgorithm>
+      AlgorithmMap;
   static AlgorithmMap m_algorithms;
 };

@@ -33,15 +33,19 @@ public:
   void Cleanup() override;
 
 private:
-  void HandlePresentation(timespec tv, std::uint32_t refresh, std::uint32_t syncOutputID, float syncOutputRefreshRate, std::uint64_t msc);
+  void HandlePresentation(timespec tv,
+                          std::uint32_t refresh,
+                          std::uint32_t syncOutputID,
+                          float syncOutputRefreshRate,
+                          std::uint64_t msc);
 
   CEvent m_stopEvent;
   CSignalRegistration m_presentationHandler;
   std::uint64_t m_lastMsc{};
   std::uint32_t m_syncOutputID{};
-  CWinSystemWayland &m_winSystem;
+  CWinSystemWayland& m_winSystem;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

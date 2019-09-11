@@ -15,14 +15,14 @@
 class CGLESShader : public Shaders::CGLSLShaderProgram
 {
 public:
-  CGLESShader( const char *shader, std::string prefix);
-  CGLESShader(const char *vshader, const char *fshader, std::string prefix);
+  CGLESShader(const char* shader, std::string prefix);
+  CGLESShader(const char* vshader, const char* fshader, std::string prefix);
   void OnCompiledAndLinked();
   bool OnEnabled();
   void Free();
 
-  GLint GetPosLoc()   { return m_hPos;   }
-  GLint GetColLoc()   { return m_hCol;   }
+  GLint GetPosLoc() { return m_hPos; }
+  GLint GetColLoc() { return m_hCol; }
   GLint GetCord0Loc() { return m_hCord0; }
   GLint GetCord1Loc() { return m_hCord1; }
   GLint GetUniColLoc() { return m_hUniCol; }
@@ -54,8 +54,8 @@ protected:
   GLint m_hContrast = 0;
   GLint m_hBrightness = 0;
 
-  const GLfloat *m_proj;
-  const GLfloat *m_model;
+  const GLfloat* m_proj;
+  const GLfloat* m_model;
 
   bool m_clipPossible;
   GLfloat m_clipXFactor;

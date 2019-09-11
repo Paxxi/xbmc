@@ -7,11 +7,13 @@
  */
 
 #include "DVDDemuxUtils.h"
-#include "cores/VideoPlayer/Interface/Addon/DemuxCrypto.h"
-#include "utils/log.h"
-#include "utils/MemUtils.h"
 
-extern "C" {
+#include "cores/VideoPlayer/Interface/Addon/DemuxCrypto.h"
+#include "utils/MemUtils.h"
+#include "utils/log.h"
+
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 }
 
@@ -48,7 +50,8 @@ DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(int iDataSize)
      * Note, if the first 23 bits of the additional bytes are not 0 then damaged
      * MPEG bitstreams could cause overread and segfault
      */
-    pPacket->pData = static_cast<uint8_t*>(KODI::MEMORY::AlignedMalloc(iDataSize + AV_INPUT_BUFFER_PADDING_SIZE, 16));
+    pPacket->pData = static_cast<uint8_t*>(
+        KODI::MEMORY::AlignedMalloc(iDataSize + AV_INPUT_BUFFER_PADDING_SIZE, 16));
     if (!pPacket->pData)
     {
       FreeDemuxPacket(pPacket);
@@ -62,15 +65,17 @@ DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(int iDataSize)
   return pPacket;
 }
 
-DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(unsigned int iDataSize, unsigned int encryptedSubsampleCount)
+DemuxPacket* CDVDDemuxUtils::AllocateDemuxPacket(unsigned int iDataSize,
+                                                 unsigned int encryptedSubsampleCount)
 {
-  DemuxPacket *ret(AllocateDemuxPacket(iDataSize));
+  DemuxPacket* ret(AllocateDemuxPacket(iDataSize));
   if (ret && encryptedSubsampleCount > 0)
-    ret->cryptoInfo = std::shared_ptr<DemuxCryptoInfo>(new DemuxCryptoInfo(encryptedSubsampleCount));
+    ret->cryptoInfo =
+        std::shared_ptr<DemuxCryptoInfo>(new DemuxCryptoInfo(encryptedSubsampleCount));
   return ret;
 }
 
-void CDVDDemuxUtils::StoreSideData(DemuxPacket *pkt, AVPacket *src)
+void CDVDDemuxUtils::StoreSideData(DemuxPacket* pkt, AVPacket* src)
 {
   AVPacket avPkt;
   av_init_packet(&avPkt);

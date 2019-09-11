@@ -36,12 +36,13 @@ using namespace SOCKETS;
 /* CEventServer                                                         */
 /************************************************************************/
 CEventServer* CEventServer::m_pInstance = NULL;
-CEventServer::CEventServer() : CThread("EventServer")
+CEventServer::CEventServer()
+  : CThread("EventServer")
 {
-  m_pSocket       = NULL;
+  m_pSocket = NULL;
   m_pPacketBuffer = NULL;
-  m_bStop         = false;
-  m_bRunning      = false;
+  m_bStop = false;
+  m_bRunning = false;
   m_bRefreshSettings = false;
 
   // default timeout in ms for receiving a single packet
@@ -53,7 +54,7 @@ void CEventServer::RemoveInstance()
   if (m_pInstance)
   {
     delete m_pInstance;
-    m_pInstance=NULL;
+    m_pInstance = NULL;
   }
 }
 
@@ -118,7 +119,7 @@ void CEventServer::Cleanup()
       delete iter->second;
     }
     m_clients.erase(iter);
-    iter =  m_clients.begin();
+    iter = m_clients.begin();
   }
 }
 
@@ -130,7 +131,7 @@ int CEventServer::GetNumberOfClients()
 
 void CEventServer::Process()
 {
-  while(!m_bStop)
+  while (!m_bStop)
   {
     Run();
     if (!m_bStop)
@@ -154,7 +155,7 @@ void CEventServer::Run()
     CLog::Log(LOGERROR, "ES: Could not create socket, aborting!");
     return;
   }
-  m_pPacketBuffer = (unsigned char *)malloc(PACKET_SIZE);
+  m_pPacketBuffer = (unsigned char*)malloc(PACKET_SIZE);
 
   if (!m_pPacketBuffer)
   {
@@ -170,19 +171,17 @@ void CEventServer::Run()
     CLog::Log(LOGERROR, "ES: Invalid port range specified %d, defaulting to 10", port_range);
     port_range = 10;
   }
-  if (!m_pSocket->Bind(!settings->GetBool(CSettings::SETTING_SERVICES_ESALLINTERFACES), m_iPort, port_range))
+  if (!m_pSocket->Bind(!settings->GetBool(CSettings::SETTING_SERVICES_ESALLINTERFACES), m_iPort,
+                       port_range))
   {
     CLog::Log(LOGERROR, "ES: Could not listen on port %d", m_iPort);
     return;
   }
 
   // publish service
-  std::vector<std::pair<std::string, std::string> > txt;
-  CZeroconf::GetInstance()->PublishService("servers.eventserver",
-                               "_xbmc-events._udp",
-                               CSysInfo::GetDeviceName(),
-                               m_iPort,
-                               txt);
+  std::vector<std::pair<std::string, std::string>> txt;
+  CZeroconf::GetInstance()->PublishService("servers.eventserver", "_xbmc-events._udp",
+                                           CSysInfo::GetDeviceName(), m_iPort, txt);
 
   // add our socket to the 'select' listener
   listener.AddSocket(m_pSocket);
@@ -197,7 +196,7 @@ void CEventServer::Run()
       if (listener.Listen(m_iListenTimeout))
       {
         CAddress addr;
-        if ((packetSize = m_pSocket->Read(addr, PACKET_SIZE, (void *)m_pPacketBuffer)) > -1)
+        if ((packetSize = m_pSocket->Read(addr, PACKET_SIZE, (void*)m_pPacketBuffer)) > -1)
         {
           ProcessPacket(addr, packetSize);
         }
@@ -228,7 +227,7 @@ void CEventServer::ProcessPacket(CAddress& addr, int pSize)
 {
   // check packet validity
   CEventPacket* packet = new CEventPacket(pSize, m_pPacketBuffer);
-  if(packet == NULL)
+  if (packet == NULL)
   {
     CLog::Log(LOGERROR, "ES: Out of memory, cannot accept packet");
     return;
@@ -252,9 +251,9 @@ void CEventServer::ProcessPacket(CAddress& addr, int pSize)
   // first check if we have a client for this address
   std::map<unsigned long, CEventClient*>::iterator iter = m_clients.find(clientToken);
 
-  if ( iter == m_clients.end() )
+  if (iter == m_clients.end())
   {
-    if ( m_clients.size() >= (unsigned int)m_iMaxClients)
+    if (m_clients.size() >= (unsigned int)m_iMaxClients)
     {
       CLog::Log(LOGWARNING, "ES: Cannot accept any more clients, maximum client count reached");
       delete packet;
@@ -262,8 +261,8 @@ void CEventServer::ProcessPacket(CAddress& addr, int pSize)
     }
 
     // new client
-    CEventClient* client = new CEventClient ( addr );
-    if (client==NULL)
+    CEventClient* client = new CEventClient(addr);
+    if (client == NULL)
     {
       CLog::Log(LOGERROR, "ES: Out of memory, cannot accept new client connection");
       delete packet;
@@ -280,9 +279,9 @@ void CEventServer::RefreshClients()
   CSingleLock lock(m_critSection);
   std::map<unsigned long, CEventClient*>::iterator iter = m_clients.begin();
 
-  while ( iter != m_clients.end() )
+  while (iter != m_clients.end())
   {
-    if (! (iter->second->Alive()))
+    if (!(iter->second->Alive()))
     {
       CLog::Log(LOGNOTICE, "ES: Client %s from %s timed out", iter->second->Name().c_str(),
                 iter->second->Address().Address());
@@ -327,24 +326,24 @@ bool CEventServer::ExecuteNextAction()
     {
       // Leave critical section before processing action
       lock.Leave();
-      switch(actionEvent.actionType)
+      switch (actionEvent.actionType)
       {
       case AT_EXEC_BUILTIN:
         CBuiltins::GetInstance().Execute(actionEvent.actionName);
         break;
 
       case AT_BUTTON:
-        {
-          unsigned int actionID;
-          CActionTranslator::TranslateString(actionEvent.actionName, actionID);
-          CAction action(actionID, 1.0f, 0.0f, actionEvent.actionName);
-          CGUIComponent* gui = CServiceBroker::GetGUI();
-          if (gui)
-            gui->GetAudioManager().PlayActionSound(action);
+      {
+        unsigned int actionID;
+        CActionTranslator::TranslateString(actionEvent.actionName, actionID);
+        CAction action(actionID, 1.0f, 0.0f, actionEvent.actionName);
+        CGUIComponent* gui = CServiceBroker::GetGUI();
+        if (gui)
+          gui->GetAudioManager().PlayActionSound(action);
 
-          g_application.OnAction(action);
-        }
-        break;
+        g_application.OnAction(action);
+      }
+      break;
       }
       return true;
     }
@@ -354,7 +353,10 @@ bool CEventServer::ExecuteNextAction()
   return false;
 }
 
-unsigned int CEventServer::GetButtonCode(std::string& strMapName, bool& isAxis, float& fAmount, bool &isJoystick)
+unsigned int CEventServer::GetButtonCode(std::string& strMapName,
+                                         bool& isAxis,
+                                         float& fAmount,
+                                         bool& isJoystick)
 {
   CSingleLock lock(m_critSection);
   std::map<unsigned long, CEventClient*>::iterator iter = m_clients.begin();
@@ -370,7 +372,7 @@ unsigned int CEventServer::GetButtonCode(std::string& strMapName, bool& isAxis, 
   return bcode;
 }
 
-bool CEventServer::GetMousePos(float &x, float &y)
+bool CEventServer::GetMousePos(float& x, float& y)
 {
   CSingleLock lock(m_critSection);
   std::map<unsigned long, CEventClient*>::iterator iter = m_clients.begin();

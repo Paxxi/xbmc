@@ -21,7 +21,7 @@
 
 namespace winrt
 {
-  using namespace Windows::Foundation;
+using namespace Windows::Foundation;
 }
 using namespace winrt::Windows::Media;
 using namespace winrt::Windows::System;
@@ -40,7 +40,7 @@ CRemoteControlXbox::~CRemoteControlXbox()
     Disconnect();
 }
 
-bool CRemoteControlXbox::IsRemoteDevice(const std::wstring &deviceId) const
+bool CRemoteControlXbox::IsRemoteDevice(const std::wstring& deviceId) const
 {
   return deviceId.compare(XBOX_REMOTE_DEVICE_ID) == 0;
 }
@@ -65,25 +65,26 @@ void CRemoteControlXbox::Disconnect()
 void CRemoteControlXbox::Initialize()
 {
   auto dispatcher = CoreWindow::GetForCurrentThread().Dispatcher();
-  m_token = dispatcher.AcceleratorKeyActivated([this](const CoreDispatcher& sender, const AcceleratorKeyEventArgs& args)
-  {
-    if (IsRemoteDevice(args.DeviceId().c_str()))
-      HandleAcceleratorKey(sender, args);
-  });
+  m_token = dispatcher.AcceleratorKeyActivated(
+      [this](const CoreDispatcher& sender, const AcceleratorKeyEventArgs& args) {
+        if (IsRemoteDevice(args.DeviceId().c_str()))
+          HandleAcceleratorKey(sender, args);
+      });
 
   auto smtc = SystemMediaTransportControls::GetForCurrentView();
   if (smtc)
   {
-    m_mediatoken = smtc.ButtonPressed([this](auto&&, const SystemMediaTransportControlsButtonPressedEventArgs& args)
-    {
-      HandleMediaButton(args);
-    });
+    m_mediatoken = smtc.ButtonPressed(
+        [this](auto&&, const SystemMediaTransportControlsButtonPressedEventArgs& args) {
+          HandleMediaButton(args);
+        });
     smtc.IsEnabled(true);
   }
   m_bInitialized = true;
 }
 
-void CRemoteControlXbox::HandleAcceleratorKey(const CoreDispatcher& sender, const AcceleratorKeyEventArgs& args)
+void CRemoteControlXbox::HandleAcceleratorKey(const CoreDispatcher& sender,
+                                              const AcceleratorKeyEventArgs& args)
 {
   auto button = TranslateVirtualKey(args.VirtualKey());
   if (!button)
@@ -110,7 +111,8 @@ void CRemoteControlXbox::HandleAcceleratorKey(const CoreDispatcher& sender, cons
     else
     {
       m_repeatCount++;
-      if (m_repeatCount > CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_remoteDelay)
+      if (m_repeatCount >
+          CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_remoteDelay)
       {
         newEvent.keybutton.holdtime = XbmcThreads::SystemClockMillis() - m_firstClickTime;
         if (appPort)
@@ -136,7 +138,8 @@ void CRemoteControlXbox::HandleAcceleratorKey(const CoreDispatcher& sender, cons
   args.Handled(true);
 }
 
-void CRemoteControlXbox::HandleMediaButton(const SystemMediaTransportControlsButtonPressedEventArgs& args)
+void CRemoteControlXbox::HandleMediaButton(
+    const SystemMediaTransportControlsButtonPressedEventArgs& args)
 {
   XBMC_Event newEvent;
   newEvent.type = XBMC_BUTTON;

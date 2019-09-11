@@ -14,50 +14,51 @@
 
 namespace XBMCAddon
 {
-  namespace xbmcwsgi
-  {
-    WsgiErrorStream::WsgiErrorStream()
-      : m_request(NULL)
-    { }
+namespace xbmcwsgi
+{
+WsgiErrorStream::WsgiErrorStream()
+  : m_request(NULL)
+{
+}
 
-    WsgiErrorStream::~WsgiErrorStream()
-    {
-      m_request = NULL;
-    }
+WsgiErrorStream::~WsgiErrorStream()
+{
+  m_request = NULL;
+}
 
-    void WsgiErrorStream::write(const String& str)
-    {
-      if (str.empty())
-        return;
+void WsgiErrorStream::write(const String& str)
+{
+  if (str.empty())
+    return;
 
-      String msg = str;
-      // remove a trailing \n
-      if (msg.at(msg.size() - 1) == '\n')
-        msg.erase(msg.size() - 1);
+  String msg = str;
+  // remove a trailing \n
+  if (msg.at(msg.size() - 1) == '\n')
+    msg.erase(msg.size() - 1);
 
-      if (m_request != NULL)
-        CLog::Log(LOGERROR, "WSGI [%s]: %s", m_request->url.c_str(), msg.c_str());
-      else
-        CLog::Log(LOGERROR, "WSGI: %s", msg.c_str());
-    }
+  if (m_request != NULL)
+    CLog::Log(LOGERROR, "WSGI [%s]: %s", m_request->url.c_str(), msg.c_str());
+  else
+    CLog::Log(LOGERROR, "WSGI: %s", msg.c_str());
+}
 
-    void WsgiErrorStream::writelines(const std::vector<String>& seq)
-    {
-      if (seq.empty())
-        return;
+void WsgiErrorStream::writelines(const std::vector<String>& seq)
+{
+  if (seq.empty())
+    return;
 
-      String msg = StringUtils::Join(seq, "");
-      write(msg);
-    }
+  String msg = StringUtils::Join(seq, "");
+  write(msg);
+}
 
 #ifndef SWIG
-    void WsgiErrorStream::SetRequest(HTTPPythonRequest* request)
-    {
-      if (m_request != NULL)
-        return;
+void WsgiErrorStream::SetRequest(HTTPPythonRequest* request)
+{
+  if (m_request != NULL)
+    return;
 
-      m_request = request;
-    }
-#endif
-  }
+  m_request = request;
 }
+#endif
+} // namespace xbmcwsgi
+} // namespace XBMCAddon

@@ -27,11 +27,11 @@ CMusicDatabaseDirectory::CMusicDatabaseDirectory(void) = default;
 
 CMusicDatabaseDirectory::~CMusicDatabaseDirectory(void) = default;
 
-bool CMusicDatabaseDirectory::GetDirectory(const CURL& url, CFileItemList &items)
+bool CMusicDatabaseDirectory::GetDirectory(const CURL& url, CFileItemList& items)
 {
   std::string path = CLegacyPathTranslation::TranslateMusicDbPath(url);
   items.SetPath(path);
-  items.m_dwSize = -1;  // No size
+  items.m_dwSize = -1; // No size
 
   std::unique_ptr<CDirectoryNode> pNode(CDirectoryNode::ParseURL(path));
 
@@ -39,7 +39,7 @@ bool CMusicDatabaseDirectory::GetDirectory(const CURL& url, CFileItemList &items
     return false;
 
   bool bResult = pNode->GetChilds(items);
-  for (int i=0;i<items.Size();++i)
+  for (int i = 0; i < items.Size(); ++i)
   {
     CFileItemPtr item = items[i];
     if (item->m_bIsFolder && !item->HasArt("icon") && !item->HasArt("thumb"))
@@ -84,7 +84,7 @@ NODE_TYPE CMusicDatabaseDirectory::GetDirectoryParentType(const std::string& str
   if (!pNode)
     return NODE_TYPE_NONE;
 
-  CDirectoryNode* pParentNode=pNode->GetParent();
+  CDirectoryNode* pParentNode = pNode->GetParent();
 
   if (!pParentNode)
     return NODE_TYPE_NONE;
@@ -94,8 +94,8 @@ NODE_TYPE CMusicDatabaseDirectory::GetDirectoryParentType(const std::string& str
 
 bool CMusicDatabaseDirectory::IsArtistDir(const std::string& strDirectory)
 {
-  NODE_TYPE node=GetDirectoryType(strDirectory);
-  return (node==NODE_TYPE_ARTIST);
+  NODE_TYPE node = GetDirectoryType(strDirectory);
+  return (node == NODE_TYPE_ARTIST);
 }
 
 void CMusicDatabaseDirectory::ClearDirectoryCache(const std::string& strDirectory)
@@ -201,7 +201,7 @@ bool CMusicDatabaseDirectory::GetLabel(const std::string& strDirectory, std::str
     case NODE_TYPE_YEAR:
     case NODE_TYPE_YEAR_ALBUM:
     case NODE_TYPE_YEAR_SONG:
-      strLabel = g_localizeStrings.Get(652);  // Years
+      strLabel = g_localizeStrings.Get(652); // Years
       break;
     case NODE_TYPE_ALBUM_COMPILATIONS:
     case NODE_TYPE_ALBUM_COMPILATIONS_SONGS:
@@ -218,17 +218,25 @@ bool CMusicDatabaseDirectory::GetLabel(const std::string& strDirectory, std::str
   return true;
 }
 
-bool CMusicDatabaseDirectory::ContainsSongs(const std::string &path)
+bool CMusicDatabaseDirectory::ContainsSongs(const std::string& path)
 {
   MUSICDATABASEDIRECTORY::NODE_TYPE type = GetDirectoryChildType(path);
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SINGLES) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_COMPILATIONS_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_TOP100_SONGS) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG_TOP100) return true;
-  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_YEAR_SONG) return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG)
+    return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SINGLES)
+    return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS)
+    return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS)
+    return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_COMPILATIONS_SONGS)
+    return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_TOP100_SONGS)
+    return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG_TOP100)
+    return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_YEAR_SONG)
+    return true;
   return false;
 }
 
@@ -255,20 +263,20 @@ bool CMusicDatabaseDirectory::CanCache(const std::string& strPath)
   return pNode->CanCache();
 }
 
-std::string CMusicDatabaseDirectory::GetIcon(const std::string &strDirectory)
+std::string CMusicDatabaseDirectory::GetIcon(const std::string& strDirectory)
 {
   switch (GetDirectoryChildType(strDirectory))
   {
   case NODE_TYPE_ARTIST:
-      return "DefaultMusicArtists.png";
+    return "DefaultMusicArtists.png";
   case NODE_TYPE_GENRE:
-      return "DefaultMusicGenres.png";
+    return "DefaultMusicGenres.png";
   case NODE_TYPE_SOURCE:
     return "DefaultMusicSources.png";
   case NODE_TYPE_ROLE:
     return "DefaultMusicRoles.png";
   case NODE_TYPE_TOP100:
-      return "DefaultMusicTop100.png";
+    return "DefaultMusicTop100.png";
   case NODE_TYPE_ALBUM:
   case NODE_TYPE_YEAR_ALBUM:
     return "DefaultMusicAlbums.png";

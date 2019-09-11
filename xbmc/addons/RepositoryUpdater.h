@@ -32,12 +32,12 @@ public:
   /**
    * Check a single repository for updates.
    */
-  void CheckForUpdates(const ADDON::RepositoryPtr& repo, bool showProgress=false);
+  void CheckForUpdates(const ADDON::RepositoryPtr& repo, bool showProgress = false);
 
   /**
    * Check all repositories for updates.
    */
-  bool CheckForUpdates(bool showProgress=false);
+  bool CheckForUpdates(bool showProgress = false);
 
   /**
    * Wait for any pending/in-progress updates to complete.
@@ -59,7 +59,9 @@ public:
 
   void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
 
-  struct RepositoryUpdated { };
+  struct RepositoryUpdated
+  {
+  };
 
   CEventStream<RepositoryUpdated>& Events() { return m_events; }
 
@@ -69,7 +71,7 @@ private:
   CRepositoryUpdater& operator=(const CRepositoryUpdater&) = delete;
   CRepositoryUpdater& operator=(CRepositoryUpdater&&) = delete;
 
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
 
   void OnTimeout() override;
 
@@ -83,4 +85,4 @@ private:
 
   CEventSource<RepositoryUpdated> m_events;
 };
-}
+} // namespace ADDON

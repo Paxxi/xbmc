@@ -19,16 +19,15 @@ CPlatform* CPlatform::CreateInstance()
 
 CPlatformAndroid::CPlatformAndroid()
 {
-
 }
 
 CPlatformAndroid::~CPlatformAndroid()
 {
-
 }
 
 void CPlatformAndroid::Init()
 {
   CPlatformPosix::Init();
-  setenv("SSL_CERT_FILE", CSpecialProtocol::TranslatePath("special://xbmc/system/certs/cacert.pem").c_str(), 1);
+  setenv("SSL_CERT_FILE",
+         CSpecialProtocol::TranslatePath("special://xbmc/system/certs/cacert.pem").c_str(), 1);
 }

@@ -16,7 +16,11 @@
 using namespace JSONRPC;
 using namespace KODI::MESSAGING;
 
-JSONRPC_STATUS CXBMCOperations::GetInfoLabels(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CXBMCOperations::GetInfoLabels(const std::string& method,
+                                              ITransportLayer* transport,
+                                              IClient* client,
+                                              const CVariant& parameterObject,
+                                              CVariant& result)
 {
   std::vector<std::string> info;
 
@@ -31,7 +35,8 @@ JSONRPC_STATUS CXBMCOperations::GetInfoLabels(const std::string &method, ITransp
   if (!info.empty())
   {
     std::vector<std::string> infoLabels;
-    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_INFOLABEL, -1, -1, static_cast<void*>(&infoLabels), "", info);
+    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_INFOLABEL, -1, -1,
+                                                 static_cast<void*>(&infoLabels), "", info);
 
     for (unsigned int i = 0; i < info.size(); i++)
     {
@@ -44,7 +49,11 @@ JSONRPC_STATUS CXBMCOperations::GetInfoLabels(const std::string &method, ITransp
   return OK;
 }
 
-JSONRPC_STATUS CXBMCOperations::GetInfoBooleans(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant &parameterObject, CVariant &result)
+JSONRPC_STATUS CXBMCOperations::GetInfoBooleans(const std::string& method,
+                                                ITransportLayer* transport,
+                                                IClient* client,
+                                                const CVariant& parameterObject,
+                                                CVariant& result)
 {
   std::vector<std::string> info;
 
@@ -58,15 +67,20 @@ JSONRPC_STATUS CXBMCOperations::GetInfoBooleans(const std::string &method, ITran
     // Need to override power management of whats in infomanager since jsonrpc
     // have a security layer aswell.
     if (field == "system.canshutdown")
-      result[parameterObject["booleans"][i].asString()] = (CServiceBroker::GetPowerManager().CanPowerdown() && CanControlPower);
+      result[parameterObject["booleans"][i].asString()] =
+          (CServiceBroker::GetPowerManager().CanPowerdown() && CanControlPower);
     else if (field == "system.canpowerdown")
-      result[parameterObject["booleans"][i].asString()] = (CServiceBroker::GetPowerManager().CanPowerdown() && CanControlPower);
+      result[parameterObject["booleans"][i].asString()] =
+          (CServiceBroker::GetPowerManager().CanPowerdown() && CanControlPower);
     else if (field == "system.cansuspend")
-      result[parameterObject["booleans"][i].asString()] = (CServiceBroker::GetPowerManager().CanSuspend() && CanControlPower);
+      result[parameterObject["booleans"][i].asString()] =
+          (CServiceBroker::GetPowerManager().CanSuspend() && CanControlPower);
     else if (field == "system.canhibernate")
-      result[parameterObject["booleans"][i].asString()] = (CServiceBroker::GetPowerManager().CanHibernate() && CanControlPower);
+      result[parameterObject["booleans"][i].asString()] =
+          (CServiceBroker::GetPowerManager().CanHibernate() && CanControlPower);
     else if (field == "system.canreboot")
-      result[parameterObject["booleans"][i].asString()] = (CServiceBroker::GetPowerManager().CanReboot() && CanControlPower);
+      result[parameterObject["booleans"][i].asString()] =
+          (CServiceBroker::GetPowerManager().CanReboot() && CanControlPower);
     else
       info.push_back(parameterObject["booleans"][i].asString());
   }
@@ -74,7 +88,8 @@ JSONRPC_STATUS CXBMCOperations::GetInfoBooleans(const std::string &method, ITran
   if (!info.empty())
   {
     std::vector<bool> infoLabels;
-    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_INFOBOOL, -1, -1, static_cast<void*>(&infoLabels), "", info);
+    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_INFOBOOL, -1, -1,
+                                                 static_cast<void*>(&infoLabels), "", info);
     for (unsigned int i = 0; i < info.size(); i++)
     {
       if (i >= infoLabels.size())

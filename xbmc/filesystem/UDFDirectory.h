@@ -15,15 +15,13 @@
 
 namespace XFILE
 {
-class CUDFDirectory :
-      public IFileDirectory
+class CUDFDirectory : public IFileDirectory
 {
 public:
   CUDFDirectory(void);
   ~CUDFDirectory(void) override;
-  bool GetDirectory(const CURL& url, CFileItemList &items) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
   bool Exists(const CURL& url) override;
   bool ContainsFiles(const CURL& url) override { return true; }
 };
-}
-
+} // namespace XFILE

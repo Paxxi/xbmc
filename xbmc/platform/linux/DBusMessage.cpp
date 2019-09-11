@@ -11,7 +11,10 @@
 #include "settings/AdvancedSettings.h"
 #include "utils/log.h"
 
-CDBusMessage::CDBusMessage(const char *destination, const char *object, const char *interface, const char *method)
+CDBusMessage::CDBusMessage(const char* destination,
+                           const char* object,
+                           const char* interface,
+                           const char* method)
 {
   m_reply = nullptr;
   m_message.reset(dbus_message_new_method_call(destination, object, interface, method));
@@ -22,11 +25,16 @@ CDBusMessage::CDBusMessage(const char *destination, const char *object, const ch
   }
   m_haveArgs = false;
 
-  CLog::Log(LOGDEBUG, LOGDBUS, "DBus: Creating message to %s on %s with interface %s and method %s\n", destination, object, interface, method);
+  CLog::Log(LOGDEBUG, LOGDBUS,
+            "DBus: Creating message to %s on %s with interface %s and method %s\n", destination,
+            object, interface, method);
 }
 
-CDBusMessage::CDBusMessage(const std::string& destination, const std::string& object, const std::string& interface, const std::string& method)
-: CDBusMessage(destination.c_str(), object.c_str(), interface.c_str(), method.c_str())
+CDBusMessage::CDBusMessage(const std::string& destination,
+                           const std::string& object,
+                           const std::string& interface,
+                           const std::string& method)
+  : CDBusMessage(destination.c_str(), object.c_str(), interface.c_str(), method.c_str())
 {
 }
 
@@ -35,7 +43,7 @@ void DBusMessageDeleter::operator()(DBusMessage* message) const
   dbus_message_unref(message);
 }
 
-void CDBusMessage::AppendObjectPath(const char *object)
+void CDBusMessage::AppendObjectPath(const char* object)
 {
   AppendWithType(DBUS_TYPE_OBJECT_PATH, &object);
 }
@@ -54,7 +62,7 @@ void CDBusMessage::AppendArgument<std::string>(const std::string arg)
   AppendArgument(arg.c_str());
 }
 
-void CDBusMessage::AppendArgument(const char **arrayString, unsigned int length)
+void CDBusMessage::AppendArgument(const char** arrayString, unsigned int length)
 {
   PrepareArgument();
   DBusMessageIter sub;
@@ -86,27 +94,28 @@ void CDBusMessage::AppendWithType(int type, const void* value)
   }
 }
 
-DBusMessageIter * CDBusMessage::GetArgumentIter() {
+DBusMessageIter* CDBusMessage::GetArgumentIter()
+{
   PrepareArgument();
   return &m_args;
 }
 
-DBusMessage *CDBusMessage::SendSystem()
+DBusMessage* CDBusMessage::SendSystem()
 {
   return Send(DBUS_BUS_SYSTEM);
 }
 
-DBusMessage *CDBusMessage::SendSession()
+DBusMessage* CDBusMessage::SendSession()
 {
   return Send(DBUS_BUS_SESSION);
 }
 
-DBusMessage *CDBusMessage::SendSystem(CDBusError& error)
+DBusMessage* CDBusMessage::SendSystem(CDBusError& error)
 {
   return Send(DBUS_BUS_SYSTEM, error);
 }
 
-DBusMessage *CDBusMessage::SendSession(CDBusError& error)
+DBusMessage* CDBusMessage::SendSession(CDBusError& error)
 {
   return Send(DBUS_BUS_SESSION, error);
 }
@@ -121,14 +130,14 @@ bool CDBusMessage::SendAsyncSession()
   return SendAsync(DBUS_BUS_SESSION);
 }
 
-DBusMessage *CDBusMessage::Send(DBusBusType type)
+DBusMessage* CDBusMessage::Send(DBusBusType type)
 {
   CDBusError error;
   CDBusConnection con;
   if (!con.Connect(type))
     return nullptr;
 
-  DBusMessage *returnMessage = Send(con, error);
+  DBusMessage* returnMessage = Send(con, error);
 
   if (error)
     error.Log();
@@ -136,13 +145,13 @@ DBusMessage *CDBusMessage::Send(DBusBusType type)
   return returnMessage;
 }
 
-DBusMessage *CDBusMessage::Send(DBusBusType type, CDBusError& error)
+DBusMessage* CDBusMessage::Send(DBusBusType type, CDBusError& error)
 {
   CDBusConnection con;
   if (!con.Connect(type, error))
     return nullptr;
 
-  DBusMessage *returnMessage = Send(con, error);
+  DBusMessage* returnMessage = Send(con, error);
 
   return returnMessage;
 }
@@ -156,7 +165,7 @@ bool CDBusMessage::SendAsync(DBusBusType type)
   return dbus_connection_send(con, m_message.get(), nullptr);
 }
 
-DBusMessage *CDBusMessage::Send(DBusConnection *con, CDBusError& error)
+DBusMessage* CDBusMessage::Send(DBusConnection* con, CDBusError& error)
 {
   m_reply.reset(dbus_connection_send_with_reply_and_block(con, m_message.get(), -1, error));
   return m_reply.get();

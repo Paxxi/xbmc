@@ -65,8 +65,12 @@ public:
   virtual void AckConfigure(std::uint32_t serial) = 0;
 
   virtual void StartMove(wayland::seat_t const& seat, std::uint32_t serial) = 0;
-  virtual void StartResize(wayland::seat_t const& seat, std::uint32_t serial, wayland::shell_surface_resize edge) = 0;
-  virtual void ShowShellContextMenu(wayland::seat_t const& seat, std::uint32_t serial, CPointInt position) = 0;
+  virtual void StartResize(wayland::seat_t const& seat,
+                           std::uint32_t serial,
+                           wayland::shell_surface_resize edge) = 0;
+  virtual void ShowShellContextMenu(wayland::seat_t const& seat,
+                                    std::uint32_t serial,
+                                    CPointInt position) = 0;
 
   virtual ~IShellSurface() = default;
 
@@ -81,12 +85,14 @@ private:
 class IShellSurfaceHandler
 {
 public:
-  virtual void OnConfigure(std::uint32_t serial, CSizeInt size, IShellSurface::StateBitset state) = 0;
+  virtual void OnConfigure(std::uint32_t serial,
+                           CSizeInt size,
+                           IShellSurface::StateBitset state) = 0;
   virtual void OnClose() = 0;
 
   virtual ~IShellSurfaceHandler() = default;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

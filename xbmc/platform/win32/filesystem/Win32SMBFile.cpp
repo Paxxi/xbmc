@@ -23,8 +23,8 @@ using namespace XFILE;
 static bool worthTryToConnect(const DWORD lastErr)
 {
   return lastErr != ERROR_INVALID_DATA && // used to indicate internal errors
-         lastErr != ERROR_FILE_NOT_FOUND      && lastErr != ERROR_BAD_NET_NAME  &&
-         lastErr != ERROR_NO_NET_OR_BAD_PATH  && lastErr != ERROR_NO_NETWORK    &&
+         lastErr != ERROR_FILE_NOT_FOUND && lastErr != ERROR_BAD_NET_NAME &&
+         lastErr != ERROR_NO_NET_OR_BAD_PATH && lastErr != ERROR_NO_NETWORK &&
          lastErr != ERROR_BAD_NETPATH;
 }
 
@@ -36,11 +36,14 @@ bool CWin32SMBFile::ConnectAndAuthenticate(const CURL& url)
   return smbDir.ConnectAndAuthenticate(authUrl, false);
 }
 
-CWin32SMBFile::CWin32SMBFile() : CWin32File(true)
-{ }
+CWin32SMBFile::CWin32SMBFile()
+  : CWin32File(true)
+{
+}
 
 CWin32SMBFile::~CWin32SMBFile()
-{ /* cleanup by CWin32File destructor */ }
+{ /* cleanup by CWin32File destructor */
+}
 
 bool CWin32SMBFile::Open(const CURL& url)
 {
@@ -48,7 +51,8 @@ bool CWin32SMBFile::Open(const CURL& url)
   if (CWin32File::Open(url))
     return true;
 
-  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(url) && CWin32File::Open(url);
+  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(url) &&
+         CWin32File::Open(url);
 }
 
 bool CWin32SMBFile::OpenForWrite(const CURL& url, bool bOverWrite /*= false*/)
@@ -57,7 +61,8 @@ bool CWin32SMBFile::OpenForWrite(const CURL& url, bool bOverWrite /*= false*/)
   if (CWin32File::OpenForWrite(url, bOverWrite))
     return true;
 
-  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(url) && CWin32File::OpenForWrite(url, bOverWrite);
+  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(url) &&
+         CWin32File::OpenForWrite(url, bOverWrite);
 }
 
 bool CWin32SMBFile::Delete(const CURL& url)
@@ -67,7 +72,8 @@ bool CWin32SMBFile::Delete(const CURL& url)
   if (CWin32File::Delete(url))
     return true;
 
-  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(url) && CWin32File::Delete(url);
+  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(url) &&
+         CWin32File::Delete(url);
 }
 
 bool CWin32SMBFile::Rename(const CURL& urlCurrentName, const CURL& urlNewName)
@@ -78,8 +84,8 @@ bool CWin32SMBFile::Rename(const CURL& urlCurrentName, const CURL& urlNewName)
   if (CWin32File::Rename(urlCurrentName, urlNewName))
     return true;
 
-  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(urlCurrentName) && ConnectAndAuthenticate(urlNewName) &&
-    CWin32File::Rename(urlCurrentName, urlNewName);
+  return worthTryToConnect(m_lastSMBFileErr) && ConnectAndAuthenticate(urlCurrentName) &&
+         ConnectAndAuthenticate(urlNewName) && CWin32File::Rename(urlCurrentName, urlNewName);
 }
 
 bool CWin32SMBFile::SetHidden(const CURL& url, bool hidden)

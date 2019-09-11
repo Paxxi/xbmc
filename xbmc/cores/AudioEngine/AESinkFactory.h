@@ -27,8 +27,8 @@ struct AESinkInfo
   AEDeviceInfoList m_deviceInfoList;
 };
 
-typedef IAESink* (*CreateSink)(std::string &device, AEAudioFormat &desiredFormat);
-typedef void (*Enumerate)(AEDeviceInfoList &list, bool force);
+typedef IAESink* (*CreateSink)(std::string& device, AEAudioFormat& desiredFormat);
+typedef void (*Enumerate)(AEDeviceInfoList& list, bool force);
 typedef void (*Cleanup)();
 
 struct AESinkRegEntry
@@ -46,13 +46,13 @@ public:
   static void ClearSinks();
   static bool HasSinks();
 
-  static void ParseDevice(std::string &device, std::string &driver);
-  static IAESink *Create(std::string &device, AEAudioFormat &desiredFormat);
-  static void EnumerateEx(std::vector<AESinkInfo> &list, bool force);
+  static void ParseDevice(std::string& device, std::string& driver);
+  static IAESink* Create(std::string& device, AEAudioFormat& desiredFormat);
+  static void EnumerateEx(std::vector<AESinkInfo>& list, bool force);
   static void Cleanup();
 
 protected:
   static std::map<std::string, AESinkRegEntry> m_AESinkRegEntry;
 };
 
-}
+} // namespace AE

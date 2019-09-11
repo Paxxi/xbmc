@@ -126,10 +126,7 @@ class TestRegExpLog : public testing::Test
 {
 protected:
   TestRegExpLog() = default;
-  ~TestRegExpLog() override
-  {
-    CLog::Close();
-  }
+  ~TestRegExpLog() override { CLog::Close(); }
 };
 
 TEST_F(TestRegExpLog, DumpOvector)

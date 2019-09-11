@@ -21,7 +21,8 @@ CFileItemListModification::CFileItemListModification()
 
 CFileItemListModification::~CFileItemListModification()
 {
-  for (std::set<IFileItemListModifier*>::const_iterator modifier = m_modifiers.begin(); modifier != m_modifiers.end(); ++modifier)
+  for (std::set<IFileItemListModifier*>::const_iterator modifier = m_modifiers.begin();
+       modifier != m_modifiers.end(); ++modifier)
     delete *modifier;
 
   m_modifiers.clear();
@@ -33,9 +34,10 @@ CFileItemListModification& CFileItemListModification::GetInstance()
   return instance;
 }
 
-bool CFileItemListModification::CanModify(const CFileItemList &items) const
+bool CFileItemListModification::CanModify(const CFileItemList& items) const
 {
-  for (std::set<IFileItemListModifier*>::const_iterator modifier = m_modifiers.begin(); modifier != m_modifiers.end(); ++modifier)
+  for (std::set<IFileItemListModifier*>::const_iterator modifier = m_modifiers.begin();
+       modifier != m_modifiers.end(); ++modifier)
   {
     if ((*modifier)->CanModify(items))
       return true;
@@ -44,10 +46,11 @@ bool CFileItemListModification::CanModify(const CFileItemList &items) const
   return false;
 }
 
-bool CFileItemListModification::Modify(CFileItemList &items) const
+bool CFileItemListModification::Modify(CFileItemList& items) const
 {
   bool result = false;
-  for (std::set<IFileItemListModifier*>::const_iterator modifier = m_modifiers.begin(); modifier != m_modifiers.end(); ++modifier)
+  for (std::set<IFileItemListModifier*>::const_iterator modifier = m_modifiers.begin();
+       modifier != m_modifiers.end(); ++modifier)
     result |= (*modifier)->Modify(items);
 
   return result;

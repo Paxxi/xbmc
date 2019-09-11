@@ -36,10 +36,10 @@ void CPtsTracker::ResetVFRDetection(void)
 void CPtsTracker::Flush()
 {
   m_pattern.clear();
-  m_ringpos       = 0;
-  m_prevpts       = DVD_NOPTS_VALUE;
-  m_ringfill      = 0;
-  m_haspattern    = false;
+  m_ringpos = 0;
+  m_prevpts = DVD_NOPTS_VALUE;
+  m_ringfill = 0;
+  m_haspattern = false;
   m_patternlength = 0;
   m_frameduration = DVD_NOPTS_VALUE;
   memset(m_diffring, 0, sizeof(m_diffring));
@@ -80,7 +80,8 @@ void CPtsTracker::Add(double pts)
     {
       m_VFRCounter++;
       m_lastPattern = m_pattern;
-      CLog::Log(LOGDEBUG, "CPtsTracker: pattern lost on diff %f, number of losses %i", GetDiff(0), m_VFRCounter);
+      CLog::Log(LOGDEBUG, "CPtsTracker: pattern lost on diff %f, number of losses %i", GetDiff(0),
+                m_VFRCounter);
       Flush();
     }
 
@@ -125,8 +126,9 @@ inline double CPtsTracker::GetDiff(int diffnr)
 //calculate the current pattern in the ringbuffer
 void CPtsTracker::GetPattern(std::vector<double>& pattern)
 {
-  int difftypesbuff[DIFFRINGSIZE]; //difftypes of the diffs, difftypesbuff[0] is the last added diff,
-                                   //difftypesbuff[1] the one added before that etc
+  int difftypesbuff
+      [DIFFRINGSIZE]; //difftypes of the diffs, difftypesbuff[0] is the last added diff,
+      //difftypesbuff[1] the one added before that etc
 
   //get the difftypes
   std::vector<double> difftypes;
@@ -177,7 +179,7 @@ void CPtsTracker::GetPattern(std::vector<double>& pattern)
       if (j * length + length > m_ringfill)
         nrdiffs = m_ringfill - j * length;
 
-      if (nrdiffs < 1)  //if the buffersize can be cleanly divided by i we're done here
+      if (nrdiffs < 1) //if the buffersize can be cleanly divided by i we're done here
         break;
 
       if (!MatchDifftype(difftypesbuff, difftypesbuff + j * length, nrdiffs))
@@ -267,9 +269,9 @@ double CPtsTracker::CalcFrameDuration()
     for (unsigned int i = 1; i < m_pattern.size(); i++)
     {
       current = m_pattern[i];
-      if (current>currentmax)
+      if (current > currentmax)
         currentmax = current;
-      if (current<currentmin)
+      if (current < currentmin)
         currentmin = current;
       frameduration += current;
     }

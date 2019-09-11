@@ -29,7 +29,7 @@ public:
 
   int GetDisplayIndexFromSettings();
   // Implementation of CWinSystemBase
-  CRenderSystemBase *GetRenderSystem() override { return this; }
+  CRenderSystemBase* GetRenderSystem() override { return this; }
   bool InitWindowSystem() override;
   bool DestroyWindowSystem() override;
   bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
@@ -54,17 +54,17 @@ public:
   bool BeginRender() override;
   bool EndRender() override;
 
-  void Register(IDispResource *resource) override;
-  void Unregister(IDispResource *resource) override;
+  void Register(IDispResource* resource) override;
+  void Unregister(IDispResource* resource) override;
 
-  virtual std::unique_ptr<CVideoSync> GetVideoSync(void *clock) override;
+  virtual std::unique_ptr<CVideoSync> GetVideoSync(void* clock) override;
 
-  bool InitDisplayLink(CVideoSyncIos *syncImpl);
+  bool InitDisplayLink(CVideoSyncIos* syncImpl);
   void DeinitDisplayLink(void);
   void OnAppFocusChange(bool focus);
   bool IsBackgrounded() const { return m_bIsBackgrounded; }
   CVEAGLContext GetEAGLContextObj();
-  void GetConnectedOutputs(std::vector<std::string> *outputs);
+  void GetConnectedOutputs(std::vector<std::string>* outputs);
   void MoveToTouchscreen();
 
   // winevents override
@@ -74,20 +74,19 @@ protected:
   void PresentRenderImpl(bool rendered) override;
   void SetVSyncImpl(bool enable) override {}
 
-  void        *m_glView; // EAGLView opaque
-  void        *m_WorkingContext; // shared EAGLContext opaque
-  bool         m_bWasFullScreenBeforeMinimize;
-  std::string   m_eglext;
-  CCriticalSection             m_resourceSection;
-  std::vector<IDispResource*>  m_resources;
-  bool         m_bIsBackgrounded;
+  void* m_glView; // EAGLView opaque
+  void* m_WorkingContext; // shared EAGLContext opaque
+  bool m_bWasFullScreenBeforeMinimize;
+  std::string m_eglext;
+  CCriticalSection m_resourceSection;
+  std::vector<IDispResource*> m_resources;
+  bool m_bIsBackgrounded;
 
 private:
   bool GetScreenResolution(int* w, int* h, double* fps, int screenIdx);
   void FillInVideoModes(int screenIdx);
   bool SwitchToVideoMode(int width, int height, double refreshrate);
-  CADisplayLinkWrapper *m_pDisplayLink;
+  CADisplayLinkWrapper* m_pDisplayLink;
   int m_internalTouchscreenResolutionWidth = -1;
   int m_internalTouchscreenResolutionHeight = -1;
 };
-

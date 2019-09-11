@@ -31,18 +31,9 @@ class CSharedMemory
 public:
   explicit CSharedMemory(std::size_t size);
 
-  std::size_t Size() const
-  {
-    return m_size;
-  }
-  void* Data() const
-  {
-    return m_mmap.Data();
-  }
-  int Fd() const
-  {
-    return m_fd;
-  }
+  std::size_t Size() const { return m_size; }
+  void* Data() const { return m_mmap.Data(); }
+  int Fd() const { return m_fd; }
 
 private:
   CSharedMemory(CSharedMemory const& other) = delete;
@@ -57,6 +48,6 @@ private:
   CMmap m_mmap;
 };
 
-}
-}
-}
+} // namespace POSIX
+} // namespace UTILS
+} // namespace KODI

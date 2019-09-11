@@ -7,11 +7,13 @@
  */
 
 #include "JobManager.h"
+
+#include "threads/SingleLock.h"
+#include "utils/log.h"
+
 #include <algorithm>
 #include <functional>
 #include <stdexcept>
-#include "threads/SingleLock.h"
-#include "utils/log.h"
 #ifdef TARGET_POSIX
 #include "platform/posix/XTimeUtils.h"
 #endif
@@ -23,7 +25,8 @@ bool CJob::ShouldCancel(unsigned int progress, unsigned int total) const
   return false;
 }
 
-CJobWorker::CJobWorker(CJobManager *manager) : CThread("JobWorker")
+CJobWorker::CJobWorker(CJobManager* manager)
+  : CThread("JobWorker")
 {
   m_jobManager = manager;
   Create(true); // start work immediately, and kill ourselves when we're done
@@ -35,17 +38,17 @@ CJobWorker::~CJobWorker()
   // occurs during processing that we haven't caught, we may skip over that step.
   // Thus, before we go out of scope, ensure the job manager knows we're gone.
   m_jobManager->RemoveWorker(this);
-  if(!IsAutoDelete())
+  if (!IsAutoDelete())
     StopThread();
 }
 
 void CJobWorker::Process()
 {
-  SetPriority( GetMinPriority() );
+  SetPriority(GetMinPriority());
   while (true)
   {
     // request an item from our manager (this call is blocking)
-    CJob *job = m_jobManager->GetNextJob(this);
+    CJob* job = m_jobManager->GetNextJob(this);
     if (!job)
       break;
 
@@ -69,7 +72,9 @@ void CJobQueue::CJobPointer::CancelJob()
 }
 
 CJobQueue::CJobQueue(bool lifo, unsigned int jobsAtOnce, CJob::PRIORITY priority)
-: m_jobsAtOnce(jobsAtOnce), m_priority(priority), m_lifo(lifo)
+  : m_jobsAtOnce(jobsAtOnce)
+  , m_priority(priority)
+  , m_lifo(lifo)
 {
 }
 
@@ -78,7 +83,7 @@ CJobQueue::~CJobQueue()
   CancelJobs();
 }
 
-void CJobQueue::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CJobQueue::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   CSingleLock lock(m_section);
   // check if this job is in our processing list
@@ -89,7 +94,7 @@ void CJobQueue::OnJobComplete(unsigned int jobID, bool success, CJob *job)
   QueueNextJob();
 }
 
-void CJobQueue::CancelJob(const CJob *job)
+void CJobQueue::CancelJob(const CJob* job)
 {
   CSingleLock lock(m_section);
   Processing::iterator i = find(m_processing.begin(), m_processing.end(), job);
@@ -107,7 +112,7 @@ void CJobQueue::CancelJob(const CJob *job)
   }
 }
 
-bool CJobQueue::AddJob(CJob *job)
+bool CJobQueue::AddJob(CJob* job)
 {
   CSingleLock lock(m_section);
   // check if we have this job already.  If so, we're done.
@@ -132,7 +137,7 @@ void CJobQueue::QueueNextJob()
   CSingleLock lock(m_section);
   if (m_jobQueue.size() && m_processing.size() < m_jobsAtOnce)
   {
-    CJobPointer &job = m_jobQueue.back();
+    CJobPointer& job = m_jobQueue.back();
     job.m_id = CJobManager::GetInstance().AddJob(job.m_job, this, m_priority);
     m_processing.push_back(job);
     m_jobQueue.pop_back();
@@ -159,7 +164,7 @@ bool CJobQueue::QueueEmpty() const
   return m_jobQueue.empty();
 }
 
-CJobManager &CJobManager::GetInstance()
+CJobManager& CJobManager::GetInstance()
 {
   static CJobManager sJobManager;
   return sJobManager;
@@ -187,9 +192,11 @@ void CJobManager::CancelJobs()
   m_running = false;
 
   // clear any pending jobs
-  for (unsigned int priority = CJob::PRIORITY_LOW_PAUSABLE; priority <= CJob::PRIORITY_DEDICATED; ++priority)
+  for (unsigned int priority = CJob::PRIORITY_LOW_PAUSABLE; priority <= CJob::PRIORITY_DEDICATED;
+       ++priority)
   {
-    for_each(m_jobQueue[priority].begin(), m_jobQueue[priority].end(), [](CWorkItem& wi) { wi.FreeJob(); });
+    for_each(m_jobQueue[priority].begin(), m_jobQueue[priority].end(),
+             [](CWorkItem& wi) { wi.FreeJob(); });
     m_jobQueue[priority].clear();
   }
 
@@ -206,7 +213,7 @@ void CJobManager::CancelJobs()
   }
 }
 
-unsigned int CJobManager::AddJob(CJob *job, IJobCallback *callback, CJob::PRIORITY priority)
+unsigned int CJobManager::AddJob(CJob* job, IJobCallback* callback, CJob::PRIORITY priority)
 {
   CSingleLock lock(m_section);
 
@@ -231,7 +238,8 @@ void CJobManager::CancelJob(unsigned int jobID)
   CSingleLock lock(m_section);
 
   // check whether we have this job in the queue
-  for (unsigned int priority = CJob::PRIORITY_LOW_PAUSABLE; priority <= CJob::PRIORITY_DEDICATED; ++priority)
+  for (unsigned int priority = CJob::PRIORITY_LOW_PAUSABLE; priority <= CJob::PRIORITY_DEDICATED;
+       ++priority)
   {
     JobQueue::iterator i = find(m_jobQueue[priority].begin(), m_jobQueue[priority].end(), jobID);
     if (i != m_jobQueue[priority].end())
@@ -266,7 +274,7 @@ void CJobManager::StartWorkers(CJob::PRIORITY priority)
   m_workers.push_back(new CJobWorker(this));
 }
 
-CJob *CJobManager::PopJob()
+CJob* CJobManager::PopJob()
 {
   CSingleLock lock(m_section);
   for (int priority = CJob::PRIORITY_DEDICATED; priority >= CJob::PRIORITY_LOW_PAUSABLE; --priority)
@@ -275,7 +283,8 @@ CJob *CJobManager::PopJob()
     if (priority == CJob::PRIORITY_LOW_PAUSABLE && m_pauseJobs)
       continue;
 
-    if (m_jobQueue[priority].size() && m_processing.size() < GetMaxWorkers(CJob::PRIORITY(priority)))
+    if (m_jobQueue[priority].size() &&
+        m_processing.size() < GetMaxWorkers(CJob::PRIORITY(priority)))
     {
       // pop the job off the queue
       CWorkItem job = m_jobQueue[priority].front();
@@ -302,14 +311,14 @@ void CJobManager::UnPauseJobs()
   m_pauseJobs = false;
 }
 
-bool CJobManager::IsProcessing(const CJob::PRIORITY &priority) const
+bool CJobManager::IsProcessing(const CJob::PRIORITY& priority) const
 {
   CSingleLock lock(m_section);
 
   if (m_pauseJobs)
     return false;
 
-  for(Processing::const_iterator it = m_processing.begin(); it < m_processing.end(); ++it)
+  for (Processing::const_iterator it = m_processing.begin(); it < m_processing.end(); ++it)
   {
     if (priority == it->m_priority)
       return true;
@@ -317,7 +326,7 @@ bool CJobManager::IsProcessing(const CJob::PRIORITY &priority) const
   return false;
 }
 
-int CJobManager::IsProcessing(const std::string &type) const
+int CJobManager::IsProcessing(const std::string& type) const
 {
   int jobsMatched = 0;
   CSingleLock lock(m_section);
@@ -325,7 +334,7 @@ int CJobManager::IsProcessing(const std::string &type) const
   if (m_pauseJobs)
     return 0;
 
-  for(Processing::const_iterator it = m_processing.begin(); it < m_processing.end(); ++it)
+  for (Processing::const_iterator it = m_processing.begin(); it < m_processing.end(); ++it)
   {
     if (type == std::string(it->m_job->GetType()))
       jobsMatched++;
@@ -333,13 +342,13 @@ int CJobManager::IsProcessing(const std::string &type) const
   return jobsMatched;
 }
 
-CJob *CJobManager::GetNextJob(const CJobWorker *worker)
+CJob* CJobManager::GetNextJob(const CJobWorker* worker)
 {
   CSingleLock lock(m_section);
   while (m_running)
   {
     // grab a job off the queue if we have one
-    CJob *job = PopJob();
+    CJob* job = PopJob();
     if (job)
       return job;
     // no jobs are left - sleep for 30 seconds to allow new jobs to come in
@@ -351,7 +360,7 @@ CJob *CJobManager::GetNextJob(const CJobWorker *worker)
   }
   // ensure no jobs have come in during the period after
   // timeout and before we held the lock
-  CJob *job = PopJob();
+  CJob* job = PopJob();
   if (job)
     return job;
   // have no jobs
@@ -359,7 +368,7 @@ CJob *CJobManager::GetNextJob(const CJobWorker *worker)
   return NULL;
 }
 
-bool CJobManager::OnJobProgress(unsigned int progress, unsigned int total, const CJob *job) const
+bool CJobManager::OnJobProgress(unsigned int progress, unsigned int total, const CJob* job) const
 {
   CSingleLock lock(m_section);
   // find the job in the processing queue, and check whether it's cancelled (no callback)
@@ -377,7 +386,7 @@ bool CJobManager::OnJobProgress(unsigned int progress, unsigned int total, const
   return true; // couldn't find the job, or it's been cancelled
 }
 
-void CJobManager::OnJobComplete(bool success, CJob *job)
+void CJobManager::OnJobComplete(bool success, CJob* job)
 {
   CSingleLock lock(m_section);
   // remove the job from the processing queue
@@ -405,7 +414,7 @@ void CJobManager::OnJobComplete(bool success, CJob *job)
   }
 }
 
-void CJobManager::RemoveWorker(const CJobWorker *worker)
+void CJobManager::RemoveWorker(const CJobWorker* worker)
 {
   CSingleLock lock(m_section);
   // remove our worker

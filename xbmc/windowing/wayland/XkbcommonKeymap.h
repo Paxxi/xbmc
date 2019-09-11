@@ -105,8 +105,10 @@ private:
     xkb_mod_index_t xkb;
     XBMCMod xbmc;
     ModifierMapping(xkb_mod_index_t xkb, XBMCMod xbmc)
-    : xkb{xkb}, xbmc{xbmc}
-    {}
+      : xkb{xkb}
+      , xbmc{xbmc}
+    {
+    }
   };
   std::vector<ModifierMapping> m_modifierMappings;
 };
@@ -124,7 +126,11 @@ public:
    * from this function.
    */
   std::unique_ptr<CXkbcommonKeymap> KeymapFromString(std::string const& keymap);
-  std::unique_ptr<CXkbcommonKeymap> KeymapFromNames(const std::string &rules, const std::string &model, const std::string &layout, const std::string &variant, const std::string &options);
+  std::unique_ptr<CXkbcommonKeymap> KeymapFromNames(const std::string& rules,
+                                                    const std::string& model,
+                                                    const std::string& layout,
+                                                    const std::string& variant,
+                                                    const std::string& options);
 
 private:
   struct XkbContextDeleter
@@ -135,6 +141,6 @@ private:
 };
 
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

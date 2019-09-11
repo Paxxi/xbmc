@@ -70,10 +70,10 @@
 #endif
 
 #ifndef S_ISDIR
-#define S_ISDIR(m) ((m) & _S_IFDIR)
+#define S_ISDIR(m) ((m)&_S_IFDIR)
 #endif
 #ifndef S_ISREG
-#define S_ISREG(m) ((m) & _S_IFREG)
+#define S_ISREG(m) ((m)&_S_IFREG)
 #endif
 #ifndef S_ISBLK
 #define S_ISBLK(m) 0

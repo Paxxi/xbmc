@@ -23,17 +23,18 @@ namespace Actor
 class CPayloadWrapBase
 {
 public:
-  virtual ~CPayloadWrapBase() {};
+  virtual ~CPayloadWrapBase(){};
 };
 
 template<typename Payload>
 class CPayloadWrap : public CPayloadWrapBase
 {
 public:
-  ~CPayloadWrap() override {};
-  CPayloadWrap(Payload *data) {m_pPayload.reset(data);};
-  CPayloadWrap(Payload &data) {m_pPayload.reset(new Payload(data));};
-  Payload *GetPlayload() {return m_pPayload.get();};
+  ~CPayloadWrap() override{};
+  CPayloadWrap(Payload* data) { m_pPayload.reset(data); };
+  CPayloadWrap(Payload& data) { m_pPayload.reset(new Payload(data)); };
+  Payload* GetPlayload() { return m_pPayload.get(); };
+
 protected:
   std::unique_ptr<Payload> m_pPayload;
 };
@@ -54,45 +55,54 @@ public:
   bool isSyncTimeout;
   size_t payloadSize;
   uint8_t buffer[MSG_INTERNAL_BUFFER_SIZE];
-  uint8_t *data = nullptr;
+  uint8_t* data = nullptr;
   std::unique_ptr<CPayloadWrapBase> payloadObj;
-  Message *replyMessage = nullptr;
-  Protocol &origin;
-  CEvent *event = nullptr;
+  Message* replyMessage = nullptr;
+  Protocol& origin;
+  CEvent* event = nullptr;
 
   void Release();
-  bool Reply(int sig, void *data = nullptr, size_t size = 0);
+  bool Reply(int sig, void* data = nullptr, size_t size = 0);
 
 private:
-  explicit Message(Protocol &_origin) noexcept
-    :origin(_origin) {}
+  explicit Message(Protocol& _origin) noexcept
+    : origin(_origin)
+  {
+  }
 };
 
 class Protocol
 {
 public:
-  Protocol(std::string name, CEvent* inEvent, CEvent *outEvent)
-    :portName(name), containerInEvent(inEvent), containerOutEvent(outEvent) {}
+  Protocol(std::string name, CEvent* inEvent, CEvent* outEvent)
+    : portName(name)
+    , containerInEvent(inEvent)
+    , containerOutEvent(outEvent)
+  {
+  }
   Protocol(std::string name)
-    : Protocol(name, nullptr, nullptr) {}
+    : Protocol(name, nullptr, nullptr)
+  {
+  }
   ~Protocol();
-  Message *GetMessage();
-  void ReturnMessage(Message *msg);
-  bool SendOutMessage(int signal, void *data = nullptr, size_t size = 0, Message *outMsg = nullptr);
-  bool SendOutMessage(int signal, CPayloadWrapBase *payload, Message *outMsg = nullptr);
-  bool SendInMessage(int signal, void *data = nullptr, size_t size = 0, Message *outMsg = nullptr);
-  bool SendInMessage(int signal, CPayloadWrapBase *payload, Message *outMsg = nullptr);
-  bool SendOutMessageSync(int signal, Message **retMsg, int timeout, void *data = nullptr, size_t size = 0);
-  bool SendOutMessageSync(int signal, Message **retMsg, int timeout, CPayloadWrapBase *payload);
-  bool ReceiveOutMessage(Message **msg);
-  bool ReceiveInMessage(Message **msg);
+  Message* GetMessage();
+  void ReturnMessage(Message* msg);
+  bool SendOutMessage(int signal, void* data = nullptr, size_t size = 0, Message* outMsg = nullptr);
+  bool SendOutMessage(int signal, CPayloadWrapBase* payload, Message* outMsg = nullptr);
+  bool SendInMessage(int signal, void* data = nullptr, size_t size = 0, Message* outMsg = nullptr);
+  bool SendInMessage(int signal, CPayloadWrapBase* payload, Message* outMsg = nullptr);
+  bool SendOutMessageSync(
+      int signal, Message** retMsg, int timeout, void* data = nullptr, size_t size = 0);
+  bool SendOutMessageSync(int signal, Message** retMsg, int timeout, CPayloadWrapBase* payload);
+  bool ReceiveOutMessage(Message** msg);
+  bool ReceiveInMessage(Message** msg);
   void Purge();
   void PurgeIn(int signal);
   void PurgeOut(int signal);
-  void DeferIn(bool value) {inDefered = value;};
-  void DeferOut(bool value) {outDefered = value;};
-  void Lock() {criticalSection.lock();};
-  void Unlock() {criticalSection.unlock();};
+  void DeferIn(bool value) { inDefered = value; };
+  void DeferOut(bool value) { outDefered = value; };
+  void Lock() { criticalSection.lock(); };
+  void Unlock() { criticalSection.unlock(); };
   std::string portName;
 
 protected:
@@ -104,4 +114,4 @@ protected:
   bool inDefered = false, outDefered = false;
 };
 
-}
+} // namespace Actor

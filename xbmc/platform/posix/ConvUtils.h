@@ -11,5 +11,4 @@
 #include "PlatformDefs.h" // DWORD ...
 
 DWORD GetLastError();
-void  SetLastError(DWORD dwErrCode);
-
+void SetLastError(DWORD dwErrCode);

@@ -13,10 +13,8 @@ extern "C"
 {
 #endif
 
-  void not_implement( const char* );
+  void not_implement(const char*);
 
 #ifdef __cplusplus
 }
 #endif
-
-

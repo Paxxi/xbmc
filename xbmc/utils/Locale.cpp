@@ -13,44 +13,50 @@
 const CLocale CLocale::Empty;
 
 CLocale::CLocale()
-  : m_language(),
-    m_territory(),
-    m_codeset(),
-    m_modifier()
-{ }
+  : m_language()
+  , m_territory()
+  , m_codeset()
+  , m_modifier()
+{
+}
 
 CLocale::CLocale(const std::string& language)
-  : m_language(),
-    m_territory(),
-    m_codeset(),
-    m_modifier()
+  : m_language()
+  , m_territory()
+  , m_codeset()
+  , m_modifier()
 {
   m_valid = ParseLocale(language, m_language, m_territory, m_codeset, m_modifier);
 }
 
 CLocale::CLocale(const std::string& language, const std::string& territory)
-  : m_language(language),
-    m_territory(territory),
-    m_codeset(),
-    m_modifier()
+  : m_language(language)
+  , m_territory(territory)
+  , m_codeset()
+  , m_modifier()
 {
   Initialize();
 }
 
-CLocale::CLocale(const std::string& language, const std::string& territory, const std::string& codeset)
-  : m_language(language),
-    m_territory(territory),
-    m_codeset(codeset),
-    m_modifier()
+CLocale::CLocale(const std::string& language,
+                 const std::string& territory,
+                 const std::string& codeset)
+  : m_language(language)
+  , m_territory(territory)
+  , m_codeset(codeset)
+  , m_modifier()
 {
   Initialize();
 }
 
-CLocale::CLocale(const std::string& language, const std::string& territory, const std::string& codeset, const std::string& modifier)
-  : m_language(language),
-    m_territory(territory),
-    m_codeset(codeset),
-    m_modifier(modifier)
+CLocale::CLocale(const std::string& language,
+                 const std::string& territory,
+                 const std::string& codeset,
+                 const std::string& modifier)
+  : m_language(language)
+  , m_territory(territory)
+  , m_codeset(codeset)
+  , m_modifier(modifier)
 {
   Initialize();
 }
@@ -67,8 +73,7 @@ bool CLocale::operator==(const CLocale& other) const
   if (!m_valid && !other.m_valid)
     return true;
 
-  return m_valid == other.m_valid &&
-         StringUtils::EqualsNoCase(m_language, other.m_language) &&
+  return m_valid == other.m_valid && StringUtils::EqualsNoCase(m_language, other.m_language) &&
          StringUtils::EqualsNoCase(m_territory, other.m_territory) &&
          StringUtils::EqualsNoCase(m_codeset, other.m_codeset) &&
          StringUtils::EqualsNoCase(m_modifier, other.m_modifier);
@@ -143,11 +148,14 @@ bool CLocale::Matches(const std::string& locale) const
 
   if (!StringUtils::EqualsNoCase(m_language, other.m_language))
     return false;
-  if (!m_territory.empty() && !other.m_territory.empty() && !StringUtils::EqualsNoCase(m_territory, other.m_territory))
+  if (!m_territory.empty() && !other.m_territory.empty() &&
+      !StringUtils::EqualsNoCase(m_territory, other.m_territory))
     return false;
-  if (!m_codeset.empty() && !other.m_codeset.empty() && !StringUtils::EqualsNoCase(m_codeset, other.m_codeset))
+  if (!m_codeset.empty() && !other.m_codeset.empty() &&
+      !StringUtils::EqualsNoCase(m_codeset, other.m_codeset))
     return false;
-  if (!m_modifier.empty() && !other.m_modifier.empty() && !StringUtils::EqualsNoCase(m_modifier, other.m_modifier))
+  if (!m_modifier.empty() && !other.m_modifier.empty() &&
+      !StringUtils::EqualsNoCase(m_modifier, other.m_modifier))
     return false;
 
   return true;
@@ -175,7 +183,8 @@ std::string CLocale::FindBestMatch(const std::set<std::string>& locales) const
   return bestMatch;
 }
 
-std::string CLocale::FindBestMatch(const std::unordered_map<std::string, std::string>& locales) const
+std::string CLocale::FindBestMatch(
+    const std::unordered_map<std::string, std::string>& locales) const
 {
   std::string bestMatch = "";
   int bestMatchRank = -1;
@@ -197,7 +206,10 @@ std::string CLocale::FindBestMatch(const std::unordered_map<std::string, std::st
   return bestMatch;
 }
 
-bool CLocale::CheckValidity(const std::string& language, const std::string& territory, const std::string& codeset, const std::string& modifier)
+bool CLocale::CheckValidity(const std::string& language,
+                            const std::string& territory,
+                            const std::string& codeset,
+                            const std::string& modifier)
 {
   static_cast<void>(territory);
   static_cast<void>(codeset);
@@ -206,7 +218,11 @@ bool CLocale::CheckValidity(const std::string& language, const std::string& terr
   return !language.empty();
 }
 
-bool CLocale::ParseLocale(const std::string &locale, std::string &language, std::string &territory, std::string &codeset, std::string &modifier)
+bool CLocale::ParseLocale(const std::string& locale,
+                          std::string& language,
+                          std::string& territory,
+                          std::string& codeset,
+                          std::string& modifier)
 {
   if (locale.empty())
     return false;
@@ -266,18 +282,20 @@ int CLocale::GetMatchRank(const std::string& locale) const
   CLocale other = FromString(locale);
 
   // both locales must be valid and match in language
-  if (!m_valid || !other.m_valid ||
-      !StringUtils::EqualsNoCase(m_language, other.m_language))
+  if (!m_valid || !other.m_valid || !StringUtils::EqualsNoCase(m_language, other.m_language))
     return -1;
 
   int rank = 0;
   // matching in territory is considered more important than matching in
   // codeset and/or modifier
-  if (!m_territory.empty() && !other.m_territory.empty() && StringUtils::EqualsNoCase(m_territory, other.m_territory))
+  if (!m_territory.empty() && !other.m_territory.empty() &&
+      StringUtils::EqualsNoCase(m_territory, other.m_territory))
     rank += 3;
-  if (!m_codeset.empty() && !other.m_codeset.empty() && StringUtils::EqualsNoCase(m_codeset, other.m_codeset))
+  if (!m_codeset.empty() && !other.m_codeset.empty() &&
+      StringUtils::EqualsNoCase(m_codeset, other.m_codeset))
     rank += 1;
-  if (!m_modifier.empty() && !other.m_modifier.empty() && StringUtils::EqualsNoCase(m_modifier, other.m_modifier))
+  if (!m_modifier.empty() && !other.m_modifier.empty() &&
+      StringUtils::EqualsNoCase(m_modifier, other.m_modifier))
     rank += 1;
 
   return rank;

@@ -12,17 +12,23 @@
 
 namespace ADDON
 {
-  class CSettingUrlEncodedString : public CSettingString
+class CSettingUrlEncodedString : public CSettingString
+{
+public:
+  CSettingUrlEncodedString(const std::string& id, CSettingsManager* settingsManager = NULL);
+  CSettingUrlEncodedString(const std::string& id,
+                           int label,
+                           const std::string& value,
+                           CSettingsManager* settingsManager = NULL);
+  CSettingUrlEncodedString(const std::string& id, const CSettingUrlEncodedString& setting);
+  ~CSettingUrlEncodedString() override = default;
+
+  SettingPtr Clone(const std::string& id) const override
   {
-  public:
-    CSettingUrlEncodedString(const std::string &id, CSettingsManager *settingsManager = NULL);
-    CSettingUrlEncodedString(const std::string &id, int label, const std::string &value, CSettingsManager *settingsManager = NULL);
-    CSettingUrlEncodedString(const std::string &id, const CSettingUrlEncodedString &setting);
-    ~CSettingUrlEncodedString() override = default;
+    return std::make_shared<CSettingUrlEncodedString>(id, *this);
+  }
 
-    SettingPtr Clone(const std::string &id) const override { return std::make_shared<CSettingUrlEncodedString>(id, *this); }
-
-    std::string GetDecodedValue() const;
-    bool SetDecodedValue(const std::string& decodedValue);
-  };
-}
+  std::string GetDecodedValue() const;
+  bool SetDecodedValue(const std::string& decodedValue);
+};
+} // namespace ADDON

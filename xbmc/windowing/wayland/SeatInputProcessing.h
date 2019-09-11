@@ -124,12 +124,13 @@ private:
     std::unique_ptr<CInputProcessorTouch> touchProcessor;
 
     SeatState(CSeat* seat)
-    : seat{seat}
-    {}
+      : seat{seat}
+    {
+    }
   };
   std::map<std::uint32_t, SeatState> m_seats;
 };
 
-}
-}
-}
+} // namespace WAYLAND
+} // namespace WINDOWING
+} // namespace KODI

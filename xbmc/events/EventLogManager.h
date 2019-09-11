@@ -18,7 +18,7 @@ class CEventLog;
 class CEventLogManager
 {
 public:
-  CEventLog &GetEventLog(unsigned int profileId);
+  CEventLog& GetEventLog(unsigned int profileId);
 
 private:
   std::map<unsigned int, std::unique_ptr<CEventLog>> m_eventLogs;

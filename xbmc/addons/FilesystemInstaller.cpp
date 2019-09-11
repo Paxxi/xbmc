@@ -23,7 +23,8 @@ CFilesystemInstaller::CFilesystemInstaller()
   m_tempFolder = CSpecialProtocol::TranslatePath("special://home/addons/temp/");
 }
 
-bool CFilesystemInstaller::InstallToFilesystem(const std::string& archive, const std::string& addonId)
+bool CFilesystemInstaller::InstallToFilesystem(const std::string& archive,
+                                               const std::string& addonId)
 {
   auto addonFolder = URIUtils::AddFileToFolder(m_addonFolder, addonId);
   auto newAddonData = URIUtils::AddFileToFolder(m_tempFolder, StringUtils::CreateUUID());
@@ -34,7 +35,8 @@ bool CFilesystemInstaller::InstallToFilesystem(const std::string& archive, const
 
   if (!UnpackArchive(archive, newAddonData))
   {
-    CLog::Log(LOGERROR, "Failed to unpack archive '%s' to '%s'", archive.c_str(), newAddonData.c_str());
+    CLog::Log(LOGERROR, "Failed to unpack archive '%s' to '%s'", archive.c_str(),
+              newAddonData.c_str());
     return false;
   }
 
@@ -43,14 +45,16 @@ bool CFilesystemInstaller::InstallToFilesystem(const std::string& archive, const
   {
     if (!CFile::Rename(addonFolder, oldAddonData))
     {
-      CLog::Log(LOGERROR, "Failed to move old addon files from '%s' to '%s'", addonFolder.c_str(), oldAddonData.c_str());
+      CLog::Log(LOGERROR, "Failed to move old addon files from '%s' to '%s'", addonFolder.c_str(),
+                oldAddonData.c_str());
       return false;
     }
   }
 
   if (!CFile::Rename(newAddonData, addonFolder))
   {
-    CLog::Log(LOGERROR, "Failed to move new addon files from '%s' to '%s'", newAddonData.c_str(), addonFolder.c_str());
+    CLog::Log(LOGERROR, "Failed to move new addon files from '%s' to '%s'", newAddonData.c_str(),
+              addonFolder.c_str());
     return false;
   }
 
@@ -69,7 +73,8 @@ bool CFilesystemInstaller::UnInstallFromFilesystem(const std::string& addonFolde
   auto tempFolder = URIUtils::AddFileToFolder(m_tempFolder, StringUtils::CreateUUID());
   if (!CFile::Rename(addonFolder, tempFolder))
   {
-    CLog::Log(LOGERROR, "Failed to move old addon files from '%s' to '%s'", addonFolder.c_str(), tempFolder.c_str());
+    CLog::Log(LOGERROR, "Failed to move old addon files from '%s' to '%s'", addonFolder.c_str(),
+              tempFolder.c_str());
     return false;
   }
 

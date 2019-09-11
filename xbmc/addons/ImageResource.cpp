@@ -34,19 +34,18 @@ void CImageResource::OnPreUnInstall()
   XFILE::CXbtManager::GetInstance().Release(xbtUrl);
 }
 
-bool CImageResource::IsAllowed(const std::string &file) const
+bool CImageResource::IsAllowed(const std::string& file) const
 {
   // check if the file path points to a directory
   if (URIUtils::HasSlashAtEnd(file, true))
     return true;
 
   std::string ext = URIUtils::GetExtension(file);
-  return file.empty() ||
-         StringUtils::EqualsNoCase(ext, ".png") ||
+  return file.empty() || StringUtils::EqualsNoCase(ext, ".png") ||
          StringUtils::EqualsNoCase(ext, ".jpg");
 }
 
-std::string CImageResource::GetFullPath(const std::string &filePath) const
+std::string CImageResource::GetFullPath(const std::string& filePath) const
 {
   // check if there's an XBT file which might contain the file. if not just return the usual full path
   CURL xbtUrl;

@@ -17,11 +17,11 @@
 
 CStopWatch::CStopWatch(bool useFrameTime /*=false*/)
 {
-  m_timerPeriod      = 0.0f;
-  m_startTick        = 0;
-  m_stopTick         = 0;
-  m_isRunning        = false;
-  m_useFrameTime     = useFrameTime;
+  m_timerPeriod = 0.0f;
+  m_startTick = 0;
+  m_stopTick = 0;
+  m_isRunning = false;
+  m_useFrameTime = useFrameTime;
 
 #ifdef TARGET_POSIX
   m_timerPeriod = 1.0f / 1000.0f; // we want seconds

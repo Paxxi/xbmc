@@ -7,15 +7,16 @@
  */
 
 #include "WinSystem.h"
+
 #include "ServiceBroker.h"
 #include "guilib/DispResource.h"
 #include "powermanagement/DPMSSupport.h"
-#include "windowing/GraphicContext.h"
 #include "settings/DisplaySettings.h"
-#include "settings/lib/Setting.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
+#include "settings/lib/Setting.h"
 #include "utils/StringUtils.h"
+#include "windowing/GraphicContext.h"
 #if HAS_GLES
 #include "guilib/GUIFontTTFGL.h"
 #endif
@@ -45,7 +46,12 @@ bool CWinSystemBase::DestroyWindowSystem()
   return false;
 }
 
-void CWinSystemBase::UpdateDesktopResolution(RESOLUTION_INFO& newRes, const std::string &output, int width, int height, float refreshRate, uint32_t dwFlags)
+void CWinSystemBase::UpdateDesktopResolution(RESOLUTION_INFO& newRes,
+                                             const std::string& output,
+                                             int width,
+                                             int height,
+                                             float refreshRate,
+                                             uint32_t dwFlags)
 {
   newRes.Overscan.left = 0;
   newRes.Overscan.top = 0;
@@ -81,7 +87,7 @@ void CWinSystemBase::UpdateResolutions()
     window.iWidth = 720;
   if (window.iHeight == 0)
     window.iHeight = 480;
-  window.iScreenWidth  = window.iWidth;
+  window.iScreenWidth = window.iWidth;
   window.iScreenHeight = window.iHeight;
   if (window.iSubtitles == 0)
     window.iSubtitles = (int)(0.965 * window.iHeight);
@@ -100,19 +106,20 @@ void CWinSystemBase::SetWindowResolution(int width, int height)
   CServiceBroker::GetWinSystem()->GetGfxContext().ResetOverscan(window);
 }
 
-static void AddResolution(std::vector<RESOLUTION_WHR> &resolutions, unsigned int addindex, float bestRefreshrate)
+static void AddResolution(std::vector<RESOLUTION_WHR>& resolutions,
+                          unsigned int addindex,
+                          float bestRefreshrate)
 {
   RESOLUTION_INFO resInfo = CDisplaySettings::GetInstance().GetResolutionInfo(addindex);
-  int width  = resInfo.iScreenWidth;
+  int width = resInfo.iScreenWidth;
   int height = resInfo.iScreenHeight;
-  int flags  = resInfo.dwFlags & D3DPRESENTFLAG_MODEMASK;
+  int flags = resInfo.dwFlags & D3DPRESENTFLAG_MODEMASK;
   float refreshrate = resInfo.fRefreshRate;
 
   // don't touch RES_DESKTOP
   for (unsigned int idx = 1; idx < resolutions.size(); idx++)
-    if (   resolutions[idx].width == width
-        && resolutions[idx].height == height
-        &&(resolutions[idx].flags & D3DPRESENTFLAG_MODEMASK) == flags)
+    if (resolutions[idx].width == width && resolutions[idx].height == height &&
+        (resolutions[idx].flags & D3DPRESENTFLAG_MODEMASK) == flags)
     {
       // check if the refresh rate of this resolution is better suited than
       // the refresh rate of the resolution with the same width/height/interlaced
@@ -132,16 +139,16 @@ static bool resSortPredicate(RESOLUTION_WHR i, RESOLUTION_WHR j)
 {
   // note: this comparison must obey "strict weak ordering"
   // a "!=" on the flags comparison resulted in memory corruption
-  return (    i.width < j.width
-          || (i.width == j.width && i.height < j.height)
-          || (i.width == j.width && i.height == j.height && i.flags < j.flags) );
+  return (i.width < j.width || (i.width == j.width && i.height < j.height) ||
+          (i.width == j.width && i.height == j.height && i.flags < j.flags));
 }
 
 std::vector<RESOLUTION_WHR> CWinSystemBase::ScreenResolutions(float refreshrate)
 {
   std::vector<RESOLUTION_WHR> resolutions;
 
-  for (unsigned int idx = RES_CUSTOM; idx < CDisplaySettings::GetInstance().ResolutionInfoSize(); idx++)
+  for (unsigned int idx = RES_CUSTOM; idx < CDisplaySettings::GetInstance().ResolutionInfoSize();
+       idx++)
   {
     RESOLUTION_INFO info = CDisplaySettings::GetInstance().GetResolutionInfo(idx);
     AddResolution(resolutions, idx, refreshrate);
@@ -153,12 +160,12 @@ std::vector<RESOLUTION_WHR> CWinSystemBase::ScreenResolutions(float refreshrate)
   return resolutions;
 }
 
-static void AddRefreshRate(std::vector<REFRESHRATE> &refreshrates, unsigned int addindex)
+static void AddRefreshRate(std::vector<REFRESHRATE>& refreshrates, unsigned int addindex)
 {
   float RefreshRate = CDisplaySettings::GetInstance().GetResolutionInfo(addindex).fRefreshRate;
 
   for (unsigned int idx = 0; idx < refreshrates.size(); idx++)
-    if (   refreshrates[idx].RefreshRate == RefreshRate)
+    if (refreshrates[idx].RefreshRate == RefreshRate)
       return; // already taken care of.
 
   REFRESHRATE rr = {RefreshRate, (int)addindex};
@@ -174,11 +181,13 @@ std::vector<REFRESHRATE> CWinSystemBase::RefreshRates(int width, int height, uin
 {
   std::vector<REFRESHRATE> refreshrates;
 
-  for (unsigned int idx = RES_DESKTOP; idx < CDisplaySettings::GetInstance().ResolutionInfoSize(); idx++)
+  for (unsigned int idx = RES_DESKTOP; idx < CDisplaySettings::GetInstance().ResolutionInfoSize();
+       idx++)
   {
-    if (CDisplaySettings::GetInstance().GetResolutionInfo(idx).iScreenWidth  == width &&
+    if (CDisplaySettings::GetInstance().GetResolutionInfo(idx).iScreenWidth == width &&
         CDisplaySettings::GetInstance().GetResolutionInfo(idx).iScreenHeight == height &&
-        (CDisplaySettings::GetInstance().GetResolutionInfo(idx).dwFlags & D3DPRESENTFLAG_MODEMASK) == (dwFlags & D3DPRESENTFLAG_MODEMASK))
+        (CDisplaySettings::GetInstance().GetResolutionInfo(idx).dwFlags &
+         D3DPRESENTFLAG_MODEMASK) == (dwFlags & D3DPRESENTFLAG_MODEMASK))
       AddRefreshRate(refreshrates, idx);
   }
 
@@ -198,7 +207,7 @@ REFRESHRATE CWinSystemBase::DefaultRefreshRate(std::vector<REFRESHRATE> rates)
   {
     float fitness = fabs(targetfps - rates[i].RefreshRate);
 
-    if (bestfitness <0 || fitness < bestfitness)
+    if (bestfitness < 0 || fitness < bestfitness)
     {
       bestfitness = fitness;
       bestmatch = rates[i];
@@ -221,7 +230,8 @@ std::string CWinSystemBase::GetClipboardText(void)
 
 int CWinSystemBase::NoOfBuffers(void)
 {
-  int buffers = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_VIDEOSCREEN_NOOFBUFFERS);
+  int buffers = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+      CSettings::SETTING_VIDEOSCREEN_NOOFBUFFERS);
   return buffers;
 }
 
@@ -239,13 +249,13 @@ KODI::WINDOWING::COSScreenSaverManager* CWinSystemBase::GetOSScreenSaver()
   return m_screenSaverManager.get();
 }
 
-void CWinSystemBase::RegisterRenderLoop(IRenderLoop *client)
+void CWinSystemBase::RegisterRenderLoop(IRenderLoop* client)
 {
   CSingleLock lock(m_renderLoopSection);
   m_renderLoopClients.push_back(client);
 }
 
-void CWinSystemBase::UnregisterRenderLoop(IRenderLoop *client)
+void CWinSystemBase::UnregisterRenderLoop(IRenderLoop* client)
 {
   CSingleLock lock(m_renderLoopSection);
   auto i = find(m_renderLoopClients.begin(), m_renderLoopClients.end(), client);
@@ -257,7 +267,8 @@ void CWinSystemBase::DriveRenderLoop()
 {
   MessagePump();
 
-  { CSingleLock lock(m_renderLoopSection);
+  {
+    CSingleLock lock(m_renderLoopSection);
     for (auto i = m_renderLoopClients.begin(); i != m_renderLoopClients.end(); ++i)
       (*i)->FrameMove();
   }

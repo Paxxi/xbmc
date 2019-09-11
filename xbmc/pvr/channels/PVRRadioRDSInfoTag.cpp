@@ -111,49 +111,35 @@ void CPVRRadioRDSInfoTag::Archive(CArchive& ar)
   }
 }
 
-bool CPVRRadioRDSInfoTag::operator==(const CPVRRadioRDSInfoTag &right) const
+bool CPVRRadioRDSInfoTag::operator==(const CPVRRadioRDSInfoTag& right) const
 {
   if (this == &right)
     return true;
 
   CSingleLock lock(m_critSection);
-  return (m_strLanguage == right.m_strLanguage &&
-          m_strCountry == right.m_strCountry &&
-          m_strTitle == right.m_strTitle &&
-          m_strBand == right.m_strBand &&
-          m_strArtist == right.m_strArtist &&
-          m_strComposer == right.m_strComposer &&
-          m_strConductor == right.m_strConductor &&
-          m_strAlbum == right.m_strAlbum &&
-          m_iAlbumTracknumber == right.m_iAlbumTracknumber &&
-          m_strInfoNews == right.m_strInfoNews &&
-          m_strInfoNewsLocal == right.m_strInfoNewsLocal &&
-          m_strInfoSport == right.m_strInfoSport &&
-          m_strInfoStock == right.m_strInfoStock &&
-          m_strInfoWeather == right.m_strInfoWeather &&
-          m_strInfoLottery == right.m_strInfoLottery &&
-          m_strInfoOther == right.m_strInfoOther &&
-          m_strProgStyle == right.m_strProgStyle &&
-          m_strProgHost == right.m_strProgHost &&
-          m_strProgStation == right.m_strProgStation &&
-          m_strProgWebsite == right.m_strProgWebsite &&
-          m_strProgNow == right.m_strProgNow &&
-          m_strProgNext == right.m_strProgNext &&
-          m_strPhoneHotline == right.m_strPhoneHotline &&
-          m_strEMailHotline == right.m_strEMailHotline &&
-          m_strPhoneStudio == right.m_strPhoneStudio &&
-          m_strEMailStudio == right.m_strEMailStudio &&
-          m_strSMSStudio == right.m_strSMSStudio &&
-          m_strRadioStyle == right.m_strRadioStyle &&
-          m_strInfoHoroscope == right.m_strInfoHoroscope &&
-          m_strInfoCinema == right.m_strInfoCinema &&
-          m_strComment == right.m_strComment &&
-          m_strEditorialStaff == right.m_strEditorialStaff &&
-          m_bHaveRadiotext == right.m_bHaveRadiotext &&
-          m_bHaveRadiotextPlus == right.m_bHaveRadiotextPlus);
+  return (
+      m_strLanguage == right.m_strLanguage && m_strCountry == right.m_strCountry &&
+      m_strTitle == right.m_strTitle && m_strBand == right.m_strBand &&
+      m_strArtist == right.m_strArtist && m_strComposer == right.m_strComposer &&
+      m_strConductor == right.m_strConductor && m_strAlbum == right.m_strAlbum &&
+      m_iAlbumTracknumber == right.m_iAlbumTracknumber && m_strInfoNews == right.m_strInfoNews &&
+      m_strInfoNewsLocal == right.m_strInfoNewsLocal && m_strInfoSport == right.m_strInfoSport &&
+      m_strInfoStock == right.m_strInfoStock && m_strInfoWeather == right.m_strInfoWeather &&
+      m_strInfoLottery == right.m_strInfoLottery && m_strInfoOther == right.m_strInfoOther &&
+      m_strProgStyle == right.m_strProgStyle && m_strProgHost == right.m_strProgHost &&
+      m_strProgStation == right.m_strProgStation && m_strProgWebsite == right.m_strProgWebsite &&
+      m_strProgNow == right.m_strProgNow && m_strProgNext == right.m_strProgNext &&
+      m_strPhoneHotline == right.m_strPhoneHotline &&
+      m_strEMailHotline == right.m_strEMailHotline && m_strPhoneStudio == right.m_strPhoneStudio &&
+      m_strEMailStudio == right.m_strEMailStudio && m_strSMSStudio == right.m_strSMSStudio &&
+      m_strRadioStyle == right.m_strRadioStyle && m_strInfoHoroscope == right.m_strInfoHoroscope &&
+      m_strInfoCinema == right.m_strInfoCinema && m_strComment == right.m_strComment &&
+      m_strEditorialStaff == right.m_strEditorialStaff &&
+      m_bHaveRadiotext == right.m_bHaveRadiotext &&
+      m_bHaveRadiotextPlus == right.m_bHaveRadiotextPlus);
 }
 
-bool CPVRRadioRDSInfoTag::operator !=(const CPVRRadioRDSInfoTag& right) const
+bool CPVRRadioRDSInfoTag::operator!=(const CPVRRadioRDSInfoTag& right) const
 {
   if (this == &right)
     return false;
@@ -640,7 +626,7 @@ bool CPVRRadioRDSInfoTag::IsPlayingRadiotextPlus() const
   return m_bHaveRadiotextPlus;
 }
 
-std::string CPVRRadioRDSInfoTag::Trim(const std::string &value)
+std::string CPVRRadioRDSInfoTag::Trim(const std::string& value)
 {
   std::string trimmedValue(value);
   StringUtils::TrimLeft(trimmedValue);
@@ -648,13 +634,12 @@ std::string CPVRRadioRDSInfoTag::Trim(const std::string &value)
   return trimmedValue;
 }
 
-bool CPVRRadioRDSInfoTag::Info::operator==(const CPVRRadioRDSInfoTag::Info &right) const
+bool CPVRRadioRDSInfoTag::Info::operator==(const CPVRRadioRDSInfoTag::Info& right) const
 {
   if (this == &right)
     return true;
 
-  return (m_infoText == right.m_infoText &&
-          m_data == right.m_data);
+  return (m_infoText == right.m_infoText && m_data == right.m_data);
 }
 
 void CPVRRadioRDSInfoTag::Info::Clear()

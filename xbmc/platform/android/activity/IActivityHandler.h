@@ -15,8 +15,8 @@ typedef struct ANativeWindow ANativeWindow;
 
 typedef enum
 {
-  ActivityOK    = 0,
-  ActivityExit  = -1,
+  ActivityOK = 0,
+  ActivityExit = -1,
   ActivityError = -2,
   ActivityUnknown = 1
 } ActivityResult;
@@ -24,14 +24,13 @@ typedef enum
 class IActivityHandler
 {
 public:
-
   virtual void onStart() {}
   virtual void onResume() {}
   virtual void onPause() {}
   virtual void onStop() {}
   virtual void onDestroy() {}
 
-  virtual void onSaveState(void **data, size_t *size) {}
+  virtual void onSaveState(void** data, size_t* size) {}
   virtual void onConfigurationChanged() {}
   virtual void onLowMemory() {}
 
@@ -41,4 +40,3 @@ public:
   virtual void onGainFocus() {}
   virtual void onLostFocus() {}
 };
-

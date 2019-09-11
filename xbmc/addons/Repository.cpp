@@ -43,8 +43,7 @@ CRepository::ResolveResult CRepository::ResolvePathAndHash(const AddonPtr& addon
 {
   std::string const& path = addon->Path();
 
-  auto dirIt = std::find_if(m_dirs.begin(), m_dirs.end(), [&path](DirInfo const& dir)
-  {
+  auto dirIt = std::find_if(m_dirs.begin(), m_dirs.end(), [&path](DirInfo const& dir) {
     return URIUtils::PathHasParent(path, dir.datadir, true);
   });
   if (dirIt == m_dirs.end())
@@ -75,7 +74,9 @@ CRepository::ResolveResult CRepository::ResolvePathAndHash(const AddonPtr& addon
   // (saves one request per addon install)
   std::string location = file.GetRedirectURL();
   // content-* headers are base64, convert to base16
-  TypedDigest hash{dirIt->hashType, StringUtils::ToHexadecimal(Base64::Decode(file.GetHttpHeader().GetValue(std::string("content-") + hashTypeStr)))};
+  TypedDigest hash{dirIt->hashType,
+                   StringUtils::ToHexadecimal(Base64::Decode(
+                       file.GetHttpHeader().GetValue(std::string("content-") + hashTypeStr)))};
 
   if (hash.Empty())
   {
@@ -122,11 +123,19 @@ CRepository::CRepository(const AddonInfoPtr& addonInfo)
     CURL datadir(dir.datadir);
     if (datadir.IsProtocol("http"))
     {
-      CLog::Log(LOGWARNING, "Repository add-on {} uses plain HTTP for add-on downloads in path {} - this is insecure and will make your Kodi installation vulnerable to attacks if enabled!", ID(), datadir.GetRedacted());
+      CLog::Log(LOGWARNING,
+                "Repository add-on {} uses plain HTTP for add-on downloads in path {} - this is "
+                "insecure and will make your Kodi installation vulnerable to attacks if enabled!",
+                ID(), datadir.GetRedacted());
     }
-    else if (datadir.IsProtocol("https") && datadir.HasProtocolOption("verifypeer") && datadir.GetProtocolOption("verifypeer") == "false")
+    else if (datadir.IsProtocol("https") && datadir.HasProtocolOption("verifypeer") &&
+             datadir.GetProtocolOption("verifypeer") == "false")
     {
-      CLog::Log(LOGWARNING, "Repository add-on {} disabled peer verification for add-on downloads in path {} - this is insecure and will make your Kodi installation vulnerable to attacks if enabled!", ID(), datadir.GetRedacted());
+      CLog::Log(
+          LOGWARNING,
+          "Repository add-on {} disabled peer verification for add-on downloads in path {} - this "
+          "is insecure and will make your Kodi installation vulnerable to attacks if enabled!",
+          ID(), datadir.GetRedacted());
     }
   }
 }
@@ -155,7 +164,9 @@ bool CRepository::FetchChecksum(const std::string& url, std::string& checksum) n
   return true;
 }
 
-bool CRepository::FetchIndex(const DirInfo& repo, std::string const& digest, VECADDONS& addons) noexcept
+bool CRepository::FetchIndex(const DirInfo& repo,
+                             std::string const& digest,
+                             VECADDONS& addons) noexcept
 {
   XFILE::CCurlFile http;
 
@@ -171,13 +182,15 @@ bool CRepository::FetchIndex(const DirInfo& repo, std::string const& digest, VEC
     std::string actualDigest = CDigest::Calculate(repo.checksumType, response);
     if (!StringUtils::EqualsNoCase(digest, actualDigest))
     {
-      CLog::Log(LOGERROR, "CRepository: {} index has wrong digest {}, expected: {}", repo.info, actualDigest, digest);
+      CLog::Log(LOGERROR, "CRepository: {} index has wrong digest {}, expected: {}", repo.info,
+                actualDigest, digest);
       return false;
     }
   }
 
-  if (URIUtils::HasExtension(repo.info, ".gz")
-      || CMime::GetFileTypeFromMime(http.GetProperty(XFILE::FILE_PROPERTY_MIME_TYPE)) == CMime::EFileType::FileTypeGZip)
+  if (URIUtils::HasExtension(repo.info, ".gz") ||
+      CMime::GetFileTypeFromMime(http.GetProperty(XFILE::FILE_PROPERTY_MIME_TYPE)) ==
+          CMime::EFileType::FileTypeGZip)
   {
     CLog::Log(LOGDEBUG, "CRepository '%s' is gzip. decompressing", repo.info.c_str());
     std::string buffer;
@@ -193,7 +206,8 @@ bool CRepository::FetchIndex(const DirInfo& repo, std::string const& digest, VEC
 }
 
 CRepository::FetchStatus CRepository::FetchIfChanged(const std::string& oldChecksum,
-    std::string& checksum, VECADDONS& addons) const
+                                                     std::string& checksum,
+                                                     VECADDONS& addons) const
 {
   checksum = "";
   std::vector<std::tuple<DirInfo const&, std::string>> dirChecksums;
@@ -254,7 +268,10 @@ CRepository::DirInfo CRepository::ParseDirConfiguration(const CAddonExtensions& 
     dir.hashType = CDigest::TypeFromString(hashStr);
     if (dir.hashType == CDigest::Type::MD5)
     {
-      CLog::Log(LOGWARNING, "CRepository::{}: Repository has MD5 hashes enabled - this hash function is broken and will only guard against unintentional data corruption", __FUNCTION__);
+      CLog::Log(LOGWARNING,
+                "CRepository::{}: Repository has MD5 hashes enabled - this hash function is broken "
+                "and will only guard against unintentional data corruption",
+                __FUNCTION__);
     }
   }
 
@@ -262,7 +279,10 @@ CRepository::DirInfo CRepository::ParseDirConfiguration(const CAddonExtensions& 
   return dir;
 }
 
-CRepositoryUpdateJob::CRepositoryUpdateJob(const RepositoryPtr& repo) : m_repo(repo) {}
+CRepositoryUpdateJob::CRepositoryUpdateJob(const RepositoryPtr& repo)
+  : m_repo(repo)
+{
+}
 
 bool CRepositoryUpdateJob::DoWork()
 {
@@ -283,7 +303,7 @@ bool CRepositoryUpdateJob::DoWork()
   auto status = m_repo->FetchIfChanged(oldChecksum, newChecksum, addons);
 
   database.SetLastChecked(m_repo->ID(), m_repo->Version(),
-      CDateTime::GetCurrentDateTime().GetAsDBDateTime());
+                          CDateTime::GetCurrentDateTime().GetAsDBDateTime());
 
   MarkFinished();
 
@@ -307,7 +327,8 @@ bool CRepositoryUpdateJob::DoWork()
       AddonPtr oldAddon;
       if (database.GetAddon(addon->ID(), oldAddon) && addon->Version() > oldAddon->Version())
       {
-        if (!oldAddon->Icon().empty() || !oldAddon->Art().empty() || !oldAddon->Screenshots().empty())
+        if (!oldAddon->Icon().empty() || !oldAddon->Art().empty() ||
+            !oldAddon->Screenshots().empty())
           CLog::Log(LOGDEBUG, "CRepository: invalidating cached art for '%s'", addon->ID().c_str());
 
         if (!oldAddon->Icon().empty())

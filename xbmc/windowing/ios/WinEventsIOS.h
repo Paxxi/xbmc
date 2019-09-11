@@ -14,7 +14,7 @@ class CWinEventsIOS : public IWinEvents
 {
 public:
   bool MessagePump() override;
+
 private:
   size_t GetQueueSize();
 };
-

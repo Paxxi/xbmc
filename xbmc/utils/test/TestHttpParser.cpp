@@ -14,13 +14,13 @@ TEST(TestHttpParser, General)
 {
   HttpParser a;
   std::string str = "POST /path/script.cgi HTTP/1.0\r\n"
-                   "From: amejia@xbmc.org\r\n"
-                   "User-Agent: XBMC/snapshot (compatible; MSIE 5.5; Windows NT"
-                     " 4.0)\r\n"
-                   "Content-Type: application/x-www-form-urlencoded\r\n"
-                   "Content-Length: 35\r\n"
-                   "\r\n"
-                   "home=amejia&favorite+flavor=orange\r\n";
+                    "From: amejia@xbmc.org\r\n"
+                    "User-Agent: XBMC/snapshot (compatible; MSIE 5.5; Windows NT"
+                    " 4.0)\r\n"
+                    "Content-Type: application/x-www-form-urlencoded\r\n"
+                    "Content-Length: 35\r\n"
+                    "\r\n"
+                    "home=amejia&favorite+flavor=orange\r\n";
   std::string refstr, varstr;
 
   EXPECT_EQ(a.Done, a.addBytes(str.c_str(), str.length()));

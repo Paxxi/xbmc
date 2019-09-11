@@ -16,23 +16,19 @@
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 
 Node TvShowChildren[] = {
-                          { NODE_TYPE_GENRE,         "genres",   135 },
-                          { NODE_TYPE_TITLE_TVSHOWS, "titles",   10024 },
-                          { NODE_TYPE_YEAR,          "years",    652 },
-                          { NODE_TYPE_ACTOR,         "actors",   344 },
-                          { NODE_TYPE_STUDIO,        "studios",  20388 },
-                          { NODE_TYPE_TAGS,          "tags",     20459 }
-                        };
+    {NODE_TYPE_GENRE, "genres", 135},     {NODE_TYPE_TITLE_TVSHOWS, "titles", 10024},
+    {NODE_TYPE_YEAR, "years", 652},       {NODE_TYPE_ACTOR, "actors", 344},
+    {NODE_TYPE_STUDIO, "studios", 20388}, {NODE_TYPE_TAGS, "tags", 20459}};
 
-CDirectoryNodeTvShowsOverview::CDirectoryNodeTvShowsOverview(const std::string& strName, CDirectoryNode* pParent)
+CDirectoryNodeTvShowsOverview::CDirectoryNodeTvShowsOverview(const std::string& strName,
+                                                             CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_TVSHOWS_OVERVIEW, strName, pParent)
 {
-
 }
 
 NODE_TYPE CDirectoryNodeTvShowsOverview::GetChildType() const
 {
-  if (GetName()=="0")
+  if (GetName() == "0")
     return NODE_TYPE_EPISODES;
 
   for (const Node& node : TvShowChildren)

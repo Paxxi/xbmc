@@ -17,13 +17,15 @@
 #include <memory>
 #include <vector>
 
-class CInputStreamProvider
-  : public ADDON::IAddonProvider
+class CInputStreamProvider : public ADDON::IAddonProvider
 {
 public:
-  CInputStreamProvider(ADDON::BinaryAddonBasePtr addonBase, kodi::addon::IAddonInstance* parentInstance);
+  CInputStreamProvider(ADDON::BinaryAddonBasePtr addonBase,
+                       kodi::addon::IAddonInstance* parentInstance);
 
-  void getAddonInstance(INSTANCE_TYPE instance_type, ADDON::BinaryAddonBasePtr& addonBase, kodi::addon::IAddonInstance*& parentInstance) override;
+  void getAddonInstance(INSTANCE_TYPE instance_type,
+                        ADDON::BinaryAddonBasePtr& addonBase,
+                        kodi::addon::IAddonInstance*& parentInstance) override;
 
 private:
   ADDON::BinaryAddonBasePtr m_addonBase;
@@ -31,16 +33,17 @@ private:
 };
 
 //! \brief Input stream class
-class CInputStreamAddon
-  : public ADDON::IAddonInstanceHandler,
-    public CDVDInputStream,
-    public CDVDInputStream::IDisplayTime,
-    public CDVDInputStream::ITimes,
-    public CDVDInputStream::IPosTime,
-    public CDVDInputStream::IDemux
+class CInputStreamAddon : public ADDON::IAddonInstanceHandler,
+                          public CDVDInputStream,
+                          public CDVDInputStream::IDisplayTime,
+                          public CDVDInputStream::ITimes,
+                          public CDVDInputStream::IPosTime,
+                          public CDVDInputStream::IDemux
 {
 public:
-  CInputStreamAddon(ADDON::BinaryAddonBasePtr& addonBase, IVideoPlayer* player, const CFileItem& fileitem);
+  CInputStreamAddon(ADDON::BinaryAddonBasePtr& addonBase,
+                    IVideoPlayer* player,
+                    const CFileItem& fileitem);
   ~CInputStreamAddon() override;
 
   static bool Supports(ADDON::BinaryAddonBasePtr& addonBase, const CFileItem& fileitem);
@@ -63,7 +66,7 @@ public:
 
   // ITime
   CDVDInputStream::ITimes* GetITimes() override;
-  bool GetTimes(Times &times) override;
+  bool GetTimes(Times& times) override;
 
   // IPosTime
   CDVDInputStream::IPosTime* GetIPosTime() override;
@@ -119,7 +122,9 @@ private:
   * @param encryptedSubsampleCount The number of subsample description blocks to allocate
   * @return The allocated packet.
   */
-  static DemuxPacket* cb_allocate_encrypted_demux_packet(void* kodiInstance, unsigned int dataSize, unsigned int encryptedSubsampleCount);
+  static DemuxPacket* cb_allocate_encrypted_demux_packet(void* kodiInstance,
+                                                         unsigned int dataSize,
+                                                         unsigned int encryptedSubsampleCount);
 
   /*!
    * @brief Free a packet that was allocated with AllocateDemuxPacket

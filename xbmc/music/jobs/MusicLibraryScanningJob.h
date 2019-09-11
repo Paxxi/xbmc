@@ -35,12 +35,12 @@ public:
   bool Cancel() override;
 
   // specialization of CJob
-  const char *GetType() const override { return "MusicLibraryScanningJob"; }
+  const char* GetType() const override { return "MusicLibraryScanningJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
   // implementation of CMusicLibraryJob
-  bool Work(CMusicDatabase &db) override;
+  bool Work(CMusicDatabase& db) override;
 
 private:
   MUSIC_INFO::CMusicInfoScanner m_scanner;

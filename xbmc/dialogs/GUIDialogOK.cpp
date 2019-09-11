@@ -15,7 +15,7 @@
 #include "utils/Variant.h"
 
 CGUIDialogOK::CGUIDialogOK(void)
-    : CGUIDialogBoxBase(WINDOW_DIALOG_OK, "DialogConfirm.xml")
+  : CGUIDialogBoxBase(WINDOW_DIALOG_OK, "DialogConfirm.xml")
 {
 }
 
@@ -39,7 +39,8 @@ bool CGUIDialogOK::OnMessage(CGUIMessage& message)
 // \brief Show CGUIDialogOK dialog, then wait for user to dismiss it.
 bool CGUIDialogOK::ShowAndGetInput(CVariant heading, CVariant text)
 {
-  CGUIDialogOK *dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
+  CGUIDialogOK* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
   if (!dialog)
     return false;
   dialog->SetHeading(heading);
@@ -51,7 +52,8 @@ bool CGUIDialogOK::ShowAndGetInput(CVariant heading, CVariant text)
 // \brief Show CGUIDialogOK dialog, then wait for user to dismiss it.
 bool CGUIDialogOK::ShowAndGetInput(CVariant heading, CVariant line0, CVariant line1, CVariant line2)
 {
-  CGUIDialogOK *dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
+  CGUIDialogOK* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogOK>(WINDOW_DIALOG_OK);
   if (!dialog)
     return false;
   dialog->SetHeading(heading);
@@ -62,7 +64,7 @@ bool CGUIDialogOK::ShowAndGetInput(CVariant heading, CVariant line0, CVariant li
   return dialog->IsConfirmed();
 }
 
-bool CGUIDialogOK::ShowAndGetInput(const HELPERS::DialogOKMessage & options)
+bool CGUIDialogOK::ShowAndGetInput(const HELPERS::DialogOKMessage& options)
 {
   if (!options.heading.isNull())
     SetHeading(options.heading);

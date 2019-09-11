@@ -12,12 +12,12 @@
 
 namespace MUSIC_INFO
 {
-  class CMusicInfoTagLoaderFFmpeg: public IMusicInfoTagLoader
-  {
-  public:
-    CMusicInfoTagLoaderFFmpeg(void);
-    ~CMusicInfoTagLoaderFFmpeg() override;
+class CMusicInfoTagLoaderFFmpeg : public IMusicInfoTagLoader
+{
+public:
+  CMusicInfoTagLoaderFFmpeg(void);
+  ~CMusicInfoTagLoaderFFmpeg() override;
 
-    bool Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt *art = NULL) override;
-  };
-}
+  bool Load(const std::string& strFileName, CMusicInfoTag& tag, EmbeddedArt* art = NULL) override;
+};
+} // namespace MUSIC_INFO

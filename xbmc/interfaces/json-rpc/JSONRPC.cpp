@@ -38,7 +38,8 @@ void CJSONRPC::Initialize()
   // Add some types/enums at runtime
   std::vector<std::string> enumList;
   for (int addonType = ADDON::ADDON_UNKNOWN; addonType < ADDON::ADDON_MAX; addonType++)
-    enumList.push_back(ADDON::CAddonInfo::TranslateType(static_cast<ADDON::TYPE>(addonType), false));
+    enumList.push_back(
+        ADDON::CAddonInfo::TranslateType(static_cast<ADDON::TYPE>(addonType), false));
   CJSONServiceDescription::AddEnum("Addon.Types", enumList);
 
   enumList.clear();
@@ -102,7 +103,8 @@ void CJSONRPC::Initialize()
     CJSONServiceDescription::AddNotification(JSONRPC_SERVICE_NOTIFICATIONS[index]);
 
   m_initialized = true;
-  CLog::Log(LOGINFO, "JSONRPC v%s: Successfully initialized", CJSONServiceDescription::GetVersion());
+  CLog::Log(LOGINFO, "JSONRPC v%s: Successfully initialized",
+            CJSONServiceDescription::GetVersion());
 }
 
 void CJSONRPC::Cleanup()
@@ -111,14 +113,24 @@ void CJSONRPC::Cleanup()
   m_initialized = false;
 }
 
-JSONRPC_STATUS CJSONRPC::Introspect(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
+JSONRPC_STATUS CJSONRPC::Introspect(const std::string& method,
+                                    ITransportLayer* transport,
+                                    IClient* client,
+                                    const CVariant& parameterObject,
+                                    CVariant& result)
 {
-  return CJSONServiceDescription::Print(result, transport, client,
-    parameterObject["getdescriptions"].asBoolean(), parameterObject["getmetadata"].asBoolean(), parameterObject["filterbytransport"].asBoolean(),
-    parameterObject["filter"]["id"].asString(), parameterObject["filter"]["type"].asString(), parameterObject["filter"]["getreferences"].asBoolean());
+  return CJSONServiceDescription::Print(
+      result, transport, client, parameterObject["getdescriptions"].asBoolean(),
+      parameterObject["getmetadata"].asBoolean(), parameterObject["filterbytransport"].asBoolean(),
+      parameterObject["filter"]["id"].asString(), parameterObject["filter"]["type"].asString(),
+      parameterObject["filter"]["getreferences"].asBoolean());
 }
 
-JSONRPC_STATUS CJSONRPC::Version(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
+JSONRPC_STATUS CJSONRPC::Version(const std::string& method,
+                                 ITransportLayer* transport,
+                                 IClient* client,
+                                 const CVariant& parameterObject,
+                                 CVariant& result)
 {
   result["version"]["major"] = 0;
   result["version"]["minor"] = 0;
@@ -139,7 +151,11 @@ JSONRPC_STATUS CJSONRPC::Version(const std::string &method, ITransportLayer *tra
   return OK;
 }
 
-JSONRPC_STATUS CJSONRPC::Permission(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
+JSONRPC_STATUS CJSONRPC::Permission(const std::string& method,
+                                    ITransportLayer* transport,
+                                    IClient* client,
+                                    const CVariant& parameterObject,
+                                    CVariant& result)
 {
   int flags = client->GetPermissionFlags();
 
@@ -149,24 +165,37 @@ JSONRPC_STATUS CJSONRPC::Permission(const std::string &method, ITransportLayer *
   return OK;
 }
 
-JSONRPC_STATUS CJSONRPC::Ping(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
+JSONRPC_STATUS CJSONRPC::Ping(const std::string& method,
+                              ITransportLayer* transport,
+                              IClient* client,
+                              const CVariant& parameterObject,
+                              CVariant& result)
 {
   CVariant temp = "pong";
   result.swap(temp);
   return OK;
 }
 
-JSONRPC_STATUS CJSONRPC::GetConfiguration(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
+JSONRPC_STATUS CJSONRPC::GetConfiguration(const std::string& method,
+                                          ITransportLayer* transport,
+                                          IClient* client,
+                                          const CVariant& parameterObject,
+                                          CVariant& result)
 {
   int flags = client->GetAnnouncementFlags();
 
   for (int i = 1; i <= ANNOUNCEMENT::ANNOUNCE_ALL; i *= 2)
-    result["notifications"][AnnouncementFlagToString((ANNOUNCEMENT::AnnouncementFlag)i)] = (flags & i) == i;
+    result["notifications"][AnnouncementFlagToString((ANNOUNCEMENT::AnnouncementFlag)i)] =
+        (flags & i) == i;
 
   return OK;
 }
 
-JSONRPC_STATUS CJSONRPC::SetConfiguration(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
+JSONRPC_STATUS CJSONRPC::SetConfiguration(const std::string& method,
+                                          ITransportLayer* transport,
+                                          IClient* client,
+                                          const CVariant& parameterObject,
+                                          CVariant& result)
 {
   int flags = 0;
   int oldFlags = client->GetAnnouncementFlags();
@@ -209,22 +238,30 @@ JSONRPC_STATUS CJSONRPC::SetConfiguration(const std::string &method, ITransportL
   return GetConfiguration(method, transport, client, parameterObject, result);
 }
 
-JSONRPC_STATUS CJSONRPC::NotifyAll(const std::string &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
+JSONRPC_STATUS CJSONRPC::NotifyAll(const std::string& method,
+                                   ITransportLayer* transport,
+                                   IClient* client,
+                                   const CVariant& parameterObject,
+                                   CVariant& result)
 {
   if (parameterObject["data"].isNull())
-    CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Other, parameterObject["sender"].asString().c_str(),
-      parameterObject["message"].asString().c_str());
+    CServiceBroker::GetAnnouncementManager()->Announce(
+        ANNOUNCEMENT::Other, parameterObject["sender"].asString().c_str(),
+        parameterObject["message"].asString().c_str());
   else
   {
     CVariant data = parameterObject["data"];
-    CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Other, parameterObject["sender"].asString().c_str(),
-      parameterObject["message"].asString().c_str(), data);
+    CServiceBroker::GetAnnouncementManager()->Announce(
+        ANNOUNCEMENT::Other, parameterObject["sender"].asString().c_str(),
+        parameterObject["message"].asString().c_str(), data);
   }
 
   return ACK;
 }
 
-std::string CJSONRPC::MethodCall(const std::string &inputString, ITransportLayer *transport, IClient *client)
+std::string CJSONRPC::MethodCall(const std::string& inputString,
+                                 ITransportLayer* transport,
+                                 IClient* client)
 {
   CVariant inputroot, outputroot, result;
   bool hasResponse = false;
@@ -243,7 +280,8 @@ std::string CJSONRPC::MethodCall(const std::string &inputString, ITransportLayer
       }
       else
       {
-        for (CVariant::const_iterator_array itr = inputroot.begin_array(); itr != inputroot.end_array(); itr++)
+        for (CVariant::const_iterator_array itr = inputroot.begin_array();
+             itr != inputroot.end_array(); itr++)
         {
           CVariant response;
           if (HandleMethodCall(*itr, response, transport, client))
@@ -266,12 +304,17 @@ std::string CJSONRPC::MethodCall(const std::string &inputString, ITransportLayer
 
   std::string str;
   if (hasResponse)
-    CJSONVariantWriter::Write(outputroot, str, CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_jsonOutputCompact);
+    CJSONVariantWriter::Write(
+        outputroot, str,
+        CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_jsonOutputCompact);
 
   return str;
 }
 
-bool CJSONRPC::HandleMethodCall(const CVariant& request, CVariant& response, ITransportLayer *transport, IClient *client)
+bool CJSONRPC::HandleMethodCall(const CVariant& request,
+                                CVariant& response,
+                                ITransportLayer* transport,
+                                IClient* client)
 {
   JSONRPC_STATUS errorCode = OK;
   CVariant result;
@@ -287,7 +330,9 @@ bool CJSONRPC::HandleMethodCall(const CVariant& request, CVariant& response, ITr
     JSONRPC::MethodCall method;
     CVariant params;
 
-    if ((errorCode = CJSONServiceDescription::CheckCall(methodName.c_str(), request["params"], transport, client, isNotification, method, params)) == OK)
+    if ((errorCode =
+             CJSONServiceDescription::CheckCall(methodName.c_str(), request["params"], transport,
+                                                client, isNotification, method, params)) == OK)
       errorCode = method(methodName, transport, client, params, result);
     else
       result = params;
@@ -308,51 +353,58 @@ bool CJSONRPC::HandleMethodCall(const CVariant& request, CVariant& response, ITr
 
 inline bool CJSONRPC::IsProperJSONRPC(const CVariant& inputroot)
 {
-  return inputroot.isMember("jsonrpc") && inputroot["jsonrpc"].isString() && inputroot["jsonrpc"] == CVariant("2.0") && inputroot.isMember("method") && inputroot["method"].isString() && (!inputroot.isMember("params") || inputroot["params"].isArray() || inputroot["params"].isObject());
+  return inputroot.isMember("jsonrpc") && inputroot["jsonrpc"].isString() &&
+         inputroot["jsonrpc"] == CVariant("2.0") && inputroot.isMember("method") &&
+         inputroot["method"].isString() &&
+         (!inputroot.isMember("params") || inputroot["params"].isArray() ||
+          inputroot["params"].isObject());
 }
 
-inline void CJSONRPC::BuildResponse(const CVariant& request, JSONRPC_STATUS code, const CVariant& result, CVariant& response)
+inline void CJSONRPC::BuildResponse(const CVariant& request,
+                                    JSONRPC_STATUS code,
+                                    const CVariant& result,
+                                    CVariant& response)
 {
   response["jsonrpc"] = "2.0";
   response["id"] = request.isMember("id") ? request["id"] : CVariant();
 
   switch (code)
   {
-    case OK:
-      response["result"] = result;
-      break;
-    case ACK:
-      response["result"] = "OK";
-      break;
-    case InvalidRequest:
-      response["error"]["code"] = InvalidRequest;
-      response["error"]["message"] = "Invalid request.";
-      break;
-    case InvalidParams:
-      response["error"]["code"] = InvalidParams;
-      response["error"]["message"] = "Invalid params.";
-      if (!result.isNull())
-        response["error"]["data"] = result;
-      break;
-    case MethodNotFound:
-      response["error"]["code"] = MethodNotFound;
-      response["error"]["message"] = "Method not found.";
-      break;
-    case ParseError:
-      response["error"]["code"] = ParseError;
-      response["error"]["message"] = "Parse error.";
-      break;
-    case BadPermission:
-      response["error"]["code"] = BadPermission;
-      response["error"]["message"] = "Bad client permission.";
-      break;
-    case FailedToExecute:
-      response["error"]["code"] = FailedToExecute;
-      response["error"]["message"] = "Failed to execute method.";
-      break;
-    default:
-      response["error"]["code"] = InternalError;
-      response["error"]["message"] = "Internal error.";
-      break;
+  case OK:
+    response["result"] = result;
+    break;
+  case ACK:
+    response["result"] = "OK";
+    break;
+  case InvalidRequest:
+    response["error"]["code"] = InvalidRequest;
+    response["error"]["message"] = "Invalid request.";
+    break;
+  case InvalidParams:
+    response["error"]["code"] = InvalidParams;
+    response["error"]["message"] = "Invalid params.";
+    if (!result.isNull())
+      response["error"]["data"] = result;
+    break;
+  case MethodNotFound:
+    response["error"]["code"] = MethodNotFound;
+    response["error"]["message"] = "Method not found.";
+    break;
+  case ParseError:
+    response["error"]["code"] = ParseError;
+    response["error"]["message"] = "Parse error.";
+    break;
+  case BadPermission:
+    response["error"]["code"] = BadPermission;
+    response["error"]["message"] = "Bad client permission.";
+    break;
+  case FailedToExecute:
+    response["error"]["code"] = FailedToExecute;
+    response["error"]["message"] = "Failed to execute method.";
+    break;
+  default:
+    response["error"]["code"] = InternalError;
+    response["error"]["message"] = "Internal error.";
+    break;
   }
 }

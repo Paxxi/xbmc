@@ -18,7 +18,7 @@
 
 #include <utility>
 
-#define MODULE      "xbmc"
+#define MODULE "xbmc"
 
 #define RUNSCRIPT_PREAMBLE \
   "" \
@@ -52,42 +52,40 @@
   ""
 
 #define RUNSCRIPT_POSTSCRIPT \
-        MODULE ".log('-->HTTP Python WSGI Interpreter Initialized<--', " MODULE ".LOGNOTICE)\n" \
-        ""
+  MODULE ".log('-->HTTP Python WSGI Interpreter Initialized<--', " MODULE ".LOGNOTICE)\n" \
+         ""
 
 #if defined(TARGET_ANDROID)
-#define RUNSCRIPT \
-  RUNSCRIPT_PREAMBLE RUNSCRIPT_SETUPTOOLS_HACK RUNSCRIPT_POSTSCRIPT
+#define RUNSCRIPT RUNSCRIPT_PREAMBLE RUNSCRIPT_SETUPTOOLS_HACK RUNSCRIPT_POSTSCRIPT
 #else
-#define RUNSCRIPT \
-  RUNSCRIPT_PREAMBLE RUNSCRIPT_POSTSCRIPT
+#define RUNSCRIPT RUNSCRIPT_PREAMBLE RUNSCRIPT_POSTSCRIPT
 #endif
 
-namespace PythonBindings {
-  void initModule_xbmc(void);
-  void initModule_xbmcaddon(void);
-  void initModule_xbmcwsgi(void);
-}
+namespace PythonBindings
+{
+void initModule_xbmc(void);
+void initModule_xbmcaddon(void);
+void initModule_xbmcwsgi(void);
+} // namespace PythonBindings
 
 using namespace PythonBindings;
 
 typedef struct
 {
-  const char *name;
+  const char* name;
   CPythonInvoker::PythonModuleInitialization initialization;
 } PythonModule;
 
-static PythonModule PythonModules[] =
-{
-  { "xbmc",           initModule_xbmc },
-  { "xbmcaddon",      initModule_xbmcaddon  },
-  { "xbmcwsgi",       initModule_xbmcwsgi }
-};
+static PythonModule PythonModules[] = {{"xbmc", initModule_xbmc},
+                                       {"xbmcaddon", initModule_xbmcaddon},
+                                       {"xbmcwsgi", initModule_xbmcwsgi}};
 
-CHTTPPythonWsgiInvoker::CHTTPPythonWsgiInvoker(ILanguageInvocationHandler* invocationHandler, HTTPPythonRequest* request)
-  : CHTTPPythonInvoker(invocationHandler, request),
-    m_wsgiResponse(NULL)
-{ }
+CHTTPPythonWsgiInvoker::CHTTPPythonWsgiInvoker(ILanguageInvocationHandler* invocationHandler,
+                                               HTTPPythonRequest* request)
+  : CHTTPPythonInvoker(invocationHandler, request)
+  , m_wsgiResponse(NULL)
+{
+}
 
 CHTTPPythonWsgiInvoker::~CHTTPPythonWsgiInvoker()
 {
@@ -107,7 +105,10 @@ HTTPPythonRequest* CHTTPPythonWsgiInvoker::GetRequest()
   return m_request;
 }
 
-void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, void *module, void *moduleDict)
+void CHTTPPythonWsgiInvoker::executeScript(void* fp,
+                                           const std::string& script,
+                                           void* module,
+                                           void* moduleDict)
 {
   if (m_request == NULL || m_addon == NULL || m_addon->Type() != ADDON::ADDON_WEB_INTERFACE ||
       fp == NULL || script.empty() || module == NULL || moduleDict == NULL)
@@ -116,7 +117,8 @@ void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, 
   ADDON::CWebinterface* webinterface = static_cast<ADDON::CWebinterface*>(m_addon.get());
   if (webinterface->GetType() != ADDON::WebinterfaceTypeWsgi)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: trying to execute a non-WSGI script at %s", script.c_str());
+    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: trying to execute a non-WSGI script at %s",
+              script.c_str());
     return;
   }
 
@@ -137,7 +139,8 @@ void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, 
   pyScript = PyString_FromStringAndSize(scriptName.c_str(), scriptName.size());
   if (pyScript == NULL)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to convert script \"%s\" to python string", script.c_str());
+    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to convert script \"%s\" to python string",
+              script.c_str());
     return;
   }
 
@@ -147,24 +150,31 @@ void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, 
   Py_DECREF(pyScript);
   if (pyModule == NULL)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to load WSGI script \"%s\"", script.c_str());
+    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to load WSGI script \"%s\"",
+              script.c_str());
     return;
   }
 
   // get the entry point
   const std::string& entryPoint = webinterface->EntryPoint();
-  CLog::Log(LOGDEBUG, "CHTTPPythonWsgiInvoker: loading entry point \"%s\" from WSGI script \"%s\"", entryPoint.c_str(), script.c_str());
+  CLog::Log(LOGDEBUG, "CHTTPPythonWsgiInvoker: loading entry point \"%s\" from WSGI script \"%s\"",
+            entryPoint.c_str(), script.c_str());
   pyEntryPoint = PyObject_GetAttrString(pyModule, entryPoint.c_str());
   if (pyEntryPoint == NULL)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to entry point \"%s\" from WSGI script \"%s\"", entryPoint.c_str(), script.c_str());
+    CLog::Log(LOGERROR,
+              "CHTTPPythonWsgiInvoker: failed to entry point \"%s\" from WSGI script \"%s\"",
+              entryPoint.c_str(), script.c_str());
     goto cleanup;
   }
 
   // check if the loaded entry point is a callable function
   if (!PyCallable_Check(pyEntryPoint))
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: defined entry point \"%s\" from WSGI script \"%s\" is not callable", entryPoint.c_str(), script.c_str());
+    CLog::Log(LOGERROR,
+              "CHTTPPythonWsgiInvoker: defined entry point \"%s\" from WSGI script \"%s\" is not "
+              "callable",
+              entryPoint.c_str(), script.c_str());
     goto cleanup;
   }
 
@@ -172,7 +182,9 @@ void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, 
   m_wsgiResponse = new XBMCAddon::xbmcwsgi::WsgiResponse();
   if (m_wsgiResponse == NULL)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to create WsgiResponse object for WSGI script \"%s\"", script.c_str());
+    CLog::Log(LOGERROR,
+              "CHTTPPythonWsgiInvoker: failed to create WsgiResponse object for WSGI script \"%s\"",
+              script.c_str());
     goto cleanup;
   }
 
@@ -198,17 +210,26 @@ void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, 
   }
   catch (const XBMCAddon::WrongTypeException& e)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to prepare WsgiResponse object for WSGI script \"%s\" with wrong type exception: %s", script.c_str(), e.GetMessage());
+    CLog::Log(LOGERROR,
+              "CHTTPPythonWsgiInvoker: failed to prepare WsgiResponse object for WSGI script "
+              "\"%s\" with wrong type exception: %s",
+              script.c_str(), e.GetMessage());
     goto cleanup;
   }
   catch (const XbmcCommons::Exception& e)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to prepare WsgiResponse object for WSGI script \"%s\" with exception: %s", script.c_str(), e.GetMessage());
+    CLog::Log(LOGERROR,
+              "CHTTPPythonWsgiInvoker: failed to prepare WsgiResponse object for WSGI script "
+              "\"%s\" with exception: %s",
+              script.c_str(), e.GetMessage());
     goto cleanup;
   }
   catch (...)
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to prepare WsgiResponse object for WSGI script \"%s\" with unknown exception", script.c_str());
+    CLog::Log(LOGERROR,
+              "CHTTPPythonWsgiInvoker: failed to prepare WsgiResponse object for WSGI script "
+              "\"%s\" with unknown exception",
+              script.c_str());
     goto cleanup;
   }
 
@@ -230,7 +251,8 @@ void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, 
   pyResultIterator = PyObject_GetIter(pyResult);
   if (pyResultIterator == NULL || !PyIter_Check(pyResultIterator))
   {
-    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: result of WSGI script \"%s\" is not iterable", script.c_str());
+    CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: result of WSGI script \"%s\" is not iterable",
+              script.c_str());
     goto cleanup;
   }
 
@@ -240,21 +262,31 @@ void CHTTPPythonWsgiInvoker::executeScript(void *fp, const std::string &script, 
     std::string result;
     try
     {
-      PythonBindings::PyXBMCGetUnicodeString(result, pyIterResult, false, "result", "handle_request");
+      PythonBindings::PyXBMCGetUnicodeString(result, pyIterResult, false, "result",
+                                             "handle_request");
     }
     catch (const XBMCAddon::WrongTypeException& e)
     {
-      CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to parse result iterable object for WSGI script \"%s\" with wrong type exception: %s", script.c_str(), e.GetMessage());
+      CLog::Log(LOGERROR,
+                "CHTTPPythonWsgiInvoker: failed to parse result iterable object for WSGI script "
+                "\"%s\" with wrong type exception: %s",
+                script.c_str(), e.GetMessage());
       goto cleanup;
     }
     catch (const XbmcCommons::Exception& e)
     {
-      CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to parse result iterable object for WSGI script \"%s\" with exception: %s", script.c_str(), e.GetMessage());
+      CLog::Log(LOGERROR,
+                "CHTTPPythonWsgiInvoker: failed to parse result iterable object for WSGI script "
+                "\"%s\" with exception: %s",
+                script.c_str(), e.GetMessage());
       goto cleanup;
     }
     catch (...)
     {
-      CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to parse result iterable object for WSGI script \"%s\" with unknown exception", script.c_str());
+      CLog::Log(LOGERROR,
+                "CHTTPPythonWsgiInvoker: failed to parse result iterable object for WSGI script "
+                "\"%s\" with unknown exception",
+                script.c_str());
       goto cleanup;
     }
 
@@ -274,7 +306,9 @@ cleanup:
     {
       //! @bug libpython < 3.4 isn't const correct
       if (PyObject_CallMethod(pyResultIterator, const_cast<char*>("close"), NULL) == NULL)
-        CLog::Log(LOGERROR, "CHTTPPythonWsgiInvoker: failed to close iterator object for WSGI script \"%s\"", script.c_str());
+        CLog::Log(LOGERROR,
+                  "CHTTPPythonWsgiInvoker: failed to close iterator object for WSGI script \"%s\"",
+                  script.c_str());
     }
     Py_DECREF(pyResultIterator);
   }
@@ -292,7 +326,8 @@ cleanup:
   }
 }
 
-std::map<std::string, CPythonInvoker::PythonModuleInitialization> CHTTPPythonWsgiInvoker::getModules() const
+std::map<std::string, CPythonInvoker::PythonModuleInitialization> CHTTPPythonWsgiInvoker::
+    getModules() const
 {
   static std::map<std::string, PythonModuleInitialization> modules;
   if (modules.empty())
@@ -309,7 +344,8 @@ const char* CHTTPPythonWsgiInvoker::getInitializationScript() const
   return RUNSCRIPT;
 }
 
-std::map<std::string, std::string> CHTTPPythonWsgiInvoker::createCgiEnvironment(const HTTPPythonRequest* httpRequest, ADDON::AddonPtr addon)
+std::map<std::string, std::string> CHTTPPythonWsgiInvoker::createCgiEnvironment(
+    const HTTPPythonRequest* httpRequest, ADDON::AddonPtr addon)
 {
   std::map<std::string, std::string> environment;
 
@@ -333,7 +369,8 @@ std::map<std::string, std::string> CHTTPPythonWsgiInvoker::createCgiEnvironment(
   environment.insert(std::make_pair("REQUEST_METHOD", requestMethod));
 
   // SCRIPT_NAME
-  std::string scriptName = std::dynamic_pointer_cast<ADDON::CWebinterface>(addon)->GetBaseLocation();
+  std::string scriptName =
+      std::dynamic_pointer_cast<ADDON::CWebinterface>(addon)->GetBaseLocation();
   environment.insert(std::make_pair("SCRIPT_NAME", scriptName));
 
   // PATH_INFO
@@ -343,13 +380,14 @@ std::map<std::string, std::string> CHTTPPythonWsgiInvoker::createCgiEnvironment(
   // QUERY_STRING
   size_t iOptions = httpRequest->url.find_first_of('?');
   if (iOptions != std::string::npos)
-    environment.insert(std::make_pair("QUERY_STRING", httpRequest->url.substr(iOptions+1)));
+    environment.insert(std::make_pair("QUERY_STRING", httpRequest->url.substr(iOptions + 1)));
   else
     environment.insert(std::make_pair("QUERY_STRING", ""));
 
   // CONTENT_TYPE
   std::string headerValue;
-  std::multimap<std::string, std::string>::const_iterator headerIt = httpRequest->headerValues.find(MHD_HTTP_HEADER_CONTENT_TYPE);
+  std::multimap<std::string, std::string>::const_iterator headerIt =
+      httpRequest->headerValues.find(MHD_HTTP_HEADER_CONTENT_TYPE);
   if (headerIt != httpRequest->headerValues.end())
     headerValue = headerIt->second;
   environment.insert(std::make_pair("CONTENT_TYPE", headerValue));
@@ -371,7 +409,8 @@ std::map<std::string, std::string> CHTTPPythonWsgiInvoker::createCgiEnvironment(
   environment.insert(std::make_pair("SERVER_PROTOCOL", httpRequest->version));
 
   // HTTP_<HEADER_NAME>
-  for (headerIt = httpRequest->headerValues.begin(); headerIt != httpRequest->headerValues.end(); ++headerIt)
+  for (headerIt = httpRequest->headerValues.begin(); headerIt != httpRequest->headerValues.end();
+       ++headerIt)
   {
     std::string headerName = headerIt->first;
     StringUtils::ToUpper(headerName);
@@ -405,7 +444,8 @@ void CHTTPPythonWsgiInvoker::addWsgiEnvironment(HTTPPythonRequest* request, void
   }
   {
     // wsgi.input
-    XBMCAddon::xbmcwsgi::WsgiInputStream* wsgiInputStream = new XBMCAddon::xbmcwsgi::WsgiInputStream();
+    XBMCAddon::xbmcwsgi::WsgiInputStream* wsgiInputStream =
+        new XBMCAddon::xbmcwsgi::WsgiInputStream();
     if (request != NULL)
       wsgiInputStream->SetRequest(request);
 
@@ -416,7 +456,8 @@ void CHTTPPythonWsgiInvoker::addWsgiEnvironment(HTTPPythonRequest* request, void
   }
   {
     // wsgi.errors
-    XBMCAddon::xbmcwsgi::WsgiErrorStream* wsgiErrorStream = new XBMCAddon::xbmcwsgi::WsgiErrorStream();
+    XBMCAddon::xbmcwsgi::WsgiErrorStream* wsgiErrorStream =
+        new XBMCAddon::xbmcwsgi::WsgiErrorStream();
     if (request != NULL)
       wsgiErrorStream->SetRequest(request);
 

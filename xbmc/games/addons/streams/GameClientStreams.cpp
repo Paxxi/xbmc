@@ -23,8 +23,8 @@
 using namespace KODI;
 using namespace GAME;
 
-CGameClientStreams::CGameClientStreams(CGameClient &gameClient) :
-  m_gameClient(gameClient)
+CGameClientStreams::CGameClientStreams(CGameClient& gameClient)
+  : m_gameClient(gameClient)
 {
 }
 
@@ -38,7 +38,7 @@ void CGameClientStreams::Deinitialize()
   m_streamManager = nullptr;
 }
 
-IGameClientStream *CGameClientStreams::OpenStream(const game_stream_properties &properties)
+IGameClientStream* CGameClientStreams::OpenStream(const game_stream_properties& properties)
 {
   if (m_streamManager == nullptr)
     return nullptr;
@@ -53,14 +53,16 @@ IGameClientStream *CGameClientStreams::OpenStream(const game_stream_properties &
   std::unique_ptr<IGameClientStream> gameStream = CreateStream(properties.type);
   if (!gameStream)
   {
-    CLog::Log(LOGERROR, "GAME: No stream implementation for type: %d", static_cast<int>(properties.type));
+    CLog::Log(LOGERROR, "GAME: No stream implementation for type: %d",
+              static_cast<int>(properties.type));
     return nullptr;
   }
 
   RETRO::StreamPtr retroStream = m_streamManager->CreateStream(retroStreamType);
   if (!retroStream)
   {
-    CLog::Log(LOGERROR, "GAME:  Invalid RetroPlayer stream type: %$d", static_cast<int>(retroStreamType));
+    CLog::Log(LOGERROR, "GAME:  Invalid RetroPlayer stream type: %$d",
+              static_cast<int>(retroStreamType));
     return nullptr;
   }
 
@@ -75,7 +77,7 @@ IGameClientStream *CGameClientStreams::OpenStream(const game_stream_properties &
   return gameStream.release();
 }
 
-void CGameClientStreams::CloseStream(IGameClientStream *stream)
+void CGameClientStreams::CloseStream(IGameClientStream* stream)
 {
   if (stream != nullptr)
   {
@@ -87,7 +89,8 @@ void CGameClientStreams::CloseStream(IGameClientStream *stream)
   }
 }
 
-std::unique_ptr<IGameClientStream> CGameClientStreams::CreateStream(GAME_STREAM_TYPE streamType) const
+std::unique_ptr<IGameClientStream> CGameClientStreams::CreateStream(
+    GAME_STREAM_TYPE streamType) const
 {
   std::unique_ptr<IGameClientStream> gameStream;
 

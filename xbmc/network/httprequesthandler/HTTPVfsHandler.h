@@ -18,11 +18,14 @@ public:
   CHTTPVfsHandler() = default;
   ~CHTTPVfsHandler() override = default;
 
-  IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPVfsHandler(request); }
-  bool CanHandleRequest(const HTTPRequest &request) const override;
+  IHTTPRequestHandler* Create(const HTTPRequest& request) const override
+  {
+    return new CHTTPVfsHandler(request);
+  }
+  bool CanHandleRequest(const HTTPRequest& request) const override;
 
   int GetPriority() const override { return 5; }
 
 protected:
-  explicit CHTTPVfsHandler(const HTTPRequest &request);
+  explicit CHTTPVfsHandler(const HTTPRequest& request);
 };

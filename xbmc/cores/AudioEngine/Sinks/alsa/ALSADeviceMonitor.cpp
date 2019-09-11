@@ -16,9 +16,9 @@
 
 #include <libudev.h>
 
-CALSADeviceMonitor::CALSADeviceMonitor() :
-  m_udev(NULL),
-  m_udevMonitor(NULL)
+CALSADeviceMonitor::CALSADeviceMonitor()
+  : m_udev(NULL)
+  , m_udevMonitor(NULL)
 {
 }
 
@@ -50,7 +50,9 @@ void CALSADeviceMonitor::Start()
     err = udev_monitor_filter_add_match_subsystem_devtype(m_udevMonitor, "sound", NULL);
     if (err)
     {
-      CLog::Log(LOGERROR, "CALSADeviceMonitor::Start - udev_monitor_filter_add_match_subsystem_devtype() failed");
+      CLog::Log(
+          LOGERROR,
+          "CALSADeviceMonitor::Start - udev_monitor_filter_add_match_subsystem_devtype() failed");
       goto err_unref_monitor;
     }
 
@@ -61,10 +63,9 @@ void CALSADeviceMonitor::Start()
       goto err_unref_monitor;
     }
 
-    g_fdEventMonitor.AddFD(
-        CFDEventMonitor::MonitoredFD(udev_monitor_get_fd(m_udevMonitor),
-                                     POLLIN, FDEventCallback, m_udevMonitor),
-        m_fdMonitorId);
+    g_fdEventMonitor.AddFD(CFDEventMonitor::MonitoredFD(udev_monitor_get_fd(m_udevMonitor), POLLIN,
+                                                        FDEventCallback, m_udevMonitor),
+                           m_fdMonitorId);
   }
 
   return;
@@ -90,11 +91,11 @@ void CALSADeviceMonitor::Stop()
   }
 }
 
-void CALSADeviceMonitor::FDEventCallback(int id, int fd, short revents, void *data)
+void CALSADeviceMonitor::FDEventCallback(int id, int fd, short revents, void* data)
 {
-  struct udev_monitor *udevMonitor = (struct udev_monitor *)data;
+  struct udev_monitor* udevMonitor = (struct udev_monitor*)data;
   bool audioDevicesChanged = false;
-  struct udev_device *device;
+  struct udev_device* device;
 
   while ((device = udev_monitor_receive_device(udevMonitor)) != NULL)
   {
@@ -107,7 +108,8 @@ void CALSADeviceMonitor::FDEventCallback(int id, int fd, short revents, void *da
     /* cardX devices emit a "change" event when ready (i.e. all subdevices added) */
     if (strcmp(action, "change") == 0)
     {
-      CLog::Log(LOGDEBUG, "CALSADeviceMonitor - ALSA card added (\"%s\", \"%s\")", udev_device_get_syspath(device), udev_device_get_devpath(device));
+      CLog::Log(LOGDEBUG, "CALSADeviceMonitor - ALSA card added (\"%s\", \"%s\")",
+                udev_device_get_syspath(device), udev_device_get_devpath(device));
       audioDevicesChanged = true;
     }
     else if (strcmp(action, "remove") == 0)

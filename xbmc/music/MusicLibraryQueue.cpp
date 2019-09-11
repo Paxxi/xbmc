@@ -25,9 +25,10 @@
 #include <utility>
 
 CMusicLibraryQueue::CMusicLibraryQueue()
-  : CJobQueue(false, 1, CJob::PRIORITY_LOW),
-    m_jobs()
-{ }
+  : CJobQueue(false, 1, CJob::PRIORITY_LOW)
+  , m_jobs()
+{
+}
 
 CMusicLibraryQueue::~CMusicLibraryQueue()
 {
@@ -41,16 +42,18 @@ CMusicLibraryQueue& CMusicLibraryQueue::GetInstance()
   return s_instance;
 }
 
-void CMusicLibraryQueue::ExportLibrary(const CLibExportSettings& settings, bool showDialog /* = false */)
+void CMusicLibraryQueue::ExportLibrary(const CLibExportSettings& settings,
+                                       bool showDialog /* = false */)
 {
   CGUIDialogProgress* progress = NULL;
   if (showDialog)
   {
-    progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
+    progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(
+        WINDOW_DIALOG_PROGRESS);
     if (progress)
     {
-      progress->SetHeading(CVariant{ 20196 }); //"Export music library"
-      progress->SetText(CVariant{ 650 });   //"Exporting"
+      progress->SetHeading(CVariant{20196}); //"Export music library"
+      progress->SetText(CVariant{650}); //"Exporting"
       progress->SetPercentage(0);
       progress->Open();
       progress->ShowProgressBar(true);
@@ -83,13 +86,14 @@ void CMusicLibraryQueue::ImportLibrary(const std::string& xmlFile, bool showDial
   CGUIDialogProgress* progress = nullptr;
   if (showDialog)
   {
-    progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
+    progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(
+        WINDOW_DIALOG_PROGRESS);
     if (progress)
     {
-      progress->SetHeading(CVariant{ 20197 }); //"Import music library"
-      progress->SetText(CVariant{ 649 });   //"Importing"
-      progress->SetLine(1, CVariant{ 330 }); //"This could take some time"
-      progress->SetLine(2, CVariant{ "" });
+      progress->SetHeading(CVariant{20197}); //"Import music library"
+      progress->SetText(CVariant{649}); //"Importing"
+      progress->SetLine(1, CVariant{330}); //"This could take some time"
+      progress->SetLine(2, CVariant{""});
       progress->SetPercentage(0);
       progress->Open();
       progress->ShowProgressBar(true);
@@ -117,12 +121,14 @@ void CMusicLibraryQueue::ImportLibrary(const std::string& xmlFile, bool showDial
   }
 }
 
-void CMusicLibraryQueue::ScanLibrary(const std::string& strDirectory, int flags /* = 0 */, bool showProgress /* = true */)
+void CMusicLibraryQueue::ScanLibrary(const std::string& strDirectory,
+                                     int flags /* = 0 */,
+                                     bool showProgress /* = true */)
 {
   AddJob(new CMusicLibraryScanningJob(strDirectory, flags, showProgress));
 }
 
-void CMusicLibraryQueue::StartAlbumScan(const std::string & strDirectory, bool refresh)
+void CMusicLibraryQueue::StartAlbumScan(const std::string& strDirectory, bool refresh)
 {
   int flags = MUSIC_INFO::CMusicInfoScanner::SCAN_ALBUMS;
   if (refresh)
@@ -178,10 +184,11 @@ void CMusicLibraryQueue::CleanLibrary(bool showDialog /* = false */)
   CGUIDialogProgress* progress = NULL;
   if (showDialog)
   {
-    progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
+    progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(
+        WINDOW_DIALOG_PROGRESS);
     if (progress)
     {
-      progress->SetHeading(CVariant{ 700 });
+      progress->SetHeading(CVariant{700});
       progress->SetPercentage(0);
       progress->Open();
       progress->ShowProgressBar(true);
@@ -204,10 +211,11 @@ void CMusicLibraryQueue::CleanLibraryModal()
     return;
 
   CGUIDialogProgress* progress = nullptr;
-  progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
+  progress = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(
+      WINDOW_DIALOG_PROGRESS);
   if (progress)
   {
-    progress->SetHeading(CVariant{ 700 });
+    progress->SetHeading(CVariant{700});
     progress->SetPercentage(0);
     progress->Open();
     progress->ShowProgressBar(true);
@@ -222,7 +230,7 @@ void CMusicLibraryQueue::CleanLibraryModal()
   Refresh();
 }
 
-void CMusicLibraryQueue::AddJob(CMusicLibraryJob *job)
+void CMusicLibraryQueue::AddJob(CMusicLibraryJob* job)
 {
   if (job == NULL)
     return;
@@ -244,7 +252,7 @@ void CMusicLibraryQueue::AddJob(CMusicLibraryJob *job)
     jobsIt->second.insert(job);
 }
 
-void CMusicLibraryQueue::CancelJob(CMusicLibraryJob *job)
+void CMusicLibraryQueue::CancelJob(CMusicLibraryJob* job)
 {
   if (job == NULL)
     return;
@@ -290,7 +298,7 @@ void CMusicLibraryQueue::Refresh()
   CServiceBroker::GetGUI()->GetWindowManager().SendThreadMessage(msg);
 }
 
-void CMusicLibraryQueue::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CMusicLibraryQueue::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   if (success)
   {

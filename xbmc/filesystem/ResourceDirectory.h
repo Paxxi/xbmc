@@ -12,15 +12,15 @@
 
 namespace XFILE
 {
-  class CResourceDirectory : public COverrideDirectory
-  {
-  public:
-    CResourceDirectory();
-    ~CResourceDirectory() override;
+class CResourceDirectory : public COverrideDirectory
+{
+public:
+  CResourceDirectory();
+  ~CResourceDirectory() override;
 
-    bool GetDirectory(const CURL& url, CFileItemList &items) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
 
-  protected:
-    std::string TranslatePath(const CURL &url) override;
-  };
-}
+protected:
+  std::string TranslatePath(const CURL& url) override;
+};
+} // namespace XFILE

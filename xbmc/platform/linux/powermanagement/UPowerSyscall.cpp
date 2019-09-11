@@ -10,14 +10,15 @@
 
 #include "utils/log.h"
 
-CUPowerSource::CUPowerSource(const char *powerSource)
+CUPowerSource::CUPowerSource(const char* powerSource)
 {
-  if(powerSource == NULL)
+  if (powerSource == NULL)
     m_powerSource = "";
   else
     m_powerSource = powerSource;
 
-  CVariant properties = CDBusUtil::GetAll("org.freedesktop.UPower", m_powerSource.c_str(), "org.freedesktop.UPower.Device");
+  CVariant properties = CDBusUtil::GetAll("org.freedesktop.UPower", m_powerSource.c_str(),
+                                          "org.freedesktop.UPower.Device");
   m_isRechargeable = properties["IsRechargeable"].asBoolean();
   Update();
 }
@@ -26,7 +27,8 @@ CUPowerSource::~CUPowerSource() = default;
 
 void CUPowerSource::Update()
 {
-  CVariant properties = CDBusUtil::GetAll("org.freedesktop.UPower", m_powerSource.c_str(), "org.freedesktop.UPower.Device");
+  CVariant properties = CDBusUtil::GetAll("org.freedesktop.UPower", m_powerSource.c_str(),
+                                          "org.freedesktop.UPower.Device");
   m_batteryLevel = properties["Percentage"].asDouble();
 }
 
@@ -64,7 +66,7 @@ CUPowerSyscall::CUPowerSyscall()
   }
 
   m_CanPowerdown = false;
-  m_CanReboot    = false;
+  m_CanReboot = false;
 
   UpdateCapabilities();
 
@@ -79,20 +81,24 @@ bool CUPowerSyscall::Powerdown()
 bool CUPowerSyscall::Suspend()
 {
   // UPower 0.9.1 does not signal sleeping unless you tell that its about to sleep...
-  CDBusMessage aboutToSleepMessage("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "AboutToSleep");
+  CDBusMessage aboutToSleepMessage("org.freedesktop.UPower", "/org/freedesktop/UPower",
+                                   "org.freedesktop.UPower", "AboutToSleep");
   aboutToSleepMessage.SendAsyncSystem();
 
-  CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "Suspend");
+  CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower",
+                       "org.freedesktop.UPower", "Suspend");
   return message.SendAsyncSystem();
 }
 
 bool CUPowerSyscall::Hibernate()
 {
   // UPower 0.9.1 does not signal sleeping unless you tell that its about to sleep...
-  CDBusMessage aboutToSleepMessage("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "AboutToSleep");
+  CDBusMessage aboutToSleepMessage("org.freedesktop.UPower", "/org/freedesktop/UPower",
+                                   "org.freedesktop.UPower", "AboutToSleep");
   aboutToSleepMessage.SendAsyncSystem();
 
-  CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "Hibernate");
+  CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower",
+                       "org.freedesktop.UPower", "Hibernate");
   return message.SendAsyncSystem();
 }
 
@@ -123,9 +129,9 @@ bool CUPowerSyscall::CanReboot()
 
 int CUPowerSyscall::BatteryLevel()
 {
-  unsigned int nBatteryCount  = 0;
-  double       subCapacity    = 0;
-  double       batteryLevel   = 0;
+  unsigned int nBatteryCount = 0;
+  double subCapacity = 0;
+  double batteryLevel = 0;
 
   for (auto& itr : m_powerSources)
   {
@@ -137,22 +143,24 @@ int CUPowerSyscall::BatteryLevel()
     }
   }
 
-  if(nBatteryCount)
+  if (nBatteryCount)
     batteryLevel = subCapacity / (double)nBatteryCount;
 
-  return (int) batteryLevel;
+  return (int)batteryLevel;
 }
 
 void CUPowerSyscall::EnumeratePowerSources()
 {
-  CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "EnumerateDevices");
-  DBusMessage *reply = message.SendSystem();
+  CDBusMessage message("org.freedesktop.UPower", "/org/freedesktop/UPower",
+                       "org.freedesktop.UPower", "EnumerateDevices");
+  DBusMessage* reply = message.SendSystem();
   if (reply)
   {
-    char** source  = NULL;
-    int    length = 0;
+    char** source = NULL;
+    int length = 0;
 
-    if (dbus_message_get_args (reply, NULL, DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &source, &length, DBUS_TYPE_INVALID))
+    if (dbus_message_get_args(reply, NULL, DBUS_TYPE_ARRAY, DBUS_TYPE_OBJECT_PATH, &source, &length,
+                              DBUS_TYPE_INVALID))
     {
       for (int i = 0; i < length; i++)
       {
@@ -166,10 +174,12 @@ void CUPowerSyscall::EnumeratePowerSources()
 
 bool CUPowerSyscall::HasUPower()
 {
-  return CDBusUtil::TryMethodCall(DBUS_BUS_SYSTEM, "org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "EnumerateDevices");
+  return CDBusUtil::TryMethodCall(DBUS_BUS_SYSTEM, "org.freedesktop.UPower",
+                                  "/org/freedesktop/UPower", "org.freedesktop.UPower",
+                                  "EnumerateDevices");
 }
 
-bool CUPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
+bool CUPowerSyscall::PumpPowerEvents(IPowerEventsCallback* callback)
 {
   bool result = false;
 
@@ -193,7 +203,8 @@ bool CUPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
           callback->OnLowBattery();
       }
       else
-        CLog::Log(LOGDEBUG, "UPower: Received an unknown signal %s", dbus_message_get_member(msg.get()));
+        CLog::Log(LOGDEBUG, "UPower: Received an unknown signal %s",
+                  dbus_message_get_member(msg.get()));
     }
   }
   return result;
@@ -201,6 +212,10 @@ bool CUPowerSyscall::PumpPowerEvents(IPowerEventsCallback *callback)
 
 void CUPowerSyscall::UpdateCapabilities()
 {
-  m_CanSuspend   = CDBusUtil::GetVariant("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "CanSuspend").asBoolean(false);
-  m_CanHibernate = CDBusUtil::GetVariant("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.UPower", "CanHibernate").asBoolean(false);
+  m_CanSuspend = CDBusUtil::GetVariant("org.freedesktop.UPower", "/org/freedesktop/UPower",
+                                       "org.freedesktop.UPower", "CanSuspend")
+                     .asBoolean(false);
+  m_CanHibernate = CDBusUtil::GetVariant("org.freedesktop.UPower", "/org/freedesktop/UPower",
+                                         "org.freedesktop.UPower", "CanHibernate")
+                       .asBoolean(false);
 }

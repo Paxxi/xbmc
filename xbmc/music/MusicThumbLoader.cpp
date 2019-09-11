@@ -19,7 +19,8 @@
 
 using namespace MUSIC_INFO;
 
-CMusicThumbLoader::CMusicThumbLoader() : CThumbLoader()
+CMusicThumbLoader::CMusicThumbLoader()
+  : CThumbLoader()
 {
   m_musicDatabase = new CMusicDatabase;
 }
@@ -45,8 +46,8 @@ void CMusicThumbLoader::OnLoaderFinish()
 
 bool CMusicThumbLoader::LoadItem(CFileItem* pItem)
 {
-  bool result  = LoadItemCached(pItem);
-       result |= LoadItemLookup(pItem);
+  bool result = LoadItemCached(pItem);
+  result |= LoadItemLookup(pItem);
 
   return result;
 }
@@ -100,7 +101,8 @@ bool CMusicThumbLoader::LoadItemLookup(CFileItem* pItem)
   if (pItem->m_bIsShareOrDrive)
     return false;
 
-  if (pItem->HasMusicInfoTag() && pItem->GetMusicInfoTag()->GetType() == MediaTypeArtist) // No fallback for artist
+  if (pItem->HasMusicInfoTag() &&
+      pItem->GetMusicInfoTag()->GetType() == MediaTypeArtist) // No fallback for artist
     return false;
 
   if (pItem->HasVideoInfoTag())
@@ -133,7 +135,7 @@ bool CMusicThumbLoader::LoadItemLookup(CFileItem* pItem)
   return true;
 }
 
-bool CMusicThumbLoader::FillThumb(CFileItem &item, bool folderThumbs /* = true */)
+bool CMusicThumbLoader::FillThumb(CFileItem& item, bool folderThumbs /* = true */)
 {
   if (item.HasArt("thumb"))
     return true;
@@ -149,7 +151,7 @@ bool CMusicThumbLoader::FillThumb(CFileItem &item, bool folderThumbs /* = true *
   return !thumb.empty();
 }
 
-bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
+bool CMusicThumbLoader::FillLibraryArt(CFileItem& item)
 {
   /* Called for any item with MusicInfoTag and no art. 
      Items on Genres, Sources and Roles nodes have ID (although items on Years
@@ -158,15 +160,16 @@ bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
   */
   bool artfound(false);
   std::vector<ArtForThumbLoader> art;
-  CMusicInfoTag &tag = *item.GetMusicInfoTag();
-  if (tag.GetDatabaseId() > -1 && (tag.GetType() == MediaTypeSong || 
-      tag.GetType() == MediaTypeAlbum || 
-      tag.GetType() == MediaTypeArtist))
+  CMusicInfoTag& tag = *item.GetMusicInfoTag();
+  if (tag.GetDatabaseId() > -1 &&
+      (tag.GetType() == MediaTypeSong || tag.GetType() == MediaTypeAlbum ||
+       tag.GetType() == MediaTypeArtist))
   {
     // Item in music library, fetch the art
     m_musicDatabase->Open();
     if (tag.GetType() == MediaTypeSong)
-      artfound = m_musicDatabase->GetArtForItem(tag.GetDatabaseId(), tag.GetAlbumId(), -1, false, art);
+      artfound =
+          m_musicDatabase->GetArtForItem(tag.GetDatabaseId(), tag.GetAlbumId(), -1, false, art);
     else if (tag.GetType() == MediaTypeAlbum)
       artfound = m_musicDatabase->GetArtForItem(-1, tag.GetDatabaseId(), -1, false, art);
     else //Artist
@@ -174,8 +177,8 @@ bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
 
     m_musicDatabase->Close();
   }
-  else if (!tag.GetArtist().empty() && 
-    (tag.GetType() == MediaTypeNone || tag.GetType() == MediaTypeSong))
+  else if (!tag.GetArtist().empty() &&
+           (tag.GetType() == MediaTypeNone || tag.GetType() == MediaTypeSong))
   {
     /* 
     Could be non-library song - has musictag but no ID or type (may have
@@ -187,10 +190,11 @@ bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
     */
     CSong song;
     // Try to split song artist names (various tags) into artist credits
-    song.SetArtistCredits(tag.GetArtist(), tag.GetMusicBrainzArtistHints(), tag.GetMusicBrainzArtistID());
+    song.SetArtistCredits(tag.GetArtist(), tag.GetMusicBrainzArtistHints(),
+                          tag.GetMusicBrainzArtistID());
     if (!song.artistCredits.empty())
     {
-      tag.SetType(MediaTypeSong);  // Makes "Information" context menu visible
+      tag.SetType(MediaTypeSong); // Makes "Information" context menu visible
       m_musicDatabase->Open();
       int iOrder = 0;
       // Song artist art
@@ -215,13 +219,15 @@ bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
         ++iOrder;
       }
       // Album artist art
-      if (!tag.GetAlbumArtist().empty() && tag.GetArtistString().compare(tag.GetAlbumArtistString()) != 0)
+      if (!tag.GetAlbumArtist().empty() &&
+          tag.GetArtistString().compare(tag.GetAlbumArtistString()) != 0)
       {
         // Split song artist names correctly into artist credits from various tag
         // arrays, inc. fallback to song artist names
         CAlbum album;
-        album.SetArtistCredits(tag.GetAlbumArtist(), tag.GetMusicBrainzAlbumArtistHints(), tag.GetMusicBrainzAlbumArtistID(),
-          tag.GetArtist(), tag.GetMusicBrainzArtistHints(), tag.GetMusicBrainzArtistID());
+        album.SetArtistCredits(tag.GetAlbumArtist(), tag.GetMusicBrainzAlbumArtistHints(),
+                               tag.GetMusicBrainzAlbumArtistID(), tag.GetArtist(),
+                               tag.GetMusicBrainzArtistHints(), tag.GetMusicBrainzArtistID());
 
         iOrder = 0;
         for (const auto& artistCredit : album.artistCredits)
@@ -262,7 +268,7 @@ bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
       }
       artfound = !art.empty();
       m_musicDatabase->Close();
-    }    
+    }
   }
 
   if (artfound)
@@ -326,10 +332,10 @@ bool CMusicThumbLoader::FillLibraryArt(CFileItem &item)
   return artfound;
 }
 
-bool CMusicThumbLoader::GetEmbeddedThumb(const std::string &path, EmbeddedArt &art)
+bool CMusicThumbLoader::GetEmbeddedThumb(const std::string& path, EmbeddedArt& art)
 {
   CFileItem item(path, false);
-  std::unique_ptr<IMusicInfoTagLoader> pLoader (CMusicInfoTagLoaderFactory::CreateLoader(item));
+  std::unique_ptr<IMusicInfoTagLoader> pLoader(CMusicInfoTagLoaderFactory::CreateLoader(item));
   CMusicInfoTag tag;
   if (nullptr != pLoader)
     pLoader->Load(path, tag, &art);

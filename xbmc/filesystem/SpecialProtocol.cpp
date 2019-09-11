@@ -7,26 +7,28 @@
  */
 
 #include "SpecialProtocol.h"
+
 #include "ServiceBroker.h"
 #include "URL.h"
 #include "Util.h"
-#include "windowing/GraphicContext.h"
 #include "profiles/ProfileManager.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
 #include "settings/SettingsComponent.h"
-#include "utils/log.h"
 #include "utils/URIUtils.h"
+#include "utils/log.h"
+#include "windowing/GraphicContext.h"
 
 #include <cassert>
 #ifdef TARGET_POSIX
-#include <dirent.h>
 #include "utils/StringUtils.h"
+
+#include <dirent.h>
 #endif
 
-const CProfileManager *CSpecialProtocol::m_profileManager = nullptr;
+const CProfileManager* CSpecialProtocol::m_profileManager = nullptr;
 
-void CSpecialProtocol::RegisterProfileManager(const CProfileManager &profileManager)
+void CSpecialProtocol::RegisterProfileManager(const CProfileManager& profileManager)
 {
   m_profileManager = &profileManager;
 }
@@ -36,73 +38,73 @@ void CSpecialProtocol::UnregisterProfileManager()
   m_profileManager = nullptr;
 }
 
-void CSpecialProtocol::SetProfilePath(const std::string &dir)
+void CSpecialProtocol::SetProfilePath(const std::string& dir)
 {
   SetPath("profile", dir);
   CLog::Log(LOGNOTICE, "special://profile/ is mapped to: %s", GetPath("profile").c_str());
 }
 
-void CSpecialProtocol::SetXBMCPath(const std::string &dir)
+void CSpecialProtocol::SetXBMCPath(const std::string& dir)
 {
   SetPath("xbmc", dir);
 }
 
-void CSpecialProtocol::SetXBMCBinPath(const std::string &dir)
+void CSpecialProtocol::SetXBMCBinPath(const std::string& dir)
 {
   SetPath("xbmcbin", dir);
 }
 
-void CSpecialProtocol::SetXBMCBinAddonPath(const std::string &dir)
+void CSpecialProtocol::SetXBMCBinAddonPath(const std::string& dir)
 {
   SetPath("xbmcbinaddons", dir);
 }
 
-void CSpecialProtocol::SetXBMCAltBinAddonPath(const std::string &dir)
+void CSpecialProtocol::SetXBMCAltBinAddonPath(const std::string& dir)
 {
   SetPath("xbmcaltbinaddons", dir);
 }
 
-void CSpecialProtocol::SetXBMCFrameworksPath(const std::string &dir)
+void CSpecialProtocol::SetXBMCFrameworksPath(const std::string& dir)
 {
   SetPath("frameworks", dir);
 }
 
-void CSpecialProtocol::SetHomePath(const std::string &dir)
+void CSpecialProtocol::SetHomePath(const std::string& dir)
 {
   SetPath("home", dir);
 }
 
-void CSpecialProtocol::SetUserHomePath(const std::string &dir)
+void CSpecialProtocol::SetUserHomePath(const std::string& dir)
 {
   SetPath("userhome", dir);
 }
 
-void CSpecialProtocol::SetEnvHomePath(const std::string &dir)
+void CSpecialProtocol::SetEnvHomePath(const std::string& dir)
 {
   SetPath("envhome", dir);
 }
 
-void CSpecialProtocol::SetMasterProfilePath(const std::string &dir)
+void CSpecialProtocol::SetMasterProfilePath(const std::string& dir)
 {
   SetPath("masterprofile", dir);
 }
 
-void CSpecialProtocol::SetTempPath(const std::string &dir)
+void CSpecialProtocol::SetTempPath(const std::string& dir)
 {
   SetPath("temp", dir);
 }
 
-void CSpecialProtocol::SetLogPath(const std::string &dir)
+void CSpecialProtocol::SetLogPath(const std::string& dir)
 {
   SetPath("logpath", dir);
 }
 
-bool CSpecialProtocol::ComparePath(const std::string &path1, const std::string &path2)
+bool CSpecialProtocol::ComparePath(const std::string& path1, const std::string& path2)
 {
   return TranslatePath(path1) == TranslatePath(path2);
 }
 
-std::string CSpecialProtocol::TranslatePath(const std::string &path)
+std::string CSpecialProtocol::TranslatePath(const std::string& path)
 {
   CURL url(path);
   // check for special-protocol, if not, return
@@ -113,7 +115,7 @@ std::string CSpecialProtocol::TranslatePath(const std::string &path)
   return TranslatePath(url);
 }
 
-std::string CSpecialProtocol::TranslatePath(const CURL &url)
+std::string CSpecialProtocol::TranslatePath(const CURL& url)
 {
   // check for special-protocol, if not, return
   if (!url.IsProtocol("special"))
@@ -123,7 +125,7 @@ std::string CSpecialProtocol::TranslatePath(const CURL &url)
     if (path.length() >= 2 && path[1] == ':')
     {
       CLog::Log(LOGWARNING, "Trying to access old style dir: %s\n", path.c_str());
-     // printf("Trying to access old style dir: %s\n", path.c_str());
+      // printf("Trying to access old style dir: %s\n", path.c_str());
     }
 #endif
 
@@ -149,7 +151,10 @@ std::string CSpecialProtocol::TranslatePath(const CURL &url)
     RootDir = FullFileName;
 
   if (RootDir == "subtitles")
-    translatedPath = URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_SUBTITLES_CUSTOMPATH), FileName);
+    translatedPath =
+        URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                                      CSettings::SETTING_SUBTITLES_CUSTOMPATH),
+                                  FileName);
   else if (RootDir == "userdata" && m_profileManager)
     translatedPath = URIUtils::AddFileToFolder(m_profileManager->GetUserDataFolder(), FileName);
   else if (RootDir == "database" && m_profileManager)
@@ -157,11 +162,20 @@ std::string CSpecialProtocol::TranslatePath(const CURL &url)
   else if (RootDir == "thumbnails" && m_profileManager)
     translatedPath = URIUtils::AddFileToFolder(m_profileManager->GetThumbnailsFolder(), FileName);
   else if (RootDir == "recordings" || RootDir == "cdrips")
-    translatedPath = URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_AUDIOCDS_RECORDINGPATH), FileName);
+    translatedPath =
+        URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                                      CSettings::SETTING_AUDIOCDS_RECORDINGPATH),
+                                  FileName);
   else if (RootDir == "screenshots")
-    translatedPath = URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_DEBUG_SCREENSHOTPATH), FileName);
+    translatedPath =
+        URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                                      CSettings::SETTING_DEBUG_SCREENSHOTPATH),
+                                  FileName);
   else if (RootDir == "musicartistsinfo")
-    translatedPath = URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(CSettings::SETTING_MUSICLIBRARY_ARTISTSFOLDER), FileName);
+    translatedPath =
+        URIUtils::AddFileToFolder(CServiceBroker::GetSettingsComponent()->GetSettings()->GetString(
+                                      CSettings::SETTING_MUSICLIBRARY_ARTISTSFOLDER),
+                                  FileName);
   else if (RootDir == "musicplaylists")
     translatedPath = URIUtils::AddFileToFolder(CUtil::MusicPlaylistsLocation(), FileName);
   else if (RootDir == "videoplaylists")
@@ -171,21 +185,14 @@ std::string CSpecialProtocol::TranslatePath(const CURL &url)
     auto winSystem = CServiceBroker::GetWinSystem();
     // windowing may not have been initialized yet
     if (winSystem)
-      translatedPath = URIUtils::AddFileToFolder(winSystem->GetGfxContext().GetMediaDir(), FileName);
+      translatedPath =
+          URIUtils::AddFileToFolder(winSystem->GetGfxContext().GetMediaDir(), FileName);
   }
   // from here on, we have our "real" special paths
-  else if (RootDir == "xbmc" ||
-           RootDir == "xbmcbin" ||
-           RootDir == "xbmcbinaddons" ||
-           RootDir == "xbmcaltbinaddons" ||
-           RootDir == "home" ||
-           RootDir == "envhome" ||
-           RootDir == "userhome" ||
-           RootDir == "temp" ||
-           RootDir == "profile" ||
-           RootDir == "masterprofile" ||
-           RootDir == "frameworks" ||
-           RootDir == "logpath")
+  else if (RootDir == "xbmc" || RootDir == "xbmcbin" || RootDir == "xbmcbinaddons" ||
+           RootDir == "xbmcaltbinaddons" || RootDir == "home" || RootDir == "envhome" ||
+           RootDir == "userhome" || RootDir == "temp" || RootDir == "profile" ||
+           RootDir == "masterprofile" || RootDir == "frameworks" || RootDir == "logpath")
   {
     std::string basePath = GetPath(RootDir);
     if (!basePath.empty())
@@ -272,8 +279,10 @@ void CSpecialProtocol::LogPaths()
 {
   CLog::Log(LOGNOTICE, "special://xbmc/ is mapped to: %s", GetPath("xbmc").c_str());
   CLog::Log(LOGNOTICE, "special://xbmcbin/ is mapped to: %s", GetPath("xbmcbin").c_str());
-  CLog::Log(LOGNOTICE, "special://xbmcbinaddons/ is mapped to: %s", GetPath("xbmcbinaddons").c_str());
-  CLog::Log(LOGNOTICE, "special://masterprofile/ is mapped to: %s", GetPath("masterprofile").c_str());
+  CLog::Log(LOGNOTICE, "special://xbmcbinaddons/ is mapped to: %s",
+            GetPath("xbmcbinaddons").c_str());
+  CLog::Log(LOGNOTICE, "special://masterprofile/ is mapped to: %s",
+            GetPath("masterprofile").c_str());
 #if defined(TARGET_POSIX)
   CLog::Log(LOGNOTICE, "special://envhome/ is mapped to: %s", GetPath("envhome").c_str());
 #endif
@@ -286,12 +295,12 @@ void CSpecialProtocol::LogPaths()
 }
 
 // private routines, to ensure we only set/get an appropriate path
-void CSpecialProtocol::SetPath(const std::string &key, const std::string &path)
+void CSpecialProtocol::SetPath(const std::string& key, const std::string& path)
 {
   m_pathMap[key] = path;
 }
 
-std::string CSpecialProtocol::GetPath(const std::string &key)
+std::string CSpecialProtocol::GetPath(const std::string& key)
 {
   std::map<std::string, std::string>::iterator it = m_pathMap.find(key);
   if (it != m_pathMap.end())

@@ -22,15 +22,18 @@ public:
   ~CDVDDemuxCC() override;
 
   bool Reset() override { return true; };
-  void Flush() override {};
+  void Flush() override{};
   DemuxPacket* Read() override { return NULL; };
-  bool SeekTime(double time, bool backwards = false, double* startpts = NULL) override {return true;};
+  bool SeekTime(double time, bool backwards = false, double* startpts = NULL) override
+  {
+    return true;
+  };
   CDemuxStream* GetStream(int iStreamId) const override;
   std::vector<CDemuxStream*> GetStreams() const override;
   int GetNrOfStreams() const override;
 
-  DemuxPacket* Read(DemuxPacket *packet);
-  static void Handler(int service, void *userdata);
+  DemuxPacket* Read(DemuxPacket* packet);
+  static void Handler(int service, void* userdata);
 
 protected:
   bool OpenDecoder();
@@ -41,7 +44,7 @@ protected:
   {
     int streamIdx;
     int service;
-    bool hasData ;
+    bool hasData;
     double pts;
   };
   std::vector<streamdata> m_streamdata;
@@ -50,6 +53,6 @@ protected:
   double m_curPts;
   std::vector<CCaptionBlock*> m_ccReorderBuffer;
   std::vector<CCaptionBlock*> m_ccTempBuffer;
-  CDecoderCC708 *m_ccDecoder;
+  CDecoderCC708* m_ccDecoder;
   AVCodecID m_codec;
 };

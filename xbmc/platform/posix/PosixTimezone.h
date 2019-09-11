@@ -21,32 +21,37 @@ struct StringSettingOption;
 class CPosixTimezone : public ISettingCallback, public ISettingsHandler
 {
 public:
-   CPosixTimezone();
+  CPosixTimezone();
 
-   void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
+  void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
 
-   void OnSettingsLoaded() override;
+  void OnSettingsLoaded() override;
 
-   std::string GetOSConfiguredTimezone();
+  std::string GetOSConfiguredTimezone();
 
-   std::vector<std::string> GetCounties();
-   std::vector<std::string> GetTimezonesByCountry(const std::string& country);
-   std::string GetCountryByTimezone(const std::string& timezone);
+  std::vector<std::string> GetCounties();
+  std::vector<std::string> GetTimezonesByCountry(const std::string& country);
+  std::string GetCountryByTimezone(const std::string& timezone);
 
-   void SetTimezone(std::string timezone);
-   int m_IsDST = 0;
+  void SetTimezone(std::string timezone);
+  int m_IsDST = 0;
 
-   static void SettingOptionsTimezoneCountriesFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data);
-   static void SettingOptionsTimezonesFiller(std::shared_ptr<const CSetting> setting, std::vector<StringSettingOption> &list, std::string &current, void *data);
+  static void SettingOptionsTimezoneCountriesFiller(std::shared_ptr<const CSetting> setting,
+                                                    std::vector<StringSettingOption>& list,
+                                                    std::string& current,
+                                                    void* data);
+  static void SettingOptionsTimezonesFiller(std::shared_ptr<const CSetting> setting,
+                                            std::vector<StringSettingOption>& list,
+                                            std::string& current,
+                                            void* data);
 
 private:
-   std::vector<std::string> m_counties;
-   std::map<std::string, std::string> m_countryByCode;
-   std::map<std::string, std::string> m_countryByName;
+  std::vector<std::string> m_counties;
+  std::map<std::string, std::string> m_countryByCode;
+  std::map<std::string, std::string> m_countryByName;
 
-   std::map<std::string, std::vector<std::string> > m_timezonesByCountryCode;
-   std::map<std::string, std::string> m_countriesByTimezoneName;
+  std::map<std::string, std::vector<std::string>> m_timezonesByCountryCode;
+  std::map<std::string, std::string> m_countriesByTimezoneName;
 };
 
 extern CPosixTimezone g_timezone;
-

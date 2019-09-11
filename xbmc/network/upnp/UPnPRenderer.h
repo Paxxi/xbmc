@@ -20,51 +20,50 @@ namespace UPNP
 class CRendererReferenceHolder
 {
 public:
-    PLT_DeviceHostReference m_Device;
+  PLT_DeviceHostReference m_Device;
 };
 
-class CUPnPRenderer : public PLT_MediaRenderer
-                    , public ANNOUNCEMENT::IAnnouncer
+class CUPnPRenderer : public PLT_MediaRenderer, public ANNOUNCEMENT::IAnnouncer
 {
 public:
-    CUPnPRenderer(const char*  friendly_name,
-                  bool         show_ip = false,
-                  const char*  uuid = NULL,
-                  unsigned int port = 0);
+  CUPnPRenderer(const char* friendly_name,
+                bool show_ip = false,
+                const char* uuid = NULL,
+                unsigned int port = 0);
 
-    ~CUPnPRenderer() override;
+  ~CUPnPRenderer() override;
 
-    void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data) override;
-    void UpdateState();
+  void Announce(ANNOUNCEMENT::AnnouncementFlag flag,
+                const char* sender,
+                const char* message,
+                const CVariant& data) override;
+  void UpdateState();
 
-    // Http server handler
-    NPT_Result ProcessHttpGetRequest(NPT_HttpRequest&              request,
-                                             const NPT_HttpRequestContext& context,
-                                             NPT_HttpResponse&             response) override;
+  // Http server handler
+  NPT_Result ProcessHttpGetRequest(NPT_HttpRequest& request,
+                                   const NPT_HttpRequestContext& context,
+                                   NPT_HttpResponse& response) override;
 
-    // AVTransport methods
-    NPT_Result OnNext(PLT_ActionReference& action) override;
-    NPT_Result OnPause(PLT_ActionReference& action) override;
-    NPT_Result OnPlay(PLT_ActionReference& action) override;
-    NPT_Result OnPrevious(PLT_ActionReference& action) override;
-    NPT_Result OnStop(PLT_ActionReference& action) override;
-    NPT_Result OnSeek(PLT_ActionReference& action) override;
-    NPT_Result OnSetAVTransportURI(PLT_ActionReference& action) override;
-    NPT_Result OnSetNextAVTransportURI(PLT_ActionReference& action) override;
+  // AVTransport methods
+  NPT_Result OnNext(PLT_ActionReference& action) override;
+  NPT_Result OnPause(PLT_ActionReference& action) override;
+  NPT_Result OnPlay(PLT_ActionReference& action) override;
+  NPT_Result OnPrevious(PLT_ActionReference& action) override;
+  NPT_Result OnStop(PLT_ActionReference& action) override;
+  NPT_Result OnSeek(PLT_ActionReference& action) override;
+  NPT_Result OnSetAVTransportURI(PLT_ActionReference& action) override;
+  NPT_Result OnSetNextAVTransportURI(PLT_ActionReference& action) override;
 
-    // RenderingControl methods
-    NPT_Result OnSetVolume(PLT_ActionReference& action) override;
-    NPT_Result OnSetMute(PLT_ActionReference& action) override;
+  // RenderingControl methods
+  NPT_Result OnSetVolume(PLT_ActionReference& action) override;
+  NPT_Result OnSetMute(PLT_ActionReference& action) override;
 
 private:
-    NPT_Result SetupServices() override;
-    NPT_Result SetupIcons() override;
-    NPT_Result GetMetadata(NPT_String& meta);
-    NPT_Result PlayMedia(const NPT_String& uri,
-                         const NPT_String& meta,
-                         PLT_Action* action = NULL);
-    NPT_Mutex m_state;
+  NPT_Result SetupServices() override;
+  NPT_Result SetupIcons() override;
+  NPT_Result GetMetadata(NPT_String& meta);
+  NPT_Result PlayMedia(const NPT_String& uri, const NPT_String& meta, PLT_Action* action = NULL);
+  NPT_Mutex m_state;
 };
 
 } /* namespace UPNP */
-

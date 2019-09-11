@@ -47,16 +47,16 @@ public:
   bool Restore() override;
   bool Hide() override;
   bool Show(bool raise = true) override;
-  void Register(IDispResource *resource) override;
-  void Unregister(IDispResource *resource) override;
-  bool HasCalibration(const RESOLUTION_INFO &resInfo) override;
+  void Register(IDispResource* resource) override;
+  void Unregister(IDispResource* resource) override;
+  bool HasCalibration(const RESOLUTION_INFO& resInfo) override;
   bool UseLimitedColor() override;
 
   // Local to WinSystemX11 only
-  Display*  GetDisplay() { return m_dpy; }
+  Display* GetDisplay() { return m_dpy; }
   int GetScreen() { return m_screen; }
   void NotifyXRREvent();
-  void GetConnectedOutputs(std::vector<std::string> *outputs);
+  void GetConnectedOutputs(std::vector<std::string>* outputs);
   bool IsCurrentOutput(std::string output);
   void RecreateWindow();
   int GetCrtc() { return m_crtc; }
@@ -67,14 +67,15 @@ public:
 protected:
   std::unique_ptr<KODI::WINDOWING::IOSScreenSaver> GetOSScreenSaverImpl() override;
 
-  virtual bool SetWindow(int width, int height, bool fullscreen, const std::string &output, int *winstate = NULL) = 0;
+  virtual bool SetWindow(
+      int width, int height, bool fullscreen, const std::string& output, int* winstate = NULL) = 0;
   virtual XVisualInfo* GetVisual() = 0;
 
   void OnLostDevice();
 
   Window m_glWindow, m_mainWindow;
   int m_screen = 0;
-  Display *m_dpy;
+  Display* m_dpy;
   Cursor m_invisibleCursor;
   Pixmap m_icon;
   bool m_bIsRotated;
@@ -82,7 +83,7 @@ protected:
   bool m_minimized;
   bool m_bIgnoreNextFocusMessage;
   CCriticalSection m_resourceSection;
-  std::vector<IDispResource*>  m_resources;
+  std::vector<IDispResource*> m_resources;
   bool m_delayDispReset;
   XbmcThreads::EndTime m_dispResetTimer;
   std::string m_currentOutput;
@@ -91,10 +92,10 @@ protected:
   bool m_bIsInternalXrr;
   int m_MouseX, m_MouseY;
   int m_crtc;
-  CWinEventsX11 *m_winEventsX11;
+  CWinEventsX11* m_winEventsX11;
 
 private:
-  bool IsSuitableVisual(XVisualInfo *vInfo);
+  bool IsSuitableVisual(XVisualInfo* vInfo);
   static int XErrorHandler(Display* dpy, XErrorEvent* error);
   bool CreateIconPixmap();
   bool HasWindowManager();

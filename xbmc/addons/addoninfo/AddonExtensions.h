@@ -21,7 +21,10 @@ class CAddonInfoBuilder;
 
 struct SExtValue
 {
-  explicit SExtValue(const std::string& strValue) : str(strValue) { }
+  explicit SExtValue(const std::string& strValue)
+    : str(strValue)
+  {
+  }
   const std::string& asString() const { return str; }
   bool asBoolean() const { return StringUtils::EqualsNoCase(str, "true"); }
   int asInteger() const { return atoi(str.c_str()); }
@@ -39,7 +42,10 @@ typedef std::vector<std::pair<std::string, CExtValues>> EXT_VALUES;
 class CExtValues : public EXT_VALUE
 {
 public:
-  CExtValues(const EXT_VALUE& values) : EXT_VALUE(values) { }
+  CExtValues(const EXT_VALUE& values)
+    : EXT_VALUE(values)
+  {
+  }
 
   const SExtValue GetValue(const std::string& id) const
   {

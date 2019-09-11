@@ -49,7 +49,7 @@ public:
    * @param obs The observable that sends the message.
    * @param msg The message.
    */
-  virtual void Notify(const Observable &obs, const ObservableMessage msg) = 0;
+  virtual void Notify(const Observable& obs, const ObservableMessage msg) = 0;
 };
 
 class Observable
@@ -59,19 +59,19 @@ class Observable
 public:
   Observable() = default;
   virtual ~Observable() = default;
-  virtual Observable &operator=(const Observable &observable);
+  virtual Observable& operator=(const Observable& observable);
 
   /*!
    * @brief Register an observer.
    * @param obs The observer to register.
    */
-  virtual void RegisterObserver(Observer *obs);
+  virtual void RegisterObserver(Observer* obs);
 
   /*!
    * @brief Unregister an observer.
    * @param obs The observer to unregister.
    */
-  virtual void UnregisterObserver(Observer *obs);
+  virtual void UnregisterObserver(Observer* obs);
 
   /*!
    * @brief Send a message to all observers when m_bObservableChanged is true.
@@ -90,7 +90,7 @@ public:
    * @param obs The observer to check.
    * @return True if this observable is being observed by the given observer, false otherwise.
    */
-  virtual bool IsObserving(const Observer &obs) const;
+  virtual bool IsObserving(const Observer& obs) const;
 
 protected:
   /*!
@@ -100,7 +100,8 @@ protected:
    */
   void SendMessage(const ObservableMessage message);
 
-  std::atomic<bool>       m_bObservableChanged{false}; /*!< true when the observable is marked as changed, false otherwise */
-  std::vector<Observer *> m_observers;                 /*!< all observers */
+  std::atomic<bool> m_bObservableChanged{
+      false}; /*!< true when the observable is marked as changed, false otherwise */
+  std::vector<Observer*> m_observers; /*!< all observers */
   mutable CCriticalSection m_obsCritSection; /*!< mutex */
 };

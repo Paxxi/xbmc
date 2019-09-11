@@ -7,12 +7,13 @@
  */
 
 #include "RenderCapture.h"
+
 #include "ServiceBroker.h"
-#include "utils/log.h"
-#include "windowing/WinSystem.h"
+#include "cores/IPlayer.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
-#include "cores/IPlayer.h"
+#include "utils/log.h"
+#include "windowing/WinSystem.h"
 #ifdef TARGET_WINDOWS
 #include "rendering/dx/DeviceResources.h"
 #include "rendering/dx/RenderContext.h"
@@ -20,21 +21,22 @@
 #include "rendering/RenderSystem.h"
 #endif
 
-extern "C" {
+extern "C"
+{
 #include <libavutil/mem.h>
 }
 
 CRenderCaptureBase::CRenderCaptureBase()
 {
-  m_state          = CAPTURESTATE_FAILED;
-  m_userState      = CAPTURESTATE_FAILED;
-  m_pixels         = NULL;
-  m_width          = 0;
-  m_height         = 0;
-  m_bufferSize     = 0;
-  m_flags          = 0;
+  m_state = CAPTURESTATE_FAILED;
+  m_userState = CAPTURESTATE_FAILED;
+  m_pixels = NULL;
+  m_width = 0;
+  m_height = 0;
+  m_bufferSize = 0;
+  m_flags = 0;
   m_asyncSupported = false;
-  m_asyncChecked   = false;
+  m_asyncChecked = false;
 }
 
 CRenderCaptureBase::~CRenderCaptureBase() = default;
@@ -43,7 +45,9 @@ bool CRenderCaptureBase::UseOcclusionQuery()
 {
   if (m_flags & CAPTUREFLAG_IMMEDIATELY)
     return false;
-  else if (CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_videoCaptureUseOcclusionQuery == 0)
+  else if (CServiceBroker::GetSettingsComponent()
+               ->GetAdvancedSettings()
+               ->m_videoCaptureUseOcclusionQuery == 0)
     return false;
   else
     return true;
@@ -91,7 +95,7 @@ void CRenderCaptureDispmanX::ReadOut()
 
 CRenderCaptureGL::CRenderCaptureGL()
 {
-  m_pbo   = 0;
+  m_pbo = 0;
   m_query = 0;
   m_occlusionQuerySupported = false;
 }
@@ -141,16 +145,21 @@ void CRenderCaptureGL::BeginRender()
     }
     else
     {
-      CLog::Log(LOGWARNING, "CRenderCaptureGL: Occlusion_query not supported, upgrade your GL drivers to support at least GL 2.1");
+      CLog::Log(LOGWARNING, "CRenderCaptureGL: Occlusion_query not supported, upgrade your GL "
+                            "drivers to support at least GL 2.1");
     }
     if (m_flags & CAPTUREFLAG_CONTINUOUS)
     {
       if (!m_occlusionQuerySupported)
-        CLog::Log(LOGWARNING, "CRenderCaptureGL: Occlusion_query not supported, performance might suffer");
+        CLog::Log(LOGWARNING,
+                  "CRenderCaptureGL: Occlusion_query not supported, performance might suffer");
       if (!CServiceBroker::GetRenderSystem()->IsExtSupported("GL_ARB_pixel_buffer_object"))
-        CLog::Log(LOGWARNING, "CRenderCaptureGL: GL_ARB_pixel_buffer_object not supported, performance might suffer");
+        CLog::Log(
+            LOGWARNING,
+            "CRenderCaptureGL: GL_ARB_pixel_buffer_object not supported, performance might suffer");
       if (!UseOcclusionQuery())
-        CLog::Log(LOGWARNING, "CRenderCaptureGL: GL_ARB_occlusion_query disabled, performance might suffer");
+        CLog::Log(LOGWARNING,
+                  "CRenderCaptureGL: GL_ARB_occlusion_query disabled, performance might suffer");
     }
 #endif
     m_asyncChecked = true;
@@ -285,8 +294,8 @@ void CRenderCaptureGL::PboToBuffer()
 
 CRenderCaptureDX::CRenderCaptureDX()
 {
-  m_query         = nullptr;
-  m_surfaceWidth  = 0;
+  m_query = nullptr;
+  m_surfaceWidth = 0;
   m_surfaceHeight = 0;
   DX::Windowing()->Register(this);
 }
@@ -305,7 +314,8 @@ int CRenderCaptureDX::GetCaptureFormat()
 
 void CRenderCaptureDX::BeginRender()
 {
-  Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext = DX::DeviceResources::Get()->GetD3DContext();
+  Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext =
+      DX::DeviceResources::Get()->GetD3DContext();
   Microsoft::WRL::ComPtr<ID3D11Device> pDevice = DX::DeviceResources::Get()->GetD3DDevice();
   CD3D11_QUERY_DESC queryDesc(D3D11_QUERY_EVENT);
 
@@ -315,9 +325,11 @@ void CRenderCaptureDX::BeginRender()
     if (m_flags & CAPTUREFLAG_CONTINUOUS)
     {
       if (!m_asyncSupported)
-        CLog::Log(LOGWARNING, "%s: D3D11_QUERY_OCCLUSION not supported, performance might suffer.", __FUNCTION__);
+        CLog::Log(LOGWARNING, "%s: D3D11_QUERY_OCCLUSION not supported, performance might suffer.",
+                  __FUNCTION__);
       if (!UseOcclusionQuery())
-        CLog::Log(LOGWARNING, "%s: D3D11_QUERY_OCCLUSION disabled, performance might suffer.", __FUNCTION__);
+        CLog::Log(LOGWARNING, "%s: D3D11_QUERY_OCCLUSION disabled, performance might suffer.",
+                  __FUNCTION__);
     }
     m_asyncChecked = true;
   }
@@ -362,8 +374,7 @@ void CRenderCaptureDX::BeginRender()
       result = pDevice->CreateQuery(&queryDesc, m_query.ReleaseAndGetAddressOf());
       if (FAILED(result))
       {
-        CLog::LogF(LOGERROR, "CreateQuery failed %s",
-                            DX::GetErrorDescription(result).c_str());
+        CLog::LogF(LOGERROR, "CreateQuery failed %s", DX::GetErrorDescription(result).c_str());
         m_asyncSupported = false;
         m_query = nullptr;
       }
@@ -401,7 +412,8 @@ void CRenderCaptureDX::ReadOut()
   if (m_query)
   {
     //if the result of the occlusion query is available, the data is probably also written into m_copySurface
-    HRESULT result = DX::DeviceResources::Get()->GetImmediateContext()->GetData(m_query.Get(), nullptr, 0, 0);
+    HRESULT result =
+        DX::DeviceResources::Get()->GetImmediateContext()->GetData(m_query.Get(), nullptr, 0, 0);
     if (SUCCEEDED(result))
     {
       if (S_OK == result)
@@ -432,7 +444,8 @@ void CRenderCaptureDX::SurfaceToBuffer()
     else
     {
       for (unsigned int y = 0; y < m_height; y++)
-        memcpy(m_pixels + y * m_width * 4, (uint8_t*)lockedRect.pData + y * lockedRect.RowPitch, m_width * 4);
+        memcpy(m_pixels + y * m_width * 4, (uint8_t*)lockedRect.pData + y * lockedRect.RowPitch,
+               m_width * 4);
     }
     m_copyTex.UnlockRect(0);
     SetState(CAPTURESTATE_DONE);

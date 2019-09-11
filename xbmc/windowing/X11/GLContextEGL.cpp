@@ -8,24 +8,28 @@
 
 // always define GL_GLEXT_PROTOTYPES before include gl headers
 #if !defined(GL_GLEXT_PROTOTYPES)
-  #define GL_GLEXT_PROTOTYPES
+#define GL_GLEXT_PROTOTYPES
 #endif
 
-#include <clocale>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
 #include "GLContextEGL.h"
-#include "utils/log.h"
-#include <EGL/eglext.h>
+
 #include "ServiceBroker.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/SettingsComponent.h"
 #include "threads/SingleLock.h"
+#include "utils/log.h"
+
+#include <clocale>
+
+#include <EGL/eglext.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <GL/glu.h>
 
 #define EGL_NO_CONFIG (EGLConfig)0
 
-CGLContextEGL::CGLContextEGL(Display *dpy) : CGLContext(dpy)
+CGLContextEGL::CGLContextEGL(Display* dpy)
+  : CGLContext(dpy)
 {
   m_extPrefix = "EGL_";
   m_eglDisplay = EGL_NO_DISPLAY;
@@ -33,9 +37,10 @@ CGLContextEGL::CGLContextEGL(Display *dpy) : CGLContext(dpy)
   m_eglContext = EGL_NO_CONTEXT;
   m_eglConfig = EGL_NO_CONFIG;
 
-  eglGetPlatformDisplayEXT = (PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
+  eglGetPlatformDisplayEXT =
+      (PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
 
-  CSettingsComponent *settings = CServiceBroker::GetSettingsComponent();
+  CSettingsComponent* settings = CServiceBroker::GetSettingsComponent();
   if (settings)
   {
     m_omlSync = settings->GetAdvancedSettings()->m_omlSync;
@@ -47,7 +52,7 @@ CGLContextEGL::~CGLContextEGL()
   Destroy();
 }
 
-bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newContext)
+bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool& newContext)
 {
   m_sync.cont = 0;
 
@@ -75,13 +80,9 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
 
   if (eglGetPlatformDisplayEXT)
   {
-    EGLint attribs[] =
-    {
-      EGL_PLATFORM_X11_SCREEN_EXT, screen,
-      EGL_NONE
-    };
-    m_eglDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_X11_EXT,(EGLNativeDisplayType)m_dpy,
-                                            attribs);
+    EGLint attribs[] = {EGL_PLATFORM_X11_SCREEN_EXT, screen, EGL_NONE};
+    m_eglDisplay =
+        eglGetPlatformDisplayEXT(EGL_PLATFORM_X11_EXT, (EGLNativeDisplayType)m_dpy, attribs);
   }
   else
     m_eglDisplay = eglGetDisplay((EGLNativeDisplayType)m_dpy);
@@ -108,8 +109,8 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
   // create context
 
   XVisualInfo vMask;
-  XVisualInfo *vInfo = nullptr;
-  int availableVisuals    = 0;
+  XVisualInfo* vInfo = nullptr;
+  int availableVisuals = 0;
   vMask.screen = screen;
   XWindowAttributes winAttr;
 
@@ -124,7 +125,7 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
   vInfo = XGetVisualInfo(m_dpy, VisualScreenMask | VisualIDMask, &vMask, &availableVisuals);
   if (!vInfo)
   {
-    CLog::Log(LOGERROR, "Failed to get VisualInfo of visual 0x%x", (unsigned) vMask.visualid);
+    CLog::Log(LOGERROR, "Failed to get VisualInfo of visual 0x%x", (unsigned)vMask.visualid);
     Destroy();
     return false;
   }
@@ -150,21 +151,17 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
     return false;
   }
 
-  EGLint contextAttributes[] =
-  {
-      EGL_CONTEXT_MAJOR_VERSION_KHR, 3,
-      EGL_CONTEXT_MINOR_VERSION_KHR, 2,
-      EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR,
-      EGL_NONE
-  };
+  EGLint contextAttributes[] = {EGL_CONTEXT_MAJOR_VERSION_KHR,
+                                3,
+                                EGL_CONTEXT_MINOR_VERSION_KHR,
+                                2,
+                                EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR,
+                                EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR,
+                                EGL_NONE};
   m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributes);
   if (m_eglContext == EGL_NO_CONTEXT)
   {
-    EGLint contextAttributes[] =
-    {
-      EGL_CONTEXT_MAJOR_VERSION_KHR, 2,
-      EGL_NONE
-    };
+    EGLint contextAttributes[] = {EGL_CONTEXT_MAJOR_VERSION_KHR, 2, EGL_NONE};
     m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributes);
 
     if (m_eglContext == EGL_NO_CONTEXT)
@@ -180,12 +177,14 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
 
   if (!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext))
   {
-    CLog::Log(LOGERROR, "Failed to make context current %p %p %p\n", m_eglDisplay, m_eglSurface, m_eglContext);
+    CLog::Log(LOGERROR, "Failed to make context current %p %p %p\n", m_eglDisplay, m_eglSurface,
+              m_eglContext);
     Destroy();
     return false;
   }
 
-  eglGetSyncValuesCHROMIUM = (PFNEGLGETSYNCVALUESCHROMIUMPROC)eglGetProcAddress("eglGetSyncValuesCHROMIUM");
+  eglGetSyncValuesCHROMIUM =
+      (PFNEGLGETSYNCVALUESCHROMIUMPROC)eglGetProcAddress("eglGetSyncValuesCHROMIUM");
 
   m_usePB = false;
   return true;
@@ -193,30 +192,30 @@ bool CGLContextEGL::Refresh(bool force, int screen, Window glWindow, bool &newCo
 
 bool CGLContextEGL::CreatePB()
 {
-  const EGLint configAttribs[] =
-  {
-    EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-    EGL_BLUE_SIZE, 8,
-    EGL_GREEN_SIZE, 8,
-    EGL_RED_SIZE, 8,
-    EGL_DEPTH_SIZE, 8,
-    EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
-    EGL_NONE
-  };
+  const EGLint configAttribs[] = {EGL_SURFACE_TYPE,
+                                  EGL_PBUFFER_BIT,
+                                  EGL_BLUE_SIZE,
+                                  8,
+                                  EGL_GREEN_SIZE,
+                                  8,
+                                  EGL_RED_SIZE,
+                                  8,
+                                  EGL_DEPTH_SIZE,
+                                  8,
+                                  EGL_RENDERABLE_TYPE,
+                                  EGL_OPENGL_BIT,
+                                  EGL_NONE};
 
-  const EGLint pbufferAttribs[] =
-  {
-    EGL_WIDTH, 9,
-    EGL_HEIGHT, 9,
-    EGL_NONE,
+  const EGLint pbufferAttribs[] = {
+      EGL_WIDTH, 9, EGL_HEIGHT, 9, EGL_NONE,
   };
 
   Destroy();
 
   if (eglGetPlatformDisplayEXT)
   {
-    m_eglDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_X11_EXT,(EGLNativeDisplayType)m_dpy,
-                                            NULL);
+    m_eglDisplay =
+        eglGetPlatformDisplayEXT(EGL_PLATFORM_X11_EXT, (EGLNativeDisplayType)m_dpy, NULL);
   }
   else
     m_eglDisplay = eglGetDisplay((EGLNativeDisplayType)m_dpy);
@@ -250,21 +249,17 @@ bool CGLContextEGL::CreatePB()
     return false;
   }
 
-  EGLint contextAttributes[] =
-  {
-      EGL_CONTEXT_MAJOR_VERSION_KHR, 3,
-      EGL_CONTEXT_MINOR_VERSION_KHR, 2,
-      EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR,
-      EGL_NONE
-  };
+  EGLint contextAttributes[] = {EGL_CONTEXT_MAJOR_VERSION_KHR,
+                                3,
+                                EGL_CONTEXT_MINOR_VERSION_KHR,
+                                2,
+                                EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR,
+                                EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR,
+                                EGL_NONE};
   m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributes);
   if (m_eglContext == EGL_NO_CONTEXT)
   {
-    EGLint contextAttributes[] =
-    {
-      EGL_CONTEXT_MAJOR_VERSION_KHR, 2,
-      EGL_NONE
-    };
+    EGLint contextAttributes[] = {EGL_CONTEXT_MAJOR_VERSION_KHR, 2, EGL_NONE};
     m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributes);
 
     if (m_eglContext == EGL_NO_CONTEXT)
@@ -277,7 +272,8 @@ bool CGLContextEGL::CreatePB()
 
   if (!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext))
   {
-    CLog::Log(LOGERROR, "Failed to make context current %p %p %p\n", m_eglDisplay, m_eglSurface, m_eglContext);
+    CLog::Log(LOGERROR, "Failed to make context current %p %p %p\n", m_eglDisplay, m_eglSurface,
+              m_eglContext);
     Destroy();
     return false;
   }
@@ -343,7 +339,7 @@ bool CGLContextEGL::SuitableCheck(EGLDisplay eglDisplay, EGLConfig config)
   return true;
 }
 
-EGLConfig CGLContextEGL::GetEGLConfig(EGLDisplay eglDisplay, XVisualInfo *vInfo)
+EGLConfig CGLContextEGL::GetEGLConfig(EGLDisplay eglDisplay, XVisualInfo* vInfo)
 {
   EGLint numConfigs;
 
@@ -358,7 +354,7 @@ EGLConfig CGLContextEGL::GetEGLConfig(EGLDisplay eglDisplay, XVisualInfo *vInfo)
     return EGL_NO_CONFIG;
   }
 
-  EGLConfig *eglConfigs;
+  EGLConfig* eglConfigs;
   eglConfigs = (EGLConfig*)malloc(numConfigs * sizeof(EGLConfig));
   if (!eglConfigs)
   {
@@ -494,7 +490,7 @@ void CGLContextEGL::SwapBuffers()
   }
 }
 
-uint64_t CGLContextEGL::GetVblankTiming(uint64_t &msc, uint64_t &interval)
+uint64_t CGLContextEGL::GetVblankTiming(uint64_t& msc, uint64_t& interval)
 {
   struct timespec nowTs;
   uint64_t now;

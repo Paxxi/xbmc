@@ -21,11 +21,11 @@ public:
   CGUIDialogVolumeBar(void);
   ~CGUIDialogVolumeBar(void) override;
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
   // Volume bar interface
-  void RegisterCallback(IGUIVolumeBarCallback *callback);
-  void UnregisterCallback(IGUIVolumeBarCallback *callback);
+  void RegisterCallback(IGUIVolumeBarCallback* callback);
+  void UnregisterCallback(IGUIVolumeBarCallback* callback);
   bool IsVolumeBarEnabled() const;
 
 private:

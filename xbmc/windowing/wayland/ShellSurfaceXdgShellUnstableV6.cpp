@@ -18,24 +18,31 @@ namespace
 
 IShellSurface::State ConvertStateFlag(wayland::zxdg_toplevel_v6_state flag)
 {
-  switch(flag)
+  switch (flag)
   {
-    case wayland::zxdg_toplevel_v6_state::activated:
-      return IShellSurface::STATE_ACTIVATED;
-    case wayland::zxdg_toplevel_v6_state::fullscreen:
-      return IShellSurface::STATE_FULLSCREEN;
-    case wayland::zxdg_toplevel_v6_state::maximized:
-      return IShellSurface::STATE_MAXIMIZED;
-    case wayland::zxdg_toplevel_v6_state::resizing:
-      return IShellSurface::STATE_RESIZING;
-    default:
-      throw std::runtime_error(std::string("Unknown xdg_toplevel state flag ") + std::to_string(static_cast<std::underlying_type<decltype(flag)>::type> (flag)));
+  case wayland::zxdg_toplevel_v6_state::activated:
+    return IShellSurface::STATE_ACTIVATED;
+  case wayland::zxdg_toplevel_v6_state::fullscreen:
+    return IShellSurface::STATE_FULLSCREEN;
+  case wayland::zxdg_toplevel_v6_state::maximized:
+    return IShellSurface::STATE_MAXIMIZED;
+  case wayland::zxdg_toplevel_v6_state::resizing:
+    return IShellSurface::STATE_RESIZING;
+  default:
+    throw std::runtime_error(
+        std::string("Unknown xdg_toplevel state flag ") +
+        std::to_string(static_cast<std::underlying_type<decltype(flag)>::type>(flag)));
   }
 }
 
-}
+} // namespace
 
-CShellSurfaceXdgShellUnstableV6* CShellSurfaceXdgShellUnstableV6::TryCreate(IShellSurfaceHandler& handler, CConnection& connection, const wayland::surface_t& surface, std::string const& title, std::string const& class_)
+CShellSurfaceXdgShellUnstableV6* CShellSurfaceXdgShellUnstableV6::TryCreate(
+    IShellSurfaceHandler& handler,
+    CConnection& connection,
+    const wayland::surface_t& surface,
+    std::string const& title,
+    std::string const& class_)
 {
   wayland::zxdg_shell_v6_t shell;
   CRegistry registry{connection};
@@ -44,7 +51,8 @@ CShellSurfaceXdgShellUnstableV6* CShellSurfaceXdgShellUnstableV6::TryCreate(IShe
 
   if (shell)
   {
-    return new CShellSurfaceXdgShellUnstableV6(handler, connection.GetDisplay(), shell, surface, title, class_);
+    return new CShellSurfaceXdgShellUnstableV6(handler, connection.GetDisplay(), shell, surface,
+                                               title, class_);
   }
   else
   {
@@ -52,23 +60,27 @@ CShellSurfaceXdgShellUnstableV6* CShellSurfaceXdgShellUnstableV6::TryCreate(IShe
   }
 }
 
-CShellSurfaceXdgShellUnstableV6::CShellSurfaceXdgShellUnstableV6(IShellSurfaceHandler& handler, wayland::display_t& display, const wayland::zxdg_shell_v6_t& shell, const wayland::surface_t& surface, std::string const& title, std::string const& app_id)
-: m_handler{handler}, m_display{display}, m_shell{shell}, m_surface{surface}, m_xdgSurface{m_shell.get_xdg_surface(m_surface)}, m_xdgToplevel{m_xdgSurface.get_toplevel()}
+CShellSurfaceXdgShellUnstableV6::CShellSurfaceXdgShellUnstableV6(
+    IShellSurfaceHandler& handler,
+    wayland::display_t& display,
+    const wayland::zxdg_shell_v6_t& shell,
+    const wayland::surface_t& surface,
+    std::string const& title,
+    std::string const& app_id)
+  : m_handler{handler}
+  , m_display{display}
+  , m_shell{shell}
+  , m_surface{surface}
+  , m_xdgSurface{m_shell.get_xdg_surface(m_surface)}
+  , m_xdgToplevel{m_xdgSurface.get_toplevel()}
 {
-  m_shell.on_ping() = [this](std::uint32_t serial)
-  {
-    m_shell.pong(serial);
-  };
-  m_xdgSurface.on_configure() = [this](std::uint32_t serial)
-  {
+  m_shell.on_ping() = [this](std::uint32_t serial) { m_shell.pong(serial); };
+  m_xdgSurface.on_configure() = [this](std::uint32_t serial) {
     m_handler.OnConfigure(serial, m_configuredSize, m_configuredState);
   };
-  m_xdgToplevel.on_close() = [this]()
-  {
-    m_handler.OnClose();
-  };
-  m_xdgToplevel.on_configure() = [this](std::int32_t width, std::int32_t height, std::vector<wayland::zxdg_toplevel_v6_state> states)
-  {
+  m_xdgToplevel.on_close() = [this]() { m_handler.OnClose(); };
+  m_xdgToplevel.on_configure() = [this](std::int32_t width, std::int32_t height,
+                                        std::vector<wayland::zxdg_toplevel_v6_state> states) {
     m_configuredSize.Set(width, height);
     m_configuredState.reset();
     for (auto state : states)
@@ -139,13 +151,17 @@ void CShellSurfaceXdgShellUnstableV6::StartMove(const wayland::seat_t& seat, std
   m_xdgToplevel.move(seat, serial);
 }
 
-void CShellSurfaceXdgShellUnstableV6::StartResize(const wayland::seat_t& seat, std::uint32_t serial, wayland::shell_surface_resize edge)
+void CShellSurfaceXdgShellUnstableV6::StartResize(const wayland::seat_t& seat,
+                                                  std::uint32_t serial,
+                                                  wayland::shell_surface_resize edge)
 {
   // wl_shell shell_surface_resize is identical to xdg_shell resize_edge
-  m_xdgToplevel.resize(seat, serial, static_cast<std::uint32_t> (edge));
+  m_xdgToplevel.resize(seat, serial, static_cast<std::uint32_t>(edge));
 }
 
-void CShellSurfaceXdgShellUnstableV6::ShowShellContextMenu(const wayland::seat_t& seat, std::uint32_t serial, CPointInt position)
+void CShellSurfaceXdgShellUnstableV6::ShowShellContextMenu(const wayland::seat_t& seat,
+                                                           std::uint32_t serial,
+                                                           CPointInt position)
 {
   m_xdgToplevel.show_window_menu(seat, serial, position.x, position.y);
 }

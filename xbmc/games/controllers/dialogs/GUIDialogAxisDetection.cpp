@@ -63,7 +63,8 @@ bool CGUIDialogAxisDetection::AcceptsPrimitive(JOYSTICK::PRIMITIVE_TYPE type) co
   return false;
 }
 
-void CGUIDialogAxisDetection::OnLateAxis(const JOYSTICK::IButtonMap* buttonMap, unsigned int axisIndex)
+void CGUIDialogAxisDetection::OnLateAxis(const JOYSTICK::IButtonMap* buttonMap,
+                                         unsigned int axisIndex)
 {
   AddAxis(buttonMap->DeviceName(), axisIndex);
 }
@@ -71,11 +72,9 @@ void CGUIDialogAxisDetection::OnLateAxis(const JOYSTICK::IButtonMap* buttonMap, 
 void CGUIDialogAxisDetection::AddAxis(const std::string& deviceName, unsigned int axisIndex)
 {
   auto it = std::find_if(m_detectedAxes.begin(), m_detectedAxes.end(),
-    [&deviceName, axisIndex](const AxisEntry& axis)
-    {
-      return axis.first == deviceName &&
-             axis.second == axisIndex;
-    });
+                         [&deviceName, axisIndex](const AxisEntry& axis) {
+                           return axis.first == deviceName && axis.second == axisIndex;
+                         });
 
   if (it == m_detectedAxes.end())
   {

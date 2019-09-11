@@ -20,9 +20,9 @@
 
 #include "DllBCM.h"
 #include "OMXCore.h"
-#include "utils/CPUInfo.h"
 #include "threads/CriticalSection.h"
 #include "threads/Event.h"
+#include "utils/CPUInfo.h"
 
 
 class AVRpiZcFrameGeometry
@@ -47,6 +47,7 @@ public:
   void setStripes(unsigned int v) { stripes = v; }
   void setBitsPerPixel(unsigned int v) { bits_per_pixel = v; }
   void setBytesPerPixel(unsigned int v) { bits_per_pixel = v * 8; }
+
 private:
   unsigned int stride_y = 0;
   unsigned int height_y = 0;
@@ -63,12 +64,12 @@ public:
   CGPUMEM(unsigned int numbytes, bool cached = true);
   ~CGPUMEM();
   void Flush();
-  void *m_arm = nullptr; // Pointer to memory mapped on ARM side
-  int m_vc_handle = 0;   // Videocore handle of relocatable memory
+  void* m_arm = nullptr; // Pointer to memory mapped on ARM side
+  int m_vc_handle = 0; // Videocore handle of relocatable memory
   int m_vcsm_handle = 0; // Handle for use by VCSM
-  unsigned int m_vc = 0;       // Address for use in GPU code
+  unsigned int m_vc = 0; // Address for use in GPU code
   unsigned int m_numbytes = 0; // Size of memory block
-  void *m_opaque = nullptr;
+  void* m_opaque = nullptr;
 };
 
 class CRBP
@@ -85,31 +86,34 @@ public:
   bool GetCodecMpg2() { return m_codec_mpg2_enabled; }
   int RaspberryPiVersion() { return g_cpuInfo.getCPUCount() == 1 ? 1 : 2; };
   bool GetCodecWvc1() { return m_codec_wvc1_enabled; }
-  void GetDisplaySize(int &width, int &height);
+  void GetDisplaySize(int& width, int& height);
   DISPMANX_DISPLAY_HANDLE_T OpenDisplay(uint32_t device);
   void CloseDisplay(DISPMANX_DISPLAY_HANDLE_T display);
   int GetGUIResolutionLimit() { return m_gui_resolution_limit; }
   // stride can be null for packed output
-  unsigned char *CaptureDisplay(int width, int height, int *stride, bool swap_red_blue, bool video_only = true);
-  DllOMX *GetDllOMX() { return m_OMX ? m_OMX->GetDll() : NULL; }
-  uint32_t LastVsync(int64_t &time);
+  unsigned char* CaptureDisplay(
+      int width, int height, int* stride, bool swap_red_blue, bool video_only = true);
+  DllOMX* GetDllOMX() { return m_OMX ? m_OMX->GetDll() : NULL; }
+  uint32_t LastVsync(int64_t& time);
   uint32_t LastVsync();
   uint32_t WaitVsync(uint32_t target = ~0U);
   void VSyncCallback();
   int GetMBox() { return m_mb; }
-  AVRpiZcFrameGeometry GetFrameGeometry(uint32_t encoding, unsigned short video_width, unsigned short video_height);
+  AVRpiZcFrameGeometry GetFrameGeometry(uint32_t encoding,
+                                        unsigned short video_width,
+                                        unsigned short video_height);
 
 private:
-  DllBcmHost *m_DllBcmHost;
-  bool       m_initialized;
-  bool       m_omx_initialized;
-  bool       m_omx_image_init;
-  int        m_arm_mem;
-  int        m_gpu_mem;
-  int        m_gui_resolution_limit;
-  bool       m_codec_mpg2_enabled;
-  bool       m_codec_wvc1_enabled;
-  COMXCore   *m_OMX;
+  DllBcmHost* m_DllBcmHost;
+  bool m_initialized;
+  bool m_omx_initialized;
+  bool m_omx_image_init;
+  int m_arm_mem;
+  int m_gpu_mem;
+  int m_gui_resolution_limit;
+  bool m_codec_mpg2_enabled;
+  bool m_codec_wvc1_enabled;
+  COMXCore* m_OMX;
   DISPMANX_DISPLAY_HANDLE_T m_display;
   CCriticalSection m_vsync_lock;
   XbmcThreads::ConditionVariable m_vsync_cond;

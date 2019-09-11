@@ -15,4 +15,3 @@ class CWinIdleTimer : public CStopWatch
 public:
   void StartZero();
 };
-

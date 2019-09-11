@@ -18,10 +18,10 @@ class CDVDStreamInfo;
 class CDVDTeletextData : public CThread, public IDVDStreamPlayer
 {
 public:
-  explicit CDVDTeletextData(CProcessInfo &processInfo);
+  explicit CDVDTeletextData(CProcessInfo& processInfo);
   ~CDVDTeletextData() override;
 
-  bool CheckStream(CDVDStreamInfo &hints);
+  bool CheckStream(CDVDStreamInfo& hints);
   bool OpenStream(CDVDStreamInfo hints) override;
   void CloseStream(bool bWaitForBuffers) override;
   void Flush();
@@ -29,7 +29,11 @@ public:
   // waits until all available data has been rendered
   void WaitForBuffers() { m_messageQueue.WaitUntilEmpty(); }
   bool AcceptsData() const override { return !m_messageQueue.IsFull(); }
-  void SendMessage(CDVDMsg* pMsg, int priority = 0) override { if(m_messageQueue.IsInited()) m_messageQueue.Put(pMsg, priority); }
+  void SendMessage(CDVDMsg* pMsg, int priority = 0) override
+  {
+    if (m_messageQueue.IsInited())
+      m_messageQueue.Put(pMsg, priority);
+  }
   void FlushMessages() override { m_messageQueue.Flush(); }
   bool IsInited() const override { return true; }
   bool IsStalled() const override { return true; }
@@ -43,7 +47,7 @@ protected:
 
 private:
   void ResetTeletextCache();
-  void Decode_p2829(unsigned char *vtxt_row, TextExtData_t **ptExtData);
+  void Decode_p2829(unsigned char* vtxt_row, TextExtData_t** ptExtData);
   void SavePage(int p, int sp, unsigned char* buffer);
   void ErasePage(int magazine);
   void AllocateCache(int magazine);
@@ -53,4 +57,3 @@ private:
   CCriticalSection m_critSection;
   CDVDMessageQueue m_messageQueue;
 };
-

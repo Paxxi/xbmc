@@ -26,22 +26,22 @@ class CTemperature;
 class CPosixResourceCounter;
 #endif
 
-#define CPU_FEATURE_MMX      1 << 0
-#define CPU_FEATURE_MMX2     1 << 1
-#define CPU_FEATURE_SSE      1 << 2
-#define CPU_FEATURE_SSE2     1 << 3
-#define CPU_FEATURE_SSE3     1 << 4
-#define CPU_FEATURE_SSSE3    1 << 5
-#define CPU_FEATURE_SSE4     1 << 6
-#define CPU_FEATURE_SSE42    1 << 7
-#define CPU_FEATURE_3DNOW    1 << 8
+#define CPU_FEATURE_MMX 1 << 0
+#define CPU_FEATURE_MMX2 1 << 1
+#define CPU_FEATURE_SSE 1 << 2
+#define CPU_FEATURE_SSE2 1 << 3
+#define CPU_FEATURE_SSE3 1 << 4
+#define CPU_FEATURE_SSSE3 1 << 5
+#define CPU_FEATURE_SSE4 1 << 6
+#define CPU_FEATURE_SSE42 1 << 7
+#define CPU_FEATURE_3DNOW 1 << 8
 #define CPU_FEATURE_3DNOWEXT 1 << 9
-#define CPU_FEATURE_ALTIVEC  1 << 10
-#define CPU_FEATURE_NEON     1 << 11
+#define CPU_FEATURE_ALTIVEC 1 << 10
+#define CPU_FEATURE_NEON 1 << 11
 
 struct CoreInfo
 {
-  int    m_id = 0;
+  int m_id = 0;
   double m_fSpeed = .0;
   double m_fPct = .0;
 #ifdef TARGET_POSIX
@@ -81,7 +81,7 @@ public:
   std::string& getCPURevision() { return m_cpuRevision; }
   std::string& getCPUSerial() { return m_cpuSerial; }
 
-  const CoreInfo &GetCoreInfo(int nCoreId);
+  const CoreInfo& GetCoreInfo(int nCoreId);
   bool HasCoreId(int nCoreId) const;
 
   std::string GetCoresUsageString() const;
@@ -91,8 +91,11 @@ public:
 private:
   CCPUInfo(const CCPUInfo&) = delete;
   CCPUInfo& operator=(const CCPUInfo&) = delete;
-  bool readProcStat(unsigned long long& user, unsigned long long& nice, unsigned long long& system,
-                    unsigned long long& idle, unsigned long long& io);
+  bool readProcStat(unsigned long long& user,
+                    unsigned long long& nice,
+                    unsigned long long& system,
+                    unsigned long long& idle,
+                    unsigned long long& io);
   void ReadCPUFeatures();
   static bool HasNeon();
 
@@ -102,7 +105,7 @@ private:
   FILE* m_fCPUFreq;
   bool m_cpuInfoForFreq;
 #if defined(TARGET_DARWIN)
-  CPosixResourceCounter *m_pResourceCounter;
+  CPosixResourceCounter* m_pResourceCounter;
 #endif
 #elif defined(TARGET_WINDOWS)
   PDH_HQUERY m_cpuQueryFreq;
@@ -116,20 +119,18 @@ private:
   unsigned long long m_idleTicks;
   unsigned long long m_ioTicks;
 
-  int          m_lastUsedPercentage;
+  int m_lastUsedPercentage;
   XbmcThreads::EndTime m_nextUsedReadTime;
-  std::string  m_cpuModel;
-  std::string  m_cpuBogoMips;
-  std::string  m_cpuSoC;
-  std::string  m_cpuHardware;
-  std::string  m_cpuRevision;
-  std::string  m_cpuSerial;
-  int          m_cpuCount;
+  std::string m_cpuModel;
+  std::string m_cpuBogoMips;
+  std::string m_cpuSoC;
+  std::string m_cpuHardware;
+  std::string m_cpuRevision;
+  std::string m_cpuSerial;
+  int m_cpuCount;
   unsigned int m_cpuFeatures;
 
   std::map<int, CoreInfo> m_cores;
-
 };
 
 extern CCPUInfo g_cpuInfo;
-

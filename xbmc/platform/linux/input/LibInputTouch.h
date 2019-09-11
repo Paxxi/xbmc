@@ -22,11 +22,11 @@ class CLibInputTouch
 {
 public:
   CLibInputTouch();
-  void ProcessTouchDown(libinput_event_touch *e);
-  void ProcessTouchMotion(libinput_event_touch *e);
-  void ProcessTouchUp(libinput_event_touch *e);
-  void ProcessTouchCancel(libinput_event_touch *e);
-  void ProcessTouchFrame(libinput_event_touch *e);
+  void ProcessTouchDown(libinput_event_touch* e);
+  void ProcessTouchMotion(libinput_event_touch* e);
+  void ProcessTouchUp(libinput_event_touch* e);
+  void ProcessTouchCancel(libinput_event_touch* e);
+  void ProcessTouchFrame(libinput_event_touch* e);
 
 private:
   void CheckSlot(int slot);
@@ -36,5 +36,6 @@ private:
   int GetX(int slot) { return m_points.at(slot).second.x; }
   int GetY(int slot) { return m_points.at(slot).second.y; }
 
-  std::vector<std::pair<TouchInput, CPoint>> m_points{std::make_pair(TouchInputUnchanged, CPoint(0, 0))};
+  std::vector<std::pair<TouchInput, CPoint>> m_points{
+      std::make_pair(TouchInputUnchanged, CPoint(0, 0))};
 };

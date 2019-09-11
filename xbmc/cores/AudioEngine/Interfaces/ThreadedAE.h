@@ -14,7 +14,6 @@
 class IThreadedAE : public IAE, public IRunnable
 {
 public:
-  virtual void Run () = 0;
+  virtual void Run() = 0;
   virtual void Stop() = 0;
 };
-

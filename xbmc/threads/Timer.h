@@ -24,7 +24,7 @@ public:
 class CTimer : protected CThread
 {
 public:
-  explicit CTimer(ITimerCallback *callback);
+  explicit CTimer(ITimerCallback* callback);
   explicit CTimer(std::function<void()> const& callback);
   ~CTimer() override;
 

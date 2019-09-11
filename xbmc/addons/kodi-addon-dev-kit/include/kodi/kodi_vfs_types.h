@@ -16,12 +16,14 @@
 #endif
 #endif
 
-#include <stdint.h>
 #include "xbmc_addon_types.h"
+
+#include <stdint.h>
 #ifdef BUILD_KODI_ADDON
 #include "IFileTypes.h"
 #else
 #include "filesystem/IFileTypes.h"
+
 #include "PlatformDefs.h"
 #endif
 
@@ -36,14 +38,14 @@ extern "C"
 
   struct VFSDirEntry
   {
-    char* label;             //!< item label
-    char* title;             //!< item title
-    char* path;              //!< item path
-    unsigned int num_props;  //!< Number of properties attached to item
+    char* label; //!< item label
+    char* title; //!< item title
+    char* path; //!< item path
+    unsigned int num_props; //!< Number of properties attached to item
     VFSProperty* properties; //!< Properties
-    time_t date_time;        //!< file creation date & time
-    bool folder;             //!< Item is a folder
-    uint64_t size;           //!< Size of file represented by item
+    time_t date_time; //!< file creation date & time
+    bool folder; //!< Item is a folder
+    uint64_t size; //!< Size of file represented by item
   };
 
   struct VFSURL
@@ -67,18 +69,19 @@ extern "C"
     //! \param heading The heading of the keyboard dialog
     //! \param input A pointer to the resulting string. Must be free'd by caller.
     //! \return True if input was received, false otherwise
-    bool (__cdecl* GetKeyboardInput)(void* ctx, const char* heading, char** input);
+    bool(__cdecl* GetKeyboardInput)(void* ctx, const char* heading, char** input);
 
     //! \brief Display an error dialog
     //! \param heading The heading of the error dialog
     //! \param line1 The first line of the error dialog
     //! \param line2 The second line of the error dialog. Can be NULL
     //! \param line3 The third line of the error dialog. Can be NULL
-    void (__cdecl* SetErrorDialog)(void* ctx, const char* heading, const char* line1, const char* line2, const char* line3);
+    void(__cdecl* SetErrorDialog)(
+        void* ctx, const char* heading, const char* line1, const char* line2, const char* line3);
 
     //! \brief Prompt the user for authentication of a URL
     //! \param url The URL
-    void (__cdecl* RequireAuthentication)(void* ctx, const char* url);
+    void(__cdecl* RequireAuthentication)(void* ctx, const char* url);
 
     //! \brief The context to be passed to the callbacks
     void* ctx;
@@ -102,14 +105,14 @@ extern "C"
     //! \param url The URL of the file
     //! \return Context for the opened file
     //! \sa IFile::Open
-    void* (__cdecl* Open) (VFSURL* url);
+    void*(__cdecl* Open)(VFSURL* url);
 
     //! \brief Open a file for output
     //! \param url The URL of the file
     //! \param bOverwrite Whether or not to overwrite an existing file
     //! \return Context for the opened file
     //! \sa IFile::OpenForWrite
-    void* (__cdecl* OpenForWrite) (VFSURL* url, bool bOverWrite);
+    void*(__cdecl* OpenForWrite)(VFSURL* url, bool bOverWrite);
 
     //! \brief Read from a file
     //! \param context The context of the file
@@ -117,7 +120,7 @@ extern "C"
     //! \param uiBufSize Number of bytes to read
     //! \return Number of bytes read
     //! \sa IFile::Read
-    ssize_t (__cdecl* Read) (void* context, void* buffer, size_t uiBufSize);
+    ssize_t(__cdecl* Read)(void* context, void* buffer, size_t uiBufSize);
 
     //! \brief Write to a file
     //! \param context The context of the file
@@ -125,7 +128,7 @@ extern "C"
     //! \param uiBufSize Number of bytes to write
     //! \return Number of bytes written
     //! \sa IFile::Write
-    ssize_t (__cdecl* Write) (void* context, const void* buffer, size_t uiBufSize);
+    ssize_t(__cdecl* Write)(void* context, const void* buffer, size_t uiBufSize);
 
     //! \brief Seek in a file
     //! \param context The context of the file
@@ -133,32 +136,32 @@ extern "C"
     //! \param whence Position in file 'position' is relative to (SEEK_CUR, SEEK_SET, SEEK_END)
     //! \return Offset in file after seek
     //! \sa IFile::Seek
-    int64_t  (__cdecl* Seek) (void* context, int64_t position, int whence);
+    int64_t(__cdecl* Seek)(void* context, int64_t position, int whence);
 
     //! \brief Truncate a file
     //! \param context The context of the file
     //! \param size The size to truncate the file to
     //! \return 0 on success, -1 on error
     //! \sa IFile::Truncate
-    int      (__cdecl* Truncate) (void* context, int64_t size);
+    int(__cdecl* Truncate)(void* context, int64_t size);
 
     //! \brief Get total size of a file
     //! \param context The context of the file
     //! \return Total file size
     //! \sa IFile::GetLength
-    int64_t  (__cdecl* GetLength) (void* context);
+    int64_t(__cdecl* GetLength)(void* context);
 
     //! \brief Get current position in a file
     //! \param context The context of the file
     //! \return Current position
     //! \sa IFile::GetPosition
-    int64_t  (__cdecl* GetPosition) (void* context);
+    int64_t(__cdecl* GetPosition)(void* context);
 
     //! \brief Get chunk size of a file
     //! \param context The context of the file
     //! \return Chunk size
     //! \sa IFile::GetChunkSize()
-    int      (__cdecl* GetChunkSize)(void* context);
+    int(__cdecl* GetChunkSize)(void* context);
 
     //! \brief Perform an IO-control on the file
     //! \param context The context of the file
@@ -166,63 +169,63 @@ extern "C"
     //! \param param Parameter attached to the IO-control
     //! \return -1 on error, >= 0 on success
     //! \sa IFile::IoControl
-    int  (__cdecl* IoControl) (void* context, XFILE::EIoControl request, void* param);
+    int(__cdecl* IoControl)(void* context, XFILE::EIoControl request, void* param);
 
     //! \brief Stat a file
     //! \param url The URL of the file
     //! \param buffer The buffer to store results in
     //! \return -1 on error, 0 otherwise
     //! \sa IFile::Stat
-    int  (__cdecl* Stat) (VFSURL* url, struct __stat64* buffer);
+    int(__cdecl* Stat)(VFSURL* url, struct __stat64* buffer);
     //! \brief Close a file
     //! \param context The context of the file
     //! \return True on success, false on failure
     //! \sa IFile::Close
 
-    bool (__cdecl* Close) (void* context);
+    bool(__cdecl* Close)(void* context);
 
     //! \brief Check for file existence
     //! \param url The URL of the file
     //! \return True if file exists, false otherwise
     //! \sa IFile::Exists
-    bool (__cdecl* Exists) (VFSURL* url);
+    bool(__cdecl* Exists)(VFSURL* url);
 
     //! \brief Clear out any idle connections
-    void (__cdecl* ClearOutIdle) ();
+    void(__cdecl* ClearOutIdle)();
 
     //! \brief Disconnect all connections
-    void (__cdecl* DisconnectAll) ();
+    void(__cdecl* DisconnectAll)();
 
     //! \brief Delete a file
     //! \param url The URL of the file
     //! \return True if deletion was successful, false otherwise
     //! \sa IFile::Delete
-    bool (__cdecl* Delete) (VFSURL* url);
+    bool(__cdecl* Delete)(VFSURL* url);
 
     //! \brief Rename a file
     //! \param url The URL of the source file
     //! \param url2 The URL of the destination file
     //! \return True if deletion was successful, false otherwise
     //! \sa IFile::Rename
-    bool (__cdecl* Rename) (VFSURL* url, VFSURL* url2);
+    bool(__cdecl* Rename)(VFSURL* url, VFSURL* url2);
 
     //! \brief Check for directory existence
     //! \param url The URL of the file
     //! \return True if directory exists, false otherwise
     //! \sa IDirectory::Exists
-    bool (__cdecl* DirectoryExists) (VFSURL* url);
+    bool(__cdecl* DirectoryExists)(VFSURL* url);
 
     //! \brief Remove a directory
     //! \param url The URL of the directory
     //! \return True if removal was successful, false otherwise
     //! \sa IDirectory::Remove
-    bool (__cdecl* RemoveDirectory) (VFSURL* url);
+    bool(__cdecl* RemoveDirectory)(VFSURL* url);
 
     //! \brief Create a directory
     //! \param url The URL of the file
     //! \return True if creation was successful, false otherwise
     //! \sa IDirectory::Create
-    bool (__cdecl* CreateDirectory) (VFSURL* url);
+    bool(__cdecl* CreateDirectory)(VFSURL* url);
 
     //! \brief List a directory
     //! \param url The URL of the directory
@@ -231,13 +234,13 @@ extern "C"
     //! \param callbacks A callback structure
     //! \return Context for the directory listing
     //! \sa IDirectory::GetDirectory
-    void* (__cdecl* GetDirectory) (VFSURL* url,
-                                   VFSDirEntry** entries,
-                                   int* num_entries,
-                                   VFSCallbacks* callbacks);
+    void*(__cdecl* GetDirectory)(VFSURL* url,
+                                 VFSDirEntry** entries,
+                                 int* num_entries,
+                                 VFSCallbacks* callbacks);
 
     //! \brief Free up resources after listing a directory
-    void (__cdecl* FreeDirectory) (void* ctx);
+    void(__cdecl* FreeDirectory)(void* ctx);
 
     //! \brief Check if file should be presented as a directory (multiple streams)
     //! \param url The URL of the file
@@ -246,10 +249,10 @@ extern "C"
     //! \param rootpath Path to root directory if multiple entries
     //! \return Context for the directory listing
     //! \sa IFileDirectory::ContainsFiles, FreeDirectory
-    void* (__cdecl* ContainsFiles) (VFSURL* url,
-                                    VFSDirEntry** entries,
-                                    int* num_entries,
-                                    char* rootpath);
+    void*(__cdecl* ContainsFiles)(VFSURL* url,
+                                  VFSDirEntry** entries,
+                                  int* num_entries,
+                                  char* rootpath);
   } KodiToAddonFuncTable_VFSEntry;
 
   typedef struct AddonInstance_VFSEntry
@@ -258,5 +261,4 @@ extern "C"
     AddonToKodiFuncTable_VFSEntry toKodi;
     KodiToAddonFuncTable_VFSEntry toAddon;
   } AddonInstance_VFSEntry;
-
 }

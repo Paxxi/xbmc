@@ -6,28 +6,30 @@
  *  See LICENSES/README.md for more information.
  */
 
-#include <stdlib.h>
-#include "network/Network.h"
 #include "DirectoryFactory.h"
-#include "SpecialProtocolDirectory.h"
-#include "MultiPathDirectory.h"
-#include "StackDirectory.h"
+
+#include "AddonsDirectory.h"
+#include "DAVDirectory.h"
+#include "EventsDirectory.h"
+#include "FTPDirectory.h"
+#include "FavouritesDirectory.h"
 #include "FileDirectoryFactory.h"
-#include "PlaylistDirectory.h"
+#include "HTTPDirectory.h"
+#include "LibraryDirectory.h"
+#include "MultiPathDirectory.h"
 #include "MusicDatabaseDirectory.h"
 #include "MusicSearchDirectory.h"
-#include "VideoDatabaseDirectory.h"
-#include "FavouritesDirectory.h"
-#include "LibraryDirectory.h"
-#include "EventsDirectory.h"
-#include "AddonsDirectory.h"
+#include "PlaylistDirectory.h"
 #include "SourcesDirectory.h"
-#include "FTPDirectory.h"
-#include "HTTPDirectory.h"
-#include "DAVDirectory.h"
+#include "SpecialProtocolDirectory.h"
+#include "StackDirectory.h"
 #include "UDFDirectory.h"
-#include "utils/log.h"
+#include "VideoDatabaseDirectory.h"
+#include "network/Network.h"
 #include "network/WakeOnAccess.h"
+#include "utils/log.h"
+
+#include <stdlib.h>
 
 #ifdef TARGET_POSIX
 #include "platform/posix/filesystem/PosixDirectory.h"
@@ -45,8 +47,8 @@
 #endif
 #endif
 #include "CDDADirectory.h"
-#include "PluginDirectory.h"
 #include "ISO9660Directory.h"
+#include "PluginDirectory.h"
 #ifdef HAS_UPNP
 #include "UPnPDirectory.h"
 #endif
@@ -54,11 +56,11 @@
 #if defined(TARGET_ANDROID)
 #include "platform/android/filesystem/APKDirectory.h"
 #endif
+#include "FileItem.h"
+#include "RSSDirectory.h"
+#include "URL.h"
 #include "XbtDirectory.h"
 #include "ZipDirectory.h"
-#include "FileItem.h"
-#include "URL.h"
-#include "RSSDirectory.h"
 #ifdef HAS_ZEROCONF
 #include "ZeroconfDirectory.h"
 #endif
@@ -101,78 +103,114 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
     {
       auto prots = StringUtils::Split(vfsAddon->GetProtocols(), "|");
 
-      if (vfsAddon->HasDirectories() && std::find(prots.begin(), prots.end(), url.GetProtocol()) != prots.end())
+      if (vfsAddon->HasDirectories() &&
+          std::find(prots.begin(), prots.end(), url.GetProtocol()) != prots.end())
         return new CVFSEntryIDirectoryWrapper(vfsAddon);
     }
   }
 
 #ifdef TARGET_POSIX
-  if (url.GetProtocol().empty() || url.IsProtocol("file")) return new CPosixDirectory();
+  if (url.GetProtocol().empty() || url.IsProtocol("file"))
+    return new CPosixDirectory();
 #elif defined(TARGET_WINDOWS)
-  if (url.GetProtocol().empty() || url.IsProtocol("file")) return new CWin32Directory();
+  if (url.GetProtocol().empty() || url.IsProtocol("file"))
+    return new CWin32Directory();
 #else
 #error Local directory access is not implemented for this platform
 #endif
-  if (url.IsProtocol("special")) return new CSpecialProtocolDirectory();
-  if (url.IsProtocol("sources")) return new CSourcesDirectory();
-  if (url.IsProtocol("addons")) return new CAddonsDirectory();
+  if (url.IsProtocol("special"))
+    return new CSpecialProtocolDirectory();
+  if (url.IsProtocol("sources"))
+    return new CSourcesDirectory();
+  if (url.IsProtocol("addons"))
+    return new CAddonsDirectory();
 #if defined(HAS_DVD_DRIVE)
-  if (url.IsProtocol("cdda")) return new CCDDADirectory();
+  if (url.IsProtocol("cdda"))
+    return new CCDDADirectory();
 #endif
-  if (url.IsProtocol("iso9660")) return new CISO9660Directory();
-  if (url.IsProtocol("udf")) return new CUDFDirectory();
-  if (url.IsProtocol("plugin")) return new CPluginDirectory();
+  if (url.IsProtocol("iso9660"))
+    return new CISO9660Directory();
+  if (url.IsProtocol("udf"))
+    return new CUDFDirectory();
+  if (url.IsProtocol("plugin"))
+    return new CPluginDirectory();
 #if defined(TARGET_ANDROID)
-  if (url.IsProtocol("apk")) return new CAPKDirectory();
+  if (url.IsProtocol("apk"))
+    return new CAPKDirectory();
 #endif
-  if (url.IsProtocol("zip")) return new CZipDirectory();
-  if (url.IsProtocol("xbt")) return new CXbtDirectory();
-  if (url.IsProtocol("multipath")) return new CMultiPathDirectory();
-  if (url.IsProtocol("stack")) return new CStackDirectory();
-  if (url.IsProtocol("playlistmusic")) return new CPlaylistDirectory();
-  if (url.IsProtocol("playlistvideo")) return new CPlaylistDirectory();
-  if (url.IsProtocol("musicdb")) return new CMusicDatabaseDirectory();
-  if (url.IsProtocol("musicsearch")) return new CMusicSearchDirectory();
-  if (url.IsProtocol("videodb")) return new CVideoDatabaseDirectory();
-  if (url.IsProtocol("library")) return new CLibraryDirectory();
-  if (url.IsProtocol("favourites")) return new CFavouritesDirectory();
+  if (url.IsProtocol("zip"))
+    return new CZipDirectory();
+  if (url.IsProtocol("xbt"))
+    return new CXbtDirectory();
+  if (url.IsProtocol("multipath"))
+    return new CMultiPathDirectory();
+  if (url.IsProtocol("stack"))
+    return new CStackDirectory();
+  if (url.IsProtocol("playlistmusic"))
+    return new CPlaylistDirectory();
+  if (url.IsProtocol("playlistvideo"))
+    return new CPlaylistDirectory();
+  if (url.IsProtocol("musicdb"))
+    return new CMusicDatabaseDirectory();
+  if (url.IsProtocol("musicsearch"))
+    return new CMusicSearchDirectory();
+  if (url.IsProtocol("videodb"))
+    return new CVideoDatabaseDirectory();
+  if (url.IsProtocol("library"))
+    return new CLibraryDirectory();
+  if (url.IsProtocol("favourites"))
+    return new CFavouritesDirectory();
 #if defined(TARGET_ANDROID)
-  if (url.IsProtocol("androidapp")) return new CAndroidAppDirectory();
+  if (url.IsProtocol("androidapp"))
+    return new CAndroidAppDirectory();
 #endif
 #ifdef HAVE_LIBBLURAY
-  if (url.IsProtocol("bluray")) return new CBlurayDirectory();
+  if (url.IsProtocol("bluray"))
+    return new CBlurayDirectory();
 #endif
-  if (url.IsProtocol("resource")) return new CResourceDirectory();
-  if (url.IsProtocol("events")) return new CEventsDirectory();
+  if (url.IsProtocol("resource"))
+    return new CResourceDirectory();
+  if (url.IsProtocol("events"))
+    return new CEventsDirectory();
 #ifdef TARGET_WINDOWS_STORE
-  if (CWinLibraryDirectory::IsValid(url)) return new CWinLibraryDirectory();
+  if (CWinLibraryDirectory::IsValid(url))
+    return new CWinLibraryDirectory();
 #endif
 
-  if (url.IsProtocol("ftp") || url.IsProtocol("ftps")) return new CFTPDirectory();
-  if (url.IsProtocol("http") || url.IsProtocol("https")) return new CHTTPDirectory();
-  if (url.IsProtocol("dav") || url.IsProtocol("davs")) return new CDAVDirectory();
+  if (url.IsProtocol("ftp") || url.IsProtocol("ftps"))
+    return new CFTPDirectory();
+  if (url.IsProtocol("http") || url.IsProtocol("https"))
+    return new CHTTPDirectory();
+  if (url.IsProtocol("dav") || url.IsProtocol("davs"))
+    return new CDAVDirectory();
 #ifdef HAS_FILESYSTEM_SMB
 #ifdef TARGET_WINDOWS
-  if (url.IsProtocol("smb")) return new CWin32SMBDirectory();
+  if (url.IsProtocol("smb"))
+    return new CWin32SMBDirectory();
 #else
-  if (url.IsProtocol("smb")) return new CSMBDirectory();
+  if (url.IsProtocol("smb"))
+    return new CSMBDirectory();
 #endif
 #endif
 #ifdef HAS_UPNP
-  if (url.IsProtocol("upnp")) return new CUPnPDirectory();
+  if (url.IsProtocol("upnp"))
+    return new CUPnPDirectory();
 #endif
-  if (url.IsProtocol("rss") || url.IsProtocol("rsss")) return new CRSSDirectory();
+  if (url.IsProtocol("rss") || url.IsProtocol("rsss"))
+    return new CRSSDirectory();
 #ifdef HAS_ZEROCONF
-  if (url.IsProtocol("zeroconf")) return new CZeroconfDirectory();
+  if (url.IsProtocol("zeroconf"))
+    return new CZeroconfDirectory();
 #endif
 #ifdef HAS_FILESYSTEM_NFS
-  if (url.IsProtocol("nfs")) return new CNFSDirectory();
+  if (url.IsProtocol("nfs"))
+    return new CNFSDirectory();
 #endif
 
   if (url.IsProtocol("pvr"))
     return new CPVRDirectory();
 
-  CLog::Log(LOGWARNING, "%s - unsupported protocol(%s) in %s", __FUNCTION__, url.GetProtocol().c_str(), url.GetRedacted().c_str() );
+  CLog::Log(LOGWARNING, "%s - unsupported protocol(%s) in %s", __FUNCTION__,
+            url.GetProtocol().c_str(), url.GetRedacted().c_str());
   return NULL;
 }
-

@@ -51,17 +51,19 @@ void CVC1BitstreamParser::Reset()
   m_Profile = VC1_PROFILE_NOPROFILE;
 }
 
-bool CVC1BitstreamParser::IsRecoveryPoint(const uint8_t *buf, int buf_size)
+bool CVC1BitstreamParser::IsRecoveryPoint(const uint8_t* buf, int buf_size)
 {
   return vc1_parse_frame(buf, buf + buf_size, true);
 };
 
-bool CVC1BitstreamParser::IsIFrame(const uint8_t *buf, int buf_size)
+bool CVC1BitstreamParser::IsIFrame(const uint8_t* buf, int buf_size)
 {
   return vc1_parse_frame(buf, buf + buf_size, false);
 };
 
-bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf_end, bool sequence_only)
+bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t* buf,
+                                          const uint8_t* buf_end,
+                                          bool sequence_only)
 {
   uint32_t state = -1;
   for (;;)
@@ -107,21 +109,24 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
       if (m_Profile == VC1_PROFILE_ADVANCED)
       {
         uint8_t fcm;
-        if (m_AdvInterlace) {
+        if (m_AdvInterlace)
+        {
           fcm = br.ReadBits(1);
           if (fcm)
             fcm = br.ReadBits(1) + 1;
         }
         else
           fcm = VC1_FRAME_PROGRESSIVE;
-        if (fcm == VC1_FIELD_INTERLACE) {
+        if (fcm == VC1_FIELD_INTERLACE)
+        {
           uint8_t pic = br.ReadBits(3);
           return pic == 0x00 || pic == 0x01;
         }
         else
         {
           uint8_t pic(0);
-          while (pic < 4 && br.ReadBits(1))++pic;
+          while (pic < 4 && br.ReadBits(1))
+            ++pic;
           return pic == 2;
         }
         return false;
@@ -130,8 +135,10 @@ bool CVC1BitstreamParser::vc1_parse_frame(const uint8_t *buf, const uint8_t *buf
       {
         br.SkipBits(m_SimpleSkipBits); // quantizer
         uint8_t pic(br.ReadBits(1));
-        if (m_MaxBFrames) {
-          if (!pic) {
+        if (m_MaxBFrames)
+        {
+          if (!pic)
+          {
             pic = br.ReadBits(1);
             return pic != 0;
           }

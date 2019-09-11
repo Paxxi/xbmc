@@ -18,14 +18,16 @@
 #include <math.h>
 
 CProgressJob::CProgressJob()
-  : m_progress(NULL),
-    m_progressDialog(NULL)
-{ }
+  : m_progress(NULL)
+  , m_progressDialog(NULL)
+{
+}
 
 CProgressJob::CProgressJob(CGUIDialogProgressBarHandle* progressBar)
-  : m_progress(progressBar),
-    m_progressDialog(NULL)
-{ }
+  : m_progress(progressBar)
+  , m_progressDialog(NULL)
+{
+}
 
 CProgressJob::~CProgressJob()
 {
@@ -52,7 +54,8 @@ bool CProgressJob::DoModal()
   // get a progress dialog if we don't already have one
   if (m_progressDialog == NULL)
   {
-    m_progressDialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(WINDOW_DIALOG_PROGRESS);
+    m_progressDialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogProgress>(
+        WINDOW_DIALOG_PROGRESS);
 
     if (m_progressDialog == NULL)
       return false;
@@ -70,7 +73,10 @@ bool CProgressJob::DoModal()
   return result;
 }
 
-void CProgressJob::SetProgressIndicators(CGUIDialogProgressBarHandle* progressBar, CGUIDialogProgress* progressDialog, bool updateProgress /* = true */, bool updateInformation /* = true */)
+void CProgressJob::SetProgressIndicators(CGUIDialogProgressBarHandle* progressBar,
+                                         CGUIDialogProgress* progressDialog,
+                                         bool updateProgress /* = true */,
+                                         bool updateInformation /* = true */)
 {
   SetProgressBar(progressBar);
   SetProgressDialog(progressDialog);
@@ -83,8 +89,7 @@ void CProgressJob::SetProgressIndicators(CGUIDialogProgressBarHandle* progressBa
 
 void CProgressJob::ShowProgressDialog() const
 {
-  if (!IsModal() || m_progressDialog == NULL ||
-      m_progressDialog->IsDialogRunning())
+  if (!IsModal() || m_progressDialog == NULL || m_progressDialog->IsDialogRunning())
     return;
 
   // show the progress dialog as a modal dialog with a progress bar
@@ -92,7 +97,7 @@ void CProgressJob::ShowProgressDialog() const
   m_progressDialog->ShowProgressBar(true);
 }
 
-void CProgressJob::SetTitle(const std::string &title)
+void CProgressJob::SetTitle(const std::string& title)
 {
   if (!m_updateInformation)
     return;
@@ -107,7 +112,7 @@ void CProgressJob::SetTitle(const std::string &title)
   }
 }
 
-void CProgressJob::SetText(const std::string &text)
+void CProgressJob::SetText(const std::string& text)
 {
   if (!m_updateInformation)
     return;

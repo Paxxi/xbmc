@@ -10,7 +10,8 @@
 
 #include "DVDOverlayCodec.h"
 
-extern "C" {
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 #include <libavutil/avutil.h>
 }
@@ -23,20 +24,20 @@ class CDVDOverlayCodecFFmpeg : public CDVDOverlayCodec
 public:
   CDVDOverlayCodecFFmpeg();
   ~CDVDOverlayCodecFFmpeg() override;
-  bool Open(CDVDStreamInfo &hints, CDVDCodecOptions &options) override;
+  bool Open(CDVDStreamInfo& hints, CDVDCodecOptions& options) override;
   void Dispose() override;
-  int Decode(DemuxPacket *pPacket) override;
+  int Decode(DemuxPacket* pPacket) override;
   void Reset() override;
   void Flush() override;
   CDVDOverlay* GetOverlay() override;
 
 private:
   AVCodecContext* m_pCodecContext;
-  AVSubtitle      m_Subtitle;
-  int             m_SubtitleIndex;
-  double          m_StartTime;
-  double          m_StopTime;
+  AVSubtitle m_Subtitle;
+  int m_SubtitleIndex;
+  double m_StartTime;
+  double m_StopTime;
 
-  int             m_width;
-  int             m_height;
+  int m_width;
+  int m_height;
 };

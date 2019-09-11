@@ -13,10 +13,10 @@
 
 using namespace XFILE::VIDEODATABASEDIRECTORY;
 
-CDirectoryNodeTitleMovies::CDirectoryNodeTitleMovies(const std::string& strName, CDirectoryNode* pParent)
+CDirectoryNodeTitleMovies::CDirectoryNodeTitleMovies(const std::string& strName,
+                                                     CDirectoryNode* pParent)
   : CDirectoryNode(NODE_TYPE_TITLE_MOVIES, strName, pParent)
 {
-
 }
 
 bool CDirectoryNodeTitleMovies::GetContent(CFileItemList& items) const
@@ -28,7 +28,10 @@ bool CDirectoryNodeTitleMovies::GetContent(CFileItemList& items) const
   CQueryParams params;
   CollectQueryParams(params);
 
-  bool bSuccess=videodatabase.GetMoviesNav(BuildPath(), items, params.GetGenreId(), params.GetYear(), params.GetActorId(), params.GetDirectorId(), params.GetStudioId(), params.GetCountryId(), params.GetSetId(), params.GetTagId());
+  bool bSuccess =
+      videodatabase.GetMoviesNav(BuildPath(), items, params.GetGenreId(), params.GetYear(),
+                                 params.GetActorId(), params.GetDirectorId(), params.GetStudioId(),
+                                 params.GetCountryId(), params.GetSetId(), params.GetTagId());
 
   videodatabase.Close();
 

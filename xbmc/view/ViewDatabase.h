@@ -21,8 +21,14 @@ public:
   ~CViewDatabase() override;
   bool Open() override;
 
-  bool GetViewState(const std::string &path, int windowID, CViewState &state, const std::string &skin);
-  bool SetViewState(const std::string &path, int windowID, const CViewState &state, const std::string &skin);
+  bool GetViewState(const std::string& path,
+                    int windowID,
+                    CViewState& state,
+                    const std::string& skin);
+  bool SetViewState(const std::string& path,
+                    int windowID,
+                    const CViewState& state,
+                    const std::string& skin);
   bool ClearViewStates(int windowID);
 
 protected:
@@ -30,5 +36,5 @@ protected:
   void CreateAnalytics() override;
   void UpdateTables(int version) override;
   int GetSchemaVersion() const override { return 6; }
-  const char *GetBaseDBName() const override { return "ViewModes"; }
+  const char* GetBaseDBName() const override { return "ViewModes"; }
 };

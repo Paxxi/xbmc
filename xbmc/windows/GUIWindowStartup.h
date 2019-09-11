@@ -10,13 +10,12 @@
 
 #include "guilib/GUIWindow.h"
 
-class CGUIWindowStartup :
-      public CGUIWindow
+class CGUIWindowStartup : public CGUIWindow
 {
 public:
   CGUIWindowStartup(void);
   ~CGUIWindowStartup(void) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
   // specialization of CGUIWindow
   void OnDeinitWindow(int nextWindowID) override;

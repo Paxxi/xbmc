@@ -17,7 +17,7 @@ using namespace OVERLAY;
 
 CDebugRenderer::CDebugRenderer()
 {
-  for (int i=0; i<4; i++)
+  for (int i = 0; i < 4; i++)
   {
     m_overlay[i] = nullptr;
     m_strDebug[i] = " ";
@@ -33,7 +33,10 @@ CDebugRenderer::~CDebugRenderer()
   }
 }
 
-void CDebugRenderer::SetInfo(std::string &info1, std::string &info2, std::string &info3, std::string &info4)
+void CDebugRenderer::SetInfo(std::string& info1,
+                             std::string& info2,
+                             std::string& info3,
+                             std::string& info4)
 {
   m_overlayRenderer.Release(0);
 
@@ -76,7 +79,7 @@ void CDebugRenderer::SetInfo(std::string &info1, std::string &info2, std::string
   m_overlayRenderer.AddOverlay(m_overlay[3], 0, 0);
 }
 
-void CDebugRenderer::Render(CRect &src, CRect &dst, CRect &view)
+void CDebugRenderer::Render(CRect& src, CRect& dst, CRect& view)
 {
   m_overlayRenderer.SetVideoRect(src, dst, view);
   m_overlayRenderer.Render(0);
@@ -87,7 +90,8 @@ void CDebugRenderer::Flush()
   m_overlayRenderer.Flush();
 }
 
-CDebugRenderer::CRenderer::CRenderer() : OVERLAY::CRenderer()
+CDebugRenderer::CRenderer::CRenderer()
+  : OVERLAY::CRenderer()
 {
   m_font = "__debug__";
   m_fontBorder = "__debugborder__";
@@ -108,11 +112,13 @@ void CDebugRenderer::CRenderer::Render(int idx)
     if (!o)
       continue;
 
-    COverlayText *text = dynamic_cast<COverlayText*>(o);
+    COverlayText* text = dynamic_cast<COverlayText*>(o);
     if (text)
-      text->PrepareRender("arial.ttf", 1, 100, 16, 0, m_font, m_fontBorder, UTILS::COLOR::NONE, m_rv);
+      text->PrepareRender("arial.ttf", 1, 100, 16, 0, m_font, m_fontBorder, UTILS::COLOR::NONE,
+                          m_rv);
 
-    RESOLUTION_INFO res = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(CServiceBroker::GetWinSystem()->GetGfxContext().GetVideoResolution());
+    RESOLUTION_INFO res = CServiceBroker::GetWinSystem()->GetGfxContext().GetResInfo(
+        CServiceBroker::GetWinSystem()->GetGfxContext().GetVideoResolution());
 
     o->m_pos = COverlay::POSITION_ABSOLUTE;
     o->m_align = COverlay::ALIGN_SCREEN;

@@ -16,15 +16,15 @@ using namespace XFILE;
 
 DllDynamic::DllDynamic()
 {
-  m_dll=NULL;
-  m_DelayUnload=true;
+  m_dll = NULL;
+  m_DelayUnload = true;
 }
 
-DllDynamic::DllDynamic(const std::string& strDllName):
-  m_strDllName(strDllName)
+DllDynamic::DllDynamic(const std::string& strDllName)
+  : m_strDllName(strDllName)
 {
-  m_dll=NULL;
-  m_DelayUnload=true;
+  m_dll = NULL;
+  m_DelayUnload = true;
 }
 
 DllDynamic::~DllDynamic()
@@ -37,7 +37,7 @@ bool DllDynamic::Load()
   if (m_dll)
     return true;
 
-  if (!(m_dll=CSectionLoader::LoadDLL(m_strDllName, m_DelayUnload, LoadSymbols())))
+  if (!(m_dll = CSectionLoader::LoadDLL(m_strDllName, m_DelayUnload, LoadSymbols())))
     return false;
 
   if (!ResolveExports())
@@ -52,9 +52,9 @@ bool DllDynamic::Load()
 
 void DllDynamic::Unload()
 {
-  if(m_dll)
+  if (m_dll)
     CSectionLoader::UnloadDLL(m_strDllName);
-  m_dll=NULL;
+  m_dll = NULL;
 }
 
 bool DllDynamic::CanLoad()
@@ -67,7 +67,7 @@ bool DllDynamic::EnableDelayedUnload(bool bOnOff)
   if (m_dll)
     return false;
 
-  m_DelayUnload=bOnOff;
+  m_DelayUnload = bOnOff;
 
   return true;
 }
@@ -77,7 +77,6 @@ bool DllDynamic::SetFile(const std::string& strDllName)
   if (m_dll)
     return false;
 
-  m_strDllName=strDllName;
+  m_strDllName = strDllName;
   return true;
 }
-

@@ -8,23 +8,23 @@
 
 #include "Addon.h"
 
-#include <algorithm>
-#include <string.h>
-#include <ostream>
-#include <utility>
-#include <vector>
-
 #include "AddonManager.h"
+#include "RepositoryUpdater.h"
+#include "ServiceBroker.h"
 #include "addons/settings/AddonSettings.h"
 #include "filesystem/Directory.h"
 #include "filesystem/File.h"
-#include "RepositoryUpdater.h"
 #include "settings/Settings.h"
-#include "ServiceBroker.h"
-#include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/XMLUtils.h"
+#include "utils/log.h"
+
+#include <algorithm>
+#include <ostream>
+#include <string.h>
+#include <utility>
+#include <vector>
 
 #ifdef HAS_PYTHON
 #include "interfaces/python/XBPython.h"
@@ -41,7 +41,8 @@ CAddon::CAddon(const AddonInfoPtr& addonInfo, TYPE addonType)
   , m_userSettingsPath()
   , m_loadSettingsFailed(false)
   , m_hasUserSettings(false)
-  , m_profilePath(StringUtils::Format("special://profile/addon_data/%s/", m_addonInfo->ID().c_str()))
+  , m_profilePath(
+        StringUtils::Format("special://profile/addon_data/%s/", m_addonInfo->ID().c_str()))
   , m_settings(nullptr)
   , m_type(addonType == ADDON_UNKNOWN ? addonInfo->MainType() : addonType)
 {
@@ -82,14 +83,16 @@ bool CAddon::LoadSettings(bool bForce, bool loadUserSettings /* = true */)
     GetSettings()->Uninitialize();
 
   // load the settings definition XML file
-  auto addonSettingsDefinitionFile = URIUtils::AddFileToFolder(m_addonInfo->Path(), "resources", "settings.xml");
+  auto addonSettingsDefinitionFile =
+      URIUtils::AddFileToFolder(m_addonInfo->Path(), "resources", "settings.xml");
   CXBMCTinyXML addonSettingsDefinitionDoc;
   if (!addonSettingsDefinitionDoc.LoadFile(addonSettingsDefinitionFile))
   {
     if (CFile::Exists(addonSettingsDefinitionFile))
     {
-      CLog::Log(LOGERROR, "CAddon[%s]: unable to load: %s, Line %d\n%s",
-        ID().c_str(), addonSettingsDefinitionFile.c_str(), addonSettingsDefinitionDoc.ErrorRow(), addonSettingsDefinitionDoc.ErrorDesc());
+      CLog::Log(LOGERROR, "CAddon[%s]: unable to load: %s, Line %d\n%s", ID().c_str(),
+                addonSettingsDefinitionFile.c_str(), addonSettingsDefinitionDoc.ErrorRow(),
+                addonSettingsDefinitionDoc.ErrorDesc());
     }
 
     return false;
@@ -143,7 +146,8 @@ bool CAddon::LoadUserSettings()
   CXBMCTinyXML doc;
   if (!doc.LoadFile(m_userSettingsPath))
   {
-    CLog::Log(LOGERROR, "CAddon[%s]: failed to load addon settings from %s", ID().c_str(), m_userSettingsPath.c_str());
+    CLog::Log(LOGERROR, "CAddon[%s]: failed to load addon settings from %s", ID().c_str(),
+              m_userSettingsPath.c_str());
     return false;
   }
 
@@ -246,7 +250,8 @@ void CAddon::UpdateSetting(const std::string& key, const std::string& value)
     setting = m_settings->AddSetting(key, value);
     if (setting == nullptr)
     {
-      CLog::Log(LOGERROR, "CAddon[%s]: failed to add undefined setting \"%s\"", ID().c_str(), key.c_str());
+      CLog::Log(LOGERROR, "CAddon[%s]: failed to add undefined setting \"%s\"", ID().c_str(),
+                key.c_str());
       return;
     }
   }
@@ -269,7 +274,8 @@ bool UpdateSettingValue(CAddon& addon, const std::string& key, typename TSetting
     setting = addon.GetSettings()->AddSetting(key, value);
     if (setting == nullptr)
     {
-      CLog::Log(LOGERROR, "CAddon[%s]: failed to add undefined setting \"%s\"", addon.ID().c_str(), key.c_str());
+      CLog::Log(LOGERROR, "CAddon[%s]: failed to add undefined setting \"%s\"", addon.ID().c_str(),
+                key.c_str());
       return false;
     }
   }
@@ -300,7 +306,7 @@ bool CAddon::UpdateSettingString(const std::string& key, const std::string& valu
   return UpdateSettingValue<CSettingString>(*this, key, value);
 }
 
-bool CAddon::SettingsFromXML(const CXBMCTinyXML &doc, bool loadDefaults /* = false */)
+bool CAddon::SettingsFromXML(const CXBMCTinyXML& doc, bool loadDefaults /* = false */)
 {
   if (doc.RootElement() == nullptr)
     return false;
@@ -331,7 +337,7 @@ bool CAddon::SettingsFromXML(const CXBMCTinyXML &doc, bool loadDefaults /* = fal
   return true;
 }
 
-bool CAddon::SettingsToXML(CXBMCTinyXML &doc) const
+bool CAddon::SettingsToXML(CXBMCTinyXML& doc) const
 {
   if (!SettingsInitialized())
     return false;
@@ -368,7 +374,7 @@ std::string CAddon::LibPath() const
   return URIUtils::AddFileToFolder(m_addonInfo->Path(), libName);
 }
 
-AddonVersion CAddon::GetDependencyVersion(const std::string &dependencyID) const
+AddonVersion CAddon::GetDependencyVersion(const std::string& dependencyID) const
 {
   return m_addonInfo->DependencyVersion(dependencyID);
 }
@@ -396,4 +402,3 @@ void OnPostUnInstall(const AddonPtr& addon)
 }
 
 } /* namespace ADDON */
-

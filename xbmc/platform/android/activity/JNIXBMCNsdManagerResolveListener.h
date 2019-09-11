@@ -14,13 +14,18 @@
 namespace jni
 {
 
-class CJNIXBMCNsdManagerResolveListener : public CJNINsdManagerResolveListener, public CJNIInterfaceImplem<CJNIXBMCNsdManagerResolveListener>
+class CJNIXBMCNsdManagerResolveListener
+  : public CJNINsdManagerResolveListener,
+    public CJNIInterfaceImplem<CJNIXBMCNsdManagerResolveListener>
 {
 public:
 public:
   CJNIXBMCNsdManagerResolveListener();
   CJNIXBMCNsdManagerResolveListener(const CJNIXBMCNsdManagerResolveListener& other);
-  explicit CJNIXBMCNsdManagerResolveListener(const jni::jhobject &object) : CJNIBase(object) {}
+  explicit CJNIXBMCNsdManagerResolveListener(const jni::jhobject& object)
+    : CJNIBase(object)
+  {
+  }
   virtual ~CJNIXBMCNsdManagerResolveListener();
 
   static void RegisterNatives(JNIEnv* env);
@@ -32,8 +37,6 @@ public:
 protected:
   static void _onResolveFailed(JNIEnv* env, jobject thiz, jobject serviceInfo, jint errorCode);
   static void _onServiceResolved(JNIEnv* env, jobject thiz, jobject serviceInfo);
-
 };
 
-}
-
+} // namespace jni

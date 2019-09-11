@@ -23,7 +23,7 @@ public:
   CWinEventsX11(CWinSystemX11& winSystem);
   virtual ~CWinEventsX11();
   bool MessagePump() override;
-  bool Init(Display *dpy, Window win);
+  bool Init(Display* dpy, Window win);
   void Quit();
   bool HasStructureChanged();
   void PendingResize(int width, int height);
@@ -31,15 +31,15 @@ public:
 
 protected:
   XBMCKey LookupXbmcKeySym(KeySym keysym);
-  bool ProcessKey(XBMC_Event &event);
-  Display *m_display = nullptr;
+  bool ProcessKey(XBMC_Event& event);
+  Display* m_display = nullptr;
   Window m_window = 0;
   Atom m_wmDeleteMessage;
-  char *m_keybuf = nullptr;
+  char* m_keybuf = nullptr;
   size_t m_keybuf_len = 0;
   XIM m_xim = nullptr;
   XIC m_xic = nullptr;
-  std::map<uint32_t,uint32_t> m_symLookupTable;
+  std::map<uint32_t, uint32_t> m_symLookupTable;
   int m_keymodState;
   bool m_structureChanged;
   int m_RREventBase;

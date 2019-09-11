@@ -18,7 +18,7 @@ public:
   ~CWinSystemWin10DX();
 
   // Implementation of CWinSystemBase via CWinSystemWin10
-  CRenderSystemBase *GetRenderSystem() override { return this; }
+  CRenderSystemBase* GetRenderSystem() override { return this; }
   bool CreateNewWindow(const std::string& name, bool fullScreen, RESOLUTION_INFO& res) override;
   bool ResizeWindow(int newWidth, int newHeight, int newLeft, int newTop) override;
   bool SetFullScreen(bool fullScreen, RESOLUTION_INFO& res, bool blankOtherDisplays) override;
@@ -32,7 +32,10 @@ public:
 
   void OnMove(int x, int y) override;
   void OnResize(int width, int height);
-  winrt::Windows::Foundation::Size GetOutputSize() const { return m_deviceResources->GetOutputSize(); }
+  winrt::Windows::Foundation::Size GetOutputSize() const
+  {
+    return m_deviceResources->GetOutputSize();
+  }
   void TrimDevice() const { m_deviceResources->Trim(); }
 
   /*!
@@ -43,22 +46,16 @@ public:
   where any resources dependent on the DirectX device should be destroyed and recreated.
   \sa Unregister, ID3DResource
   */
-  void Register(ID3DResource *resource) const
-  {
-    m_deviceResources->Register(resource);
-  };
+  void Register(ID3DResource* resource) const { m_deviceResources->Register(resource); };
   /*!
   \brief Unregister as a dependent of the DirectX Render System
   Resources should call this on destruction if they're a dependent on the Render System
   \sa Register, ID3DResource
   */
-  void Unregister(ID3DResource *resource) const
-  {
-    m_deviceResources->Unregister(resource);
-  };
+  void Unregister(ID3DResource* resource) const { m_deviceResources->Unregister(resource); };
 
-  void Register(IDispResource *resource) override { CWinSystemWin10::Register(resource); };
-  void Unregister(IDispResource *resource) override { CWinSystemWin10::Unregister(resource); };
+  void Register(IDispResource* resource) override { CWinSystemWin10::Register(resource); };
+  void Unregister(IDispResource* resource) override { CWinSystemWin10::Unregister(resource); };
 
   void ShowSplash(const std::string& message) override;
 
@@ -69,4 +66,3 @@ protected:
   void ResizeDeviceBuffers() override;
   bool IsStereoEnabled() override;
 };
-

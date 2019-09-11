@@ -17,12 +17,12 @@ class XMode
 public:
   XMode()
   {
-    id="";
-    name="";
-    hz=0.0f;
-    isPreferred=false;
-    isCurrent=false;
-    w=h=0;
+    id = "";
+    name = "";
+    hz = 0.0f;
+    isPreferred = false;
+    isCurrent = false;
+    w = h = 0;
   }
   bool operator==(XMode& mode) const
   {
@@ -42,10 +42,7 @@ public:
       return false;
     return true;
   }
-  bool IsInterlaced()
-  {
-    return name.back() == 'i';
-  }
+  bool IsInterlaced() { return name.back() == 'i'; }
   std::string id;
   std::string name;
   float hz;
@@ -81,13 +78,13 @@ public:
 class CXRandR
 {
 public:
-  explicit CXRandR(bool query=false);
-  bool Query(bool force=false, bool ignoreoff=true);
-  bool Query(bool force, int screennum, bool ignoreoff=true);
+  explicit CXRandR(bool query = false);
+  bool Query(bool force = false, bool ignoreoff = true);
+  bool Query(bool force, int screennum, bool ignoreoff = true);
   std::vector<XOutput> GetModes(void);
   XMode GetCurrentMode(const std::string& outputName);
   XMode GetPreferredMode(const std::string& outputName);
-  XOutput *GetOutput(const std::string& outputName);
+  XOutput* GetOutput(const std::string& outputName);
   bool SetMode(XOutput output, XMode mode);
   void LoadCustomModeLinesToAllOutputs(void);
   void SaveState();
@@ -95,7 +92,7 @@ public:
   bool IsOutputConnected(const std::string& name);
   bool TurnOffOutput(const std::string& name);
   bool TurnOnOutput(const std::string& name);
-  int GetCrtc(int x, int y, float &hz);
+  int GetCrtc(int x, int y, float& hz);
   //bool Has1080i();
   //bool Has1080p();
   //bool Has720p();

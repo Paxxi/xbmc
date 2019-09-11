@@ -106,7 +106,7 @@ public:
   \param value value to search for
   \return True if value was found in list, false otherwise
   */
-  bool FindIntInList(const std::string &id, int value) const;
+  bool FindIntInList(const std::string& id, int value) const;
 
   /*!
    \brief Gets the setting with the given identifier.
@@ -219,7 +219,7 @@ public:
   \param id Setting identifier
   \return True if setting the value to its default was successful, false otherwise
   */
-  bool SetDefault(const std::string &id);
+  bool SetDefault(const std::string& id);
   /*!
   \brief Sets the value of all settings to their default.
   */
@@ -228,21 +228,21 @@ public:
 protected:
   CSettingsBase();
 
-  virtual void InitializeSettingTypes() { }
-  virtual void InitializeControls() { }
-  virtual void InitializeOptionFillers() { }
-  virtual void UninitializeOptionFillers() { }
-  virtual void InitializeConditions() { }
-  virtual void UninitializeConditions() { }
+  virtual void InitializeSettingTypes() {}
+  virtual void InitializeControls() {}
+  virtual void InitializeOptionFillers() {}
+  virtual void UninitializeOptionFillers() {}
+  virtual void InitializeConditions() {}
+  virtual void UninitializeConditions() {}
   virtual bool InitializeDefinitions() = 0;
-  virtual void InitializeVisibility() { }
-  virtual void InitializeDefaults() { }
-  virtual void InitializeISettingsHandlers() { }
-  virtual void UninitializeISettingsHandlers() { }
-  virtual void InitializeISubSettings() { }
-  virtual void UninitializeISubSettings() { }
-  virtual void InitializeISettingCallbacks() { }
-  virtual void UninitializeISettingCallbacks() { }
+  virtual void InitializeVisibility() {}
+  virtual void InitializeDefaults() {}
+  virtual void InitializeISettingsHandlers() {}
+  virtual void UninitializeISettingsHandlers() {}
+  virtual void InitializeISubSettings() {}
+  virtual void UninitializeISubSettings() {}
+  virtual void InitializeISettingCallbacks() {}
+  virtual void UninitializeISettingCallbacks() {}
 
   bool InitializeDefinitionsFromXml(const CXBMCTinyXML& xml);
 
@@ -282,6 +282,7 @@ protected:
   bool m_initialized = false;
   CSettingsManager* m_settingsManager;
   mutable CCriticalSection m_critical;
+
 private:
   CSettingsBase(const CSettingsBase&) = delete;
   CSettingsBase& operator=(const CSettingsBase&) = delete;

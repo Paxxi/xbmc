@@ -19,11 +19,13 @@ public:
   virtual ~CRemoteControlXbox();
   void Initialize();
   void Disconnect();
-  bool IsRemoteDevice(const std::wstring &deviceId) const;
+  bool IsRemoteDevice(const std::wstring& deviceId) const;
 
 private:
-  void HandleAcceleratorKey(const winrt::Windows::UI::Core::CoreDispatcher&, const winrt::Windows::UI::Core::AcceleratorKeyEventArgs&);
-  void HandleMediaButton(const winrt::Windows::Media::SystemMediaTransportControlsButtonPressedEventArgs&);
+  void HandleAcceleratorKey(const winrt::Windows::UI::Core::CoreDispatcher&,
+                            const winrt::Windows::UI::Core::AcceleratorKeyEventArgs&);
+  void HandleMediaButton(
+      const winrt::Windows::Media::SystemMediaTransportControlsButtonPressedEventArgs&);
   int32_t TranslateVirtualKey(winrt::Windows::System::VirtualKey vk);
   int32_t TranslateMediaKey(winrt::Windows::Media::SystemMediaTransportControlsButton mk);
 

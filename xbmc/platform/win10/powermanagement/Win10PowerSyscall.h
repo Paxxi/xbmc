@@ -29,7 +29,7 @@ public:
   bool CanSuspend() override;
   bool CanHibernate() override;
   bool CanReboot() override;
-  int  BatteryLevel() override;
+  int BatteryLevel() override;
 
-  bool PumpPowerEvents(IPowerEventsCallback *callback) override;
+  bool PumpPowerEvents(IPowerEventsCallback* callback) override;
 };

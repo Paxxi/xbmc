@@ -13,13 +13,13 @@
 class IRunnable;
 class CEvent;
 
-class CGUIDialogBusy: public CGUIDialog
+class CGUIDialogBusy : public CGUIDialog
 {
 public:
   CGUIDialogBusy(void);
   ~CGUIDialogBusy(void) override;
   bool OnBack(int actionID) override;
-  void DoProcess(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void DoProcess(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
   /*! \brief set the current progress of the busy operation
    \param progress a percentage of progress
@@ -36,7 +36,7 @@ public:
    \param allowCancel whether the user can cancel the wait, defaults to true.
    \return true if the runnable completes, false if the user cancels early.
    */
-  static bool Wait(IRunnable *runnable, unsigned int displaytime, bool allowCancel);
+  static bool Wait(IRunnable* runnable, unsigned int displaytime, bool allowCancel);
 
   /*! \brief Wait on an event while displaying the busy dialog.
    Throws up the busy dialog after the given time.
@@ -45,9 +45,10 @@ public:
    \param allowCancel whether the user can cancel the wait, defaults to true.
    \return true if the event completed, false if cancelled.
    */
-  static bool WaitOnEvent(CEvent &event, unsigned int displaytime = 100, bool allowCancel = true);
+  static bool WaitOnEvent(CEvent& event, unsigned int displaytime = 100, bool allowCancel = true);
+
 protected:
-  void Open_Internal(const std::string &param = "") override;
+  void Open_Internal(const std::string& param = "") override;
   bool m_bCanceled;
   bool m_bLastVisible = false;
   float m_progress; ///< current progress

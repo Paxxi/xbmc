@@ -16,8 +16,8 @@
 using namespace KODI;
 using namespace RETRO;
 
-CGUIPlaybackControl::CGUIPlaybackControl(IPlaybackCallback &callback) :
-  m_callback(callback)
+CGUIPlaybackControl::CGUIPlaybackControl(IPlaybackCallback& callback)
+  : m_callback(callback)
 {
 }
 
@@ -25,7 +25,7 @@ CGUIPlaybackControl::~CGUIPlaybackControl() = default;
 
 void CGUIPlaybackControl::FrameMove()
 {
-  CGUIComponent *gui = CServiceBroker::GetGUI();
+  CGUIComponent* gui = CServiceBroker::GetGUI();
   if (gui == nullptr)
     return;
 
@@ -57,7 +57,9 @@ void CGUIPlaybackControl::FrameMove()
   }
 }
 
-CGUIPlaybackControl::GuiState CGUIPlaybackControl::NextState(bool bFullscreen, bool bInMenu, bool bInBackground)
+CGUIPlaybackControl::GuiState CGUIPlaybackControl::NextState(bool bFullscreen,
+                                                             bool bInMenu,
+                                                             bool bInBackground)
 {
   GuiState newState = m_state;
 
@@ -141,13 +143,13 @@ bool CGUIPlaybackControl::AcceptsInput(GuiState state)
 
   switch (state)
   {
-    case GuiState::FULLSCREEN:
-    {
-      bEnableInput = true;
-      break;
-    }
-    default:
-      break;
+  case GuiState::FULLSCREEN:
+  {
+    bEnableInput = true;
+    break;
+  }
+  default:
+    break;
   }
 
   return bEnableInput;

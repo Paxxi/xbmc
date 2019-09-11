@@ -14,7 +14,8 @@
 
 using namespace KODI::WINDOWING::WAYLAND;
 
-COSScreenSaverIdleInhibitUnstableV1* COSScreenSaverIdleInhibitUnstableV1::TryCreate(CConnection& connection, wayland::surface_t const& inhibitSurface)
+COSScreenSaverIdleInhibitUnstableV1* COSScreenSaverIdleInhibitUnstableV1::TryCreate(
+    CConnection& connection, wayland::surface_t const& inhibitSurface)
 {
   wayland::zwp_idle_inhibit_manager_v1_t manager;
   CRegistry registry{connection};
@@ -31,8 +32,10 @@ COSScreenSaverIdleInhibitUnstableV1* COSScreenSaverIdleInhibitUnstableV1::TryCre
   }
 }
 
-COSScreenSaverIdleInhibitUnstableV1::COSScreenSaverIdleInhibitUnstableV1(const wayland::zwp_idle_inhibit_manager_v1_t& manager, const wayland::surface_t& inhibitSurface)
-: m_manager{manager}, m_surface{inhibitSurface}
+COSScreenSaverIdleInhibitUnstableV1::COSScreenSaverIdleInhibitUnstableV1(
+    const wayland::zwp_idle_inhibit_manager_v1_t& manager, const wayland::surface_t& inhibitSurface)
+  : m_manager{manager}
+  , m_surface{inhibitSurface}
 {
   assert(m_manager);
   assert(m_surface);

@@ -14,37 +14,38 @@
 #include "Win32DllLoader.h"
 #endif
 #include "DllLoader.h"
+#include "URL.h"
 #include "dll_tracker.h" // for python unload hack
 #include "filesystem/File.h"
-#include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
+#include "utils/URIUtils.h"
 #include "utils/log.h"
-#include "URL.h"
 
 #if defined(TARGET_WINDOWS)
 #define ENV_PARTIAL_PATH \
-                 "special://xbmcbin/;" \
-                 "special://xbmcbin/system/;" \
-                 "special://xbmcbin/system/python/;" \
-                 "special://xbmc/;" \
-                 "special://xbmc/system/;" \
-                 "special://xbmc/system/python/"
+  "special://xbmcbin/;" \
+  "special://xbmcbin/system/;" \
+  "special://xbmcbin/system/python/;" \
+  "special://xbmc/;" \
+  "special://xbmc/system/;" \
+  "special://xbmc/system/python/"
 #else
 #define ENV_PARTIAL_PATH \
-                 "special://xbmcbin/system/;" \
-                 "special://xbmcbin/system/players/mplayer/;" \
-                 "special://xbmcbin/system/players/VideoPlayer/;" \
-                 "special://xbmcbin/system/players/paplayer/;" \
-                 "special://xbmcbin/system/python/;" \
-                 "special://xbmc/system/;" \
-                 "special://xbmc/system/players/mplayer/;" \
-                 "special://xbmc/system/players/VideoPlayer/;" \
-                 "special://xbmc/system/players/paplayer/;" \
-                 "special://xbmc/system/python/"
+  "special://xbmcbin/system/;" \
+  "special://xbmcbin/system/players/mplayer/;" \
+  "special://xbmcbin/system/players/VideoPlayer/;" \
+  "special://xbmcbin/system/players/paplayer/;" \
+  "special://xbmcbin/system/python/;" \
+  "special://xbmc/system/;" \
+  "special://xbmc/system/players/mplayer/;" \
+  "special://xbmc/system/players/VideoPlayer/;" \
+  "special://xbmc/system/players/paplayer/;" \
+  "special://xbmc/system/python/"
 #endif
 #if defined(TARGET_DARWIN)
-#define ENV_PATH ENV_PARTIAL_PATH \
-                 ";special://frameworks/"
+#define ENV_PATH \
+  ENV_PARTIAL_PATH \
+  ";special://frameworks/"
 #else
 #define ENV_PATH ENV_PARTIAL_PATH
 #endif
@@ -56,8 +57,8 @@
 using namespace XFILE;
 
 LibraryLoader* DllLoaderContainer::m_dlls[64] = {};
-int        DllLoaderContainer::m_iNrOfDlls = 0;
-bool       DllLoaderContainer::m_bTrack = true;
+int DllLoaderContainer::m_iNrOfDlls = 0;
+bool DllLoaderContainer::m_bTrack = true;
 
 void DllLoaderContainer::Clear()
 {
@@ -72,8 +73,10 @@ LibraryLoader* DllLoaderContainer::GetModule(const char* sName)
 {
   for (int i = 0; i < m_iNrOfDlls && m_dlls[i] != NULL; i++)
   {
-    if (stricmp(m_dlls[i]->GetName(), sName) == 0) return m_dlls[i];
-    if (!m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetFileName(), sName) == 0) return m_dlls[i];
+    if (stricmp(m_dlls[i]->GetName(), sName) == 0)
+      return m_dlls[i];
+    if (!m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetFileName(), sName) == 0)
+      return m_dlls[i];
   }
 
   return NULL;
@@ -83,14 +86,17 @@ LibraryLoader* DllLoaderContainer::GetModule(HMODULE hModule)
 {
   for (int i = 0; i < m_iNrOfDlls && m_dlls[i] != NULL; i++)
   {
-    if (m_dlls[i]->GetHModule() == hModule) return m_dlls[i];
+    if (m_dlls[i]->GetHModule() == hModule)
+      return m_dlls[i];
   }
   return NULL;
 }
 
-LibraryLoader* DllLoaderContainer::LoadModule(const char* sName, const char* sCurrentDir/*=NULL*/, bool bLoadSymbols/*=false*/)
+LibraryLoader* DllLoaderContainer::LoadModule(const char* sName,
+                                              const char* sCurrentDir /*=NULL*/,
+                                              bool bLoadSymbols /*=false*/)
 {
-  LibraryLoader* pDll=NULL;
+  LibraryLoader* pDll = NULL;
 
   if (IsSystemDll(sName))
   {
@@ -98,8 +104,8 @@ LibraryLoader* DllLoaderContainer::LoadModule(const char* sName, const char* sCu
   }
   else if (sCurrentDir)
   {
-    std::string strPath=sCurrentDir;
-    strPath+=sName;
+    std::string strPath = sCurrentDir;
+    strPath += sName;
     pDll = GetModule(strPath.c_str());
   }
 
@@ -119,13 +125,14 @@ LibraryLoader* DllLoaderContainer::LoadModule(const char* sName, const char* sCu
 #ifdef LOGALL
     CLog::Log(LOGDEBUG, "Already loaded Dll %s at 0x%x", pDll->GetFileName(), pDll);
 #endif
-
   }
 
   return pDll;
 }
 
-LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCurrentDir, bool bLoadSymbols)
+LibraryLoader* DllLoaderContainer::FindModule(const char* sName,
+                                              const char* sCurrentDir,
+                                              bool bLoadSymbols)
 {
   if (URIUtils::IsInArchive(sName))
   {
@@ -146,8 +153,8 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
 #endif
   else if (sCurrentDir)
   { // in the path of the parent dll?
-    std::string strPath=sCurrentDir;
-    strPath+=sName;
+    std::string strPath = sCurrentDir;
+    strPath += sName;
 
     if (CFile::Exists(strPath))
       return LoadDll(strPath.c_str(), bLoadSymbols);
@@ -160,7 +167,7 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
   std::string systemLibs = getenv("KODI_ANDROID_SYSTEM_LIBS");
   vecEnv = StringUtils::Split(systemLibs, ':');
   std::string localLibs = getenv("KODI_ANDROID_LIBS");
-  vecEnv.insert(vecEnv.begin(),localLibs);
+  vecEnv.insert(vecEnv.begin(), localLibs);
 #else
   vecEnv = StringUtils::Split(ENV_PATH, ';');
 #endif
@@ -175,7 +182,7 @@ LibraryLoader* DllLoaderContainer::FindModule(const char* sName, const char* sCu
     CLog::Log(LOGDEBUG, "Searching for the dll %s in directory %s", sName, strPath.c_str());
 #endif
 
-    strPath+=sName;
+    strPath += sName;
 
     // Have we already loaded this dll
     if ((pDll = GetModule(strPath.c_str())) != NULL)
@@ -203,8 +210,8 @@ void DllLoaderContainer::ReleaseModule(LibraryLoader*& pDll)
     return;
   }
 
-  int iRefCount=pDll->DecrRef();
-  if (iRefCount==0)
+  int iRefCount = pDll->DecrRef();
+  if (iRefCount == 0)
   {
 
 #ifdef LOGALL
@@ -215,7 +222,7 @@ void DllLoaderContainer::ReleaseModule(LibraryLoader*& pDll)
     {
       pDll->Unload();
       delete pDll;
-      pDll=NULL;
+      pDll = NULL;
     }
     else
       CLog::Log(LOGINFO, "%s has symbols loaded and can never be unloaded", pDll->GetName());
@@ -223,7 +230,8 @@ void DllLoaderContainer::ReleaseModule(LibraryLoader*& pDll)
 #ifdef LOGALL
   else
   {
-    CLog::Log(LOGDEBUG, "Dll %s is still referenced with a count of %d", pDll->GetFileName(), iRefCount);
+    CLog::Log(LOGDEBUG, "Dll %s is still referenced with a count of %d", pDll->GetFileName(),
+              iRefCount);
   }
 #endif
 }
@@ -263,7 +271,8 @@ bool DllLoaderContainer::IsSystemDll(const char* sName)
 {
   for (int i = 0; i < m_iNrOfDlls && m_dlls[i] != NULL; i++)
   {
-    if (m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetName(), sName) == 0) return true;
+    if (m_dlls[i]->IsSystemDll() && stricmp(m_dlls[i]->GetName(), sName) == 0)
+      return true;
   }
 
   return false;
@@ -276,7 +285,8 @@ int DllLoaderContainer::GetNrOfModules()
 
 LibraryLoader* DllLoaderContainer::GetModule(int iPos)
 {
-  if (iPos < m_iNrOfDlls) return m_dlls[iPos];
+  if (iPos < m_iNrOfDlls)
+    return m_dlls[iPos];
   return NULL;
 }
 
@@ -307,7 +317,8 @@ void DllLoaderContainer::UnRegisterDll(LibraryLoader* pDll)
       bool bRemoved = false;
       for (int i = 0; i < m_iNrOfDlls && m_dlls[i]; i++)
       {
-        if (m_dlls[i] == pDll) bRemoved = true;
+        if (m_dlls[i] == pDll)
+          bRemoved = true;
         if (bRemoved && i + 1 < m_iNrOfDlls)
         {
           m_dlls[i] = m_dlls[i + 1];
@@ -335,5 +346,4 @@ void DllLoaderContainer::UnloadPythonDlls()
       i = 0;
     }
   }
-
 }

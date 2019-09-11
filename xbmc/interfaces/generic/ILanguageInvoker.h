@@ -17,7 +17,8 @@
 class CLanguageInvokerThread;
 class ILanguageInvocationHandler;
 
-typedef enum {
+typedef enum
+{
   InvokerStateUninitialized,
   InvokerStateInitialized,
   InvokerStateRunning,
@@ -30,17 +31,18 @@ typedef enum {
 class ILanguageInvoker
 {
 public:
-  explicit ILanguageInvoker(ILanguageInvocationHandler *invocationHandler);
+  explicit ILanguageInvoker(ILanguageInvocationHandler* invocationHandler);
   virtual ~ILanguageInvoker();
 
-  virtual bool Execute(const std::string &script, const std::vector<std::string> &arguments = std::vector<std::string>());
+  virtual bool Execute(const std::string& script,
+                       const std::vector<std::string>& arguments = std::vector<std::string>());
   virtual bool Stop(bool abort = false);
   virtual bool IsStopping() const;
 
   void SetId(int id) { m_id = id; }
   int GetId() const { return m_id; }
   const ADDON::AddonPtr& GetAddon() const { return m_addon; }
-  void SetAddon(const ADDON::AddonPtr &addon) { m_addon = addon; }
+  void SetAddon(const ADDON::AddonPtr& addon) { m_addon = addon; }
   InvokerState GetState() const { return m_state; }
   bool IsActive() const;
   bool IsRunning() const;
@@ -49,7 +51,7 @@ public:
 protected:
   friend class CLanguageInvokerThread;
 
-  virtual bool execute(const std::string &script, const std::vector<std::string> &arguments) = 0;
+  virtual bool execute(const std::string& script, const std::vector<std::string>& arguments) = 0;
   virtual bool stop(bool abort) = 0;
 
   virtual void pulseGlobalEvent();
@@ -66,7 +68,7 @@ protected:
 private:
   int m_id;
   InvokerState m_state;
-  ILanguageInvocationHandler *m_invocationHandler;
+  ILanguageInvocationHandler* m_invocationHandler;
 };
 
 typedef std::shared_ptr<ILanguageInvoker> LanguageInvokerPtr;

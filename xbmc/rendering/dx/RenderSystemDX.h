@@ -18,9 +18,9 @@
 
 enum PCI_Vendors
 {
-  PCIV_ATI    = 0x1002,
+  PCIV_ATI = 0x1002,
   PCIV_nVidia = 0x10DE,
-  PCIV_Intel  = 0x8086
+  PCIV_Intel = 0x8086
 };
 
 class ID3DResource;
@@ -44,16 +44,19 @@ public:
   void SetViewPort(const CRect& viewPort) override;
   void GetViewPort(CRect& viewPort) override;
   void RestoreViewPort() override;
-  CRect ClipRectToScissorRect(const CRect &rect) override;
+  CRect ClipRectToScissorRect(const CRect& rect) override;
   bool ScissorsCanEffectClipping() override;
-  void SetScissors(const CRect &rect) override;
+  void SetScissors(const CRect& rect) override;
   void ResetScissors() override;
   void CaptureStateBlock() override;
   void ApplyStateBlock() override;
-  void SetCameraPosition(const CPoint &camera, int screenWidth, int screenHeight, float stereoFactor = 0.f) override;
+  void SetCameraPosition(const CPoint& camera,
+                         int screenWidth,
+                         int screenHeight,
+                         float stereoFactor = 0.f) override;
   void SetStereoMode(RENDER_STEREO_MODE mode, RENDER_STEREO_VIEW view) override;
   bool SupportsStereo(RENDER_STEREO_MODE mode) const override;
-  void Project(float &x, float &y, float &z) override;
+  void Project(float& x, float& y, float& z) override;
   bool SupportsNPOT(bool dxt) const override;
 
   // IDeviceNotify overrides
@@ -90,12 +93,12 @@ protected:
 
   // our adapter could change as we go
   bool m_interlaced;
-  bool m_inScene{ false }; ///< True if we're in a BeginScene()/EndScene() block
-  bool m_BlendEnabled{ false };
-  bool m_ScissorsEnabled{ false };
+  bool m_inScene{false}; ///< True if we're in a BeginScene()/EndScene() block
+  bool m_BlendEnabled{false};
+  bool m_ScissorsEnabled{false};
   D3D11_VIEWPORT m_viewPort;
   CRect m_scissor;
-  CGUIShaderDX* m_pGUIShader{ nullptr };
+  CGUIShaderDX* m_pGUIShader{nullptr};
   Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_depthStencilState;
   Microsoft::WRL::ComPtr<ID3D11BlendState> m_BlendEnableState;
   Microsoft::WRL::ComPtr<ID3D11BlendState> m_BlendDisableState;
@@ -109,4 +112,3 @@ protected:
 
   std::shared_ptr<DX::DeviceResources> m_deviceResources;
 };
-

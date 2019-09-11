@@ -10,13 +10,13 @@
 
 CTextureBundle::CTextureBundle()
   : m_tbXBT{false}
-	, m_useXBT{false}
+  , m_useXBT{false}
 {
 }
 
 CTextureBundle::CTextureBundle(bool useXBT)
   : m_tbXBT{useXBT}
-	, m_useXBT{useXBT}
+  , m_useXBT{useXBT}
 {
 }
 
@@ -36,7 +36,8 @@ bool CTextureBundle::HasFile(const std::string& Filename)
   return false;
 }
 
-void CTextureBundle::GetTexturesFromPath(const std::string &path, std::vector<std::string> &textures)
+void CTextureBundle::GetTexturesFromPath(const std::string& path,
+                                         std::vector<std::string>& textures)
 {
   if (m_useXBT)
   {
@@ -44,8 +45,10 @@ void CTextureBundle::GetTexturesFromPath(const std::string &path, std::vector<st
   }
 }
 
-bool CTextureBundle::LoadTexture(const std::string& Filename, CBaseTexture** ppTexture,
-                                     int &width, int &height)
+bool CTextureBundle::LoadTexture(const std::string& Filename,
+                                 CBaseTexture** ppTexture,
+                                 int& width,
+                                 int& height)
 {
   if (m_useXBT)
   {
@@ -55,8 +58,12 @@ bool CTextureBundle::LoadTexture(const std::string& Filename, CBaseTexture** ppT
   return false;
 }
 
-int CTextureBundle::LoadAnim(const std::string& Filename, CBaseTexture*** ppTextures,
-                              int &width, int &height, int& nLoops, int** ppDelays)
+int CTextureBundle::LoadAnim(const std::string& Filename,
+                             CBaseTexture*** ppTextures,
+                             int& width,
+                             int& height,
+                             int& nLoops,
+                             int** ppDelays)
 {
   if (m_useXBT)
   {
@@ -76,7 +83,7 @@ void CTextureBundle::SetThemeBundle(bool themeBundle)
   m_tbXBT.SetThemeBundle(themeBundle);
 }
 
-std::string CTextureBundle::Normalize(const std::string &name)
+std::string CTextureBundle::Normalize(const std::string& name)
 {
   return CTextureBundleXBT::Normalize(name);
 }

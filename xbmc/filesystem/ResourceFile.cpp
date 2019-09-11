@@ -19,16 +19,17 @@ using namespace XFILE;
 
 CResourceFile::CResourceFile()
   : COverrideFile(false)
-{ }
+{
+}
 
 CResourceFile::~CResourceFile() = default;
 
-bool CResourceFile::TranslatePath(const std::string &path, std::string &translatedPath)
+bool CResourceFile::TranslatePath(const std::string& path, std::string& translatedPath)
 {
   return TranslatePath(CURL(path), translatedPath);
 }
 
-bool CResourceFile::TranslatePath(const CURL &url, std::string &translatedPath)
+bool CResourceFile::TranslatePath(const CURL& url, std::string& translatedPath)
 {
   translatedPath = url.Get();
 
@@ -60,7 +61,7 @@ bool CResourceFile::TranslatePath(const CURL &url, std::string &translatedPath)
   return true;
 }
 
-std::string CResourceFile::TranslatePath(const CURL &url)
+std::string CResourceFile::TranslatePath(const CURL& url)
 {
   std::string translatedPath;
   if (!TranslatePath(url, translatedPath))

@@ -8,8 +8,9 @@
 
 #pragma once
 
-typedef enum {
-  SORT_METHOD_NONE=0,
+typedef enum
+{
+  SORT_METHOD_NONE = 0,
   SORT_METHOD_LABEL,
   SORT_METHOD_LABEL_IGNORE_THE,
   SORT_METHOD_DATE,

@@ -19,7 +19,10 @@ namespace CONTEXTMENU
 {
 
 CVideoInfo::CVideoInfo(MediaType mediaType)
-    : CStaticContextMenuAction(19033), m_mediaType(mediaType) {}
+  : CStaticContextMenuAction(19033)
+  , m_mediaType(mediaType)
+{
+}
 
 bool CVideoInfo::IsVisible(const CFileItem& item) const
 {
@@ -180,4 +183,4 @@ bool CPlay::Execute(const CFileItemPtr& itemIn) const
   return true;
 };
 
-}
+} // namespace CONTEXTMENU

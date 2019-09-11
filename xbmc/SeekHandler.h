@@ -32,12 +32,19 @@ public:
   CSeekHandler() = default;
   ~CSeekHandler() override;
 
-  static void SettingOptionsSeekStepsFiller(std::shared_ptr<const CSetting> setting, std::vector<IntegerSettingOption> &list, int &current, void *data);
+  static void SettingOptionsSeekStepsFiller(std::shared_ptr<const CSetting> setting,
+                                            std::vector<IntegerSettingOption>& list,
+                                            int& current,
+                                            void* data);
 
   void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
-  void Seek(bool forward, float amount, float duration = 0, bool analogSeek = false, SeekType type = SEEK_TYPE_VIDEO);
+  void Seek(bool forward,
+            float amount,
+            float duration = 0,
+            bool analogSeek = false,
+            SeekType type = SEEK_TYPE_VIDEO);
   void SeekSeconds(int seconds);
   void FrameMove();
   void Reset();
@@ -52,7 +59,7 @@ public:
 protected:
   CSeekHandler(const CSeekHandler&) = delete;
   CSeekHandler& operator=(CSeekHandler const&) = delete;
-  bool SeekTimeCode(const CAction &action);
+  bool SeekTimeCode(const CAction& action);
   void ChangeTimeCode(int remote);
 
 private:
@@ -62,14 +69,14 @@ private:
   int GetSeekStepSize(SeekType type, int step);
 
   int m_seekDelay = 500;
-  std::map<SeekType, int > m_seekDelays;
+  std::map<SeekType, int> m_seekDelays;
   bool m_requireSeek = false;
   bool m_seekChanged = false;
   bool m_analogSeek = false;
   double m_seekSize = 0;
   int m_seekStep = 0;
-  std::map<SeekType, std::vector<int> > m_forwardSeekSteps;
-  std::map<SeekType, std::vector<int> > m_backwardSeekSteps;
+  std::map<SeekType, std::vector<int>> m_forwardSeekSteps;
+  std::map<SeekType, std::vector<int>> m_backwardSeekSteps;
   CStopWatch m_timer;
   CStopWatch m_timerTimeCode;
   int m_timeCodeStamp[6];

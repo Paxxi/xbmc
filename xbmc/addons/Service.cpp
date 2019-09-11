@@ -16,8 +16,8 @@
 namespace ADDON
 {
 
-CServiceAddonManager::CServiceAddonManager(CAddonMgr& addonMgr) :
-    m_addonMgr(addonMgr)
+CServiceAddonManager::CServiceAddonManager(CAddonMgr& addonMgr)
+  : m_addonMgr(addonMgr)
 {
 }
 
@@ -115,7 +115,8 @@ void CServiceAddonManager::Stop(std::map<std::string, int>::value_type service)
   CLog::Log(LOGDEBUG, "CServiceAddonManager: stopping %s.", service.first.c_str());
   if (!CScriptInvocationManager::GetInstance().Stop(service.second))
   {
-    CLog::Log(LOGINFO, "CServiceAddonManager: failed to stop %s (may have ended)", service.first.c_str());
+    CLog::Log(LOGINFO, "CServiceAddonManager: failed to stop %s (may have ended)",
+              service.first.c_str());
   }
 }
-}
+} // namespace ADDON

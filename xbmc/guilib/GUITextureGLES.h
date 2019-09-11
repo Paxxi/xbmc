@@ -29,16 +29,20 @@ class CGUITextureGLES : public CGUITextureBase
 {
 public:
   CGUITextureGLES(float posX, float posY, float width, float height, const CTextureInfo& texture);
-  static void DrawQuad(const CRect &coords, UTILS::Color color, CBaseTexture *texture = NULL, const CRect *texCoords = NULL);
+  static void DrawQuad(const CRect& coords,
+                       UTILS::Color color,
+                       CBaseTexture* texture = NULL,
+                       const CRect* texCoords = NULL);
+
 protected:
   void Begin(UTILS::Color color);
-  void Draw(float *x, float *y, float *z, const CRect &texture, const CRect &diffuse, int orientation);
+  void Draw(
+      float* x, float* y, float* z, const CRect& texture, const CRect& diffuse, int orientation);
   void End();
 
   GLubyte m_col[4];
 
   PackedVertices m_packedVertices;
   std::vector<GLushort> m_idx;
-  CRenderSystemGLES *m_renderSystem;
+  CRenderSystemGLES* m_renderSystem;
 };
-

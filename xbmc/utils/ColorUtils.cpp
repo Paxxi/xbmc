@@ -14,6 +14,6 @@
 
 UTILS::Color ColorUtils::ChangeOpacity(const UTILS::Color color, const float opacity)
 {
-  int newAlpha = ceil( ((color >> 24) & 0xff) * opacity);
+  int newAlpha = ceil(((color >> 24) & 0xff) * opacity);
   return color + (newAlpha << 24);
 };

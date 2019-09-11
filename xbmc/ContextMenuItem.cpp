@@ -7,10 +7,11 @@
  */
 
 #include "ContextMenuItem.h"
+
+#include "GUIInfoManager.h"
 #include "addons/AddonManager.h"
 #include "addons/ContextMenuAddon.h"
 #include "addons/IAddon.h"
-#include "GUIInfoManager.h"
 #include "guilib/GUIComponent.h"
 #ifdef HAS_PYTHON
 #include "interfaces/generic/ScriptInvocationManager.h"
@@ -63,24 +64,24 @@ bool CContextMenuItem::operator==(const CContextMenuItem& other) const
   if (IsGroup() && other.IsGroup())
     return (m_groupId == other.m_groupId && m_parent == other.m_parent);
 
-  return (IsGroup() == other.IsGroup())
-      && (m_parent == other.m_parent)
-      && (m_library == other.m_library)
-      && (m_addonId == other.m_addonId);
+  return (IsGroup() == other.IsGroup()) && (m_parent == other.m_parent) &&
+         (m_library == other.m_library) && (m_addonId == other.m_addonId);
 }
 
 std::string CContextMenuItem::ToString() const
 {
   if (IsGroup())
     return StringUtils::Format("CContextMenuItem[group, id=%s, parent=%s, addon=%s]",
-        m_groupId.c_str(), m_parent.c_str(), m_addonId.c_str());
+                               m_groupId.c_str(), m_parent.c_str(), m_addonId.c_str());
   else
     return StringUtils::Format("CContextMenuItem[item, parent=%s, library=%s, addon=%s]",
-        m_parent.c_str(), m_library.c_str(), m_addonId.c_str());
+                               m_parent.c_str(), m_library.c_str(), m_addonId.c_str());
 }
 
-CContextMenuItem CContextMenuItem::CreateGroup(const std::string& label, const std::string& parent,
-    const std::string& groupId, const std::string& addonId)
+CContextMenuItem CContextMenuItem::CreateGroup(const std::string& label,
+                                               const std::string& parent,
+                                               const std::string& groupId,
+                                               const std::string& addonId)
 {
   CContextMenuItem menuItem;
   menuItem.m_label = label;
@@ -90,8 +91,11 @@ CContextMenuItem CContextMenuItem::CreateGroup(const std::string& label, const s
   return menuItem;
 }
 
-CContextMenuItem CContextMenuItem::CreateItem(const std::string& label, const std::string& parent,
-    const std::string& library, const std::string& condition, const std::string& addonId)
+CContextMenuItem CContextMenuItem::CreateItem(const std::string& label,
+                                              const std::string& parent,
+                                              const std::string& library,
+                                              const std::string& condition,
+                                              const std::string& addonId)
 {
   CContextMenuItem menuItem;
   menuItem.m_label = label;

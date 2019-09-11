@@ -13,7 +13,7 @@
 
 #include <algorithm>
 
-Observable &Observable::operator=(const Observable &observable)
+Observable& Observable::operator=(const Observable& observable)
 {
   CSingleLock lock(m_obsCritSection);
 
@@ -23,13 +23,13 @@ Observable &Observable::operator=(const Observable &observable)
   return *this;
 }
 
-bool Observable::IsObserving(const Observer &obs) const
+bool Observable::IsObserving(const Observer& obs) const
 {
   CSingleLock lock(m_obsCritSection);
   return std::find(m_observers.begin(), m_observers.end(), &obs) != m_observers.end();
 }
 
-void Observable::RegisterObserver(Observer *obs)
+void Observable::RegisterObserver(Observer* obs)
 {
   CSingleLock lock(m_obsCritSection);
   if (!IsObserving(*obs))
@@ -38,7 +38,7 @@ void Observable::RegisterObserver(Observer *obs)
   }
 }
 
-void Observable::UnregisterObserver(Observer *obs)
+void Observable::UnregisterObserver(Observer* obs)
 {
   CSingleLock lock(m_obsCritSection);
   auto iter = std::remove(m_observers.begin(), m_observers.end(), obs);

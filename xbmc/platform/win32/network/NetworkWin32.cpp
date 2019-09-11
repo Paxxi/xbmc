@@ -48,7 +48,8 @@ std::string CNetworkInterfaceWin32::GetMacAddress() const
 {
   std::string result;
   const unsigned char* mAddr = m_adapter.PhysicalAddress;
-  result = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X", mAddr[0], mAddr[1], mAddr[2], mAddr[3], mAddr[4], mAddr[5]);
+  result = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X", mAddr[0], mAddr[1], mAddr[2],
+                               mAddr[3], mAddr[4], mAddr[5]);
   return result;
 }
 
@@ -59,7 +60,9 @@ void CNetworkInterfaceWin32::GetMacAddressRaw(char rawMac[6]) const
 
 std::string CNetworkInterfaceWin32::GetCurrentIPAddress(void) const
 {
-  return m_adapter.FirstUnicastAddress != nullptr ? CNetworkBase::GetIpStr(m_adapter.FirstUnicastAddress->Address.lpSockaddr) : "";
+  return m_adapter.FirstUnicastAddress != nullptr
+             ? CNetworkBase::GetIpStr(m_adapter.FirstUnicastAddress->Address.lpSockaddr)
+             : "";
 }
 
 std::string CNetworkInterfaceWin32::GetCurrentNetmask(void) const
@@ -72,11 +75,13 @@ std::string CNetworkInterfaceWin32::GetCurrentNetmask(void) const
 
 std::string CNetworkInterfaceWin32::GetCurrentDefaultGateway(void) const
 {
-  return m_adapter.FirstGatewayAddress != nullptr ? CNetworkBase::GetIpStr(m_adapter.FirstGatewayAddress->Address.lpSockaddr) : "";
+  return m_adapter.FirstGatewayAddress != nullptr
+             ? CNetworkBase::GetIpStr(m_adapter.FirstGatewayAddress->Address.lpSockaddr)
+             : "";
 }
 
 CNetworkWin32::CNetworkWin32()
- : CNetworkBase()
+  : CNetworkBase()
 {
   queryInterfaceList();
 }
@@ -90,7 +95,7 @@ CNetworkWin32::~CNetworkWin32(void)
 void CNetworkWin32::CleanInterfaceList()
 {
   std::vector<CNetworkInterface*>::iterator it = m_interfaces.begin();
-  while(it != m_interfaces.end())
+  while (it != m_interfaces.end())
   {
     CNetworkInterface* nInt = *it;
     delete nInt;
@@ -100,8 +105,8 @@ void CNetworkWin32::CleanInterfaceList()
 
 std::vector<CNetworkInterface*>& CNetworkWin32::GetInterfaceList(void)
 {
-  CSingleLock lock (m_critSection);
-  if(m_netrefreshTimer.GetElapsedSeconds() >= 5.0f)
+  CSingleLock lock(m_critSection);
+  if (m_netrefreshTimer.GetElapsedSeconds() >= 5.0f)
     queryInterfaceList();
 
   return m_interfaces;
@@ -112,7 +117,8 @@ void CNetworkWin32::queryInterfaceList()
   CleanInterfaceList();
   m_netrefreshTimer.StartZero();
 
-  const ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_INCLUDE_PREFIX | GAA_FLAG_INCLUDE_GATEWAYS;
+  const ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_DNS_SERVER |
+                      GAA_FLAG_INCLUDE_PREFIX | GAA_FLAG_INCLUDE_GATEWAYS;
   ULONG ulOutBufLen;
 
   if (GetAdaptersAddresses(AF_INET, flags, nullptr, nullptr, &ulOutBufLen) != ERROR_BUFFER_OVERFLOW)
@@ -126,7 +132,8 @@ void CNetworkWin32::queryInterfaceList()
   {
     for (PIP_ADAPTER_ADDRESSES adapter = adapterAddresses; adapter; adapter = adapter->Next)
     {
-      if (adapter->IfType == IF_TYPE_SOFTWARE_LOOPBACK || adapter->OperStatus != IF_OPER_STATUS::IfOperStatusUp)
+      if (adapter->IfType == IF_TYPE_SOFTWARE_LOOPBACK ||
+          adapter->OperStatus != IF_OPER_STATUS::IfOperStatusUp)
         continue;
       m_interfaces.push_back(new CNetworkInterfaceWin32(*adapter));
     }
@@ -139,10 +146,12 @@ std::vector<std::string> CNetworkWin32::GetNameServers(void)
 {
   std::vector<std::string> result;
 
-  const ULONG flags = GAA_FLAG_SKIP_UNICAST | GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_FRIENDLY_NAME;
+  const ULONG flags = GAA_FLAG_SKIP_UNICAST | GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST |
+                      GAA_FLAG_SKIP_FRIENDLY_NAME;
   ULONG ulOutBufLen;
 
-  if (GetAdaptersAddresses(AF_UNSPEC, flags, nullptr, nullptr, &ulOutBufLen) != ERROR_BUFFER_OVERFLOW)
+  if (GetAdaptersAddresses(AF_UNSPEC, flags, nullptr, nullptr, &ulOutBufLen) !=
+      ERROR_BUFFER_OVERFLOW)
     return result;
 
   PIP_ADAPTER_ADDRESSES adapterAddresses = static_cast<PIP_ADAPTER_ADDRESSES>(malloc(ulOutBufLen));
@@ -153,9 +162,11 @@ std::vector<std::string> CNetworkWin32::GetNameServers(void)
   {
     for (PIP_ADAPTER_ADDRESSES adapter = adapterAddresses; adapter; adapter = adapter->Next)
     {
-      if (adapter->IfType == IF_TYPE_SOFTWARE_LOOPBACK || adapter->OperStatus != IF_OPER_STATUS::IfOperStatusUp)
+      if (adapter->IfType == IF_TYPE_SOFTWARE_LOOPBACK ||
+          adapter->OperStatus != IF_OPER_STATUS::IfOperStatusUp)
         continue;
-      for (PIP_ADAPTER_DNS_SERVER_ADDRESS dnsAddress = adapter->FirstDnsServerAddress; dnsAddress; dnsAddress = dnsAddress->Next)
+      for (PIP_ADAPTER_DNS_SERVER_ADDRESS dnsAddress = adapter->FirstDnsServerAddress; dnsAddress;
+           dnsAddress = dnsAddress->Next)
       {
         std::string strIp = CNetworkBase::GetIpStr(dnsAddress->Address.lpSockaddr);
         if (!strIp.empty())
@@ -178,8 +189,8 @@ bool CNetworkWin32::PingHost(unsigned long host, unsigned int timeout_ms /* = 20
 
 bool CNetworkWin32::PingHost(const struct sockaddr& host, unsigned int timeout_ms /* = 2000 */)
 {
-  char SendData[]    = "poke";
-  BYTE ReplyBuffer [sizeof(ICMP_ECHO_REPLY) + sizeof(SendData)];
+  char SendData[] = "poke";
+  BYTE ReplyBuffer[sizeof(ICMP_ECHO_REPLY) + sizeof(SendData)];
 
   SetLastError(ERROR_SUCCESS);
 
@@ -188,28 +199,36 @@ bool CNetworkWin32::PingHost(const struct sockaddr& host, unsigned int timeout_m
 
   switch (host.sa_family)
   {
-    case AF_INET:
-      hIcmpFile = IcmpCreateFile();
-      dwRetVal = IcmpSendEcho2(hIcmpFile, nullptr, nullptr, nullptr, reinterpret_cast<const struct sockaddr_in&>(host).sin_addr.S_un.S_addr, SendData, sizeof(SendData), nullptr, ReplyBuffer, sizeof(ReplyBuffer), timeout_ms);
-      break;
+  case AF_INET:
+    hIcmpFile = IcmpCreateFile();
+    dwRetVal = IcmpSendEcho2(hIcmpFile, nullptr, nullptr, nullptr,
+                             reinterpret_cast<const struct sockaddr_in&>(host).sin_addr.S_un.S_addr,
+                             SendData, sizeof(SendData), nullptr, ReplyBuffer, sizeof(ReplyBuffer),
+                             timeout_ms);
+    break;
 
-    case AF_INET6:
-    {
-      hIcmpFile = Icmp6CreateFile();
-      struct sockaddr_in6 source = { AF_INET6, 0, 0, in6addr_any };
-      dwRetVal = Icmp6SendEcho2(hIcmpFile, nullptr, nullptr, nullptr, &source, &const_cast<struct sockaddr_in6&>(reinterpret_cast<const struct sockaddr_in6&>(host)), SendData, sizeof(SendData), nullptr, ReplyBuffer, sizeof(ReplyBuffer), timeout_ms);
-      break;
-    }
+  case AF_INET6:
+  {
+    hIcmpFile = Icmp6CreateFile();
+    struct sockaddr_in6 source = {AF_INET6, 0, 0, in6addr_any};
+    dwRetVal = Icmp6SendEcho2(
+        hIcmpFile, nullptr, nullptr, nullptr, &source,
+        &const_cast<struct sockaddr_in6&>(reinterpret_cast<const struct sockaddr_in6&>(host)),
+        SendData, sizeof(SendData), nullptr, ReplyBuffer, sizeof(ReplyBuffer), timeout_ms);
+    break;
+  }
 
-    default:
-      return false;
+  default:
+    return false;
   }
 
   DWORD lastErr = GetLastError();
   if (lastErr != ERROR_SUCCESS && lastErr != IP_REQ_TIMED_OUT)
-    CLog::Log(LOGERROR, "%s - %s failed - %s", __FUNCTION__, host.sa_family == AF_INET ? "IcmpSendEcho2" : "Icmp6SendEcho2", CWIN32Util::WUSysMsg(lastErr).c_str());
+    CLog::Log(LOGERROR, "%s - %s failed - %s", __FUNCTION__,
+              host.sa_family == AF_INET ? "IcmpSendEcho2" : "Icmp6SendEcho2",
+              CWIN32Util::WUSysMsg(lastErr).c_str());
 
-  IcmpCloseHandle (hIcmpFile);
+  IcmpCloseHandle(hIcmpFile);
 
   if (dwRetVal > 0U)
   {
@@ -233,24 +252,24 @@ bool CNetworkInterfaceWin32::GetHostMacAddress(const struct sockaddr& host, std:
   if (GetBestInterfaceEx(&static_cast<struct sockaddr>(host), &InterfaceIndex) != NO_ERROR)
     return false;
 
-  NET_LUID luid = { 0 };
+  NET_LUID luid = {0};
   if (ConvertInterfaceIndexToLuid(InterfaceIndex, &luid) != NO_ERROR)
     return false;
 
-  MIB_IPNET_ROW2 neighborIp = { 0 };
+  MIB_IPNET_ROW2 neighborIp = {0};
   neighborIp.InterfaceLuid = luid;
   neighborIp.InterfaceIndex;
   neighborIp.Address.si_family = host.sa_family;
   switch (host.sa_family)
   {
-    case AF_INET:
-      neighborIp.Address.Ipv4 = reinterpret_cast<const struct sockaddr_in&>(host);
-      break;
-    case AF_INET6:
-      neighborIp.Address.Ipv6 = reinterpret_cast<const struct sockaddr_in6&>(host);
-      break;
-    default:
-      return false;
+  case AF_INET:
+    neighborIp.Address.Ipv4 = reinterpret_cast<const struct sockaddr_in&>(host);
+    break;
+  case AF_INET6:
+    neighborIp.Address.Ipv6 = reinterpret_cast<const struct sockaddr_in6&>(host);
+    break;
+  default:
+    return false;
   }
 
   DWORD dwRetVal = ResolveIpNetEntry2(&neighborIp, nullptr);
@@ -258,13 +277,17 @@ bool CNetworkInterfaceWin32::GetHostMacAddress(const struct sockaddr& host, std:
   {
     if (neighborIp.PhysicalAddressLength == 6)
     {
-      mac = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X",
-        neighborIp.PhysicalAddress[0], neighborIp.PhysicalAddress[1], neighborIp.PhysicalAddress[2],
-        neighborIp.PhysicalAddress[3], neighborIp.PhysicalAddress[4], neighborIp.PhysicalAddress[5]);
+      mac = StringUtils::Format("%02X:%02X:%02X:%02X:%02X:%02X", neighborIp.PhysicalAddress[0],
+                                neighborIp.PhysicalAddress[1], neighborIp.PhysicalAddress[2],
+                                neighborIp.PhysicalAddress[3], neighborIp.PhysicalAddress[4],
+                                neighborIp.PhysicalAddress[5]);
       return true;
     }
     else
-      CLog::Log(LOGERROR, "%s - ResolveIpNetEntry2 completed successfully, but mac address has length != 6 (%d)", __FUNCTION__, neighborIp.PhysicalAddressLength);
+      CLog::Log(
+          LOGERROR,
+          "%s - ResolveIpNetEntry2 completed successfully, but mac address has length != 6 (%d)",
+          __FUNCTION__, neighborIp.PhysicalAddressLength);
   }
   else
     CLog::Log(LOGERROR, "%s - ResolveIpNetEntry2 failed with error (%d)", __FUNCTION__, dwRetVal);

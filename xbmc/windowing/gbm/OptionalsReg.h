@@ -22,11 +22,11 @@ namespace GBM
 class CVaapiProxy;
 
 CVaapiProxy* VaapiProxyCreate(int fd);
-void VaapiProxyDelete(CVaapiProxy *proxy);
-void VaapiProxyConfig(CVaapiProxy *proxy, void *eglDpy);
-void VAAPIRegister(CVaapiProxy *winSystem, bool deepColor);
-void VAAPIRegisterRender(CVaapiProxy *winSystem, bool &general, bool &deepColor);
+void VaapiProxyDelete(CVaapiProxy* proxy);
+void VaapiProxyConfig(CVaapiProxy* proxy, void* eglDpy);
+void VAAPIRegister(CVaapiProxy* winSystem, bool deepColor);
+void VAAPIRegisterRender(CVaapiProxy* winSystem, bool& general, bool& deepColor);
 
-}
-}
-}
+} // namespace GBM
+} // namespace WINDOWING
+} // namespace KODI

@@ -31,26 +31,29 @@ namespace
 class CGetDirectoryItems : public IRunnable
 {
 public:
-  CGetDirectoryItems(const std::string &path, CFileItemList &items, const XFILE::CDirectory::CHints &hints)
-  : m_path(path), m_items(items), m_hints(hints)
+  CGetDirectoryItems(const std::string& path,
+                     CFileItemList& items,
+                     const XFILE::CDirectory::CHints& hints)
+    : m_path(path)
+    , m_items(items)
+    , m_hints(hints)
   {
   }
-  void Run() override
-  {
-    m_result = XFILE::CDirectory::GetDirectory(m_path, m_items, m_hints);
-  }
+  void Run() override { m_result = XFILE::CDirectory::GetDirectory(m_path, m_items, m_hints); }
   bool m_result;
+
 protected:
   std::string m_path;
-  CFileItemList &m_items;
+  CFileItemList& m_items;
   XFILE::CDirectory::CHints m_hints;
 };
-}
+} // namespace
 
 
 bool CGUIDialogSimpleMenu::ShowPlaySelection(CFileItem& item)
 {
-  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_DISC_PLAYBACK) != BD_PLAYBACK_SIMPLE_MENU)
+  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+          CSettings::SETTING_DISC_PLAYBACK) != BD_PLAYBACK_SIMPLE_MENU)
     return true;
 
   std::string path;
@@ -97,17 +100,22 @@ bool CGUIDialogSimpleMenu::ShowPlaySelection(CFileItem& item, const std::string&
 
   if (!GetDirectoryItems(directory, items, XFILE::CDirectory::CHints()))
   {
-    CLog::Log(LOGERROR, "CGUIWindowVideoBase::ShowPlaySelection - Failed to get play directory for %s", directory.c_str());
+    CLog::Log(LOGERROR,
+              "CGUIWindowVideoBase::ShowPlaySelection - Failed to get play directory for %s",
+              directory.c_str());
     return true;
   }
 
   if (items.IsEmpty())
   {
-    CLog::Log(LOGERROR, "CGUIWindowVideoBase::ShowPlaySelection - Failed to get any items %s", directory.c_str());
+    CLog::Log(LOGERROR, "CGUIWindowVideoBase::ShowPlaySelection - Failed to get any items %s",
+              directory.c_str());
     return true;
   }
 
-  CGUIDialogSelect* dialog = CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(WINDOW_DIALOG_SELECT);
+  CGUIDialogSelect* dialog =
+      CServiceBroker::GetGUI()->GetWindowManager().GetWindow<CGUIDialogSelect>(
+          WINDOW_DIALOG_SELECT);
   while (true)
   {
     dialog->Reset();
@@ -119,7 +127,8 @@ bool CGUIDialogSimpleMenu::ShowPlaySelection(CFileItem& item, const std::string&
     CFileItemPtr item_new = dialog->GetSelectedFileItem();
     if (!item_new || dialog->GetSelectedItem() < 0)
     {
-      CLog::Log(LOGDEBUG, "CGUIWindowVideoBase::ShowPlaySelection - User aborted %s", directory.c_str());
+      CLog::Log(LOGDEBUG, "CGUIWindowVideoBase::ShowPlaySelection - User aborted %s",
+                directory.c_str());
       break;
     }
 
@@ -133,9 +142,11 @@ bool CGUIDialogSimpleMenu::ShowPlaySelection(CFileItem& item, const std::string&
     }
 
     items.Clear();
-    if (!GetDirectoryItems(item_new->GetPath(), items, XFILE::CDirectory::CHints()) || items.IsEmpty())
+    if (!GetDirectoryItems(item_new->GetPath(), items, XFILE::CDirectory::CHints()) ||
+        items.IsEmpty())
     {
-      CLog::Log(LOGERROR, "CGUIWindowVideoBase::ShowPlaySelection - Failed to get any items %s", item_new->GetPath().c_str());
+      CLog::Log(LOGERROR, "CGUIWindowVideoBase::ShowPlaySelection - Failed to get any items %s",
+                item_new->GetPath().c_str());
       break;
     }
   }
@@ -143,8 +154,9 @@ bool CGUIDialogSimpleMenu::ShowPlaySelection(CFileItem& item, const std::string&
   return false;
 }
 
-bool CGUIDialogSimpleMenu::GetDirectoryItems(const std::string &path, CFileItemList &items,
-                                             const XFILE::CDirectory::CHints &hints)
+bool CGUIDialogSimpleMenu::GetDirectoryItems(const std::string& path,
+                                             CFileItemList& items,
+                                             const XFILE::CDirectory::CHints& hints)
 {
   CGetDirectoryItems getItems(path, items, hints);
   if (!CGUIDialogBusy::Wait(&getItems, 100, true))

@@ -29,7 +29,8 @@ public:
   int64_t GetLength() override;
 
   static std::string TranslateUrl(const CURL& url);
+
 protected:
   CFile m_file;
 };
-}
+} // namespace XFILE

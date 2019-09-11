@@ -18,7 +18,7 @@
 /************************************************************************/
 
 CPiTexture::CPiTexture(unsigned int width, unsigned int height, unsigned int format)
-: CGLTexture(width, height, format)
+  : CGLTexture(width, height, format)
 {
   m_egl_image = NULL;
 }
@@ -77,7 +77,8 @@ void CPiTexture::LoadToGPU()
     // Bind the texture object
     glBindTexture(GL_TEXTURE_2D, m_texture);
 
-    if (IsMipmapped()) {
+    if (IsMipmapped())
+    {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glGenerateMipmap(GL_TEXTURE_2D);
     }
@@ -87,7 +88,12 @@ void CPiTexture::LoadToGPU()
   CGLTexture::LoadToGPU();
 }
 
-void CPiTexture::Update(unsigned int width, unsigned int height, unsigned int pitch, unsigned int format, const unsigned char *pixels, bool loadToGPU)
+void CPiTexture::Update(unsigned int width,
+                        unsigned int height,
+                        unsigned int pitch,
+                        unsigned int format,
+                        const unsigned char* pixels,
+                        bool loadToGPU)
 {
   if (m_egl_image)
   {
@@ -98,22 +104,28 @@ void CPiTexture::Update(unsigned int width, unsigned int height, unsigned int pi
   CGLTexture::Update(width, height, pitch, format, pixels, loadToGPU);
 }
 
-bool CPiTexture::LoadFromFileInternal(const std::string& texturePath, unsigned int maxWidth, unsigned int maxHeight, bool requirePixels, const std::string& strMimeType)
+bool CPiTexture::LoadFromFileInternal(const std::string& texturePath,
+                                      unsigned int maxWidth,
+                                      unsigned int maxHeight,
+                                      bool requirePixels,
+                                      const std::string& strMimeType)
 {
   if (URIUtils::HasExtension(texturePath, ".jpg|.tbn"))
   {
-    COMXImageFile *file = g_OMXImage.LoadJpeg(texturePath);
+    COMXImageFile* file = g_OMXImage.LoadJpeg(texturePath);
     if (file)
     {
       bool okay = false;
       int orientation = file->GetOrientation();
       // limit the sizes of jpegs (even if we fail to decode)
-      g_OMXImage.ClampLimits(maxWidth, maxHeight, file->GetWidth(), file->GetHeight(), orientation & 4);
+      g_OMXImage.ClampLimits(maxWidth, maxHeight, file->GetWidth(), file->GetHeight(),
+                             orientation & 4);
 
       if (requirePixels)
       {
         Allocate(maxWidth, maxHeight, XB_FMT_A8R8G8B8);
-        if (m_pixels && COMXImage::DecodeJpeg(file, maxWidth, GetRows(), GetPitch(), (void *)m_pixels))
+        if (m_pixels &&
+            COMXImage::DecodeJpeg(file, maxWidth, GetRows(), GetPitch(), (void*)m_pixels))
           okay = true;
       }
       else

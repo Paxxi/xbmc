@@ -54,6 +54,6 @@ class CLircContainer;
 CLircContainer* LircRegister();
 struct delete_CLircContainer
 {
-  void operator()(CLircContainer *p) const;
+  void operator()(CLircContainer* p) const;
 };
-}
+} // namespace OPTIONALS

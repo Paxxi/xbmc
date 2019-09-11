@@ -13,11 +13,12 @@
 #include <utility>
 #include <vector>
 
-class CFileItem; typedef std::shared_ptr<CFileItem> CFileItemPtr;
+class CFileItem;
+typedef std::shared_ptr<CFileItem> CFileItemPtr;
 class CFileItemList;
 namespace PLAYLIST
 {
-  class CPlayList;
+class CPlayList;
 }
 
 typedef enum
@@ -32,13 +33,14 @@ class CPartyModeManager final
 public:
   CPartyModeManager(void);
 
-  bool Enable(PartyModeContext context=PARTYMODECONTEXT_MUSIC, const std::string& strXspPath = "");
+  bool Enable(PartyModeContext context = PARTYMODECONTEXT_MUSIC,
+              const std::string& strXspPath = "");
   void Disable();
   void Play(int iPos);
   void OnSongChange(bool bUpdatePlayed = false);
   void AddUserSongs(PLAYLIST::CPlayList& tempList, bool bPlay = false);
   void AddUserSongs(CFileItemList& tempList, bool bPlay = false);
-  bool IsEnabled(PartyModeContext context=PARTYMODECONTEXT_UNKNOWN) const;
+  bool IsEnabled(PartyModeContext context = PARTYMODECONTEXT_UNKNOWN) const;
   int GetSongsPlayed();
   int GetMatchingSongs();
   int GetMatchingSongsPicked();
@@ -50,7 +52,7 @@ public:
 private:
   void Process();
   bool AddRandomSongs();
-  void Add(CFileItemPtr &pItem);
+  void Add(CFileItemPtr& pItem);
   bool ReapSongs();
   bool MovePlaying();
   void SendUpdateMessage();

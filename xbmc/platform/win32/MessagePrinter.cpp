@@ -17,22 +17,26 @@
 void CMessagePrinter::DisplayMessage(const std::string& message)
 {
   using KODI::PLATFORM::WINDOWS::ToW;
-  MessageBox(nullptr, ToW(message).c_str(), ToW(CCompileInfo::GetAppName()).c_str(), MB_OK | MB_ICONINFORMATION);
+  MessageBox(nullptr, ToW(message).c_str(), ToW(CCompileInfo::GetAppName()).c_str(),
+             MB_OK | MB_ICONINFORMATION);
 }
 
 void CMessagePrinter::DisplayWarning(const std::string& warning)
 {
   using KODI::PLATFORM::WINDOWS::ToW;
-  MessageBox(nullptr, ToW(warning).c_str(), ToW(CCompileInfo::GetAppName()).c_str(), MB_OK | MB_ICONWARNING);
+  MessageBox(nullptr, ToW(warning).c_str(), ToW(CCompileInfo::GetAppName()).c_str(),
+             MB_OK | MB_ICONWARNING);
 }
 
 void CMessagePrinter::DisplayError(const std::string& error)
 {
   using KODI::PLATFORM::WINDOWS::ToW;
-  MessageBox(nullptr, ToW(error).c_str(), ToW(CCompileInfo::GetAppName()).c_str(), MB_OK | MB_ICONERROR);
+  MessageBox(nullptr, ToW(error).c_str(), ToW(CCompileInfo::GetAppName()).c_str(),
+             MB_OK | MB_ICONERROR);
 }
 
-void CMessagePrinter::DisplayHelpMessage(const std::vector<std::pair<std::string, std::string>>& help)
+void CMessagePrinter::DisplayHelpMessage(
+    const std::vector<std::pair<std::string, std::string>>& help)
 {
   using KODI::PLATFORM::WINDOWS::ToW;
   //very crude implementation, pretty it up when possible
@@ -42,5 +46,6 @@ void CMessagePrinter::DisplayHelpMessage(const std::vector<std::pair<std::string
     message.append(line.first + "\t" + line.second + "\r\n");
   }
 
-  MessageBox(nullptr, ToW(message).c_str(), ToW(CCompileInfo::GetAppName()).c_str(), MB_OK | MB_ICONINFORMATION);
+  MessageBox(nullptr, ToW(message).c_str(), ToW(CCompileInfo::GetAppName()).c_str(),
+             MB_OK | MB_ICONINFORMATION);
 }

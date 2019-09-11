@@ -14,21 +14,20 @@
 class CFileItem;
 class CFileItemList;
 
-class CGUIDialogFavourites :
-      public CGUIDialog
+class CGUIDialogFavourites : public CGUIDialog
 {
 public:
   CGUIDialogFavourites(void);
   ~CGUIDialogFavourites(void) override;
-  bool OnMessage(CGUIMessage &message) override;
+  bool OnMessage(CGUIMessage& message) override;
   void OnInitWindow() override;
 
   CFileItemPtr GetCurrentListItem(int offset = 0) override;
 
   bool HasListItems() const override { return true; }
 
-  static bool ChooseAndSetNewName(const CFileItemPtr &item);
-  static bool ChooseAndSetNewThumbnail(const CFileItemPtr &item);
+  static bool ChooseAndSetNewName(const CFileItemPtr& item);
+  static bool ChooseAndSetNewThumbnail(const CFileItemPtr& item);
 
 protected:
   int GetSelectedItem();

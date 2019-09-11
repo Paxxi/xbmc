@@ -42,10 +42,7 @@ protected:
     */
   }
 
-  ~TestZipFile() override
-  {
-    CServiceBroker::GetSettingsComponent()->GetSettings()->Unload();
-  }
+  ~TestZipFile() override { CServiceBroker::GetSettingsComponent()->GetSettings()->Unload(); }
 };
 
 TEST_F(TestZipFile, Read)
@@ -58,8 +55,7 @@ TEST_F(TestZipFile, Read)
 
   reffile = XBMC_REF_FILE_PATH("xbmc/filesystem/test/reffile.txt.zip");
   CURL zipUrl = URIUtils::CreateArchivePath("zip", CURL(reffile), "");
-  ASSERT_TRUE(XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "",
-    XFILE::DIR_FLAG_NO_FILE_DIRS));
+  ASSERT_TRUE(XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "", XFILE::DIR_FLAG_NO_FILE_DIRS));
   EXPECT_GT(itemlist.Size(), 0);
   EXPECT_FALSE(itemlist[0]->GetPath().empty());
   strpathinzip = itemlist[0]->GetPath();
@@ -110,8 +106,7 @@ TEST_F(TestZipFile, Exists)
 
   reffile = XBMC_REF_FILE_PATH("xbmc/filesystem/test/reffile.txt.zip");
   CURL zipUrl = URIUtils::CreateArchivePath("zip", CURL(reffile), "");
-  ASSERT_TRUE(XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "",
-    XFILE::DIR_FLAG_NO_FILE_DIRS));
+  ASSERT_TRUE(XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "", XFILE::DIR_FLAG_NO_FILE_DIRS));
   strpathinzip = itemlist[0]->GetPath();
 
   EXPECT_TRUE(XFILE::CFile::Exists(strpathinzip));
@@ -125,8 +120,7 @@ TEST_F(TestZipFile, Stat)
 
   reffile = XBMC_REF_FILE_PATH("xbmc/filesystem/test/reffile.txt.zip");
   CURL zipUrl = URIUtils::CreateArchivePath("zip", CURL(reffile), "");
-  ASSERT_TRUE(XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "",
-    XFILE::DIR_FLAG_NO_FILE_DIRS));
+  ASSERT_TRUE(XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "", XFILE::DIR_FLAG_NO_FILE_DIRS));
   strpathinzip = itemlist[0]->GetPath();
 
   EXPECT_EQ(0, XFILE::CFile::Stat(strpathinzip, &buffer));
@@ -139,7 +133,7 @@ TEST_F(TestZipFile, Stat)
  */
 TEST_F(TestZipFile, CorruptedFile)
 {
-  XFILE::CFile *file;
+  XFILE::CFile* file;
   char buf[16];
   memset(&buf, 0, sizeof(buf));
   std::string reffilepath, strpathinzip, str;
@@ -152,8 +146,7 @@ TEST_F(TestZipFile, CorruptedFile)
   std::cout << "Reference file generated at '" << XBMC_TEMPFILEPATH(file) << "'" << std::endl;
 
   CURL zipUrl = URIUtils::CreateArchivePath("zip", CURL(reffilepath), "");
-  if (!XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "",
-                                       XFILE::DIR_FLAG_NO_FILE_DIRS))
+  if (!XFILE::CDirectory::GetDirectory(zipUrl, itemlist, "", XFILE::DIR_FLAG_NO_FILE_DIRS))
   {
     XBMC_DELETETEMPFILE(file);
     SUCCEED();
@@ -173,14 +166,13 @@ TEST_F(TestZipFile, CorruptedFile)
     SUCCEED();
     return;
   }
-  std::cout << "file->GetLength(): " <<
-    testing::PrintToString(file->GetLength()) << std::endl;
-  std::cout << "file->Seek(file->GetLength() / 2, SEEK_CUR) return value: " <<
-    testing::PrintToString(file->Seek(file->GetLength() / 2, SEEK_CUR)) << std::endl;
-  std::cout << "file->Seek(0, SEEK_END) return value: " <<
-    testing::PrintToString(file->Seek(0, SEEK_END)) << std::endl;
-  std::cout << "file->Seek(0, SEEK_SET) return value: " <<
-    testing::PrintToString(file->Seek(0, SEEK_SET)) << std::endl;
+  std::cout << "file->GetLength(): " << testing::PrintToString(file->GetLength()) << std::endl;
+  std::cout << "file->Seek(file->GetLength() / 2, SEEK_CUR) return value: "
+            << testing::PrintToString(file->Seek(file->GetLength() / 2, SEEK_CUR)) << std::endl;
+  std::cout << "file->Seek(0, SEEK_END) return value: "
+            << testing::PrintToString(file->Seek(0, SEEK_END)) << std::endl;
+  std::cout << "file->Seek(0, SEEK_SET) return value: "
+            << testing::PrintToString(file->Seek(0, SEEK_SET)) << std::endl;
   std::cout << "File contents:" << std::endl;
   while ((size = file->Read(buf, sizeof(buf))) > 0)
   {
@@ -192,7 +184,7 @@ TEST_F(TestZipFile, CorruptedFile)
       str = StringUtils::Format("%02X ", buf[i]);
       std::cout << str;
     }
-    while (i++ < static_cast<ssize_t> (sizeof(buf)))
+    while (i++ < static_cast<ssize_t>(sizeof(buf)))
       std::cout << "   ";
     std::cout << " [";
     for (i = 0; i < size; i++)

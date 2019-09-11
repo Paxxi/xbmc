@@ -21,7 +21,7 @@ public:
   CGUIDialogAddonInfo(void);
   ~CGUIDialogAddonInfo(void) override;
   bool OnMessage(CGUIMessage& message) override;
-  bool OnAction(const CAction &action) override;
+  bool OnAction(const CAction& action) override;
 
   CFileItemPtr GetCurrentListItem(int offset = 0) override { return m_item; }
   bool HasListItems() const override { return true; }
@@ -35,7 +35,7 @@ private:
    \param item to display
    \return true if we can display information, false otherwise
    */
-  bool SetItem(const CFileItemPtr &item);
+  bool SetItem(const CFileItemPtr& item);
   void UpdateControls();
 
   void OnUpdate();
@@ -76,4 +76,3 @@ private:
   ADDON::AddonPtr m_localAddon;
   bool m_addonEnabled = false;
 };
-

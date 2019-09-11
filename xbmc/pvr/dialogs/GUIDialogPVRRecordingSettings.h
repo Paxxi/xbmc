@@ -22,35 +22,36 @@ struct IntegerSettingOption;
 
 namespace PVR
 {
-  class CGUIDialogPVRRecordingSettings : public CGUIDialogSettingsManualBase
-  {
-  public:
-    CGUIDialogPVRRecordingSettings();
+class CGUIDialogPVRRecordingSettings : public CGUIDialogSettingsManualBase
+{
+public:
+  CGUIDialogPVRRecordingSettings();
 
-    void SetRecording(const CPVRRecordingPtr &recording);
-    static bool CanEditRecording(const CFileItem& item);
+  void SetRecording(const CPVRRecordingPtr& recording);
+  static bool CanEditRecording(const CFileItem& item);
 
-  protected:
-    // implementation of ISettingCallback
-    bool OnSettingChanging(std::shared_ptr<const CSetting> setting) override;
-    void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
+protected:
+  // implementation of ISettingCallback
+  bool OnSettingChanging(std::shared_ptr<const CSetting> setting) override;
+  void OnSettingChanged(std::shared_ptr<const CSetting> setting) override;
 
-    // specialization of CGUIDialogSettingsBase
-    bool AllowResettingSettings() const override { return false; }
-    void Save() override;
-    void SetupView() override;
+  // specialization of CGUIDialogSettingsBase
+  bool AllowResettingSettings() const override { return false; }
+  void Save() override;
+  void SetupView() override;
 
-    // specialization of CGUIDialogSettingsManualBase
-    void InitializeSettings() override;
+  // specialization of CGUIDialogSettingsManualBase
+  void InitializeSettings() override;
 
-  private:
-    static void LifetimesFiller(std::shared_ptr<const CSetting> setting,
-                                std::vector<IntegerSettingOption> &list,
-                                int &current, void *data);
+private:
+  static void LifetimesFiller(std::shared_ptr<const CSetting> setting,
+                              std::vector<IntegerSettingOption>& list,
+                              int& current,
+                              void* data);
 
-    CPVRRecordingPtr m_recording;
-    std::string m_strTitle;
-    int m_iPlayCount = 0;
-    int m_iLifetime = 0;
-  };
+  CPVRRecordingPtr m_recording;
+  std::string m_strTitle;
+  int m_iPlayCount = 0;
+  int m_iLifetime = 0;
+};
 } // namespace PVR

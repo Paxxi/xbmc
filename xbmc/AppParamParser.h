@@ -32,7 +32,7 @@ public:
   bool m_standAlone = false;
 
 private:
-  void ParseArg(const std::string &arg);
+  void ParseArg(const std::string& arg);
   void DisplayHelp();
   void DisplayVersion();
 

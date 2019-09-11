@@ -20,10 +20,12 @@ class CGUIWindowSplash : public CGUIWindow
 public:
   CGUIWindowSplash(void);
   ~CGUIWindowSplash(void) override;
-  bool OnAction(const CAction &action) override { return false; };
+  bool OnAction(const CAction& action) override { return false; };
   void Render() override;
+
 protected:
   void OnInitWindow() override;
+
 private:
   std::unique_ptr<CGUIImage> m_image;
 };

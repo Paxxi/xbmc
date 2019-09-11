@@ -19,18 +19,24 @@ namespace
 {
 // Offset between keyboard codes of Wayland (effectively evdev) and xkb_keycode_t
 constexpr int WL_KEYBOARD_XKB_CODE_OFFSET{8};
-}
+} // namespace
 
 CInputProcessorKeyboard::CInputProcessorKeyboard(IInputHandlerKeyboard& handler)
-: m_handler{handler}, m_keyRepeatTimer{std::bind(&CInputProcessorKeyboard::KeyRepeatTimeout, this)}
+  : m_handler{handler}
+  , m_keyRepeatTimer{std::bind(&CInputProcessorKeyboard::KeyRepeatTimeout, this)}
 {
 }
 
-void CInputProcessorKeyboard::OnKeyboardKeymap(CSeat* seat, wayland::keyboard_keymap_format format, std::string const &keymap)
+void CInputProcessorKeyboard::OnKeyboardKeymap(CSeat* seat,
+                                               wayland::keyboard_keymap_format format,
+                                               std::string const& keymap)
 {
- if (format != wayland::keyboard_keymap_format::xkb_v1)
+  if (format != wayland::keyboard_keymap_format::xkb_v1)
   {
-    CLog::Log(LOGWARNING, "Wayland compositor sent keymap in format %u, but we only understand xkbv1 - keyboard input will not work",  static_cast<unsigned int>(format));
+    CLog::Log(LOGWARNING,
+              "Wayland compositor sent keymap in format %u, but we only understand xkbv1 - "
+              "keyboard input will not work",
+              static_cast<unsigned int>(format));
     return;
   }
 
@@ -46,24 +52,34 @@ void CInputProcessorKeyboard::OnKeyboardKeymap(CSeat* seat, wayland::keyboard_ke
 
     m_keymap = m_xkbContext->KeymapFromString(keymap);
   }
-  catch(std::exception const& e)
+  catch (std::exception const& e)
   {
-    CLog::Log(LOGERROR, "Could not parse keymap from compositor: %s - continuing without keymap", e.what());
+    CLog::Log(LOGERROR, "Could not parse keymap from compositor: %s - continuing without keymap",
+              e.what());
   }
 }
 
-void CInputProcessorKeyboard::OnKeyboardEnter(CSeat* seat, std::uint32_t serial, wayland::surface_t surface, wayland::array_t keys)
+void CInputProcessorKeyboard::OnKeyboardEnter(CSeat* seat,
+                                              std::uint32_t serial,
+                                              wayland::surface_t surface,
+                                              wayland::array_t keys)
 {
   m_handler.OnKeyboardEnter();
 }
 
-void CInputProcessorKeyboard::OnKeyboardLeave(CSeat* seat, std::uint32_t serial, wayland::surface_t surface)
+void CInputProcessorKeyboard::OnKeyboardLeave(CSeat* seat,
+                                              std::uint32_t serial,
+                                              wayland::surface_t surface)
 {
   m_keyRepeatTimer.Stop();
   m_handler.OnKeyboardLeave();
 }
 
-void CInputProcessorKeyboard::OnKeyboardKey(CSeat* seat, std::uint32_t serial, std::uint32_t time, std::uint32_t key, wayland::keyboard_key_state state)
+void CInputProcessorKeyboard::OnKeyboardKey(CSeat* seat,
+                                            std::uint32_t serial,
+                                            std::uint32_t time,
+                                            std::uint32_t key,
+                                            wayland::keyboard_key_state state)
 {
   if (!m_keymap)
   {
@@ -74,7 +90,12 @@ void CInputProcessorKeyboard::OnKeyboardKey(CSeat* seat, std::uint32_t serial, s
   ConvertAndSendKey(key, state == wayland::keyboard_key_state::pressed);
 }
 
-void CInputProcessorKeyboard::OnKeyboardModifiers(CSeat* seat, std::uint32_t serial, std::uint32_t modsDepressed, std::uint32_t modsLatched, std::uint32_t modsLocked, std::uint32_t group)
+void CInputProcessorKeyboard::OnKeyboardModifiers(CSeat* seat,
+                                                  std::uint32_t serial,
+                                                  std::uint32_t modsDepressed,
+                                                  std::uint32_t modsLatched,
+                                                  std::uint32_t modsLocked,
+                                                  std::uint32_t group)
 {
   if (!m_keymap)
   {
@@ -86,11 +107,13 @@ void CInputProcessorKeyboard::OnKeyboardModifiers(CSeat* seat, std::uint32_t ser
   m_keymap->UpdateMask(modsDepressed, modsLatched, modsLocked, group);
 }
 
-void CInputProcessorKeyboard::OnKeyboardRepeatInfo(CSeat* seat, std::int32_t rate, std::int32_t delay)
+void CInputProcessorKeyboard::OnKeyboardRepeatInfo(CSeat* seat,
+                                                   std::int32_t rate,
+                                                   std::int32_t delay)
 {
   CLog::Log(LOGDEBUG, "Key repeat rate: %d cps, delay %d ms", rate, delay);
   // rate is in characters per second, so convert to msec interval
-  m_keyRepeatInterval = (rate != 0) ? static_cast<int> (1000.0f / rate) : 0;
+  m_keyRepeatInterval = (rate != 0) ? static_cast<int>(1000.0f / rate) : 0;
   m_keyRepeatDelay = delay;
 }
 
@@ -113,7 +136,7 @@ void CInputProcessorKeyboard::ConvertAndSendKey(std::uint32_t scancode, bool pre
     scancode = 0;
   }
 
-  XBMC_Event event{SendKey(scancode, xbmcKey, static_cast<std::uint16_t> (utf32), pressed)};
+  XBMC_Event event{SendKey(scancode, xbmcKey, static_cast<std::uint16_t>(utf32), pressed)};
 
   if (pressed && m_keymap->ShouldKeycodeRepeat(xkbCode) && m_keyRepeatInterval > 0)
   {
@@ -130,18 +153,18 @@ void CInputProcessorKeyboard::ConvertAndSendKey(std::uint32_t scancode, bool pre
   }
 }
 
-XBMC_Event CInputProcessorKeyboard::SendKey(unsigned char scancode, XBMCKey key, std::uint16_t unicodeCodepoint, bool pressed)
+XBMC_Event CInputProcessorKeyboard::SendKey(unsigned char scancode,
+                                            XBMCKey key,
+                                            std::uint16_t unicodeCodepoint,
+                                            bool pressed)
 {
   assert(m_keymap);
 
-  XBMC_Event event{static_cast<unsigned char> (pressed ? XBMC_KEYDOWN : XBMC_KEYUP)};
-  event.key.keysym =
-  {
-    .scancode = scancode,
-    .sym = key,
-    .mod = m_keymap->ActiveXBMCModifiers(),
-    .unicode = unicodeCodepoint
-  };
+  XBMC_Event event{static_cast<unsigned char>(pressed ? XBMC_KEYDOWN : XBMC_KEYUP)};
+  event.key.keysym = {.scancode = scancode,
+                      .sym = key,
+                      .mod = m_keymap->ActiveXBMCModifiers(),
+                      .unicode = unicodeCodepoint};
   m_handler.OnKeyboardEvent(event);
   // Return created event for convenience (key repeat)
   return event;

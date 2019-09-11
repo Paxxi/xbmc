@@ -61,9 +61,9 @@ void CVideoSyncIos::OnResetDisplay()
 
 void CVideoSyncIos::IosVblankHandler()
 {
-  int           NrVBlanks;
-  double        VBlankTime;
-  int64_t       nowtime = CurrentHostCounter();
+  int NrVBlanks;
+  double VBlankTime;
+  int64_t nowtime = CurrentHostCounter();
 
   //calculate how many vblanks happened
   VBlankTime = (double)(nowtime - m_LastVBlankTime) / (double)CurrentHostFrequency();
@@ -92,4 +92,3 @@ void CVideoSyncIos::DeinitDisplayLink()
 {
   m_winSystem.DeinitDisplayLink();
 }
-

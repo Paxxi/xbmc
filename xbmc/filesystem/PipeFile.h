@@ -54,8 +54,8 @@ public:
   void OnPipeOverFlow() override;
   void OnPipeUnderFlow() override;
 
-  void AddListener(IPipeListener *l);
-  void RemoveListener(IPipeListener *l);
+  void AddListener(IPipeListener* l);
+  void RemoveListener(IPipeListener* l);
 
   void SetEof();
   bool IsEof();
@@ -68,10 +68,10 @@ protected:
   int64_t m_pos = 0;
   int64_t m_length = -1;
 
-  XFILE::Pipe *m_pipe;
+  XFILE::Pipe* m_pipe;
 
   CCriticalSection m_lock;
-  std::vector<XFILE::IPipeListener *> m_listeners;
+  std::vector<XFILE::IPipeListener*> m_listeners;
 };
 
-}
+} // namespace XFILE

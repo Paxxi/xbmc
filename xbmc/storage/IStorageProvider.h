@@ -8,10 +8,10 @@
 
 #pragma once
 
+#include "MediaSource.h"
+
 #include <string>
 #include <vector>
-
-#include "MediaSource.h"
 #ifdef HAS_DVD_DRIVE
 #include "cdioSupport.h"
 #endif
@@ -21,9 +21,9 @@ class IStorageEventsCallback
 public:
   virtual ~IStorageEventsCallback() = default;
 
-  virtual void OnStorageAdded(const std::string &label, const std::string &path) = 0;
-  virtual void OnStorageSafelyRemoved(const std::string &label) = 0;
-  virtual void OnStorageUnsafelyRemoved(const std::string &label) = 0;
+  virtual void OnStorageAdded(const std::string& label, const std::string& path) = 0;
+  virtual void OnStorageSafelyRemoved(const std::string& label) = 0;
+  virtual void OnStorageUnsafelyRemoved(const std::string& label) = 0;
 };
 
 class IStorageProvider
@@ -34,8 +34,8 @@ public:
   virtual void Initialize() = 0;
   virtual void Stop() = 0;
 
-  virtual void GetLocalDrives(VECSOURCES &localDrives) = 0;
-  virtual void GetRemovableDrives(VECSOURCES &removableDrives) = 0;
+  virtual void GetLocalDrives(VECSOURCES& localDrives) = 0;
+  virtual void GetRemovableDrives(VECSOURCES& removableDrives) = 0;
   virtual std::string GetFirstOpticalDeviceFileName()
   {
 #ifdef HAS_DVD_DRIVE
@@ -49,7 +49,7 @@ public:
 
   virtual std::vector<std::string> GetDiskUsage() = 0;
 
-  virtual bool PumpDriveChangeEvents(IStorageEventsCallback *callback) = 0;
+  virtual bool PumpDriveChangeEvents(IStorageEventsCallback* callback) = 0;
 
   /**\brief Called by media manager to create platform storage provider
   *

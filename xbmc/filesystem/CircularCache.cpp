@@ -17,15 +17,15 @@
 using namespace XFILE;
 
 CCircularCache::CCircularCache(size_t front, size_t back)
- : CCacheStrategy()
- , m_beg(0)
- , m_end(0)
- , m_cur(0)
- , m_buf(NULL)
- , m_size(front + back)
- , m_size_back(back)
+  : CCacheStrategy()
+  , m_beg(0)
+  , m_end(0)
+  , m_cur(0)
+  , m_buf(NULL)
+  , m_size(front + back)
+  , m_size_back(back)
 #ifdef TARGET_WINDOWS
- , m_handle(NULL)
+  , m_handle(NULL)
 #endif
 {
 }
@@ -39,7 +39,7 @@ int CCircularCache::Open()
 {
 #ifdef TARGET_WINDOWS
   m_handle = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, m_size, NULL);
-  if(m_handle == NULL)
+  if (m_handle == NULL)
     return CACHE_RC_ERROR;
   m_buf = (uint8_t*)MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 #else
@@ -71,7 +71,7 @@ size_t CCircularCache::GetMaxWriteSize(const size_t& iRequestSize)
 {
   CSingleLock lock(m_sync);
 
-  size_t back  = (size_t)(m_cur - m_beg); // Backbuffer size
+  size_t back = (size_t)(m_cur - m_beg); // Backbuffer size
   size_t front = (size_t)(m_end - m_cur); // Frontbuffer size
   size_t limit = m_size - std::min(back, m_size_back) - front;
 
@@ -98,27 +98,27 @@ size_t CCircularCache::GetMaxWriteSize(const size_t& iRequestSize)
  *
  * Multiple calls may be needed to fill buffer completely.
  */
-int CCircularCache::WriteToCache(const char *buf, size_t len)
+int CCircularCache::WriteToCache(const char* buf, size_t len)
 {
   CSingleLock lock(m_sync);
 
   // where are we in the buffer
-  size_t pos   = m_end % m_size;
-  size_t back  = (size_t)(m_cur - m_beg);
+  size_t pos = m_end % m_size;
+  size_t back = (size_t)(m_cur - m_beg);
   size_t front = (size_t)(m_end - m_cur);
 
   size_t limit = m_size - std::min(back, m_size_back) - front;
-  size_t wrap  = m_size - pos;
+  size_t wrap = m_size - pos;
 
   // limit by max forward size
-  if(len > limit)
+  if (len > limit)
     len = limit;
 
   // limit to wrap point
-  if(len > wrap)
+  if (len > wrap)
     len = wrap;
 
-  if(len == 0)
+  if (len == 0)
     return 0;
 
   if (m_buf == NULL)
@@ -129,7 +129,7 @@ int CCircularCache::WriteToCache(const char *buf, size_t len)
   m_end += len;
 
   // drop history that was overwritten
-  if(m_end - m_beg > (int64_t)m_size)
+  if (m_end - m_beg > (int64_t)m_size)
     m_beg = m_end - m_size;
 
   m_written.Set();
@@ -142,26 +142,26 @@ int CCircularCache::WriteToCache(const char *buf, size_t len)
  * the buffer wrap point. So multiple calls
  * may be needed to empty the whole cache
  */
-int CCircularCache::ReadFromCache(char *buf, size_t len)
+int CCircularCache::ReadFromCache(char* buf, size_t len)
 {
   CSingleLock lock(m_sync);
 
-  size_t pos   = m_cur % m_size;
+  size_t pos = m_cur % m_size;
   size_t front = (size_t)(m_end - m_cur);
   size_t avail = std::min(m_size - pos, front);
 
-  if(avail == 0)
+  if (avail == 0)
   {
-    if(IsEndOfInput())
+    if (IsEndOfInput())
       return 0;
     else
       return CACHE_RC_WOULD_BLOCK;
   }
 
-  if(len > avail)
+  if (len > avail)
     len = avail;
 
-  if(len == 0)
+  if (len == 0)
     return 0;
 
   if (m_buf == NULL)
@@ -184,14 +184,14 @@ int64_t CCircularCache::WaitForData(unsigned int minimum, unsigned int millis)
   CSingleLock lock(m_sync);
   int64_t avail = m_end - m_cur;
 
-  if(millis == 0 || IsEndOfInput())
+  if (millis == 0 || IsEndOfInput())
     return avail;
 
-  if(minimum > m_size - m_size_back)
+  if (minimum > m_size - m_size_back)
     minimum = m_size - m_size_back;
 
   XbmcThreads::EndTime endtime(millis);
-  while (!IsEndOfInput() && avail < minimum && !endtime.IsTimePast() )
+  while (!IsEndOfInput() && avail < minimum && !endtime.IsTimePast())
   {
     lock.Leave();
     m_written.WaitMSec(50); // may miss the deadline. shouldn't be a problem.
@@ -220,7 +220,7 @@ int64_t CCircularCache::Seek(int64_t pos)
     lock.Enter();
   }
 
-  if(pos >= m_beg && pos <= m_end)
+  if (pos >= m_beg && pos <= m_end)
   {
     m_cur = pos;
     return pos;
@@ -261,8 +261,7 @@ bool CCircularCache::IsCachedPosition(int64_t iFilePosition)
   return iFilePosition >= m_beg && iFilePosition <= m_end;
 }
 
-CCacheStrategy *CCircularCache::CreateNew()
+CCacheStrategy* CCircularCache::CreateNew()
 {
   return new CCircularCache(m_size - m_size_back, m_size_back);
 }
-

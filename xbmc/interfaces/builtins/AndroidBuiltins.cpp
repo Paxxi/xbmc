@@ -19,8 +19,8 @@
  */
 static int LaunchAndroidActivity(const std::vector<std::string>& params)
 {
-  KODI::MESSAGING::CApplicationMessenger::GetInstance().PostMsg(
-    TMSG_START_ANDROID_ACTIVITY, -1, -1, nullptr, "", params);
+  KODI::MESSAGING::CApplicationMessenger::GetInstance().PostMsg(TMSG_START_ANDROID_ACTIVITY, -1, -1,
+                                                                nullptr, "", params);
 
   return 0;
 }
@@ -51,7 +51,8 @@ static int LaunchAndroidActivity(const std::vector<std::string>& params)
 
 CBuiltins::CommandMap CAndroidBuiltins::GetOperations() const
 {
-  return {
-           {"startandroidactivity",    {"Launch an Android native app with the given package name.  Optional parms (in order): intent, dataType, dataURI.", 1, LaunchAndroidActivity}}
-         };
+  return {{"startandroidactivity",
+           {"Launch an Android native app with the given package name.  Optional parms (in order): "
+            "intent, dataType, dataURI.",
+            1, LaunchAndroidActivity}}};
 }

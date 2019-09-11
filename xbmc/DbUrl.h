@@ -25,27 +25,27 @@ public:
   void Reset();
 
   std::string ToString() const;
-  bool FromString(const std::string &dbUrl);
+  bool FromString(const std::string& dbUrl);
 
   const std::string& GetType() const { return m_type; }
-  void AppendPath(const std::string &subPath);
+  void AppendPath(const std::string& subPath);
 
-  using CUrlOptions::HasOption;
   using CUrlOptions::GetOptions;
   using CUrlOptions::GetOptionsString;
+  using CUrlOptions::HasOption;
 
-  void AddOption(const std::string &key, const char *value) override;
-  void AddOption(const std::string &key, const std::string &value) override;
-  void AddOption(const std::string &key, int value) override;
-  void AddOption(const std::string &key, float value) override;
-  void AddOption(const std::string &key, double value) override;
-  void AddOption(const std::string &key, bool value) override;
-  void AddOptions(const std::string &options) override;
-  void RemoveOption(const std::string &key) override;
+  void AddOption(const std::string& key, const char* value) override;
+  void AddOption(const std::string& key, const std::string& value) override;
+  void AddOption(const std::string& key, int value) override;
+  void AddOption(const std::string& key, float value) override;
+  void AddOption(const std::string& key, double value) override;
+  void AddOption(const std::string& key, bool value) override;
+  void AddOptions(const std::string& options) override;
+  void RemoveOption(const std::string& key) override;
 
 protected:
   virtual bool parse() = 0;
-  virtual bool validateOption(const std::string &key, const CVariant &value);
+  virtual bool validateOption(const std::string& key, const CVariant& value);
 
   CURL m_url;
   std::string m_type;

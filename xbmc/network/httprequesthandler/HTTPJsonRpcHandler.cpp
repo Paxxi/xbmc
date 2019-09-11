@@ -21,7 +21,7 @@
 
 #define MAX_HTTP_POST_SIZE 65536
 
-bool CHTTPJsonRpcHandler::CanHandleRequest(const HTTPRequest &request) const
+bool CHTTPJsonRpcHandler::CanHandleRequest(const HTTPRequest& request) const
 {
   return (request.pathUrl.compare("/jsonrpc") == 0);
 }
@@ -34,15 +34,18 @@ int CHTTPJsonRpcHandler::HandleRequest()
 
   // get all query arguments
   std::map<std::string, std::string> arguments;
-  HTTPRequestHandlerUtils::GetRequestHeaderValues(m_request.connection, MHD_GET_ARGUMENT_KIND, arguments);
+  HTTPRequestHandlerUtils::GetRequestHeaderValues(m_request.connection, MHD_GET_ARGUMENT_KIND,
+                                                  arguments);
 
   if (m_request.method == POST)
   {
-    std::string contentType = HTTPRequestHandlerUtils::GetRequestHeaderValue(m_request.connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_CONTENT_TYPE);
+    std::string contentType = HTTPRequestHandlerUtils::GetRequestHeaderValue(
+        m_request.connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_CONTENT_TYPE);
     // If the content-type of the m_request was specified, it must be application/json-rpc, application/json, or application/jsonrequest
     // http://www.jsonrpc.org/historical/json-rpc-over-http.html
     if (!contentType.empty() && contentType.compare("application/json-rpc") != 0 &&
-        contentType.compare("application/json") != 0 && contentType.compare("application/jsonrequest") != 0)
+        contentType.compare("application/json") != 0 &&
+        contentType.compare("application/jsonrequest") != 0)
     {
       m_response.type = HTTPError;
       m_response.status = MHD_HTTP_UNSUPPORTED_MEDIA_TYPE;
@@ -119,11 +122,13 @@ HttpResponseRanges CHTTPJsonRpcHandler::GetResponseData() const
   return ranges;
 }
 
-bool CHTTPJsonRpcHandler::appendPostData(const char *data, size_t size)
+bool CHTTPJsonRpcHandler::appendPostData(const char* data, size_t size)
 {
   if (m_requestData.size() + size > MAX_HTTP_POST_SIZE)
   {
-    CLog::Log(LOGERROR, "WebServer: Stopped uploading POST data since it exceeded size limitations (%d)", MAX_HTTP_POST_SIZE);
+    CLog::Log(LOGERROR,
+              "WebServer: Stopped uploading POST data since it exceeded size limitations (%d)",
+              MAX_HTTP_POST_SIZE);
     return false;
   }
 
@@ -132,7 +137,9 @@ bool CHTTPJsonRpcHandler::appendPostData(const char *data, size_t size)
   return true;
 }
 
-bool CHTTPJsonRpcHandler::CHTTPTransportLayer::PrepareDownload(const char *path, CVariant &details, std::string &protocol)
+bool CHTTPJsonRpcHandler::CHTTPTransportLayer::PrepareDownload(const char* path,
+                                                               CVariant& details,
+                                                               std::string& protocol)
 {
   if (!XFILE::CFile::Exists(path))
     return false;
@@ -141,7 +148,7 @@ bool CHTTPJsonRpcHandler::CHTTPTransportLayer::PrepareDownload(const char *path,
   std::string url;
   std::string strPath = path;
   if (StringUtils::StartsWith(strPath, "image://") ||
-    (StringUtils::StartsWith(strPath, "special://") && StringUtils::EndsWith(strPath, ".tbn")))
+      (StringUtils::StartsWith(strPath, "special://") && StringUtils::EndsWith(strPath, ".tbn")))
     url = "image/";
   else
     url = "vfs/";
@@ -151,7 +158,7 @@ bool CHTTPJsonRpcHandler::CHTTPTransportLayer::PrepareDownload(const char *path,
   return true;
 }
 
-bool CHTTPJsonRpcHandler::CHTTPTransportLayer::Download(const char *path, CVariant &result)
+bool CHTTPJsonRpcHandler::CHTTPTransportLayer::Download(const char* path, CVariant& result)
 {
   return false;
 }

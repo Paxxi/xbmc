@@ -39,25 +39,19 @@ void CGBMUtils::DestroyDevice()
   }
 }
 
-bool CGBMUtils::CreateSurface(int width, int height, uint32_t format, const uint64_t *modifiers, const int modifiers_count)
+bool CGBMUtils::CreateSurface(
+    int width, int height, uint32_t format, const uint64_t* modifiers, const int modifiers_count)
 {
   if (m_surface)
     CLog::Log(LOGWARNING, "CGBMUtils::%s - surface already created", __FUNCTION__);
 
 #if defined(HAS_GBM_MODIFIERS)
-  m_surface = gbm_surface_create_with_modifiers(m_device,
-                                                width,
-                                                height,
-                                                format,
-                                                modifiers,
+  m_surface = gbm_surface_create_with_modifiers(m_device, width, height, format, modifiers,
                                                 modifiers_count);
 #endif
   if (!m_surface)
   {
-    m_surface = gbm_surface_create(m_device,
-                                   width,
-                                   height,
-                                   format,
+    m_surface = gbm_surface_create(m_device, width, height, format,
                                    GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING);
   }
 
@@ -67,9 +61,8 @@ bool CGBMUtils::CreateSurface(int width, int height, uint32_t format, const uint
     return false;
   }
 
-  CLog::Log(LOGDEBUG, "CGBMUtils::%s - created surface with size %dx%d", __FUNCTION__,
-                                                                         width,
-                                                                         height);
+  CLog::Log(LOGDEBUG, "CGBMUtils::%s - created surface with size %dx%d", __FUNCTION__, width,
+            height);
 
   return true;
 }
@@ -88,7 +81,7 @@ void CGBMUtils::DestroySurface()
   }
 }
 
-struct gbm_bo *CGBMUtils::LockFrontBuffer()
+struct gbm_bo* CGBMUtils::LockFrontBuffer()
 {
   if (m_next_bo)
     CLog::Log(LOGWARNING, "CGBMUtils::%s - uneven surface buffer usage", __FUNCTION__);

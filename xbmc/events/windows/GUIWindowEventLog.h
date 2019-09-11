@@ -22,10 +22,10 @@ public:
 protected:
   // specialization of CGUIMediaWindow
   bool OnSelect(int item) override;
-  void GetContextButtons(int itemNumber, CContextButtons &buttons) override;
+  void GetContextButtons(int itemNumber, CContextButtons& buttons) override;
   bool OnContextButton(int itemNumber, CONTEXT_BUTTON button) override;
   void UpdateButtons() override;
-  bool GetDirectory(const std::string &strDirectory, CFileItemList &items) override;
+  bool GetDirectory(const std::string& strDirectory, CFileItemList& items) override;
   std::string GetRootPath() const override { return "events://"; }
 
   bool OnSelect(CFileItemPtr item);

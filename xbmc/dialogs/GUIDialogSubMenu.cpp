@@ -10,14 +10,14 @@
 
 #include "guilib/GUIMessage.h"
 
-CGUIDialogSubMenu::CGUIDialogSubMenu(int id, const std::string &xmlFile)
-    : CGUIDialog(id, xmlFile.c_str())
+CGUIDialogSubMenu::CGUIDialogSubMenu(int id, const std::string& xmlFile)
+  : CGUIDialog(id, xmlFile.c_str())
 {
 }
 
 CGUIDialogSubMenu::~CGUIDialogSubMenu(void) = default;
 
-bool CGUIDialogSubMenu::OnMessage(CGUIMessage &message)
+bool CGUIDialogSubMenu::OnMessage(CGUIMessage& message)
 {
   if (message.GetMessage() == GUI_MSG_CLICKED)
   {

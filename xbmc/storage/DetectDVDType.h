@@ -18,8 +18,8 @@
 #ifdef HAS_DVD_DRIVE
 
 #include "threads/CriticalSection.h"
-
 #include "threads/Thread.h"
+
 #include <memory>
 #include <string>
 
@@ -44,17 +44,18 @@ public:
   static CCdInfo* GetCdInfo();
   static CEvent m_evAutorun;
 
-  static const std::string &GetDVDLabel();
-  static const std::string &GetDVDPath();
+  static const std::string& GetDVDLabel();
+  static const std::string& GetDVDPath();
 
   static void UpdateState();
+
 protected:
   void UpdateDvdrom();
   DWORD GetTrayState();
 
 
   void DetectMediaType();
-  void SetNewDVDShareUrl( const std::string& strNewUrl, bool bCDDA, const std::string& strDiscLabel );
+  void SetNewDVDShareUrl(const std::string& strNewUrl, bool bCDDA, const std::string& strDiscLabel);
 
 private:
   static CCriticalSection m_muReadingMedia;
@@ -75,5 +76,5 @@ private:
 
   std::shared_ptr<CLibcdio> m_cdio;
 };
-}
+} // namespace MEDIA_DETECT
 #endif

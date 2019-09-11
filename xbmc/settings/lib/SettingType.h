@@ -12,7 +12,8 @@
  \ingroup settings
  \brief Basic setting types available in the settings system.
  */
-enum class SettingType {
+enum class SettingType
+{
   Unknown = 0,
   Boolean,
   Integer,

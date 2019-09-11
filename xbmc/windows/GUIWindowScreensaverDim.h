@@ -15,7 +15,7 @@ class CGUIWindowScreensaverDim : public CGUIDialog
 public:
   CGUIWindowScreensaverDim();
 
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
   void Render() override;
 
 protected:

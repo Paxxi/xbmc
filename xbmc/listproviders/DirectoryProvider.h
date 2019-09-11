@@ -25,7 +25,7 @@ class CVariant;
 
 namespace PVR
 {
-  enum class PVREvent;
+enum class PVREvent;
 }
 
 enum class InfoTagType
@@ -37,10 +37,9 @@ enum class InfoTagType
   PVR,
 };
 
-class CDirectoryProvider :
-  public IListProvider,
-  public IJobCallback,
-  public ANNOUNCEMENT::IAnnouncer
+class CDirectoryProvider : public IListProvider,
+                           public IJobCallback,
+                           public ANNOUNCEMENT::IAnnouncer
 {
 public:
   typedef enum
@@ -50,33 +49,37 @@ public:
     DONE
   } UpdateState;
 
-  CDirectoryProvider(const TiXmlElement *element, int parentID);
+  CDirectoryProvider(const TiXmlElement* element, int parentID);
   ~CDirectoryProvider() override;
 
   bool Update(bool forceRefresh) override;
-  void Announce(ANNOUNCEMENT::AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data) override;
-  void Fetch(std::vector<CGUIListItemPtr> &items) override;
+  void Announce(ANNOUNCEMENT::AnnouncementFlag flag,
+                const char* sender,
+                const char* message,
+                const CVariant& data) override;
+  void Fetch(std::vector<CGUIListItemPtr>& items) override;
   void Reset() override;
-  bool OnClick(const CGUIListItemPtr &item) override;
-  bool OnInfo(const CGUIListItemPtr &item) override;
-  bool OnContextMenu(const CGUIListItemPtr &item) override;
+  bool OnClick(const CGUIListItemPtr& item) override;
+  bool OnInfo(const CGUIListItemPtr& item) override;
+  bool OnContextMenu(const CGUIListItemPtr& item) override;
   bool IsUpdating() const override;
 
   // callback from directory job
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
+
 private:
-  UpdateState      m_updateState;
-  bool             m_isAnnounced;
-  unsigned int     m_jobID;
+  UpdateState m_updateState;
+  bool m_isAnnounced;
+  unsigned int m_jobID;
   KODI::GUILIB::GUIINFO::CGUIInfoLabel m_url;
   KODI::GUILIB::GUIINFO::CGUIInfoLabel m_target;
   KODI::GUILIB::GUIINFO::CGUIInfoLabel m_sortMethod;
   KODI::GUILIB::GUIINFO::CGUIInfoLabel m_sortOrder;
   KODI::GUILIB::GUIINFO::CGUIInfoLabel m_limit;
-  std::string      m_currentUrl;
-  std::string      m_currentTarget;   ///< \brief node.target property on the list as a whole
-  SortDescription  m_currentSort;
-  unsigned int     m_currentLimit;
+  std::string m_currentUrl;
+  std::string m_currentTarget; ///< \brief node.target property on the list as a whole
+  SortDescription m_currentSort;
+  unsigned int m_currentLimit;
   std::vector<CGUIStaticItemPtr> m_items;
   std::vector<InfoTagType> m_itemTypes;
   mutable CCriticalSection m_section;

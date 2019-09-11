@@ -28,4 +28,3 @@ void CPlatform::Init()
 {
   // nothing for now
 }
-

@@ -25,18 +25,18 @@
 
 using namespace OVERLAY;
 
-static UTILS::Color colors[9] = { UTILS::COLOR::YELLOW,
-                                  UTILS::COLOR::WHITE,
-                                  UTILS::COLOR::BLUE,
-                                  UTILS::COLOR::BRIGHTGREEN,
-                                  UTILS::COLOR::YELLOWGREEN,
-                                  UTILS::COLOR::CYAN,
-                                  UTILS::COLOR::LIGHTGREY,
-                                  UTILS::COLOR::GREY,
-                                  UTILS::COLOR::DARKGREY };
+static UTILS::Color colors[9] = {
+    UTILS::COLOR::YELLOW,      UTILS::COLOR::WHITE,       UTILS::COLOR::BLUE,
+    UTILS::COLOR::BRIGHTGREEN, UTILS::COLOR::YELLOWGREEN, UTILS::COLOR::CYAN,
+    UTILS::COLOR::LIGHTGREY,   UTILS::COLOR::GREY,        UTILS::COLOR::DARKGREY};
 
-CGUITextLayout* COverlayText::GetFontLayout(const std::string &font, int color, int opacity, int height, int style,
-                                            const std::string &fontcache, const std::string &fontbordercache)
+CGUITextLayout* COverlayText::GetFontLayout(const std::string& font,
+                                            int color,
+                                            int opacity,
+                                            int height,
+                                            int style,
+                                            const std::string& fontcache,
+                                            const std::string& fontbordercache)
 {
   if (CUtil::IsUsingTTFSubtitles())
   {
@@ -60,20 +60,10 @@ CGUITextLayout* COverlayText::GetFontLayout(const std::string &font, int color, 
 
     // We scale based on PAL4x3 - this at least ensures all sizing is constant across resolutions.
     RESOLUTION_INFO pal(720, 576, 0);
-    CGUIFont *subtitle_font = g_fontManager.LoadTTF(fontcache
-                                                    , font_path
-                                                    , fgcolor
-                                                    , 0
-                                                    , height
-                                                    , style
-                                                    , false, 1.0f, 1.0f, &pal, true);
-    CGUIFont *border_font   = g_fontManager.LoadTTF(fontbordercache
-                                                    , font_path
-                                                    , bordercolor
-                                                    , 0
-                                                    , height
-                                                    , style
-                                                    , true, 1.0f, 1.0f, &pal, true);
+    CGUIFont* subtitle_font = g_fontManager.LoadTTF(fontcache, font_path, fgcolor, 0, height, style,
+                                                    false, 1.0f, 1.0f, &pal, true);
+    CGUIFont* border_font = g_fontManager.LoadTTF(fontbordercache, font_path, bordercolor, 0,
+                                                  height, style, true, 1.0f, 1.0f, &pal, true);
     if (!subtitle_font || !border_font)
       CLog::Log(LOGERROR, "COverlayText::GetFontLayout - Unable to load subtitle font");
     else
@@ -83,7 +73,7 @@ CGUITextLayout* COverlayText::GetFontLayout(const std::string &font, int color, 
   return nullptr;
 }
 
-COverlayText::COverlayText(CDVDOverlayText * src)
+COverlayText::COverlayText(CDVDOverlayText* src)
 {
   CDVDOverlayText::CElement* e = src->m_pHead;
   while (e)
@@ -98,7 +88,7 @@ COverlayText::COverlayText(CDVDOverlayText * src)
   }
 
   // Avoid additional line breaks
-  while(StringUtils::EndsWith(m_text, "\n"))
+  while (StringUtils::EndsWith(m_text, "\n"))
     m_text = StringUtils::Left(m_text, m_text.length() - 1);
 
   // Remove HTML-like tags from the subtitles until
@@ -117,36 +107,36 @@ COverlayText::COverlayText(CDVDOverlayText * src)
   StringUtils::Replace(m_text, "<P>", "");
   StringUtils::Replace(m_text, "&nbsp;", "");
   StringUtils::Replace(m_text, "</u>", "");
-  StringUtils::Replace(m_text, "</i", "[/I]"); // handle tags which aren't closed properly (happens).
+  StringUtils::Replace(m_text, "</i",
+                       "[/I]"); // handle tags which aren't closed properly (happens).
   StringUtils::Replace(m_text, "</b", "[/B]");
   StringUtils::Replace(m_text, "</u", "");
 
-  m_subalign = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(CSettings::SETTING_SUBTITLES_ALIGN);
+  m_subalign = CServiceBroker::GetSettingsComponent()->GetSettings()->GetInt(
+      CSettings::SETTING_SUBTITLES_ALIGN);
   if (m_subalign == SUBTITLE_ALIGN_MANUAL)
   {
-    m_align  = ALIGN_SUBTITLE;
-    m_pos    = POSITION_RELATIVE;
-    m_x      = 0.0f;
-    m_y      = 0.0f;
+    m_align = ALIGN_SUBTITLE;
+    m_pos = POSITION_RELATIVE;
+    m_x = 0.0f;
+    m_y = 0.0f;
   }
   else
   {
-    if(m_subalign == SUBTITLE_ALIGN_TOP_INSIDE ||
-       m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE)
-      m_align  = ALIGN_VIDEO;
+    if (m_subalign == SUBTITLE_ALIGN_TOP_INSIDE || m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE)
+      m_align = ALIGN_VIDEO;
     else
       m_align = ALIGN_SCREEN;
 
-    m_pos    = POSITION_RELATIVE;
-    m_x      = 0.5f;
+    m_pos = POSITION_RELATIVE;
+    m_x = 0.5f;
 
-    if(m_subalign == SUBTITLE_ALIGN_TOP_INSIDE ||
-       m_subalign == SUBTITLE_ALIGN_TOP_OUTSIDE)
-      m_y    = 0.0f;
+    if (m_subalign == SUBTITLE_ALIGN_TOP_INSIDE || m_subalign == SUBTITLE_ALIGN_TOP_OUTSIDE)
+      m_y = 0.0f;
     else
-      m_y    = 1.0f;
+      m_y = 1.0f;
   }
-  m_width  = 0;
+  m_width = 0;
   m_height = 0;
 
   m_type = TYPE_GUITEXT;
@@ -158,44 +148,52 @@ COverlayText::~COverlayText()
   delete m_layout;
 }
 
-void COverlayText::PrepareRender(const std::string &font, int color, int opacity, int height, int style, const std::string &fontcache,
-                                 const std::string &fontbordercache, const UTILS::Color bgcolor, const CRect &rectView)
+void COverlayText::PrepareRender(const std::string& font,
+                                 int color,
+                                 int opacity,
+                                 int height,
+                                 int style,
+                                 const std::string& fontcache,
+                                 const std::string& fontbordercache,
+                                 const UTILS::Color bgcolor,
+                                 const CRect& rectView)
 {
   if (!m_layout)
     m_layout = GetFontLayout(font, color, opacity, height, style, fontcache, fontbordercache);
 
   if (m_layout == nullptr)
   {
-    CLog::Log(LOGERROR, "COverlayText::PrepareRender - GetFontLayout failed for font %s", font.c_str());
+    CLog::Log(LOGERROR, "COverlayText::PrepareRender - GetFontLayout failed for font %s",
+              font.c_str());
     return;
   }
-  
+
   m_rv = rectView;
   m_bgcolor = bgcolor;
   m_bordercolor = ColorUtils::ChangeOpacity(UTILS::COLOR::BLACK, opacity / 100.0f);
-  
-  m_layout->Update(m_text, m_rv.Width() * 0.9f, false, true); // true to force LTR reading order (most Hebrew subs are this format)
+
+  m_layout->Update(m_text, m_rv.Width() * 0.9f, false,
+                   true); // true to force LTR reading order (most Hebrew subs are this format)
   m_layout->GetTextExtent(m_width, m_height);
-  
 }
 
-void COverlayText::Render(OVERLAY::SRenderState &state)
+void COverlayText::Render(OVERLAY::SRenderState& state)
 {
-  if(m_layout == nullptr)
+  if (m_layout == nullptr)
     return;
 
   float x = state.x;
   float y = state.y;
 
-  if (m_subalign == SUBTITLE_ALIGN_MANUAL
-  ||  m_subalign == SUBTITLE_ALIGN_BOTTOM_OUTSIDE
-  ||  m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE)
+  if (m_subalign == SUBTITLE_ALIGN_MANUAL || m_subalign == SUBTITLE_ALIGN_BOTTOM_OUTSIDE ||
+      m_subalign == SUBTITLE_ALIGN_BOTTOM_INSIDE)
     y -= m_height;
-  
+
   // draw the overlay background
   if (m_bgcolor != UTILS::COLOR::NONE)
   {
-    CRect backgroundbox(x - m_layout->GetTextWidth() * 0.52f, y, x + m_layout->GetTextWidth() * 0.52f, y + m_layout->GetTextHeight());
+    CRect backgroundbox(x - m_layout->GetTextWidth() * 0.52f, y,
+                        x + m_layout->GetTextWidth() * 0.52f, y + m_layout->GetTextHeight());
     CGUITexture::DrawQuad(backgroundbox, m_bgcolor);
   }
 

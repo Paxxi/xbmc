@@ -22,10 +22,10 @@ public:
   bool Pause(double dTime) override { return false; };
   bool IsEOF() override;
   int64_t GetLength() override;
-  BitstreamStats GetBitstreamStats() const override ;
+  BitstreamStats GetBitstreamStats() const override;
   int GetBlockSize() override;
   void SetReadRate(unsigned rate) override;
-  bool GetCacheStatus(XFILE::SCacheStatus *status) override;
+  bool GetCacheStatus(XFILE::SCacheStatus* status) override;
 
 protected:
   XFILE::CFile* m_pFile = nullptr;

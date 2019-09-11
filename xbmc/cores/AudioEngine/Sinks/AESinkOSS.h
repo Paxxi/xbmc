@@ -17,23 +17,24 @@
 class CAESinkOSS : public IAESink
 {
 public:
-  const char *GetName() override { return "OSS"; }
+  const char* GetName() override { return "OSS"; }
 
   CAESinkOSS();
   ~CAESinkOSS() override;
 
   static void Register();
-  static IAESink* Create(std::string &device, AEAudioFormat &desiredFormat);
-  static void EnumerateDevicesEx(AEDeviceInfoList &list, bool force = false);
+  static IAESink* Create(std::string& device, AEAudioFormat& desiredFormat);
+  static void EnumerateDevicesEx(AEDeviceInfoList& list, bool force = false);
 
-  bool Initialize(AEAudioFormat &format, std::string &device) override;
+  bool Initialize(AEAudioFormat& format, std::string& device) override;
   void Deinitialize() override;
 
   virtual void Stop();
   void GetDelay(AEDelayStatus& status) override;
   double GetCacheTotal() override { return 0.0; } /* FIXME */
-  unsigned int AddPackets(uint8_t **data, unsigned int frames, unsigned int offset) override;
+  unsigned int AddPackets(uint8_t** data, unsigned int frames, unsigned int offset) override;
   void Drain() override;
+
 private:
   int m_fd;
   std::string m_device;
@@ -41,6 +42,5 @@ private:
   AEAudioFormat m_format;
 
   CAEChannelInfo GetChannelLayout(const AEAudioFormat& format);
-  std::string GetDeviceUse(const AEAudioFormat& format, const std::string &device);
+  std::string GetDeviceUse(const AEAudioFormat& format, const std::string& device);
 };
-

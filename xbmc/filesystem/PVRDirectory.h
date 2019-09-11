@@ -10,16 +10,16 @@
 
 #include "IDirectory.h"
 
-namespace XFILE {
+namespace XFILE
+{
 
-class CPVRDirectory
-  : public IDirectory
+class CPVRDirectory : public IDirectory
 {
 public:
   CPVRDirectory();
   ~CPVRDirectory() override;
 
-  bool GetDirectory(const CURL& url, CFileItemList &items) override;
+  bool GetDirectory(const CURL& url, CFileItemList& items) override;
   bool AllowAll() const override { return true; }
   DIR_CACHE_TYPE GetCacheType(const CURL& url) const override { return DIR_CACHE_NEVER; };
   bool Exists(const CURL& url) override;
@@ -32,4 +32,4 @@ public:
   static bool HasDeletedRadioRecordings();
 };
 
-}
+} // namespace XFILE

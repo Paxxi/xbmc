@@ -23,14 +23,14 @@ public:
    \param[in] item Item to be marked as watched/unwatched
    \param[in] mark Whether to mark the item as watched or unwatched
   */
-  CVideoLibraryMarkWatchedJob(const CFileItemPtr &item, bool mark);
+  CVideoLibraryMarkWatchedJob(const CFileItemPtr& item, bool mark);
   ~CVideoLibraryMarkWatchedJob() override;
 
-  const char *GetType() const override { return "CVideoLibraryMarkWatchedJob"; }
+  const char* GetType() const override { return "CVideoLibraryMarkWatchedJob"; }
   bool operator==(const CJob* job) const override;
 
 protected:
-  bool Work(CVideoDatabase &db) override;
+  bool Work(CVideoDatabase& db) override;
 
 private:
   CFileItemPtr m_item;

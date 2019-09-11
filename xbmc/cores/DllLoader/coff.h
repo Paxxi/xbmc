@@ -23,11 +23,11 @@
  *  Some general purpose MACROs
  */
 
-#define VERSION_MAJOR(x)    ((unsigned int)((x)& 0xff))
-#define VERSION_MINOR(x)    ((unsigned int)(((x)>8) &0xff))
+#define VERSION_MAJOR(x) ((unsigned int)((x)&0xff))
+#define VERSION_MINOR(x) ((unsigned int)(((x) > 8) & 0xff))
 
-#define BIGVERSION_MAJOR(x)    ((unsigned int)((x)& 0xffff))
-#define BIGVERSION_MINOR(x)    ((unsigned int)(((x)>16) &0xffff))
+#define BIGVERSION_MAJOR(x) ((unsigned int)((x)&0xffff))
+#define BIGVERSION_MINOR(x) ((unsigned int)(((x) > 16) & 0xffff))
 
 /*
  *      COFF File Header (Object & Image)
@@ -36,15 +36,14 @@
 
 typedef struct
 {
-  unsigned short MachineType;            /* magic type               */
-  unsigned short NumberOfSections;       /* number of sections       */
-  unsigned long TimeDateStamp;          /* time & date stamp        */
-  unsigned long PointerToSymbolTable;   /* file pointer to symtab   */
-  unsigned long NumberOfSymbols;        /* number of symtab entries */
-  unsigned short SizeOfOptionHeader;     /* sizeof(optional hdr)     */
-  unsigned short Characteristics;        /* flags                    */
-}
-COFF_FileHeader_t;
+  unsigned short MachineType; /* magic type               */
+  unsigned short NumberOfSections; /* number of sections       */
+  unsigned long TimeDateStamp; /* time & date stamp        */
+  unsigned long PointerToSymbolTable; /* file pointer to symtab   */
+  unsigned long NumberOfSymbols; /* number of symtab entries */
+  unsigned short SizeOfOptionHeader; /* sizeof(optional hdr)     */
+  unsigned short Characteristics; /* flags                    */
+} COFF_FileHeader_t;
 
 /*
  *      Machine Types
@@ -55,38 +54,36 @@ COFF_FileHeader_t;
 #if 1
 
 #ifndef IMAGE_FILE_MACHINE_I386
-#define IMAGE_FILE_MACHINE_I386     0x14c
+#define IMAGE_FILE_MACHINE_I386 0x14c
 #endif
 
 
-
-#define IMAGE_FILE_RELOCS_STRIPPED                  0x0001
-#define IMAGE_FILE_EXECUTABLE_IMAGE                 0x0002
-#define IMAGE_FILE_LINE_NUMS_STRIPPED               0x0004
-#define IMAGE_FILE_LOCAL_SYMS_STRIPPED              0x0008
-#define IMAGE_FILE_AGGRESSIVE_WS_TRIM               0x0010
-#define IMAGE_FILE_LARGE_ADDRESS_AWARE              0x0020
-#define IMAGE_FILE_16BIT_MACHINE                    0x0040
-#define IMAGE_FILE_BYTES_REVERSED_LO                0x0080
-#define IMAGE_FILE_32BIT_MACHINE                    0x0100
-#define IMAGE_FILE_DEBUG_STRIPPED                   0x0200
-#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP          0x0400
-#define IMAGE_FILE_SYSTEM                           0x1000
-#define IMAGE_FILE_DLL                              0x2000
-#define IMAGE_FILE_UP_SYSTEM_ONLY                   0x4000
-#define IMAGE_FILE_BYTES_REVERSED_HI                0x8000
+#define IMAGE_FILE_RELOCS_STRIPPED 0x0001
+#define IMAGE_FILE_EXECUTABLE_IMAGE 0x0002
+#define IMAGE_FILE_LINE_NUMS_STRIPPED 0x0004
+#define IMAGE_FILE_LOCAL_SYMS_STRIPPED 0x0008
+#define IMAGE_FILE_AGGRESSIVE_WS_TRIM 0x0010
+#define IMAGE_FILE_LARGE_ADDRESS_AWARE 0x0020
+#define IMAGE_FILE_16BIT_MACHINE 0x0040
+#define IMAGE_FILE_BYTES_REVERSED_LO 0x0080
+#define IMAGE_FILE_32BIT_MACHINE 0x0100
+#define IMAGE_FILE_DEBUG_STRIPPED 0x0200
+#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP 0x0400
+#define IMAGE_FILE_SYSTEM 0x1000
+#define IMAGE_FILE_DLL 0x2000
+#define IMAGE_FILE_UP_SYSTEM_ONLY 0x4000
+#define IMAGE_FILE_BYTES_REVERSED_HI 0x8000
 
 #endif
 
 
+#define OPTMAGIC_PE32 0x010b
+#define OPTMAGIC_PE32P 0x020b
 
-#define OPTMAGIC_PE32   0x010b
-#define OPTMAGIC_PE32P  0x020b
-
-#define OPTHDR_SIZE     28
-#define OPTHDR_SIZEP    24
-#define WINHDR_SIZE     68
-#define WINHDR_SIZEP    88
+#define OPTHDR_SIZE 28
+#define OPTHDR_SIZEP 24
+#define WINHDR_SIZE 68
+#define WINHDR_SIZEP 88
 
 /*
  *      Optional Header Standard Fields (Image Only)
@@ -103,8 +100,7 @@ typedef struct
   unsigned long Entry;
   unsigned long CodeBase;
   unsigned long DataBase;
-}
-OptionHeader_t;
+} OptionHeader_t;
 
 typedef struct
 {
@@ -115,8 +111,7 @@ typedef struct
   unsigned long BssSize;
   unsigned long Entry;
   unsigned long CodeBase;
-}
-OptionHeaderPlus_t;
+} OptionHeaderPlus_t;
 
 /*
  *      Optional Header Windows NT-Specific Fields (Image Only)
@@ -143,8 +138,7 @@ typedef struct
   unsigned long SizeOfHeapCommit;
   unsigned long LoaderFlags;
   unsigned long NumDirectories;
-}
-WindowsHeader_t;
+} WindowsHeader_t;
 
 typedef struct
 {
@@ -166,8 +160,7 @@ typedef struct
   unsigned long long SizeOfHeapCommit;
   unsigned long LoaderFlags;
   unsigned long NumDirectories;
-}
-WindowsHeaderPlus_t;
+} WindowsHeaderPlus_t;
 
 /*
 #define IMAGE_SUBSYSTEM_UNKNOWN                     0
@@ -194,10 +187,10 @@ typedef struct
 {
   unsigned long RVA;
   unsigned long Size;
-}
-Image_Data_Directory_t;
+} Image_Data_Directory_t;
 
-enum Directory_Items {
+enum Directory_Items
+{
   EXPORT_TABLE = 0,
   IMPORT_TABLE,
   RESOURCE_TABLE,
@@ -234,43 +227,42 @@ typedef struct
   unsigned short NumRelocations;
   unsigned short NumLineNumbers;
   unsigned long Characteristics;
-}
-SectionHeader_t;
+} SectionHeader_t;
 
 /*
  *      Section Flags (Characteristics)
  *          Spec section 4.1
  */
 
-#define IMAGE_SCN_CNT_CODE          0x00000020
-#define IMAGE_SCN_CNT_DATA          0x00000040
-#define IMAGE_SCN_CNT_BSS           0x00000080
-#define IMAGE_SCN_LNK_INFO          0x00000200
-#define IMAGE_SCN_LNK_REMOVE        0x00000800
-#define IMAGE_SCN_LNK_COMDAT        0x00001000
-#define IMAGE_SCN_ALIGN_1BYTES      0x00100000
-#define IMAGE_SCN_ALIGN_2BYTES      0x00200000
-#define IMAGE_SCN_ALIGN_4BYTES      0x00300000
-#define IMAGE_SCN_ALIGN_8BYTES      0x00400000
-#define IMAGE_SCN_ALIGN_16BYTES     0x00500000
-#define IMAGE_SCN_ALIGN_32BYTES     0x00600000
-#define IMAGE_SCN_ALIGN_64BYTES     0x00700000
-#define IMAGE_SCN_ALIGN_128BYTES    0x00800000
-#define IMAGE_SCN_ALIGN_256BYTES    0x00900000
-#define IMAGE_SCN_ALIGN_512BYTES    0x00A00000
-#define IMAGE_SCN_ALIGN_1024BYTES   0x00B00000
-#define IMAGE_SCN_ALIGN_2048BYTES   0x00C00000
-#define IMAGE_SCN_ALIGN_4096BYTES   0x00D00000
-#define IMAGE_SCN_ALIGN_8192BYTES   0x00E00000
-#define IMAGE_SCN_ALIGN_MASK        0x00F00000
-#define IMAGE_SCN_LNK_NRELOC_OVFL   0x01000000
-#define IMAGE_SCN_MEM_DISCARDABLE   0x02000000
-#define IMAGE_SCN_MEM_NOT_CACHED    0x04000000
-#define IMAGE_SCN_MEM_NOT_PAGED     0x08000000
-#define IMAGE_SCN_MEM_SHARED        0x10000000
-#define IMAGE_SCN_MEM_EXECUTE       0x20000000
-#define IMAGE_SCN_MEM_READ          0x40000000
-#define IMAGE_SCN_MEM_WRITE         0x80000000
+#define IMAGE_SCN_CNT_CODE 0x00000020
+#define IMAGE_SCN_CNT_DATA 0x00000040
+#define IMAGE_SCN_CNT_BSS 0x00000080
+#define IMAGE_SCN_LNK_INFO 0x00000200
+#define IMAGE_SCN_LNK_REMOVE 0x00000800
+#define IMAGE_SCN_LNK_COMDAT 0x00001000
+#define IMAGE_SCN_ALIGN_1BYTES 0x00100000
+#define IMAGE_SCN_ALIGN_2BYTES 0x00200000
+#define IMAGE_SCN_ALIGN_4BYTES 0x00300000
+#define IMAGE_SCN_ALIGN_8BYTES 0x00400000
+#define IMAGE_SCN_ALIGN_16BYTES 0x00500000
+#define IMAGE_SCN_ALIGN_32BYTES 0x00600000
+#define IMAGE_SCN_ALIGN_64BYTES 0x00700000
+#define IMAGE_SCN_ALIGN_128BYTES 0x00800000
+#define IMAGE_SCN_ALIGN_256BYTES 0x00900000
+#define IMAGE_SCN_ALIGN_512BYTES 0x00A00000
+#define IMAGE_SCN_ALIGN_1024BYTES 0x00B00000
+#define IMAGE_SCN_ALIGN_2048BYTES 0x00C00000
+#define IMAGE_SCN_ALIGN_4096BYTES 0x00D00000
+#define IMAGE_SCN_ALIGN_8192BYTES 0x00E00000
+#define IMAGE_SCN_ALIGN_MASK 0x00F00000
+#define IMAGE_SCN_LNK_NRELOC_OVFL 0x01000000
+#define IMAGE_SCN_MEM_DISCARDABLE 0x02000000
+#define IMAGE_SCN_MEM_NOT_CACHED 0x04000000
+#define IMAGE_SCN_MEM_NOT_PAGED 0x08000000
+#define IMAGE_SCN_MEM_SHARED 0x10000000
+#define IMAGE_SCN_MEM_EXECUTE 0x20000000
+#define IMAGE_SCN_MEM_READ 0x40000000
+#define IMAGE_SCN_MEM_WRITE 0x80000000
 
 /*
  *      COFF Relocations (Object Only)
@@ -282,23 +274,22 @@ typedef struct
   unsigned long VirtualAddress;
   unsigned long SymTableIndex;
   unsigned short Type;
-}
-ObjReloc_t;
+} ObjReloc_t;
 
 /*
  *      COFF Relocation Type Indicators
  *          Spec section 5.2.1
  */
 
-#define IMAGE_REL_I386_ABSOLUTE     0x0000
-#define IMAGE_REL_I386_DIR16        0x0001
-#define IMAGE_REL_I386_REL16        0x0002
-#define IMAGE_REL_I386_DIR32        0x0006
-#define IMAGE_REL_I386_DIR32NB      0x0007
-#define IMAGE_REL_I386_SEG12        0x0009
-#define IMAGE_REL_I386_SECTION      0x000A
-#define IMAGE_REL_I386_SECREL       0x000B
-#define IMAGE_REL_I386_REL32        0x0014
+#define IMAGE_REL_I386_ABSOLUTE 0x0000
+#define IMAGE_REL_I386_DIR16 0x0001
+#define IMAGE_REL_I386_REL16 0x0002
+#define IMAGE_REL_I386_DIR32 0x0006
+#define IMAGE_REL_I386_DIR32NB 0x0007
+#define IMAGE_REL_I386_SEG12 0x0009
+#define IMAGE_REL_I386_SECTION 0x000A
+#define IMAGE_REL_I386_SECREL 0x000B
+#define IMAGE_REL_I386_REL32 0x0014
 
 /*
  *      COFF Line Numbers
@@ -312,8 +303,7 @@ typedef struct
     unsigned long VirtualAddress;
   } Type;
   unsigned short LineNum;
-}
-LineNumbers_t;
+} LineNumbers_t;
 
 /*
  *      COFF Symbol Table
@@ -331,65 +321,64 @@ typedef struct
   unsigned short Type;
   unsigned char StorageClass;
   unsigned char NumberOfAuxSymbols;
-}
-SymbolTable_t;
+} SymbolTable_t;
 
 #if !defined(TARGET_WINDOWS)
 
-#define IMAGE_SYM_UNDEFINED     0
-#define IMAGE_SYM_ABSOLUTE      0xFFFF
-#define IMAGE_SYM_DEBUG         0xFFFE
+#define IMAGE_SYM_UNDEFINED 0
+#define IMAGE_SYM_ABSOLUTE 0xFFFF
+#define IMAGE_SYM_DEBUG 0xFFFE
 
 
-#define IMAGE_SYM_TYPE_NULL         0
-#define IMAGE_SYM_TYPE_VOID         1
-#define IMAGE_SYM_TYPE_CHAR         2
-#define IMAGE_SYM_TYPE_SHORT        3
-#define IMAGE_SYM_TYPE_INT          4
-#define IMAGE_SYM_TYPE_LONG         5
-#define IMAGE_SYM_TYPE_FLOAT        6
-#define IMAGE_SYM_TYPE_DOUBLE       7
-#define IMAGE_SYM_TYPE_STRUCT       8
-#define IMAGE_SYM_TYPE_UNION        9
-#define IMAGE_SYM_TYPE_ENUM         10
-#define IMAGE_SYM_TYPE_MOE          11
-#define IMAGE_SYM_TYPE_BYTE         12
-#define IMAGE_SYM_TYPE_WORD         13
-#define IMAGE_SYM_TYPE_UINT         14
-#define IMAGE_SYM_TYPE_DWORD        15
+#define IMAGE_SYM_TYPE_NULL 0
+#define IMAGE_SYM_TYPE_VOID 1
+#define IMAGE_SYM_TYPE_CHAR 2
+#define IMAGE_SYM_TYPE_SHORT 3
+#define IMAGE_SYM_TYPE_INT 4
+#define IMAGE_SYM_TYPE_LONG 5
+#define IMAGE_SYM_TYPE_FLOAT 6
+#define IMAGE_SYM_TYPE_DOUBLE 7
+#define IMAGE_SYM_TYPE_STRUCT 8
+#define IMAGE_SYM_TYPE_UNION 9
+#define IMAGE_SYM_TYPE_ENUM 10
+#define IMAGE_SYM_TYPE_MOE 11
+#define IMAGE_SYM_TYPE_BYTE 12
+#define IMAGE_SYM_TYPE_WORD 13
+#define IMAGE_SYM_TYPE_UINT 14
+#define IMAGE_SYM_TYPE_DWORD 15
 
-#define IMAGE_SYM_DWORD_NULL        0
-#define IMAGE_SYM_DWORD_POINTER     1
-#define IMAGE_SYM_DWORD_FUNCTION    2
-#define IMAGE_SYM_DWORD_ARRAY       3
+#define IMAGE_SYM_DWORD_NULL 0
+#define IMAGE_SYM_DWORD_POINTER 1
+#define IMAGE_SYM_DWORD_FUNCTION 2
+#define IMAGE_SYM_DWORD_ARRAY 3
 
 
-#define IMAGE_SYM_CLASS_END_OF_FUNCTION         0xFF
-#define IMAGE_SYM_CLASS_NULL                    0
-#define IMAGE_SYM_CLASS_AUTOMATIC               1
-#define IMAGE_SYM_CLASS_EXTERNAL                2
-#define IMAGE_SYM_CLASS_STATIC                  3
-#define IMAGE_SYM_CLASS_REGISTER                4
-#define IMAGE_SYM_CLASS_EXTERNAL_DEF            5
-#define IMAGE_SYM_CLASS_LABEL                   6
-#define IMAGE_SYM_CLASS_UNDEFINED_LABEL         7
-#define IMAGE_SYM_CLASS_MEMBER_OF_STRUCT        8
-#define IMAGE_SYM_CLASS_ARGUMENT                9
-#define IMAGE_SYM_CLASS_STRUCT_TAG              10
-#define IMAGE_SYM_CLASS_MEMBER_OF_UNION         11
-#define IMAGE_SYM_CLASS_UNION_TAG               12
-#define IMAGE_SYM_CLASS_TYPE_DEFINITION         13
-#define IMAGE_SYM_CLASS_UNDEFINED_STATIC        14
-#define IMAGE_SYM_CLASS_ENUM_TAG                15
-#define IMAGE_SYM_CLASS_MEMBER_OF_ENUM          16
-#define IMAGE_SYM_CLASS_REGISTER_PARAM          17
-#define IMAGE_SYM_CLASS_BIT_FIELD               18
-#define IMAGE_SYM_CLASS_BLOCK                   100
-#define IMAGE_SYM_CLASS_FUNCTION                101
-#define IMAGE_SYM_CLASS_END_OF_STRUCT           102
-#define IMAGE_SYM_CLASS_FILE                    103
-#define IMAGE_SYM_CLASS_SECTION                 104
-#define IMAGE_SYM_CLASS_WEAK_EXTERNAL           105
+#define IMAGE_SYM_CLASS_END_OF_FUNCTION 0xFF
+#define IMAGE_SYM_CLASS_NULL 0
+#define IMAGE_SYM_CLASS_AUTOMATIC 1
+#define IMAGE_SYM_CLASS_EXTERNAL 2
+#define IMAGE_SYM_CLASS_STATIC 3
+#define IMAGE_SYM_CLASS_REGISTER 4
+#define IMAGE_SYM_CLASS_EXTERNAL_DEF 5
+#define IMAGE_SYM_CLASS_LABEL 6
+#define IMAGE_SYM_CLASS_UNDEFINED_LABEL 7
+#define IMAGE_SYM_CLASS_MEMBER_OF_STRUCT 8
+#define IMAGE_SYM_CLASS_ARGUMENT 9
+#define IMAGE_SYM_CLASS_STRUCT_TAG 10
+#define IMAGE_SYM_CLASS_MEMBER_OF_UNION 11
+#define IMAGE_SYM_CLASS_UNION_TAG 12
+#define IMAGE_SYM_CLASS_TYPE_DEFINITION 13
+#define IMAGE_SYM_CLASS_UNDEFINED_STATIC 14
+#define IMAGE_SYM_CLASS_ENUM_TAG 15
+#define IMAGE_SYM_CLASS_MEMBER_OF_ENUM 16
+#define IMAGE_SYM_CLASS_REGISTER_PARAM 17
+#define IMAGE_SYM_CLASS_BIT_FIELD 18
+#define IMAGE_SYM_CLASS_BLOCK 100
+#define IMAGE_SYM_CLASS_FUNCTION 101
+#define IMAGE_SYM_CLASS_END_OF_STRUCT 102
+#define IMAGE_SYM_CLASS_FILE 103
+#define IMAGE_SYM_CLASS_SECTION 104
+#define IMAGE_SYM_CLASS_WEAK_EXTERNAL 105
 #endif
 
 typedef struct
@@ -399,8 +388,7 @@ typedef struct
   unsigned long PtrToLineNumber;
   unsigned long PtrToNextFunc;
   unsigned short unused;
-}
-AuxFuncDef_t;
+} AuxFuncDef_t;
 
 /*
  *      Symbol Auxiliary Record: .bf and .ef
@@ -415,8 +403,7 @@ typedef struct
   unsigned short unused2;
   unsigned long PtrToNextFunc;
   unsigned char unused3;
-}
-AuxBfEf_t;
+} AuxBfEf_t;
 
 /*
  *      Export Section (Directory)
@@ -441,8 +428,7 @@ typedef struct
   unsigned long ExportAddressTable_RVA;
   unsigned long NamePointerTable_RVA;
   unsigned long OrdinalTable_RVA;
-}
-ExportDirTable_t;
+} ExportDirTable_t;
 
 
 /*
@@ -462,8 +448,7 @@ typedef struct
   unsigned long ForwarderChain;
   unsigned long Name_RVA;
   unsigned long ImportAddressTable_RVA;
-}
-ImportDirTable_t;
+} ImportDirTable_t;
 
 /*
  *      .reloc Relocation types
@@ -471,21 +456,18 @@ ImportDirTable_t;
  */
 
 #if 1
-#define IMAGE_REL_BASED_ABSOLUTE        0
-#define IMAGE_REL_BASED_HIGH            1
-#define IMAGE_REL_BASED_LOW             2
-#define IMAGE_REL_BASED_HIGHLOW         3
-#define IMAGE_REL_BASED_HIGHADJ         4
-#define IMAGE_REL_BASED_MIPS_JMPADDR    5
-#define IMAGE_REL_BASED_SECTION         6
-#define IMAGE_REL_BASED_REL32           7
-#define IMAGE_REL_BASED_MIPS_JMPADDR16  9
-#define IMAGE_REL_BASED_DIR64           10
-#define IMAGE_REL_BASED_HIGH3ADJ        11
+#define IMAGE_REL_BASED_ABSOLUTE 0
+#define IMAGE_REL_BASED_HIGH 1
+#define IMAGE_REL_BASED_LOW 2
+#define IMAGE_REL_BASED_HIGHLOW 3
+#define IMAGE_REL_BASED_HIGHADJ 4
+#define IMAGE_REL_BASED_MIPS_JMPADDR 5
+#define IMAGE_REL_BASED_SECTION 6
+#define IMAGE_REL_BASED_REL32 7
+#define IMAGE_REL_BASED_MIPS_JMPADDR16 9
+#define IMAGE_REL_BASED_DIR64 10
+#define IMAGE_REL_BASED_HIGH3ADJ 11
 #endif
 
 
-
-
 #pragma pack()
-

@@ -31,14 +31,14 @@ using namespace KODI::MESSAGING;
  */
 static int LoadProfile(const std::vector<std::string>& params)
 {
-  const std::shared_ptr<CProfileManager> profileManager = CServiceBroker::GetSettingsComponent()->GetProfileManager();
+  const std::shared_ptr<CProfileManager> profileManager =
+      CServiceBroker::GetSettingsComponent()->GetProfileManager();
 
   int index = profileManager->GetProfileIndex(params[0]);
   bool prompt = (params.size() == 2 && StringUtils::EqualsNoCase(params[1], "prompt"));
   bool bCanceled;
-  if (index >= 0
-      && (profileManager->GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE
-        || g_passwordManager.IsProfileLockUnlocked(index,bCanceled,prompt)))
+  if (index >= 0 && (profileManager->GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
+                     g_passwordManager.IsProfileLockUnlocked(index, bCanceled, prompt)))
   {
     CApplicationMessenger::GetInstance().PostMsg(TMSG_LOADPROFILE, index);
   }
@@ -51,7 +51,8 @@ static int LoadProfile(const std::vector<std::string>& params)
  */
 static int LogOff(const std::vector<std::string>& params)
 {
-  const std::shared_ptr<CProfileManager> profileManager = CServiceBroker::GetSettingsComponent()->GetProfileManager();
+  const std::shared_ptr<CProfileManager> profileManager =
+      CServiceBroker::GetSettingsComponent()->GetProfileManager();
   profileManager->LogOff();
 
   return 0;
@@ -66,13 +67,15 @@ static int MasterMode(const std::vector<std::string>& params)
   {
     g_passwordManager.bMasterUser = false;
     g_passwordManager.LockSources(true);
-    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, g_localizeStrings.Get(20052),g_localizeStrings.Get(20053));
+    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, g_localizeStrings.Get(20052),
+                                          g_localizeStrings.Get(20053));
   }
   else if (g_passwordManager.IsMasterLockUnlocked(true))
   {
     g_passwordManager.LockSources(false);
     g_passwordManager.bMasterUser = true;
-    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, g_localizeStrings.Get(20052),g_localizeStrings.Get(20054));
+    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Warning, g_localizeStrings.Get(20052),
+                                          g_localizeStrings.Get(20054));
   }
 
   CUtil::DeleteVideoDatabaseDirectoryCache();
@@ -120,8 +123,8 @@ static int MasterMode(const std::vector<std::string>& params)
 CBuiltins::CommandMap CProfileBuiltins::GetOperations() const
 {
   return {
-           {"loadprofile",   {"Load the specified profile (note; if locks are active it won't work)", 1, LoadProfile}},
-           {"mastermode",    {"Control master mode", 0, MasterMode}},
-           {"system.logoff", {"Log off current user", 0, LogOff}}
-         };
+      {"loadprofile",
+       {"Load the specified profile (note; if locks are active it won't work)", 1, LoadProfile}},
+      {"mastermode", {"Control master mode", 0, MasterMode}},
+      {"system.logoff", {"Log off current user", 0, LogOff}}};
 }

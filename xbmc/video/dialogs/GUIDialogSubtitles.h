@@ -32,33 +32,40 @@ public:
   void OnInitWindow() override;
 
 protected:
-  void Process(unsigned int currentTime, CDirtyRegionList &dirtyregions) override;
-  void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+  void Process(unsigned int currentTime, CDirtyRegionList& dirtyregions) override;
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job) override;
 
-  bool SetService(const std::string &service);
+  bool SetService(const std::string& service);
   const CFileItemPtr GetService() const;
   void FillServices();
   void ClearServices();
   void ClearSubtitles();
 
-  enum STATUS { NO_SERVICES = 0, SEARCHING, SEARCH_COMPLETE, DOWNLOADING };
+  enum STATUS
+  {
+    NO_SERVICES = 0,
+    SEARCHING,
+    SEARCH_COMPLETE,
+    DOWNLOADING
+  };
   void UpdateStatus(STATUS status);
 
-  void Search(const std::string &search="");
-  void OnSearchComplete(const CFileItemList *items);
+  void Search(const std::string& search = "");
+  void OnSearchComplete(const CFileItemList* items);
 
-  void Download(const CFileItem &subtitle);
-  void OnDownloadComplete(const CFileItemList *items, const std::string &language);
+  void Download(const CFileItem& subtitle);
+  void OnDownloadComplete(const CFileItemList* items, const std::string& language);
 
-  void SetSubtitles(const std::string &subtitle);
+  void SetSubtitles(const std::string& subtitle);
 
   CCriticalSection m_critsection;
   CFileItemList* m_subtitles;
   CFileItemList* m_serviceItems;
-  std::string    m_currentService;
-  std::string    m_status;
-  std::string     m_strManualSearch;
-  bool           m_pausedOnRun = false;
-  bool           m_updateSubsList = false; ///< true if we need to update our subs list
-  std::string     m_LastAutoDownloaded; ///< Last video file path which automatically downloaded subtitle
+  std::string m_currentService;
+  std::string m_status;
+  std::string m_strManualSearch;
+  bool m_pausedOnRun = false;
+  bool m_updateSubsList = false; ///< true if we need to update our subs list
+  std::string
+      m_LastAutoDownloaded; ///< Last video file path which automatically downloaded subtitle
 };
