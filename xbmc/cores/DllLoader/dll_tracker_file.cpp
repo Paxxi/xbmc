@@ -8,7 +8,7 @@
 
 #include "dll_tracker_file.h"
 
-#include "DllLoader.h"
+#include "LibraryLoader.h"
 #include "dll_tracker.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"

@@ -8,7 +8,7 @@
 
 #include "dll_tracker.h"
 
-#include "DllLoader.h"
+#include "LibraryLoader.h"
 #include "dll_tracker_file.h"
 #include "dll_tracker_library.h"
 #include "threads/SingleLock.h"
@@ -24,7 +24,7 @@ extern "C"
   CCriticalSection g_trackerLock;
   TrackedDllList g_trackedDlls;
 
-  void tracker_dll_add(DllLoader* pDll)
+  void tracker_dll_add(LibraryLoader* pDll)
   {
     DllTrackInfo* trackInfo = new DllTrackInfo;
     trackInfo->pDll = pDll;
@@ -34,7 +34,7 @@ extern "C"
     g_trackedDlls.push_back(trackInfo);
   }
 
-  void tracker_dll_free(DllLoader* pDll)
+  void tracker_dll_free(LibraryLoader* pDll)
   {
     CSingleLock locktd(g_trackerLock);
     for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end();)
@@ -71,7 +71,7 @@ extern "C"
     }
   }
 
-  void tracker_dll_set_addr(DllLoader* pDll, uintptr_t min, uintptr_t max)
+  void tracker_dll_set_addr(LibraryLoader* pDll, uintptr_t min, uintptr_t max)
   {
     CSingleLock locktd(g_trackerLock);
     for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)
@@ -117,7 +117,7 @@ extern "C"
     return NULL;
   }
 
-  DllTrackInfo* tracker_get_dlltrackinfo_byobject(DllLoader* pDll)
+  DllTrackInfo* tracker_get_dlltrackinfo_byobject(LibraryLoader* pDll)
   {
     CSingleLock locktd(g_trackerLock);
     for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)
@@ -130,7 +130,7 @@ extern "C"
     return NULL;
   }
 
-  void tracker_dll_data_track(DllLoader* pDll, uintptr_t addr)
+  void tracker_dll_data_track(LibraryLoader* pDll, uintptr_t addr)
   {
     CSingleLock locktd(g_trackerLock);
     for (TrackedDllsIter it = g_trackedDlls.begin(); it != g_trackedDlls.end(); ++it)

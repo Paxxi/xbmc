@@ -8,8 +8,8 @@
 
 #include "dll.h"
 
-#include "DllLoader.h"
 #include "DllLoaderContainer.h"
+#include "LibraryLoader.h"
 #include "dll_tracker.h"
 #include "dll_util.h"
 #include "filesystem/SpecialProtocol.h"

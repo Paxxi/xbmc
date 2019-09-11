@@ -13,7 +13,6 @@
 #ifdef TARGET_WINDOWS
 #include "Win32DllLoader.h"
 #endif
-#include "DllLoader.h"
 #include "URL.h"
 #include "dll_tracker.h" // for python unload hack
 #include "filesystem/File.h"
@@ -248,8 +247,6 @@ LibraryLoader* DllLoaderContainer::LoadDll(const char* sName, bool bLoadSymbols)
   pLoader = new SoLoader(sName, bLoadSymbols);
 #elif defined(TARGET_WINDOWS)
   pLoader = new Win32DllLoader(sName, false);
-#else
-  pLoader = new DllLoader(sName, m_bTrack, false, bLoadSymbols);
 #endif
 
   if (!pLoader)
