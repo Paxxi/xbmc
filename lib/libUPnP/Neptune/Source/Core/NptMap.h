@@ -504,7 +504,7 @@ template <typename K, typename V, typename HF>
 void
 NPT_HashMap<K,V,HF>::AllocateBuckets(unsigned int count_log)
 {
-    m_Buckets = new Entry*[1<<count_log];
+    m_Buckets = new Entry*[size_t(1)<<count_log];
     m_BucketCountLog = count_log;
     for (int i=0; i<(1<<count_log); i++) {
         m_Buckets[i] = NULL;

@@ -22,6 +22,7 @@
 /*----------------------------------------------------------------------
 |   NPT_DebugOutput
 +---------------------------------------------------------------------*/
+#if defined(TARGET_WINDOWS)
 void
 NPT_DebugOutput(const char* message)
 {
@@ -37,4 +38,4 @@ NPT_DebugOutput(const char* message)
 
   OutputDebugString(newStr.get());
 }
-
+#endif

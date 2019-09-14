@@ -23,8 +23,10 @@
 /*----------------------------------------------------------------------
 |       NPT_DebugOuput
 +---------------------------------------------------------------------*/
+#if defined(TARGET_POSIX)
 void
 NPT_DebugOutput(const char* message)
 {
     printf("%s", message);
 }
+#endif

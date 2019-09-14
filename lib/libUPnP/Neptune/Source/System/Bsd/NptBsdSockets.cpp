@@ -131,21 +131,6 @@ static NPT_WinsockSystem& WinsockInitializer = NPT_WinsockSystem::Initializer;
 #undef SetPort
 #endif
 
-#define EWOULDBLOCK  WSAEWOULDBLOCK
-#define EINPROGRESS  WSAEINPROGRESS
-#define ECONNREFUSED WSAECONNREFUSED
-#define ECONNABORTED WSAECONNABORTED
-#define ECONNRESET   WSAECONNRESET
-#define ETIMEDOUT    WSAETIMEDOUT
-#define ENETRESET    WSAENETRESET
-#define EADDRINUSE   WSAEADDRINUSE
-#define ENETDOWN     WSAENETDOWN
-#define ENETUNREACH  WSAENETUNREACH
-#define ENOTCONN     WSAENOTCONN
-#if !defined(EAGAIN)
-#define EAGAIN       WSAEWOULDBLOCK 
-#define EINTR        WSAEINTR
-#endif
 #if !defined(SHUT_RDWR)
 #define SHUT_RDWR SD_BOTH 
 #endif
@@ -440,6 +425,54 @@ InetAddressToSocketAddress(const NPT_sockaddr_in& inet_address,
 /*----------------------------------------------------------------------
 |   MapErrorCode
 +---------------------------------------------------------------------*/
+#if defined(TARGET_WINDOWS)
+static NPT_Result 
+MapErrorCode(int error)
+{
+    switch (error) {
+        case WSAECONNRESET:
+        case WSAENETRESET:
+            return NPT_ERROR_CONNECTION_RESET;
+
+        case WSAECONNABORTED:
+            return NPT_ERROR_CONNECTION_ABORTED;
+
+        case WSAECONNREFUSED:
+            return NPT_ERROR_CONNECTION_REFUSED;
+
+        case WSAETIMEDOUT:
+            return NPT_ERROR_TIMEOUT;
+
+        case WSAEADDRINUSE:
+            return NPT_ERROR_ADDRESS_IN_USE;
+
+        case WSAENETDOWN:
+            return NPT_ERROR_NETWORK_DOWN;
+
+        case WSAENETUNREACH:
+            return NPT_ERROR_NETWORK_UNREACHABLE;
+            
+        case WSAEHOSTUNREACH:
+            return NPT_ERROR_HOST_UNREACHABLE;
+
+        case WSAEINPROGRESS:
+        case WSAEWOULDBLOCK:
+            return NPT_ERROR_WOULD_BLOCK;
+
+        case WSAENOTCONN:
+            return NPT_ERROR_NOT_CONNECTED;
+
+        case WSAEINTR:
+            return NPT_ERROR_INTERRUPTED;
+
+        case WSAEACCES:
+            return NPT_ERROR_PERMISSION_DENIED;
+
+        default:
+            return NPT_ERROR_ERRNO(error);
+    }
+}
+#else
 static NPT_Result 
 MapErrorCode(int error)
 {
@@ -500,6 +533,7 @@ MapErrorCode(int error)
             return NPT_ERROR_ERRNO(error);
     }
 }
+#endif
 
 #if defined(_XBOX)
 
@@ -869,7 +903,7 @@ NPT_BsdSocketFd::WaitForCondition(bool        wait_for_readable,
 {
     // wait for incoming connection
     NPT_Result result = NPT_SUCCESS;
-    int        max_fd = (int)m_SocketFd;
+    int        max_fd = static_cast<int>(m_SocketFd);
     fd_set read_set;
     fd_set write_set;
     fd_set except_set;
@@ -885,7 +919,8 @@ NPT_BsdSocketFd::WaitForCondition(bool        wait_for_readable,
     
     // setup the cancel fd
     if (m_Cancellable && timeout) {
-        if ((int)m_CancelFds[1] > max_fd) max_fd = m_CancelFds[1];
+      if (static_cast<int>(m_CancelFds[1]) > max_fd)
+        max_fd = static_cast<int>(m_CancelFds[1]);
         FD_SET(m_CancelFds[1], &read_set);
     }
     
