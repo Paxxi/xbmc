@@ -453,7 +453,7 @@ CCdInfo* CMediaManager::GetCdInfo(const std::string& devicePath)
   }
 
   CCdInfo* pCdInfo = NULL;
-  CCdIoSupport cdio;
+  CLibcdio cdio;
   pCdInfo = cdio.GetCdInfo((char*)strDevice.c_str());
   if (pCdInfo != NULL)
   {

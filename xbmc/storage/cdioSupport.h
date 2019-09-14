@@ -21,9 +21,7 @@
 #include <memory>
 #include <string>
 
-#include <cdio/cdio.h>
-
-#include "PlatformDefs.h" // for ssize_t typedef, used by cdio
+typedef struct _CdIo CdIo_t; 
 
 namespace MEDIA_DETECT
 {
@@ -80,7 +78,121 @@ typedef struct signature
   const char* description;
 } signature_t;
 
-typedef std::map<cdtext_field_t, std::string> xbmc_cdtext_t;
+/*! Enumeration of CD-TEXT text fields. */
+enum class CdTextField
+{
+  TITLE = 0, /**< title of album name or track titles */
+  PERFORMER = 1, /**< name(s) of the performer(s) */
+  SONGWRITER = 2, /**< name(s) of the songwriter(s) */
+  COMPOSER = 3, /**< name(s) of the composer(s) */
+  MESSAGE = 4, /**< message(s) from content provider or artist, ISO-8859-1 encoded*/
+  ARRANGER = 5, /**< name(s) of the arranger(s) */
+  ISRC = 6, /**< ISRC code of each track */
+  UPC_EAN = 7, /**< upc/european article number of disc, ISO-8859-1 encoded */
+  GENRE = 8, /**< genre identification and genre information, ASCII encoded */
+  DISCID = 9, /**< disc identification, ASCII encoded (may be non-printable) */
+  INVALID = 10 /**< INVALID FIELD*/
+};
+
+/**
+   * The driver_id_t enumerations may be used to tag a specific driver
+   * that is opened or is desired to be opened. Note that this is
+   * different than what is available on a given host.
+   *
+   * Order should not be changed lightly because it breaks the ABI.
+   * One is not supposed to iterate over the values, but iterate over the
+   * cdio_drivers and cdio_device_drivers arrays.
+   *
+   * NOTE: IF YOU MODIFY ENUM MAKE SURE INITIALIZATION BETWEEN CDIO.C AGREES.
+   *
+   */
+enum class CdDriver
+{
+  Unknown, /**< Used as input when we don't care what kind
+                         of driver to use. */
+  Win32, /**< Microsoft Windows Driver. Includes ASPI and
+                         ioctl access. */
+  Cdrdao, /**< cdrdao format CD image. This is listed
+                         before BIN/CUE, to make the code prefer cdrdao
+                         over BIN/CUE when both exist. */
+  Bincue, /**< CDRWIN BIN/CUE format CD image. This is
+                         listed before NRG, to make the code prefer
+                         BIN/CUE over NRG when both exist. */
+  Nrg, /**< Nero NRG format CD image. */
+  Device /**< Is really a set of the above; should come last */
+};
+
+/**
+       disc modes. The first combined from MMC-5 6.33.3.13 (Send
+       CUESHEET), "DVD Book" from MMC-5 Table 400, page 419.  and
+       GNU/Linux /usr/include/linux/cdrom.h and we've added DVD.
+    */
+enum class CdDiscMode
+{
+  CD_DA, /**< CD-DA */
+  CD_DATA, /**< CD-ROM form 1 */
+  CD_XA, /**< CD-ROM XA form2 */
+  CD_MIXED, /**< Some combo of above. */
+  DVD_ROM, /**< DVD ROM (e.g. movies) */
+  DVD_RAM, /**< DVD-RAM */
+  DVD_R, /**< DVD-R */
+  DVD_RW, /**< DVD-RW */
+  HD_DVD_ROM, /**< HD DVD-ROM */
+  HD_DVD_RAM, /**< HD DVD-RAM */
+  HD_DVD_R, /**< HD DVD-R */
+  DVD_PR, /**< DVD+R */
+  DVD_PRW, /**< DVD+RW */
+  DVD_PRW_DL, /**< DVD+RW DL */
+  DVD_PR_DL, /**< DVD+R DL */
+  DVD_OTHER, /**< Unknown/unclassified DVD type */
+  NO_INFO,
+  ERRORMODE,
+  CD_I /**< CD-i. */
+};
+
+/**
+      The following are status codes for completion of a given cdio
+      operation. By design 0 is successful completion and -1 is error
+      completion. This is compatable with ioctl so those routines that
+      call ioctl can just pass the value the get back (cast as this
+      enum). Also, by using negative numbers for errors, the
+      enumeration values below can be used in places where a positive
+      value is expected when things complete successfully. For example,
+      get_blocksize returns the blocksize, but on error uses the error
+      codes below. So note that this enumeration is often cast to an
+      integer.  C seems to tolerate this.
+  */
+enum class CdDriverReturnCode
+{
+  OP_SUCCESS = 0, /**< in cases where an int is
+                                    returned, like cdio_set_speed,
+                                    more the negative return codes are
+                                    for errors and the positive ones
+                                    for success. */
+  OP_ERROR = -1, /**< operation returned an error */
+  OP_UNSUPPORTED = -2, /**< returned when a particular driver
+                                      doesn't support a particular operation.
+                                      For example an image driver which doesn't
+                                      really "eject" a CD.
+                                   */
+  OP_UNINIT = -3, /**< returned when a particular driver
+                                      hasn't been initialized or a null
+                                      pointer has been passed.
+                                   */
+  OP_NOT_PERMITTED = -4, /**< Operation not permitted.
+                                      For example might be a permission
+                                      problem.
+                                   */
+  OP_BAD_PARAMETER = -5, /**< Bad parameter passed  */
+  OP_BAD_POINTER = -6, /**< Bad pointer to memory area  */
+  OP_NO_DRIVER = -7, /**< Operation called on a driver
+                                      not available on this OS  */
+  OP_MMC_SENSE_DATA = -8, /**< MMC operation returned sense data,
+                                      but no other error above recorded. */
+};
+
+
+typedef std::map<CdTextField, std::string> xbmc_cdtext_t;
 
 typedef struct TRACKINFO
 {
@@ -250,51 +362,26 @@ private:
   xbmc_cdtext_t m_cdtext; //  CD-Text for this disc
 };
 
-class CLibcdio : public CCriticalSection
+class CLibcdio
 {
-private:
-  CLibcdio();
-
 public:
-  virtual ~CLibcdio();
+  CLibcdio();
+  ~CLibcdio();
 
-  static void ReleaseInstance();
-  static std::shared_ptr<CLibcdio> GetInstance();
 
   // libcdio is not thread safe so these are wrappers to libcdio routines
-  CdIo_t* cdio_open(const char* psz_source, driver_id_t driver_id);
-  CdIo_t* cdio_open_win32(const char* psz_source);
-  void cdio_destroy(CdIo_t* p_cdio);
-  discmode_t cdio_get_discmode(CdIo_t* p_cdio);
-  int mmc_get_tray_status(const CdIo_t* p_cdio);
-  int cdio_eject_media(CdIo_t** p_cdio);
-  track_t cdio_get_last_track_num(const CdIo_t* p_cdio);
-  lsn_t cdio_get_track_lsn(const CdIo_t* p_cdio, track_t i_track);
-  lsn_t cdio_get_track_last_lsn(const CdIo_t* p_cdio, track_t i_track);
-  driver_return_code_t cdio_read_audio_sectors(const CdIo_t* p_cdio,
-                                               void* p_buf,
-                                               lsn_t i_lsn,
-                                               uint32_t i_blocks);
+  bool cdio_open(const char* psz_source, CdDriver driver_id);
+  bool cdio_open_win32(const char* psz_source);
+  void cdio_destroy();
+  CdDiscMode cdio_get_discmode();
+  int mmc_get_tray_status();
+  int cdio_eject_media();
+  uint8_t cdio_get_last_track_num();
+  int cdio_get_track_lsn(uint8_t i_track);
+  int cdio_get_track_last_lsn(uint8_t i_track);
+  CdDriverReturnCode cdio_read_audio_sectors(void* p_buf, int i_lsn, uint32_t i_blocks);
 
-  char* GetDeviceFileName();
-
-private:
-  char* s_defaultDevice;
-  CCriticalSection m_critSection;
-  static std::shared_ptr<CLibcdio> m_pInstance;
-};
-
-class CCdIoSupport
-{
-public:
-  CCdIoSupport();
-  virtual ~CCdIoSupport();
-
-  bool EjectTray();
-  bool CloseTray();
-
-  HANDLE OpenCDROM();
-  HANDLE OpenIMAGE(std::string& strFilename);
+  std::string GetDeviceFileName();
   int ReadSector(HANDLE hDevice, DWORD dwSector, char* lpczBuffer);
   int ReadSectorMode2(HANDLE hDevice, DWORD dwSector, char* lpczBuffer);
   int ReadSectorCDDA(HANDLE hDevice, DWORD dwSector, char* lpczBuffer);
@@ -304,9 +391,7 @@ public:
 
   CCdInfo* GetCdInfo(char* cDeviceFileName = NULL);
   void GetCdTextInfo(xbmc_cdtext_t& xcdt, int trackNum);
-
-protected:
-  int ReadBlock(int superblock, uint32_t offset, uint8_t bufnum, track_t track_num);
+  int ReadBlock(int superblock, uint32_t offset, uint8_t bufnum, uint8_t track_num);
   bool IsIt(int num);
   int IsHFS(void);
   int Is3DO(void);
@@ -314,14 +399,14 @@ protected:
   int IsUDF(void);
   int GetSize(void);
   int GetJolietLevel(void);
-  int GuessFilesystem(int start_session, track_t track_num);
+  int GuessFilesystem(int start_session, uint8_t track_num);
+  int GetLibraryVersion() const;
 
   uint32_t CddbDiscId();
   int CddbDecDigitSum(int n);
-  unsigned int MsfSeconds(msf_t* msf);
 
 private:
-  char buffer[7][CDIO_CD_FRAMESIZE_RAW]; /* for CD-Data */
+  char buffer[7][2352]; /* for CD-Data */
   static signature_t sigs[17];
   int i = 0, j = 0; /* index */
   int m_nStartTrack; /* first sector of track */
@@ -333,9 +418,8 @@ private:
   int m_nUDFVerMinor;
   int m_nUDFVerMajor;
 
-  CdIo* cdio;
-  track_t m_nNumTracks = CDIO_INVALID_TRACK;
-  track_t m_nFirstTrackNum = CDIO_INVALID_TRACK;
+  uint8_t m_nNumTracks = 255;
+  uint8_t m_nFirstTrackNum = 255;
 
   std::string m_strDiscLabel;
 
@@ -344,7 +428,10 @@ private:
   int m_nFirstAudio; /* # of first audio track */
   int m_nNumAudio; /* # of audio tracks */
 
-  std::shared_ptr<CLibcdio> m_cdio;
+private:
+  CdIo_t* m_handle;
+  std::string m_defaultDevice;
+  static CCriticalSection s_critSection;
 };
 
 } // namespace MEDIA_DETECT

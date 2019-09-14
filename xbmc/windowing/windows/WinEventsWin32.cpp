@@ -41,7 +41,6 @@
 #include <math.h>
 
 #include <Shlobj.h>
-#include <Windowsx.h>
 #include <dbt.h>
 
 using namespace KODI::MESSAGING;
@@ -80,6 +79,16 @@ CGenericTouchSwipeDetector* CWinEventsWin32::m_touchSwipeDetector = nullptr;
 // seen at http://www.codeproject.com/Messages/2897423/Re-No-message-triggered-on-SD-card-insertion-remov.aspx
 #define WM_MEDIA_CHANGE (WM_USER + 666)
 SHChangeNotifyEntry shcne;
+
+constexpr int GetXParam(LPARAM lParam)
+{
+  return static_cast<int>(static_cast<short>(LOWORD(lParam)));
+}
+
+constexpr int GetYParam(LPARAM lParam)
+{
+  return static_cast<int>(static_cast<short>(HIWORD(lParam)));
+}
 
 static int XBMC_MapVirtualKey(int scancode, WPARAM vkey)
 {
@@ -517,8 +526,8 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     break;
   case WM_MOUSEMOVE:
     newEvent.type = XBMC_MOUSEMOTION;
-    newEvent.motion.x = GET_X_LPARAM(lParam);
-    newEvent.motion.y = GET_Y_LPARAM(lParam);
+    newEvent.button.x = GetXParam(lParam);
+    newEvent.button.y = GetYParam(lParam);
     if (appPort)
       appPort->OnEvent(newEvent);
     return (0);
@@ -526,8 +535,8 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
   case WM_MBUTTONDOWN:
   case WM_RBUTTONDOWN:
     newEvent.type = XBMC_MOUSEBUTTONDOWN;
-    newEvent.button.x = GET_X_LPARAM(lParam);
-    newEvent.button.y = GET_Y_LPARAM(lParam);
+    newEvent.button.x = GetXParam(lParam);
+    newEvent.button.y = GetYParam(lParam);
     newEvent.button.button = 0;
     if (uMsg == WM_LBUTTONDOWN)
       newEvent.button.button = XBMC_BUTTON_LEFT;
@@ -542,8 +551,8 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
   case WM_MBUTTONUP:
   case WM_RBUTTONUP:
     newEvent.type = XBMC_MOUSEBUTTONUP;
-    newEvent.button.x = GET_X_LPARAM(lParam);
-    newEvent.button.y = GET_Y_LPARAM(lParam);
+    newEvent.button.x = GetXParam(lParam);
+    newEvent.button.y = GetYParam(lParam);
     newEvent.button.button = 0;
     if (uMsg == WM_LBUTTONUP)
       newEvent.button.button = XBMC_BUTTON_LEFT;
@@ -562,12 +571,12 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     newEvent.type = XBMC_MOUSEBUTTONDOWN;
     // the coordinates in WM_MOUSEWHEEL are screen, not client coordinates
     POINT point;
-    point.x = GET_X_LPARAM(lParam);
-    point.y = GET_Y_LPARAM(lParam);
+    point.x = GetXParam(lParam);
+    point.y = GetYParam(lParam);
     WindowFromScreenCoords(hWnd, &point);
     newEvent.button.x = static_cast<uint16_t>(point.x);
     newEvent.button.y = static_cast<uint16_t>(point.y);
-    newEvent.button.button = GET_Y_LPARAM(wParam) > 0 ? XBMC_BUTTON_WHEELUP : XBMC_BUTTON_WHEELDOWN;
+    newEvent.button.button = GetYParam(wParam) > 0 ? XBMC_BUTTON_WHEELUP : XBMC_BUTTON_WHEELDOWN;
     if (appPort)
     {
       appPort->OnEvent(newEvent);
@@ -593,7 +602,7 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
   case WM_DISPLAYCHANGE:
     CLog::LogFC(LOGDEBUG, LOGWINDOWING, "display change event");
     if (g_application.GetRenderGUI() && !DX::Windowing()->IsAlteringWindow() &&
-        GET_X_LPARAM(lParam) > 0 && GET_Y_LPARAM(lParam) > 0)
+        GetXParam(lParam) > 0 && GetYParam(lParam) > 0)
     {
       DX::Windowing()->UpdateResolutions();
     }
@@ -665,8 +674,8 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     }
     else
     {
-      g_sizeMoveWidth = GET_X_LPARAM(lParam);
-      g_sizeMoveHight = GET_Y_LPARAM(lParam);
+      g_sizeMoveWidth = GetXParam(lParam);
+      g_sizeMoveHight = GetYParam(lParam);
       if (DX::Windowing()->IsInSizeMoveMode())
       {
         // If an user is dragging the resize bars, we don't resize
@@ -701,8 +710,8 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     return (0);
   case WM_MOVE:
   {
-    g_sizeMoveX = GET_X_LPARAM(lParam);
-    g_sizeMoveY = GET_Y_LPARAM(lParam);
+    g_sizeMoveX = GetXParam(lParam);
+    g_sizeMoveY = GetYParam(lParam);
     if (DX::Windowing()->IsInSizeMoveMode())
     {
       // the same as WM_SIZE

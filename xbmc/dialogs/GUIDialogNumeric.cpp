@@ -39,7 +39,7 @@ CGUIDialogNumeric::CGUIDialogNumeric(void)
   : CGUIDialog(WINDOW_DIALOG_NUMERIC, "DialogNumeric.xml")
   , m_bConfirmed{false}
   , m_bCanceled{false}
-  , m_mode{INPUT_PASSWORD}
+  , m_mode{INPUT_MODE::PASSWORD}
   , m_block{0}
   , m_lastblock{0}
   , m_dirty{false}
@@ -57,22 +57,22 @@ void CGUIDialogNumeric::OnInitWindow()
   CVariant data;
   switch (m_mode)
   {
-  case INPUT_TIME:
+  case INPUT_MODE::TIME:
     data["type"] = "time";
     break;
-  case INPUT_DATE:
+  case INPUT_MODE::DATE:
     data["type"] = "date";
     break;
-  case INPUT_IP_ADDRESS:
+  case INPUT_MODE::IP_ADDRESS:
     data["type"] = "ip";
     break;
-  case INPUT_PASSWORD:
+  case INPUT_MODE::PASSWORD:
     data["type"] = "numericpassword";
     break;
-  case INPUT_NUMBER:
+  case INPUT_MODE::NUMBER:
     data["type"] = "number";
     break;
-  case INPUT_TIME_SECONDS:
+  case INPUT_MODE::TIME_SECONDS:
     data["type"] = "seconds";
     break;
   default:
@@ -216,12 +216,12 @@ void CGUIDialogNumeric::OnBackSpace()
     --m_block;
     return;
   }
-  if (m_mode == INPUT_NUMBER || m_mode == INPUT_PASSWORD)
+  if (m_mode == INPUT_MODE::NUMBER || m_mode == INPUT_MODE::PASSWORD)
   { // just go back one character
     if (!m_number.empty())
       m_number.erase(m_number.length() - 1);
   }
-  else if (m_mode == INPUT_IP_ADDRESS)
+  else if (m_mode == INPUT_MODE::IP_ADDRESS)
   {
     if (m_ip[m_block])
       m_ip[m_block] /= 10;
@@ -231,7 +231,7 @@ void CGUIDialogNumeric::OnBackSpace()
       m_dirty = false;
     }
   }
-  else if (m_mode == INPUT_TIME)
+  else if (m_mode == INPUT_MODE::TIME)
   {
     if (m_block == 0)
       m_datetime.wHour /= 10;
@@ -243,7 +243,7 @@ void CGUIDialogNumeric::OnBackSpace()
       m_dirty = false;
     }
   }
-  else if (m_mode == INPUT_TIME_SECONDS)
+  else if (m_mode == INPUT_MODE::TIME_SECONDS)
   {
     if (m_block == 0)
       m_datetime.wHour /= 10;
@@ -265,7 +265,7 @@ void CGUIDialogNumeric::OnBackSpace()
       m_dirty = false;
     }
   }
-  else if (m_mode == INPUT_DATE)
+  else if (m_mode == INPUT_MODE::DATE)
   {
     if (m_block == 0)
       m_datetime.wDay /= 10;
@@ -298,13 +298,13 @@ void CGUIDialogNumeric::OnPrevious()
 
 void CGUIDialogNumeric::OnNext()
 {
-  if (m_mode == INPUT_IP_ADDRESS && m_block == 0 && m_ip[0] == 0)
+  if (m_mode == INPUT_MODE::IP_ADDRESS && m_block == 0 && m_ip[0] == 0)
     return;
 
   if (m_block < m_lastblock)
     m_block++;
   m_dirty = false;
-  if (m_mode == INPUT_DATE)
+  if (m_mode == INPUT_MODE::DATE)
     VerifyDate(m_block == 2);
 }
 
@@ -313,24 +313,24 @@ void CGUIDialogNumeric::FrameMove()
   std::string strLabel;
   unsigned int start = 0;
   unsigned int end = 0;
-  if (m_mode == INPUT_PASSWORD)
+  if (m_mode == INPUT_MODE::PASSWORD)
     strLabel.assign(m_number.length(), '*');
-  else if (m_mode == INPUT_NUMBER)
+  else if (m_mode == INPUT_MODE::NUMBER)
     strLabel = m_number;
-  else if (m_mode == INPUT_TIME)
+  else if (m_mode == INPUT_MODE::TIME)
   { // format up the time
     strLabel = StringUtils::Format("%2d:%02d", m_datetime.wHour, m_datetime.wMinute);
     start = m_block * 3;
     end = m_block * 3 + 2;
   }
-  else if (m_mode == INPUT_TIME_SECONDS)
+  else if (m_mode == INPUT_MODE::TIME_SECONDS)
   { // format up the time
     strLabel = StringUtils::Format("%2d:%02d:%02d", m_datetime.wHour, m_datetime.wMinute,
                                    m_datetime.wSecond);
     start = m_block * 3;
     end = m_block * 3 + 2;
   }
-  else if (m_mode == INPUT_DATE)
+  else if (m_mode == INPUT_MODE::DATE)
   { // format up the date
     strLabel =
         StringUtils::Format("%2d/%2d/%4d", m_datetime.wDay, m_datetime.wMonth, m_datetime.wYear);
@@ -339,7 +339,7 @@ void CGUIDialogNumeric::FrameMove()
     if (m_block == 2)
       end = m_block * 3 + 4;
   }
-  else if (m_mode == INPUT_IP_ADDRESS)
+  else if (m_mode == INPUT_MODE::IP_ADDRESS)
   { // format up the date
     strLabel = StringUtils::Format("%3d.%3d.%3d.%3d", m_ip[0], m_ip[1], m_ip[2], m_ip[3]);
     start = m_block * 4;
@@ -360,20 +360,20 @@ void CGUIDialogNumeric::OnNumber(uint32_t num)
 
   switch (m_mode)
   {
-  case INPUT_NUMBER:
-  case INPUT_PASSWORD:
+  case INPUT_MODE::NUMBER:
+  case INPUT_MODE::PASSWORD:
     m_number += num + '0';
     break;
-  case INPUT_TIME:
+  case INPUT_MODE::TIME:
     HandleInputTime(num);
     break;
-  case INPUT_TIME_SECONDS:
+  case INPUT_MODE::TIME_SECONDS:
     HandleInputSeconds(num);
     break;
-  case INPUT_DATE:
+  case INPUT_MODE::DATE:
     HandleInputDate(num);
     break;
-  case INPUT_IP_ADDRESS:
+  case INPUT_MODE::IP_ADDRESS:
     HandleInputIP(num);
     break;
   }
@@ -384,10 +384,10 @@ void CGUIDialogNumeric::SetMode(INPUT_MODE mode, const SYSTEMTIME& initial)
   m_mode = mode;
   m_block = 0;
   m_lastblock = 0;
-  if (m_mode == INPUT_TIME || m_mode == INPUT_TIME_SECONDS || m_mode == INPUT_DATE)
+  if (m_mode == INPUT_MODE::TIME || m_mode == INPUT_MODE::TIME_SECONDS || m_mode == INPUT_MODE::DATE)
   {
     m_datetime = initial;
-    m_lastblock = (m_mode != INPUT_TIME) ? 2 : 1;
+    m_lastblock = (m_mode != INPUT_MODE::TIME) ? 2 : 1;
   }
 }
 
@@ -396,10 +396,10 @@ void CGUIDialogNumeric::SetMode(INPUT_MODE mode, const std::string& initial)
   m_mode = mode;
   m_block = 0;
   m_lastblock = 0;
-  if (m_mode == INPUT_TIME || m_mode == INPUT_TIME_SECONDS || m_mode == INPUT_DATE)
+  if (m_mode == INPUT_MODE::TIME || m_mode == INPUT_MODE::TIME_SECONDS || m_mode == INPUT_MODE::DATE)
   {
     CDateTime dateTime;
-    if (m_mode == INPUT_TIME || m_mode == INPUT_TIME_SECONDS)
+    if (m_mode == INPUT_MODE::TIME || m_mode == INPUT_MODE::TIME_SECONDS)
     {
       // check if we have a pure number
       if (initial.find_first_not_of("0123456789") == std::string::npos)
@@ -412,12 +412,12 @@ void CGUIDialogNumeric::SetMode(INPUT_MODE mode, const std::string& initial)
         std::string tmp = initial;
         // if we are handling seconds and if the string only contains
         // "mm:ss" we need to add dummy "hh:" to get "hh:mm:ss"
-        if (m_mode == INPUT_TIME_SECONDS && tmp.length() <= 5)
+        if (m_mode == INPUT_MODE::TIME_SECONDS && tmp.length() <= 5)
           tmp = "00:" + tmp;
         dateTime.SetFromDBTime(tmp);
       }
     }
-    else if (m_mode == INPUT_DATE)
+    else if (m_mode == INPUT_MODE::DATE)
     {
       std::string tmp = initial;
       StringUtils::Replace(tmp, '/', '.');
@@ -428,9 +428,9 @@ void CGUIDialogNumeric::SetMode(INPUT_MODE mode, const std::string& initial)
       return;
 
     dateTime.GetAsSystemTime(m_datetime);
-    m_lastblock = (m_mode == INPUT_DATE) ? 2 : 1;
+    m_lastblock = (m_mode == INPUT_MODE::DATE) ? 2 : 1;
   }
-  else if (m_mode == INPUT_IP_ADDRESS)
+  else if (m_mode == INPUT_MODE::IP_ADDRESS)
   {
     m_lastblock = 3;
     auto blocks = StringUtils::Split(initial, '.');
@@ -445,13 +445,13 @@ void CGUIDialogNumeric::SetMode(INPUT_MODE mode, const std::string& initial)
       m_ip[i] = static_cast<uint8_t>(atoi(blocks[i].c_str()));
     }
   }
-  else if (m_mode == INPUT_NUMBER || m_mode == INPUT_PASSWORD)
+  else if (m_mode == INPUT_MODE::NUMBER || m_mode == INPUT_MODE::PASSWORD)
     m_number = initial;
 }
 
 SYSTEMTIME CGUIDialogNumeric::GetOutput() const
 {
-  assert(m_mode == INPUT_TIME || m_mode == INPUT_TIME_SECONDS || m_mode == INPUT_DATE);
+  assert(m_mode == INPUT_MODE::TIME || m_mode == INPUT_MODE::TIME_SECONDS || m_mode == INPUT_MODE::DATE);
   return m_datetime;
 }
 
@@ -459,18 +459,18 @@ std::string CGUIDialogNumeric::GetOutputString() const
 {
   switch (m_mode)
   {
-  case INPUT_DATE:
+  case INPUT_MODE::DATE:
     return StringUtils::Format("%02i/%02i/%04i", m_datetime.wDay, m_datetime.wMonth,
                                m_datetime.wYear);
-  case INPUT_TIME:
+  case INPUT_MODE::TIME:
     return StringUtils::Format("%i:%02i", m_datetime.wHour, m_datetime.wMinute);
-  case INPUT_TIME_SECONDS:
+  case INPUT_MODE::TIME_SECONDS:
     return StringUtils::Format("%i:%02i:%02i", m_datetime.wHour, m_datetime.wMinute,
                                m_datetime.wSecond);
-  case INPUT_IP_ADDRESS:
+  case INPUT_MODE::IP_ADDRESS:
     return StringUtils::Format("%d.%d.%d.%d", m_ip[0], m_ip[1], m_ip[2], m_ip[3]);
-  case INPUT_NUMBER:
-  case INPUT_PASSWORD:
+  case INPUT_MODE::NUMBER:
+  case INPUT_MODE::PASSWORD:
     return m_number;
   }
 
@@ -490,7 +490,7 @@ bool CGUIDialogNumeric::ShowAndGetSeconds(std::string& timeString, const std::st
   time.wHour = seconds / 3600;
   time.wMinute = (seconds - time.wHour * 3600) / 60;
   time.wSecond = seconds - time.wHour * 3600 - time.wMinute * 60;
-  pDialog->SetMode(INPUT_TIME_SECONDS, time);
+  pDialog->SetMode(INPUT_MODE::TIME_SECONDS, time);
   pDialog->SetHeading(heading);
   pDialog->Open();
   if (!pDialog->IsConfirmed() || pDialog->IsCanceled())
@@ -508,7 +508,7 @@ bool CGUIDialogNumeric::ShowAndGetTime(SYSTEMTIME& time, const std::string& head
           WINDOW_DIALOG_NUMERIC);
   if (!pDialog)
     return false;
-  pDialog->SetMode(INPUT_TIME, time);
+  pDialog->SetMode(INPUT_MODE::TIME, time);
   pDialog->SetHeading(heading);
   pDialog->Open();
   if (!pDialog->IsConfirmed() || pDialog->IsCanceled())
@@ -524,7 +524,7 @@ bool CGUIDialogNumeric::ShowAndGetDate(SYSTEMTIME& date, const std::string& head
           WINDOW_DIALOG_NUMERIC);
   if (!pDialog)
     return false;
-  pDialog->SetMode(INPUT_DATE, date);
+  pDialog->SetMode(INPUT_MODE::DATE, date);
   pDialog->SetHeading(heading);
   pDialog->Open();
   if (!pDialog->IsConfirmed() || pDialog->IsCanceled())
@@ -540,7 +540,7 @@ bool CGUIDialogNumeric::ShowAndGetIPAddress(std::string& IPAddress, const std::s
           WINDOW_DIALOG_NUMERIC);
   if (!pDialog)
     return false;
-  pDialog->SetMode(INPUT_IP_ADDRESS, IPAddress);
+  pDialog->SetMode(INPUT_MODE::IP_ADDRESS, IPAddress);
   pDialog->SetHeading(heading);
   pDialog->Open();
   if (!pDialog->IsConfirmed() || pDialog->IsCanceled())
@@ -559,7 +559,7 @@ bool CGUIDialogNumeric::ShowAndGetNumber(std::string& strInput,
           WINDOW_DIALOG_NUMERIC);
   pDialog->SetHeading(strHeading);
 
-  pDialog->SetMode(INPUT_NUMBER, strInput);
+  pDialog->SetMode(INPUT_MODE::NUMBER, strInput);
   if (iAutoCloseTimeoutMs)
     pDialog->SetAutoClose(iAutoCloseTimeoutMs);
 
@@ -660,7 +660,7 @@ InputVerificationResult CGUIDialogNumeric::ShowAndVerifyInput(std::string& strTo
   if (!bVerifyInput)
     strInput = strToVerify;
 
-  pDialog->SetMode(INPUT_PASSWORD, strInput);
+  pDialog->SetMode(INPUT_MODE::PASSWORD, strInput);
   pDialog->Open();
 
   strInput = pDialog->GetOutputString();

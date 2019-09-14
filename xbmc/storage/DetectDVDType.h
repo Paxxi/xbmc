@@ -74,7 +74,7 @@ private:
   static std::string m_diskLabel;
   static std::string m_diskPath;
 
-  std::shared_ptr<CLibcdio> m_cdio;
+  std::unique_ptr<CLibcdio> m_cdio;
 };
 } // namespace MEDIA_DETECT
 #endif

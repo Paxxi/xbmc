@@ -25,15 +25,26 @@
 #include <list>
 
 #include <Audioclient.h>
+#include <DSound.h> /* Microsoft can't write standalone headers */
+// clang-format off
+#include <mmdeviceapi.h>
 #include <Functiondiscoverykeys_devpkey.h>
+// clang-format on
+#include <mmdeviceapi.h>
 #include <Mmreg.h>
 #include <Rpc.h>
 #include <initguid.h>
-#include <mmdeviceapi.h>
-
+#include <mmsystem.h> /* Microsoft can't write standalone headers */
+#include <wrl/client.h>
 #pragma comment(lib, "Rpcrt4.lib")
 
 extern HWND g_hWnd;
+
+struct SDirectSoundImpl
+{
+  Microsoft::WRL::ComPtr<IDirectSoundBuffer> m_pBuffer;
+  Microsoft::WRL::ComPtr<IDirectSound> m_pDSound;
+};
 
 DEFINE_GUID(_KSDATAFORMAT_SUBTYPE_IEEE_FLOAT,
             WAVE_FORMAT_IEEE_FLOAT,
@@ -102,9 +113,7 @@ static BOOL CALLBACK DSEnumCallback(LPGUID lpGuid,
 }
 
 CAESinkDirectSound::CAESinkDirectSound()
-  : m_pBuffer(nullptr)
-  , m_pDSound(nullptr)
-  , m_encodedFormat(AE_FMT_INVALID)
+  : m_encodedFormat(AE_FMT_INVALID)
   , m_AvgBytesPerSec(0)
   , m_dwChunkSize(0)
   , m_dwFrameSize(0)
@@ -118,6 +127,7 @@ CAESinkDirectSound::CAESinkDirectSound()
   , m_isDirtyDS(false)
 {
   m_channelLayout.Reset();
+  m_pimpl = std::make_unique<SDirectSoundImpl>();
 }
 
 CAESinkDirectSound::~CAESinkDirectSound()
@@ -178,7 +188,7 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat& format, std::string& device)
       RpcStringFree(&wszUuid);
   }
 
-  hr = DirectSoundCreate(deviceGUID, m_pDSound.ReleaseAndGetAddressOf(), nullptr);
+  hr = DirectSoundCreate(deviceGUID, m_pimpl->m_pDSound.ReleaseAndGetAddressOf(), nullptr);
 
   if (FAILED(hr))
   {
@@ -187,7 +197,7 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat& format, std::string& device)
         "Failed to create the DirectSound device %s with error %s, trying the default device.",
         deviceFriendlyName, dserr2str(hr));
 
-    hr = DirectSoundCreate(nullptr, m_pDSound.ReleaseAndGetAddressOf(), nullptr);
+    hr = DirectSoundCreate(nullptr, m_pimpl->m_pDSound.ReleaseAndGetAddressOf(), nullptr);
     if (FAILED(hr))
     {
       CLog::LogF(LOGERROR, "Failed to create the default DirectSound device with error %s.",
@@ -200,13 +210,13 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat& format, std::string& device)
   HWND tmp_hWnd = g_hWnd == nullptr ? GetDesktopWindow() : g_hWnd;
   CLog::LogF(LOGDEBUG, "Using Window handle: %p", static_cast<void*>(tmp_hWnd));
 
-  hr = m_pDSound->SetCooperativeLevel(tmp_hWnd, DSSCL_PRIORITY);
+  hr = m_pimpl->m_pDSound->SetCooperativeLevel(tmp_hWnd, DSSCL_PRIORITY);
 
   if (FAILED(hr))
   {
     CLog::LogF(LOGERROR, "Failed to create the DirectSound device cooperative level.");
     CLog::LogF(LOGERROR, "DSErr: %s", dserr2str(hr));
-    m_pDSound = nullptr;
+    m_pimpl->m_pDSound = nullptr;
     return false;
   }
 
@@ -263,7 +273,8 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat& format, std::string& device)
   dsbdesc.lpwfxFormat = (WAVEFORMATEX*)&wfxex;
 
   // now create the stream buffer
-  HRESULT res = m_pDSound->CreateSoundBuffer(&dsbdesc, m_pBuffer.ReleaseAndGetAddressOf(), nullptr);
+  HRESULT res = m_pimpl->m_pDSound->CreateSoundBuffer(
+      &dsbdesc, m_pimpl->m_pBuffer.ReleaseAndGetAddressOf(), nullptr);
   if (res != DS_OK)
   {
     if (dsbdesc.dwFlags & DSBCAPS_LOCHARDWARE)
@@ -272,18 +283,19 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat& format, std::string& device)
                  dserr2str(res));
       // Try without DSBCAPS_LOCHARDWARE
       dsbdesc.dwFlags &= ~DSBCAPS_LOCHARDWARE;
-      res = m_pDSound->CreateSoundBuffer(&dsbdesc, m_pBuffer.ReleaseAndGetAddressOf(), nullptr);
+      res = m_pimpl->m_pDSound->CreateSoundBuffer(
+          &dsbdesc, m_pimpl->m_pBuffer.ReleaseAndGetAddressOf(), nullptr);
     }
     if (res != DS_OK)
     {
-      m_pBuffer = nullptr;
+      m_pimpl->m_pBuffer = nullptr;
       CLog::LogF(LOGERROR, "cannot create secondary buffer (%s)", dserr2str(res));
       return false;
     }
   }
   CLog::LogF(LOGDEBUG, "secondary buffer created");
 
-  m_pBuffer->Stop();
+  m_pimpl->m_pBuffer->Stop();
 
   AEChannelsFromSpeakerMask(wfxex.dwChannelMask);
   format.m_channelLayout = m_channelLayout;
@@ -329,14 +341,14 @@ void CAESinkDirectSound::Deinitialize()
 
   CLog::LogF(LOGDEBUG, "Cleaning up");
 
-  if (m_pBuffer)
+  if (m_pimpl->m_pBuffer)
   {
-    m_pBuffer->Stop();
+    m_pimpl->m_pBuffer->Stop();
   }
 
   m_initialized = false;
-  m_pBuffer = nullptr;
-  m_pDSound = nullptr;
+  m_pimpl->m_pBuffer = nullptr;
+  m_pimpl->m_pDSound = nullptr;
   m_BufferOffset = 0;
   m_CacheLen = 0;
   m_dwChunkSize = 0;
@@ -355,7 +367,7 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t** data,
   unsigned char* pBuffer = (unsigned char*)data[0] + offset * m_format.m_frameSize;
 
   DWORD bufferStatus = 0;
-  if (m_pBuffer->GetStatus(&bufferStatus) != DS_OK)
+  if (m_pimpl->m_pBuffer->GetStatus(&bufferStatus) != DS_OK)
   {
     CLog::LogF(LOGERROR, "GetStatus() failed");
     return 0;
@@ -363,7 +375,7 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t** data,
   if (bufferStatus & DSBSTATUS_BUFFERLOST)
   {
     CLog::LogF(LOGDEBUG, "Buffer allocation was lost. Restoring buffer.");
-    m_pBuffer->Restore();
+    m_pimpl->m_pBuffer->Restore();
   }
 
   while (GetSpace() < total)
@@ -383,8 +395,8 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t** data,
     if (m_BufferOffset >= m_dwBufferLen) // Wrap-around manually
       m_BufferOffset = 0;
     DWORD dwWriteBytes = std::min((int)m_dwChunkSize, (int)len);
-    HRESULT res =
-        m_pBuffer->Lock(m_BufferOffset, dwWriteBytes, &start, &size, &startWrap, &sizeWrap, 0);
+    HRESULT res = m_pimpl->m_pBuffer->Lock(m_BufferOffset, dwWriteBytes, &start, &size, &startWrap,
+                                           &sizeWrap, 0);
     if (DS_OK != res)
     {
       CLog::LogF(LOGERROR, "Unable to lock buffer at offset %u. HRESULT: 0x%08x", m_BufferOffset,
@@ -409,7 +421,7 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t** data,
     }
 
     m_CacheLen += size + sizeWrap; // This data is now in the cache
-    m_pBuffer->Unlock(start, size, startWrap, sizeWrap);
+    m_pimpl->m_pBuffer->Unlock(start, size, startWrap, sizeWrap);
   }
 
   CheckPlayStatus();
@@ -419,8 +431,8 @@ unsigned int CAESinkDirectSound::AddPackets(uint8_t** data,
 
 void CAESinkDirectSound::Stop()
 {
-  if (m_pBuffer)
-    m_pBuffer->Stop();
+  if (m_pimpl->m_pBuffer)
+    m_pimpl->m_pBuffer->Stop();
 }
 
 void CAESinkDirectSound::Drain()
@@ -428,8 +440,8 @@ void CAESinkDirectSound::Drain()
   if (!m_initialized || m_isDirtyDS)
     return;
 
-  m_pBuffer->Stop();
-  HRESULT res = m_pBuffer->SetCurrentPosition(0);
+  m_pimpl->m_pBuffer->Stop();
+  HRESULT res = m_pimpl->m_pBuffer->SetCurrentPosition(0);
   if (DS_OK != res)
   {
     CLog::LogF(LOGERROR,
@@ -608,7 +620,7 @@ failed:
 void CAESinkDirectSound::CheckPlayStatus()
 {
   DWORD status = 0;
-  if (m_pBuffer->GetStatus(&status) != DS_OK)
+  if (m_pimpl->m_pBuffer->GetStatus(&status) != DS_OK)
   {
     CLog::LogF(LOGERROR, "GetStatus() failed");
     return;
@@ -617,7 +629,7 @@ void CAESinkDirectSound::CheckPlayStatus()
   if (!(status & DSBSTATUS_PLAYING) &&
       m_CacheLen != 0) // If we have some data, see if we can start playback
   {
-    HRESULT hr = m_pBuffer->Play(0, 0, DSBPLAY_LOOPING);
+    HRESULT hr = m_pimpl->m_pBuffer->Play(0, 0, DSBPLAY_LOOPING);
     CLog::LogF(LOGDEBUG, "Resuming Playback");
     if (FAILED(hr))
       CLog::LogF(LOGERROR, "Failed to play the DirectSound buffer: %s", dserr2str(hr));
@@ -629,7 +641,7 @@ bool CAESinkDirectSound::UpdateCacheStatus()
   CSingleLock lock(m_runLock);
 
   DWORD playCursor = 0, writeCursor = 0;
-  HRESULT res = m_pBuffer->GetCurrentPosition(
+  HRESULT res = m_pimpl->m_pBuffer->GetCurrentPosition(
       &playCursor, &writeCursor); // Get the current playback and safe write positions
   if (DS_OK != res)
   {

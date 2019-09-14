@@ -7,6 +7,7 @@
  */
 
 #pragma once
+// clang-format off
 
 /**
  * SWIGHIDDENVIRTUAL allows the keyword 'virtual' to be there when the main
@@ -43,9 +44,9 @@
  *  of the constant in the scripting language.
  */
 #ifdef SWIG
-#define SWIG_CONSTANT_FROM_GETTER(type, varname) % constant type varname = get##varname()
+#define SWIG_CONSTANT_FROM_GETTER(type,varname) %constant type varname = get##varname ()
 #else
-#define SWIG_CONSTANT_FROM_GETTER(type, varname) type get##varname()
+#define SWIG_CONSTANT_FROM_GETTER(type,varname) type get##varname ()
 #endif
 
 /**
@@ -62,9 +63,9 @@
  *  only be seen by the SWIG processor.
  */
 #ifdef SWIG
-#define SWIG_CONSTANT(type, var) % constant type var = var
+#define SWIG_CONSTANT(type,var) %constant type var = var
 #else
-#define SWIG_CONSTANT(type, var)
+#define SWIG_CONSTANT(type,var)
 #endif
 
 /**
@@ -81,9 +82,9 @@
  *  only be seen by the SWIG processor.
  */
 #ifdef SWIG
-#define SWIG_CONSTANT2(type, var, val) % constant type var = val
+#define SWIG_CONSTANT2(type,var,val) %constant type var = val
 #else
-#define SWIG_CONSTANT2(type, var, val)
+#define SWIG_CONSTANT2(type,var,val)
 #endif
 
 /**
@@ -93,10 +94,9 @@
 *  only be seen by the SWIG processor.
 */
 #ifdef SWIG
-#define SWIG_IMMUTABLE(var) \
-  % feature("immutable"); \
-  var; \
-  % feature("immutable", "")
+#define SWIG_IMMUTABLE(var) %feature("immutable"); var; %feature("immutable", "")
 #else
 #define SWIG_IMMUTABLE(var) var
 #endif
+
+// clang-format on

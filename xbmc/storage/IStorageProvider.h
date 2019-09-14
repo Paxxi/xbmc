@@ -39,7 +39,7 @@ public:
   virtual std::string GetFirstOpticalDeviceFileName()
   {
 #ifdef HAS_DVD_DRIVE
-    return std::string(MEDIA_DETECT::CLibcdio::GetInstance()->GetDeviceFileName());
+    return MEDIA_DETECT::CLibcdio().GetDeviceFileName();
 #else
     return "";
 #endif

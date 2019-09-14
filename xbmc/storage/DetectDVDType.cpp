@@ -47,7 +47,7 @@ std::string CDetectDVDMedia::m_diskPath = "";
 
 CDetectDVDMedia::CDetectDVDMedia()
   : CThread("DetectDVDMedia")
-  , m_cdio(CLibcdio::GetInstance())
+  , m_cdio(std::make_unique<CLibcdio>())
 {
   m_bStop = false;
   m_pInstance = this;
@@ -58,7 +58,7 @@ CDetectDVDMedia::~CDetectDVDMedia() = default;
 void CDetectDVDMedia::OnStartup()
 {
   // SetPriority( THREAD_PRIORITY_LOWEST );
-  CLog::Log(LOGDEBUG, "Compiled with libcdio Version 0.%d", LIBCDIO_VERSION_NUM);
+  CLog::Log(LOGDEBUG, "Compiled with libcdio Version 0.%d", m_cdio->GetLibraryVersion());
 }
 
 void CDetectDVDMedia::Process()
@@ -66,11 +66,10 @@ void CDetectDVDMedia::Process()
 // for apple - currently disable this check since cdio will return null if no media is loaded
 #if !defined(TARGET_DARWIN)
   //Before entering loop make sure we actually have a CDrom drive
-  CdIo_t* p_cdio = m_cdio->cdio_open(NULL, DRIVER_DEVICE);
-  if (p_cdio == NULL)
+  if (!m_cdio->cdio_open(NULL, CdDriver::Device))
     return;
   else
-    m_cdio->cdio_destroy(p_cdio);
+    m_cdio->cdio_destroy();
 #endif
 
   while ((!m_bStop))
@@ -197,7 +196,6 @@ void CDetectDVDMedia::DetectMediaType()
   CLog::Log(LOGINFO, "Detecting DVD-ROM media filesystem...");
 
   std::string strNewUrl;
-  CCdIoSupport cdio;
 
   // Delete old CD-Information
   if (m_pCdInfo != NULL)
@@ -207,7 +205,7 @@ void CDetectDVDMedia::DetectMediaType()
   }
 
   // Detect new CD-Information
-  m_pCdInfo = cdio.GetCdInfo();
+  m_pCdInfo = m_cdio->GetCdInfo();
   if (m_pCdInfo == NULL)
   {
     CLog::Log(LOGERROR, "Detection of DVD-ROM media failed.");

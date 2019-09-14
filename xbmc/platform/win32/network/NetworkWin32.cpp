@@ -15,16 +15,41 @@
 #include "platform/win32/WIN32Util.h"
 
 #include <errno.h>
-
+// clang-format off
+#include <ws2def.h>
+#include <ws2ipdef.h>
+#include <iphlpapi.h>
+// clang-format on
 #include <IcmpAPI.h>
 #include <Mstcpip.h>
-#include <iphlpapi.h>
 #include <netinet/in.h>
 
 #include "PlatformDefs.h"
 
 #pragma comment(lib, "Ntdll.lib")
 
+class CNetworkInterfaceWin32 : public CNetworkInterface
+{
+public:
+  CNetworkInterfaceWin32(const IP_ADAPTER_ADDRESSES& adapter);
+  ~CNetworkInterfaceWin32(void) override;
+
+  bool IsEnabled(void) const override;
+  bool IsConnected(void) const override;
+
+  std::string GetMacAddress(void) const override;
+  void GetMacAddressRaw(char rawMac[6]) const override;
+
+  bool GetHostMacAddress(unsigned long host, std::string& mac) const override;
+  bool GetHostMacAddress(const struct sockaddr& host, std::string& mac) const;
+
+  std::string GetCurrentIPAddress() const override;
+  std::string GetCurrentNetmask() const override;
+  std::string GetCurrentDefaultGateway(void) const override;
+
+private:
+  IP_ADAPTER_ADDRESSES m_adapter;
+};
 CNetworkInterfaceWin32::CNetworkInterfaceWin32(const IP_ADAPTER_ADDRESSES& adapter)
 {
   m_adapter = adapter;

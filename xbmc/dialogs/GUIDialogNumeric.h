@@ -24,14 +24,14 @@ enum class InputVerificationResult
 class CGUIDialogNumeric : public CGUIDialog
 {
 public:
-  enum INPUT_MODE
+  enum class INPUT_MODE
   {
-    INPUT_TIME = 1,
-    INPUT_DATE,
-    INPUT_IP_ADDRESS,
-    INPUT_PASSWORD,
-    INPUT_NUMBER,
-    INPUT_TIME_SECONDS
+    TIME = 1,
+    DATE,
+    IP_ADDRESS,
+    PASSWORD,
+    NUMBER,
+    TIME_SECONDS
   };
   CGUIDialogNumeric(void);
   ~CGUIDialogNumeric(void) override;
@@ -42,7 +42,7 @@ public:
 
   bool IsConfirmed() const;
   bool IsCanceled() const;
-  bool IsInputHidden() const { return m_mode == INPUT_PASSWORD; };
+  bool IsInputHidden() const { return m_mode == INPUT_MODE::PASSWORD; };
 
   static bool ShowAndVerifyNewPassword(std::string& strNewPassword);
   static int ShowAndVerifyPassword(std::string& strPassword,

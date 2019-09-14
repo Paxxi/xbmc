@@ -17,10 +17,12 @@
 #include <stdio.h>
 
 #if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
+// clang-format off
 #include <d3d9.h>
 #include <ddraw.h>
-#include <dsound.h>
 #include <mmsystem.h>
+#include <dsound.h>
+// clang-format on
 
 #define DIRECTINPUT_VERSION 0x800
 #include <dinput.h>

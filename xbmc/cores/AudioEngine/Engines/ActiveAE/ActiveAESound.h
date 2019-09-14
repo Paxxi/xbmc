@@ -12,6 +12,8 @@
 #include "cores/AudioEngine/Interfaces/AESound.h"
 #include "filesystem/File.h"
 
+#include <algorithm>
+
 class DllAvUtil;
 
 namespace ActiveAE

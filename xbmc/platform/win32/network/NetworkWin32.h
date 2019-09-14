@@ -15,34 +15,6 @@
 #include <string>
 #include <vector>
 
-#include <Iphlpapi.h> /* Microsoft can't write standalone headers */
-#include <ws2ipdef.h> /* Microsoft can't write standalone headers */
-
-class CNetworkWin32;
-
-class CNetworkInterfaceWin32 : public CNetworkInterface
-{
-public:
-  CNetworkInterfaceWin32(const IP_ADAPTER_ADDRESSES& adapter);
-  ~CNetworkInterfaceWin32(void) override;
-
-  bool IsEnabled(void) const override;
-  bool IsConnected(void) const override;
-
-  std::string GetMacAddress(void) const override;
-  void GetMacAddressRaw(char rawMac[6]) const override;
-
-  bool GetHostMacAddress(unsigned long host, std::string& mac) const override;
-  bool GetHostMacAddress(const struct sockaddr& host, std::string& mac) const;
-
-  std::string GetCurrentIPAddress() const override;
-  std::string GetCurrentNetmask() const override;
-  std::string GetCurrentDefaultGateway(void) const override;
-
-private:
-  IP_ADAPTER_ADDRESSES m_adapter;
-};
-
 class CNetworkWin32 : public CNetworkBase
 {
 public:

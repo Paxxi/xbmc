@@ -14,10 +14,8 @@
 
 #include <stdint.h>
 
-#include <DSound.h> /* Microsoft can't write standalone headers */
-#include <mmsystem.h> /* Microsoft can't write standalone headers */
-#include <wrl/client.h>
 
+struct SDirectSoundImpl;
 class CAESinkDirectSound : public IAESink
 {
 public:
@@ -49,8 +47,7 @@ private:
   unsigned int GetSpace();
   const char* dserr2str(int err);
 
-  Microsoft::WRL::ComPtr<IDirectSoundBuffer> m_pBuffer;
-  Microsoft::WRL::ComPtr<IDirectSound> m_pDSound;
+  std::unique_ptr<SDirectSoundImpl> m_pimpl;
 
   AEAudioFormat m_format;
   enum AEDataFormat m_encodedFormat;
