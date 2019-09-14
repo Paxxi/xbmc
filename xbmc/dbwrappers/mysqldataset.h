@@ -152,7 +152,7 @@ or insert() operations default = false) */
   /* sequence numbers */
   long nextid(const char* seq_name) override;
   /* sequence numbers */
-  int num_rows() override;
+  size_t num_rows() override;
   /* interrupt any pending database operation  */
   void interrupt() override;
 

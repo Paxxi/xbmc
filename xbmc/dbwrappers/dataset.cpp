@@ -176,16 +176,16 @@ void Dataset::set_select_sql(const std::string& sel_sql)
 void Dataset::parse_sql(std::string& sql)
 {
   std::string fpattern, by_what;
-  for (unsigned int i = 0; i < fields_object->size(); i++)
+  for (size_t i = 0; i < fields_object->size(); i++)
   {
     fpattern = ":OLD_" + (*fields_object)[i].props.name;
     by_what = "'" + (*fields_object)[i].val.get_asString() + "'";
-    int idx = 0;
-    int next_idx = 0;
+    size_t idx = 0;
+    size_t next_idx = 0;
     while ((idx = sql.find(fpattern, next_idx)) >= 0)
     {
       next_idx = idx + fpattern.size();
-      if (sql.length() > ((unsigned int)next_idx))
+      if (sql.length() > next_idx)
         if (isalnum(sql[next_idx]) || sql[next_idx] == '_')
         {
           continue;
@@ -194,16 +194,16 @@ void Dataset::parse_sql(std::string& sql)
     } //while
   } //for
 
-  for (unsigned int i = 0; i < edit_object->size(); i++)
+  for (size_t i = 0; i < edit_object->size(); i++)
   {
     fpattern = ":NEW_" + (*edit_object)[i].props.name;
     by_what = "'" + (*edit_object)[i].val.get_asString() + "'";
-    int idx = 0;
-    int next_idx = 0;
+    size_t idx = 0;
+    size_t next_idx = 0;
     while ((idx = sql.find(fpattern, next_idx)) >= 0)
     {
       next_idx = idx + fpattern.size();
-      if (sql.length() > ((unsigned int)next_idx))
+      if (sql.length() > next_idx)
         if (isalnum(sql[next_idx]) || sql[next_idx] == '_')
         {
           continue;
@@ -238,7 +238,7 @@ bool Dataset::seek(int pos)
 
 void Dataset::refresh()
 {
-  int row = frecno;
+  size_t row = frecno;
   if ((row != 0) && active)
   {
     close();
@@ -628,11 +628,11 @@ void Dataset::clear_delete_sql()
   delete_sql.clear();
 }
 
-int Dataset::field_count()
+size_t Dataset::field_count()
 {
   return fields_object->size();
 }
-int Dataset::fieldCount()
+size_t Dataset::fieldCount()
 {
   return fields_object->size();
 }

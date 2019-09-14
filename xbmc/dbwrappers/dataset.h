@@ -218,7 +218,7 @@ protected:
 
   bool active; // Is Query Opened?
   bool haveError;
-  int frecno; // number of current row bei bewegung
+  size_t frecno; // number of current row bei bewegung
   std::string sql;
 
   ParamList plist; // Paramlist for locate
@@ -307,7 +307,7 @@ public:
   /* sequence numbers */
   virtual long nextid(const char* seq_name) = 0;
   /* sequence numbers */
-  virtual int num_rows() = 0;
+  virtual size_t num_rows() = 0;
 
   /* Open SQL query */
   virtual void open(const std::string& sql) = 0;
@@ -375,8 +375,8 @@ public:
 
   /* func. retrieves a number of fields */
   /* Number of fields in a record */
-  virtual int field_count();
-  virtual int fieldCount();
+  virtual size_t field_count();
+  virtual size_t fieldCount();
   /* func. retrieves a field name with 'n' index */
   virtual const char* fieldName(int n);
   /* func. retrieves a field index with 'fn' field name,return -1 when field name not found */

@@ -744,15 +744,14 @@ void SqliteDataset::make_deletion()
 void SqliteDataset::fill_fields()
 {
   //cout <<"rr "<<result.records.size()<<"|" << frecno <<"\n";
-  if ((db == NULL) || (result.record_header.empty()) ||
-      (result.records.size() < (unsigned int)frecno))
+  if ((db == NULL) || (result.record_header.empty()) || (result.records.size() < frecno))
     return;
 
   if (fields_object->size() == 0) // Filling columns name
   {
-    const unsigned int ncols = result.record_header.size();
+    const size_t ncols = result.record_header.size();
     fields_object->resize(ncols);
-    for (unsigned int i = 0; i < ncols; i++)
+    for (size_t i = 0; i < ncols; i++)
       (*fields_object)[i].props = result.record_header[i];
   }
 
@@ -762,16 +761,16 @@ void SqliteDataset::fill_fields()
     const sql_record* row = result.records[frecno];
     if (row)
     {
-      const unsigned int ncols = row->size();
+      const size_t ncols = row->size();
       fields_object->resize(ncols);
-      for (unsigned int i = 0; i < ncols; i++)
+      for (size_t i = 0; i < ncols; i++)
         (*fields_object)[i].val = row->at(i);
       return;
     }
   }
-  const unsigned int ncols = result.record_header.size();
+  const size_t ncols = result.record_header.size();
   fields_object->resize(ncols);
-  for (unsigned int i = 0; i < ncols; i++)
+  for (size_t i = 0; i < ncols; i++)
     (*fields_object)[i].val = "";
 }
 
@@ -861,8 +860,8 @@ bool SqliteDataset::query(const std::string& query)
   if (!handle())
     throw DbErrors("No Database Connection");
   std::string qry = query;
-  int fs = qry.find("select");
-  int fS = qry.find("SELECT");
+  size_t fs = qry.find("select");
+  size_t fS = qry.find("SELECT");
   if (!(fs >= 0 || fS >= 0))
     throw DbErrors("MUST be select SQL!");
 
@@ -965,7 +964,7 @@ void SqliteDataset::cancel()
 }
 
 
-int SqliteDataset::num_rows()
+size_t SqliteDataset::num_rows()
 {
   return result.records.size();
 }

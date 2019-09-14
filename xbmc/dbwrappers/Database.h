@@ -73,7 +73,7 @@ public:
   public:
     DatasetLayout(size_t totalfields);
     void SetField(int fieldNo, const std::string& strField, bool bOutput = false);
-    void AdjustRecordNumbers(int offset);
+    void AdjustRecordNumbers(size_t offset);
     bool GetFetch(int fieldno);
     bool GetOutput(int fieldno);
     int GetRecNo(int fieldno);

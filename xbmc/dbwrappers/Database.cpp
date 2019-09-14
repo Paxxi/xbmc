@@ -157,9 +157,9 @@ void CDatabase::DatasetLayout::SetField(int fieldNo,
   }
 }
 
-void CDatabase::DatasetLayout::AdjustRecordNumbers(int offset)
+void CDatabase::DatasetLayout::AdjustRecordNumbers(size_t offset)
 {
-  int recno = 0;
+  size_t recno = 0;
   for (auto& field : m_fields)
   {
     if (field.fetch)
@@ -238,7 +238,7 @@ void CDatabase::Split(const std::string& strFileNameAndPath,
 {
   strFileName = "";
   strPath = "";
-  int i = strFileNameAndPath.size() - 1;
+  size_t i = strFileNameAndPath.size() - 1;
   while (i > 0)
   {
     char ch = strFileNameAndPath[i];

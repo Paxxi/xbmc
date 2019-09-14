@@ -32,8 +32,12 @@
 
 namespace dbiplus
 {
-
 //************* MysqlDatabase implementation ***************
+
+unsigned long m_strlen(const char* str)
+{
+  return static_cast<unsigned long>(strlen(str));
+}
 
 MysqlDatabase::MysqlDatabase()
 {
@@ -115,12 +119,12 @@ void MysqlDatabase::configure_connection()
   // MySQL 5.7.5+: See #8393
   strcpy(sqlcmd,
          "SET SESSION sql_mode = (SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
-  if ((ret = mysql_real_query(conn, sqlcmd, strlen(sqlcmd))) != MYSQL_OK)
+  if ((ret = mysql_real_query(conn, sqlcmd, m_strlen(sqlcmd))) != MYSQL_OK)
     throw DbErrors("Can't disable sql_mode ONLY_FULL_GROUP_BY: '%s' (%d)", db.c_str(), ret);
 
   // MySQL 5.7.6+: See #8393. Non-fatal if error, as not supported by MySQL 5.0.x
   strcpy(sqlcmd, "SELECT @@SESSION.optimizer_switch");
-  if ((ret = mysql_real_query(conn, sqlcmd, strlen(sqlcmd))) == MYSQL_OK)
+  if ((ret = mysql_real_query(conn, sqlcmd, m_strlen(sqlcmd))) == MYSQL_OK)
   {
     MYSQL_RES* res = mysql_store_result(conn);
     MYSQL_ROW row;
@@ -137,7 +141,7 @@ void MysqlDatabase::configure_connection()
           if (StringUtils::Trim(itIn) == "derived_merge=on")
           {
             strcpy(sqlcmd, "SET SESSION optimizer_switch = 'derived_merge=off'");
-            if ((ret = mysql_real_query(conn, sqlcmd, strlen(sqlcmd))) != MYSQL_OK)
+            if ((ret = mysql_real_query(conn, sqlcmd, m_strlen(sqlcmd))) != MYSQL_OK)
               throw DbErrors("Can't set optimizer_switch = '%s': '%s' (%d)",
                              StringUtils::Trim(itIn).c_str(), db.c_str(), ret);
             break;
@@ -466,7 +470,7 @@ int MysqlDatabase::query_with_reconnect(const char* query)
   int result;
 
   // try to reconnect if server is gone
-  while (((result = mysql_real_query(conn, query, strlen(query))) != MYSQL_OK) &&
+  while (((result = mysql_real_query(conn, query, m_strlen(query))) != MYSQL_OK) &&
          ((result = mysql_errno(conn)) == CR_SERVER_GONE_ERROR || result == CR_SERVER_LOST) &&
          (attempts-- > 0))
   {
@@ -1169,7 +1173,7 @@ void MysqlDatabase::mysqlVXPrintf(StrAccum* pAccum, /* Accumulate results here *
           {
             bufpt = const_cast<char*>("Inf");
           }
-          length = strlen(bufpt);
+          length = static_cast<int>(strlen(bufpt));
           break;
         }
       }
@@ -1355,7 +1359,7 @@ void MysqlDatabase::mysqlVXPrintf(StrAccum* pAccum, /* Accumulate results here *
       }
       else
       {
-        length = strlen(bufpt);
+        length = static_cast<int>(strlen(bufpt));
       }
       break;
     case etSQLESCAPE:
@@ -1456,7 +1460,7 @@ bool MysqlDatabase::mysqlStrAccumAppend(StrAccum* p, const char* z, int N)
   }
   if (N < 0)
   {
-    N = strlen(z);
+    N = static_cast<int>(strlen(z));
   }
   if (N == 0 || z == 0)
   {
@@ -1669,15 +1673,14 @@ void MysqlDataset::make_deletion()
 
 void MysqlDataset::fill_fields()
 {
-  if ((db == NULL) || (result.record_header.empty()) ||
-      (result.records.size() < (unsigned int)frecno))
+  if ((db == NULL) || (result.record_header.empty()) || (result.records.size() < frecno))
     return;
 
   if (fields_object->size() == 0) // Filling columns name
   {
-    const unsigned int ncols = result.record_header.size();
+    const size_t ncols = result.record_header.size();
     fields_object->resize(ncols);
-    for (unsigned int i = 0; i < ncols; i++)
+    for (size_t i = 0; i < ncols; i++)
       (*fields_object)[i].props = result.record_header[i];
   }
 
@@ -1687,16 +1690,16 @@ void MysqlDataset::fill_fields()
     const sql_record* row = result.records[frecno];
     if (row)
     {
-      const unsigned int ncols = row->size();
+      const size_t ncols = row->size();
       fields_object->resize(ncols);
-      for (unsigned int i = 0; i < ncols; i++)
+      for (size_t i = 0; i < ncols; i++)
         (*fields_object)[i].val = row->at(i);
       return;
     }
   }
-  const unsigned int ncols = result.record_header.size();
+  const size_t ncols = result.record_header.size();
   fields_object->resize(ncols);
-  for (unsigned int i = 0; i < ncols; i++)
+  for (size_t i = 0; i < ncols; i++)
     (*fields_object)[i].val = "";
 }
 
@@ -1771,7 +1774,7 @@ int MysqlDataset::exec(const std::string& sql)
       qry += " CHARACTER SET utf8 COLLATE utf8_general_ci";
   }
 
-  CLog::Log(LOGDEBUG, "Mysql execute: %s", qry.c_str());
+  CLog::Log(LOGDEBUG, "Mysql execute: {}", qry);
 
   if (db->setErr(static_cast<MysqlDatabase*>(db)->query_with_reconnect(qry.c_str()), qry.c_str()) !=
       MYSQL_OK)
@@ -1800,8 +1803,8 @@ bool MysqlDataset::query(const std::string& query)
   if (!handle())
     throw DbErrors("No Database Connection");
   std::string qry = query;
-  int fs = qry.find("select");
-  int fS = qry.find("SELECT");
+  size_t fs = qry.find("select");
+  size_t fS = qry.find("SELECT");
   if (!(fs >= 0 || fS >= 0))
     throw DbErrors("MUST be select SQL!");
 
@@ -1939,7 +1942,7 @@ void MysqlDataset::cancel()
   }
 }
 
-int MysqlDataset::num_rows()
+size_t MysqlDataset::num_rows()
 {
   return result.records.size();
 }
@@ -1981,7 +1984,7 @@ void MysqlDataset::next(void)
 
 void MysqlDataset::free_row(void)
 {
-  if (frecno < 0 || (unsigned int)frecno >= result.records.size())
+  if (frecno >= result.records.size())
     return;
 
   sql_record* row = result.records[frecno];
