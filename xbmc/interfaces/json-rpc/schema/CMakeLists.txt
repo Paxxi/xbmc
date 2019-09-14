@@ -25,6 +25,4 @@ add_custom_target(generate_json_header ALL
                           ${CMAKE_BINARY_DIR}/addons/xbmc.json/addon.xml)
 set_target_properties(generate_json_header PROPERTIES FOLDER "Build Utilities")
 
-if(BOOTSTRAP_IN_TREE)
-  add_dependencies(generate_json_header JsonSchemaBuilder::JsonSchemaBuilder)
-endif()
+add_dependencies(generate_json_header JsonSchemaBuilder::JsonSchemaBuilder)
