@@ -15,6 +15,7 @@
 #include "utils/StringUtils.h"
 #include "utils/auto_buffer.h"
 
+#include "platform/win32/CharsetConverter.h"
 #include "platform/win32/WIN32Util.h"
 
 #include <Windows.h>
@@ -101,13 +102,8 @@ void CWin32InterfaceForCLog::PrintDebugString(const std::string& debugString)
 {
 #ifdef _DEBUG
   ::OutputDebugStringW(L"Debug Print: ");
-  int bufSize = MultiByteToWideChar(CP_UTF8, 0, debugString.c_str(), debugString.length(), NULL, 0);
-  XUTILS::auto_buffer buf(sizeof(wchar_t) * (bufSize + 1)); // '+1' for extra safety
-  if (MultiByteToWideChar(CP_UTF8, 0, debugString.c_str(), debugString.length(),
-                          (wchar_t*)buf.get(), buf.size() / sizeof(wchar_t)) == bufSize)
-    ::OutputDebugStringW(std::wstring((wchar_t*)buf.get(), bufSize).c_str());
-  else
-    ::OutputDebugStringA(debugString.c_str());
+  std::wstring debugMessage = KODI::PLATFORM::WINDOWS::ToW(debugString);
+  ::OutputDebugStringW(debugMessage.c_str());
   ::OutputDebugStringW(L"\n");
 #endif // _DEBUG
 }

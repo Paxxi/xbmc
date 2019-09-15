@@ -168,7 +168,7 @@ public:
   static OutputIt SplitTo(OutputIt d_first,
                           const std::string& input,
                           const std::string& delimiter,
-                          unsigned int iMaxStrings = 0)
+                          size_t iMaxStrings = 0)
   {
     OutputIt dest = d_first;
 

@@ -510,12 +510,12 @@ bool DatabaseUtils::GetDatabaseResults(const MediaType& mediaType,
     return true;
 
   const dbiplus::result_set& resultSet = dataset->get_result_set();
-  unsigned int offset = results.size();
+  size_t offset = results.size();
 
   if (fields.empty())
   {
     DatabaseResult result;
-    for (unsigned int index = 0; index < resultSet.records.size(); index++)
+    for (size_t index = 0; index < resultSet.records.size(); index++)
     {
       result[FieldRow] = index + offset;
       results.push_back(result);

@@ -3,7 +3,6 @@ set(SOURCES dll.cpp
             dll_tracker.cpp
             dll_tracker_file.cpp
             dll_tracker_library.cpp
-            dll_util.cpp
             LibraryLoader.cpp)
 
 set(HEADERS dll.h
@@ -11,7 +10,6 @@ set(HEADERS dll.h
             dll_tracker.h
             dll_tracker_file.h
             dll_tracker_library.h
-            dll_util.h
             LibraryLoader.h)
 
 if(NOT CORE_SYSTEM_NAME STREQUAL windows AND NOT CORE_SYSTEM_NAME STREQUAL windowsstore)

@@ -606,7 +606,7 @@ int CSkinInfo::TranslateString(const std::string& setting)
   CSkinSettingStringPtr skinString(new CSkinSettingString());
   skinString->name = setting;
 
-  int number = m_bools.size() + m_strings.size();
+  int number = static_cast<int>(m_bools.size() + m_strings.size());
   m_strings.insert(std::pair<int, CSkinSettingStringPtr>(number, skinString));
 
   return number;
@@ -648,7 +648,7 @@ int CSkinInfo::TranslateBool(const std::string& setting)
   CSkinSettingBoolPtr skinBool(new CSkinSettingBool());
   skinBool->name = setting;
 
-  int number = m_bools.size() + m_strings.size();
+  int number = static_cast<int>(m_bools.size() + m_strings.size());
   m_bools.insert(std::pair<int, CSkinSettingBoolPtr>(number, skinBool));
   m_settingsUpdateHandler->TriggerSave();
 

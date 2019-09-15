@@ -1612,7 +1612,7 @@ ssize_t CCurlFile::CReadState::Read(void* lpBuf, size_t uiBufSize)
   }
 
   /* ensure only available data is considered */
-  unsigned int want = std::min<unsigned int>(m_buffer.getMaxReadSize(), uiBufSize);
+  unsigned int want = std::min(m_buffer.getMaxReadSize(), uiBufSize);
 
   /* xfer data to caller */
   if (m_buffer.ReadData((char*)lpBuf, want))

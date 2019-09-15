@@ -131,11 +131,11 @@ public:
   iterator_map end_map();
   const_iterator_map end_map() const;
 
-  unsigned int size() const;
+  size_t size() const;
   bool empty() const;
   void clear();
   void erase(const std::string& key);
-  void erase(unsigned int position);
+  void erase(size_t position);
 
   bool isMember(const std::string& key) const;
 

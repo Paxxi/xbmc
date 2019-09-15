@@ -195,7 +195,7 @@ public:
     JSONSchemaPropertiesIterator begin() const;
     JSONSchemaPropertiesIterator find(const std::string& key) const;
     JSONSchemaPropertiesIterator end() const;
-    unsigned int size() const;
+    size_t size() const;
 
   private:
     std::map<std::string, JSONSchemaTypeDefinitionPtr> m_propertiesmap;

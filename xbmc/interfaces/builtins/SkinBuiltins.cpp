@@ -354,7 +354,7 @@ static int SetTheme(const std::vector<std::string>& params)
       URIUtils::RemoveExtension(strTmpTheme);
       if (StringUtils::EqualsNoCase(vecTheme[i], strTmpTheme))
       {
-        iTheme = i;
+        iTheme = static_cast<int>(i);
         break;
       }
     }
@@ -368,7 +368,7 @@ static int SetTheme(const std::vector<std::string>& params)
   if (iTheme > (int)vecTheme.size() - 1)
     iTheme = -1;
   if (iTheme < -1)
-    iTheme = vecTheme.size() - 1;
+    iTheme = static_cast<int>(vecTheme.size() - 1);
 
   std::string strSkinTheme = "SKINDEFAULT";
   if (iTheme != -1 && iTheme < (int)vecTheme.size())

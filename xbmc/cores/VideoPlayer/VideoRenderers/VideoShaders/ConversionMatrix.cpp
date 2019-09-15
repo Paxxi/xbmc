@@ -380,48 +380,48 @@ void CConvertMatrix::SetColPrimaries(AVColorPrimaries dst, AVColorPrimaries src)
     {
     case AVCOL_PRI_BT709:
       primToXYZ = PrimariesBT709;
-      m_gammaSrc = 2.2;
+      m_gammaSrc = 2.2f;
       break;
     case AVCOL_PRI_BT470BG:
       primToXYZ = PrimariesBT610_625;
-      m_gammaSrc = 2.2;
+      m_gammaSrc = 2.2f;
       break;
     case AVCOL_PRI_SMPTE170M:
     case AVCOL_PRI_SMPTE240M:
       primToXYZ = PrimariesBT610_525;
-      m_gammaSrc = 2.2;
+      m_gammaSrc = 2.2f;
       break;
     case AVCOL_PRI_BT2020:
       primToXYZ = PrimariesBT2020;
-      m_gammaSrc = 2.4;
+      m_gammaSrc = 2.4f;
       break;
     default:
       primToXYZ = PrimariesBT709;
-      m_gammaSrc = 2.2;
+      m_gammaSrc = 2.2f;
       break;
     }
     switch (m_colPrimariesDst)
     {
     case AVCOL_PRI_BT709:
       primToRGB = PrimariesBT709;
-      m_gammaDst = 2.2;
+      m_gammaDst = 2.2f;
       break;
     case AVCOL_PRI_BT470BG:
       primToRGB = PrimariesBT610_625;
-      m_gammaDst = 2.2;
+      m_gammaDst = 2.2f;
       break;
     case AVCOL_PRI_SMPTE170M:
     case AVCOL_PRI_SMPTE240M:
       primToRGB = PrimariesBT610_525;
-      m_gammaDst = 2.2;
+      m_gammaDst = 2.2f;
       break;
     case AVCOL_PRI_BT2020:
       primToRGB = PrimariesBT2020;
-      m_gammaDst = 2.4;
+      m_gammaDst = 2.4f;
       break;
     default:
       primToRGB = PrimariesBT709;
-      m_gammaDst = 2.2;
+      m_gammaDst = 2.2f;
       break;
     }
     PrimaryToXYZ toXYZ(primToXYZ.primaries, primToXYZ.whitepoint);

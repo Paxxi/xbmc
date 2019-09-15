@@ -3243,7 +3243,7 @@ void CApplication::OnPlayerCloseFile(const CFileItem& file, const CBookmark& boo
     bookmark.partNumber = m_stackHelper.GetRegisteredStackPartNumber(file);
   }
 
-  percent = bookmark.timeInSeconds / bookmark.totalTimeInSeconds * 100;
+  percent = static_cast<float>(bookmark.timeInSeconds / bookmark.totalTimeInSeconds * 100);
 
   const std::shared_ptr<CAdvancedSettings> advancedSettings =
       CServiceBroker::GetSettingsComponent()->GetAdvancedSettings();
@@ -3370,8 +3370,8 @@ void CApplication::OnPlayBackSeek(int64_t iTime, int64_t seekOffset)
 #endif
 
   CVariant param;
-  CJSONUtils::MillisecondsToTimeObject(iTime, param["player"]["time"]);
-  CJSONUtils::MillisecondsToTimeObject(seekOffset, param["player"]["seekoffset"]);
+  CJSONUtils::MillisecondsToTimeObject(static_cast<int>(iTime), param["player"]["time"]);
+  CJSONUtils::MillisecondsToTimeObject(static_cast<int>(seekOffset), param["player"]["seekoffset"]);
   param["player"]["playerid"] = CServiceBroker::GetPlaylistPlayer().GetCurrentPlaylist();
   param["player"]["speed"] = (int)m_appPlayer.GetPlaySpeed();
   CServiceBroker::GetAnnouncementManager()->Announce(ANNOUNCEMENT::Player, "xbmc", "OnSeek",

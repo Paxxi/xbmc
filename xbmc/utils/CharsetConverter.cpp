@@ -561,11 +561,12 @@ bool CCharsetConverter::CInnerConverter::logicalToVisualBiDi(
     bool bidiFailed = false;
     FriBidiCharType baseCopy =
         base; // preserve same value for all lines, required because fribidi_log2vis will modify parameter value
-    if (fribidi_log2vis((const FriBidiChar*)(stringSrc.c_str() + lineStart), lineLen, &baseCopy,
-                        visual, NULL, NULL, NULL))
+    if (fribidi_log2vis((const FriBidiChar*)(stringSrc.c_str() + lineStart),
+                        static_cast<FriBidiStrIndex>(lineLen), &baseCopy, visual, NULL, NULL, NULL))
     {
       // Removes bidirectional marks
-      const int newLen = fribidi_remove_bidi_marks(visual, lineLen, NULL, NULL, NULL);
+      const int newLen = fribidi_remove_bidi_marks(visual, static_cast<FriBidiStrIndex>(lineLen),
+                                                   NULL, NULL, NULL);
       if (newLen > 0)
         stringDst.append((const char32_t*)visual, (size_t)newLen);
       else if (newLen < 0)

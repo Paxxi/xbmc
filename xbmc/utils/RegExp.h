@@ -102,7 +102,7 @@ public:
    *                                          string. If set to -1 string checked up to the end.
    * @return staring position of match in string, negative value in case of error or no match
    */
-  int RegFind(const std::string& str, unsigned int startoffset = 0, int maxNumberOfCharsToTest = -1)
+  int RegFind(const std::string& str, size_t startoffset = 0, int maxNumberOfCharsToTest = -1)
   {
     return PrivateRegFind(str.length(), str.c_str(), startoffset, maxNumberOfCharsToTest);
   }
@@ -143,7 +143,7 @@ public:
 private:
   int PrivateRegFind(size_t bufferLen,
                      const char* str,
-                     unsigned int startoffset = 0,
+                     size_t startoffset = 0,
                      int maxNumberOfCharsToTest = -1);
   void InitValues(bool caseless = false, CRegExp::utf8Mode utf8 = asciiOnly);
   static bool requireUtf8(const std::string& regexp);

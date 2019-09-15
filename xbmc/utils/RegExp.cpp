@@ -334,7 +334,7 @@ int CRegExp::RegFind(const char* str,
 
 int CRegExp::PrivateRegFind(size_t bufferLen,
                             const char* str,
-                            unsigned int startoffset /* = 0*/,
+                            size_t startoffset /* = 0*/,
                             int maxNumberOfCharsToTest /*= -1*/)
 {
   m_offset = 0;

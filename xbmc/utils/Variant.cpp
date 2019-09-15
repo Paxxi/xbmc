@@ -803,7 +803,7 @@ CVariant::const_iterator_map CVariant::end_map() const
     return EMPTY_MAP.end();
 }
 
-unsigned int CVariant::size() const
+size_t CVariant::size() const
 {
   if (m_type == VariantTypeObject)
     return m_data.map->size();
@@ -856,7 +856,7 @@ void CVariant::erase(const std::string& key)
     m_data.map->erase(key);
 }
 
-void CVariant::erase(unsigned int position)
+void CVariant::erase(size_t position)
 {
   if (m_type == VariantTypeNull)
   {

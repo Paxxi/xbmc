@@ -341,7 +341,7 @@ extern "C"
   {
     //ported from WINE code
     PFV* tmp;
-    int len;
+    ptrdiff_t len;
 
     if (!start || !*start || !end || !*end)
     {
@@ -401,12 +401,12 @@ extern "C"
     tmp[2048 - 1] = 0;
     CLog::Log(LOGDEBUG, "  msg: %s", tmp);
 
-    return strlen(tmp);
+    return static_cast<int>(strlen(tmp));
   }
 
   char* dll_fullpath(char* absPath, const char* relPath, size_t maxLength)
   {
-    unsigned int len = strlen(relPath);
+    size_t len = strlen(relPath);
     if (len > maxLength && absPath != NULL)
       return NULL;
 
@@ -574,7 +574,7 @@ extern "C"
 
         return -1;
       }
-      return ret;
+      return static_cast<int>(ret);
     }
     else if (!IS_STD_DESCRIPTOR(fd))
     {
@@ -605,7 +605,7 @@ extern "C"
 
         return -1;
       }
-      return ret;
+      return static_cast<int>(ret);
     }
     else if (!IS_STD_DESCRIPTOR(fd))
     {
@@ -884,7 +884,7 @@ extern "C"
       intptr_t ret = _wfindnext64i32(f, &wdata); // local dir
       if (ret != -1)
         to_finddata64i32(&wdata, data);
-      return ret;
+      return static_cast<int>(ret);
     }
 
     // we have a valid data struture. get next item!
@@ -1105,7 +1105,7 @@ extern "C"
           break;
         read += r;
       } while (bufSize > read);
-      return read / size;
+      return static_cast<int>(read / size);
     }
     CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
     return 0;
@@ -1220,7 +1220,8 @@ extern "C"
       if (g_emuFileWrapper.StreamIsEmulatedFile(stream))
       {
         size_t len = strlen(szLine);
-        return dll_fwrite(static_cast<const void*>(szLine), sizeof(char), len, stream);
+        return static_cast<int>(
+            dll_fwrite(static_cast<const void*>(szLine), sizeof(char), len, stream));
       }
     }
 
@@ -1409,7 +1410,7 @@ extern "C"
   {
     std::string buffer = StringUtils::FormatV(format, va);
     CLog::Log(LOGDEBUG, "  msg: %s", buffer.c_str());
-    return buffer.length();
+    return static_cast<int>(buffer.length());
   }
 
   int dll_vfprintf(FILE* stream, const char* format, va_list va)
@@ -1425,18 +1426,18 @@ extern "C"
     if (IS_STDOUT_STREAM(stream) || IS_STDERR_STREAM(stream) || !IS_VALID_STREAM(stream))
     {
       CLog::Log(LOGINFO, "  msg: %s", tmp);
-      return strlen(tmp);
+      return static_cast<int>(strlen(tmp));
     }
     else
     {
       CFile* pFile = g_emuFileWrapper.GetFileXbmcByStream(stream);
       if (pFile != NULL)
       {
-        int len = strlen(tmp);
+        size_t len = strlen(tmp);
         // replace all '\n' occurences with '\r\n'...
         char tmp2[2048];
-        int j = 0;
-        for (int i = 0; i < len; i++)
+        size_t j = 0;
+        for (size_t i = 0; i < len; i++)
         {
           if (j == 2047)
           { // out of space
@@ -1458,12 +1459,12 @@ extern "C"
         tmp2[j] = 0;
         len = strlen(tmp2);
         pFile->Write(tmp2, len);
-        return len;
+        return static_cast<int>(len);
       }
     }
 
     CLog::Log(LOGERROR, "%s emulated function failed", __FUNCTION__);
-    return strlen(tmp);
+    return static_cast<int>(strlen(tmp));
   }
 
   int dll_fscanf(FILE* stream, const char* format, ...)
@@ -1827,7 +1828,7 @@ extern "C"
       if (value_start != NULL)
       {
         char var[64];
-        int size = strlen(envstring) + 1;
+        size_t size = strlen(envstring) + 1;
         char* value = (char*)malloc(size);
 
         if (!value)

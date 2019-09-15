@@ -151,7 +151,7 @@ std::vector<std::string> CWin32StorageProvider::GetDiskUsage()
     dwStrLength += 1;
     pcBuffer.reset(new wchar_t[dwStrLength]);
     GetLogicalDriveStrings(dwStrLength, pcBuffer.get());
-    int iPos = 0;
+    size_t iPos = 0;
     do
     {
       std::wstring strDrive = pcBuffer.get() + iPos;
@@ -192,7 +192,7 @@ void CWin32StorageProvider::GetDrivesByType(VECSOURCES& localDrives,
     pcBuffer.reset(new wchar_t[dwStrLength]);
     GetLogicalDriveStringsW(dwStrLength, pcBuffer.get());
 
-    int iPos = 0;
+    size_t iPos = 0;
     WCHAR cVolumeName[100];
     do
     {

@@ -239,7 +239,7 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
 
   strOutput = StringUtils::Format("Thread %d (process %d)\r\n", GetCurrentThreadId(),
                                   GetCurrentProcessId());
-  WriteFile(hDumpFile, strOutput.c_str(), strOutput.size(), &dwBytes, NULL);
+  WriteFile(hDumpFile, strOutput.c_str(), static_cast<DWORD>(strOutput.size()), &dwBytes, NULL);
 
   while (pSW(IMAGE_FILE_MACHINE_I386, hCurProc, GetCurrentThread(), &frame, pEp->ContextRecord,
              NULL, pSFTA, pSGMB, NULL))
@@ -259,7 +259,7 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
         strOutput.append(StringUtils::Format(" at %s:%d", Line.FileName, Line.LineNumber));
 
       strOutput.append("\r\n");
-      WriteFile(hDumpFile, strOutput.c_str(), strOutput.size(), &dwBytes, NULL);
+      WriteFile(hDumpFile, strOutput.c_str(), static_cast<DWORD>(strOutput.size()), &dwBytes, NULL);
     }
   }
   returncode = true;

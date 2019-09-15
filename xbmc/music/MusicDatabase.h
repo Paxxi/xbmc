@@ -432,7 +432,7 @@ public:
   /////////////////////////////////////////////////
   // Link tables
   /////////////////////////////////////////////////
-  bool AddAlbumArtist(int idArtist, int idAlbum, std::string strArtist, int iOrder);
+  bool AddAlbumArtist(int idArtist, int idAlbum, std::string strArtist, size_t iOrder);
   bool GetAlbumsByArtist(int idArtist, std::vector<int>& albums);
   bool GetArtistsByAlbum(int idAlbum, CFileItem* item);
   bool DeleteAlbumArtistsByAlbum(int idAlbum);
@@ -442,9 +442,9 @@ public:
                      int idSong,
                      const std::string& strRole,
                      const std::string& strArtist,
-                     int iOrder);
+                     size_t iOrder);
   bool AddSongArtist(
-      int idArtist, int idSong, int idRole, const std::string& strArtist, int iOrder);
+      int idArtist, int idSong, int idRole, const std::string& strArtist, size_t iOrder);
   int AddSongContributor(int idSong,
                          const std::string& strRole,
                          const std::string& strArtist,
@@ -587,7 +587,7 @@ public:
   \param songIDs a vector of <1, id> pairs suited to party mode use
   \return count of song ids found.
   */
-  unsigned int GetRandomSongIDs(const Filter& filter, std::vector<std::pair<int, int>>& songIDs);
+  size_t GetRandomSongIDs(const Filter& filter, std::vector<std::pair<int, int>>& songIDs);
 
   /////////////////////////////////////////////////
   // JSON-RPC

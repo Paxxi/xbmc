@@ -101,8 +101,8 @@ enum CONTEXT_BUTTON
 class CContextButtons : public std::vector<std::pair<size_t, std::string>>
 {
 public:
-  void Add(unsigned int, const std::string& label);
-  void Add(unsigned int, int label);
+  void Add(size_t, const std::string& label);
+  void Add(size_t, int label);
 };
 
 class CGUIDialogContextMenu : public CGUIDialog

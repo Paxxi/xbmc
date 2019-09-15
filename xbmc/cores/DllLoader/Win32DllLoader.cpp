@@ -107,7 +107,7 @@ Export win32_exports[] = {
     {"_environ", static_cast<unsigned long>(-1), (void*)&dll__environ, NULL},
     {"_open_osfhandle", static_cast<unsigned long>(-1), (void*)dll_open_osfhandle, NULL},
 
-    {NULL, -1, NULL, NULL}};
+    {NULL, static_cast<unsigned long>(-1), NULL, NULL}};
 
 Win32DllLoader::Win32DllLoader(const std::string& dll, bool isSystemDll)
   : LibraryLoader(dll)

@@ -66,14 +66,14 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
 
   int choseong = -1, jungseong = -1, jongseong = -1;
 
-  for (unsigned int i = 0; i < input.size(); i++)
+  for (size_t i = 0; i < input.size(); i++)
   {
     wchar_t ch = input.at(i);
-    int key = dicKorean.find(ch);
+    size_t key = dicKorean.find(ch);
 
     // H/W Keyboard input with English will be changed to Korean
     // because H/W input in Korean is not supported.
-    if (key == -1)
+    if (key == static_cast<size_t>(-1))
       key = dicEnglish.find(ch);
 
     if (key == -1) // If not Korean and English
@@ -112,8 +112,9 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
         }
         else // Jungseong with choseong can have jongseong.
         {
-          if (jongseong ==
-              -1) // Chongseong can have two consonant. So this is first consonant of chongseong.
+          // Chongseong can have two consonant.
+          // So this is first consonant of chongseong.
+          if (jongseong == -1)
           {
             jongseong = dicJongseong.find(dicKorean.at(key));
             if (jongseong == -1) // This consonant cannot be jongseong. ex) "ㄸ", "ㅃ", "ㅉ"
@@ -156,12 +157,12 @@ std::wstring CInputCodingTableKorean::InputToKorean(const std::wstring& input)
       }
       else // If there is no jungseong, new consonant can be choseong or second part of double consonant.
       {
-        if (choseong ==
-            -1) // New consonant is choseong. Also it could be first part of double consonant.
+        // New consonant is choseong. Also it could be first part of double consonant.
+        if (choseong == -1)
         {
-          if (jongseong !=
-              -1) // If choseong is already completed, new consonant is another choseong.
-              // So previous character has only jongseong.
+          // If choseong is already completed, new consonant is another choseong.
+          // So previous character has only jongseong.
+          if (jongseong != -1)
           {
             korean += dicJongseong.at(jongseong);
             jongseong = -1;

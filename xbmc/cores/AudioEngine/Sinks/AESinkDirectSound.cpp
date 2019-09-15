@@ -8,7 +8,6 @@
 
 #define INITGUID
 
-
 #include "AESinkDirectSound.h"
 
 #include "cores/AudioEngine/AESinkFactory.h"
@@ -30,7 +29,6 @@
 #include <mmdeviceapi.h>
 #include <Functiondiscoverykeys_devpkey.h>
 // clang-format on
-#include <mmdeviceapi.h>
 #include <Mmreg.h>
 #include <Rpc.h>
 #include <initguid.h>

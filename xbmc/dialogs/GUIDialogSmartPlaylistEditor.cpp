@@ -309,7 +309,7 @@ void CGUIDialogSmartPlaylistEditor::OnLimit()
   for (auto limit = limits.begin(); limit != limits.end(); limit++)
   {
     if (*limit == static_cast<int>(m_playlist.m_limit))
-      selected = std::distance(limits.begin(), limit);
+      selected = static_cast<int>(std::distance(limits.begin(), limit));
     if (*limit == 0)
       dialog->Add(g_localizeStrings.Get(21428));
     else
@@ -486,7 +486,7 @@ void CGUIDialogSmartPlaylistEditor::UpdateButtons()
 
 void CGUIDialogSmartPlaylistEditor::UpdateRuleControlButtons()
 {
-  int iSize = m_playlist.m_ruleCombination.m_rules.size();
+  int iSize = static_cast<int>(m_playlist.m_ruleCombination.m_rules.size());
   int iItem = GetSelectedItem();
   // only enable the remove control if ...
   CONTROL_ENABLE_ON_CONDITION(CONTROL_RULE_REMOVE,

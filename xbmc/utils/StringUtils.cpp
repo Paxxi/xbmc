@@ -857,7 +857,7 @@ std::vector<std::string> StringUtils::SplitMulti(const std::vector<std::string>&
 
   // Control the number of strings input is split into, keeping the original strings.
   // Note iMaxStrings > input.size()
-  int iNew = iMaxStrings - results.size();
+  size_t iNew = iMaxStrings - results.size();
   for (size_t di = 0; di < delimiters.size(); di++)
   {
     for (size_t i = 0; i < results.size(); i++)
@@ -1143,7 +1143,7 @@ std::string StringUtils::BinaryStringToString(const std::string& in)
       if (isdigit(*cur))
       {
         char* end;
-        unsigned long num = strtol(cur, &end, 10);
+        size_t num = strtol(cur, &end, 10);
         cur = end - 1;
         out.push_back(num);
         continue;
@@ -1312,7 +1312,7 @@ int StringUtils::FindBestMatch(const std::string& str,
   for (std::vector<std::string>::const_iterator it = strings.begin(); it != strings.end();
        ++it, i++)
   {
-    int maxlength = std::max(str.length(), it->length());
+    size_t maxlength = std::max(str.length(), it->length());
     double score = StringUtils::CompareFuzzy(str, *it) / maxlength;
     if (score > matchscore)
     {

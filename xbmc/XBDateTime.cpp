@@ -1222,9 +1222,9 @@ std::string CDateTime::GetAsLocalizedTime(const std::string& format, bool withSe
     }
     else if (c == 'h' || c == 'H') // parse hour (H="24 hour clock")
     {
-      int partLength = 0;
+      size_t partLength = 0;
 
-      int pos = strFormat.find_first_not_of(c, i + 1);
+      size_t pos = strFormat.find_first_not_of(c, i + 1);
       if (pos > -1)
       {
         // Get length of the hour mask, eg. HH
@@ -1258,9 +1258,9 @@ std::string CDateTime::GetAsLocalizedTime(const std::string& format, bool withSe
     }
     else if (c == 'm') // parse minutes
     {
-      int partLength = 0;
+      size_t partLength = 0;
 
-      int pos = strFormat.find_first_not_of(c, i + 1);
+      size_t pos = strFormat.find_first_not_of(c, i + 1);
       if (pos > -1)
       {
         // Get length of the minute mask, eg. mm
@@ -1285,9 +1285,9 @@ std::string CDateTime::GetAsLocalizedTime(const std::string& format, bool withSe
     }
     else if (c == 's') // parse seconds
     {
-      int partLength = 0;
+      size_t partLength = 0;
 
-      int pos = strFormat.find_first_not_of(c, i + 1);
+      size_t pos = strFormat.find_first_not_of(c, i + 1);
       if (pos > -1)
       {
         // Get length of the seconds mask, eg. ss
@@ -1317,7 +1317,7 @@ std::string CDateTime::GetAsLocalizedTime(const std::string& format, bool withSe
     }
     else if (c == 'x') // add meridiem symbol
     {
-      int pos = strFormat.find_first_not_of(c, i + 1);
+      size_t pos = strFormat.find_first_not_of(c, i + 1);
       if (pos > -1)
       {
         // Get length of the meridiem mask

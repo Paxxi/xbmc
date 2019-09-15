@@ -444,14 +444,14 @@ static bool localGetNetworkResources(struct _NETRESOURCEW* basePathToScanPtr,
   do
   {
     DWORD resCount = -1;
-    DWORD bufSize = buf.size();
+    DWORD bufSize = static_cast<DWORD>(buf.size());
     result = WNetEnumResourceW(netEnum, &resCount, buf.get(), &bufSize);
     if (result == NO_ERROR)
     {
       if (bufSize > buf.size())
       { // buffer is too small
         buf.allocate(bufSize); // discard buffer content and extend the buffer
-        bufSize = buf.size();
+        bufSize = static_cast<DWORD>(buf.size());
         result = WNetEnumResourceW(netEnum, &resCount, buf.get(), &bufSize);
         if (result != NO_ERROR || bufSize > buf.size())
           errorFlag = true; // hardly ever happens
