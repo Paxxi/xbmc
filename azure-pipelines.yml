@@ -23,6 +23,6 @@ jobs:
         x64-uwp:
           BUILD_ARCH: x64
     steps:
-      - script: tools\buildsteps\windows\$(BUILD_ARCH)BuildSetup.bat
+      - script: tools\buildsteps\windows\$(BUILD_ARCH)\BuildSetup.bat
         displayName: 'Run BuildSetup.bat'
 
