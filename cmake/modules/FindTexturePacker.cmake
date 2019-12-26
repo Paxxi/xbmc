@@ -11,16 +11,23 @@
 #
 #   TexturePacker::TexturePacker   - The TexturePacker executable
 
+include(cmake/scripts/common/BuildNative.cmake)
+
 if(NOT TARGET TexturePacker::TexturePacker)
   if(KODI_DEPENDSBUILD)
     add_executable(TexturePacker::TexturePacker IMPORTED GLOBAL)
     set_target_properties(TexturePacker::TexturePacker PROPERTIES
                                                        IMPORTED_LOCATION "${NATIVEPREFIX}/bin/TexturePacker")
-  elseif(WIN32)
-    add_executable(TexturePacker::TexturePacker IMPORTED GLOBAL)
-    set_target_properties(TexturePacker::TexturePacker PROPERTIES
-                                                       IMPORTED_LOCATION "${DEPENDENCIES_DIR}/tools/TexturePacker/TexturePacker.exe")
   else()
+    if(CMAKE_HOST_WIN32 AND NOT WITH_TEXTUREPACKER)
+      build_native_tool(NAME TexturePacker
+                        SOURCE_DIR ${CMAKE_SOURCE_DIR}/tools/depends/native/TexturePacker
+                        BUILD_DIR ${CMAKE_BINARY_DIR}/TexturePacker-build
+                        EXTRA_ARGS
+                          -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/project/BuildDependencies/Win32
+                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+    set(WITH_TEXTUREPACKER ${TEXTUREPACKER_DIR})
+    endif()
     if(WITH_TEXTUREPACKER)
       get_filename_component(_tppath ${WITH_TEXTUREPACKER} ABSOLUTE)
       find_program(TEXTUREPACKER_EXECUTABLE TexturePacker PATHS ${_tppath})

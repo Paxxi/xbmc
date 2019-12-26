@@ -43,9 +43,6 @@ if(FRIBIDI_FOUND)
                                            IMPORTED_LOCATION "${FRIBIDI_LIBRARY}"
                                            INTERFACE_INCLUDE_DIRECTORIES "${FRIBIDI_INCLUDE_DIR}"
                                            INTERFACE_COMPILE_OPTIONS "${FRIBIDI_DEFINITIONS}")
-    if(FRIBIDI_LIBRARY MATCHES "static")
-      target_compile_definitions(FriBidi::FriBidi INTERFACE FRIBIDI_STATIC)
-    endif()
   endif()
 endif()
 

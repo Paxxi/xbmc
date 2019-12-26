@@ -11,16 +11,25 @@
 #
 #   JsonSchemaBuilder::JsonSchemaBuilder   - The JsonSchemaBuilder executable
 
+include(cmake/scripts/common/BuildNative.cmake)
+
 if(NOT TARGET JsonSchemaBuilder::JsonSchemaBuilder)
   if(KODI_DEPENDSBUILD)
     add_executable(JsonSchemaBuilder::JsonSchemaBuilder IMPORTED GLOBAL)
     set_target_properties(JsonSchemaBuilder::JsonSchemaBuilder PROPERTIES
                                                        IMPORTED_LOCATION "${NATIVEPREFIX}/bin/JsonSchemaBuilder")
-  elseif(CORE_SYSTEM_NAME STREQUAL windowsstore)
-    add_executable(JsonSchemaBuilder::JsonSchemaBuilder IMPORTED GLOBAL)
-    set_target_properties(JsonSchemaBuilder::JsonSchemaBuilder PROPERTIES
-                                                       IMPORTED_LOCATION "${DEPENDENCIES_DIR}/bin/json-rpc/JsonSchemaBuilder")
   else()
+    if(CMAKE_HOST_WIN32 AND NOT WITH_JSONSCHEMABUILDER)
+      build_native_tool(NAME JsonSchemaBuilder
+                        SOURCE_DIR ${CMAKE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder
+                        BUILD_DIR ${CMAKE_BINARY_DIR}/JsonSchemaBuilder-build
+                        EXTRA_ARGS
+                          -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/project/BuildDependencies/Win32
+                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+      message("JSON=${JSONSCHEMABUILDER_DIR}")
+      set(WITH_JSONSCHEMABUILDER ${JSONSCHEMABUILDER_DIR})
+    endif()
+    message("JSON=${WITH_JSONSCHEMABUILDER}")
     if(WITH_JSONSCHEMABUILDER)
       get_filename_component(_jsbpath ${WITH_JSONSCHEMABUILDER} ABSOLUTE)
       find_program(JSONSCHEMABUILDER_EXECUTABLE JsonSchemaBuilder PATHS ${_jsbpath})

@@ -1,4 +1,14 @@
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+if(NOT PROJECT_NAME)
+  cmake_minimum_required(VERSION 3.16)
+  project(TexturePacker LANGUAGES CXX)
+  set(KODI_ROOT ${CMAKE_SOURCE_DIR}/../../../..)
+  # separate_arguments(ARCH_DEFINES NATIVE_COMMAND ${EXTRA_DEFINES})
+  set(ARCH_DEFINES ${EXTRA_DEFINES})
+else()
+  set(KODI_ROOT ${CMAKE_SOURCE_DIR})
+endif()
+
+list(APPEND CMAKE_MODULE_PATH ${KODI_ROOT}/cmake/modules)
 
 if(APPLE)
   set(CMAKE_FIND_ROOT_PATH ${NATIVEPREFIX})
@@ -33,7 +43,7 @@ set(SOURCES src/md5.cpp
             src/decoder/GifHelper.cpp
             src/decoder/JPGDecoder.cpp
             src/decoder/PNGDecoder.cpp
-            ${CMAKE_SOURCE_DIR}/xbmc/guilib/XBTF.cpp)
+            ${KODI_ROOT}/xbmc/guilib/XBTF.cpp)
 
 set(CMAKE_POSITITION_INDEPENDENT_CODE 1)
 
@@ -42,13 +52,34 @@ target_include_directories(TexturePacker
                            PRIVATE ${PNG_INCLUDE_DIRS}
                                     ${JPEG_INCLUDE_DIR}
                                     ${GIF_INCLUDE_DIR}
-                                    ${CMAKE_SOURCE_DIR}/xbmc
+                                    ${KODI_ROOT}/xbmc
                                     ${CMAKE_CURRENT_SOURCE_DIR}/src
                                     ${CMAKE_CURRENT_SOURCE_DIR}/src/decoder)
+
+if(CMAKE_HOST_WIN32)
+# The PNG module adds a dependency on shared
+# zlib so we use the no_module version to specify
+# a static zlib
+find_package(zlib REQUIRED NO_MODULE)
+find_package(libpng REQUIRED NO_MODULE)
+target_link_libraries(TexturePacker
+                      PRIVATE zlib::zlibstatic
+                              libpng::png_static
+                              ${GIF_LIBRARIES}
+                              ${JPEG_LIBRARIES}
+                              ${LZO2_LIBRARIES})
+target_include_directories(TexturePacker
+                           PRIVATE ${KODI_ROOT}/xbmc/platform/win32)
+else()
 target_link_libraries(TexturePacker
                       PRIVATE ${SYSTEM_LDFLAGS}
                               ${GIF_LIBRARIES}
                               ${PNG_LIBRARIES}
                               ${JPEG_LIBRARIES}
                               ${LZO2_LIBRARIES})
+endif()
 target_compile_options(TexturePacker PRIVATE ${ARCH_DEFINES})
+
+export(TARGETS TexturePacker
+               NAMESPACE TexturePacker::
+               FILE TexturePacker.cmake)
