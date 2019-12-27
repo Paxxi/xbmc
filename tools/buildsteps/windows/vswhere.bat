@@ -27,44 +27,57 @@ SET vcvars=no
 SET sdkver=
 
 SET vsver=
-SET toolsdir=%arch%
+
+SET CPPDESKTOP=Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core
+SET CPPDESKTOPNAME=Visual C++ core desktop features
+SET CPPX64=Microsoft.VisualStudio.Component.VC.Tools.x86.x64
+SET CPPX64NAME=VC++ 2017 version 15.9 v14.16 latest v141 tools
+SET CPPX64NAME2019=MSVC v142 - VS 2019 C++ x64/x86 build tools (v14.24)
+SET CPPSDK=Microsoft.VisualStudio.Component.Windows10SDK.17763
+SET CPPSDKNAME=Windows 10 SDK (10.0.17763.0)
 
 IF "%arch%" NEQ "x64" (
   SET vcarch=%vcarch%_%arch%
 )
 
-IF "%arch%"=="x86" (
-  SET toolsdir=win32
-)
-
 IF "%vcstore%"=="store" (
   SET sdkver=10.0.17763.0
-  SET toolsdir="win10-%toolsdir%"
 )
 
-SET vswhere="%builddeps%\%toolsdir%\tools\vswhere\vswhere.exe"
+REM It's not an issue to hard code this. This path cannot be changed even if a user
+REM opts to install Visual Studio on another drive.
+SET vswhere="C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
 
-FOR /f "usebackq tokens=1* delims=" %%i in (`%vswhere% -latest -property installationPath`) do (
+FOR /f "tokens=* usebackq" %%i in (`%vswhere% -nologo -version [16^,17^) -property installationPath -requires %CPPDESKTOP% %CPPX64% %CPPSDK%`) do (
+  echo "%%i"
   IF EXIST "%%i\VC\Auxiliary\Build\vcvarsall.bat" (
     SET vcvars="%%i\VC\Auxiliary\Build\vcvarsall.bat"
-    SET vsver=15
+    SET vsver=16
   )
 )
 
 IF %vcvars%==no (
-  FOR /f "usebackq tokens=1* delims=" %%i in (`%vswhere% -legacy -property installationPath`) do (
-    ECHO %%i | findstr "14" >NUL 2>NUL
-    IF NOT ERRORLEVEL 1 (
-      IF EXIST "%%i\VC\vcvarsall.bat" (
-        SET vcvars="%%i\VC\vcvarsall.bat"
-        SET vsver=14
-      )
+  FOR /f "tokens=* usebackq" %%i in (`%vswhere% -nologo -version [15^,16^) -property installationPath -requires %CPPDESKTOP% %CPPX64% %CPPSDK%`) do (
+  echo "%%i"
+    IF EXIST "%%i\VC\Auxiliary\Build\vcvarsall.bat" (
+      SET vcvars="%%i\VC\Auxiliary\Build\vcvarsall.bat"
+      SET vsver=15
     )
   )
 )
 
 IF %vcvars%==no (
-  ECHO "ERROR! Could not find vcvarsall.bat"
+  ECHO "ERROR! Could not find vcvarsall.bat for either VS 2017 or 2019"
+  ECHO "ERROR! Kodi requires these workloads to be installed"
+  ECHO "ERROR! For Visual Studio 2019"
+  ECHO "ERROR! %CPPX64NAME2019% ID=%CPPX64%"
+  ECHO "ERROR!"
+  ECHO "ERROR! For Visual Studio 2017"
+  ECHO "ERROR! %CPPX64NAME% ID=%CPPX64%"
+  ECHO "ERROR!"
+  ECHO "ERROR! For both versions"
+  ECHO "ERROR! %CPPDESKTOPNAME% ID=%CPPDESKTOP%"
+  ECHO "ERROR! %CPPSDKNAME% ID=%CPPSDK%"
   EXIT /B 1
 )
 
