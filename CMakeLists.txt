@@ -37,6 +37,7 @@ include(cmake/scripts/common/ProjectMacros.cmake)
 core_find_versions()
 include(cmake/scripts/${CORE_SYSTEM_NAME}/PathSetup.cmake)
 include(cmake/scripts/common/CompilerSettings.cmake)
+include(cmake/scripts/common/DownloadAndExtractDepends.cmake)
 include(ExternalProject)
 
 
@@ -91,6 +92,9 @@ set(INCLUDES ${CMAKE_SOURCE_DIR}
 if (NOT PLATFORMDEFS_DIR STREQUAL "")
   list(APPEND INCLUDES ${CMAKE_SOURCE_DIR}/xbmc/${PLATFORMDEFS_DIR})
 endif()
+
+# No-op on non-windows platforms
+download_and_extract_depends()
 
 find_package(PkgConfig)
 find_package(Threads REQUIRED QUIET)

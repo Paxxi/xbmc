@@ -217,6 +217,9 @@ cmake_install.cmake
 /project/BuildDependencies/win10-x64
 /project/BuildDependencies/win10-win32
 /project/BuildDependencies/win32
+/project/BuildDependencies/native
+/project/BuildDependencies/arm64
+/project/BuildDependencies/win10-arm64
 
 # /system/players/VideoPlayer
 /system/players/VideoPlayer/*
