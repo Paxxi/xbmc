@@ -4,7 +4,7 @@
 # D3DCOMPILER_DLL - Path to the Direct3D Compiler
 # FXC - Path to the DirectX Effects Compiler (FXC)
 
-if(NOT CORE_SYSTEM_NAME STREQUAL windowsstore)
+if((NOT CORE_SYSTEM_NAME STREQUAL windowsstore) AND (NOT CMAKE_GENERATOR_PLATFORM MATCHES ^arm64))
   find_file(D3DCOMPILER_DLL
             NAMES d3dcompiler_47.dll d3dcompiler_46.dll
             PATHS

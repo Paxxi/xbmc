@@ -47,7 +47,12 @@ if(ENABLE_INTERNAL_FLATBUFFERS)
   set_target_properties(flatbuffers PROPERTIES FOLDER "External Projects"
                                     INTERFACE_INCLUDE_DIRECTORIES ${FLATBUFFERS_INCLUDE_DIR})
 else()
+  find_program(NAMES flatc)
+  set(TEMP_CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}")
+  set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/project/BuildDependencies/native)
   find_program(FLATBUFFERS_FLATC_EXECUTABLE NAMES flatc)
+  set(CMAKE_PREFIX_PATH "${TEMP_CMAKE_PREFIX_PATH}")
+
   find_path(FLATBUFFERS_INCLUDE_DIR NAMES flatbuffers/flatbuffers.h)
 endif()
 

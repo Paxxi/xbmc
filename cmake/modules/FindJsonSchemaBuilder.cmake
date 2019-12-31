@@ -24,7 +24,7 @@ if(NOT TARGET JsonSchemaBuilder::JsonSchemaBuilder)
                         SOURCE_DIR ${CMAKE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder
                         BUILD_DIR ${CMAKE_BINARY_DIR}/JsonSchemaBuilder-build
                         EXTRA_ARGS
-                          -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/project/BuildDependencies/Win32
+                          -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/project/BuildDependencies/native
                         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
       message("JSON=${JSONSCHEMABUILDER_DIR}")
       set(WITH_JSONSCHEMABUILDER ${JSONSCHEMABUILDER_DIR})

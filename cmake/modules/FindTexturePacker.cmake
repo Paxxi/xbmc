@@ -24,7 +24,8 @@ if(NOT TARGET TexturePacker::TexturePacker)
                         SOURCE_DIR ${CMAKE_SOURCE_DIR}/tools/depends/native/TexturePacker
                         BUILD_DIR ${CMAKE_BINARY_DIR}/TexturePacker-build
                         EXTRA_ARGS
-                          -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/project/BuildDependencies/Win32
+                          -A Win32
+                          -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/project/BuildDependencies/native
                         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
     set(WITH_TEXTUREPACKER ${TEXTUREPACKER_DIR})
     endif()
@@ -40,9 +41,6 @@ if(NOT TARGET TexturePacker::TexturePacker)
                                                            IMPORTED_LOCATION "${TEXTUREPACKER_EXECUTABLE}")
       endif()
       mark_as_advanced(TEXTUREPACKER)
-    else()
-      add_subdirectory(${CMAKE_SOURCE_DIR}/tools/depends/native/TexturePacker build/texturepacker)
-      add_executable(TexturePacker::TexturePacker ALIAS TexturePacker)
     endif()
   endif()
 endif()

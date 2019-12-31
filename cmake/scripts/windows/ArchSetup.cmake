@@ -9,12 +9,18 @@ endif()
 
 # -------- Architecture settings ---------
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+if(CMAKE_GENERATOR_PLATFORM MATCHES win32)
   set(ARCH win32)
   set(SDK_TARGET_ARCH x86)
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+elseif(CMAKE_GENERATOR_PLATFORM MATCHES x64)
   set(ARCH x64)
   set(SDK_TARGET_ARCH x64)
+elseif(CMAKE_GENERATOR_PLATFORM MATCHES ^arm64)
+  set(ARCH arm64)
+  set(SDK_TARGET_ARCH arm64)
+elseif(CMAKE_GENERATOR_PLATFORM MATCHES ^arm)
+  set(ARCH arm)
+  set(SDK_TARGET_ARCH arm)
 endif()
 
 
@@ -39,21 +45,28 @@ list(APPEND CMAKE_PREFIX_PATH ${DEPENDENCIES_DIR})
 # -------- Compiler options ---------
 
 add_options(CXX ALL_BUILDS "/wd\"4996\"")
-set(ARCH_DEFINES -D_WINDOWS -DTARGET_WINDOWS -DTARGET_WINDOWS_DESKTOP -D__SSE__ -D__SSE2__)
+set(ARCH_DEFINES -D_WINDOWS -DTARGET_WINDOWS -DTARGET_WINDOWS_DESKTOP)
+if (NOT CMAKE_GENERATOR_PLATFORM MATCHES ^arm)
+  list(APPEND ARCH_DEFINES -D__SSE__ -D__SSE2__)
+else()
+  list(APPEND ARCH_DEFINES -DDISABLE_MATHUTILS_ASM_ROUND_INT)
+endif()
 set(SYSTEM_DEFINES -DWIN32_LEAN_AND_MEAN -DNOMINMAX -DHAS_DX -D__STDC_CONSTANT_MACROS
                    -DTAGLIB_STATIC -DNPT_CONFIG_ENABLE_LOGGING
                    -DPLT_HTTP_DEFAULT_USER_AGENT="UPnP/1.0 DLNADOC/1.50 Kodi"
                    -DPLT_HTTP_DEFAULT_SERVER="UPnP/1.0 DLNADOC/1.50 Kodi"
                    -DUNICODE -D_UNICODE
-                   -FRIBIDI_STATIC
+                   -DFRIBIDI_STATIC
                    $<$<CONFIG:Debug>:-DD3D_DEBUG_INFO>)
+
+
 
 # Additional SYSTEM_DEFINES
 list(APPEND SYSTEM_DEFINES -DHAS_WIN32_NETWORK -DHAS_FILESYSTEM_SMB)
 
 # Make sure /FS is set for Visual Studio in order to prevent simultaneous access to pdb files.
 if(CMAKE_GENERATOR MATCHES "Visual Studio")
-  set(CMAKE_CXX_FLAGS "/MP /FS ${CMAKE_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS "/MP /FS /EHsc ${CMAKE_CXX_FLAGS}")
 endif()
 
 # Google Test needs to use shared version of runtime libraries
@@ -70,7 +83,8 @@ link_directories(${DEPENDENCIES_DIR}/lib)
 
 # Additional libraries
 list(APPEND DEPLIBS bcrypt.lib d3d11.lib DInput8.lib DSound.lib winmm.lib Mpr.lib Iphlpapi.lib WS2_32.lib
-                    PowrProf.lib setupapi.lib Shlwapi.lib dwmapi.lib dxguid.lib DelayImp.lib Mincore.lib)
+                    PowrProf.lib setupapi.lib Shlwapi.lib dwmapi.lib dxguid.lib DelayImp.lib Mincore.lib
+                    gdi32.lib shell32.lib)
 
 # NODEFAULTLIB option
 set(_nodefaultlibs_RELEASE libcmt)

@@ -189,10 +189,15 @@ bool win32_exception::write_stacktrace(EXCEPTION_POINTERS* pEp)
   frame.AddrPC.Offset = pEp->ContextRecord->Eip; // Current location in program
   frame.AddrStack.Offset = pEp->ContextRecord->Esp; // Stack pointers current value
   frame.AddrFrame.Offset = pEp->ContextRecord->Ebp; // Value of register used to access local function variables.
-#else
+#elif defined(_M_X64)
   frame.AddrPC.Offset = pEp->ContextRecord->Rip; // Current location in program
   frame.AddrStack.Offset = pEp->ContextRecord->Rsp; // Stack pointers current value
   frame.AddrFrame.Offset = pEp->ContextRecord->Rbp; // Value of register used to access local function variables.
+#else
+  frame.AddrPC.Offset = pEp->ContextRecord->Pc; // Current location in program
+  frame.AddrStack.Offset = pEp->ContextRecord->Sp; // Stack pointers current value
+  // Seems like X11 is the correct one to use https://azeria-labs.com/arm-data-types-and-registers-part-2/
+  frame.AddrFrame.Offset = pEp->ContextRecord->X11; // Value of register used to access local function variables.
 #endif
 
   if(pSI(hCurProc, NULL, TRUE) == FALSE)

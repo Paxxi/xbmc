@@ -8,6 +8,7 @@
 
 #pragma once
 
+#if defined(HAVE_SSE2)
 #include <emmintrin.h>
 #include <smmintrin.h>
 
@@ -116,3 +117,4 @@ inline void* gpu_memcpy(void* d, const void* s, size_t size)
 
     return d;
 }
+#endif

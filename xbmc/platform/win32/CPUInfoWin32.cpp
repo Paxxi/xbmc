@@ -21,7 +21,9 @@
 
 #include <Pdh.h>
 #include <PdhMsg.h>
+#if defined(_M_IX86) || defined(_M_X64)
 #include <intrin.h>
+#endif
 
 #pragma comment(lib, "Pdh.lib")
 
@@ -125,6 +127,7 @@ CCPUInfoWin32::CCPUInfoWin32()
   else
     m_cpuQueryLoad = nullptr;
 
+  #if defined(_M_IX86) || defined(_M_X64) 
   int CPUInfo[4]; // receives EAX, EBX, ECD and EDX in that order
 
   __cpuid(CPUInfo, 0);
@@ -167,6 +170,7 @@ CCPUInfoWin32::CCPUInfoWin32()
   // Set MMX2 when SSE is present as SSE is a superset of MMX2 and Intel doesn't set the MMX2 cap
   if (m_cpuFeatures & CPU_FEATURE_SSE)
     m_cpuFeatures |= CPU_FEATURE_MMX2;
+#endif
 }
 
 CCPUInfoWin32::~CCPUInfoWin32()

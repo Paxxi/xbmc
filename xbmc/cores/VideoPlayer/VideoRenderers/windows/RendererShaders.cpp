@@ -11,7 +11,9 @@
 #include "DVDCodecs/Video/DXVA.h"
 #include "rendering/dx/RenderContext.h"
 #include "utils/CPUInfo.h"
+#if defined(HAVE_SSE2)
 #include "utils/gpu_memcpy_sse4.h"
+#endif
 #include "utils/log.h"
 #include "windowing/GraphicContext.h"
 

@@ -595,6 +595,10 @@ bool CAddonInfoBuilder::PlatformSupportsAddon(const AddonInfoPtr& addon)
     "windows-i686",
 #elif defined(_M_AMD64)
     "windows-x86_64",
+#elif defined(_M_ARM)
+    "windows-arm"
+#elif defined(_M_ARM64)
+    "windows-arm64"
 #else
 #error no architecture dependant platform tag
 #endif
