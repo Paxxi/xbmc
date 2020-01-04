@@ -72,5 +72,6 @@ private:
   XBMCAddon::AddonClass::Ref<XBMCAddon::Python::PythonLanguageHook> m_languageHook;
   bool m_systemExitThrown = false;
 
+  static bool s_modulesInitialized;
   static CCriticalSection s_critical;
 };

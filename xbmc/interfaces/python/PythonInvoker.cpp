@@ -68,6 +68,7 @@ using namespace KODI::MESSAGING;
 #define PythonModulesSize sizeof(PythonModules) / sizeof(PythonModule)
 
 CCriticalSection CPythonInvoker::s_critical;
+bool CPythonInvoker::s_modulesInitialized{false};
 
 static const std::string getListOfAddonClassesAsString(XBMCAddon::AddonClass::Ref<XBMCAddon::Python::PythonLanguageHook>& languageHook)
 {
@@ -296,6 +297,16 @@ bool CPythonInvoker::execute(const std::string& script, const std::vector<std::w
   CLog::Log(LOGDEBUG, "CPythonInvoker(%d, %s): entering source directory %s", GetId(), m_sourceFile.c_str(), scriptDir.c_str());
   PyObject* module = PyImport_AddModule("__main__");
   PyObject* moduleDict = PyModule_GetDict(module);
+  
+  if (!s_modulesInitialized)
+  {
+    GilSafeSingleLock lock(s_critical);
+    if (!s_modulesInitialized)
+    {
+      PyImport_ImportModule("datetime");
+      s_modulesInitialized = true;
+    }
+  }
 
   // we need to check if we was asked to abort before we had inited
   bool stopping = false;
