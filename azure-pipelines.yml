@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+jobs:
+  - job: Build
+    displayName: Run BuildSetup.bat
+    strategy:
+      matrix:
+        Win32:
+          BUILD_ARCH: win32
+        Win32-uwp:
+          BUILD_ARCH: win32-uwp
+        x64:
+          BUILD_ARCH: x64
+        x64-uwp:
+          BUILD_ARCH: x64
+    steps:
+      - script: tools\buildsteps\windows\$(BUILD_ARCH)\BuildSetup.bat
+        displayName: 'Run BuildSetup.bat'
+
